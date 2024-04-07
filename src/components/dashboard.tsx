@@ -5,6 +5,7 @@
 // import Link from "next/link"
 import { Link, LinkProps, Outlet } from '@tanstack/react-router';
 import {
+  BedDouble,
   Bell,
   Home,
   LineChart,
@@ -94,6 +95,9 @@ export default function Dashboard() {
               </NavLink>
               <NavLink to="/analytics" icon={LineChart}>
                 Analytics
+              </NavLink>
+              <NavLink to="/reservations" icon={BedDouble}>
+                Reservations
               </NavLink>
             </nav>
           </div>
