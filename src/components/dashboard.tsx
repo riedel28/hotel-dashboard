@@ -4,38 +4,39 @@
  */
 // import Link from "next/link"
 import { Link, LinkProps, Outlet } from '@tanstack/react-router';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  Card
-} from '@/components/ui/card';
-import { SheetTrigger, SheetContent, Sheet } from '@/components/ui/sheet';
-import { Input } from '@/components/ui/input';
-import {
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu
-} from '@/components/ui/dropdown-menu';
-import {
-  Package,
-  Package2,
   Bell,
   Home,
-  ShoppingCart,
-  Users,
   LineChart,
+  LucideIcon,
   Menu,
+  Package,
+  Package2,
   Search,
+  ShoppingCart,
   UserCircle,
-  LucideIcon
+  Users
 } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 interface NavLinkProps {
   to: LinkProps['to'];

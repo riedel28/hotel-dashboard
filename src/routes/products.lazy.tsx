@@ -1,5 +1,6 @@
-import { Button } from '@/components/ui/button';
 import { createLazyFileRoute } from '@tanstack/react-router';
+
+import { Button } from '@/components/ui/button';
 
 export const Route = createLazyFileRoute('/products')({
   component: () => (
