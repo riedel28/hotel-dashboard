@@ -16,10 +16,34 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const ProductsLazyImport = createFileRoute('/products')()
+const OrdersLazyImport = createFileRoute('/orders')()
+const CustomersLazyImport = createFileRoute('/customers')()
+const AnalyticsLazyImport = createFileRoute('/analytics')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const ProductsLazyRoute = ProductsLazyImport.update({
+  path: '/products',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/products.lazy').then((d) => d.Route))
+
+const OrdersLazyRoute = OrdersLazyImport.update({
+  path: '/orders',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/orders.lazy').then((d) => d.Route))
+
+const CustomersLazyRoute = CustomersLazyImport.update({
+  path: '/customers',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/customers.lazy').then((d) => d.Route))
+
+const AnalyticsLazyRoute = AnalyticsLazyImport.update({
+  path: '/analytics',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/analytics.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
@@ -43,11 +67,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/analytics': {
+      preLoaderRoute: typeof AnalyticsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/customers': {
+      preLoaderRoute: typeof CustomersLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/orders': {
+      preLoaderRoute: typeof OrdersLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/products': {
+      preLoaderRoute: typeof ProductsLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexLazyRoute, AboutLazyRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexLazyRoute,
+  AboutLazyRoute,
+  AnalyticsLazyRoute,
+  CustomersLazyRoute,
+  OrdersLazyRoute,
+  ProductsLazyRoute,
+])
 
 /* prettier-ignore-end */
