@@ -5,15 +5,12 @@ import * as React from 'react';
 import { Link, Outlet } from '@tanstack/react-router';
 import {
   AudioWaveform,
-  BadgeCheck,
-  Bell,
   BookOpen,
   Bot,
   ChevronRight,
   ChevronsUpDown,
   Command,
   ConciergeBell,
-  CreditCard,
   Folder,
   Forward,
   Frame,
@@ -24,8 +21,8 @@ import {
   PieChart,
   Plus,
   Settings2,
-  Sparkles,
-  Trash2
+  Trash2,
+  User
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -76,9 +73,9 @@ import {
 // This is sample data.
 const data = {
   user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg'
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    avatar: 'https://github.com/shadcn.png'
   },
   teams: [
     {
@@ -402,7 +399,7 @@ export default function Page() {
                         <span className="truncate font-semibold">
                           {data.user.name}
                         </span>
-                        <span className="truncate text-xs">
+                        <span className="truncate text-xs text-muted-foreground">
                           {data.user.email}
                         </span>
                       </div>
@@ -410,24 +407,11 @@ export default function Page() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Sparkles />
-                      Upgrade to Pro
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <BadgeCheck />
-                      Account
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <CreditCard />
-                      Billing
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Bell />
-                      Notifications
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile">
+                        <User />
+                        Profile
+                      </Link>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
