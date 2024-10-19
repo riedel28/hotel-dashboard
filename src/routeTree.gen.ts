@@ -27,36 +27,43 @@ const IndexLazyImport = createFileRoute('/')()
 // Create/Update Routes
 
 const ProductsLazyRoute = ProductsLazyImport.update({
+  id: '/products',
   path: '/products',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/products.lazy').then((d) => d.Route))
 
 const OrdersLazyRoute = OrdersLazyImport.update({
+  id: '/orders',
   path: '/orders',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/orders.lazy').then((d) => d.Route))
 
 const CustomersLazyRoute = CustomersLazyImport.update({
+  id: '/customers',
   path: '/customers',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/customers.lazy').then((d) => d.Route))
 
 const AnalyticsLazyRoute = AnalyticsLazyImport.update({
+  id: '/analytics',
   path: '/analytics',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/analytics.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
+  id: '/about',
   path: '/about',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
 const ReservationsRoute = ReservationsImport.update({
+  id: '/reservations',
   path: '/reservations',
   getParentRoute: () => rootRoute,
 } as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
@@ -66,30 +73,51 @@ const IndexLazyRoute = IndexLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/reservations': {
+      id: '/reservations'
+      path: '/reservations'
+      fullPath: '/reservations'
       preLoaderRoute: typeof ReservationsImport
       parentRoute: typeof rootRoute
     }
     '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
     '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
       preLoaderRoute: typeof AnalyticsLazyImport
       parentRoute: typeof rootRoute
     }
     '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
       preLoaderRoute: typeof CustomersLazyImport
       parentRoute: typeof rootRoute
     }
     '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
       preLoaderRoute: typeof OrdersLazyImport
       parentRoute: typeof rootRoute
     }
     '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
       preLoaderRoute: typeof ProductsLazyImport
       parentRoute: typeof rootRoute
     }
@@ -98,14 +126,130 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
-  IndexLazyRoute,
-  ReservationsRoute,
-  AboutLazyRoute,
-  AnalyticsLazyRoute,
-  CustomersLazyRoute,
-  OrdersLazyRoute,
-  ProductsLazyRoute,
-])
+export interface FileRoutesByFullPath {
+  '/': typeof IndexLazyRoute
+  '/reservations': typeof ReservationsRoute
+  '/about': typeof AboutLazyRoute
+  '/analytics': typeof AnalyticsLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/orders': typeof OrdersLazyRoute
+  '/products': typeof ProductsLazyRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexLazyRoute
+  '/reservations': typeof ReservationsRoute
+  '/about': typeof AboutLazyRoute
+  '/analytics': typeof AnalyticsLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/orders': typeof OrdersLazyRoute
+  '/products': typeof ProductsLazyRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/reservations': typeof ReservationsRoute
+  '/about': typeof AboutLazyRoute
+  '/analytics': typeof AnalyticsLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/orders': typeof OrdersLazyRoute
+  '/products': typeof ProductsLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/reservations'
+    | '/about'
+    | '/analytics'
+    | '/customers'
+    | '/orders'
+    | '/products'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/reservations'
+    | '/about'
+    | '/analytics'
+    | '/customers'
+    | '/orders'
+    | '/products'
+  id:
+    | '__root__'
+    | '/'
+    | '/reservations'
+    | '/about'
+    | '/analytics'
+    | '/customers'
+    | '/orders'
+    | '/products'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexLazyRoute: typeof IndexLazyRoute
+  ReservationsRoute: typeof ReservationsRoute
+  AboutLazyRoute: typeof AboutLazyRoute
+  AnalyticsLazyRoute: typeof AnalyticsLazyRoute
+  CustomersLazyRoute: typeof CustomersLazyRoute
+  OrdersLazyRoute: typeof OrdersLazyRoute
+  ProductsLazyRoute: typeof ProductsLazyRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  ReservationsRoute: ReservationsRoute,
+  AboutLazyRoute: AboutLazyRoute,
+  AnalyticsLazyRoute: AnalyticsLazyRoute,
+  CustomersLazyRoute: CustomersLazyRoute,
+  OrdersLazyRoute: OrdersLazyRoute,
+  ProductsLazyRoute: ProductsLazyRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/reservations",
+        "/about",
+        "/analytics",
+        "/customers",
+        "/orders",
+        "/products"
+      ]
+    },
+    "/": {
+      "filePath": "index.lazy.tsx"
+    },
+    "/reservations": {
+      "filePath": "reservations.tsx"
+    },
+    "/about": {
+      "filePath": "about.lazy.tsx"
+    },
+    "/analytics": {
+      "filePath": "analytics.lazy.tsx"
+    },
+    "/customers": {
+      "filePath": "customers.lazy.tsx"
+    },
+    "/orders": {
+      "filePath": "orders.lazy.tsx"
+    },
+    "/products": {
+      "filePath": "products.lazy.tsx"
+    }
+  }
+}
+ROUTE_MANIFEST_END */
