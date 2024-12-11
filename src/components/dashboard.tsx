@@ -19,7 +19,7 @@ import {
   Map,
   MoreHorizontal,
   PieChart,
-  Plus,
+  RefreshCw,
   Settings2,
   Trash2,
   User
@@ -46,7 +46,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
@@ -70,6 +69,14 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
+import { Property, Stage } from './ui/property-selector';
+
+interface Team extends Property {
+  plan: string;
+  logo: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  className?: string;
+}
+
 // This is sample data.
 const data = {
   user: {
@@ -79,21 +86,27 @@ const data = {
   },
   teams: [
     {
-      name: 'Acme Inc',
+      id: '1',
+      name: 'Development (2)',
       logo: GalleryVerticalEnd,
-      plan: 'Enterprise'
+      plan: 'Enterprise',
+      stage: 'demo'
     },
     {
-      name: 'Acme Corp.',
+      id: '2',
+      name: 'Staging',
       logo: AudioWaveform,
-      plan: 'Startup'
+      plan: 'Startup',
+      stage: 'production'
     },
     {
-      name: 'Evil Corp.',
+      id: '3',
+      name: 'Development 13, Adyen',
       logo: Command,
-      plan: 'Free'
+      plan: 'Free',
+      stage: 'staging'
     }
-  ],
+  ] as Team[],
   navMain: [
     {
       title: 'Front Office',
@@ -222,23 +235,23 @@ export default function Page() {
                       <span className="truncate font-semibold">
                         {activeTeam.name}
                       </span>
-                      <span className="truncate text-xs">
-                        {activeTeam.plan}
+                      <span className="truncate text-xs capitalize">
+                        {activeTeam.stage}
                       </span>
                     </div>
                     <ChevronsUpDown className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                  className="w-[350px] min-w-56 rounded-lg"
                   align="start"
                   side="bottom"
                   sideOffset={4}
                 >
                   <DropdownMenuLabel className="text-xs text-muted-foreground">
-                    Teams
+                    Properties
                   </DropdownMenuLabel>
-                  {data.teams.map((team, index) => (
+                  {data.teams.map((team) => (
                     <DropdownMenuItem
                       key={team.name}
                       onClick={() => setActiveTeam(team)}
@@ -248,16 +261,17 @@ export default function Page() {
                         <team.logo className="size-4 shrink-0" />
                       </div>
                       {team.name}
-                      <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+
+                      <Stage stage={team.stage} className="ml-auto" />
                     </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="gap-2 p-2">
-                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                      <Plus className="size-4" />
-                    </div>
+                  <DropdownMenuItem className="flex justify-center gap-2">
+                    {/* <div className="flex size-6 items-center justify-center rounded-md border bg-background"> */}
+                    <RefreshCw className="size-4 text-muted-foreground" />
+                    {/* </div> */}
                     <div className="font-medium text-muted-foreground">
-                      Add team
+                      Refresh
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -418,6 +432,9 @@ export default function Page() {
                   <DropdownMenuItem>
                     <LogOut />
                     Log out
+                    <span className="ml-auto text-xs text-muted-foreground">
+                      v1.2.4
+                    </span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -427,7 +444,7 @@ export default function Page() {
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b-[1px] transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b-[1px] transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -446,7 +463,7 @@ export default function Page() {
             </Breadcrumb>
           </div>
         </header>
-        <main className="p-4">
+        <main className="px-6 py-4 pb-8">
           <Outlet />
         </main>
       </SidebarInset>
