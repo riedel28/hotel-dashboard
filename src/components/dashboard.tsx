@@ -463,9 +463,9 @@ export default function Page() {
             </Breadcrumb>
           </div>
         </header>
-        <main className="px-6 py-4 pb-8">
+        <section className="px-6 py-4 pb-8">
           <Outlet />
-        </main>
+        </section>
       </SidebarInset>
     </SidebarProvider>
   );

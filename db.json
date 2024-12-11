@@ -2,111 +2,48 @@
   "reservations": [
     {
       "id": 1,
-      "reservationNr": "1234-5678-1111",
-      "email": "alpha@example.com"
+      "state": "done",
+      "guest_email": "jd@example.com",
+      "primary_guest_name": "John Doe",
+      "booking_nr": "0123456879-1",
+      "room_name": "101",
+      "booking_from": "2023-07-31",
+      "booking_id": "112233",
+      "balance": 40.99,
+      "completed_at": "2023-07-31",
+      "last_opened_at": "2023-07-18T12:35:30.910+02:00",
+      "received_at": "2023-07-18T12:35:30.910+02:00",
+      "page_url": "https://example.com/checkin/112233"
     },
     {
       "id": 2,
-      "reservationNr": "2345-6789-2222",
-      "email": "bravo@example.com"
+      "state": "pending",
+      "guest_email": "jd@example.com",
+      "primary_guest_name": "Jane Doe",
+      "booking_nr": "0123456879-3",
+      "room_name": "102",
+      "booking_from": "2023-07-31",
+      "booking_id": "223344",
+      "completed_at": "2023-07-31",
+      "last_opened_at": "2023-07-18T12:35:30.910+02:00",
+      "received_at": "2023-07-18T12:35:30.910+02:00",
+      "page_url": "https://example.com/checkin/223344",
+      "balance": 0
     },
     {
       "id": 3,
-      "reservationNr": "3456-7890-3333",
-      "email": "charlie@example.com"
-    },
-    {
-      "id": 4,
-      "reservationNr": "4567-8901-4444",
-      "email": "delta@example.com"
-    },
-    { "id": 5, "reservationNr": "5678-9012-5555", "email": "echo@example.com" },
-    {
-      "id": 6,
-      "reservationNr": "6789-0123-6666",
-      "email": "foxtrot@example.com"
-    },
-    { "id": 7, "reservationNr": "7890-1234-7777", "email": "golf@example.com" },
-    {
-      "id": 8,
-      "reservationNr": "8901-2345-8888",
-      "email": "hotel@example.com"
-    },
-    {
-      "id": 9,
-      "reservationNr": "9012-3456-9999",
-      "email": "india@example.com"
-    },
-    {
-      "id": 10,
-      "reservationNr": "0123-4567-0000",
-      "email": "juliet@example.com"
-    },
-    {
-      "id": 11,
-      "reservationNr": "1234-5678-1111",
-      "email": "kilo@example.com"
-    },
-    {
-      "id": 12,
-      "reservationNr": "2345-6789-2222",
-      "email": "lima@example.com"
-    },
-    {
-      "id": 13,
-      "reservationNr": "3456-7890-3333",
-      "email": "mike@example.com"
-    },
-    {
-      "id": 14,
-      "reservationNr": "4567-8901-4444",
-      "email": "november@example.com"
-    },
-    {
-      "id": 15,
-      "reservationNr": "5678-9012-5555",
-      "email": "oscar@example.com"
-    },
-    {
-      "id": 16,
-      "reservationNr": "6789-0123-6666",
-      "email": "papa@example.com"
-    },
-    {
-      "id": 17,
-      "reservationNr": "7890-1234-7777",
-      "email": "quebec@example.com"
-    },
-    {
-      "id": 18,
-      "reservationNr": "8901-2345-8888",
-      "email": "romeo@example.com"
-    },
-    {
-      "id": 19,
-      "reservationNr": "9012-3456-9999",
-      "email": "sierra@example.com"
-    },
-    {
-      "id": 20,
-      "reservationNr": "0123-4567-0000",
-      "email": "tango@example.com"
-    },
-    {
-      "id": 21,
-      "reservationNr": "1234-5678-1111",
-      "email": "uniform@example.com"
-    },
-    {
-      "id": 22,
-      "reservationNr": "2345-6789-2222",
-      "email": "victor@example.com"
-    },
-    {
-      "id": 23,
-      "reservationNr": "3456-7890-3333",
-      "email": "whiskey@example.com"
-    },
-    { "id": 24, "reservationNr": "4567-8901-4444", "email": "xray@example.com" }
+      "state": "started",
+      "guest_email": "max.mustermann@example.com",
+      "primary_guest_name": "Max Mustermann",
+      "booking_nr": "0123456879-9",
+      "room_name": "103",
+      "booking_from": "2023-07-31",
+      "booking_id": "334455",
+      "completed_at": "2023-07-31",
+      "last_opened_at": "2023-07-18T12:35:30.910+02:00",
+      "received_at": "2023-07-18T12:35:30.910+02:00",
+      "page_url": "https://example.com/checkin/334455",
+      "balance": 1200.99
+    }
   ]
 }
