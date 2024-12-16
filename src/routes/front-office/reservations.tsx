@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, X } from 'lucide-react';
 import { z } from 'zod';
 
 import { Reservation, columns } from '@/components/reservations-table/columns';
@@ -26,6 +26,7 @@ const fetchReservations = async ({
   total: number;
 }> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
+
   const response = await fetch(
     `http://localhost:5000/reservations?_page=${page}&_limit=${perPage}`
   );
@@ -71,7 +72,15 @@ function ReservationsPage() {
   }
 
   if (reservationsQuery.isError) {
-    content = <div>Error: {reservationsQuery.error.message}</div>;
+    content = (
+      <div className="flex max-w-lg flex-col justify-center rounded-md border p-4 text-center">
+        <div className="mx-auto mb-2 flex size-10 items-center justify-center rounded-full bg-red-50">
+          <X className="size-6 text-red-700" />
+        </div>
+        <h2 className="text-lg font-semibold">Error</h2>
+        <p>{reservationsQuery.error.message}</p>
+      </div>
+    );
   }
 
   if (reservationsQuery.data) {
