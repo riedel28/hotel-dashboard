@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link as RouterLink } from '@tanstack/react-router';
 import { Row } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import {
@@ -174,9 +175,16 @@ export function RowActions({ row }: RowActionsProps) {
             <MessageSquareDot className="mr-2 h-4 w-4" />
             Push to device
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <PenSquare className="mr-2 h-4 w-4" />
-            Edit
+          <DropdownMenuItem asChild>
+            <RouterLink
+              to="/front-office/reservations/$reservationId"
+              params={{
+                reservationId: String(row.original.id)
+              }}
+            >
+              <PenSquare className="mr-2 h-4 w-4" />
+              Edit
+            </RouterLink>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

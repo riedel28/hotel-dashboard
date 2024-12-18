@@ -14,7 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ProfileImport } from './routes/profile'
-import { Route as FrontOfficeReservationsImport } from './routes/front-office/reservations'
+import { Route as FrontOfficeReservationsIndexImport } from './routes/front-office/reservations/index'
+import { Route as FrontOfficeReservationsReservationIdImport } from './routes/front-office/reservations/$reservationId'
 
 // Create Virtual Routes
 
@@ -69,11 +70,19 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const FrontOfficeReservationsRoute = FrontOfficeReservationsImport.update({
-  id: '/front-office/reservations',
-  path: '/front-office/reservations',
-  getParentRoute: () => rootRoute,
-} as any)
+const FrontOfficeReservationsIndexRoute =
+  FrontOfficeReservationsIndexImport.update({
+    id: '/front-office/reservations/',
+    path: '/front-office/reservations/',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const FrontOfficeReservationsReservationIdRoute =
+  FrontOfficeReservationsReservationIdImport.update({
+    id: '/front-office/reservations/$reservationId',
+    path: '/front-office/reservations/$reservationId',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -128,11 +137,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/front-office/reservations': {
-      id: '/front-office/reservations'
+    '/front-office/reservations/$reservationId': {
+      id: '/front-office/reservations/$reservationId'
+      path: '/front-office/reservations/$reservationId'
+      fullPath: '/front-office/reservations/$reservationId'
+      preLoaderRoute: typeof FrontOfficeReservationsReservationIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/front-office/reservations/': {
+      id: '/front-office/reservations/'
       path: '/front-office/reservations'
       fullPath: '/front-office/reservations'
-      preLoaderRoute: typeof FrontOfficeReservationsImport
+      preLoaderRoute: typeof FrontOfficeReservationsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -148,7 +164,8 @@ export interface FileRoutesByFullPath {
   '/customers': typeof CustomersLazyRoute
   '/orders': typeof OrdersLazyRoute
   '/products': typeof ProductsLazyRoute
-  '/front-office/reservations': typeof FrontOfficeReservationsRoute
+  '/front-office/reservations/$reservationId': typeof FrontOfficeReservationsReservationIdRoute
+  '/front-office/reservations': typeof FrontOfficeReservationsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -159,7 +176,8 @@ export interface FileRoutesByTo {
   '/customers': typeof CustomersLazyRoute
   '/orders': typeof OrdersLazyRoute
   '/products': typeof ProductsLazyRoute
-  '/front-office/reservations': typeof FrontOfficeReservationsRoute
+  '/front-office/reservations/$reservationId': typeof FrontOfficeReservationsReservationIdRoute
+  '/front-office/reservations': typeof FrontOfficeReservationsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -171,7 +189,8 @@ export interface FileRoutesById {
   '/customers': typeof CustomersLazyRoute
   '/orders': typeof OrdersLazyRoute
   '/products': typeof ProductsLazyRoute
-  '/front-office/reservations': typeof FrontOfficeReservationsRoute
+  '/front-office/reservations/$reservationId': typeof FrontOfficeReservationsReservationIdRoute
+  '/front-office/reservations/': typeof FrontOfficeReservationsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -184,6 +203,7 @@ export interface FileRouteTypes {
     | '/customers'
     | '/orders'
     | '/products'
+    | '/front-office/reservations/$reservationId'
     | '/front-office/reservations'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -194,6 +214,7 @@ export interface FileRouteTypes {
     | '/customers'
     | '/orders'
     | '/products'
+    | '/front-office/reservations/$reservationId'
     | '/front-office/reservations'
   id:
     | '__root__'
@@ -204,7 +225,8 @@ export interface FileRouteTypes {
     | '/customers'
     | '/orders'
     | '/products'
-    | '/front-office/reservations'
+    | '/front-office/reservations/$reservationId'
+    | '/front-office/reservations/'
   fileRoutesById: FileRoutesById
 }
 
@@ -216,7 +238,8 @@ export interface RootRouteChildren {
   CustomersLazyRoute: typeof CustomersLazyRoute
   OrdersLazyRoute: typeof OrdersLazyRoute
   ProductsLazyRoute: typeof ProductsLazyRoute
-  FrontOfficeReservationsRoute: typeof FrontOfficeReservationsRoute
+  FrontOfficeReservationsReservationIdRoute: typeof FrontOfficeReservationsReservationIdRoute
+  FrontOfficeReservationsIndexRoute: typeof FrontOfficeReservationsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -227,7 +250,9 @@ const rootRouteChildren: RootRouteChildren = {
   CustomersLazyRoute: CustomersLazyRoute,
   OrdersLazyRoute: OrdersLazyRoute,
   ProductsLazyRoute: ProductsLazyRoute,
-  FrontOfficeReservationsRoute: FrontOfficeReservationsRoute,
+  FrontOfficeReservationsReservationIdRoute:
+    FrontOfficeReservationsReservationIdRoute,
+  FrontOfficeReservationsIndexRoute: FrontOfficeReservationsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -249,7 +274,8 @@ export const routeTree = rootRoute
         "/customers",
         "/orders",
         "/products",
-        "/front-office/reservations"
+        "/front-office/reservations/$reservationId",
+        "/front-office/reservations/"
       ]
     },
     "/": {
@@ -273,8 +299,11 @@ export const routeTree = rootRoute
     "/products": {
       "filePath": "products.lazy.tsx"
     },
-    "/front-office/reservations": {
-      "filePath": "front-office/reservations.tsx"
+    "/front-office/reservations/$reservationId": {
+      "filePath": "front-office/reservations/$reservationId.tsx"
+    },
+    "/front-office/reservations/": {
+      "filePath": "front-office/reservations/index.tsx"
     }
   }
 }

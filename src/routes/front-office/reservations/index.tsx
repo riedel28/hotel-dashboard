@@ -163,7 +163,7 @@ function ReservationsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">Reservations</h1>
 
         <Button>
@@ -177,7 +177,7 @@ function ReservationsPage() {
   );
 }
 
-export const Route = createFileRoute('/front-office/reservations')({
+export const Route = createFileRoute('/front-office/reservations/')({
   validateSearch: (search) => reservationsFilterSchema.parse(search),
   component: () => <ReservationsPage />
 });
