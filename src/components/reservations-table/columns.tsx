@@ -2,12 +2,45 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { ArrowUpRightIcon, CheckIcon, ClockIcon } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
-
-import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 
 import { RowActions } from './row-actions';
+
+type StatusIconProps = {
+  status: string;
+};
+
+export function StatusIcon({ status }: StatusIconProps) {
+  switch (status.toLowerCase()) {
+    case 'done':
+      return (
+        <div className="inline-flex rounded-full bg-green-200 p-1">
+          <CheckIcon className="size-3.5 text-green-700" />
+        </div>
+      );
+    case 'pending':
+      return (
+        <div className="inline-flex rounded-full bg-yellow-200 p-1">
+          <ClockIcon className="size-3.5 text-yellow-700" />
+        </div>
+      );
+    case 'started':
+      return (
+        <div className="inline-flex rounded-full bg-blue-200 p-1">
+          <ArrowUpRightIcon className="size-3.5 text-blue-700" />
+        </div>
+      );
+    default:
+      return null;
+  }
+}
 
 export type Reservation = {
   id: number;
@@ -29,20 +62,23 @@ export const columns: ColumnDef<Reservation>[] = [
   {
     accessorKey: 'state',
     header: 'Status',
+    size: 50,
     cell: ({ row }) => {
       const status = row.getValue('state') as Reservation['state'];
 
       return (
-        <Badge
-          variant="secondary"
-          className={cn('rounded-md text-xs font-medium capitalize', {
-            'bg-sky-100 text-sky-700': status === 'started',
-            'bg-orange-100 text-orange-700': status === 'pending',
-            'bg-emerald-100 text-emerald-700': status === 'done'
-          })}
-        >
-          {status}
-        </Badge>
+        <div className="flex justify-center">
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger role="button" aria-label={status}>
+                <StatusIcon status={status} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <span className="capitalize">{status}</span>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       );
     }
   },
