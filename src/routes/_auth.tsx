@@ -1,8 +1,7 @@
 'use client';
-
 import * as React from 'react';
+import { createFileRoute, redirect, Link, Outlet, useRouter } from '@tanstack/react-router'
 
-import { Link, Outlet } from '@tanstack/react-router';
 import {
   AudioWaveform,
   BookOpen,
@@ -69,9 +68,11 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
-import { Property, Stage } from './ui/property-selector';
+import { Property, Stage } from '@/components/ui/property-selector';
+import { useAuth } from '@/auth';
 
 interface Team extends Property {
+  name: string;
   plan: string;
   logo: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   className?: string;
@@ -213,8 +214,37 @@ const data = {
   ]
 };
 
-export default function Page() {
-  const [activeTeam, setActiveTeam] = React.useState(data.teams[0]);
+
+export const Route = createFileRoute('/_auth')({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+  },
+  component: DashboardLayout,
+})
+
+export default function DashboardLayout() {
+  const router = useRouter()
+  const navigate = Route.useNavigate()
+  const auth = useAuth()
+
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      auth.logout().then(() => {
+        router.invalidate().finally(() => {
+          navigate({ to: '/' })
+        })
+      })
+    }
+  }
+
+  const [activeTeam, setActiveTeam] = React.useState<Team>(data.teams[0]);
 
   return (
     <SidebarProvider>
@@ -386,7 +416,7 @@ export default function Page() {
                         {data.user.name}
                       </span>
                       <span className="truncate text-xs">
-                        {data.user.email}
+                        {auth.user?.email}
                       </span>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
@@ -414,7 +444,7 @@ export default function Page() {
                           {data.user.name}
                         </span>
                         <span className="truncate text-xs text-muted-foreground">
-                          {data.user.email}
+                          {auth.user?.email}
                         </span>
                       </div>
                     </div>
@@ -429,7 +459,9 @@ export default function Page() {
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                  >
                     <LogOut />
                     Log out
                     <span className="ml-auto text-xs text-muted-foreground">
@@ -470,3 +502,5 @@ export default function Page() {
     </SidebarProvider>
   );
 }
+
+
