@@ -61,10 +61,14 @@ export function RowActions({ row }: RowActionsProps) {
               Edit
             </RouterLink>
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <MessageSquareDot className="mr-2 h-4 w-4" />
+            Share
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
+            className="text-red-600"
             onClick={() => setShowDeleteDialog(true)}
-            variant="destructive"
           >
             <Trash className="mr-2 h-4 w-4" />
             Delete
@@ -75,7 +79,8 @@ export function RowActions({ row }: RowActionsProps) {
       <DeleteDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        bookingNr={row.getValue('booking_nr')}
+        reservationNr={row.original.booking_nr}
+        reservationId={row.original.id}
       />
       <ShareDialog
         open={showShareModal}

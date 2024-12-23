@@ -1,5 +1,7 @@
 import { AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React from 'react';
 
 import {
   AlertDialog,
@@ -15,46 +17,86 @@ import { Button } from '@/components/ui/button';
 interface DeleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  bookingNr: string;
+  reservationNr: string;
+  reservationId: number
+}
+
+async function deleteReservation(reservationId: number) {
+
+  const response = await fetch(`http://localhost:5000/reservations/${reservationId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete reservation');
+  }
+
+  return response.json();
 }
 
 export function DeleteDialog({
   open,
   onOpenChange,
-  bookingNr
+  reservationNr, reservationId
 }: DeleteDialogProps) {
+  const [isDeleting, setIsDeleting] = React.useState(false);
+  const queryClient = useQueryClient();
+
+  const deleteReservationMutation = useMutation({
+    mutationFn: () => deleteReservation(reservationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reservations'] });
+      onOpenChange(false);
+
+      toast.success(
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4" />
+            <span className="font-bold">Reservation deleted</span>
+          </div>
+          <div>
+            The reservation <span className="font-medium">{reservationNr}</span> has been
+            deleted
+          </div>
+        </div>
+      );
+    },
+    onError: (error) => {
+      toast.error(
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4" />
+            <span className="font-bold">Error deleting reservation</span>
+          </div>
+          <div>{error.message}</div>
+        </div>
+      );
+    }, onSettled: () => {
+      setIsDeleting(false);
+    }
+  });
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure sure?</AlertDialogTitle>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription className="py-4">
-            The reservation <span className="font-medium">{bookingNr}</span>{' '}
-            will be deleted.
+            The reservation <span className="font-medium">{reservationNr}</span>{' '}
+            will be deleted. This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
             variant="destructive"
+            disabled={isDeleting}
             onClick={() => {
-              onOpenChange(false);
-              toast.info(
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4" />
-                    <span className="font-bold">Reservation deleted</span>
-                  </div>
-                  <div>
-                    The reservation{' '}
-                    <span className="font-medium">{bookingNr}</span> has been
-                    deleted
-                  </div>
-                </div>
-              );
+              setIsDeleting(true);
+              deleteReservationMutation.mutate();
             }}
           >
-            Delete
+            {isDeleting ? 'Deleting...' : 'Delete'}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

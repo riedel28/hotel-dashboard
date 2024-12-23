@@ -60,20 +60,6 @@
       "balance": 726
     },
     {
-      "id": 191,
-      "state": "pending",
-      "guest_email": "jd@example.com",
-      "primary_guest_name": "John Doe",
-      "booking_id": 113,
-      "completed_at": "2024-12-23T06:53:04.372Z",
-      "last_opened_at": "2024-12-23T06:53:04.372Z",
-      "received_at": "2024-12-23T06:53:04.372Z",
-      "booking_nr": "res",
-      "room_name": "102",
-      "page_url": "url.com",
-      "balance": 242
-    },
-    {
       "id": 252,
       "state": "pending",
       "guest_email": "jd@example.com",
