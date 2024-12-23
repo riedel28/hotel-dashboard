@@ -1,70 +1,50 @@
-import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-import { X } from 'lucide-react'
-import { z } from 'zod'
+import { reservationsQueryOptions } from '@/api/reservations';
+import { useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { X } from 'lucide-react';
+import { z } from 'zod';
 
-import { Reservation, columns } from '@/components/reservations-table/columns'
-import { DataTable as ReservationsTable } from '@/components/reservations-table/data-table'
-import { Skeleton } from '@/components/ui/skeleton'
-import { AddReservationModal } from '@/components/add-reservation-modal'
+import { AddReservationModal } from '@/components/add-reservation-modal';
+import { columns } from '@/components/reservations-table/columns';
+import { DataTable as ReservationsTable } from '@/components/reservations-table/data-table';
+import { TableSkeleton } from '@/components/reservations-table/table-skeleton';
+import { TableToolbar } from '@/components/reservations-table/table-toolbar';
+import { Button, buttonVariants } from '@/components/ui/button';
 
-import { Button, buttonVariants } from '@/components/ui/button'
-
-const fetchReservations = async ({
-  page,
-  perPage,
-}: {
-  page: number
-  perPage: number
-}): Promise<{
-  index: Reservation[]
-  total: number
-}> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  const response = await fetch(
-    `http://localhost:5000/reservations?_page=${page}&_limit=${perPage}`,
-  )
-  if (!response.ok) {
-    throw new Error('Network response was not ok')
-  }
-
-  const totalCount = response.headers.get('X-Total-Count')
-  const data = await response.json()
-
-  return { index: data, total: totalCount ? parseInt(totalCount, 10) : 0 }
-}
+import { cn } from '@/lib/utils';
 
 const reservationsFilterSchema = z.object({
   page: z.number().default(1),
   per_page: z.number().default(20),
-})
+  q: z.string().optional(),
+  status: z
+    .enum(['pending', 'started', 'done', 'all'])
+    .default('all')
+    .optional()
+});
 
 function ReservationsPage() {
-  const { page, per_page } = Route.useSearch()
-  const navigate = Route.useNavigate()
+  const { page, per_page } = Route.useSearch();
+  const navigate = Route.useNavigate();
 
+  const reservationsQuery = useQuery(
+    reservationsQueryOptions({ page, perPage: per_page })
+  );
 
-  const reservationsQuery = useQuery<{
-    index: Reservation[]
-    total: number
-  }>({
-    queryKey: ['reservations', page, per_page],
-    queryFn: () => {
-      return fetchReservations({ page, perPage: per_page })
-    },
-    placeholderData: (previousData) => previousData,
-  })
-
-  let content
+  let content;
 
   if (reservationsQuery.isLoading) {
     content = (
-      <div className="max-w-lg space-y-1">
-        <Skeleton className="h-[62px]" />
-        <Skeleton className="h-[62px]" />
+      <div>
+        <div className="space-y-2">
+          <TableToolbar
+            onRefresh={reservationsQuery.refetch}
+            isRefreshing={reservationsQuery.isRefetching}
+          />
+          <TableSkeleton />
+        </div>
       </div>
-    )
+    );
   }
 
   if (reservationsQuery.isError) {
@@ -76,20 +56,33 @@ function ReservationsPage() {
         <h2 className="text-lg font-semibold">Error</h2>
         <p>{reservationsQuery.error.message}</p>
       </div>
-    )
+    );
   }
 
   if (reservationsQuery.data) {
     content = (
       <div>
-        <div className="mb-4 flex justify-between">
-          <h1 className="text-2xl font-bold">Reservations</h1>
-          <AddReservationModal />
+        <div className="space-y-2">
+          <TableToolbar
+            onRefresh={reservationsQuery.refetch}
+            isRefreshing={reservationsQuery.isRefetching}
+          />
+
+          <div
+            className={cn(
+              '- opacity duration - 300 ease -in -out opacity-100 transition',
+              {
+                'opacity-70': reservationsQuery.isFetching
+              }
+            )}
+          >
+            <ReservationsTable
+              data={reservationsQuery.data.index}
+              columns={columns}
+              isLoading={reservationsQuery.isLoading}
+            />
+          </div>
         </div>
-        <ReservationsTable
-          columns={columns}
-          data={reservationsQuery?.data?.index}
-        />
 
         <div className="mt-4 flex max-w-lg items-center justify-between">
           <div className="flex-1">
@@ -102,12 +95,12 @@ function ReservationsPage() {
               onClick={() => {
                 navigate({
                   to: '/front-office/reservations',
-                  search: { page: page - 1, per_page },
-                })
+                  search: { page: page - 1, per_page }
+                });
               }}
               className={buttonVariants({
                 variant: 'secondary',
-                size: 'sm',
+                size: 'sm'
               })}
               disabled={page <= 1}
             >
@@ -118,12 +111,12 @@ function ReservationsPage() {
               onClick={() => {
                 navigate({
                   to: '/front-office/reservations',
-                  search: { page: page + 1, per_page },
-                })
+                  search: { page: page + 1, per_page }
+                });
               }}
               className={buttonVariants({
                 variant: 'secondary',
-                size: 'sm',
+                size: 'sm'
               })}
               disabled={page >= 5}
             >
@@ -132,17 +125,21 @@ function ReservationsPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div>
+      <div className="mb-6 flex justify-between">
+        <h1 className="text-2xl font-bold">Reservations</h1>
+        <AddReservationModal />
+      </div>
       {content}
     </div>
-  )
+  );
 }
 
 export const Route = createFileRoute('/_auth/front-office/reservations/')({
   validateSearch: (search) => reservationsFilterSchema.parse(search),
-  component: () => <ReservationsPage />,
-})
+  component: () => <ReservationsPage />
+});
