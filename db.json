@@ -46,32 +46,18 @@
       "balance": 1200.99
     },
     {
-      "id": 148,
+      "id": 207,
       "state": "pending",
       "guest_email": "jd@example.com",
       "primary_guest_name": "John Doe",
-      "booking_id": 160,
-      "completed_at": "2024-12-23T06:52:27.227Z",
-      "last_opened_at": "2024-12-23T06:52:27.227Z",
-      "received_at": "2024-12-23T06:52:27.227Z",
-      "booking_nr": "12345",
-      "room_name": "102",
-      "page_url": "some-url.com",
-      "balance": 726
-    },
-    {
-      "id": 252,
-      "state": "pending",
-      "guest_email": "jd@example.com",
-      "primary_guest_name": "John Doe",
-      "booking_id": 630,
-      "completed_at": "2024-12-23T06:53:55.398Z",
-      "last_opened_at": "2024-12-23T06:53:55.398Z",
-      "received_at": "2024-12-23T06:53:55.398Z",
-      "booking_nr": "new res",
-      "room_name": "103",
-      "page_url": "url.com",
-      "balance": 272
+      "booking_id": 940,
+      "completed_at": "2024-12-23T07:29:30.211Z",
+      "last_opened_at": "2024-12-23T07:29:30.211Z",
+      "received_at": "2024-12-23T07:29:30.211Z",
+      "booking_nr": "wda",
+      "room_name": "104",
+      "page_url": "dwad",
+      "balance": 562
     }
   ]
 }

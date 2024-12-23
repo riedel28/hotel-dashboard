@@ -58,7 +58,7 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <App />
         <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
-        <Toaster />
+        <Toaster richColors />
       </QueryClientProvider>
     </StrictMode>
   );

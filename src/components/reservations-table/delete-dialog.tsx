@@ -1,8 +1,6 @@
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React from 'react';
-
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -22,6 +20,7 @@ interface DeleteDialogProps {
 }
 
 async function deleteReservation(reservationId: number) {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const response = await fetch(`http://localhost:5000/reservations/${reservationId}`, {
     method: 'DELETE',
@@ -37,16 +36,19 @@ async function deleteReservation(reservationId: number) {
 export function DeleteDialog({
   open,
   onOpenChange,
-  reservationNr, reservationId
+  reservationNr,
+  reservationId
 }: DeleteDialogProps) {
-  const [isDeleting, setIsDeleting] = React.useState(false);
   const queryClient = useQueryClient();
 
   const deleteReservationMutation = useMutation({
     mutationFn: () => deleteReservation(reservationId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reservations'] });
+    onSuccess: async () => {
+      // First close the modal
       onOpenChange(false);
+
+      // Then update the table and show success message after the update
+      await queryClient.invalidateQueries({ queryKey: ['reservations'] });
 
       toast.success(
         <div className="space-y-2">
@@ -71,8 +73,6 @@ export function DeleteDialog({
           <div>{error.message}</div>
         </div>
       );
-    }, onSettled: () => {
-      setIsDeleting(false);
     }
   });
 
@@ -90,13 +90,13 @@ export function DeleteDialog({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
             variant="destructive"
-            disabled={isDeleting}
-            onClick={() => {
-              setIsDeleting(true);
-              deleteReservationMutation.mutate();
-            }}
+            disabled={deleteReservationMutation.isPending}
+            onClick={() => deleteReservationMutation.mutate()}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {deleteReservationMutation.isPending && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Delete
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
