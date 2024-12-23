@@ -1,19 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { PlusCircle, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { z } from 'zod'
 
 import { Reservation, columns } from '@/components/reservations-table/columns'
 import { DataTable as ReservationsTable } from '@/components/reservations-table/data-table'
-import { Button, buttonVariants } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-} from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
+import { AddReservationModal } from '@/components/add-reservation-modal'
+
+import { Button, buttonVariants } from '@/components/ui/button'
 
 const fetchReservations = async ({
   page,
@@ -42,18 +37,19 @@ const fetchReservations = async ({
 
 const reservationsFilterSchema = z.object({
   page: z.number().default(1),
-  per_page: z.number().default(2),
+  per_page: z.number().default(20),
 })
 
 function ReservationsPage() {
   const { page, per_page } = Route.useSearch()
   const navigate = Route.useNavigate()
 
+
   const reservationsQuery = useQuery<{
     index: Reservation[]
     total: number
   }>({
-    queryKey: ['items', page, per_page],
+    queryKey: ['reservations', page, per_page],
     queryFn: () => {
       return fetchReservations({ page, perPage: per_page })
     },
@@ -86,6 +82,10 @@ function ReservationsPage() {
   if (reservationsQuery.data) {
     content = (
       <div>
+        <div className="mb-4 flex justify-between">
+          <h1 className="text-2xl font-bold">Reservations</h1>
+          <AddReservationModal />
+        </div>
         <ReservationsTable
           columns={columns}
           data={reservationsQuery?.data?.index}
@@ -130,32 +130,6 @@ function ReservationsPage() {
               Next page
             </Button>
           </div>
-          <div className="flex items-center space-x-1.5">
-            <Select
-              value={per_page.toString()}
-              onValueChange={(value) => {
-                navigate({
-                  to: '/front-office/reservations',
-                  search: { page, per_page: parseInt(value, 10) },
-                })
-              }}
-            >
-              <SelectTrigger className="h-9 w-[110px]">
-                <div className="flex gap-1.5">
-                  <span>{per_page}</span>
-                  <span className="text-border">/</span>
-                  <span>page</span>
-                </div>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="5">5</SelectItem>
-                  <SelectItem value="10">10</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
       </div>
     )
@@ -163,15 +137,6 @@ function ReservationsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-lg font-semibold md:text-2xl">Reservations</h1>
-
-        <Button>
-          <PlusCircle />
-          Add reservation
-        </Button>
-      </div>
-
       {content}
     </div>
   )
