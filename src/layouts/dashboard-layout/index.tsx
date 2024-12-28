@@ -5,22 +5,18 @@ import * as React from 'react';
 import { useAuth } from '@/auth';
 import { Link } from '@tanstack/react-router';
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
   ChevronRight,
   ChevronsUpDown,
-  Command,
   ConciergeBell,
   Folder,
   Forward,
   Frame,
-  GalleryVerticalEnd,
   LogOut,
   Map,
   MoreHorizontal,
   PieChart,
-  RefreshCw,
   Settings2,
   Trash2,
   User
@@ -49,7 +45,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Property, Stage } from '@/components/ui/property-selector';
 import { Separator } from '@/components/ui/separator';
 import {
   Sidebar,
@@ -71,12 +66,7 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
-interface Team extends Property {
-  name: string;
-  plan: string;
-  logo: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  className?: string;
-}
+import PropertySelector from './property-selector';
 
 // This is sample data.
 const data = {
@@ -85,29 +75,29 @@ const data = {
     email: 'john.doe@example.com',
     avatar: 'https://github.com/shadcn.png'
   },
-  teams: [
-    {
-      id: '1',
-      name: 'Development (2)',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
-      stage: 'demo'
-    },
-    {
-      id: '2',
-      name: 'Staging',
-      logo: AudioWaveform,
-      plan: 'Startup',
-      stage: 'production'
-    },
-    {
-      id: '3',
-      name: 'Development 13, Adyen',
-      logo: Command,
-      plan: 'Free',
-      stage: 'staging'
-    }
-  ] as Team[],
+  // teams: [
+  //   {
+  //     id: '1',
+  //     name: 'Development (2)',
+  //     logo: GalleryVerticalEnd,
+  //     plan: 'Enterprise',
+  //     stage: 'demo'
+  //   },
+  //   {
+  //     id: '2',
+  //     name: 'Staging',
+  //     logo: AudioWaveform,
+  //     plan: 'Startup',
+  //     stage: 'production'
+  //   },
+  //   {
+  //     id: '3',
+  //     name: 'Development 13, Adyen',
+  //     logo: Command,
+  //     plan: 'Free',
+  //     stage: 'staging'
+  //   }
+  // ] as Team[],
   navMain: [
     {
       title: 'Front Office',
@@ -224,68 +214,13 @@ export default function DashboardLayout({
 }) {
   const auth = useAuth();
 
-  const [activeTeam, setActiveTeam] = React.useState<Team>(data.teams[0]);
-
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                      <activeTeam.logo className="size-4" />
-                    </div>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {activeTeam.name}
-                      </span>
-                      <span className="truncate text-xs capitalize">
-                        {activeTeam.stage}
-                      </span>
-                    </div>
-                    <ChevronsUpDown className="ml-auto" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-[350px] min-w-56 rounded-lg"
-                  align="start"
-                  side="bottom"
-                  sideOffset={4}
-                >
-                  <DropdownMenuLabel className="text-xs text-muted-foreground">
-                    Properties
-                  </DropdownMenuLabel>
-                  {data.teams.map((team) => (
-                    <DropdownMenuItem
-                      key={team.name}
-                      onClick={() => setActiveTeam(team)}
-                      className="gap-2 p-2"
-                    >
-                      <div className="flex size-6 items-center justify-center rounded-sm border">
-                        <team.logo className="size-4 shrink-0" />
-                      </div>
-                      {team.name}
-
-                      <Stage stage={team.stage} className="ml-auto" />
-                    </DropdownMenuItem>
-                  ))}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex justify-center gap-2">
-                    {/* <div className="flex size-6 items-center justify-center rounded-md border bg-background"> */}
-                    <RefreshCw className="size-4 text-muted-foreground" />
-                    {/* </div> */}
-                    <div className="font-medium text-muted-foreground">
-                      Refresh
-                    </div>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <PropertySelector />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
