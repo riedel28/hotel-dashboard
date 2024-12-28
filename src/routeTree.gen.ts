@@ -13,319 +13,328 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ProfileImport } from './routes/profile'
-import { Route as LoginImport } from './routes/login'
-import { Route as AuthImport } from './routes/_auth'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthDashboardImport } from './routes/_auth.dashboard'
-import { Route as AuthFrontOfficeReservationsIndexImport } from './routes/_auth.front-office/reservations/index'
-import { Route as AuthFrontOfficeReservationsReservationIdImport } from './routes/_auth.front-office/reservations/$reservationId'
+import { Route as DashboardLayoutImport } from './routes/_dashboard-layout'
+import { Route as DashboardLayoutIndexImport } from './routes/_dashboard-layout/index'
+import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as DashboardLayoutProfileImport } from './routes/_dashboard-layout/profile'
+import { Route as DashboardLayoutFrontOfficeReservationsIndexImport } from './routes/_dashboard-layout/front-office/reservations/index'
 
 // Create Virtual Routes
 
-const ProductsLazyImport = createFileRoute('/products')()
-const OrdersLazyImport = createFileRoute('/orders')()
-const CustomersLazyImport = createFileRoute('/customers')()
-const AnalyticsLazyImport = createFileRoute('/analytics')()
-const AboutLazyImport = createFileRoute('/about')()
+const DashboardLayoutProductsLazyImport = createFileRoute(
+  '/_dashboard-layout/products',
+)()
+const DashboardLayoutOrdersLazyImport = createFileRoute(
+  '/_dashboard-layout/orders',
+)()
+const DashboardLayoutCustomersLazyImport = createFileRoute(
+  '/_dashboard-layout/customers',
+)()
+const DashboardLayoutAnalyticsLazyImport = createFileRoute(
+  '/_dashboard-layout/analytics',
+)()
+const DashboardLayoutAboutLazyImport = createFileRoute(
+  '/_dashboard-layout/about',
+)()
+const DashboardLayoutFrontOfficeReservationsReservationIdLazyImport =
+  createFileRoute(
+    '/_dashboard-layout/front-office/reservations/$reservationId',
+  )()
 
 // Create/Update Routes
 
-const ProductsLazyRoute = ProductsLazyImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/products.lazy').then((d) => d.Route))
-
-const OrdersLazyRoute = OrdersLazyImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/orders.lazy').then((d) => d.Route))
-
-const CustomersLazyRoute = CustomersLazyImport.update({
-  id: '/customers',
-  path: '/customers',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/customers.lazy').then((d) => d.Route))
-
-const AnalyticsLazyRoute = AnalyticsLazyImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/analytics.lazy').then((d) => d.Route))
-
-const AboutLazyRoute = AboutLazyImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
-
-const ProfileRoute = ProfileImport.update({
-  id: '/profile',
-  path: '/profile',
+const DashboardLayoutRoute = DashboardLayoutImport.update({
+  id: '/_dashboard-layout',
   getParentRoute: () => rootRoute,
 } as any)
 
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AuthRoute = AuthImport.update({
-  id: '/_auth',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const IndexRoute = IndexImport.update({
+const DashboardLayoutIndexRoute = DashboardLayoutIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardLayoutProductsLazyRoute =
+  DashboardLayoutProductsLazyImport.update({
+    id: '/products',
+    path: '/products',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_dashboard-layout/products.lazy').then((d) => d.Route),
+  )
+
+const DashboardLayoutOrdersLazyRoute = DashboardLayoutOrdersLazyImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_dashboard-layout/orders.lazy').then((d) => d.Route),
+)
+
+const DashboardLayoutCustomersLazyRoute =
+  DashboardLayoutCustomersLazyImport.update({
+    id: '/customers',
+    path: '/customers',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_dashboard-layout/customers.lazy').then((d) => d.Route),
+  )
+
+const DashboardLayoutAnalyticsLazyRoute =
+  DashboardLayoutAnalyticsLazyImport.update({
+    id: '/analytics',
+    path: '/analytics',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_dashboard-layout/analytics.lazy').then((d) => d.Route),
+  )
+
+const DashboardLayoutAboutLazyRoute = DashboardLayoutAboutLazyImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_dashboard-layout/about.lazy').then((d) => d.Route),
+)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthDashboardRoute = AuthDashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthRoute,
+const DashboardLayoutProfileRoute = DashboardLayoutProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
 
-const AuthFrontOfficeReservationsIndexRoute =
-  AuthFrontOfficeReservationsIndexImport.update({
+const DashboardLayoutFrontOfficeReservationsIndexRoute =
+  DashboardLayoutFrontOfficeReservationsIndexImport.update({
     id: '/front-office/reservations/',
     path: '/front-office/reservations/',
-    getParentRoute: () => AuthRoute,
+    getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
-const AuthFrontOfficeReservationsReservationIdRoute =
-  AuthFrontOfficeReservationsReservationIdImport.update({
+const DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute =
+  DashboardLayoutFrontOfficeReservationsReservationIdLazyImport.update({
     id: '/front-office/reservations/$reservationId',
     path: '/front-office/reservations/$reservationId',
-    getParentRoute: () => AuthRoute,
-  } as any)
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any).lazy(() =>
+    import(
+      './routes/_dashboard-layout/front-office/reservations/$reservationId.lazy'
+    ).then((d) => d.Route),
+  )
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_auth': {
-      id: '/_auth'
+    '/_dashboard-layout': {
+      id: '/_dashboard-layout'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthImport
+      preLoaderRoute: typeof DashboardLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/profile': {
-      id: '/profile'
+    '/_dashboard-layout/profile': {
+      id: '/_dashboard-layout/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
+      preLoaderRoute: typeof DashboardLayoutProfileImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
+    '/_dashboard-layout/about': {
+      id: '/_dashboard-layout/about'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof DashboardLayoutAboutLazyImport
+      parentRoute: typeof DashboardLayoutImport
     }
-    '/analytics': {
-      id: '/analytics'
+    '/_dashboard-layout/analytics': {
+      id: '/_dashboard-layout/analytics'
       path: '/analytics'
       fullPath: '/analytics'
-      preLoaderRoute: typeof AnalyticsLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof DashboardLayoutAnalyticsLazyImport
+      parentRoute: typeof DashboardLayoutImport
     }
-    '/customers': {
-      id: '/customers'
+    '/_dashboard-layout/customers': {
+      id: '/_dashboard-layout/customers'
       path: '/customers'
       fullPath: '/customers'
-      preLoaderRoute: typeof CustomersLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof DashboardLayoutCustomersLazyImport
+      parentRoute: typeof DashboardLayoutImport
     }
-    '/orders': {
-      id: '/orders'
+    '/_dashboard-layout/orders': {
+      id: '/_dashboard-layout/orders'
       path: '/orders'
       fullPath: '/orders'
-      preLoaderRoute: typeof OrdersLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof DashboardLayoutOrdersLazyImport
+      parentRoute: typeof DashboardLayoutImport
     }
-    '/products': {
-      id: '/products'
+    '/_dashboard-layout/products': {
+      id: '/_dashboard-layout/products'
       path: '/products'
       fullPath: '/products'
-      preLoaderRoute: typeof ProductsLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof DashboardLayoutProductsLazyImport
+      parentRoute: typeof DashboardLayoutImport
     }
-    '/_auth/dashboard': {
-      id: '/_auth/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthDashboardImport
-      parentRoute: typeof AuthImport
+    '/_dashboard-layout/': {
+      id: '/_dashboard-layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof DashboardLayoutIndexImport
+      parentRoute: typeof DashboardLayoutImport
     }
-    '/_auth/front-office/reservations/$reservationId': {
-      id: '/_auth/front-office/reservations/$reservationId'
+    '/_dashboard-layout/front-office/reservations/$reservationId': {
+      id: '/_dashboard-layout/front-office/reservations/$reservationId'
       path: '/front-office/reservations/$reservationId'
       fullPath: '/front-office/reservations/$reservationId'
-      preLoaderRoute: typeof AuthFrontOfficeReservationsReservationIdImport
-      parentRoute: typeof AuthImport
+      preLoaderRoute: typeof DashboardLayoutFrontOfficeReservationsReservationIdLazyImport
+      parentRoute: typeof DashboardLayoutImport
     }
-    '/_auth/front-office/reservations/': {
-      id: '/_auth/front-office/reservations/'
+    '/_dashboard-layout/front-office/reservations/': {
+      id: '/_dashboard-layout/front-office/reservations/'
       path: '/front-office/reservations'
       fullPath: '/front-office/reservations'
-      preLoaderRoute: typeof AuthFrontOfficeReservationsIndexImport
-      parentRoute: typeof AuthImport
+      preLoaderRoute: typeof DashboardLayoutFrontOfficeReservationsIndexImport
+      parentRoute: typeof DashboardLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthRouteChildren {
-  AuthDashboardRoute: typeof AuthDashboardRoute
-  AuthFrontOfficeReservationsReservationIdRoute: typeof AuthFrontOfficeReservationsReservationIdRoute
-  AuthFrontOfficeReservationsIndexRoute: typeof AuthFrontOfficeReservationsIndexRoute
+interface DashboardLayoutRouteChildren {
+  DashboardLayoutProfileRoute: typeof DashboardLayoutProfileRoute
+  DashboardLayoutAboutLazyRoute: typeof DashboardLayoutAboutLazyRoute
+  DashboardLayoutAnalyticsLazyRoute: typeof DashboardLayoutAnalyticsLazyRoute
+  DashboardLayoutCustomersLazyRoute: typeof DashboardLayoutCustomersLazyRoute
+  DashboardLayoutOrdersLazyRoute: typeof DashboardLayoutOrdersLazyRoute
+  DashboardLayoutProductsLazyRoute: typeof DashboardLayoutProductsLazyRoute
+  DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
+  DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute: typeof DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute
+  DashboardLayoutFrontOfficeReservationsIndexRoute: typeof DashboardLayoutFrontOfficeReservationsIndexRoute
 }
 
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthDashboardRoute: AuthDashboardRoute,
-  AuthFrontOfficeReservationsReservationIdRoute:
-    AuthFrontOfficeReservationsReservationIdRoute,
-  AuthFrontOfficeReservationsIndexRoute: AuthFrontOfficeReservationsIndexRoute,
+const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardLayoutProfileRoute: DashboardLayoutProfileRoute,
+  DashboardLayoutAboutLazyRoute: DashboardLayoutAboutLazyRoute,
+  DashboardLayoutAnalyticsLazyRoute: DashboardLayoutAnalyticsLazyRoute,
+  DashboardLayoutCustomersLazyRoute: DashboardLayoutCustomersLazyRoute,
+  DashboardLayoutOrdersLazyRoute: DashboardLayoutOrdersLazyRoute,
+  DashboardLayoutProductsLazyRoute: DashboardLayoutProductsLazyRoute,
+  DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
+  DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute:
+    DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute,
+  DashboardLayoutFrontOfficeReservationsIndexRoute:
+    DashboardLayoutFrontOfficeReservationsIndexRoute,
 }
 
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
+  DashboardLayoutRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof AuthRouteWithChildren
-  '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
-  '/about': typeof AboutLazyRoute
-  '/analytics': typeof AnalyticsLazyRoute
-  '/customers': typeof CustomersLazyRoute
-  '/orders': typeof OrdersLazyRoute
-  '/products': typeof ProductsLazyRoute
-  '/dashboard': typeof AuthDashboardRoute
-  '/front-office/reservations/$reservationId': typeof AuthFrontOfficeReservationsReservationIdRoute
-  '/front-office/reservations': typeof AuthFrontOfficeReservationsIndexRoute
+  '': typeof DashboardLayoutRouteWithChildren
+  '/profile': typeof DashboardLayoutProfileRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/about': typeof DashboardLayoutAboutLazyRoute
+  '/analytics': typeof DashboardLayoutAnalyticsLazyRoute
+  '/customers': typeof DashboardLayoutCustomersLazyRoute
+  '/orders': typeof DashboardLayoutOrdersLazyRoute
+  '/products': typeof DashboardLayoutProductsLazyRoute
+  '/': typeof DashboardLayoutIndexRoute
+  '/front-office/reservations/$reservationId': typeof DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute
+  '/front-office/reservations': typeof DashboardLayoutFrontOfficeReservationsIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof AuthRouteWithChildren
-  '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
-  '/about': typeof AboutLazyRoute
-  '/analytics': typeof AnalyticsLazyRoute
-  '/customers': typeof CustomersLazyRoute
-  '/orders': typeof OrdersLazyRoute
-  '/products': typeof ProductsLazyRoute
-  '/dashboard': typeof AuthDashboardRoute
-  '/front-office/reservations/$reservationId': typeof AuthFrontOfficeReservationsReservationIdRoute
-  '/front-office/reservations': typeof AuthFrontOfficeReservationsIndexRoute
+  '/profile': typeof DashboardLayoutProfileRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/about': typeof DashboardLayoutAboutLazyRoute
+  '/analytics': typeof DashboardLayoutAnalyticsLazyRoute
+  '/customers': typeof DashboardLayoutCustomersLazyRoute
+  '/orders': typeof DashboardLayoutOrdersLazyRoute
+  '/products': typeof DashboardLayoutProductsLazyRoute
+  '/': typeof DashboardLayoutIndexRoute
+  '/front-office/reservations/$reservationId': typeof DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute
+  '/front-office/reservations': typeof DashboardLayoutFrontOfficeReservationsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_auth': typeof AuthRouteWithChildren
-  '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
-  '/about': typeof AboutLazyRoute
-  '/analytics': typeof AnalyticsLazyRoute
-  '/customers': typeof CustomersLazyRoute
-  '/orders': typeof OrdersLazyRoute
-  '/products': typeof ProductsLazyRoute
-  '/_auth/dashboard': typeof AuthDashboardRoute
-  '/_auth/front-office/reservations/$reservationId': typeof AuthFrontOfficeReservationsReservationIdRoute
-  '/_auth/front-office/reservations/': typeof AuthFrontOfficeReservationsIndexRoute
+  '/_dashboard-layout': typeof DashboardLayoutRouteWithChildren
+  '/_dashboard-layout/profile': typeof DashboardLayoutProfileRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/_dashboard-layout/about': typeof DashboardLayoutAboutLazyRoute
+  '/_dashboard-layout/analytics': typeof DashboardLayoutAnalyticsLazyRoute
+  '/_dashboard-layout/customers': typeof DashboardLayoutCustomersLazyRoute
+  '/_dashboard-layout/orders': typeof DashboardLayoutOrdersLazyRoute
+  '/_dashboard-layout/products': typeof DashboardLayoutProductsLazyRoute
+  '/_dashboard-layout/': typeof DashboardLayoutIndexRoute
+  '/_dashboard-layout/front-office/reservations/$reservationId': typeof DashboardLayoutFrontOfficeReservationsReservationIdLazyRoute
+  '/_dashboard-layout/front-office/reservations/': typeof DashboardLayoutFrontOfficeReservationsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | ''
-    | '/login'
     | '/profile'
+    | '/auth/login'
     | '/about'
     | '/analytics'
     | '/customers'
     | '/orders'
     | '/products'
-    | '/dashboard'
+    | '/'
     | '/front-office/reservations/$reservationId'
     | '/front-office/reservations'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | ''
-    | '/login'
     | '/profile'
+    | '/auth/login'
     | '/about'
     | '/analytics'
     | '/customers'
     | '/orders'
     | '/products'
-    | '/dashboard'
+    | '/'
     | '/front-office/reservations/$reservationId'
     | '/front-office/reservations'
   id:
     | '__root__'
-    | '/'
-    | '/_auth'
-    | '/login'
-    | '/profile'
-    | '/about'
-    | '/analytics'
-    | '/customers'
-    | '/orders'
-    | '/products'
-    | '/_auth/dashboard'
-    | '/_auth/front-office/reservations/$reservationId'
-    | '/_auth/front-office/reservations/'
+    | '/_dashboard-layout'
+    | '/_dashboard-layout/profile'
+    | '/auth/login'
+    | '/_dashboard-layout/about'
+    | '/_dashboard-layout/analytics'
+    | '/_dashboard-layout/customers'
+    | '/_dashboard-layout/orders'
+    | '/_dashboard-layout/products'
+    | '/_dashboard-layout/'
+    | '/_dashboard-layout/front-office/reservations/$reservationId'
+    | '/_dashboard-layout/front-office/reservations/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  ProfileRoute: typeof ProfileRoute
-  AboutLazyRoute: typeof AboutLazyRoute
-  AnalyticsLazyRoute: typeof AnalyticsLazyRoute
-  CustomersLazyRoute: typeof CustomersLazyRoute
-  OrdersLazyRoute: typeof OrdersLazyRoute
-  ProductsLazyRoute: typeof ProductsLazyRoute
+  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuthRoute: AuthRouteWithChildren,
-  LoginRoute: LoginRoute,
-  ProfileRoute: ProfileRoute,
-  AboutLazyRoute: AboutLazyRoute,
-  AnalyticsLazyRoute: AnalyticsLazyRoute,
-  CustomersLazyRoute: CustomersLazyRoute,
-  OrdersLazyRoute: OrdersLazyRoute,
-  ProductsLazyRoute: ProductsLazyRoute,
+  DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
+  AuthLoginRoute: AuthLoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -338,60 +347,62 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/_auth",
-        "/login",
-        "/profile",
-        "/about",
-        "/analytics",
-        "/customers",
-        "/orders",
-        "/products"
+        "/_dashboard-layout",
+        "/auth/login"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_auth": {
-      "filePath": "_auth.tsx",
+    "/_dashboard-layout": {
+      "filePath": "_dashboard-layout.tsx",
       "children": [
-        "/_auth/dashboard",
-        "/_auth/front-office/reservations/$reservationId",
-        "/_auth/front-office/reservations/"
+        "/_dashboard-layout/profile",
+        "/_dashboard-layout/about",
+        "/_dashboard-layout/analytics",
+        "/_dashboard-layout/customers",
+        "/_dashboard-layout/orders",
+        "/_dashboard-layout/products",
+        "/_dashboard-layout/",
+        "/_dashboard-layout/front-office/reservations/$reservationId",
+        "/_dashboard-layout/front-office/reservations/"
       ]
     },
-    "/login": {
-      "filePath": "login.tsx"
+    "/_dashboard-layout/profile": {
+      "filePath": "_dashboard-layout/profile.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/profile": {
-      "filePath": "profile.tsx"
+    "/auth/login": {
+      "filePath": "auth/login.tsx"
     },
-    "/about": {
-      "filePath": "about.lazy.tsx"
+    "/_dashboard-layout/about": {
+      "filePath": "_dashboard-layout/about.lazy.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/analytics": {
-      "filePath": "analytics.lazy.tsx"
+    "/_dashboard-layout/analytics": {
+      "filePath": "_dashboard-layout/analytics.lazy.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/customers": {
-      "filePath": "customers.lazy.tsx"
+    "/_dashboard-layout/customers": {
+      "filePath": "_dashboard-layout/customers.lazy.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/orders": {
-      "filePath": "orders.lazy.tsx"
+    "/_dashboard-layout/orders": {
+      "filePath": "_dashboard-layout/orders.lazy.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/products": {
-      "filePath": "products.lazy.tsx"
+    "/_dashboard-layout/products": {
+      "filePath": "_dashboard-layout/products.lazy.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/_auth/dashboard": {
-      "filePath": "_auth.dashboard.tsx",
-      "parent": "/_auth"
+    "/_dashboard-layout/": {
+      "filePath": "_dashboard-layout/index.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/_auth/front-office/reservations/$reservationId": {
-      "filePath": "_auth.front-office/reservations/$reservationId.tsx",
-      "parent": "/_auth"
+    "/_dashboard-layout/front-office/reservations/$reservationId": {
+      "filePath": "_dashboard-layout/front-office/reservations/$reservationId.lazy.tsx",
+      "parent": "/_dashboard-layout"
     },
-    "/_auth/front-office/reservations/": {
-      "filePath": "_auth.front-office/reservations/index.tsx",
-      "parent": "/_auth"
+    "/_dashboard-layout/front-office/reservations/": {
+      "filePath": "_dashboard-layout/front-office/reservations/index.tsx",
+      "parent": "/_dashboard-layout"
     }
   }
 }

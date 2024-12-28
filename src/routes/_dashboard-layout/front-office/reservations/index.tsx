@@ -7,8 +7,8 @@ import { z } from 'zod';
 import { AddReservationModal } from '@/components/add-reservation-modal';
 import { columns } from '@/components/reservations-table/columns';
 import { DataTable as ReservationsTable } from '@/components/reservations-table/data-table';
-import { TableSkeleton } from '@/components/reservations-table/table-skeleton';
-import { TableToolbar } from '@/components/reservations-table/table-toolbar';
+// import { TableSkeleton } from '@/components/reservations-table/table-skeleton'
+// import { TableToolbar } from '@/components/reservations-table/table-toolbar'
 import { Button, buttonVariants } from '@/components/ui/button';
 
 import { cn } from '@/lib/utils';
@@ -37,11 +37,11 @@ function ReservationsPage() {
     content = (
       <div>
         <div className="space-y-2">
-          <TableToolbar
+          {/* <TableToolbar
             onRefresh={reservationsQuery.refetch}
             isRefreshing={reservationsQuery.isRefetching}
-          />
-          <TableSkeleton />
+          /> */}
+          {/* <TableSkeleton /> */}
         </div>
       </div>
     );
@@ -63,10 +63,10 @@ function ReservationsPage() {
     content = (
       <div>
         <div className="space-y-2">
-          <TableToolbar
+          {/* <TableToolbar
             onRefresh={reservationsQuery.refetch}
             isRefreshing={reservationsQuery.isRefetching}
-          />
+          /> */}
 
           <div
             className={cn(
@@ -79,7 +79,7 @@ function ReservationsPage() {
             <ReservationsTable
               data={reservationsQuery.data.index}
               columns={columns}
-              isLoading={reservationsQuery.isLoading}
+              // isLoading={reservationsQuery.isLoading}
             />
           </div>
         </div>
@@ -139,7 +139,9 @@ function ReservationsPage() {
   );
 }
 
-export const Route = createFileRoute('/_auth/front-office/reservations/')({
+export const Route = createFileRoute(
+  '/_dashboard-layout/front-office/reservations/'
+)({
   validateSearch: (search) => reservationsFilterSchema.parse(search),
   component: () => <ReservationsPage />
 });

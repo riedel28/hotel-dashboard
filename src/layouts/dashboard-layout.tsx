@@ -1,7 +1,9 @@
 'use client';
-import * as React from 'react';
-import { createFileRoute, redirect, Link, Outlet, useRouter } from '@tanstack/react-router'
 
+import * as React from 'react';
+
+import { useAuth } from '@/auth';
+import { Link } from '@tanstack/react-router';
 import {
   AudioWaveform,
   BookOpen,
@@ -47,6 +49,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { Property, Stage } from '@/components/ui/property-selector';
 import { Separator } from '@/components/ui/separator';
 import {
   Sidebar,
@@ -67,9 +70,6 @@ import {
   SidebarRail,
   SidebarTrigger
 } from '@/components/ui/sidebar';
-
-import { Property, Stage } from '@/components/ui/property-selector';
-import { useAuth } from '@/auth';
 
 interface Team extends Property {
   name: string;
@@ -214,35 +214,15 @@ const data = {
   ]
 };
 
+export default function DashboardLayout({
+  children,
+  onLogout
+}: {
+  children: React.ReactNode;
 
-export const Route = createFileRoute('/_auth')({
-  beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: '/login',
-        search: {
-          redirect: location.href,
-        },
-      })
-    }
-  },
-  component: DashboardLayout,
-})
-
-export default function DashboardLayout() {
-  const router = useRouter()
-  const navigate = Route.useNavigate()
-  const auth = useAuth()
-
-  const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      auth.logout().then(() => {
-        router.invalidate().finally(() => {
-          navigate({ to: '/' })
-        })
-      })
-    }
-  }
+  onLogout: () => void;
+}) {
+  const auth = useAuth();
 
   const [activeTeam, setActiveTeam] = React.useState<Team>(data.teams[0]);
 
@@ -459,9 +439,7 @@ export default function DashboardLayout() {
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={handleLogout}
-                  >
+                  <DropdownMenuItem onClick={onLogout}>
                     <LogOut />
                     Log out
                     <span className="ml-auto text-xs text-muted-foreground">
@@ -495,12 +473,8 @@ export default function DashboardLayout() {
             </Breadcrumb>
           </div>
         </header>
-        <section className="px-6 py-4 pb-8">
-          <Outlet />
-        </section>
+        <section className="px-6 py-4 pb-8">{children}</section>
       </SidebarInset>
     </SidebarProvider>
   );
 }
-
-
