@@ -5,21 +5,29 @@ import * as React from 'react';
 import { useAuth } from '@/auth';
 import { Link } from '@tanstack/react-router';
 import {
-  BookOpen,
-  Bot,
-  ChevronRight,
+  ArrowUpRightIcon,
+  BedDoubleIcon,
+  BedSingleIcon,
+  BuildingIcon,
+  CalendarIcon,
   ChevronsUpDown,
   ConciergeBell,
-  Folder,
-  Forward,
-  Frame,
+  CreditCardIcon,
+  FileSpreadsheetIcon,
+  Grid2X2Icon,
+  HomeIcon,
+  ListTodoIcon,
+  LockIcon,
   LogOut,
-  Map,
-  MoreHorizontal,
-  PieChart,
-  Settings2,
-  Trash2,
-  User
+  ReceiptTextIcon,
+  ShoppingBagIcon,
+  ShoppingCartIcon,
+  SmartphoneIcon,
+  SquareActivityIcon,
+  TabletIcon,
+  TvIcon,
+  User,
+  UsersIcon
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -31,11 +39,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger
-} from '@/components/ui/collapsible';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -58,9 +61,6 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger
@@ -102,104 +102,29 @@ const data = {
     {
       title: 'Front Office',
       url: '/front-office',
-      icon: ConciergeBell,
-      isActive: true,
-      items: [
-        {
-          title: 'Reservations',
-          url: '/front-office/reservations'
-        },
-        {
-          title: 'Starred',
-          url: '#'
-        },
-        {
-          title: 'Settings',
-          url: '#'
-        }
-      ]
-    },
-    {
-      title: 'Models',
-      url: '#',
-      icon: Bot,
-      items: [
-        {
-          title: 'Genesis',
-          url: '#'
-        },
-        {
-          title: 'Explorer',
-          url: '#'
-        },
-        {
-          title: 'Quantum',
-          url: '#'
-        }
-      ]
-    },
-    {
-      title: 'Documentation',
-      url: '#',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#'
-        },
-        {
-          title: 'Get Started',
-          url: '#'
-        },
-        {
-          title: 'Tutorials',
-          url: '#'
-        },
-        {
-          title: 'Changelog',
-          url: '#'
-        }
-      ]
-    },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: Settings2,
-      items: [
-        {
-          title: 'General',
-          url: '#'
-        },
-        {
-          title: 'Team',
-          url: '#'
-        },
-        {
-          title: 'Billing',
-          url: '#'
-        },
-        {
-          title: 'Limits',
-          url: '#'
-        }
-      ]
+      icon: ConciergeBell
     }
   ],
-  projects: [
+  contentManager: [
     {
-      name: 'Design Engineering',
-      url: '#',
-      icon: Frame
+      name: 'Mobile App',
+      url: '/mobile-cms',
+      icon: SmartphoneIcon
     },
     {
-      name: 'Sales & Marketing',
-      url: '#',
-      icon: PieChart
+      name: 'TV App',
+      url: '/tv',
+      icon: TvIcon
     },
     {
-      name: 'Travel',
-      url: '#',
-      icon: Map
+      name: 'Products',
+      url: '/products',
+      icon: ShoppingBagIcon
+    },
+    {
+      name: 'Events',
+      url: '/events',
+      icon: CalendarIcon
     }
   ]
 };
@@ -225,86 +150,162 @@ export default function DashboardLayout({
           </SidebarMenu>
         </SidebarHeader>
         <SidebarContent>
+          <SidebarMenu>
+            <SidebarGroup>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/">
+                    <HomeIcon />
+                    <span>Start</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/monitoring">
+                    <SquareActivityIcon />
+                    <span>Monitoring</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarGroup>
+          </SidebarMenu>
           <SidebarGroup>
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+            <SidebarGroupLabel>Front Office</SidebarGroupLabel>
             <SidebarMenu>
-              {data.navMain.map((item) => (
-                <Collapsible
-                  key={item.title}
-                  asChild
-                  defaultOpen={item.isActive}
-                  className="group/collapsible"
-                >
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title}>
-                        {item.icon && <item.icon />}
-                        <span>{item.title}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <Link to={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link
+                    to="/reservations"
+                    search={{
+                      page: 1,
+                      per_page: 10
+                    }}
+                  >
+                    <BedDoubleIcon />
+                    <span>Reservations</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/registration-forms">
+                    <ListTodoIcon />
+                    <span>Registration forms</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/payments">
+                    <ReceiptTextIcon />
+                    <span>Payments</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/orders">
+                    <ShoppingCartIcon />
+                    <span>Orders</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+          <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+            <SidebarGroupLabel>Content Manager</SidebarGroupLabel>
+            <SidebarMenu>
+              {data.contentManager.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{item.name}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                  {item.url === '/tv' ? (
+                    <SidebarMenuAction>
+                      <ArrowUpRightIcon className="text-muted-foreground/80" />
+                      <span className="sr-only">External link</span>
+                    </SidebarMenuAction>
+                  ) : null}
+                </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Projects</SidebarGroupLabel>
+            <SidebarGroupLabel>Integrations</SidebarGroupLabel>
             <SidebarMenu>
-              {data.projects.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.name}</span>
-                    </a>
-                  </SidebarMenuButton>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <SidebarMenuAction showOnHover>
-                        <MoreHorizontal />
-                        <span className="sr-only">More</span>
-                      </SidebarMenuAction>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="w-48 rounded-lg"
-                      side="bottom"
-                      align="end"
-                    >
-                      <DropdownMenuItem>
-                        <Folder className="text-muted-foreground" />
-                        <span>View Project</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Forward className="text-muted-foreground" />
-                        <span>Share Project</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <Trash2 className="text-muted-foreground" />
-                        <span>Delete Project</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </SidebarMenuItem>
-              ))}
               <SidebarMenuItem>
-                <SidebarMenuButton className="text-sidebar-foreground/70">
-                  <MoreHorizontal className="text-sidebar-foreground/70" />
-                  <span>More</span>
+                <SidebarMenuButton asChild>
+                  <Link to="/access-provider">
+                    <LockIcon />
+                    <span>Access Provider</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/pms-provider">
+                    <Grid2X2Icon />
+                    <span>PMS Provider</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/payment-provider">
+                    <CreditCardIcon />
+                    <span>Payment Provider</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+
+          {/* Settings */}
+          <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+            <SidebarGroupLabel>Settings</SidebarGroupLabel>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/company">
+                    <BuildingIcon />
+                    <span>Company data</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/checkin-page">
+                    <FileSpreadsheetIcon />
+                    <span>Checkin Page</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/users">
+                    <UsersIcon />
+                    <span>Users</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/rooms">
+                    <BedSingleIcon />
+                    <span>Rooms</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/devices">
+                    <TabletIcon />
+                    <span>Devices</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

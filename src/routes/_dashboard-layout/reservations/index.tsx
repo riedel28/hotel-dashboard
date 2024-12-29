@@ -94,7 +94,7 @@ function ReservationsPage() {
             <Button
               onClick={() => {
                 navigate({
-                  to: '/front-office/reservations',
+                  to: '/reservations',
                   search: { page: page - 1, per_page }
                 });
               }}
@@ -110,7 +110,7 @@ function ReservationsPage() {
             <Button
               onClick={() => {
                 navigate({
-                  to: '/front-office/reservations',
+                  to: '/reservations',
                   search: { page: page + 1, per_page }
                 });
               }}
@@ -139,9 +139,7 @@ function ReservationsPage() {
   );
 }
 
-export const Route = createFileRoute(
-  '/_dashboard-layout/front-office/reservations/'
-)({
+export const Route = createFileRoute('/_dashboard-layout/reservations/')({
   validateSearch: (search) => reservationsFilterSchema.parse(search),
   component: () => <ReservationsPage />
 });
