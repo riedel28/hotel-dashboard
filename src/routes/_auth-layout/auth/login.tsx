@@ -7,12 +7,14 @@ import {
   useRouter,
   useRouterState
 } from '@tanstack/react-router';
+import { MessageCircleIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 
 import { cn } from '@/lib/utils';
 
@@ -72,6 +74,9 @@ function LoginPage() {
   return (
     <div className="w-full max-w-md">
       <div className="mb-8 text-center">
+        <div className="mb-2 inline-block rounded-md bg-primary p-2 text-white">
+          <MessageCircleIcon className="size-10" />
+        </div>
         <h1 className="text-2xl font-bold">Login</h1>
         <p className="text-muted-foreground">
           {search.redirect
@@ -99,9 +104,7 @@ function LoginPage() {
             <label htmlFor="password" className="text-sm font-medium">
               Password
             </label>
-            <Input
-              id="password"
-              type="password"
+            <PasswordInput
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
