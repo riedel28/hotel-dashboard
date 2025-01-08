@@ -4,14 +4,16 @@ import { createFileRoute } from '@tanstack/react-router';
 import { X } from 'lucide-react';
 import { z } from 'zod';
 
-import { AddReservationModal } from '@/components/add-reservation-modal';
-import { columns } from '@/components/reservations-table/columns';
-import { DataTable as ReservationsTable } from '@/components/reservations-table/data-table';
 // import { TableSkeleton } from '@/components/reservations-table/table-skeleton'
 // import { TableToolbar } from '@/components/reservations-table/table-toolbar'
 import { Button, buttonVariants } from '@/components/ui/button';
+import { SearchInput } from '@/components/ui/search-input';
 
 import { cn } from '@/lib/utils';
+
+import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
+import { columns } from '../reservations/-components/reservations-table/columns';
+import { DataTable as ReservationsTable } from '../reservations/-components/reservations-table/data-table';
 
 const reservationsFilterSchema = z.object({
   page: z.number().default(1),
@@ -67,6 +69,10 @@ function ReservationsPage() {
             onRefresh={reservationsQuery.refetch}
             isRefreshing={reservationsQuery.isRefetching}
           /> */}
+
+          <div className="max-w-sm">
+            <SearchInput />
+          </div>
 
           <div
             className={cn(
@@ -139,7 +145,9 @@ function ReservationsPage() {
   );
 }
 
-export const Route = createFileRoute('/_dashboard-layout/reservations/')({
+export const Route = createFileRoute(
+  '/_dashboard-layout/(front-office)/reservations/'
+)({
   validateSearch: (search) => reservationsFilterSchema.parse(search),
   component: () => <ReservationsPage />
 });

@@ -71,7 +71,7 @@ function ReservationForm() {
 }
 
 export const Route = createLazyFileRoute(
-  '/_dashboard-layout/reservations/$reservationId'
+  '/_dashboard-layout/(front-office)/reservations/$reservationId'
 )({
   component: ReservationPage
 });
