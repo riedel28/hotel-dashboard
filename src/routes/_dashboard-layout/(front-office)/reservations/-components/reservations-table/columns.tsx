@@ -3,15 +3,8 @@
 import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
-
 import { RowActions } from './row-actions';
-import { StatusIcon } from './status-icon';
+import { StatusBadge } from './status-icon';
 
 export type Reservation = {
   id: number;
@@ -37,20 +30,7 @@ export const columns: ColumnDef<Reservation>[] = [
     cell: ({ row }) => {
       const status = row.getValue('state') as Reservation['state'];
 
-      return (
-        <div className="flex justify-center">
-          <TooltipProvider delayDuration={0}>
-            <Tooltip>
-              <TooltipTrigger role="button" aria-label={status}>
-                <StatusIcon status={status} />
-              </TooltipTrigger>
-              <TooltipContent>
-                <span className="capitalize">{status}</span>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      );
+      return <StatusBadge status={status} />;
     }
   },
   {
