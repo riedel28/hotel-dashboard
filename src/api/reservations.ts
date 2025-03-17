@@ -1,6 +1,5 @@
+import { Reservation } from '@/routes/_dashboard-layout/(front-office)/reservations/-components/reservations-table/columns';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
-
-import { Reservation } from '@/components/reservations-table/columns';
 
 type ReservationsResponse = {
   index: Reservation[];

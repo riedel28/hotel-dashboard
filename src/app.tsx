@@ -1,23 +1,24 @@
 import { StrictMode } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import ReactDOM from 'react-dom/client';
 
+import { AuthProvider, useAuth } from './auth';
+import { Toaster } from './components/ui/sonner';
 import './globals.css';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
-import { AuthProvider, useAuth } from './auth'
-import { Toaster } from './components/ui/sonner';
 
 // Create a new router instance
 const router = createRouter({
-  routeTree, context: {
+  routeTree,
+  context: {
     // auth will initially be undefined
     // We'll be passing down the auth state from within a React component
-    auth: undefined!,
-  },
+    auth: undefined!
+  }
 });
 
 // Register the router instance for type safety
@@ -39,10 +40,9 @@ if (!rootElement.innerHTML) {
     }
   });
 
-
   function InnerApp() {
-    const auth = useAuth()
-    return <RouterProvider router={router} context={{ auth }} />
+    const auth = useAuth();
+    return <RouterProvider router={router} context={{ auth }} />;
   }
 
   function App() {
@@ -50,14 +50,17 @@ if (!rootElement.innerHTML) {
       <AuthProvider>
         <InnerApp />
       </AuthProvider>
-    )
+    );
   }
 
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <App />
-        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+        <ReactQueryDevtools
+          initialIsOpen={false}
+          buttonPosition="bottom-left"
+        />
         <Toaster richColors />
       </QueryClientProvider>
     </StrictMode>
