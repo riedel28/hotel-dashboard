@@ -19,6 +19,7 @@ import {
   ListTodoIcon,
   LockIcon,
   LogOut,
+  MessageCircleIcon,
   ReceiptTextIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
@@ -48,7 +49,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Separator } from '@/components/ui/separator';
 import {
   Sidebar,
   SidebarContent,
@@ -144,7 +144,19 @@ export default function DashboardLayout({
       <Sidebar collapsible="icon">
         <SidebarHeader>
           <SidebarMenu>
-            <SidebarMenuItem>
+            <SidebarGroup>
+              <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+                <div className="bg-primary inline-block rounded-md p-1 text-white transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
+                  <MessageCircleIcon className="size-4" />
+                </div>
+                <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
+                  Backoffice Manager
+                </span>
+
+                <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
+              </SidebarMenuItem>
+            </SidebarGroup>
+            <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
               <PropertySelector />
             </SidebarMenuItem>
           </SidebarMenu>
@@ -359,7 +371,7 @@ export default function DashboardLayout({
                         <span className="truncate font-semibold">
                           {data.user.name}
                         </span>
-                        <span className="truncate text-xs text-muted-foreground">
+                        <span className="text-muted-foreground truncate text-xs">
                           {auth.user?.email}
                         </span>
                       </div>
@@ -378,7 +390,7 @@ export default function DashboardLayout({
                   <DropdownMenuItem onClick={onLogout}>
                     <LogOut />
                     Log out
-                    <span className="ml-auto text-xs text-muted-foreground">
+                    <span className="text-muted-foreground ml-auto text-xs">
                       v1.2.4
                     </span>
                   </DropdownMenuItem>
@@ -392,8 +404,7 @@ export default function DashboardLayout({
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 border-b-[1px] transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
+            <SidebarTrigger className="md:hidden" />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
