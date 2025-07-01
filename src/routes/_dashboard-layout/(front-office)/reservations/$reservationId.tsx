@@ -4,7 +4,7 @@ import {
   QueryErrorResetBoundary,
   useSuspenseQuery
 } from '@tanstack/react-query';
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { ErrorFallback } from '@/components/ui/error-fallback';
@@ -70,7 +70,7 @@ function ReservationForm() {
   );
 }
 
-export const Route = createLazyFileRoute(
+export const Route = createFileRoute(
   '/_dashboard-layout/(front-office)/reservations/$reservationId'
 )({
   component: ReservationPage

@@ -1,8 +1,8 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 
-export const Route = createLazyFileRoute('/_dashboard-layout/products')({
+export const Route = createFileRoute('/_dashboard-layout/products')({
   component: () => (
     <>
       <div className="flex items-center">

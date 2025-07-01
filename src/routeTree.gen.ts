@@ -8,476 +8,512 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardLayoutRouteImport } from './routes/_dashboard-layout'
+import { Route as AuthLayoutRouteImport } from './routes/_auth-layout'
+import { Route as DashboardLayoutIndexRouteImport } from './routes/_dashboard-layout/index'
+import { Route as DashboardLayoutUsersRouteImport } from './routes/_dashboard-layout/users'
+import { Route as DashboardLayoutRoomsRouteImport } from './routes/_dashboard-layout/rooms'
+import { Route as DashboardLayoutProfileRouteImport } from './routes/_dashboard-layout/profile'
+import { Route as DashboardLayoutProductsRouteImport } from './routes/_dashboard-layout/products'
+import { Route as DashboardLayoutPmsProviderRouteImport } from './routes/_dashboard-layout/pms-provider'
+import { Route as DashboardLayoutPaymentProviderRouteImport } from './routes/_dashboard-layout/payment-provider'
+import { Route as DashboardLayoutMonitoringRouteImport } from './routes/_dashboard-layout/monitoring'
+import { Route as DashboardLayoutEventsRouteImport } from './routes/_dashboard-layout/events'
+import { Route as DashboardLayoutDevicesRouteImport } from './routes/_dashboard-layout/devices'
+import { Route as DashboardLayoutCustomersRouteImport } from './routes/_dashboard-layout/customers'
+import { Route as DashboardLayoutCompanyRouteImport } from './routes/_dashboard-layout/company'
+import { Route as DashboardLayoutCheckinPageRouteImport } from './routes/_dashboard-layout/checkin-page'
+import { Route as DashboardLayoutAnalyticsRouteImport } from './routes/_dashboard-layout/analytics'
+import { Route as DashboardLayoutAccessProviderRouteImport } from './routes/_dashboard-layout/access-provider'
+import { Route as DashboardLayoutAboutRouteImport } from './routes/_dashboard-layout/about'
+import { Route as DashboardLayoutfrontOfficeRegistrationFormsRouteImport } from './routes/_dashboard-layout/(front-office)/registration-forms'
+import { Route as DashboardLayoutfrontOfficePaymentsRouteImport } from './routes/_dashboard-layout/(front-office)/payments'
+import { Route as DashboardLayoutfrontOfficeOrdersRouteImport } from './routes/_dashboard-layout/(front-office)/orders'
+import { Route as AuthLayoutAuthLoginRouteImport } from './routes/_auth-layout/auth/login'
+import { Route as AuthLayoutAuthForgotPasswordRouteImport } from './routes/_auth-layout/auth/forgot-password'
+import { Route as DashboardLayoutfrontOfficeReservationsIndexRouteImport } from './routes/_dashboard-layout/(front-office)/reservations/index'
+import { Route as DashboardLayoutfrontOfficeReservationsReservationIdRouteImport } from './routes/_dashboard-layout/(front-office)/reservations/$reservationId'
 
-// Import Routes
-
-import { Route as rootRoute } from './routes/__root'
-import { Route as DashboardLayoutImport } from './routes/_dashboard-layout'
-import { Route as AuthLayoutImport } from './routes/_auth-layout'
-import { Route as DashboardLayoutIndexImport } from './routes/_dashboard-layout/index'
-import { Route as DashboardLayoutProfileImport } from './routes/_dashboard-layout/profile'
-import { Route as AuthLayoutAuthLoginImport } from './routes/_auth-layout/auth/login'
-import { Route as AuthLayoutAuthForgotPasswordImport } from './routes/_auth-layout/auth/forgot-password'
-import { Route as DashboardLayoutfrontOfficeReservationsIndexImport } from './routes/_dashboard-layout/(front-office)/reservations/index'
-
-// Create Virtual Routes
-
-const DashboardLayoutUsersLazyImport = createFileRoute(
-  '/_dashboard-layout/users',
-)()
-const DashboardLayoutRoomsLazyImport = createFileRoute(
-  '/_dashboard-layout/rooms',
-)()
-const DashboardLayoutProductsLazyImport = createFileRoute(
-  '/_dashboard-layout/products',
-)()
-const DashboardLayoutPmsProviderLazyImport = createFileRoute(
-  '/_dashboard-layout/pms-provider',
-)()
-const DashboardLayoutPaymentProviderLazyImport = createFileRoute(
-  '/_dashboard-layout/payment-provider',
-)()
-const DashboardLayoutMonitoringLazyImport = createFileRoute(
-  '/_dashboard-layout/monitoring',
-)()
-const DashboardLayoutEventsLazyImport = createFileRoute(
-  '/_dashboard-layout/events',
-)()
-const DashboardLayoutDevicesLazyImport = createFileRoute(
-  '/_dashboard-layout/devices',
-)()
-const DashboardLayoutCustomersLazyImport = createFileRoute(
-  '/_dashboard-layout/customers',
-)()
-const DashboardLayoutCompanyLazyImport = createFileRoute(
-  '/_dashboard-layout/company',
-)()
-const DashboardLayoutCheckinPageLazyImport = createFileRoute(
-  '/_dashboard-layout/checkin-page',
-)()
-const DashboardLayoutAnalyticsLazyImport = createFileRoute(
-  '/_dashboard-layout/analytics',
-)()
-const DashboardLayoutAccessProviderLazyImport = createFileRoute(
-  '/_dashboard-layout/access-provider',
-)()
-const DashboardLayoutAboutLazyImport = createFileRoute(
-  '/_dashboard-layout/about',
-)()
-const DashboardLayoutfrontOfficeRegistrationFormsLazyImport = createFileRoute(
-  '/_dashboard-layout/(front-office)/registration-forms',
-)()
-const DashboardLayoutfrontOfficePaymentsLazyImport = createFileRoute(
-  '/_dashboard-layout/(front-office)/payments',
-)()
-const DashboardLayoutfrontOfficeOrdersLazyImport = createFileRoute(
-  '/_dashboard-layout/(front-office)/orders',
-)()
-const DashboardLayoutfrontOfficeReservationsReservationIdLazyImport =
-  createFileRoute(
-    '/_dashboard-layout/(front-office)/reservations/$reservationId',
-  )()
-
-// Create/Update Routes
-
-const DashboardLayoutRoute = DashboardLayoutImport.update({
+const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
   id: '/_dashboard-layout',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthLayoutRoute = AuthLayoutImport.update({
+const AuthLayoutRoute = AuthLayoutRouteImport.update({
   id: '/_auth-layout',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const DashboardLayoutIndexRoute = DashboardLayoutIndexImport.update({
+const DashboardLayoutIndexRoute = DashboardLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
-
-const DashboardLayoutUsersLazyRoute = DashboardLayoutUsersLazyImport.update({
+const DashboardLayoutUsersRoute = DashboardLayoutUsersRouteImport.update({
   id: '/users',
   path: '/users',
   getParentRoute: () => DashboardLayoutRoute,
-} as any).lazy(() =>
-  import('./routes/_dashboard-layout/users.lazy').then((d) => d.Route),
-)
-
-const DashboardLayoutRoomsLazyRoute = DashboardLayoutRoomsLazyImport.update({
+} as any)
+const DashboardLayoutRoomsRoute = DashboardLayoutRoomsRouteImport.update({
   id: '/rooms',
   path: '/rooms',
   getParentRoute: () => DashboardLayoutRoute,
-} as any).lazy(() =>
-  import('./routes/_dashboard-layout/rooms.lazy').then((d) => d.Route),
-)
-
-const DashboardLayoutProductsLazyRoute =
-  DashboardLayoutProductsLazyImport.update({
-    id: '/products',
-    path: '/products',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/products.lazy').then((d) => d.Route),
-  )
-
-const DashboardLayoutPmsProviderLazyRoute =
-  DashboardLayoutPmsProviderLazyImport.update({
-    id: '/pms-provider',
-    path: '/pms-provider',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/pms-provider.lazy').then((d) => d.Route),
-  )
-
-const DashboardLayoutPaymentProviderLazyRoute =
-  DashboardLayoutPaymentProviderLazyImport.update({
-    id: '/payment-provider',
-    path: '/payment-provider',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/payment-provider.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const DashboardLayoutMonitoringLazyRoute =
-  DashboardLayoutMonitoringLazyImport.update({
-    id: '/monitoring',
-    path: '/monitoring',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/monitoring.lazy').then((d) => d.Route),
-  )
-
-const DashboardLayoutEventsLazyRoute = DashboardLayoutEventsLazyImport.update({
-  id: '/events',
-  path: '/events',
-  getParentRoute: () => DashboardLayoutRoute,
-} as any).lazy(() =>
-  import('./routes/_dashboard-layout/events.lazy').then((d) => d.Route),
-)
-
-const DashboardLayoutDevicesLazyRoute = DashboardLayoutDevicesLazyImport.update(
-  {
-    id: '/devices',
-    path: '/devices',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/_dashboard-layout/devices.lazy').then((d) => d.Route),
-)
-
-const DashboardLayoutCustomersLazyRoute =
-  DashboardLayoutCustomersLazyImport.update({
-    id: '/customers',
-    path: '/customers',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/customers.lazy').then((d) => d.Route),
-  )
-
-const DashboardLayoutCompanyLazyRoute = DashboardLayoutCompanyLazyImport.update(
-  {
-    id: '/company',
-    path: '/company',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/_dashboard-layout/company.lazy').then((d) => d.Route),
-)
-
-const DashboardLayoutCheckinPageLazyRoute =
-  DashboardLayoutCheckinPageLazyImport.update({
-    id: '/checkin-page',
-    path: '/checkin-page',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/checkin-page.lazy').then((d) => d.Route),
-  )
-
-const DashboardLayoutAnalyticsLazyRoute =
-  DashboardLayoutAnalyticsLazyImport.update({
-    id: '/analytics',
-    path: '/analytics',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/analytics.lazy').then((d) => d.Route),
-  )
-
-const DashboardLayoutAccessProviderLazyRoute =
-  DashboardLayoutAccessProviderLazyImport.update({
-    id: '/access-provider',
-    path: '/access-provider',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/access-provider.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const DashboardLayoutAboutLazyRoute = DashboardLayoutAboutLazyImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => DashboardLayoutRoute,
-} as any).lazy(() =>
-  import('./routes/_dashboard-layout/about.lazy').then((d) => d.Route),
-)
-
-const DashboardLayoutProfileRoute = DashboardLayoutProfileImport.update({
+} as any)
+const DashboardLayoutProfileRoute = DashboardLayoutProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
-
-const DashboardLayoutfrontOfficeRegistrationFormsLazyRoute =
-  DashboardLayoutfrontOfficeRegistrationFormsLazyImport.update({
+const DashboardLayoutProductsRoute = DashboardLayoutProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutPmsProviderRoute =
+  DashboardLayoutPmsProviderRouteImport.update({
+    id: '/pms-provider',
+    path: '/pms-provider',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutPaymentProviderRoute =
+  DashboardLayoutPaymentProviderRouteImport.update({
+    id: '/payment-provider',
+    path: '/payment-provider',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutMonitoringRoute =
+  DashboardLayoutMonitoringRouteImport.update({
+    id: '/monitoring',
+    path: '/monitoring',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutEventsRoute = DashboardLayoutEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutDevicesRoute = DashboardLayoutDevicesRouteImport.update({
+  id: '/devices',
+  path: '/devices',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutCustomersRoute =
+  DashboardLayoutCustomersRouteImport.update({
+    id: '/customers',
+    path: '/customers',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutCompanyRoute = DashboardLayoutCompanyRouteImport.update({
+  id: '/company',
+  path: '/company',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutCheckinPageRoute =
+  DashboardLayoutCheckinPageRouteImport.update({
+    id: '/checkin-page',
+    path: '/checkin-page',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutAnalyticsRoute =
+  DashboardLayoutAnalyticsRouteImport.update({
+    id: '/analytics',
+    path: '/analytics',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutAccessProviderRoute =
+  DashboardLayoutAccessProviderRouteImport.update({
+    id: '/access-provider',
+    path: '/access-provider',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutAboutRoute = DashboardLayoutAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutfrontOfficeRegistrationFormsRoute =
+  DashboardLayoutfrontOfficeRegistrationFormsRouteImport.update({
     id: '/(front-office)/registration-forms',
     path: '/registration-forms',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import(
-      './routes/_dashboard-layout/(front-office)/registration-forms.lazy'
-    ).then((d) => d.Route),
-  )
-
-const DashboardLayoutfrontOfficePaymentsLazyRoute =
-  DashboardLayoutfrontOfficePaymentsLazyImport.update({
+  } as any)
+const DashboardLayoutfrontOfficePaymentsRoute =
+  DashboardLayoutfrontOfficePaymentsRouteImport.update({
     id: '/(front-office)/payments',
     path: '/payments',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/(front-office)/payments.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const DashboardLayoutfrontOfficeOrdersLazyRoute =
-  DashboardLayoutfrontOfficeOrdersLazyImport.update({
+  } as any)
+const DashboardLayoutfrontOfficeOrdersRoute =
+  DashboardLayoutfrontOfficeOrdersRouteImport.update({
     id: '/(front-office)/orders',
     path: '/orders',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_dashboard-layout/(front-office)/orders.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginImport.update({
+  } as any)
+const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
-
 const AuthLayoutAuthForgotPasswordRoute =
-  AuthLayoutAuthForgotPasswordImport.update({
+  AuthLayoutAuthForgotPasswordRouteImport.update({
     id: '/auth/forgot-password',
     path: '/auth/forgot-password',
     getParentRoute: () => AuthLayoutRoute,
   } as any)
-
 const DashboardLayoutfrontOfficeReservationsIndexRoute =
-  DashboardLayoutfrontOfficeReservationsIndexImport.update({
+  DashboardLayoutfrontOfficeReservationsIndexRouteImport.update({
     id: '/(front-office)/reservations/',
     path: '/reservations/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-
-const DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute =
-  DashboardLayoutfrontOfficeReservationsReservationIdLazyImport.update({
+const DashboardLayoutfrontOfficeReservationsReservationIdRoute =
+  DashboardLayoutfrontOfficeReservationsReservationIdRouteImport.update({
     id: '/(front-office)/reservations/$reservationId',
     path: '/reservations/$reservationId',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any).lazy(() =>
-    import(
-      './routes/_dashboard-layout/(front-office)/reservations/$reservationId.lazy'
-    ).then((d) => d.Route),
-  )
+  } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/about': typeof DashboardLayoutAboutRoute
+  '/access-provider': typeof DashboardLayoutAccessProviderRoute
+  '/analytics': typeof DashboardLayoutAnalyticsRoute
+  '/checkin-page': typeof DashboardLayoutCheckinPageRoute
+  '/company': typeof DashboardLayoutCompanyRoute
+  '/customers': typeof DashboardLayoutCustomersRoute
+  '/devices': typeof DashboardLayoutDevicesRoute
+  '/events': typeof DashboardLayoutEventsRoute
+  '/monitoring': typeof DashboardLayoutMonitoringRoute
+  '/payment-provider': typeof DashboardLayoutPaymentProviderRoute
+  '/pms-provider': typeof DashboardLayoutPmsProviderRoute
+  '/products': typeof DashboardLayoutProductsRoute
+  '/profile': typeof DashboardLayoutProfileRoute
+  '/rooms': typeof DashboardLayoutRoomsRoute
+  '/users': typeof DashboardLayoutUsersRoute
+  '/': typeof DashboardLayoutIndexRoute
+  '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
+  '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/orders': typeof DashboardLayoutfrontOfficeOrdersRoute
+  '/payments': typeof DashboardLayoutfrontOfficePaymentsRoute
+  '/registration-forms': typeof DashboardLayoutfrontOfficeRegistrationFormsRoute
+  '/reservations/$reservationId': typeof DashboardLayoutfrontOfficeReservationsReservationIdRoute
+  '/reservations': typeof DashboardLayoutfrontOfficeReservationsIndexRoute
+}
+export interface FileRoutesByTo {
+  '/about': typeof DashboardLayoutAboutRoute
+  '/access-provider': typeof DashboardLayoutAccessProviderRoute
+  '/analytics': typeof DashboardLayoutAnalyticsRoute
+  '/checkin-page': typeof DashboardLayoutCheckinPageRoute
+  '/company': typeof DashboardLayoutCompanyRoute
+  '/customers': typeof DashboardLayoutCustomersRoute
+  '/devices': typeof DashboardLayoutDevicesRoute
+  '/events': typeof DashboardLayoutEventsRoute
+  '/monitoring': typeof DashboardLayoutMonitoringRoute
+  '/payment-provider': typeof DashboardLayoutPaymentProviderRoute
+  '/pms-provider': typeof DashboardLayoutPmsProviderRoute
+  '/products': typeof DashboardLayoutProductsRoute
+  '/profile': typeof DashboardLayoutProfileRoute
+  '/rooms': typeof DashboardLayoutRoomsRoute
+  '/users': typeof DashboardLayoutUsersRoute
+  '/': typeof DashboardLayoutIndexRoute
+  '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
+  '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/orders': typeof DashboardLayoutfrontOfficeOrdersRoute
+  '/payments': typeof DashboardLayoutfrontOfficePaymentsRoute
+  '/registration-forms': typeof DashboardLayoutfrontOfficeRegistrationFormsRoute
+  '/reservations/$reservationId': typeof DashboardLayoutfrontOfficeReservationsReservationIdRoute
+  '/reservations': typeof DashboardLayoutfrontOfficeReservationsIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/_auth-layout': typeof AuthLayoutRouteWithChildren
+  '/_dashboard-layout': typeof DashboardLayoutRouteWithChildren
+  '/_dashboard-layout/about': typeof DashboardLayoutAboutRoute
+  '/_dashboard-layout/access-provider': typeof DashboardLayoutAccessProviderRoute
+  '/_dashboard-layout/analytics': typeof DashboardLayoutAnalyticsRoute
+  '/_dashboard-layout/checkin-page': typeof DashboardLayoutCheckinPageRoute
+  '/_dashboard-layout/company': typeof DashboardLayoutCompanyRoute
+  '/_dashboard-layout/customers': typeof DashboardLayoutCustomersRoute
+  '/_dashboard-layout/devices': typeof DashboardLayoutDevicesRoute
+  '/_dashboard-layout/events': typeof DashboardLayoutEventsRoute
+  '/_dashboard-layout/monitoring': typeof DashboardLayoutMonitoringRoute
+  '/_dashboard-layout/payment-provider': typeof DashboardLayoutPaymentProviderRoute
+  '/_dashboard-layout/pms-provider': typeof DashboardLayoutPmsProviderRoute
+  '/_dashboard-layout/products': typeof DashboardLayoutProductsRoute
+  '/_dashboard-layout/profile': typeof DashboardLayoutProfileRoute
+  '/_dashboard-layout/rooms': typeof DashboardLayoutRoomsRoute
+  '/_dashboard-layout/users': typeof DashboardLayoutUsersRoute
+  '/_dashboard-layout/': typeof DashboardLayoutIndexRoute
+  '/_auth-layout/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
+  '/_auth-layout/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/_dashboard-layout/(front-office)/orders': typeof DashboardLayoutfrontOfficeOrdersRoute
+  '/_dashboard-layout/(front-office)/payments': typeof DashboardLayoutfrontOfficePaymentsRoute
+  '/_dashboard-layout/(front-office)/registration-forms': typeof DashboardLayoutfrontOfficeRegistrationFormsRoute
+  '/_dashboard-layout/(front-office)/reservations/$reservationId': typeof DashboardLayoutfrontOfficeReservationsReservationIdRoute
+  '/_dashboard-layout/(front-office)/reservations/': typeof DashboardLayoutfrontOfficeReservationsIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/about'
+    | '/access-provider'
+    | '/analytics'
+    | '/checkin-page'
+    | '/company'
+    | '/customers'
+    | '/devices'
+    | '/events'
+    | '/monitoring'
+    | '/payment-provider'
+    | '/pms-provider'
+    | '/products'
+    | '/profile'
+    | '/rooms'
+    | '/users'
+    | '/'
+    | '/auth/forgot-password'
+    | '/auth/login'
+    | '/orders'
+    | '/payments'
+    | '/registration-forms'
+    | '/reservations/$reservationId'
+    | '/reservations'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/about'
+    | '/access-provider'
+    | '/analytics'
+    | '/checkin-page'
+    | '/company'
+    | '/customers'
+    | '/devices'
+    | '/events'
+    | '/monitoring'
+    | '/payment-provider'
+    | '/pms-provider'
+    | '/products'
+    | '/profile'
+    | '/rooms'
+    | '/users'
+    | '/'
+    | '/auth/forgot-password'
+    | '/auth/login'
+    | '/orders'
+    | '/payments'
+    | '/registration-forms'
+    | '/reservations/$reservationId'
+    | '/reservations'
+  id:
+    | '__root__'
+    | '/_auth-layout'
+    | '/_dashboard-layout'
+    | '/_dashboard-layout/about'
+    | '/_dashboard-layout/access-provider'
+    | '/_dashboard-layout/analytics'
+    | '/_dashboard-layout/checkin-page'
+    | '/_dashboard-layout/company'
+    | '/_dashboard-layout/customers'
+    | '/_dashboard-layout/devices'
+    | '/_dashboard-layout/events'
+    | '/_dashboard-layout/monitoring'
+    | '/_dashboard-layout/payment-provider'
+    | '/_dashboard-layout/pms-provider'
+    | '/_dashboard-layout/products'
+    | '/_dashboard-layout/profile'
+    | '/_dashboard-layout/rooms'
+    | '/_dashboard-layout/users'
+    | '/_dashboard-layout/'
+    | '/_auth-layout/auth/forgot-password'
+    | '/_auth-layout/auth/login'
+    | '/_dashboard-layout/(front-office)/orders'
+    | '/_dashboard-layout/(front-office)/payments'
+    | '/_dashboard-layout/(front-office)/registration-forms'
+    | '/_dashboard-layout/(front-office)/reservations/$reservationId'
+    | '/_dashboard-layout/(front-office)/reservations/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
+  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_auth-layout': {
-      id: '/_auth-layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthLayoutImport
-      parentRoute: typeof rootRoute
-    }
     '/_dashboard-layout': {
       id: '/_dashboard-layout'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof DashboardLayoutImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof DashboardLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_dashboard-layout/profile': {
-      id: '/_dashboard-layout/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof DashboardLayoutProfileImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/about': {
-      id: '/_dashboard-layout/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof DashboardLayoutAboutLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/access-provider': {
-      id: '/_dashboard-layout/access-provider'
-      path: '/access-provider'
-      fullPath: '/access-provider'
-      preLoaderRoute: typeof DashboardLayoutAccessProviderLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/analytics': {
-      id: '/_dashboard-layout/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof DashboardLayoutAnalyticsLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/checkin-page': {
-      id: '/_dashboard-layout/checkin-page'
-      path: '/checkin-page'
-      fullPath: '/checkin-page'
-      preLoaderRoute: typeof DashboardLayoutCheckinPageLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/company': {
-      id: '/_dashboard-layout/company'
-      path: '/company'
-      fullPath: '/company'
-      preLoaderRoute: typeof DashboardLayoutCompanyLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/customers': {
-      id: '/_dashboard-layout/customers'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof DashboardLayoutCustomersLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/devices': {
-      id: '/_dashboard-layout/devices'
-      path: '/devices'
-      fullPath: '/devices'
-      preLoaderRoute: typeof DashboardLayoutDevicesLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/events': {
-      id: '/_dashboard-layout/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof DashboardLayoutEventsLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/monitoring': {
-      id: '/_dashboard-layout/monitoring'
-      path: '/monitoring'
-      fullPath: '/monitoring'
-      preLoaderRoute: typeof DashboardLayoutMonitoringLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/payment-provider': {
-      id: '/_dashboard-layout/payment-provider'
-      path: '/payment-provider'
-      fullPath: '/payment-provider'
-      preLoaderRoute: typeof DashboardLayoutPaymentProviderLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/pms-provider': {
-      id: '/_dashboard-layout/pms-provider'
-      path: '/pms-provider'
-      fullPath: '/pms-provider'
-      preLoaderRoute: typeof DashboardLayoutPmsProviderLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/products': {
-      id: '/_dashboard-layout/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof DashboardLayoutProductsLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/rooms': {
-      id: '/_dashboard-layout/rooms'
-      path: '/rooms'
-      fullPath: '/rooms'
-      preLoaderRoute: typeof DashboardLayoutRoomsLazyImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/_dashboard-layout/users': {
-      id: '/_dashboard-layout/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof DashboardLayoutUsersLazyImport
-      parentRoute: typeof DashboardLayoutImport
+    '/_auth-layout': {
+      id: '/_auth-layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_dashboard-layout/': {
       id: '/_dashboard-layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof DashboardLayoutIndexImport
-      parentRoute: typeof DashboardLayoutImport
+      preLoaderRoute: typeof DashboardLayoutIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/_auth-layout/auth/forgot-password': {
-      id: '/_auth-layout/auth/forgot-password'
-      path: '/auth/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthLayoutAuthForgotPasswordImport
-      parentRoute: typeof AuthLayoutImport
+    '/_dashboard-layout/users': {
+      id: '/_dashboard-layout/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof DashboardLayoutUsersRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/_auth-layout/auth/login': {
-      id: '/_auth-layout/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLayoutAuthLoginImport
-      parentRoute: typeof AuthLayoutImport
+    '/_dashboard-layout/rooms': {
+      id: '/_dashboard-layout/rooms'
+      path: '/rooms'
+      fullPath: '/rooms'
+      preLoaderRoute: typeof DashboardLayoutRoomsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(front-office)/orders': {
-      id: '/_dashboard-layout/(front-office)/orders'
-      path: '/orders'
-      fullPath: '/orders'
-      preLoaderRoute: typeof DashboardLayoutfrontOfficeOrdersLazyImport
-      parentRoute: typeof DashboardLayoutImport
+    '/_dashboard-layout/profile': {
+      id: '/_dashboard-layout/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof DashboardLayoutProfileRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(front-office)/payments': {
-      id: '/_dashboard-layout/(front-office)/payments'
-      path: '/payments'
-      fullPath: '/payments'
-      preLoaderRoute: typeof DashboardLayoutfrontOfficePaymentsLazyImport
-      parentRoute: typeof DashboardLayoutImport
+    '/_dashboard-layout/products': {
+      id: '/_dashboard-layout/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof DashboardLayoutProductsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/pms-provider': {
+      id: '/_dashboard-layout/pms-provider'
+      path: '/pms-provider'
+      fullPath: '/pms-provider'
+      preLoaderRoute: typeof DashboardLayoutPmsProviderRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/payment-provider': {
+      id: '/_dashboard-layout/payment-provider'
+      path: '/payment-provider'
+      fullPath: '/payment-provider'
+      preLoaderRoute: typeof DashboardLayoutPaymentProviderRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/monitoring': {
+      id: '/_dashboard-layout/monitoring'
+      path: '/monitoring'
+      fullPath: '/monitoring'
+      preLoaderRoute: typeof DashboardLayoutMonitoringRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/events': {
+      id: '/_dashboard-layout/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof DashboardLayoutEventsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/devices': {
+      id: '/_dashboard-layout/devices'
+      path: '/devices'
+      fullPath: '/devices'
+      preLoaderRoute: typeof DashboardLayoutDevicesRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/customers': {
+      id: '/_dashboard-layout/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof DashboardLayoutCustomersRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/company': {
+      id: '/_dashboard-layout/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof DashboardLayoutCompanyRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/checkin-page': {
+      id: '/_dashboard-layout/checkin-page'
+      path: '/checkin-page'
+      fullPath: '/checkin-page'
+      preLoaderRoute: typeof DashboardLayoutCheckinPageRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/analytics': {
+      id: '/_dashboard-layout/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof DashboardLayoutAnalyticsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/access-provider': {
+      id: '/_dashboard-layout/access-provider'
+      path: '/access-provider'
+      fullPath: '/access-provider'
+      preLoaderRoute: typeof DashboardLayoutAccessProviderRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/about': {
+      id: '/_dashboard-layout/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof DashboardLayoutAboutRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(front-office)/registration-forms': {
       id: '/_dashboard-layout/(front-office)/registration-forms'
       path: '/registration-forms'
       fullPath: '/registration-forms'
-      preLoaderRoute: typeof DashboardLayoutfrontOfficeRegistrationFormsLazyImport
-      parentRoute: typeof DashboardLayoutImport
+      preLoaderRoute: typeof DashboardLayoutfrontOfficeRegistrationFormsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(front-office)/reservations/$reservationId': {
-      id: '/_dashboard-layout/(front-office)/reservations/$reservationId'
-      path: '/reservations/$reservationId'
-      fullPath: '/reservations/$reservationId'
-      preLoaderRoute: typeof DashboardLayoutfrontOfficeReservationsReservationIdLazyImport
-      parentRoute: typeof DashboardLayoutImport
+    '/_dashboard-layout/(front-office)/payments': {
+      id: '/_dashboard-layout/(front-office)/payments'
+      path: '/payments'
+      fullPath: '/payments'
+      preLoaderRoute: typeof DashboardLayoutfrontOfficePaymentsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(front-office)/orders': {
+      id: '/_dashboard-layout/(front-office)/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof DashboardLayoutfrontOfficeOrdersRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_auth-layout/auth/login': {
+      id: '/_auth-layout/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLayoutAuthLoginRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth-layout/auth/forgot-password': {
+      id: '/_auth-layout/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthLayoutAuthForgotPasswordRouteImport
+      parentRoute: typeof AuthLayoutRoute
     }
     '/_dashboard-layout/(front-office)/reservations/': {
       id: '/_dashboard-layout/(front-office)/reservations/'
       path: '/reservations'
       fullPath: '/reservations'
-      preLoaderRoute: typeof DashboardLayoutfrontOfficeReservationsIndexImport
-      parentRoute: typeof DashboardLayoutImport
+      preLoaderRoute: typeof DashboardLayoutfrontOfficeReservationsIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(front-office)/reservations/$reservationId': {
+      id: '/_dashboard-layout/(front-office)/reservations/$reservationId'
+      path: '/reservations/$reservationId'
+      fullPath: '/reservations/$reservationId'
+      preLoaderRoute: typeof DashboardLayoutfrontOfficeReservationsReservationIdRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AuthLayoutRouteChildren {
   AuthLayoutAuthForgotPasswordRoute: typeof AuthLayoutAuthForgotPasswordRoute
@@ -494,56 +530,53 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
 )
 
 interface DashboardLayoutRouteChildren {
+  DashboardLayoutAboutRoute: typeof DashboardLayoutAboutRoute
+  DashboardLayoutAccessProviderRoute: typeof DashboardLayoutAccessProviderRoute
+  DashboardLayoutAnalyticsRoute: typeof DashboardLayoutAnalyticsRoute
+  DashboardLayoutCheckinPageRoute: typeof DashboardLayoutCheckinPageRoute
+  DashboardLayoutCompanyRoute: typeof DashboardLayoutCompanyRoute
+  DashboardLayoutCustomersRoute: typeof DashboardLayoutCustomersRoute
+  DashboardLayoutDevicesRoute: typeof DashboardLayoutDevicesRoute
+  DashboardLayoutEventsRoute: typeof DashboardLayoutEventsRoute
+  DashboardLayoutMonitoringRoute: typeof DashboardLayoutMonitoringRoute
+  DashboardLayoutPaymentProviderRoute: typeof DashboardLayoutPaymentProviderRoute
+  DashboardLayoutPmsProviderRoute: typeof DashboardLayoutPmsProviderRoute
+  DashboardLayoutProductsRoute: typeof DashboardLayoutProductsRoute
   DashboardLayoutProfileRoute: typeof DashboardLayoutProfileRoute
-  DashboardLayoutAboutLazyRoute: typeof DashboardLayoutAboutLazyRoute
-  DashboardLayoutAccessProviderLazyRoute: typeof DashboardLayoutAccessProviderLazyRoute
-  DashboardLayoutAnalyticsLazyRoute: typeof DashboardLayoutAnalyticsLazyRoute
-  DashboardLayoutCheckinPageLazyRoute: typeof DashboardLayoutCheckinPageLazyRoute
-  DashboardLayoutCompanyLazyRoute: typeof DashboardLayoutCompanyLazyRoute
-  DashboardLayoutCustomersLazyRoute: typeof DashboardLayoutCustomersLazyRoute
-  DashboardLayoutDevicesLazyRoute: typeof DashboardLayoutDevicesLazyRoute
-  DashboardLayoutEventsLazyRoute: typeof DashboardLayoutEventsLazyRoute
-  DashboardLayoutMonitoringLazyRoute: typeof DashboardLayoutMonitoringLazyRoute
-  DashboardLayoutPaymentProviderLazyRoute: typeof DashboardLayoutPaymentProviderLazyRoute
-  DashboardLayoutPmsProviderLazyRoute: typeof DashboardLayoutPmsProviderLazyRoute
-  DashboardLayoutProductsLazyRoute: typeof DashboardLayoutProductsLazyRoute
-  DashboardLayoutRoomsLazyRoute: typeof DashboardLayoutRoomsLazyRoute
-  DashboardLayoutUsersLazyRoute: typeof DashboardLayoutUsersLazyRoute
+  DashboardLayoutRoomsRoute: typeof DashboardLayoutRoomsRoute
+  DashboardLayoutUsersRoute: typeof DashboardLayoutUsersRoute
   DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
-  DashboardLayoutfrontOfficeOrdersLazyRoute: typeof DashboardLayoutfrontOfficeOrdersLazyRoute
-  DashboardLayoutfrontOfficePaymentsLazyRoute: typeof DashboardLayoutfrontOfficePaymentsLazyRoute
-  DashboardLayoutfrontOfficeRegistrationFormsLazyRoute: typeof DashboardLayoutfrontOfficeRegistrationFormsLazyRoute
-  DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute: typeof DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute
+  DashboardLayoutfrontOfficeOrdersRoute: typeof DashboardLayoutfrontOfficeOrdersRoute
+  DashboardLayoutfrontOfficePaymentsRoute: typeof DashboardLayoutfrontOfficePaymentsRoute
+  DashboardLayoutfrontOfficeRegistrationFormsRoute: typeof DashboardLayoutfrontOfficeRegistrationFormsRoute
+  DashboardLayoutfrontOfficeReservationsReservationIdRoute: typeof DashboardLayoutfrontOfficeReservationsReservationIdRoute
   DashboardLayoutfrontOfficeReservationsIndexRoute: typeof DashboardLayoutfrontOfficeReservationsIndexRoute
 }
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardLayoutAboutRoute: DashboardLayoutAboutRoute,
+  DashboardLayoutAccessProviderRoute: DashboardLayoutAccessProviderRoute,
+  DashboardLayoutAnalyticsRoute: DashboardLayoutAnalyticsRoute,
+  DashboardLayoutCheckinPageRoute: DashboardLayoutCheckinPageRoute,
+  DashboardLayoutCompanyRoute: DashboardLayoutCompanyRoute,
+  DashboardLayoutCustomersRoute: DashboardLayoutCustomersRoute,
+  DashboardLayoutDevicesRoute: DashboardLayoutDevicesRoute,
+  DashboardLayoutEventsRoute: DashboardLayoutEventsRoute,
+  DashboardLayoutMonitoringRoute: DashboardLayoutMonitoringRoute,
+  DashboardLayoutPaymentProviderRoute: DashboardLayoutPaymentProviderRoute,
+  DashboardLayoutPmsProviderRoute: DashboardLayoutPmsProviderRoute,
+  DashboardLayoutProductsRoute: DashboardLayoutProductsRoute,
   DashboardLayoutProfileRoute: DashboardLayoutProfileRoute,
-  DashboardLayoutAboutLazyRoute: DashboardLayoutAboutLazyRoute,
-  DashboardLayoutAccessProviderLazyRoute:
-    DashboardLayoutAccessProviderLazyRoute,
-  DashboardLayoutAnalyticsLazyRoute: DashboardLayoutAnalyticsLazyRoute,
-  DashboardLayoutCheckinPageLazyRoute: DashboardLayoutCheckinPageLazyRoute,
-  DashboardLayoutCompanyLazyRoute: DashboardLayoutCompanyLazyRoute,
-  DashboardLayoutCustomersLazyRoute: DashboardLayoutCustomersLazyRoute,
-  DashboardLayoutDevicesLazyRoute: DashboardLayoutDevicesLazyRoute,
-  DashboardLayoutEventsLazyRoute: DashboardLayoutEventsLazyRoute,
-  DashboardLayoutMonitoringLazyRoute: DashboardLayoutMonitoringLazyRoute,
-  DashboardLayoutPaymentProviderLazyRoute:
-    DashboardLayoutPaymentProviderLazyRoute,
-  DashboardLayoutPmsProviderLazyRoute: DashboardLayoutPmsProviderLazyRoute,
-  DashboardLayoutProductsLazyRoute: DashboardLayoutProductsLazyRoute,
-  DashboardLayoutRoomsLazyRoute: DashboardLayoutRoomsLazyRoute,
-  DashboardLayoutUsersLazyRoute: DashboardLayoutUsersLazyRoute,
+  DashboardLayoutRoomsRoute: DashboardLayoutRoomsRoute,
+  DashboardLayoutUsersRoute: DashboardLayoutUsersRoute,
   DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
-  DashboardLayoutfrontOfficeOrdersLazyRoute:
-    DashboardLayoutfrontOfficeOrdersLazyRoute,
-  DashboardLayoutfrontOfficePaymentsLazyRoute:
-    DashboardLayoutfrontOfficePaymentsLazyRoute,
-  DashboardLayoutfrontOfficeRegistrationFormsLazyRoute:
-    DashboardLayoutfrontOfficeRegistrationFormsLazyRoute,
-  DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute:
-    DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute,
+  DashboardLayoutfrontOfficeOrdersRoute: DashboardLayoutfrontOfficeOrdersRoute,
+  DashboardLayoutfrontOfficePaymentsRoute:
+    DashboardLayoutfrontOfficePaymentsRoute,
+  DashboardLayoutfrontOfficeRegistrationFormsRoute:
+    DashboardLayoutfrontOfficeRegistrationFormsRoute,
+  DashboardLayoutfrontOfficeReservationsReservationIdRoute:
+    DashboardLayoutfrontOfficeReservationsReservationIdRoute,
   DashboardLayoutfrontOfficeReservationsIndexRoute:
     DashboardLayoutfrontOfficeReservationsIndexRoute,
 }
@@ -552,321 +585,10 @@ const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
   DashboardLayoutRouteChildren,
 )
 
-export interface FileRoutesByFullPath {
-  '': typeof DashboardLayoutRouteWithChildren
-  '/profile': typeof DashboardLayoutProfileRoute
-  '/about': typeof DashboardLayoutAboutLazyRoute
-  '/access-provider': typeof DashboardLayoutAccessProviderLazyRoute
-  '/analytics': typeof DashboardLayoutAnalyticsLazyRoute
-  '/checkin-page': typeof DashboardLayoutCheckinPageLazyRoute
-  '/company': typeof DashboardLayoutCompanyLazyRoute
-  '/customers': typeof DashboardLayoutCustomersLazyRoute
-  '/devices': typeof DashboardLayoutDevicesLazyRoute
-  '/events': typeof DashboardLayoutEventsLazyRoute
-  '/monitoring': typeof DashboardLayoutMonitoringLazyRoute
-  '/payment-provider': typeof DashboardLayoutPaymentProviderLazyRoute
-  '/pms-provider': typeof DashboardLayoutPmsProviderLazyRoute
-  '/products': typeof DashboardLayoutProductsLazyRoute
-  '/rooms': typeof DashboardLayoutRoomsLazyRoute
-  '/users': typeof DashboardLayoutUsersLazyRoute
-  '/': typeof DashboardLayoutIndexRoute
-  '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
-  '/auth/login': typeof AuthLayoutAuthLoginRoute
-  '/orders': typeof DashboardLayoutfrontOfficeOrdersLazyRoute
-  '/payments': typeof DashboardLayoutfrontOfficePaymentsLazyRoute
-  '/registration-forms': typeof DashboardLayoutfrontOfficeRegistrationFormsLazyRoute
-  '/reservations/$reservationId': typeof DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute
-  '/reservations': typeof DashboardLayoutfrontOfficeReservationsIndexRoute
-}
-
-export interface FileRoutesByTo {
-  '': typeof AuthLayoutRouteWithChildren
-  '/profile': typeof DashboardLayoutProfileRoute
-  '/about': typeof DashboardLayoutAboutLazyRoute
-  '/access-provider': typeof DashboardLayoutAccessProviderLazyRoute
-  '/analytics': typeof DashboardLayoutAnalyticsLazyRoute
-  '/checkin-page': typeof DashboardLayoutCheckinPageLazyRoute
-  '/company': typeof DashboardLayoutCompanyLazyRoute
-  '/customers': typeof DashboardLayoutCustomersLazyRoute
-  '/devices': typeof DashboardLayoutDevicesLazyRoute
-  '/events': typeof DashboardLayoutEventsLazyRoute
-  '/monitoring': typeof DashboardLayoutMonitoringLazyRoute
-  '/payment-provider': typeof DashboardLayoutPaymentProviderLazyRoute
-  '/pms-provider': typeof DashboardLayoutPmsProviderLazyRoute
-  '/products': typeof DashboardLayoutProductsLazyRoute
-  '/rooms': typeof DashboardLayoutRoomsLazyRoute
-  '/users': typeof DashboardLayoutUsersLazyRoute
-  '/': typeof DashboardLayoutIndexRoute
-  '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
-  '/auth/login': typeof AuthLayoutAuthLoginRoute
-  '/orders': typeof DashboardLayoutfrontOfficeOrdersLazyRoute
-  '/payments': typeof DashboardLayoutfrontOfficePaymentsLazyRoute
-  '/registration-forms': typeof DashboardLayoutfrontOfficeRegistrationFormsLazyRoute
-  '/reservations/$reservationId': typeof DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute
-  '/reservations': typeof DashboardLayoutfrontOfficeReservationsIndexRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/_auth-layout': typeof AuthLayoutRouteWithChildren
-  '/_dashboard-layout': typeof DashboardLayoutRouteWithChildren
-  '/_dashboard-layout/profile': typeof DashboardLayoutProfileRoute
-  '/_dashboard-layout/about': typeof DashboardLayoutAboutLazyRoute
-  '/_dashboard-layout/access-provider': typeof DashboardLayoutAccessProviderLazyRoute
-  '/_dashboard-layout/analytics': typeof DashboardLayoutAnalyticsLazyRoute
-  '/_dashboard-layout/checkin-page': typeof DashboardLayoutCheckinPageLazyRoute
-  '/_dashboard-layout/company': typeof DashboardLayoutCompanyLazyRoute
-  '/_dashboard-layout/customers': typeof DashboardLayoutCustomersLazyRoute
-  '/_dashboard-layout/devices': typeof DashboardLayoutDevicesLazyRoute
-  '/_dashboard-layout/events': typeof DashboardLayoutEventsLazyRoute
-  '/_dashboard-layout/monitoring': typeof DashboardLayoutMonitoringLazyRoute
-  '/_dashboard-layout/payment-provider': typeof DashboardLayoutPaymentProviderLazyRoute
-  '/_dashboard-layout/pms-provider': typeof DashboardLayoutPmsProviderLazyRoute
-  '/_dashboard-layout/products': typeof DashboardLayoutProductsLazyRoute
-  '/_dashboard-layout/rooms': typeof DashboardLayoutRoomsLazyRoute
-  '/_dashboard-layout/users': typeof DashboardLayoutUsersLazyRoute
-  '/_dashboard-layout/': typeof DashboardLayoutIndexRoute
-  '/_auth-layout/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
-  '/_auth-layout/auth/login': typeof AuthLayoutAuthLoginRoute
-  '/_dashboard-layout/(front-office)/orders': typeof DashboardLayoutfrontOfficeOrdersLazyRoute
-  '/_dashboard-layout/(front-office)/payments': typeof DashboardLayoutfrontOfficePaymentsLazyRoute
-  '/_dashboard-layout/(front-office)/registration-forms': typeof DashboardLayoutfrontOfficeRegistrationFormsLazyRoute
-  '/_dashboard-layout/(front-office)/reservations/$reservationId': typeof DashboardLayoutfrontOfficeReservationsReservationIdLazyRoute
-  '/_dashboard-layout/(front-office)/reservations/': typeof DashboardLayoutfrontOfficeReservationsIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ''
-    | '/profile'
-    | '/about'
-    | '/access-provider'
-    | '/analytics'
-    | '/checkin-page'
-    | '/company'
-    | '/customers'
-    | '/devices'
-    | '/events'
-    | '/monitoring'
-    | '/payment-provider'
-    | '/pms-provider'
-    | '/products'
-    | '/rooms'
-    | '/users'
-    | '/'
-    | '/auth/forgot-password'
-    | '/auth/login'
-    | '/orders'
-    | '/payments'
-    | '/registration-forms'
-    | '/reservations/$reservationId'
-    | '/reservations'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | ''
-    | '/profile'
-    | '/about'
-    | '/access-provider'
-    | '/analytics'
-    | '/checkin-page'
-    | '/company'
-    | '/customers'
-    | '/devices'
-    | '/events'
-    | '/monitoring'
-    | '/payment-provider'
-    | '/pms-provider'
-    | '/products'
-    | '/rooms'
-    | '/users'
-    | '/'
-    | '/auth/forgot-password'
-    | '/auth/login'
-    | '/orders'
-    | '/payments'
-    | '/registration-forms'
-    | '/reservations/$reservationId'
-    | '/reservations'
-  id:
-    | '__root__'
-    | '/_auth-layout'
-    | '/_dashboard-layout'
-    | '/_dashboard-layout/profile'
-    | '/_dashboard-layout/about'
-    | '/_dashboard-layout/access-provider'
-    | '/_dashboard-layout/analytics'
-    | '/_dashboard-layout/checkin-page'
-    | '/_dashboard-layout/company'
-    | '/_dashboard-layout/customers'
-    | '/_dashboard-layout/devices'
-    | '/_dashboard-layout/events'
-    | '/_dashboard-layout/monitoring'
-    | '/_dashboard-layout/payment-provider'
-    | '/_dashboard-layout/pms-provider'
-    | '/_dashboard-layout/products'
-    | '/_dashboard-layout/rooms'
-    | '/_dashboard-layout/users'
-    | '/_dashboard-layout/'
-    | '/_auth-layout/auth/forgot-password'
-    | '/_auth-layout/auth/login'
-    | '/_dashboard-layout/(front-office)/orders'
-    | '/_dashboard-layout/(front-office)/payments'
-    | '/_dashboard-layout/(front-office)/registration-forms'
-    | '/_dashboard-layout/(front-office)/reservations/$reservationId'
-    | '/_dashboard-layout/(front-office)/reservations/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
-  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
-}
-
 const rootRouteChildren: RootRouteChildren = {
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
   DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/_auth-layout",
-        "/_dashboard-layout"
-      ]
-    },
-    "/_auth-layout": {
-      "filePath": "_auth-layout.tsx",
-      "children": [
-        "/_auth-layout/auth/forgot-password",
-        "/_auth-layout/auth/login"
-      ]
-    },
-    "/_dashboard-layout": {
-      "filePath": "_dashboard-layout.tsx",
-      "children": [
-        "/_dashboard-layout/profile",
-        "/_dashboard-layout/about",
-        "/_dashboard-layout/access-provider",
-        "/_dashboard-layout/analytics",
-        "/_dashboard-layout/checkin-page",
-        "/_dashboard-layout/company",
-        "/_dashboard-layout/customers",
-        "/_dashboard-layout/devices",
-        "/_dashboard-layout/events",
-        "/_dashboard-layout/monitoring",
-        "/_dashboard-layout/payment-provider",
-        "/_dashboard-layout/pms-provider",
-        "/_dashboard-layout/products",
-        "/_dashboard-layout/rooms",
-        "/_dashboard-layout/users",
-        "/_dashboard-layout/",
-        "/_dashboard-layout/(front-office)/orders",
-        "/_dashboard-layout/(front-office)/payments",
-        "/_dashboard-layout/(front-office)/registration-forms",
-        "/_dashboard-layout/(front-office)/reservations/$reservationId",
-        "/_dashboard-layout/(front-office)/reservations/"
-      ]
-    },
-    "/_dashboard-layout/profile": {
-      "filePath": "_dashboard-layout/profile.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/about": {
-      "filePath": "_dashboard-layout/about.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/access-provider": {
-      "filePath": "_dashboard-layout/access-provider.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/analytics": {
-      "filePath": "_dashboard-layout/analytics.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/checkin-page": {
-      "filePath": "_dashboard-layout/checkin-page.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/company": {
-      "filePath": "_dashboard-layout/company.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/customers": {
-      "filePath": "_dashboard-layout/customers.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/devices": {
-      "filePath": "_dashboard-layout/devices.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/events": {
-      "filePath": "_dashboard-layout/events.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/monitoring": {
-      "filePath": "_dashboard-layout/monitoring.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/payment-provider": {
-      "filePath": "_dashboard-layout/payment-provider.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/pms-provider": {
-      "filePath": "_dashboard-layout/pms-provider.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/products": {
-      "filePath": "_dashboard-layout/products.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/rooms": {
-      "filePath": "_dashboard-layout/rooms.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/users": {
-      "filePath": "_dashboard-layout/users.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/": {
-      "filePath": "_dashboard-layout/index.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_auth-layout/auth/forgot-password": {
-      "filePath": "_auth-layout/auth/forgot-password.tsx",
-      "parent": "/_auth-layout"
-    },
-    "/_auth-layout/auth/login": {
-      "filePath": "_auth-layout/auth/login.tsx",
-      "parent": "/_auth-layout"
-    },
-    "/_dashboard-layout/(front-office)/orders": {
-      "filePath": "_dashboard-layout/(front-office)/orders.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/(front-office)/payments": {
-      "filePath": "_dashboard-layout/(front-office)/payments.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/(front-office)/registration-forms": {
-      "filePath": "_dashboard-layout/(front-office)/registration-forms.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/(front-office)/reservations/$reservationId": {
-      "filePath": "_dashboard-layout/(front-office)/reservations/$reservationId.lazy.tsx",
-      "parent": "/_dashboard-layout"
-    },
-    "/_dashboard-layout/(front-office)/reservations/": {
-      "filePath": "_dashboard-layout/(front-office)/reservations/index.tsx",
-      "parent": "/_dashboard-layout"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
