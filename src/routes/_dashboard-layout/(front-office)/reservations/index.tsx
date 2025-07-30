@@ -1,7 +1,7 @@
 import { reservationsQueryOptions } from '@/api/reservations';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { X } from 'lucide-react';
+import { RefreshCw, X } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 import { z } from 'zod';
 
@@ -32,14 +32,36 @@ function ReservationsPage() {
     reservationsQueryOptions({ page, perPage: per_page })
   );
 
+  const handleRefresh = () => {
+    reservationsQuery.refetch();
+  };
+
   let content;
 
   if (reservationsQuery.isLoading) {
     content = (
       <div>
         <div className="space-y-2">
-          <div className="max-w-sm">
-            <SearchInput />
+          <div className="flex items-center justify-between">
+            <div className="max-w-sm">
+              <SearchInput />
+            </div>
+            <Button
+              variant="secondary"
+              onClick={handleRefresh}
+              disabled={reservationsQuery.isFetching}
+            >
+              <RefreshCw
+                className={cn(
+                  'mr-2 h-4 w-4',
+                  reservationsQuery.isFetching && 'animate-spin'
+                )}
+              />
+              <FormattedMessage
+                id="reservations.refresh"
+                defaultMessage="Refresh"
+              />
+            </Button>
           </div>
           <ReservationsTable data={[]} columns={columns} isLoading={true} />
         </div>
@@ -65,8 +87,26 @@ function ReservationsPage() {
     content = (
       <div>
         <div className="space-y-2">
-          <div className="max-w-sm">
-            <SearchInput />
+          <div className="flex items-center justify-between">
+            <div className="max-w-sm">
+              <SearchInput />
+            </div>
+            <Button
+              variant="outline"
+              onClick={handleRefresh}
+              disabled={reservationsQuery.isFetching}
+            >
+              <RefreshCw
+                className={cn(
+                  'mr-2 h-4 w-4',
+                  reservationsQuery.isFetching && 'animate-spin'
+                )}
+              />
+              <FormattedMessage
+                id="reservations.refresh"
+                defaultMessage="Refresh"
+              />
+            </Button>
           </div>
 
           <div
