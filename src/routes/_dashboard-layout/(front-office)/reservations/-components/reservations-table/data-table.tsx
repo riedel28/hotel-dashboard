@@ -17,20 +17,28 @@ import {
   TableRow
 } from '@/components/ui/table';
 
+import { TableSkeleton } from './table-skeleton';
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data
+  data,
+  isLoading = false
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel()
   });
+
+  if (isLoading) {
+    return <TableSkeleton rows={5} columns={columns.length} />;
+  }
 
   return (
     <div className="rounded-md border">

@@ -5,8 +5,6 @@ import { X } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 import { z } from 'zod';
 
-// import { TableSkeleton } from '@/components/reservations-table/table-skeleton'
-// import { TableToolbar } from '@/components/reservations-table/table-toolbar'
 import { Button, buttonVariants } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/search-input';
 
@@ -40,11 +38,10 @@ function ReservationsPage() {
     content = (
       <div>
         <div className="space-y-2">
-          {/* <TableToolbar
-            onRefresh={reservationsQuery.refetch}
-            isRefreshing={reservationsQuery.isRefetching}
-          /> */}
-          {/* <TableSkeleton /> */}
+          <div className="max-w-sm">
+            <SearchInput />
+          </div>
+          <ReservationsTable data={[]} columns={columns} isLoading={true} />
         </div>
       </div>
     );
@@ -68,11 +65,6 @@ function ReservationsPage() {
     content = (
       <div>
         <div className="space-y-2">
-          {/* <TableToolbar
-            onRefresh={reservationsQuery.refetch}
-            isRefreshing={reservationsQuery.isRefetching}
-          /> */}
-
           <div className="max-w-sm">
             <SearchInput />
           </div>
@@ -88,7 +80,7 @@ function ReservationsPage() {
             <ReservationsTable
               data={reservationsQuery.data.index}
               columns={columns}
-              // isLoading={reservationsQuery.isLoading}
+              isLoading={reservationsQuery.isLoading}
             />
           </div>
         </div>
