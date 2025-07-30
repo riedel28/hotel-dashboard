@@ -93,6 +93,7 @@
     "eslint-plugin-formatjs": "^5.4.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "json-server": "^1.0.0-beta.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
