@@ -25,7 +25,6 @@ function NavigationMenu({
       {...props}
     >
       {children}
-      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}{' '}
       <ChevronDownIcon
         className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
         aria-hidden="true"
@@ -79,7 +78,6 @@ function NavigationMenuTrigger({
       {...props}
     >
       {children}
-      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}{' '}
       <ChevronDownIcon
         className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
         aria-hidden="true"

@@ -237,7 +237,6 @@ export function ShareDialog({
                         id="reservations.lastSent"
                         defaultMessage="Last sent:"
                       />
-                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                       {dayjs(reservation.last_opened_at).format(
                         'DD.MM.YYYY HH:mm:ss'
                       )}
@@ -274,12 +273,24 @@ export function ShareDialog({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                          <SelectItem value="49">🇩🇪 +49</SelectItem>
-                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                          <SelectItem value="43">🇦🇹 +43</SelectItem>
-                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                          <SelectItem value="41">🇨🇭 +41</SelectItem>
+                          <SelectItem value="49">
+                            <FormattedMessage
+                              id="phoneCodes.germany"
+                              defaultMessage="DE +49"
+                            />
+                          </SelectItem>
+                          <SelectItem value="43">
+                            <FormattedMessage
+                              id="phoneCodes.austria"
+                              defaultMessage="AT +43"
+                            />
+                          </SelectItem>
+                          <SelectItem value="41">
+                            <FormattedMessage
+                              id="phoneCodes.switzerland"
+                              defaultMessage="CH +41"
+                            />
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
