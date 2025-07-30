@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowUpRightIcon, CheckIcon, ClockIcon } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
 
 import { Badge, BadgeProps } from '@/components/ui/badge';
 
@@ -36,10 +37,9 @@ export function StatusIcon({ status }: StatusIconProps) {
 }
 
 const statusMap = {
-  done: 'border-emerald-200 bg-emerald-100 text-emerald-600 hover:bg-emerald-100',
-  pending:
-    'border-orange-200 bg-orange-100 text-orange-600 hover:bg-orange-100',
-  started: 'border-sky-200 bg-sky-100 text-sky-600 hover:bg-sky-100'
+  done: 'bg-emerald-100 text-emerald-700',
+  pending: 'bg-orange-100 text-orange-700',
+  started: 'bg-sky-100 text-sky-700'
 } as const;
 
 interface StatusBadgeProps extends BadgeProps {
@@ -47,6 +47,34 @@ interface StatusBadgeProps extends BadgeProps {
 }
 
 export function StatusBadge({ status }: StatusBadgeProps) {
+  const getStatusMessage = () => {
+    switch (status) {
+      case 'done':
+        return (
+          <FormattedMessage
+            id="reservations.status.done"
+            defaultMessage="Done"
+          />
+        );
+      case 'pending':
+        return (
+          <FormattedMessage
+            id="reservations.status.pending"
+            defaultMessage="Pending"
+          />
+        );
+      case 'started':
+        return (
+          <FormattedMessage
+            id="reservations.status.started"
+            defaultMessage="Started"
+          />
+        );
+      default:
+        return status;
+    }
+  };
+
   return (
     <Badge
       variant="secondary"
@@ -57,7 +85,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
         status === 'done' && statusMap['done']
       )}
     >
-      {status}
+      {getStatusMessage()}
     </Badge>
   );
 }
