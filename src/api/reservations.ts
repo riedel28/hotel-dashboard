@@ -30,7 +30,7 @@ async function fetchReservations({
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const response = await fetch(
-    `http://localhost:5000/reservations?_page=${page}&_limit=${perPage}`
+    `http://localhost:3001/reservations?_page=${page}&_limit=${perPage}`
   );
   if (!response.ok) {
     throw new Error('Network response was not ok');

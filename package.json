@@ -13,7 +13,7 @@
     "format": "prettier --write .",
     "dev": "concurrently \"npm run client\" \"npm run server\"",
     "client": "vite",
-    "server": "json-server --watch db.json --port 5000"
+    "server": "json-server --watch db.json --port 3001"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
