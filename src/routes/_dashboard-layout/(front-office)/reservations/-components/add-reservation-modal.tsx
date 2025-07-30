@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -209,7 +210,7 @@ export function AddReservationModal() {
                 </FormItem>
               )}
             />
-            <div className="flex justify-end space-x-2">
+            <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
@@ -220,7 +221,7 @@ export function AddReservationModal() {
               <Button type="submit">
                 <FormattedMessage id="actions.create" defaultMessage="Create" />
               </Button>
-            </div>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>
