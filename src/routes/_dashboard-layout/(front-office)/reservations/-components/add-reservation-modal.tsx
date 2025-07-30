@@ -2,7 +2,7 @@ import React from 'react';
 
 import { buildApiUrl, getEndpointUrl } from '@/config/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { PlusCircle } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
@@ -40,6 +40,7 @@ type FormValues = {
 };
 
 async function createReservation(data: FormValues) {
+  await new Promise((resolve) => setTimeout(resolve, 1500));
   const response = await fetch(buildApiUrl(getEndpointUrl('reservations')), {
     method: 'POST',
     headers: {
@@ -96,6 +97,11 @@ export function AddReservationModal() {
     createReservationMutation.mutate(data);
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    form.handleSubmit(onSubmit)(e);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -117,7 +123,7 @@ export function AddReservationModal() {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <FormField
               control={form.control}
               name="booking_nr"
@@ -216,7 +222,13 @@ export function AddReservationModal() {
               >
                 <FormattedMessage id="actions.cancel" defaultMessage="Cancel" />
               </Button>
-              <Button type="submit">
+              <Button
+                type="submit"
+                disabled={createReservationMutation.isPending}
+              >
+                {createReservationMutation.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 <FormattedMessage id="actions.create" defaultMessage="Create" />
               </Button>
             </DialogFooter>
