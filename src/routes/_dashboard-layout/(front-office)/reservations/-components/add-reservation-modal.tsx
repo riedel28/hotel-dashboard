@@ -157,19 +157,16 @@ export function AddReservationModal() {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={intl.formatMessage({
-                          id: 'placeholders.selectRoom',
-                          defaultMessage: 'Select a room'
-                        })}
-                      >
-                        <FormattedMessage
-                          id="reservations.selectRoom"
-                          defaultMessage="Select a room"
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={intl.formatMessage({
+                            id: 'placeholders.selectRoom',
+                            defaultMessage: 'Select a room'
+                          })}
                         />
-                      </SelectValue>
-                    </SelectTrigger>
+                      </SelectTrigger>
+                    </FormControl>
                     <SelectContent>
                       <SelectGroup>
                         {[101, 102, 103, 104, 105].map((room) => (
