@@ -1,4 +1,3 @@
-// Dependencies: pnpm install lucide-react
 'use client';
 
 import { useState } from 'react';
@@ -25,208 +24,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { cn } from '@/lib/utils';
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
-
-// Dependencies: pnpm install lucide-react
 
 export interface Property {
   id: string;
@@ -281,7 +78,7 @@ export default function PropertySelector() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between bg-background px-3 font-normal outline-offset-0 hover:bg-background focus-visible:border-ring focus-visible:outline-[3px] focus-visible:outline-ring/20"
+          className="bg-background hover:bg-background focus-visible:border-ring focus-visible:outline-ring/20 w-full justify-between px-3 font-normal outline-offset-0 focus-visible:outline-[3px]"
         >
           <span className={cn('truncate', !value && 'text-muted-foreground')}>
             {value
@@ -294,13 +91,13 @@ export default function PropertySelector() {
           <ChevronsUpDownIcon
             size={16}
             strokeWidth={2}
-            className="shrink-0 text-muted-foreground/80"
+            className="text-muted-foreground/80 shrink-0"
             aria-hidden="true"
           />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0"
+        className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
         align="start"
         side="right"
       >
@@ -336,7 +133,7 @@ export default function PropertySelector() {
                         {property.name}
                       </span>
 
-                      <CommandShortcut className="text-[9px] font-semibold uppercase tracking-wide">
+                      <CommandShortcut className="text-[9px] font-semibold tracking-wide uppercase">
                         {property.stage}
                       </CommandShortcut>
                     </CommandItem>
