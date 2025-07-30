@@ -2,6 +2,7 @@ import { reservationsQueryOptions } from '@/api/reservations';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { X } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
 import { z } from 'zod';
 
 // import { TableSkeleton } from '@/components/reservations-table/table-skeleton'
@@ -55,7 +56,9 @@ function ReservationsPage() {
         <div className="mx-auto mb-2 flex size-10 items-center justify-center rounded-full bg-red-50">
           <X className="size-6 text-red-700" />
         </div>
-        <h2 className="text-lg font-semibold">Error</h2>
+        <h2 className="text-lg font-semibold">
+          <FormattedMessage id="reservations.error" defaultMessage="Error" />
+        </h2>
         <p>{reservationsQuery.error.message}</p>
       </div>
     );
@@ -93,7 +96,14 @@ function ReservationsPage() {
         <div className="mt-4 flex max-w-lg items-center justify-between">
           <div className="flex-1">
             <span className="text-sm">
-              {per_page} of {reservationsQuery.data?.total} items
+              <FormattedMessage
+                id="reservations.pagination"
+                defaultMessage="{count} of {total} items"
+                values={{
+                  count: per_page,
+                  total: reservationsQuery.data?.total
+                }}
+              />
             </span>
           </div>
           <div className="flex-1 space-x-2">
@@ -110,7 +120,10 @@ function ReservationsPage() {
               })}
               disabled={page <= 1}
             >
-              Prev page
+              <FormattedMessage
+                id="reservations.prevPage"
+                defaultMessage="Prev page"
+              />
             </Button>
 
             <Button
@@ -126,7 +139,10 @@ function ReservationsPage() {
               })}
               disabled={page >= 5}
             >
-              Next page
+              <FormattedMessage
+                id="reservations.nextPage"
+                defaultMessage="Next page"
+              />
             </Button>
           </div>
         </div>
@@ -137,7 +153,12 @@ function ReservationsPage() {
   return (
     <div>
       <div className="mb-6 flex justify-between">
-        <h1 className="text-2xl font-bold">Reservations</h1>
+        <h1 className="text-2xl font-bold">
+          <FormattedMessage
+            id="reservations.title"
+            defaultMessage="Reservations"
+          />
+        </h1>
         <AddReservationModal />
       </div>
       {content}

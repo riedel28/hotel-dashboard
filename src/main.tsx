@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom/client';
 import { AuthProvider, useAuth } from './auth';
 import { Toaster } from './components/ui/sonner';
 import './globals.css';
+import { IntlProvider } from './i18n/intl-provider';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
@@ -29,6 +30,21 @@ declare module '@tanstack/react-router' {
 }
 
 // Render the app
+function InnerApp() {
+  const auth = useAuth();
+  return <RouterProvider router={router} context={{ auth }} />;
+}
+
+function App() {
+  return (
+    <IntlProvider>
+      <AuthProvider>
+        <InnerApp />
+      </AuthProvider>
+    </IntlProvider>
+  );
+}
+
 const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
@@ -39,19 +55,6 @@ if (!rootElement.innerHTML) {
       }
     }
   });
-
-  function InnerApp() {
-    const auth = useAuth();
-    return <RouterProvider router={router} context={{ auth }} />;
-  }
-
-  function App() {
-    return (
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
-    );
-  }
 
   root.render(
     <StrictMode>

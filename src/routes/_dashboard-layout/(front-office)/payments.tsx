@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { FormattedMessage } from 'react-intl';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(front-office)/payments'
@@ -7,5 +8,12 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  return <div>Hello "/_dashboard-layout/payments"!</div>;
+  return (
+    <div>
+      <FormattedMessage
+        id="payments.title"
+        defaultMessage='Hello "/_dashboard-layout/payments"!'
+      />
+    </div>
+  );
 }

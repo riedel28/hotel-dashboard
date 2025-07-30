@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
+import { FormattedMessage } from 'react-intl';
 
 import { ErrorFallback } from '@/components/ui/error-fallback';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
@@ -32,7 +33,10 @@ function ReservationPage() {
   return (
     <div>
       <h1 className="mb-6 text-lg font-semibold md:text-2xl">
-        Edit reservation
+        <FormattedMessage
+          id="reservations.editTitle"
+          defaultMessage="Edit reservation"
+        />
       </h1>
       <Suspense fallback={<FormSkeleton />}>
         <QueryErrorResetBoundary>

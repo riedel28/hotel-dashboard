@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { Copy, Link, Mail, MessageCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -136,22 +137,36 @@ export function ShareDialog({
     <Dialog open={open} onOpenChange={handleCloseModal}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Send message</DialogTitle>
+          <DialogTitle>
+            <FormattedMessage
+              id="reservations.sendMessage"
+              defaultMessage="Send message"
+            />
+          </DialogTitle>
         </DialogHeader>
 
         <DialogDescription>
-          Send message to the guest via email, SMS or WhatsApp to complete the
-          check-in process
+          <FormattedMessage
+            id="reservations.sendMessageDesc"
+            defaultMessage="Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
+          />
         </DialogDescription>
 
         <div className="mb-2 grid grid-cols-2">
           <div className="flex gap-1">
-            <span className="text-muted-foreground">Reservation:</span>
+            <span className="text-muted-foreground">
+              <FormattedMessage
+                id="reservations.reservationNr"
+                defaultMessage="Reservation:"
+              />
+            </span>
             <span className="font-medium">{reservation.booking_nr}</span>
           </div>
 
           <div className="flex gap-1">
-            <span className="text-muted-foreground">Room:</span>
+            <span className="text-muted-foreground">
+              <FormattedMessage id="reservations.room" defaultMessage="Room:" />
+            </span>
             <span className="font-medium">{reservation.room_name}</span>
           </div>
         </div>
@@ -167,7 +182,12 @@ export function ShareDialog({
                 name="first_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First name</FormLabel>
+                    <FormLabel>
+                      <FormattedMessage
+                        id="reservations.firstName"
+                        defaultMessage="First name"
+                      />
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -182,7 +202,12 @@ export function ShareDialog({
                 name="last_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last name</FormLabel>
+                    <FormLabel>
+                      <FormattedMessage
+                        id="reservations.lastName"
+                        defaultMessage="Last name"
+                      />
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -195,7 +220,7 @@ export function ShareDialog({
 
             <div className="flex gap-2">
               <div className="mr-2 pt-2">
-                <Mail className="size-5 text-muted-foreground/70" />
+                <Mail className="text-muted-foreground/70 size-5" />
               </div>
 
               <FormField
@@ -208,7 +233,11 @@ export function ShareDialog({
                     </FormControl>
                     <FormMessage />
                     <FormDescription>
-                      Last sent:{' '}
+                      <FormattedMessage
+                        id="reservations.lastSent"
+                        defaultMessage="Last sent:"
+                      />
+                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                       {dayjs(reservation.last_opened_at).format(
                         'DD.MM.YYYY HH:mm:ss'
                       )}
@@ -225,13 +254,13 @@ export function ShareDialog({
                   form.trigger(['first_name', 'last_name', 'email']);
                 }}
               >
-                Send
+                <FormattedMessage id="actions.send" defaultMessage="Send" />
               </Button>
             </div>
 
             <div className="items-flex-start flex gap-2">
               <div className="mr-2 pt-2">
-                <MessageCircle className="size-5 text-muted-foreground/70" />
+                <MessageCircle className="text-muted-foreground/70 size-5" />
               </div>
 
               <FormField
@@ -245,8 +274,11 @@ export function ShareDialog({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
+                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                           <SelectItem value="49">🇩🇪 +49</SelectItem>
+                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                           <SelectItem value="43">🇦🇹 +43</SelectItem>
+                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                           <SelectItem value="41">🇨🇭 +41</SelectItem>
                         </SelectContent>
                       </Select>
@@ -276,7 +308,7 @@ export function ShareDialog({
                   form.trigger(['first_name', 'last_name', 'prefix', 'phone']);
                 }}
               >
-                Send
+                <FormattedMessage id="actions.send" defaultMessage="Send" />
               </Button>
             </div>
 
@@ -284,7 +316,7 @@ export function ShareDialog({
 
             <div className="flex items-center gap-2">
               <div className="mr-2">
-                <Link className="size-5 text-muted-foreground/70" />
+                <Link className="text-muted-foreground/70 size-5" />
               </div>
 
               <FormField
@@ -308,7 +340,7 @@ export function ShareDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => handleCloseModal(false)}>
-            Close
+            <FormattedMessage id="actions.close" defaultMessage="Close" />
           </Button>
         </DialogFooter>
       </DialogContent>

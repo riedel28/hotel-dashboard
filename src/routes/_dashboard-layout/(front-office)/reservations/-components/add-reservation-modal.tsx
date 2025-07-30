@@ -1,47 +1,47 @@
-import { PlusCircle } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import React from 'react'
+import React from 'react';
 
-import { Button } from '@/components/ui/button'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { PlusCircle } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
+  DialogTrigger
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-} from '@/components/ui/form'
+  FormLabel
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+  SelectValue
+} from '@/components/ui/select';
 
 type FormValues = {
-  booking_nr: string
-  room: string
-  page_url: string
-}
-
-
+  booking_nr: string;
+  room: string;
+  page_url: string;
+};
 
 async function createReservation(data: FormValues) {
   const response = await fetch('http://localhost:5000/reservations', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       id: Math.floor(Math.random() * 1000),
@@ -55,55 +55,64 @@ async function createReservation(data: FormValues) {
       booking_nr: data.booking_nr,
       room_name: data.room,
       page_url: data.page_url,
-      balance: Math.floor(Math.random() * 1000),
-    }),
-  })
+      balance: Math.floor(Math.random() * 1000)
+    })
+  });
   if (!response.ok) {
-    throw new Error('Failed to create reservation')
+    throw new Error('Failed to create reservation');
   }
-  return response.json()
+  return response.json();
 }
 
 export function AddReservationModal() {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const queryClient = useQueryClient()
+  const [isOpen, setIsOpen] = React.useState(false);
+  const queryClient = useQueryClient();
+  const intl = useIntl();
 
   const form = useForm<FormValues>({
     defaultValues: {
       booking_nr: '',
       room: '',
-      page_url: '',
-    },
-  })
+      page_url: ''
+    }
+  });
 
   const createReservationMutation = useMutation({
     mutationFn: createReservation,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reservations'] })
-      setIsOpen(false)
-      form.reset()
-      toast.success('Reservation created successfully')
+      queryClient.invalidateQueries({ queryKey: ['reservations'] });
+      setIsOpen(false);
+      form.reset();
+      toast.success('Reservation created successfully');
     },
     onError: (error) => {
-      toast.error('Failed to create reservation: ' + error.message)
-    },
-  })
+      toast.error('Failed to create reservation: ' + error.message);
+    }
+  });
 
   const onSubmit = (data: FormValues) => {
-    createReservationMutation.mutate(data)
-  }
+    createReservationMutation.mutate(data);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Reservation
+          <FormattedMessage
+            id="reservations.add"
+            defaultMessage="Add Reservation"
+          />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Reservation</DialogTitle>
+          <DialogTitle>
+            <FormattedMessage
+              id="reservations.createTitle"
+              defaultMessage="Create New Reservation"
+            />
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -112,9 +121,21 @@ export function AddReservationModal() {
               name="booking_nr"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reservation Nr.</FormLabel>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="reservations.reservationNr"
+                      defaultMessage="Reservation Nr."
+                    />
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter reservation number" required />
+                    <Input
+                      {...field}
+                      placeholder={intl.formatMessage({
+                        id: 'placeholders.reservationNumber',
+                        defaultMessage: 'Enter reservation number'
+                      })}
+                      required
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -124,16 +145,38 @@ export function AddReservationModal() {
               name="room"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Room</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="reservations.room"
+                      defaultMessage="Room"
+                    />
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a room" />
+                      <SelectValue
+                        placeholder={intl.formatMessage({
+                          id: 'placeholders.selectRoom',
+                          defaultMessage: 'Select a room'
+                        })}
+                      >
+                        <FormattedMessage
+                          id="reservations.selectRoom"
+                          defaultMessage="Select a room"
+                        />
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         {[101, 102, 103, 104, 105].map((room) => (
                           <SelectItem key={room} value={room.toString()}>
-                            Room {room}
+                            <FormattedMessage
+                              id="reservations.roomWithNumber"
+                              defaultMessage="Room {room}"
+                              values={{ room }}
+                            />
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -147,22 +190,40 @@ export function AddReservationModal() {
               name="page_url"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Page URL</FormLabel>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="reservations.pageUrl"
+                      defaultMessage="Page URL"
+                    />
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter page URL" required />
+                    <Input
+                      {...field}
+                      placeholder={intl.formatMessage({
+                        id: 'placeholders.pageUrl',
+                        defaultMessage: 'Enter page URL'
+                      })}
+                      required
+                    />
                   </FormControl>
                 </FormItem>
               )}
             />
             <div className="flex justify-end space-x-2">
-              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-                Cancel
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+              >
+                <FormattedMessage id="actions.cancel" defaultMessage="Cancel" />
               </Button>
-              <Button type="submit">Create</Button>
+              <Button type="submit">
+                <FormattedMessage id="actions.create" defaultMessage="Create" />
+              </Button>
             </div>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

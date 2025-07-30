@@ -1,4 +1,5 @@
 import { RotateCcw } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
 
 import { Button } from './button';
 
@@ -11,7 +12,9 @@ export function ErrorFallback({
 }) {
   return (
     <div className="max-w-lg rounded-md border border-rose-100 bg-rose-50 p-6 text-center">
-      <h3 className="text-xl font-semibold text-rose-700">Error!</h3>
+      <h3 className="text-xl font-semibold text-rose-700">
+        <FormattedMessage id="error.title" defaultMessage="Error!" />
+      </h3>
       <p className="text-rose-700">{error?.message}</p>
 
       <Button
@@ -21,7 +24,7 @@ export function ErrorFallback({
         className="mt-4"
       >
         <RotateCcw />
-        Try again
+        <FormattedMessage id="error.tryAgain" defaultMessage="Try again" />
       </Button>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { ChevronsUpDownIcon, RefreshCwIcon } from 'lucide-react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -63,6 +64,7 @@ export default function PropertySelector() {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<Property>(() => properties[0]);
   const [loading, setLoading] = useState(false);
+  const intl = useIntl();
 
   function handleReloadProperties() {
     setLoading(true);
@@ -86,7 +88,10 @@ export default function PropertySelector() {
                   (property) =>
                     property.name.toLowerCase() === value.name.toLowerCase()
                 )?.name
-              : 'Select property'}
+              : intl.formatMessage({
+                  id: 'placeholders.selectProperty',
+                  defaultMessage: 'Select property'
+                })}
           </span>
           <ChevronsUpDownIcon
             size={16}
@@ -102,9 +107,21 @@ export default function PropertySelector() {
         side="right"
       >
         <Command>
-          <CommandInput placeholder="Search for property" />
+          <CommandInput
+            placeholder={intl.formatMessage({
+              id: 'placeholders.searchProperty',
+              defaultMessage: 'Search for property'
+            })}
+          />
           <CommandList className="w-[320px]">
-            {!loading && <CommandEmpty>No properties found.</CommandEmpty>}
+            {!loading && (
+              <CommandEmpty>
+                <FormattedMessage
+                  id="properties.notFound"
+                  defaultMessage="No properties found."
+                />
+              </CommandEmpty>
+            )}
             <CommandGroup>
               <ScrollArea>
                 {loading ? (
@@ -157,7 +174,7 @@ export default function PropertySelector() {
                   )}
                   aria-hidden="true"
                 />
-                Reload
+                <FormattedMessage id="actions.reload" defaultMessage="Reload" />
               </Button>
             </CommandGroup>
           </CommandList>

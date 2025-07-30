@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { useAuth } from '@/auth';
+import { useIntlContext } from '@/i18n/intl-provider';
 import { Link } from '@tanstack/react-router';
 import {
   ArrowUpRightIcon,
@@ -30,6 +31,7 @@ import {
   User,
   UsersIcon
 } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -66,6 +68,7 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
+import LanguageSwitcher from './language-switcher';
 import PropertySelector from './property-selector';
 
 // This is sample data.
@@ -100,29 +103,29 @@ const data = {
   // ] as Team[],
   navMain: [
     {
-      title: 'Front Office',
+      title: 'sidebar.frontOffice',
       url: '/front-office',
       icon: ConciergeBell
     }
   ],
   contentManager: [
     {
-      name: 'Mobile App',
+      name: 'sidebar.contentManager.mobileCMS',
       url: '/mobile-cms',
       icon: SmartphoneIcon
     },
     {
-      name: 'TV App',
+      name: 'sidebar.contentManager.tv',
       url: '/tv',
       icon: TvIcon
     },
     {
-      name: 'Products',
+      name: 'sidebar.contentManager.products',
       url: '/products',
       icon: ShoppingBagIcon
     },
     {
-      name: 'Events',
+      name: 'sidebar.contentManager.events',
       url: '/events',
       icon: CalendarIcon
     }
@@ -134,10 +137,10 @@ export default function DashboardLayout({
   onLogout
 }: {
   children: React.ReactNode;
-
   onLogout: () => void;
 }) {
   const auth = useAuth();
+  const { locale, setLocale } = useIntlContext();
 
   return (
     <SidebarProvider>
@@ -150,7 +153,10 @@ export default function DashboardLayout({
                   <MessageCircleIcon className="size-4" />
                 </div>
                 <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
-                  Backoffice Manager
+                  <FormattedMessage
+                    id="app.title"
+                    defaultMessage="Backoffice Manager"
+                  />
                 </span>
 
                 <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
@@ -168,7 +174,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/">
                     <HomeIcon />
-                    <span>Start</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.start"
+                        defaultMessage="Start"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -176,14 +187,24 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/monitoring">
                     <SquareActivityIcon />
-                    <span>Monitoring</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.monitoring"
+                        defaultMessage="Monitoring"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarGroup>
           </SidebarMenu>
           <SidebarGroup>
-            <SidebarGroupLabel>Front Office</SidebarGroupLabel>
+            <SidebarGroupLabel>
+              <FormattedMessage
+                id="sidebar.frontOffice"
+                defaultMessage="Front Office"
+              />
+            </SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
@@ -195,7 +216,12 @@ export default function DashboardLayout({
                     }}
                   >
                     <BedDoubleIcon />
-                    <span>Reservations</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.reservations"
+                        defaultMessage="Reservations"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -203,7 +229,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/registration-forms">
                     <ListTodoIcon />
-                    <span>Registration forms</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.registrationForms"
+                        defaultMessage="Registration forms"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -211,7 +242,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/payments">
                     <ReceiptTextIcon />
-                    <span>Payments</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.payments"
+                        defaultMessage="Payments"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -219,27 +255,47 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/orders">
                     <ShoppingCartIcon />
-                    <span>Orders</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.orders"
+                        defaultMessage="Orders"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Content Manager</SidebarGroupLabel>
+            <SidebarGroupLabel>
+              <FormattedMessage
+                id="sidebar.contentManager"
+                defaultMessage="Content Manager"
+              />
+            </SidebarGroupLabel>
             <SidebarMenu>
               {data.contentManager.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton asChild>
                     <Link to={item.url}>
                       <item.icon />
-                      <span>{item.name}</span>
+                      <span>
+                        <FormattedMessage
+                          id={`sidebar.contentManager.${item.url.replace('/', '').replace('-', '').replace('cms', 'CMS')}`}
+                          defaultMessage="Content Manager Item"
+                        />
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                   {item.url === '/tv' ? (
                     <SidebarMenuAction>
                       <ArrowUpRightIcon className="text-muted-foreground/80" />
-                      <span className="sr-only">External link</span>
+                      <span className="sr-only">
+                        <FormattedMessage
+                          id="common.externalLink"
+                          defaultMessage="External link"
+                        />
+                      </span>
                     </SidebarMenuAction>
                   ) : null}
                 </SidebarMenuItem>
@@ -247,13 +303,23 @@ export default function DashboardLayout({
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Integrations</SidebarGroupLabel>
+            <SidebarGroupLabel>
+              <FormattedMessage
+                id="sidebar.integrations"
+                defaultMessage="Integrations"
+              />
+            </SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/access-provider">
                     <LockIcon />
-                    <span>Access Provider</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.accessProvider"
+                        defaultMessage="Access Provider"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -261,7 +327,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/pms-provider">
                     <Grid2X2Icon />
-                    <span>PMS Provider</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.pmsProvider"
+                        defaultMessage="PMS Provider"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -269,7 +340,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/payment-provider">
                     <CreditCardIcon />
-                    <span>Payment Provider</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.paymentProvider"
+                        defaultMessage="Payment Provider"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -278,13 +354,23 @@ export default function DashboardLayout({
 
           {/* Settings */}
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Settings</SidebarGroupLabel>
+            <SidebarGroupLabel>
+              <FormattedMessage
+                id="sidebar.settings"
+                defaultMessage="Settings"
+              />
+            </SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/company">
                     <BuildingIcon />
-                    <span>Company data</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.companyData"
+                        defaultMessage="Company data"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -292,7 +378,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/checkin-page">
                     <FileSpreadsheetIcon />
-                    <span>Checkin Page</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.checkinPage"
+                        defaultMessage="Checkin Page"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -300,7 +391,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/users">
                     <UsersIcon />
-                    <span>Users</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.users"
+                        defaultMessage="Users"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -308,7 +404,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/rooms">
                     <BedSingleIcon />
-                    <span>Rooms</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.rooms"
+                        defaultMessage="Rooms"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -316,7 +417,12 @@ export default function DashboardLayout({
                 <SidebarMenuButton asChild>
                   <Link to="/devices">
                     <TabletIcon />
-                    <span>Devices</span>
+                    <span>
+                      <FormattedMessage
+                        id="sidebar.devices"
+                        defaultMessage="Devices"
+                      />
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -337,7 +443,12 @@ export default function DashboardLayout({
                         src={data.user.avatar}
                         alt={data.user.name}
                       />
-                      <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                      <AvatarFallback className="rounded-lg">
+                        <FormattedMessage
+                          id="avatar.fallback"
+                          defaultMessage="CN"
+                        />
+                      </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
@@ -364,7 +475,10 @@ export default function DashboardLayout({
                           alt={data.user.name}
                         />
                         <AvatarFallback className="rounded-lg">
-                          CN
+                          <FormattedMessage
+                            id="avatar.fallback"
+                            defaultMessage="CN"
+                          />
                         </AvatarFallback>
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
@@ -382,21 +496,31 @@ export default function DashboardLayout({
                     <DropdownMenuItem asChild>
                       <Link to="/profile">
                         <User />
-                        Profile
+                        <FormattedMessage
+                          id="user.profile"
+                          defaultMessage="Profile"
+                        />
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={onLogout}>
                     <LogOut />
-                    Log out
+                    <FormattedMessage
+                      id="user.logout"
+                      defaultMessage="Log out"
+                    />
                     <span className="text-muted-foreground ml-auto text-xs">
-                      v1.2.4
+                      <FormattedMessage
+                        id="app.version"
+                        defaultMessage="v1.2.4"
+                      />
                     </span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </SidebarMenuItem>
+            <LanguageSwitcher locale={locale} setLocale={setLocale} />
           </SidebarMenu>
         </SidebarFooter>
         <SidebarRail />
@@ -409,12 +533,20 @@ export default function DashboardLayout({
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="#">
-                    Building Your Application
+                    <FormattedMessage
+                      id="breadcrumb.buildingApp"
+                      defaultMessage="Building Your Application"
+                    />
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>
+                    <FormattedMessage
+                      id="breadcrumb.dataFetching"
+                      defaultMessage="Data Fetching"
+                    />
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

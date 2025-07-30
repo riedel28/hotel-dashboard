@@ -1,9 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { FormattedMessage } from 'react-intl';
 
 export const Route = createFileRoute('/_dashboard-layout/devices')({
   component: RouteComponent
 });
 
 function RouteComponent() {
-  return <div>Hello "/_dashboard-layout/devices"!</div>;
+  return (
+    <div>
+      <FormattedMessage
+        id="devices.title"
+        defaultMessage='Hello "/_dashboard-layout/devices"!'
+      />
+    </div>
+  );
 }

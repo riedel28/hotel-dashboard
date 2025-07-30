@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Table,
@@ -49,9 +50,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 );
               })}
@@ -75,7 +76,10 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                <FormattedMessage
+                  id="table.noResults"
+                  defaultMessage="No results."
+                />
               </TableCell>
             </TableRow>
           )}

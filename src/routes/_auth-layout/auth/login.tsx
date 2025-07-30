@@ -8,6 +8,7 @@ import {
   useRouterState
 } from '@tanstack/react-router';
 import { MessageCircleIcon } from 'lucide-react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -43,6 +44,7 @@ function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const intl = useIntl();
 
   const search = Route.useSearch();
 
@@ -74,26 +76,39 @@ function LoginPage() {
   return (
     <div className="w-full max-w-md">
       <div className="mb-8 text-center">
-        <div className="mb-2 inline-block rounded-md bg-primary p-2 text-white">
+        <div className="bg-primary mb-2 inline-block rounded-md p-2 text-white">
           <MessageCircleIcon className="size-10" />
         </div>
-        <h1 className="text-2xl font-bold">Login</h1>
+        <h1 className="text-2xl font-bold">
+          <FormattedMessage id="auth.login.title" defaultMessage="Login" />
+        </h1>
         <p className="text-muted-foreground">
-          {search.redirect
-            ? 'Please login to access this page'
-            : 'Enter your credentials to access the dashboard'}
+          {search.redirect ? (
+            <FormattedMessage
+              id="auth.login.redirectMessage"
+              defaultMessage="Please login to access this page"
+            />
+          ) : (
+            <FormattedMessage
+              id="auth.login.defaultMessage"
+              defaultMessage="Enter your credentials to access the dashboard"
+            />
+          )}
         </p>
       </div>
       <div>
         <form onSubmit={onFormSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              Email
+              <FormattedMessage id="auth.login.email" defaultMessage="Email" />
             </label>
             <Input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder={intl.formatMessage({
+                id: 'placeholders.email',
+                defaultMessage: 'Enter your email'
+              })}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoggingIn}
@@ -102,10 +117,16 @@ function LoginPage() {
           </div>
           <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
-              Password
+              <FormattedMessage
+                id="auth.login.password"
+                defaultMessage="Password"
+              />
             </label>
             <PasswordInput
-              placeholder="Enter your password"
+              placeholder={intl.formatMessage({
+                id: 'placeholders.password',
+                defaultMessage: 'Enter your password'
+              })}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={isLoggingIn}
@@ -115,7 +136,10 @@ function LoginPage() {
           <div className="flex justify-between">
             <label className="flex items-center gap-2 text-sm">
               <Checkbox />
-              Remember me
+              <FormattedMessage
+                id="auth.login.rememberMe"
+                defaultMessage="Remember me"
+              />
             </label>
             <Link
               className={cn(
@@ -126,11 +150,21 @@ function LoginPage() {
               )}
               to="/auth/forgot-password"
             >
-              Forgot password?
+              <FormattedMessage
+                id="auth.login.forgotPassword"
+                defaultMessage="Forgot password?"
+              />
             </Link>
           </div>
           <Button type="submit" className="w-full" disabled={isLoggingIn}>
-            {isLoggingIn ? 'Logging in...' : 'Login'}
+            {isLoggingIn ? (
+              <FormattedMessage
+                id="auth.login.loggingIn"
+                defaultMessage="Logging in..."
+              />
+            ) : (
+              <FormattedMessage id="auth.login.submit" defaultMessage="Login" />
+            )}
           </Button>
         </form>
       </div>

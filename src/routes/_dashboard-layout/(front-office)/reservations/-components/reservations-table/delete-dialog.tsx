@@ -1,6 +1,8 @@
-import { AlertCircle, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AlertCircle, Loader2 } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
+import { toast } from 'sonner';
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -16,15 +18,18 @@ interface DeleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   reservationNr: string;
-  reservationId: number
+  reservationId: number;
 }
 
 async function deleteReservation(reservationId: number) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const response = await fetch(`http://localhost:5000/reservations/${reservationId}`, {
-    method: 'DELETE',
-  });
+  const response = await fetch(
+    `http://localhost:5000/reservations/${reservationId}`,
+    {
+      method: 'DELETE'
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Failed to delete reservation');
@@ -54,11 +59,23 @@ export function DeleteDialog({
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
-            <span className="font-bold">Reservation deleted</span>
+            <span className="font-bold">
+              <FormattedMessage
+                id="reservations.deleted"
+                defaultMessage="Reservation deleted"
+              />
+            </span>
           </div>
           <div>
-            The reservation <span className="font-medium">{reservationNr}</span> has been
-            deleted
+            <FormattedMessage
+              id="reservations.deletedMessage"
+              defaultMessage="The reservation <span className='font-medium'>{reservationNr}</span> has been deleted"
+              values={{
+                reservationNr: (
+                  <span className="font-medium">{reservationNr}</span>
+                )
+              }}
+            />
           </div>
         </div>
       );
@@ -68,7 +85,12 @@ export function DeleteDialog({
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
-            <span className="font-bold">Error deleting reservation</span>
+            <span className="font-bold">
+              <FormattedMessage
+                id="reservations.deleteError"
+                defaultMessage="Error deleting reservation"
+              />
+            </span>
           </div>
           <div>{error.message}</div>
         </div>
@@ -80,14 +102,28 @@ export function DeleteDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>
+            <FormattedMessage
+              id="reservations.deleteConfirmTitle"
+              defaultMessage="Are you sure?"
+            />
+          </AlertDialogTitle>
           <AlertDialogDescription className="py-4">
-            The reservation <span className="font-medium">{reservationNr}</span>{' '}
-            will be deleted. This action cannot be undone.
+            <FormattedMessage
+              id="reservations.deleteConfirmDesc"
+              defaultMessage="The reservation <span className='font-medium'>{reservationNr}</span> will be deleted. This action cannot be undone."
+              values={{
+                reservationNr: (
+                  <span className="font-medium">{reservationNr}</span>
+                )
+              }}
+            />
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>
+            <FormattedMessage id="actions.cancel" defaultMessage="Cancel" />
+          </AlertDialogCancel>
           <Button
             variant="destructive"
             disabled={deleteReservationMutation.isPending}
@@ -96,7 +132,7 @@ export function DeleteDialog({
             {deleteReservationMutation.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Delete
+            <FormattedMessage id="actions.delete" defaultMessage="Delete" />
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -10,6 +10,7 @@ import {
   PenSquare,
   Trash
 } from 'lucide-react';
+import { FormattedMessage } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -39,31 +40,39 @@ export function RowActions({ row }: RowActionsProps) {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
           >
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">
+              <FormattedMessage
+                id="reservations.openMenu"
+                defaultMessage="Open menu"
+              />
+            </span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-[180px]">
           <DropdownMenuItem>
             <MessageSquareDot className="mr-2 h-4 w-4" />
-            Push to device
+            <FormattedMessage
+              id="reservations.pushToDevice"
+              defaultMessage="Push to device"
+            />
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <RouterLink
-              to="/front-office/reservations/$reservationId"
+              to="/reservations/$reservationId"
               params={{
                 reservationId: String(row.original.id)
               }}
             >
               <PenSquare className="mr-2 h-4 w-4" />
-              Edit
+              <FormattedMessage id="actions.edit" defaultMessage="Edit" />
             </RouterLink>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <MessageSquareDot className="mr-2 h-4 w-4" />
-            Share
+            <FormattedMessage id="actions.share" defaultMessage="Share" />
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -71,7 +80,8 @@ export function RowActions({ row }: RowActionsProps) {
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash className="mr-2 h-4 w-4" />
-            Delete
+            <FormattedMessage id="actions.delete" defaultMessage="Delete" />
+            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
