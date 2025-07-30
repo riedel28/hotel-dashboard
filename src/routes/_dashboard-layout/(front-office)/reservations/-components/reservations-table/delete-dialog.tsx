@@ -1,3 +1,4 @@
+import { buildResourceUrl } from '@/config/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
@@ -25,7 +26,7 @@ async function deleteReservation(reservationId: number) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const response = await fetch(
-    `http://localhost:5000/reservations/${reservationId}`,
+    buildResourceUrl('reservations', reservationId),
     {
       method: 'DELETE'
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { buildApiUrl, getEndpointUrl } from '@/config/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -39,7 +40,7 @@ type FormValues = {
 };
 
 async function createReservation(data: FormValues) {
-  const response = await fetch('http://localhost:5000/reservations', {
+  const response = await fetch(buildApiUrl(getEndpointUrl('reservations')), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

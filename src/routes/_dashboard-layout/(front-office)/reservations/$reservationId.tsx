@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 
+import { buildResourceUrl } from '@/config/api';
 import {
   QueryErrorResetBoundary,
   useSuspenseQuery
@@ -14,7 +15,7 @@ import { FormSkeleton } from '@/components/ui/form-skeleton';
 async function fetchReservationById(id: string) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const response = await fetch(`http://localhost:5000/reservations/${id}`);
+  const response = await fetch(buildResourceUrl('reservations', id));
 
   if (response.status === 404) {
     throw new Error('Reservation not found');

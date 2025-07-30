@@ -1,6 +1,48 @@
-# React + TypeScript + Vite
+# TanStack Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React dashboard built with TypeScript, Vite, and TanStack Query.
+
+## API Configuration
+
+The application uses a centralized API configuration system located in `src/config/api.ts`. This allows for easy environment-based configuration and URL management.
+
+### Environment Variables
+
+You can configure the API base URL using the `VITE_API_BASE_URL` environment variable:
+
+```bash
+# Development (default)
+VITE_API_BASE_URL=http://localhost:3001
+
+# Staging
+VITE_API_BASE_URL=https://api-staging.example.com
+
+# Production
+VITE_API_BASE_URL=https://api.example.com
+```
+
+### Usage
+
+The API configuration provides helper functions for building URLs:
+
+```typescript
+import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
+
+// Build a full URL with query parameters
+const url = buildApiUrl(getEndpointUrl('reservations'), {
+  _page: 1,
+  _limit: 10
+});
+
+// Result: http://localhost:3001/reservations?_page=1&_limit=10
+
+// Build a URL for a specific resource by ID
+const resourceUrl = buildResourceUrl('reservations', 123);
+
+// Result: http://localhost:3001/reservations/123
+```
+
+## Development Setup
 
 Currently, two official plugins are available:
 

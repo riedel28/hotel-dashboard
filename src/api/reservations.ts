@@ -1,3 +1,4 @@
+import { buildApiUrl, getEndpointUrl } from '@/config/api';
 import { Reservation } from '@/routes/_dashboard-layout/(front-office)/reservations/-components/reservations-table/columns';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
@@ -30,7 +31,10 @@ async function fetchReservations({
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const response = await fetch(
-    `http://localhost:3001/reservations?_page=${page}&_limit=${perPage}`
+    buildApiUrl(getEndpointUrl('reservations'), {
+      _page: page,
+      _limit: perPage
+    })
   );
   if (!response.ok) {
     throw new Error('Network response was not ok');
