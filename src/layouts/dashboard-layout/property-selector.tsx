@@ -4,7 +4,9 @@ import { useState } from 'react';
 
 import { ChevronsUpDownIcon, RefreshCwIcon } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { toast } from 'sonner';
 
+import { Badge, BadgeProps } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -30,6 +32,63 @@ export interface Property {
   id: string;
   name: string;
   stage: 'demo' | 'production' | 'staging' | 'template';
+}
+
+const stageMap = {
+  demo: 'bg-purple-100 text-purple-700 border-purple-200',
+  production: 'bg-green-100 text-green-700 border-green-200',
+  staging: 'bg-blue-100 text-blue-700 border-blue-200',
+  template: 'bg-orange-100 text-orange-700 border-orange-200'
+} as const;
+
+interface StageBadgeProps extends BadgeProps {
+  stage: keyof typeof stageMap;
+}
+
+function StageBadge({ stage }: StageBadgeProps) {
+  const getStageMessage = () => {
+    switch (stage) {
+      case 'demo':
+        return (
+          <FormattedMessage id="property.stage.demo" defaultMessage="Demo" />
+        );
+      case 'production':
+        return (
+          <FormattedMessage
+            id="property.stage.production"
+            defaultMessage="Production"
+          />
+        );
+      case 'staging':
+        return (
+          <FormattedMessage
+            id="property.stage.staging"
+            defaultMessage="Staging"
+          />
+        );
+      case 'template':
+        return (
+          <FormattedMessage
+            id="property.stage.template"
+            defaultMessage="Template"
+          />
+        );
+      default:
+        return stage;
+    }
+  };
+
+  return (
+    <Badge
+      variant="secondary"
+      className={cn(
+        'rounded-md px-1.5 text-[11px] font-medium capitalize',
+        stageMap[stage]
+      )}
+    >
+      {getStageMessage()}
+    </Badge>
+  );
 }
 
 export const properties: Property[] = [
@@ -60,6 +119,10 @@ export const properties: Property[] = [
   }
 ];
 
+const truncatePropertyName = (name: string, maxLength: number = 20) => {
+  return name.length > maxLength ? `${name.substring(0, maxLength)}...` : name;
+};
+
 export default function PropertySelector() {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<Property>(() => properties[0]);
@@ -68,8 +131,21 @@ export default function PropertySelector() {
 
   function handleReloadProperties() {
     setLoading(true);
+    toast.info(
+      intl.formatMessage({
+        id: 'property.toast.reloading',
+        defaultMessage: 'Reloading properties'
+      })
+    );
+
     setTimeout(() => {
       setLoading(false);
+      toast.info(
+        intl.formatMessage({
+          id: 'property.toast.reloaded',
+          defaultMessage: 'Properties reloaded'
+        })
+      );
     }, 2000);
   }
 
@@ -126,10 +202,11 @@ export default function PropertySelector() {
               <ScrollArea>
                 {loading ? (
                   <div className="space-y-1">
-                    <Skeleton className="h-[36px] w-full" />
-                    <Skeleton className="h-[36px] w-full" />
-                    <Skeleton className="h-[36px] w-full" />
-                    <Skeleton className="h-[36px] w-full" />
+                    <Skeleton className="h-[32px] w-full" />
+                    <Skeleton className="h-[32px] w-full" />
+                    <Skeleton className="h-[32px] w-full" />
+                    <Skeleton className="h-[32px] w-full" />
+                    <Skeleton className="h-[32px] w-full" />
                   </div>
                 ) : (
                   properties.map((property) => (
@@ -137,12 +214,50 @@ export default function PropertySelector() {
                       key={property.id}
                       value={property.id}
                       onSelect={(currentValue) => {
-                        setValue(
+                        const selectedProperty =
                           properties.find(
                             (property) => property.id === currentValue
-                          ) ?? properties[0]
-                        );
+                          ) ?? properties[0];
+
+                        setValue(selectedProperty);
                         setOpen(false);
+
+                        toast.info(
+                          intl.formatMessage(
+                            {
+                              id: 'property.toast.changed.description',
+                              defaultMessage: 'Switched to "{propertyName}"'
+                            },
+                            {
+                              propertyName: truncatePropertyName(property.name)
+                            }
+                          ),
+                          {
+                            action: {
+                              label: intl.formatMessage({
+                                id: 'actions.undo',
+                                defaultMessage: 'Undo'
+                              }),
+                              onClick: () => {
+                                setValue(value);
+                                toast.info(
+                                  intl.formatMessage(
+                                    {
+                                      id: 'property.toast.reverted.description',
+                                      defaultMessage:
+                                        'Switched back to "{propertyName}"'
+                                    },
+                                    {
+                                      propertyName: truncatePropertyName(
+                                        value.name
+                                      )
+                                    }
+                                  )
+                                );
+                              }
+                            }
+                          }
+                        );
                       }}
                       className="h-9 gap-1"
                     >
@@ -151,7 +266,7 @@ export default function PropertySelector() {
                       </span>
 
                       <CommandShortcut className="text-[9px] font-semibold tracking-wide uppercase">
-                        {property.stage}
+                        <StageBadge stage={property.stage} />
                       </CommandShortcut>
                     </CommandItem>
                   ))
@@ -169,7 +284,7 @@ export default function PropertySelector() {
               >
                 <RefreshCwIcon
                   className={cn(
-                    '-ms-2 me-2 mr-0 opacity-60',
+                    '-ms-2 me-2 mr-0 size-3.5 opacity-60',
                     loading && 'animate-spin'
                   )}
                   aria-hidden="true"
