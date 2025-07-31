@@ -107,6 +107,7 @@
   "reservations.balance": "Betrag",
   "reservations.bookingNumber": "Reservierungs-Nr.",
   "reservations.bookingNumberReadonly": "Reservierungsnummer kann nicht geändert werden",
+  "reservations.bookingNumberTooltip": "Die Reservierungsnummer finden Sie in Ihrem PMS",
   "reservations.business": "Geschäftlich",
   "reservations.children": "Kinder",
   "reservations.completedAt": "Abgeschlossen am",

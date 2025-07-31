@@ -16,6 +16,7 @@
     "server": "json-server --watch db.json --port 3001"
   },
   "dependencies": {
+    "@base-ui-components/react": "^1.0.0-beta.2",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
