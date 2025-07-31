@@ -13,7 +13,23 @@
       "last_opened_at": "2023-07-18T12:35:30.910+02:00",
       "received_at": "2023-07-18T12:35:30.910+02:00",
       "page_url": "https://example.com/checkin/223344",
-      "balance": 0
+      "balance": 0,
+      "guests": [
+        {
+          "id": "1",
+          "name": "Petro Demydov"
+        },
+        {
+          "id": "2",
+          "name": "Surattana Bopp"
+        }
+      ],
+      "adults": 2,
+      "youth": 0,
+      "children": 0,
+      "infants": 5,
+      "purpose": "business",
+      "room": "401"
     },
     {
       "id": "3",
@@ -28,7 +44,23 @@
       "last_opened_at": "2023-07-18T12:35:30.910+02:00",
       "received_at": "2023-07-18T12:35:30.910+02:00",
       "page_url": "https://example.com/checkin/334455",
-      "balance": 1200.99
+      "balance": 1200.99,
+      "guests": [
+        {
+          "id": "1",
+          "name": "Petro Demydov"
+        },
+        {
+          "id": "2",
+          "name": "Surattana Bopp"
+        }
+      ],
+      "adults": 2,
+      "youth": 0,
+      "children": 2,
+      "infants": 6,
+      "purpose": "private",
+      "room": "401"
     },
     {
       "id": "667",
@@ -213,7 +245,7 @@
       "balance": 34
     },
     {
-      "id": 882,
+      "id": "882",
       "state": "pending",
       "guest_email": "jd@example.com",
       "primary_guest_name": "John Doe",
@@ -227,7 +259,7 @@
       "balance": 190
     },
     {
-      "id": 75,
+      "id": "75",
       "state": "pending",
       "guest_email": "jd@example.com",
       "primary_guest_name": "John Doe",
@@ -241,7 +273,7 @@
       "balance": 363
     },
     {
-      "id": 590,
+      "id": "590",
       "state": "pending",
       "guest_email": "jd@example.com",
       "primary_guest_name": "John Doe",
