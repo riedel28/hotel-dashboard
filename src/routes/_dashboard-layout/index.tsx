@@ -47,7 +47,6 @@ function StartPage() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Section */}
       <div className="space-y-1">
         <h1 className="text-2xl font-bold tracking-tight">
           <FormattedMessage

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Slot } from '@radix-ui/react-slot';
-import { ChevronRight, MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import { cn } from '@/lib/utils';
@@ -78,7 +78,8 @@ function BreadcrumbSeparator({
       className={cn('[&>svg]:size-3.5', className)}
       {...props}
     >
-      {children ?? <ChevronRight />}
+      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+      {children ?? <span className="text-foreground/30 text-sm">/</span>}
     </li>
   );
 }

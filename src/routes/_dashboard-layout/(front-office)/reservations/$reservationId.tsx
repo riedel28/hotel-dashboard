@@ -9,6 +9,14 @@ import { createFileRoute } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import { FormattedMessage } from 'react-intl';
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb';
 import { ErrorFallback } from '@/components/ui/error-fallback';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 
@@ -37,30 +45,62 @@ async function fetchReservationById(id: string) {
 
 function ReservationPage() {
   return (
-    <div>
-      <h1 className="mb-4 text-lg font-semibold md:text-xl">
-        <FormattedMessage
-          id="reservations.editTitle"
-          defaultMessage="Edit reservation"
-        />
-      </h1>
-      <Suspense fallback={<FormSkeleton />}>
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <ErrorFallback
-                  error={error}
-                  resetErrorBoundary={resetErrorBoundary}
+    <div className="space-y-6">
+      <div className="space-y-1">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">
+                <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/reservations">
+                <FormattedMessage
+                  id="reservations.title"
+                  defaultMessage="Reservations"
                 />
-              )}
-            >
-              <ReservationForm />
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      </Suspense>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                <FormattedMessage
+                  id="reservations.editTitle"
+                  defaultMessage="Edit reservation"
+                />
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <h1 className="text-2xl font-bold">
+          <FormattedMessage
+            id="reservations.editTitle"
+            defaultMessage="Edit reservation"
+          />
+        </h1>
+      </div>
+
+      <div>
+        <Suspense fallback={<FormSkeleton />}>
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary
+                onReset={reset}
+                fallbackRender={({ error, resetErrorBoundary }) => (
+                  <ErrorFallback
+                    error={error}
+                    resetErrorBoundary={resetErrorBoundary}
+                  />
+                )}
+              >
+                <ReservationForm />
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
+        </Suspense>
+      </div>
     </div>
   );
 }

@@ -5,6 +5,14 @@ import { RefreshCw, X } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 import { z } from 'zod';
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/search-input';
 
@@ -183,7 +191,26 @@ function ReservationsPage() {
   }
 
   return (
-    <div>
+    <div className="space-y-1">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">
+              <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              <FormattedMessage
+                id="reservations.title"
+                defaultMessage="Reservations"
+              />
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div className="mb-6 flex justify-between">
         <h1 className="text-2xl font-bold">
           <FormattedMessage
