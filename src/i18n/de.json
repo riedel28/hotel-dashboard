@@ -25,6 +25,8 @@
   "auth.login.rememberMe": "Angemeldet bleiben",
   "auth.login.submit": "Anmelden",
   "auth.login.title": "Anmelden",
+  "auth.logout.confirmDesc": "Sie werden von Ihrem Konto abgemeldet und zur Anmeldeseite weitergeleitet.",
+  "auth.logout.confirmTitle": "Sind Sie sicher, dass Sie sich abmelden möchten?",
   "avatar.fallback": "CN",
   "breadcrumb.buildingApp": "Ihre Anwendung erstellen",
   "breadcrumb.dataFetching": "Daten abrufen",

@@ -1,13 +1,10 @@
 'use client';
 
-import { useAuth } from '@/auth';
+import { useState } from 'react';
+
 import DashboardLayout from '@/layouts/dashboard-layout';
-import {
-  Outlet,
-  createFileRoute,
-  redirect,
-  useRouter
-} from '@tanstack/react-router';
+import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_dashboard-layout')({
   beforeLoad: ({ context, location }) => {
@@ -24,23 +21,27 @@ export const Route = createFileRoute('/_dashboard-layout')({
 });
 
 export default function Layout() {
-  const router = useRouter();
   const navigate = Route.useNavigate();
-  const auth = useAuth();
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      auth.logout().then(() => {
-        router.invalidate().finally(() => {
-          navigate({ to: '/auth/login' });
-        });
-      });
-    }
+    setLogoutDialogOpen(true);
+  };
+
+  const handleLogoutSuccess = () => {
+    navigate({ to: '/auth/login' });
   };
 
   return (
-    <DashboardLayout onLogout={handleLogout}>
-      <Outlet />
-    </DashboardLayout>
+    <>
+      <DashboardLayout onLogout={handleLogout}>
+        <Outlet />
+      </DashboardLayout>
+      <LogoutDialog
+        open={logoutDialogOpen}
+        onOpenChange={setLogoutDialogOpen}
+        onLogoutSuccess={handleLogoutSuccess}
+      />
+    </>
   );
 }

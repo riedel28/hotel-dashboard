@@ -25,6 +25,8 @@
   "auth.login.rememberMe": "Remember me",
   "auth.login.submit": "Login",
   "auth.login.title": "Login",
+  "auth.logout.confirmDesc": "You will be logged out of your account and redirected to the login page.",
+  "auth.logout.confirmTitle": "Are you sure you want to logout?",
   "avatar.fallback": "CN",
   "breadcrumb.buildingApp": "Building Your Application",
   "breadcrumb.dataFetching": "Data Fetching",
