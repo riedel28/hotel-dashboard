@@ -1,15 +1,9 @@
+import { useState } from 'react';
+
 import { buildResourceUrl } from '@/config/api';
-import { AddGuestModal } from '@/routes/_dashboard-layout/(front-office)/reservations/-components/add-guest-modal';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  CircleQuestionMarkIcon,
-  Edit2,
-  MoreHorizontal,
-  Search,
-  Trash2,
-  User
-} from 'lucide-react';
+import { Edit2, MoreHorizontal, Search, Trash2, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
@@ -38,12 +32,16 @@ import { Label } from '@/components/ui/label';
 import { NumberInput } from '@/components/ui/number-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 
-// Zod schema for reservation form
+import { AddGuestModal } from './add-guest-modal';
+import { EditGuestModal } from './edit-guest-modal';
+
 const reservationFormSchema = z.object({
   booking_nr: z.string().min(1, 'Booking number is required'),
   guests: z
@@ -139,354 +137,473 @@ export function EditReservationForm({
     form.setValue('guests', updatedGuests);
   };
 
+  const [editingGuest, setEditingGuest] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const editGuest = (
+    guestId: string,
+    updatedGuest: { id: string; name: string }
+  ) => {
+    const currentGuests = form.getValues('guests');
+    const updatedGuests = currentGuests.map((guest) =>
+      guest.id === guestId ? updatedGuest : guest
+    );
+    form.setValue('guests', updatedGuests);
+  };
+
+  // Mock room data - replace with actual data from your API
+  const roomOptions = [
+    {
+      id: 'room-1',
+      name: 'Standard Room',
+      description: 'Comfortable standard room',
+      price: 120
+    },
+    {
+      id: 'room-2',
+      name: 'Deluxe Room',
+      description: 'Spacious deluxe room with premium amenities',
+      price: 180
+    },
+    {
+      id: 'room-3',
+      name: 'Suite',
+      description: 'Luxury suite with separate living area',
+      price: 250
+    }
+  ];
+
   return (
-    <Card className="max-w-2xl shadow-none">
-      <CardHeader>
-        <CardTitle>
-          <FormattedMessage
-            id="reservations.formTitle"
-            defaultMessage="Reservation Details"
-          />
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Reservation Number */}
-            <FormField
-              control={form.control}
-              name="booking_nr"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center gap-1">
-                    <FormLabel className="flex items-center gap-2">
-                      <FormattedMessage
-                        id="reservations.bookingNumber"
-                        defaultMessage="Reservation No."
-                      />
-                    </FormLabel>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <CircleQuestionMarkIcon className="text-muted-foreground size-4" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="text-sm">
-                          <FormattedMessage
-                            id="reservations.bookingNumberTooltip"
-                            defaultMessage="The booking number can be found in your Property Management System (PMS)"
-                          />
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-
-                  <FormControl>
-                    <Input
-                      {...field}
-                      readOnly
-                      className="cursor-not-allowed bg-gray-50"
-                      aria-describedby="booking-nr-readonly"
-                    />
-                  </FormControl>
-                  <FormDescription id="booking-nr-readonly">
-                    <FormattedMessage
-                      id="reservations.bookingNumberReadonly"
-                      defaultMessage="Booking number cannot be modified"
-                    />
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Guests Section */}
-            <div className="space-y-4">
-              <FormLabel>
-                <FormattedMessage
-                  id="reservations.guests"
-                  defaultMessage="Guests"
-                />
-              </FormLabel>
-
-              {/* Guest Search */}
-              <div className="relative">
-                <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                <Input
-                  placeholder={intl.formatMessage({
-                    id: 'placeholders.searchForGuest',
-                    defaultMessage: 'Search for a guest...'
-                  })}
-                  className="pl-10"
-                  type="text"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                    }
-                  }}
-                />
-              </div>
-
-              {/* Guest List */}
-              <FormField
-                control={form.control}
-                name="guests"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="space-y-2">
-                      {field.value.map((guest) => (
-                        <div
-                          key={guest.id}
-                          className="flex items-center justify-between rounded-md border px-2 py-1"
-                        >
-                          <div className="flex items-center gap-2">
-                            <User className="text-muted-foreground h-4 w-4" />
-                            <span className="max-w-md truncate text-sm">
-                              {guest.name}
-                            </span>
-                          </div>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">
-                                  <FormattedMessage
-                                    id="guests.openMenu"
-                                    defaultMessage="Open guest menu"
-                                  />
-                                </span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                              align="end"
-                              className="w-[160px]"
-                            >
-                              <DropdownMenuItem>
-                                <Edit2 className="mr-2 h-4 w-4" />
-                                <FormattedMessage
-                                  id="guests.edit"
-                                  defaultMessage="Edit guest"
-                                />
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                className="text-red-600"
-                                onClick={() => removeGuest(guest.id)}
-                              >
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                <FormattedMessage
-                                  id="guests.remove"
-                                  defaultMessage="Remove"
-                                />
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="max-w-xl space-y-3"
+      >
+        {/* Reservation Number Section */}
+        <Card className="shadow-none">
+          <CardHeader>
+            <CardTitle>
+              <FormattedMessage
+                id="reservations.bookingInformation"
+                defaultMessage="Booking Information"
               />
-
-              {/* Add New Guest Button */}
-              <AddGuestModal onAddGuest={addGuest} />
-            </div>
-
-            {/* Number of People */}
-            <div className="space-y-4">
-              <FormLabel>
-                <FormattedMessage
-                  id="reservations.numberOfPeople"
-                  defaultMessage="Number of People"
-                />
-              </FormLabel>
-
-              <div className="flex gap-4">
-                <FormField
-                  control={form.control}
-                  name="adults"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel required>
-                        <FormattedMessage
-                          id="reservations.adults"
-                          defaultMessage="Adults"
-                        />
-                      </FormLabel>
-                      <FormControl>
-                        <NumberInput
-                          {...field}
-                          min={1}
-                          onValueChange={(value) => field.onChange(value || 0)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="youth"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>
-                        <FormattedMessage
-                          id="reservations.youth"
-                          defaultMessage="Youth"
-                        />
-                      </FormLabel>
-                      <FormControl>
-                        <NumberInput
-                          {...field}
-                          min={0}
-                          onValueChange={(value) => field.onChange(value || 0)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="children"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel required>
-                        <FormattedMessage
-                          id="reservations.children"
-                          defaultMessage="Children"
-                        />
-                      </FormLabel>
-                      <FormControl>
-                        <NumberInput
-                          {...field}
-                          min={0}
-                          onValueChange={(value) => field.onChange(value || 0)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="infants"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel required>
-                        <FormattedMessage
-                          id="reservations.infants"
-                          defaultMessage="Infants"
-                        />
-                      </FormLabel>
-                      <FormControl>
-                        <NumberInput
-                          {...field}
-                          min={0}
-                          onValueChange={(value) => field.onChange(value || 0)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* Purpose of Stay */}
-            <FormField
-              control={form.control}
-              name="purpose"
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel required>
-                    <FormattedMessage
-                      id="reservations.purposeOfStay"
-                      defaultMessage="Purpose of Stay"
-                    />
-                  </FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex space-y-1"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="private" id="private" />
-                        <Label htmlFor="private">
-                          <FormattedMessage
-                            id="reservations.private"
-                            defaultMessage="Private"
-                          />
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="business" id="business" />
-                        <Label htmlFor="business">
-                          <FormattedMessage
-                            id="reservations.business"
-                            defaultMessage="Business"
-                          />
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Room */}
-            <FormField
-              control={form.control}
-              name="room"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel required>
-                    <FormattedMessage
-                      id="reservations.room"
-                      defaultMessage="Room"
-                    />
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      readOnly
-                      className="cursor-not-allowed bg-gray-50"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex justify-end gap-2">
-              <Button
-                type="submit"
-                disabled={updateReservationMutation.isPending}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
               >
-                {updateReservationMutation.isPending ? (
-                  <FormattedMessage
-                    id="common.saving"
-                    defaultMessage="Saving..."
+                <FormField
+                  control={form.control}
+                  name="booking_nr"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <FormattedMessage
+                          id="reservations.bookingNumber"
+                          defaultMessage="Reservation No."
+                        />
+                      </FormLabel>
+                      <FormDescription id="booking-nr-readonly">
+                        <FormattedMessage
+                          id="reservations.bookingNumberTooltip"
+                          defaultMessage="The booking number can be found in your Property Management System (PMS)"
+                        />
+                      </FormDescription>
+
+                      <FormControl>
+                        <Input
+                          {...field}
+                          readOnly
+                          className="cursor-not-allowed bg-gray-50"
+                          aria-describedby="booking-nr-readonly"
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+
+        {/* Guests Section */}
+        <Card className="shadow-none">
+          <CardHeader>
+            <CardTitle>
+              <FormattedMessage
+                id="reservations.guests"
+                defaultMessage="Guests"
+              />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                {/* Guest Search */}
+                <div className="relative">
+                  <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                  <Input
+                    placeholder={intl.formatMessage({
+                      id: 'placeholders.searchForGuest',
+                      defaultMessage: 'Search for a guest...'
+                    })}
+                    className="pl-10"
+                    type="text"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                      }
+                    }}
                   />
-                ) : (
-                  <FormattedMessage
-                    id="common.save"
-                    defaultMessage="Save Changes"
+                </div>
+
+                {/* Guest List */}
+                <FormField
+                  control={form.control}
+                  name="guests"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="space-y-2">
+                        {field.value.map((guest) => (
+                          <div
+                            key={guest.id}
+                            className="flex items-center justify-between rounded-md border px-2 py-1"
+                          >
+                            <div className="flex items-center gap-2">
+                              <User className="text-muted-foreground h-4 w-4" />
+                              <span className="max-w-md truncate text-sm">
+                                {guest.name}
+                              </span>
+                            </div>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">
+                                    <FormattedMessage
+                                      id="guests.openMenu"
+                                      defaultMessage="Open guest menu"
+                                    />
+                                  </span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent
+                                align="end"
+                                className="w-[160px]"
+                              >
+                                <DropdownMenuItem
+                                  onSelect={() => setEditingGuest(guest)}
+                                >
+                                  <Edit2 className="mr-2 h-4 w-4" />
+                                  <FormattedMessage
+                                    id="guests.edit"
+                                    defaultMessage="Edit guest"
+                                  />
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  className="text-red-600"
+                                  onClick={() => removeGuest(guest.id)}
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  <FormattedMessage
+                                    id="guests.remove"
+                                    defaultMessage="Remove"
+                                  />
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Add New Guest Button */}
+                <AddGuestModal onAddGuest={addGuest} />
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+
+        {/* Number of People Section */}
+        <Card className="shadow-none">
+          <CardHeader>
+            <CardTitle>
+              <FormattedMessage
+                id="reservations.numberOfPeople"
+                defaultMessage="Number of People"
+              />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <div className="flex gap-4">
+                  <FormField
+                    control={form.control}
+                    name="adults"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel required>
+                          <FormattedMessage
+                            id="reservations.adults"
+                            defaultMessage="Adults"
+                          />
+                        </FormLabel>
+                        <FormControl>
+                          <NumberInput
+                            {...field}
+                            min={1}
+                            onValueChange={(value) =>
+                              field.onChange(value || 0)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+
+                  <FormField
+                    control={form.control}
+                    name="youth"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>
+                          <FormattedMessage
+                            id="reservations.youth"
+                            defaultMessage="Youth"
+                          />
+                        </FormLabel>
+                        <FormControl>
+                          <NumberInput
+                            {...field}
+                            min={0}
+                            onValueChange={(value) =>
+                              field.onChange(value || 0)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="children"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel required>
+                          <FormattedMessage
+                            id="reservations.children"
+                            defaultMessage="Children"
+                          />
+                        </FormLabel>
+                        <FormControl>
+                          <NumberInput
+                            {...field}
+                            min={0}
+                            onValueChange={(value) =>
+                              field.onChange(value || 0)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="infants"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel required>
+                          <FormattedMessage
+                            id="reservations.infants"
+                            defaultMessage="Infants"
+                          />
+                        </FormLabel>
+                        <FormControl>
+                          <NumberInput
+                            {...field}
+                            min={0}
+                            onValueChange={(value) =>
+                              field.onChange(value || 0)
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+
+        {/* Purpose of Stay Section */}
+        <Card className="shadow-none">
+          <CardHeader>
+            <CardTitle>
+              <FormattedMessage
+                id="reservations.purposeOfStay"
+                defaultMessage="Purpose of Stay"
+              />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={form.control}
+                  name="purpose"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex gap-4"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="private" id="private" />
+                            <Label htmlFor="private">
+                              <FormattedMessage
+                                id="reservations.private"
+                                defaultMessage="Private"
+                              />
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="business" id="business" />
+                            <Label htmlFor="business">
+                              <FormattedMessage
+                                id="reservations.business"
+                                defaultMessage="Business"
+                              />
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+
+        {/* Room Section */}
+        <Card className="shadow-none">
+          <CardHeader>
+            <CardTitle>
+              <FormattedMessage id="reservations.room" defaultMessage="Room" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={form.control}
+                  name="room"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue
+                              placeholder={intl.formatMessage({
+                                id: 'placeholders.selectRoom',
+                                defaultMessage: 'Select a room...'
+                              })}
+                            >
+                              {roomOptions.find(
+                                (room) => room.id === field.value
+                              )?.name ??
+                                intl.formatMessage({
+                                  id: 'placeholders.selectRoom',
+                                  defaultMessage: 'Select a room...'
+                                })}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {roomOptions.map((room) => (
+                              <SelectItem
+                                key={room.id}
+                                value={room.id}
+                                className="bg-card hover:bg-accent flex w-full items-center justify-between rounded-md p-3 transition-colors"
+                              >
+                                <div className="flex-1">
+                                  <div className="text-foreground font-medium">
+                                    {room.name}
+                                  </div>
+                                  <div className="text-muted-foreground text-sm">
+                                    {room.description}
+                                  </div>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+
+        <Button type="submit" disabled={updateReservationMutation.isPending}>
+          {updateReservationMutation.isPending ? (
+            <FormattedMessage id="common.saving" defaultMessage="Saving..." />
+          ) : (
+            <FormattedMessage id="common.save" defaultMessage="Save Changes" />
+          )}
+        </Button>
+      </form>
+
+      {editingGuest && (
+        <EditGuestModal
+          guest={editingGuest}
+          onEditGuest={editGuest}
+          open={!!editingGuest}
+          onOpenChange={(open) => !open && setEditingGuest(null)}
+        />
+      )}
+    </Form>
   );
 }

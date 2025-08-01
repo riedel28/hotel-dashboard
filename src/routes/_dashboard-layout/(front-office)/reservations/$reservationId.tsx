@@ -38,7 +38,7 @@ async function fetchReservationById(id: string) {
 function ReservationPage() {
   return (
     <div>
-      <h1 className="mb-6 text-lg font-semibold md:text-2xl">
+      <h1 className="mb-4 text-lg font-semibold md:text-xl">
         <FormattedMessage
           id="reservations.editTitle"
           defaultMessage="Edit reservation"
