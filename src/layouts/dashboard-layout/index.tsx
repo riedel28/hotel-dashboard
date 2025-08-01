@@ -73,34 +73,6 @@ import PropertySelector from './property-selector';
 
 // This is sample data.
 const data = {
-  user: {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    avatar: 'https://github.com/shadcn.png'
-  },
-  // teams: [
-  //   {
-  //     id: '1',
-  //     name: 'Development (2)',
-  //     logo: GalleryVerticalEnd,
-  //     plan: 'Enterprise',
-  //     stage: 'demo'
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Staging',
-  //     logo: AudioWaveform,
-  //     plan: 'Startup',
-  //     stage: 'production'
-  //   },
-  //   {
-  //     id: '3',
-  //     name: 'Development 13, Adyen',
-  //     logo: Command,
-  //     plan: 'Free',
-  //     stage: 'staging'
-  //   }
-  // ] as Team[],
   navMain: [
     {
       title: 'sidebar.frontOffice',
@@ -440,8 +412,8 @@ export default function DashboardLayout({
                   >
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
-                        src={data.user.avatar}
-                        alt={data.user.name}
+                        src="https://github.com/shadcn.png"
+                        alt={`${auth.user?.firstName} ${auth.user?.lastName}`}
                       />
                       <AvatarFallback className="rounded-lg">
                         <FormattedMessage
@@ -452,7 +424,7 @@ export default function DashboardLayout({
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {data.user.name}
+                        {auth.user?.firstName} {auth.user?.lastName}
                       </span>
                       <span className="truncate text-xs">
                         {auth.user?.email}
@@ -471,8 +443,8 @@ export default function DashboardLayout({
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage
-                          src={data.user.avatar}
-                          alt={data.user.name}
+                          src="https://github.com/shadcn.png"
+                          alt={`${auth.user?.firstName} ${auth.user?.lastName}`}
                         />
                         <AvatarFallback className="rounded-lg">
                           <FormattedMessage
@@ -483,7 +455,7 @@ export default function DashboardLayout({
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
-                          {data.user.name}
+                          {auth.user?.firstName} {auth.user?.lastName}
                         </span>
                         <span className="text-muted-foreground truncate text-xs">
                           {auth.user?.email}

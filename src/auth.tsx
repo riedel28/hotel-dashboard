@@ -4,7 +4,9 @@ import { sleep } from './utils';
 
 interface User {
   email: string;
-  password: string; // In a real app, you would never store the password in state
+  password: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface AuthContext {
@@ -47,7 +49,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // In a real app, you would validate credentials here
       const user = {
         email: credentials.email,
-        password: credentials.password // Again, never store passwords in state in real apps
+        password: credentials.password,
+        firstName: 'John',
+        lastName: 'Doe'
       };
       setStoredUser(user);
       setUser(user);
