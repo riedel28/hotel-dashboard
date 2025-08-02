@@ -103,9 +103,9 @@
   "profile.title": "Hallo /profile!",
   "properties.notFound": "Keine Objekte gefunden.",
   "property.stage.demo": "Demo",
-  "property.stage.production": "Produktion",
+  "property.stage.production": "Production",
   "property.stage.staging": "Staging",
-  "property.stage.template": "Vorlage",
+  "property.stage.template": "Template",
   "property.toast.changed": "Objekt geändert",
   "property.toast.changed.description": "Gewechselt zu \"{propertyName}\"",
   "property.toast.reloaded": "Objekte neu geladen",
@@ -195,7 +195,14 @@
   "sidebar.toggle": "Seitenleiste umschalten",
   "sidebar.users": "Benutzer",
   "table.noResults": "Keine Ergebnisse.",
+  "user.language": "Sprache",
   "user.logout": "Abmelden",
   "user.profile": "Profil",
-  "users.title": "Hallo \"/_dashboard-layout/users\"!"
+  "users.title": "Hallo \"/_dashboard-layout/users\"!",
+  "header.navigation.dashboard": "Dashboard",
+  "header.navigation.docs": "Dokumentation",
+  "header.navigation.apiReference": "API-Referenz",
+  "header.userView.selectView": "Ansicht auswählen",
+  "header.userView.user": "Benutzer",
+  "header.userView.admin": "Admin"
 }

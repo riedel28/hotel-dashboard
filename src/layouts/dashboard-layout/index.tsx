@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 
-import { useAuth } from '@/auth';
 import { useIntlContext } from '@/i18n/intl-provider';
+import Header from '@/layouts/dashboard-layout/header';
 import { Link } from '@tanstack/react-router';
 import {
   ArrowUpRightIcon,
@@ -11,7 +11,6 @@ import {
   BedSingleIcon,
   BuildingIcon,
   CalendarIcon,
-  ChevronsUpDown,
   ConciergeBell,
   CreditCardIcon,
   FileSpreadsheetIcon,
@@ -19,7 +18,6 @@ import {
   HomeIcon,
   ListTodoIcon,
   LockIcon,
-  LogOut,
   MessageCircleIcon,
   ReceiptTextIcon,
   ShoppingBagIcon,
@@ -28,21 +26,10 @@ import {
   SquareActivityIcon,
   TabletIcon,
   TvIcon,
-  User,
   UsersIcon
 } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
 import {
   Sidebar,
   SidebarContent,
@@ -61,7 +48,6 @@ import {
 } from '@/components/ui/sidebar';
 
 import LanguageSwitcher from './language-switcher';
-import PropertySelector from './property-selector';
 
 // This is sample data.
 const data = {
@@ -97,13 +83,10 @@ const data = {
 };
 
 export default function DashboardLayout({
-  children,
-  onLogout
+  children
 }: {
   children: React.ReactNode;
-  onLogout: () => void;
 }) {
-  const auth = useAuth();
   const { locale, setLocale } = useIntlContext();
 
   return (
@@ -126,9 +109,6 @@ export default function DashboardLayout({
                 <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
               </SidebarMenuItem>
             </SidebarGroup>
-            <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
-              <PropertySelector />
-            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
         <SidebarContent>
@@ -395,101 +375,13 @@ export default function DashboardLayout({
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                    <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt={`${auth.user?.firstName} ${auth.user?.lastName}`}
-                      />
-                      <AvatarFallback className="rounded-lg">
-                        <FormattedMessage
-                          id="avatar.fallback"
-                          defaultMessage="CN"
-                        />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {auth.user?.firstName} {auth.user?.lastName}
-                      </span>
-                      <span className="truncate text-xs">
-                        {auth.user?.email}
-                      </span>
-                    </div>
-                    <ChevronsUpDown className="ml-auto size-4" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-                  side="bottom"
-                  align="end"
-                  sideOffset={4}
-                >
-                  <DropdownMenuLabel className="p-0 font-normal">
-                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                      <Avatar className="h-8 w-8 rounded-lg">
-                        <AvatarImage
-                          src="https://github.com/shadcn.png"
-                          alt={`${auth.user?.firstName} ${auth.user?.lastName}`}
-                        />
-                        <AvatarFallback className="rounded-lg">
-                          <FormattedMessage
-                            id="avatar.fallback"
-                            defaultMessage="CN"
-                          />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">
-                          {auth.user?.firstName} {auth.user?.lastName}
-                        </span>
-                        <span className="text-muted-foreground truncate text-xs">
-                          {auth.user?.email}
-                        </span>
-                      </div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile">
-                        <User />
-                        <FormattedMessage
-                          id="user.profile"
-                          defaultMessage="Profile"
-                        />
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={onLogout}>
-                    <LogOut />
-                    <FormattedMessage
-                      id="user.logout"
-                      defaultMessage="Log out"
-                    />
-                    <span className="text-muted-foreground ml-auto text-xs">
-                      <FormattedMessage
-                        id="app.version"
-                        defaultMessage="v1.2.4"
-                      />
-                    </span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
             <LanguageSwitcher locale={locale} setLocale={setLocale} />
           </SidebarMenu>
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
+        <Header />
         <section className="px-6 py-4 pb-8">{children}</section>
       </SidebarInset>
     </SidebarProvider>

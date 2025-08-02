@@ -153,10 +153,10 @@ export default function PropertySelector() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="bg-background hover:bg-background focus-visible:border-ring focus-visible:outline-ring/20 w-full justify-between px-3 font-normal outline-offset-0 focus-visible:outline-[3px]"
+          className="bg-background text-foreground data-[state=open]:bg-accent focus-visible:border-ring focus-visible:outline-ring/20 w-full max-w-[300px] justify-between px-3 outline-offset-0 focus-visible:outline-[3px]"
         >
           <span className={cn('truncate', !value && 'text-muted-foreground')}>
             {value
@@ -180,7 +180,7 @@ export default function PropertySelector() {
       <PopoverContent
         className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
         align="start"
-        side="right"
+        side="bottom"
       >
         <Command>
           <CommandInput
@@ -189,7 +189,7 @@ export default function PropertySelector() {
               defaultMessage: 'Search for property'
             })}
           />
-          <CommandList className="w-[320px]">
+          <CommandList className="w-[350px] max-w-[400px]">
             {!loading && (
               <CommandEmpty>
                 <FormattedMessage
@@ -261,7 +261,7 @@ export default function PropertySelector() {
                       }}
                       className="h-9 gap-1"
                     >
-                      <span className="w-[200px] truncate">
+                      <span className="w-[250px] truncate">
                         {property.name}
                       </span>
 

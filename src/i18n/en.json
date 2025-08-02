@@ -179,7 +179,14 @@
   "sidebar.toggle": "Toggle Sidebar",
   "sidebar.users": "Users",
   "table.noResults": "No results.",
+  "user.language": "Language",
   "user.logout": "Log out",
   "user.profile": "Profile",
-  "users.title": "Hello \"/_dashboard-layout/users\"!"
+  "users.title": "Hello \"/_dashboard-layout/users\"!",
+  "header.navigation.dashboard": "Dashboard",
+  "header.navigation.docs": "Docs",
+  "header.navigation.apiReference": "API reference",
+  "header.userView.selectView": "Select view",
+  "header.userView.user": "User",
+  "header.userView.admin": "Admin"
 }

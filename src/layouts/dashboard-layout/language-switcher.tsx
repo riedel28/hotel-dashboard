@@ -1,4 +1,4 @@
-import ReactCountryFlag from 'react-country-flag';
+import Flag from 'react-flagkit';
 
 import {
   Select,
@@ -27,11 +27,11 @@ function LanguageSwitcher({ locale, setLocale }: LanguageSwitcherProps) {
           <SelectValue>
             {lang && (
               <>
-                <ReactCountryFlag
-                  countryCode={lang.country}
-                  svg
+                <Flag
+                  country={lang.country}
                   className="mr-2 h-4 w-7 rounded-sm align-middle shadow-sm"
                   title={lang.label}
+                  aria-label={lang.label}
                 />
                 {lang.label}
               </>
@@ -41,11 +41,11 @@ function LanguageSwitcher({ locale, setLocale }: LanguageSwitcherProps) {
         <SelectContent>
           {languages.map((lang) => (
             <SelectItem key={lang.code} value={lang.code}>
-              <ReactCountryFlag
-                countryCode={lang.country}
-                svg
+              <Flag
+                country={lang.country}
                 className="mr-2 h-4 w-7 rounded-sm align-middle shadow-sm"
                 title={lang.label}
+                aria-label={lang.label}
               />
               {lang.label}
             </SelectItem>
