@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
-} from '../../components/ui/breadcrumb';
+} from '../../../components/ui/breadcrumb';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/rooms')({
   component: RouteComponent

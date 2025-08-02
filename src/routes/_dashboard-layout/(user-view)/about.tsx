@@ -8,13 +8,13 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
-} from '../../components/ui/breadcrumb';
+} from '../../../components/ui/breadcrumb';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/about')({
-  component: About
+  component: RouteComponent
 });
 
-function About() {
+function RouteComponent() {
   return (
     <div className="space-y-4">
       <Breadcrumb>
@@ -33,7 +33,7 @@ function About() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="p-2">
+      <div>
         <FormattedMessage id="about.title" defaultMessage="Hello from About!" />
       </div>
     </div>

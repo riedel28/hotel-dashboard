@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { FormattedMessage } from 'react-intl';
 
-export const Route = createFileRoute('/_dashboard-layout/(admin-view)/properties')({
+export const Route = createFileRoute(
+  '/_dashboard-layout/(admin-view)/properties'
+)({
   component: RouteComponent
 });
 

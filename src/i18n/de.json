@@ -214,6 +214,7 @@
   "viewAwareContent.admin.features": "Admin-Funktionen: Benutzer verwalten, Systemeinstellungen konfigurieren, auf alle Daten zugreifen, Systemadministration",
   "view.toast.switched": "Gewechselt zu {view} Ansicht",
   "view.toast.reverted": "Zurück gewechselt zu {view} Ansicht",
+  "view.toast.autoSwitched": "Gewechselt zu {view} Ansicht und zum Dashboard weitergeleitet",
   "properties.title": "Hallo \"/_dashboard-layout/properties\"!",
   "mobileCMS.title": "Hallo \"/_dashboard-layout/mobile-cms\"!",
   "tv.title": "Hallo \"/_dashboard-layout/tv\"!"

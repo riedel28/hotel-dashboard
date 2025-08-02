@@ -8,12 +8,13 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
-} from '../../components/ui/breadcrumb';
-import { Button } from '../../components/ui/button';
+} from '../../../components/ui/breadcrumb';
 
-export const Route = createFileRoute('/_dashboard-layout/(user-view)/products')({
-  component: RouteComponent
-});
+export const Route = createFileRoute('/_dashboard-layout/(user-view)/products')(
+  {
+    component: RouteComponent
+  }
+);
 
 function RouteComponent() {
   return (
@@ -34,30 +35,11 @@ function RouteComponent() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">
-            <FormattedMessage id="products.title" defaultMessage="Products" />
-          </h1>
-          <Button>
-            <FormattedMessage
-              id="products.addProduct"
-              defaultMessage="Add Product"
-            />
-          </Button>
-        </div>
-        <div className="text-muted-foreground">
-          <FormattedMessage
-            id="products.noProducts"
-            defaultMessage="You have no products"
-          />
-        </div>
-        <div className="text-muted-foreground">
-          <FormattedMessage
-            id="products.startSelling"
-            defaultMessage="You can start selling as soon as you add a product."
-          />
-        </div>
+      <div>
+        <FormattedMessage
+          id="products.title"
+          defaultMessage="Hello /products!"
+        />
       </div>
     </div>
   );

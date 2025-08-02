@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { ViewProvider, useView } from '@/contexts/view-context';
+import { AutoViewSwitcher } from '@/layouts/dashboard-layout/auto-view-switcher';
 import Header from '@/layouts/dashboard-layout/header';
 import { Link } from '@tanstack/react-router';
 import {
@@ -423,6 +424,7 @@ export default function DashboardLayout({
   return (
     <ViewProvider>
       <SidebarProvider>
+        <AutoViewSwitcher />
         <DashboardSidebar />
         <SidebarInset>
           <Header />
