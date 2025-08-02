@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { FormattedMessage } from 'react-intl';
 
-export const Route = createFileRoute('/_dashboard-layout/monitoring')({
+export const Route = createFileRoute('/_dashboard-layout/(user-view)/checkin-page')({
   component: RouteComponent
 });
 
@@ -9,8 +9,8 @@ function RouteComponent() {
   return (
     <div>
       <FormattedMessage
-        id="monitoring.title"
-        defaultMessage='Hello "/_dashboard-layout/monitoring"!'
+        id="checkinPage.title"
+        defaultMessage='Hello "/_dashboard-layout/checkin-page"!'
       />
     </div>
   );

@@ -10,7 +10,7 @@ import {
   BreadcrumbSeparator
 } from '../../components/ui/breadcrumb';
 
-export const Route = createFileRoute('/_dashboard-layout/payment-provider')({
+export const Route = createFileRoute('/_dashboard-layout/(user-view)/pms-provider')({
   component: RouteComponent
 });
 
@@ -28,8 +28,8 @@ function RouteComponent() {
           <BreadcrumbItem>
             <BreadcrumbPage>
               <FormattedMessage
-                id="paymentProvider.title"
-                defaultMessage="Payment Provider"
+                id="pmsProvider.title"
+                defaultMessage="PMS Provider"
               />
             </BreadcrumbPage>
           </BreadcrumbItem>
@@ -38,8 +38,8 @@ function RouteComponent() {
 
       <div>
         <FormattedMessage
-          id="paymentProvider.title"
-          defaultMessage="Hello '/_dashboard-layout/payment-provider'!"
+          id="pmsProvider.title"
+          defaultMessage="Hello '/_dashboard-layout/pms-provider'!"
         />
       </div>
     </div>

@@ -136,7 +136,7 @@ function ReservationForm() {
 }
 
 export const Route = createFileRoute(
-  '/_dashboard-layout/(front-office)/reservations/$reservationId'
+  '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
 )({
   component: ReservationPage
 });

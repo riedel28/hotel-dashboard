@@ -10,11 +10,11 @@ import {
   BreadcrumbSeparator
 } from '../../components/ui/breadcrumb';
 
-export const Route = createFileRoute('/_dashboard-layout/profile')({
-  component: RouteComponent
+export const Route = createFileRoute('/_dashboard-layout/(user-view)/about')({
+  component: About
 });
 
-function RouteComponent() {
+function About() {
   return (
     <div className="space-y-4">
       <Breadcrumb>
@@ -27,14 +27,14 @@ function RouteComponent() {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <FormattedMessage id="profile.title" defaultMessage="Profile" />
+              <FormattedMessage id="about.title" defaultMessage="About" />
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
-        <FormattedMessage id="profile.title" defaultMessage="Hello /profile!" />
+      <div className="p-2">
+        <FormattedMessage id="about.title" defaultMessage="Hello from About!" />
       </div>
     </div>
   );

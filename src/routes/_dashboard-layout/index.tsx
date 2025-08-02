@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { useAuth } from '../../auth';
 import { Card, CardDescription, CardTitle } from '../../components/ui/card';
+import ViewAwareContent from '../../layouts/dashboard-layout/view-aware-content';
 
 export const Route = createFileRoute('/_dashboard-layout/')({
   component: StartPage
@@ -63,6 +64,9 @@ function StartPage() {
         </p>
       </div>
 
+      {/* View Switching Demo */}
+      <ViewAwareContent />
+
       {/* Quick Actions Grid */}
       <div className="grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
         {quickActions.map((action) => {
@@ -71,7 +75,7 @@ function StartPage() {
           return (
             <Card
               key={action.href}
-              className="group border-border hover:border-border cursor-pointer p-0 shadow-none transition-all duration-200 hover:shadow-sm"
+              className="border-border hover:border-border group cursor-pointer p-0 shadow-none transition-all duration-200 hover:shadow-sm"
             >
               <Link
                 to={action.href}

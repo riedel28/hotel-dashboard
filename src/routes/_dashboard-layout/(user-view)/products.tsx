@@ -11,7 +11,7 @@ import {
 } from '../../components/ui/breadcrumb';
 import { Button } from '../../components/ui/button';
 
-export const Route = createFileRoute('/_dashboard-layout/products')({
+export const Route = createFileRoute('/_dashboard-layout/(user-view)/products')({
   component: RouteComponent
 });
 

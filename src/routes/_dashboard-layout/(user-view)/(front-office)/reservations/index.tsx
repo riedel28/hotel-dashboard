@@ -226,7 +226,7 @@ function ReservationsPage() {
 }
 
 export const Route = createFileRoute(
-  '/_dashboard-layout/(front-office)/reservations/'
+  '/_dashboard-layout/(user-view)/(front-office)/reservations/'
 )({
   validateSearch: (search) => reservationsFilterSchema.parse(search),
   component: () => <ReservationsPage />

@@ -1,9 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { FormattedMessage } from 'react-intl';
 
-export const Route = createFileRoute(
-  '/_dashboard-layout/(front-office)/registration-forms'
-)({
+export const Route = createFileRoute('/_dashboard-layout/(user-view)/tv')({
   component: RouteComponent
 });
 
@@ -11,8 +9,8 @@ function RouteComponent() {
   return (
     <div>
       <FormattedMessage
-        id="registrationForms.title"
-        defaultMessage='Hello "/_dashboard-layout/registration-forms"!'
+        id="tv.title"
+        defaultMessage='Hello "/_dashboard-layout/tv"!'
       />
     </div>
   );

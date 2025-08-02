@@ -1,3 +1,4 @@
+import { useView } from '@/contexts/view-context';
 import { ChevronsUpDown } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -11,9 +12,10 @@ import {
 
 export default function ViewSelector() {
   const intl = useIntl();
+  const { currentView, setCurrentView } = useView();
 
   return (
-    <Select defaultValue="user">
+    <Select value={currentView} onValueChange={setCurrentView}>
       <SelectTrigger
         aria-label={intl.formatMessage({
           id: 'header.userView.selectView',

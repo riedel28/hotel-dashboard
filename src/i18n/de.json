@@ -194,6 +194,8 @@
   "sidebar.title": "Seitenleiste",
   "sidebar.toggle": "Seitenleiste umschalten",
   "sidebar.users": "Benutzer",
+  "sidebar.properties": "Eigenschaften",
+  "sidebar.customers": "Kunden",
   "table.noResults": "Keine Ergebnisse.",
   "user.language": "Sprache",
   "user.logout": "Abmelden",
@@ -204,5 +206,15 @@
   "header.navigation.apiReference": "API-Referenz",
   "header.userView.selectView": "Ansicht auswählen",
   "header.userView.user": "Benutzer",
-  "header.userView.admin": "Admin"
+  "header.userView.admin": "Admin",
+  "viewAwareContent.title": "Aktuelle Ansicht: {view}",
+  "viewAwareContent.user.description": "Sie sehen die Benutzeroberfläche. Dies zeigt eingeschränkte Funktionalität für normale Benutzer.",
+  "viewAwareContent.user.features": "Benutzerfunktionen: Reservierungen anzeigen, Zahlungen tätigen, grundlegende Einstellungen zugreifen",
+  "viewAwareContent.admin.description": "Sie sehen die Administrator-Oberfläche. Dies zeigt vollständige Funktionalität für Administratoren.",
+  "viewAwareContent.admin.features": "Admin-Funktionen: Benutzer verwalten, Systemeinstellungen konfigurieren, auf alle Daten zugreifen, Systemadministration",
+  "view.toast.switched": "Gewechselt zu {view} Ansicht",
+  "view.toast.reverted": "Zurück gewechselt zu {view} Ansicht",
+  "properties.title": "Hallo \"/_dashboard-layout/properties\"!",
+  "mobileCMS.title": "Hallo \"/_dashboard-layout/mobile-cms\"!",
+  "tv.title": "Hallo \"/_dashboard-layout/tv\"!"
 }
