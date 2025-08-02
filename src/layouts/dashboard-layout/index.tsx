@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 
-import { useIntlContext } from '@/i18n/intl-provider';
 import Header from '@/layouts/dashboard-layout/header';
 import { Link } from '@tanstack/react-router';
 import {
@@ -33,7 +32,6 @@ import { FormattedMessage } from 'react-intl';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
@@ -46,8 +44,6 @@ import {
   SidebarRail,
   SidebarTrigger
 } from '@/components/ui/sidebar';
-
-import LanguageSwitcher from './language-switcher';
 
 // This is sample data.
 const data = {
@@ -87,8 +83,6 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { locale, setLocale } = useIntlContext();
-
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
@@ -373,11 +367,6 @@ export default function DashboardLayout({
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <LanguageSwitcher locale={locale} setLocale={setLocale} />
-          </SidebarMenu>
-        </SidebarFooter>
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
