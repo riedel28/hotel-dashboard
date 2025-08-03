@@ -128,8 +128,8 @@ function RouteComponent() {
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         {/* Sidebar Navigation */}
         <div className="space-y-4">
-          <div className="bg-card rounded-lg border p-4">
-            <h2 className="mb-4 text-lg font-semibold">
+          <div className="bg-card rounded-lg border p-3">
+            <h2 className="mt-2 mb-4 px-2 text-lg font-semibold">
               <FormattedMessage
                 id="profile.settings"
                 defaultMessage="Settings"
