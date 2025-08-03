@@ -4,6 +4,7 @@ import { useAuth } from '@/auth';
 import { useIntlContext } from '@/i18n/intl-provider';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
+import { getPackageVersion } from '@/utils/package-info';
 import { Link } from '@tanstack/react-router';
 import { CheckIcon, GlobeIcon, LogOutIcon, UserCircleIcon } from 'lucide-react';
 import Flag from 'react-flagkit';
@@ -41,6 +42,7 @@ export default function UserMenu() {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { locale, setLocale } = useIntlContext();
   const lang = languages.find((l) => l.code === locale);
+  const version = getPackageVersion();
 
   const handleLogout = () => {
     setLogoutDialogOpen(true);
@@ -159,7 +161,11 @@ export default function UserMenu() {
             <LogOutIcon />
             <FormattedMessage id="user.logout" defaultMessage="Log out" />
             <span className="text-muted-foreground ml-auto text-xs">
-              <FormattedMessage id="app.version" defaultMessage="v1.2.4" />
+              <FormattedMessage
+                id="app.version"
+                defaultMessage="v{version}"
+                values={{ version }}
+              />
             </span>
           </DropdownMenuItem>
         </DropdownMenuContent>
