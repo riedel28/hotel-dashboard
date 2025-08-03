@@ -32,7 +32,7 @@ export function ProfileSidebar({
             key={section.id}
             variant={isActive ? 'secondary' : 'ghost'}
             className={cn(
-              'h-auto w-full justify-start gap-2 p-3',
+              'h-auto w-full justify-start gap-2 p-2.5',
               isActive && 'bg-secondary text-secondary-foreground'
             )}
             onClick={() => onSectionChange(section.id)}
