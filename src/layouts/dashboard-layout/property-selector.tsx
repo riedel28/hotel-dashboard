@@ -82,7 +82,7 @@ function StageBadge({ stage }: StageBadgeProps) {
     <Badge
       variant="secondary"
       className={cn(
-        'rounded-md px-1.5 text-[11px] font-medium capitalize',
+        'rounded-md px-1.5 text-[11px] font-medium tracking-wide capitalize',
         stageMap[stage]
       )}
     >
@@ -119,7 +119,7 @@ export const properties: Property[] = [
   }
 ];
 
-const truncatePropertyName = (name: string, maxLength: number = 20) => {
+const truncatePropertyName = (name: string, maxLength: number = 40) => {
   return name.length > maxLength ? `${name.substring(0, maxLength)}...` : name;
 };
 
@@ -156,7 +156,7 @@ export default function PropertySelector() {
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="bg-background text-foreground data-[state=open]:bg-accent focus-visible:border-ring focus-visible:outline-ring/20 w-full max-w-[300px] justify-between px-3 outline-offset-0 focus-visible:outline-[3px]"
+          className="text-foreground data-[state=open]:bg-accent focus-visible:border-ring focus-visible:outline-ring/20 w-full max-w-[300px] justify-between px-3 outline-offset-0 focus-visible:outline-[3px]"
         >
           <span className={cn('truncate', !value && 'text-muted-foreground')}>
             {value
@@ -231,35 +231,10 @@ export default function PropertySelector() {
                             {
                               propertyName: truncatePropertyName(property.name)
                             }
-                          ),
-                          {
-                            action: {
-                              label: intl.formatMessage({
-                                id: 'actions.undo',
-                                defaultMessage: 'Undo'
-                              }),
-                              onClick: () => {
-                                setValue(value);
-                                toast.info(
-                                  intl.formatMessage(
-                                    {
-                                      id: 'property.toast.reverted.description',
-                                      defaultMessage:
-                                        'Switched back to "{propertyName}"'
-                                    },
-                                    {
-                                      propertyName: truncatePropertyName(
-                                        value.name
-                                      )
-                                    }
-                                  )
-                                );
-                              }
-                            }
-                          }
+                          )
                         );
                       }}
-                      className="h-9 gap-1"
+                      className="h-[38px] gap-1"
                     >
                       <span className="w-[250px] truncate">
                         {property.name}

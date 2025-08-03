@@ -426,9 +426,11 @@ export default function DashboardLayout({
       <SidebarProvider>
         <AutoViewSwitcher />
         <DashboardSidebar />
-        <SidebarInset>
+        <SidebarInset className="flex h-full flex-col">
           <Header />
-          <section className="px-6 py-4 pb-8">{children}</section>
+          <main className="flex-1 overflow-auto">
+            <section className="px-6 py-4 pb-8">{children}</section>
+          </main>
         </SidebarInset>
       </SidebarProvider>
     </ViewProvider>
