@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { createFileRoute } from '@tanstack/react-router';
-import { Camera, Lock, Shield, User } from 'lucide-react';
+import { Camera, Lock, Shield, User, Users } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -22,6 +22,7 @@ import {
   type ProfileSection,
   ProfileSidebar
 } from './profile/-components/profile-sidebar';
+import { RolesSection } from './profile/-components/roles-section';
 import { TwoFactorSection } from './profile/-components/two-factor-section';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
@@ -52,6 +53,11 @@ function RouteComponent() {
       id: 'password',
       title: 'profile.sidebar.password',
       icon: Lock
+    },
+    {
+      id: 'roles',
+      title: 'profile.sidebar.roles',
+      icon: Users
     },
     {
       id: 'avatar',
@@ -86,6 +92,8 @@ function RouteComponent() {
         );
       case 'password':
         return <PasswordSection />;
+      case 'roles':
+        return <RolesSection initialRoles={['administrators']} />;
       case 'twoFactor':
         return <TwoFactorSection isEnabled={userData.twoFactorEnabled} />;
       default:
