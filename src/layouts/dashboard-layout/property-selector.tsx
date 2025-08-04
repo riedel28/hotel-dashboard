@@ -189,7 +189,7 @@ export default function PropertySelector() {
               defaultMessage: 'Search for property'
             })}
           />
-          <CommandList className="max-w-[400px]">
+          <CommandList className="w-[400px] max-w-[400px]">
             {!loading && (
               <CommandEmpty>
                 <FormattedMessage
@@ -202,7 +202,6 @@ export default function PropertySelector() {
               <ScrollArea>
                 {loading ? (
                   <div className="space-y-1">
-                    <Skeleton className="h-[34px] w-full" />
                     <Skeleton className="h-[34px] w-full" />
                     <Skeleton className="h-[34px] w-full" />
                     <Skeleton className="h-[34px] w-full" />
