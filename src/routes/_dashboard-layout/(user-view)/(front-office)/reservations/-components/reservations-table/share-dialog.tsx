@@ -38,7 +38,7 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 
-import { Reservation } from './columns';
+import { Reservation } from './reservations-table';
 
 const messageSchema = z.object({
   first_name: z.string().min(1, {

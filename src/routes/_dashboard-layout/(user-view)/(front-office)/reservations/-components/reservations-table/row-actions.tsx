@@ -22,8 +22,8 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-import { Reservation } from './columns.tsx';
 import { DeleteDialog } from './delete-dialog';
+import { Reservation } from './reservations-table';
 import { ShareDialog } from './share-dialog';
 
 interface RowActionsProps {
