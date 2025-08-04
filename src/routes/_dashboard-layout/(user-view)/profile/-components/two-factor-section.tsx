@@ -193,20 +193,13 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
             <div className="flex justify-end">
               <Button
                 onClick={handleSetup}
-                disabled={isLoading}
+                loading={isLoading}
                 variant="outline"
               >
-                {isLoading ? (
-                  <FormattedMessage
-                    id="profile.saving"
-                    defaultMessage="Saving..."
-                  />
-                ) : (
-                  <FormattedMessage
-                    id="profile.twoFactor.setup"
-                    defaultMessage="Set up 2FA"
-                  />
-                )}
+                <FormattedMessage
+                  id="profile.twoFactor.setup"
+                  defaultMessage="Set up 2FA"
+                />
               </Button>
             </div>
           )}

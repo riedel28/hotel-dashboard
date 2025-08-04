@@ -143,18 +143,11 @@ export function PasswordSection() {
             />
           </div>
           <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <FormattedMessage
-                  id="profile.saving"
-                  defaultMessage="Saving..."
-                />
-              ) : (
-                <FormattedMessage
-                  id="profile.save"
-                  defaultMessage="Save Changes"
-                />
-              )}
+            <Button type="submit" loading={isLoading}>
+              <FormattedMessage
+                id="profile.save"
+                defaultMessage="Save Changes"
+              />
             </Button>
           </div>
         </form>

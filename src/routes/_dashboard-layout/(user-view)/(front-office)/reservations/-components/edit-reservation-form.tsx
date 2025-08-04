@@ -587,12 +587,8 @@ export function EditReservationForm({
           </CardContent>
         </Card>
 
-        <Button type="submit" disabled={updateReservationMutation.isPending}>
-          {updateReservationMutation.isPending ? (
-            <FormattedMessage id="common.saving" defaultMessage="Saving..." />
-          ) : (
-            <FormattedMessage id="common.save" defaultMessage="Save Changes" />
-          )}
+        <Button type="submit" loading={updateReservationMutation.isPending}>
+          <FormattedMessage id="common.save" defaultMessage="Save Changes" />
         </Button>
       </form>
 

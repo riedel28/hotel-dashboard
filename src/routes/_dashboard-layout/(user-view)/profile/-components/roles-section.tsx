@@ -133,18 +133,11 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
           </div>
 
           <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <FormattedMessage
-                  id="profile.roles.saving"
-                  defaultMessage="Saving..."
-                />
-              ) : (
-                <FormattedMessage
-                  id="profile.roles.save"
-                  defaultMessage="Save Roles"
-                />
-              )}
+            <Button type="submit" loading={isLoading}>
+              <FormattedMessage
+                id="profile.roles.save"
+                defaultMessage="Save Roles"
+              />
             </Button>
           </div>
         </form>
