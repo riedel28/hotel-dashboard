@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -31,15 +31,25 @@ interface DataGridPaginationProps {
 
 function DataGridPagination(props: DataGridPaginationProps) {
   const { table, recordCount, isLoading } = useDataGrid();
+  const intl = useIntl();
 
   const defaultProps: Partial<DataGridPaginationProps> = {
     sizes: [5, 10, 25, 50, 100],
-    sizesLabel: 'pagination.show',
-    sizesDescription: 'pagination.perPage',
+    sizesLabel: intl.formatMessage({
+      id: 'pagination.show',
+      defaultMessage: 'Show'
+    }),
+    sizesDescription: intl.formatMessage({
+      id: 'pagination.perPage',
+      defaultMessage: 'Per page'
+    }),
     sizesSkeleton: <Skeleton className="h-8 w-44" />,
     moreLimit: 5,
     more: false,
-    info: 'pagination.info',
+    info: intl.formatMessage({
+      id: 'pagination.info',
+      defaultMessage: 'Info'
+    }),
     infoSkeleton: <Skeleton className="h-8 w-60" />
   };
 
