@@ -202,11 +202,11 @@ export default function PropertySelector() {
               <ScrollArea>
                 {loading ? (
                   <div className="space-y-1">
-                    <Skeleton className="h-[32px] w-full" />
-                    <Skeleton className="h-[32px] w-full" />
-                    <Skeleton className="h-[32px] w-full" />
-                    <Skeleton className="h-[32px] w-full" />
-                    <Skeleton className="h-[32px] w-full" />
+                    <Skeleton className="h-[34px] w-full" />
+                    <Skeleton className="h-[34px] w-full" />
+                    <Skeleton className="h-[34px] w-full" />
+                    <Skeleton className="h-[34px] w-full" />
+                    <Skeleton className="h-[34px] w-full" />
                   </div>
                 ) : (
                   properties.map((property) => (
