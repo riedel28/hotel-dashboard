@@ -1,7 +1,8 @@
-import { useState } from 'react';
-
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,41 +12,71 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
-interface PersonalSectionProps {
-  initialData?: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-}
+type PersonalFormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+};
 
-export function PersonalSection({ initialData }: PersonalSectionProps) {
+export function PersonalSection() {
   const intl = useIntl();
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: initialData?.firstName || '',
-    lastName: initialData?.lastName || '',
-    email: initialData?.email || ''
+
+  // Create schema with internationalized messages
+  const personalFormSchema = z.object({
+    firstName: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.firstName.required',
+        defaultMessage: 'First name is required'
+      })
+    ),
+    lastName: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.lastName.required',
+        defaultMessage: 'Last name is required'
+      })
+    ),
+    email: z
+      .string()
+      .min(
+        1,
+        intl.formatMessage({
+          id: 'validation.email.required',
+          defaultMessage: 'Email is required'
+        })
+      )
+      .email(
+        intl.formatMessage({
+          id: 'validation.email.invalid',
+          defaultMessage: 'Please enter a valid email address'
+        })
+      )
   });
 
-  const handleInputChange =
-    (field: keyof typeof formData) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: e.target.value
-      }));
-    };
+  const form = useForm<PersonalFormValues>({
+    resolver: zodResolver(personalFormSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: ''
+    }
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
+  const onSubmit = async (data: PersonalFormValues) => {
     try {
       // TODO: Implement API call to update personal information
+      console.log('Updating profile with data:', data);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       toast.success(
@@ -61,8 +92,6 @@ export function PersonalSection({ initialData }: PersonalSectionProps) {
           defaultMessage: 'Error updating profile'
         })
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -83,78 +112,93 @@ export function PersonalSection({ initialData }: PersonalSectionProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">
-                <FormattedMessage
-                  id="profile.personal.firstName"
-                  defaultMessage="First Name"
-                />
-              </Label>
-              <Input
-                id="firstName"
-                type="text"
-                value={formData.firstName}
-                onChange={handleInputChange('firstName')}
-                placeholder={intl.formatMessage({
-                  id: 'placeholders.enterFirstName',
-                  defaultMessage: 'Enter first name'
-                })}
-                disabled={isLoading}
-                required
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <FormattedMessage
+                        id="profile.personal.firstName"
+                        defaultMessage="First Name"
+                      />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={intl.formatMessage({
+                          id: 'placeholders.enterFirstName',
+                          defaultMessage: 'Enter first name'
+                        })}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <FormattedMessage
+                        id="profile.personal.lastName"
+                        defaultMessage="Last Name"
+                      />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder={intl.formatMessage({
+                          id: 'placeholders.enterLastName',
+                          defaultMessage: 'Enter last name'
+                        })}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">
-                <FormattedMessage
-                  id="profile.personal.lastName"
-                  defaultMessage="Last Name"
-                />
-              </Label>
-              <Input
-                id="lastName"
-                type="text"
-                value={formData.lastName}
-                onChange={handleInputChange('lastName')}
-                placeholder={intl.formatMessage({
-                  id: 'placeholders.enterLastName',
-                  defaultMessage: 'Enter last name'
-                })}
-                disabled={isLoading}
-                required
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">
-              <FormattedMessage
-                id="profile.personal.email"
-                defaultMessage="Email"
-              />
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange('email')}
-              placeholder={intl.formatMessage({
-                id: 'placeholders.email',
-                defaultMessage: 'Enter your email'
-              })}
-              disabled={isLoading}
-              required
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="profile.personal.email"
+                      defaultMessage="Email"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder={intl.formatMessage({
+                        id: 'placeholders.email',
+                        defaultMessage: 'Enter your email'
+                      })}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex justify-end">
-            <Button type="submit" loading={isLoading}>
-              <FormattedMessage
-                id="profile.save"
-                defaultMessage="Save Changes"
-              />
-            </Button>
-          </div>
-        </form>
+            <div className="flex justify-end">
+              <Button type="submit">
+                <FormattedMessage
+                  id="profile.save"
+                  defaultMessage="Save Changes"
+                />
+              </Button>
+            </div>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );

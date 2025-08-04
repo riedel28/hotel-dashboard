@@ -363,7 +363,7 @@ export function EditReservationForm({
                     name="adults"
                     render={({ field }) => (
                       <FormItem className="flex-1">
-                        <FormLabel required>
+                        <FormLabel>
                           <FormattedMessage
                             id="reservations.adults"
                             defaultMessage="Adults"
@@ -413,7 +413,7 @@ export function EditReservationForm({
                     name="children"
                     render={({ field }) => (
                       <FormItem className="flex-1">
-                        <FormLabel required>
+                        <FormLabel>
                           <FormattedMessage
                             id="reservations.children"
                             defaultMessage="Children"
@@ -438,7 +438,7 @@ export function EditReservationForm({
                     name="infants"
                     render={({ field }) => (
                       <FormItem className="flex-1">
-                        <FormLabel required>
+                        <FormLabel>
                           <FormattedMessage
                             id="reservations.infants"
                             defaultMessage="Infants"

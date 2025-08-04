@@ -134,13 +134,7 @@ function RouteComponent() {
           {/* Content Area */}
           <div className="max-w-2xl min-w-0">
             <TabsContent value="personal" className="mt-0">
-              <PersonalSection
-                initialData={{
-                  firstName: userData.firstName,
-                  lastName: userData.lastName,
-                  email: userData.email
-                }}
-              />
+              <PersonalSection />
             </TabsContent>
             <TabsContent value="avatar" className="mt-0">
               <AvatarSection

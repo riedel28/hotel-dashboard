@@ -91,9 +91,8 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
 
 function FormLabel({
   className,
-  required = false,
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root> & { required?: boolean }) {
+}: React.ComponentProps<typeof LabelPrimitive.Root>) {
   const { error, formItemId } = useFormField();
 
   return (
@@ -105,7 +104,6 @@ function FormLabel({
       {...props}
     >
       {props.children}
-      {required && <span className="text-red-600">*</span>}
     </Label>
   );
 }
