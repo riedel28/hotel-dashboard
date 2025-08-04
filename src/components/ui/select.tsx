@@ -5,7 +5,7 @@ import { ReactNode, isValidElement } from 'react';
 
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { VariantProps, cva } from 'class-variance-authority';
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { CheckIcon, ChevronUpIcon, ChevronsUpDownIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
@@ -89,7 +89,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="-me-0.5 h-4 w-4 opacity-60" />
+        <ChevronsUpDownIcon className="-me-0.5 h-4 w-4 opacity-60" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -126,7 +126,7 @@ function SelectScrollDownButton({
       )}
       {...props}
     >
-      <ChevronDownIcon className="h-4 w-4" />
+      <ChevronsUpDownIcon className="h-4 w-4" />
     </SelectPrimitive.ScrollDownButton>
   );
 }
