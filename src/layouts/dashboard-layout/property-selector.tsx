@@ -34,59 +34,59 @@ export interface Property {
   stage: 'demo' | 'production' | 'staging' | 'template';
 }
 
-const stageMap = {
-  demo: 'bg-purple-100 text-purple-700 border-purple-200',
-  production: 'bg-green-100 text-green-700 border-green-200',
-  staging: 'bg-blue-100 text-blue-700 border-blue-200',
-  template: 'bg-orange-100 text-orange-700 border-orange-200'
-} as const;
-
 interface StageBadgeProps extends BadgeProps {
-  stage: keyof typeof stageMap;
+  stage: keyof typeof stageVariantMap;
 }
 
-function StageBadge({ stage }: StageBadgeProps) {
-  const getStageMessage = () => {
-    switch (stage) {
-      case 'demo':
-        return (
-          <FormattedMessage id="property.stage.demo" defaultMessage="Demo" />
-        );
-      case 'production':
-        return (
-          <FormattedMessage
-            id="property.stage.production"
-            defaultMessage="Production"
-          />
-        );
-      case 'staging':
-        return (
-          <FormattedMessage
-            id="property.stage.staging"
-            defaultMessage="Staging"
-          />
-        );
-      case 'template':
-        return (
-          <FormattedMessage
-            id="property.stage.template"
-            defaultMessage="Template"
-          />
-        );
-      default:
-        return stage;
-    }
-  };
+const stageVariantMap = {
+  demo: 'info',
+  production: 'success',
+  staging: 'primary',
+  template: 'warning'
+} as const;
 
+const getStageMessage = (stage: keyof typeof stageVariantMap) => {
+  switch (stage) {
+    case 'demo':
+      return (
+        <FormattedMessage id="property.stage.demo" defaultMessage="Demo" />
+      );
+    case 'production':
+      return (
+        <FormattedMessage
+          id="property.stage.production"
+          defaultMessage="Production"
+        />
+      );
+    case 'staging':
+      return (
+        <FormattedMessage
+          id="property.stage.staging"
+          defaultMessage="Staging"
+        />
+      );
+    case 'template':
+      return (
+        <FormattedMessage
+          id="property.stage.template"
+          defaultMessage="Template"
+        />
+      );
+    default:
+      return stage;
+  }
+};
+
+function StageBadge({ stage, ...props }: StageBadgeProps) {
   return (
     <Badge
-      variant="secondary"
-      className={cn(
-        'rounded-md px-1.5 text-[11px] font-medium tracking-wide capitalize',
-        stageMap[stage]
-      )}
+      variant={stageVariantMap[stage]}
+      appearance="outline"
+      size="sm"
+      className="capitalize"
+      {...props}
     >
-      {getStageMessage()}
+      {getStageMessage(stage)}
     </Badge>
   );
 }
@@ -156,7 +156,7 @@ export default function PropertySelector() {
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="text-foreground data-[state=open]:bg-accent focus-visible:border-ring focus-visible:outline-ring/20 w-full max-w-[300px] justify-between px-3 outline-offset-0 focus-visible:outline-[3px]"
+          className="text-secondary-foreground data-[state=open]:bg-accent focus-visible:border-ring focus-visible:outline-ring/20 w-full max-w-[300px] justify-between px-3 text-sm outline-offset-0 focus-visible:outline-[3px]"
         >
           <span className={cn('truncate', !value && 'text-muted-foreground')}>
             {value
@@ -189,7 +189,7 @@ export default function PropertySelector() {
               defaultMessage: 'Search for property'
             })}
           />
-          <CommandList className="w-[350px] max-w-[400px]">
+          <CommandList className="max-w-[400px]">
             {!loading && (
               <CommandEmpty>
                 <FormattedMessage
@@ -253,7 +253,7 @@ export default function PropertySelector() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-full font-normal"
+                className="h-8 w-full text-sm font-normal"
                 onClick={handleReloadProperties}
                 disabled={loading}
               >

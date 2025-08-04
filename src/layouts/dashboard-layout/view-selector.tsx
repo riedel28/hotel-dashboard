@@ -1,5 +1,4 @@
 import { useView } from '@/contexts/view-context';
-import { ChevronsUpDown } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
@@ -21,8 +20,7 @@ export default function ViewSelector() {
           id: 'header.userView.selectView',
           defaultMessage: 'Select view'
         })}
-        className="hover:bg-accent data-[state=open]:bg-accent text-foreground border-none font-medium shadow-none focus-visible:ring-0"
-        icon={<ChevronsUpDown size={14} />}
+        className="hover:bg-accent data-[state=open]:bg-accent text-secondary-foreground border-none bg-transparent text-sm font-medium shadow-none focus-visible:ring-0"
       >
         <SelectValue
           placeholder={intl.formatMessage({
