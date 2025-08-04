@@ -26,7 +26,7 @@ const useCardContext = () => {
 
 // Variants
 const cardVariants = cva(
-  'flex flex-col items-stretch text-card-foreground rounded-xl',
+  'flex flex-col gap-4 items-stretch text-card-foreground rounded-xl',
   {
     variants: {
       variant: {
@@ -41,11 +41,11 @@ const cardVariants = cva(
 );
 
 const cardHeaderVariants = cva(
-  'flex items-center justify-between flex-wrap px-5 min-h-14 gap-2.5',
+  'flex justify-between flex-col flex-wrap px-5 pt-5 min-h-14 gap-2.5',
   {
     variants: {
       variant: {
-        default: 'border-b border-border',
+        default: 'border-border',
         accent: ''
       }
     },

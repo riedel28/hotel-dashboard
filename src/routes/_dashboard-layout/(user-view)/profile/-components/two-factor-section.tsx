@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -13,8 +13,9 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { ExternalLink } from '@/components/ui/external-link';
 import { Switch } from '@/components/ui/switch';
+
+import { cn } from '@/lib/utils';
 
 interface TwoFactorSectionProps {
   isEnabled?: boolean;
@@ -126,28 +127,64 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
               </p>
               <div className="space-y-2">
                 <div>
-                  <ExternalLink href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                    className={cn(
+                      buttonVariants({
+                        mode: 'link',
+                        underlined: 'solid'
+                      }),
+                      'text-foreground'
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FormattedMessage
                       id="profile.twoFactor.apps.google"
-                      defaultMessage="Google Authenticator"
+                      // eslint-disable-next-line formatjs/no-emoji
+                      defaultMessage="Google Authenticator  ↗"
                     />
-                  </ExternalLink>
+                  </a>
                 </div>
                 <div>
-                  <ExternalLink href="https://www.microsoft.com/en-us/account/authenticator">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                    className={cn(
+                      buttonVariants({
+                        mode: 'link',
+                        underlined: 'solid'
+                      }),
+                      'text-foreground'
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FormattedMessage
                       id="profile.twoFactor.apps.microsoft"
-                      defaultMessage="Microsoft Authenticator"
+                      // eslint-disable-next-line formatjs/no-emoji
+                      defaultMessage="Microsoft Authenticator ↗"
                     />
-                  </ExternalLink>
+                  </a>
                 </div>
                 <div>
-                  <ExternalLink href="https://authy.com/">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                    className={cn(
+                      buttonVariants({
+                        mode: 'link',
+                        underlined: 'solid'
+                      }),
+                      'text-foreground'
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FormattedMessage
                       id="profile.twoFactor.apps.authy"
-                      defaultMessage="Authy"
+                      // eslint-disable-next-line formatjs/no-emoji
+                      defaultMessage="Authy ↗"
                     />
-                  </ExternalLink>
+                  </a>
                 </div>
               </div>
             </div>
