@@ -1,0 +1,20 @@
+---
+alwaysApply: true
+---
+
+# Translation Rules
+
+- **ALWAYS** add translations for any new text strings in both `src/i18n/en.json` and `src/i18n/de.json`
+- When adding new UI components or pages, check if translations are needed
+- Translation keys should be descriptive and follow the existing naming convention (e.g., `component.action`, `page.title`)
+- Sort translation keys alphabetically within each file
+- Use `FormattedMessage` component for all user-facing text
+- Never hardcode strings in components - always use translation keys
+- When adding new features, add corresponding translation keys immediately
+- **ALWAYS** add translations for any new text strings in both `src/i18n/en.json` and `src/i18n/de.json`
+- When adding new UI components or pages, check if translations are needed
+- Translation keys should be descriptive and follow the existing naming convention (e.g., `component.action`, `page.title`)
+- Sort translation keys alphabetically within each file
+- Use `FormattedMessage` component for all user-facing text
+- Never hardcode strings in components - always use translation keys
+- When adding new features, add corresponding translation keys immediately

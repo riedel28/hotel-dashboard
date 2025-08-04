@@ -1,0 +1,9 @@
+# Testing & Quality
+
+- Add proper error handling for API calls
+- Use proper loading states and skeleton components
+- Ensure accessibility standards are met
+- Test components in both light and dark themes
+- Use the existing API patterns in `src/api/`
+- Handle loading, error, and success states properly
+- Use proper TypeScript types for API responses

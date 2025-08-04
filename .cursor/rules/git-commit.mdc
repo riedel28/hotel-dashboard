@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+---
+
+# Git Commit Guidelines
+
+- Write concise, specific commit messages that clearly describe the change
+- Use conventional commit format: `type(scope): description`
+- Keep descriptions under 50 characters when possible
+- Use imperative mood ("add" not "added", "fix" not "fixed")
+- Examples:
+  - `feat(header): add sticky positioning`
+  - `fix(scroll): prevent iOS bounce effect`
+  - `refactor(layout): improve sidebar structure`
+  - `docs(readme): update API configuration`
+- Avoid generic messages like "update", "fix", or "improve" without context
+- Write concise, specific commit messages that clearly describe the change
+- Use conventional commit format: `type(scope): description`
+- Keep descriptions under 50 characters when possible
+- Use imperative mood ("add" not "added", "fix" not "fixed")
+- Examples:
+  - `feat(header): add sticky positioning`
+  - `fix(scroll): prevent iOS bounce effect`
+  - `refactor(layout): improve sidebar structure`
+  - `docs(readme): update API configuration`
+- Avoid generic messages like "update", "fix", or "improve" without context
