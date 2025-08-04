@@ -17,7 +17,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { ErrorFallback } from '@/components/ui/error-fallback';
+import { ErrorDisplayError } from '@/components/ui/error-display';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 
 import {
@@ -89,10 +89,19 @@ function ReservationPage() {
               <ErrorBoundary
                 onReset={reset}
                 fallbackRender={({ error, resetErrorBoundary }) => (
-                  <ErrorFallback
-                    error={error}
-                    resetErrorBoundary={resetErrorBoundary}
-                  />
+                  <div className="flex min-h-[60vh] items-center justify-center">
+                    <ErrorDisplayError
+                      title={
+                        <FormattedMessage
+                          id="reservations.error"
+                          defaultMessage="Error"
+                        />
+                      }
+                      message={error.message}
+                      showRetry
+                      onRetry={resetErrorBoundary}
+                    />
+                  </div>
                 )}
               >
                 <ReservationForm />

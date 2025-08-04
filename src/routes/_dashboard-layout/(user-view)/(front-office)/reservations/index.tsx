@@ -1,7 +1,7 @@
 import { reservationsQueryOptions } from '@/api/reservations';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { RefreshCw, X } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
 import { z } from 'zod';
 
@@ -14,6 +14,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { ErrorDisplayError } from '@/components/ui/error-display';
 import { SearchInput } from '@/components/ui/search-input';
 
 import { cn } from '@/lib/utils';
@@ -79,14 +80,16 @@ function ReservationsPage() {
 
   if (reservationsQuery.isError) {
     content = (
-      <div className="flex max-w-lg flex-col justify-center rounded-md border p-4 text-center">
-        <div className="mx-auto mb-2 flex size-10 items-center justify-center rounded-full bg-red-50">
-          <X className="size-6 text-red-700" />
-        </div>
-        <h2 className="text-lg font-semibold">
-          <FormattedMessage id="reservations.error" defaultMessage="Error" />
-        </h2>
-        <p>{reservationsQuery.error.message}</p>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <ErrorDisplayError
+          title={
+            <FormattedMessage id="reservations.error" defaultMessage="Error" />
+          }
+          message={reservationsQuery.error.message}
+          showRetry
+          onRetry={handleRefresh}
+          isRetrying={reservationsQuery.isFetching}
+        />
       </div>
     );
   }
