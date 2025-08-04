@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { createFileRoute } from '@tanstack/react-router';
 import { Camera, Lock, Shield, User, Users } from 'lucide-react';
 import { FormattedMessage } from 'react-intl';
@@ -12,16 +10,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { getUserInitials } from '@/lib/utils';
 
 import { AvatarSection } from './profile/-components/avatar-section';
 import { PasswordSection } from './profile/-components/password-section';
 import { PersonalSection } from './profile/-components/personal-section';
-import {
-  type ProfileSection,
-  ProfileSidebar
-} from './profile/-components/profile-sidebar';
 import { RolesSection } from './profile/-components/roles-section';
 import { TwoFactorSection } from './profile/-components/two-factor-section';
 
@@ -30,8 +25,6 @@ export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
 });
 
 function RouteComponent() {
-  const [activeSection, setActiveSection] = useState('personal');
-
   // TODO: Fetch user data from API
   const userData = {
     firstName: 'John',
@@ -42,72 +35,6 @@ function RouteComponent() {
   };
 
   const userInitials = getUserInitials(userData.firstName, userData.lastName);
-
-  const sections: ProfileSection[] = [
-    {
-      id: 'personal',
-      title: 'profile.sidebar.personal',
-      icon: User
-    },
-    {
-      id: 'password',
-      title: 'profile.sidebar.password',
-      icon: Lock
-    },
-    {
-      id: 'roles',
-      title: 'profile.sidebar.roles',
-      icon: Users
-    },
-    {
-      id: 'avatar',
-      title: 'profile.sidebar.avatar',
-      icon: Camera
-    },
-    {
-      id: 'twoFactor',
-      title: 'profile.sidebar.twoFactor',
-      icon: Shield
-    }
-  ];
-
-  const renderActiveSection = () => {
-    switch (activeSection) {
-      case 'personal':
-        return (
-          <PersonalSection
-            initialData={{
-              firstName: userData.firstName,
-              lastName: userData.lastName,
-              email: userData.email
-            }}
-          />
-        );
-      case 'avatar':
-        return (
-          <AvatarSection
-            currentAvatar={userData.avatar}
-            userInitials={userInitials}
-          />
-        );
-      case 'password':
-        return <PasswordSection />;
-      case 'roles':
-        return <RolesSection initialRoles={['administrators']} />;
-      case 'twoFactor':
-        return <TwoFactorSection isEnabled={userData.twoFactorEnabled} />;
-      default:
-        return (
-          <PersonalSection
-            initialData={{
-              firstName: userData.firstName,
-              lastName: userData.lastName,
-              email: userData.email
-            }}
-          />
-        );
-    }
-  };
 
   return (
     <div className="space-y-1">
@@ -133,29 +60,106 @@ function RouteComponent() {
         </h1>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        {/* Sidebar Navigation */}
-        <div className="space-y-4">
-          <div className="bg-card rounded-lg border p-3">
-            <h2 className="mt-2 mb-4 px-2 text-lg font-semibold">
-              <FormattedMessage
-                id="profile.settings"
-                defaultMessage="Settings"
+      <Tabs defaultValue="personal" className="w-full">
+        <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+          {/* Sidebar Navigation */}
+          <div className="space-y-4">
+            <TabsList
+              variant="button"
+              className="h-auto w-full flex-col bg-transparent py-2"
+            >
+              <TabsTrigger
+                value="personal"
+                className="h-auto w-full justify-start gap-2 p-2.5"
+              >
+                <User className="h-4 w-4 shrink-0" />
+                <span className="text-sm font-medium">
+                  <FormattedMessage
+                    id="profile.sidebar.personal"
+                    defaultMessage="Personal"
+                  />
+                </span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="password"
+                className="h-auto w-full justify-start gap-2 p-2.5"
+              >
+                <Lock className="h-4 w-4 shrink-0" />
+                <span className="text-sm font-medium">
+                  <FormattedMessage
+                    id="profile.sidebar.password"
+                    defaultMessage="Password"
+                  />
+                </span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="roles"
+                className="h-auto w-full justify-start gap-2 p-2.5"
+              >
+                <Users className="h-4 w-4 shrink-0" />
+                <span className="text-sm font-medium">
+                  <FormattedMessage
+                    id="profile.sidebar.roles"
+                    defaultMessage="Roles"
+                  />
+                </span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="avatar"
+                className="h-auto w-full justify-start gap-2 p-2.5"
+              >
+                <Camera className="h-4 w-4 shrink-0" />
+                <span className="text-sm font-medium">
+                  <FormattedMessage
+                    id="profile.sidebar.avatar"
+                    defaultMessage="Avatar"
+                  />
+                </span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="twoFactor"
+                className="h-auto w-full justify-start gap-2 p-2.5"
+              >
+                <Shield className="h-4 w-4 shrink-0" />
+                <span className="text-sm font-medium">
+                  <FormattedMessage
+                    id="profile.sidebar.twoFactor"
+                    defaultMessage="Two Factor"
+                  />
+                </span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          {/* Content Area */}
+          <div className="max-w-2xl min-w-0">
+            <TabsContent value="personal" className="mt-0">
+              <PersonalSection
+                initialData={{
+                  firstName: userData.firstName,
+                  lastName: userData.lastName,
+                  email: userData.email
+                }}
               />
-            </h2>
-            <ProfileSidebar
-              sections={sections}
-              activeSection={activeSection}
-              onSectionChange={setActiveSection}
-            />
+            </TabsContent>
+            <TabsContent value="avatar" className="mt-0">
+              <AvatarSection
+                currentAvatar={userData.avatar}
+                userInitials={userInitials}
+              />
+            </TabsContent>
+            <TabsContent value="password" className="mt-0">
+              <PasswordSection />
+            </TabsContent>
+            <TabsContent value="roles" className="mt-0">
+              <RolesSection initialRoles={['administrators']} />
+            </TabsContent>
+            <TabsContent value="twoFactor" className="mt-0">
+              <TwoFactorSection isEnabled={userData.twoFactorEnabled} />
+            </TabsContent>
           </div>
         </div>
-
-        {/* Content Area */}
-        <div className="max-w-2xl min-w-0 space-y-6">
-          {renderActiveSection()}
-        </div>
-      </div>
+      </Tabs>
     </div>
   );
 }
