@@ -8,7 +8,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
-} from '../../../components/ui/breadcrumb';
+} from '@/components/ui/breadcrumb';
+
+import UsersTable from './users/-components/users-table';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/users')({
   component: RouteComponent
@@ -16,7 +18,7 @@ export const Route = createFileRoute('/_dashboard-layout/(user-view)/users')({
 
 function RouteComponent() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-1">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -33,12 +35,12 @@ function RouteComponent() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
-        <FormattedMessage
-          id="users.title"
-          defaultMessage='Hello "/_dashboard-layout/users"!'
-        />
+      <div className="mb-6 flex justify-between">
+        <h1 className="text-2xl font-bold">
+          <FormattedMessage id="users.title" defaultMessage="Users" />
+        </h1>
       </div>
+      <UsersTable />
     </div>
   );
 }
