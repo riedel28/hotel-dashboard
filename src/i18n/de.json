@@ -281,5 +281,14 @@
   "view.toast.autoSwitched": "Gewechselt zu {view} Ansicht und zum Dashboard weitergeleitet",
   "properties.title": "Hallo \"/_dashboard-layout/properties\"!",
   "mobileCMS.title": "Hallo \"/_dashboard-layout/mobile-cms\"!",
-  "tv.title": "Hallo \"/_dashboard-layout/tv\"!"
+  "tv.title": "Hallo \"/_dashboard-layout/tv\"!",
+  "notFound.title": "Seite nicht gefunden",
+  "notFound.message": "Entschuldigung, wir konnten die gesuchte Seite nicht finden.",
+  "notFound.backButton": "Zurück",
+  "notFound.homeButton": "Startseite",
+  "notFound.searchButton": "Suchen",
+  "notFound.global.title": "Seite nicht gefunden",
+  "notFound.global.message": "Entschuldigung, wir konnten die gesuchte Seite nicht finden.",
+  "notFound.global.homeButton": "Zum Dashboard",
+  "notFound.global.backButton": "Zurück"
 }
