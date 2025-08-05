@@ -18,7 +18,7 @@ const SelectContext = React.createContext<{
 
 // Root Component
 const Select = ({
-  indicatorPosition = 'left',
+  indicatorPosition = 'right',
   indicatorVisibility = true,
   indicator,
   ...props

@@ -12,6 +12,7 @@ import {
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { ChevronDownIcon, ChevronUpIcon, CopyIcon } from 'lucide-react';
+import Flag from 'react-flagkit';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Badge } from '@/components/ui/badge';
@@ -30,6 +31,7 @@ type Guest = {
   id: string;
   first_name: string;
   last_name: string;
+  nationality_code: 'DE' | 'US';
 };
 
 type CheckInCheckOutVia = 'android' | 'ios' | 'tv' | 'station' | 'web';
@@ -467,10 +469,19 @@ export default function ReservationsTable({
         ),
         cell: ({ row }) => {
           return (
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {row.original.guests.map((guest) => {
                 return (
-                  <div key={guest.id} className="text-nowrap">
+                  <div
+                    key={guest.id}
+                    className="flex items-center gap-2 text-nowrap"
+                  >
+                    <Flag
+                      country={guest.nationality_code}
+                      title={guest.nationality_code}
+                      className="size-3.5 rounded-sm"
+                      aria-label={guest.nationality_code}
+                    />
                     <FormattedMessage
                       id="reservations.guestNameFormat"
                       defaultMessage="{lastName}, {firstName}"
@@ -561,11 +572,9 @@ export default function ReservationsTable({
         ),
         cell: ({ row }) => {
           return (
-            <CurrencyFormatter
-              value={row.original.balance}
-              currency="EUR"
-              className="text-right"
-            />
+            <div className="text-right">
+              <CurrencyFormatter value={row.original.balance} currency="EUR" />
+            </div>
           );
         },
         meta: {

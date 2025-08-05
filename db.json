@@ -21,12 +21,14 @@
         {
           "id": "1",
           "first_name": "Max",
-          "last_name": "Mustermann"
+          "last_name": "Mustermann",
+          "nationality_code": "DE"
         },
         {
           "id": "2",
           "first_name": "Jane",
-          "last_name": "Doe"
+          "last_name": "Doe",
+          "nationality_code": "US"
         }
       ],
       "adults": 2,
@@ -136,25 +138,6 @@
       "room_name": "104",
       "page_url": "wada",
       "balance": 809
-    },
-    {
-      "id": "199",
-      "state": "pending",
-      "guest_email": "jd@example.com",
-      "primary_guest_name": "John Doe",
-      "booking_id": 704,
-      "guests": [],
-      "booking_from": "2025-02-01",
-      "booking_to": "2025-02-05",
-      "check_in_via": "web",
-      "check_out_via": "ios",
-      "completed_at": "2025-01-18T16:50:59.081Z",
-      "last_opened_at": "2025-01-18T16:50:59.081Z",
-      "received_at": "2025-01-18T16:50:59.081Z",
-      "booking_nr": "u3y75y78yt7845t",
-      "room_name": "",
-      "page_url": "dada",
-      "balance": 8
     },
     {
       "id": "598",

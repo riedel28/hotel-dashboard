@@ -2,7 +2,7 @@ import React from 'react';
 
 import { buildApiUrl, getEndpointUrl } from '@/config/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Loader2, PlusCircle } from 'lucide-react';
+import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
@@ -23,7 +23,7 @@ import {
   FormItem,
   FormLabel
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Input, InputWrapper } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -123,7 +123,7 @@ export function AddReservationModal() {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <FormField
               control={form.control}
               name="booking_nr"
@@ -202,14 +202,17 @@ export function AddReservationModal() {
                     />
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.pageUrl',
-                        defaultMessage: 'Enter page URL'
-                      })}
-                      required
-                    />
+                    <InputWrapper>
+                      <LinkIcon />
+                      <Input
+                        {...field}
+                        placeholder={intl.formatMessage({
+                          id: 'placeholders.pageUrl',
+                          defaultMessage: 'Enter page URL'
+                        })}
+                        required
+                      />
+                    </InputWrapper>
                   </FormControl>
                 </FormItem>
               )}
@@ -229,7 +232,7 @@ export function AddReservationModal() {
                 {createReservationMutation.isPending && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                <FormattedMessage id="actions.create" defaultMessage="Create" />
+                <FormattedMessage id="actions.add" defaultMessage="Add" />
               </Button>
             </DialogFooter>
           </form>

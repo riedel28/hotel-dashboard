@@ -9,32 +9,50 @@ type ReservationsResponse = {
 
 function reservationsQueryOptions({
   page,
-  perPage
+  perPage,
+  status,
+  q
 }: {
   page: number;
   perPage: number;
+  status?: string;
+  q?: string;
 }) {
   return queryOptions({
-    queryKey: ['reservations', page, perPage],
-    queryFn: () => fetchReservations({ page, perPage }),
+    queryKey: ['reservations', page, perPage, status, q],
+    queryFn: () => fetchReservations({ page, perPage, status, q }),
     placeholderData: keepPreviousData
   });
 }
 
 async function fetchReservations({
   page,
-  perPage
+  perPage,
+  status,
+  q
 }: {
   page: number;
   perPage: number;
+  status?: string;
+  q?: string;
 }): Promise<ReservationsResponse> {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
+  const params: Record<string, string | number> = {
+    _page: page,
+    _limit: perPage
+  };
+
+  if (status && status !== 'all') {
+    params.status = status;
+  }
+
+  if (q) {
+    params.q = q;
+  }
+
   const response = await fetch(
-    buildApiUrl(getEndpointUrl('reservations'), {
-      _page: page,
-      _limit: perPage
-    })
+    buildApiUrl(getEndpointUrl('reservations'), params)
   );
   if (!response.ok) {
     throw new Error('Network response was not ok');

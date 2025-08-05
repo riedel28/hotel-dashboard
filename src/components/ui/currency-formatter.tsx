@@ -1,4 +1,4 @@
-import { useIntl } from 'react-intl';
+import { FormattedNumber } from 'react-intl';
 
 interface CurrencyFormatterProps {
   value: number;
@@ -9,20 +9,14 @@ interface CurrencyFormatterProps {
 
 export function CurrencyFormatter({
   value,
-  currency = 'EUR',
-  locale,
-  className = ''
+  currency = 'EUR'
 }: CurrencyFormatterProps) {
-  const intl = useIntl();
-
-  // Use the current locale from react-intl if no locale is provided
-  const currentLocale = locale || intl.locale;
-
-  const amount = new Intl.NumberFormat(currentLocale, {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: value % 1 === 0 ? 0 : 2
-  }).format(value);
-
-  return <span className={className}>{amount}</span>;
+  return (
+    <FormattedNumber
+      value={value}
+      style="currency"
+      currency={currency}
+      minimumFractionDigits={value % 1 === 0 ? 0 : 2}
+    />
+  );
 }
