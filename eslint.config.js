@@ -1,4 +1,6 @@
 import js from '@eslint/js';
+import tanstackQuery from '@tanstack/eslint-plugin-query';
+import tanstackRouter from '@tanstack/eslint-plugin-router';
 import typescript from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import formatjs from 'eslint-plugin-formatjs';
@@ -21,6 +23,8 @@ export default [
     },
     plugins: {
       '@typescript-eslint': typescript,
+      '@tanstack/query': tanstackQuery,
+      '@tanstack/router': tanstackRouter,
       formatjs: formatjs,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh
@@ -28,6 +32,8 @@ export default [
     rules: {
       ...typescript.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
+      ...tanstackQuery.configs.recommended.rules,
+      ...tanstackRouter.configs.recommended.rules,
       'react-refresh/only-export-components': 'off',
       'no-undef': 'off',
       'no-redeclare': 'off',
