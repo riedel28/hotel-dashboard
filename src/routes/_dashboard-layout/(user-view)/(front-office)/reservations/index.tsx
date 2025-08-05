@@ -2,7 +2,7 @@ import { reservationsQueryOptions } from '@/api/reservations';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { PaginationState } from '@tanstack/react-table';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, XIcon } from 'lucide-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { z } from 'zod';
 
@@ -301,12 +301,13 @@ function ReservationsPage() {
                 onDateChange={handleDateChange}
                 className="w-full sm:w-[208px]"
               />
-              {(status !== 'all' || q || from || to) && (
+              {(q || from || to || (status && status !== 'all')) && (
                 <Button
                   variant="ghost"
                   onClick={handleClearFilters}
                   className="text-muted-foreground hover:text-foreground"
                 >
+                  <XIcon />
                   <FormattedMessage
                     id="reservations.clearFilters"
                     defaultMessage="Clear filters"
