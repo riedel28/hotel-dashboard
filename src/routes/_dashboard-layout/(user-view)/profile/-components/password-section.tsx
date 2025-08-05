@@ -1,7 +1,10 @@
 import { useState } from 'react';
 
-import { FormattedMessage, useIntl } from 'react-intl';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,55 +14,56 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
 import { PasswordInput } from '@/components/ui/password-input';
+import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
 
-export function PasswordSection() {
-  const intl = useIntl();
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required'),
+    newPassword: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long'),
+    confirmPassword: z.string().min(1, 'Please confirm your password')
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword']
   });
 
-  const handleInputChange =
-    (field: keyof typeof formData) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: e.target.value
-      }));
-    };
+type PasswordFormData = z.infer<typeof passwordSchema>;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+export function PasswordSection() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const form = useForm<PasswordFormData>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    }
+  });
+
+  const onSubmit = async (data: PasswordFormData) => {
     setIsLoading(true);
 
     try {
-      // Validate passwords match
-      if (formData.newPassword !== formData.confirmPassword) {
-        toast.error('New passwords do not match');
-        return;
-      }
-
-      // Validate password strength (basic validation)
-      if (formData.newPassword.length < 8) {
-        toast.error('Password must be at least 8 characters long');
-        return;
-      }
-
       // TODO: Implement API call to change password
+      console.log('Password change data:', data);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       toast.success('Password changed successfully');
 
       // Reset form
-      setFormData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
+      form.reset();
     } catch {
       toast.error('Error changing password');
     } finally {
@@ -84,73 +88,78 @@ export function PasswordSection() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="currentPassword">
-              <FormattedMessage
-                id="profile.password.currentPassword"
-                defaultMessage="Current Password"
-              />
-            </Label>
-            <PasswordInput
-              id="currentPassword"
-              value={formData.currentPassword}
-              onChange={handleInputChange('currentPassword')}
-              placeholder={intl.formatMessage({
-                id: 'placeholders.password',
-                defaultMessage: 'Enter your password'
-              })}
-              disabled={isLoading}
-              required
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="currentPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="profile.password.currentPassword"
+                      defaultMessage="Current Password"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput disabled={isLoading} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="newPassword">
-              <FormattedMessage
-                id="profile.password.newPassword"
-                defaultMessage="New Password"
-              />
-            </Label>
-            <PasswordInput
-              id="newPassword"
-              value={formData.newPassword}
-              onChange={handleInputChange('newPassword')}
-              placeholder={intl.formatMessage({
-                id: 'placeholders.password',
-                defaultMessage: 'Enter your password'
-              })}
-              disabled={isLoading}
-              required
+
+            <FormField
+              control={form.control}
+              name="newPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="profile.password.newPassword"
+                      defaultMessage="New Password"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    <div className="space-y-2">
+                      <PasswordInput disabled={isLoading} {...field} />
+                      <PasswordStrengthMeter password={field.value} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">
-              <FormattedMessage
-                id="profile.password.confirmPassword"
-                defaultMessage="Confirm New Password"
-              />
-            </Label>
-            <PasswordInput
-              id="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleInputChange('confirmPassword')}
-              placeholder={intl.formatMessage({
-                id: 'placeholders.password',
-                defaultMessage: 'Enter your password'
-              })}
-              disabled={isLoading}
-              required
+
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="profile.password.confirmPassword"
+                      defaultMessage="Confirm New Password"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput disabled={isLoading} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex justify-end">
-            <Button type="submit" loading={isLoading}>
-              <FormattedMessage
-                id="profile.save"
-                defaultMessage="Save Changes"
-              />
-            </Button>
-          </div>
-        </form>
+
+            <div className="flex justify-end">
+              <Button type="submit" loading={isLoading}>
+                <FormattedMessage
+                  id="profile.save"
+                  defaultMessage="Save Changes"
+                />
+              </Button>
+            </div>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );
