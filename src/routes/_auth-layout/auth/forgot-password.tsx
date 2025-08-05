@@ -19,8 +19,8 @@ function RouteComponent() {
       <Link
         className={cn(
           buttonVariants({
-            variant: 'link',
-            className: 'p-0'
+            mode: 'link',
+            underlined: 'solid'
           })
         )}
         to="/auth/login"

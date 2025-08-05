@@ -132,7 +132,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                     className={cn(
                       buttonVariants({
                         mode: 'link',
-                        underlined: 'solid'
+                        underline: 'solid'
                       }),
                       'text-foreground'
                     )}
@@ -152,7 +152,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                     className={cn(
                       buttonVariants({
                         mode: 'link',
-                        underlined: 'solid'
+                        underline: 'solid'
                       }),
                       'text-foreground'
                     )}
@@ -172,7 +172,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                     className={cn(
                       buttonVariants({
                         mode: 'link',
-                        underlined: 'solid'
+                        underline: 'solid'
                       }),
                       'text-foreground'
                     )}
