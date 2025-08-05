@@ -33,7 +33,7 @@ import { ReservationDateFilter } from './-components/reservations-table/reservat
 
 const reservationsFilterSchema = z.object({
   page: z.number().default(1),
-  per_page: z.number().default(20),
+  per_page: z.number().default(10),
   q: z.string().optional(),
   status: z
     .enum(['pending', 'started', 'done', 'all'])
