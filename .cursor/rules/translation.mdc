@@ -1,5 +1,6 @@
 ---
-alwaysApply: true
+globs: src/**/*.tsx
+alwaysApply: false
 ---
 
 # Translation Rules
