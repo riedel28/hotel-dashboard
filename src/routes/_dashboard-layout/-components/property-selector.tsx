@@ -102,6 +102,7 @@ export const properties: Property[] = [
     name: 'Staging',
     stage: 'staging'
   },
+
   {
     id: 'a4e1fa51-f4ce-4e45-892c-224030a00bdd',
     name: 'Development 13, Adyen',
@@ -115,6 +116,31 @@ export const properties: Property[] = [
   {
     id: 'cc198b13-4933-43aa-977e-dcd95fa30771',
     name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, reiciendis dolor! Tempora, animi debitis itaque nihil quidem laborum consectetur dolorem.',
+    stage: 'production'
+  },
+  {
+    id: 'f8a2b4c6-d8e0-4f2a-9b1c-3d5e7f9a1b2c',
+    name: 'Grand Hotel Vienna',
+    stage: 'production'
+  },
+  {
+    id: 'e7d6c5b4-a3f2-1e0d-9c8b-7a6f5e4d3c2b',
+    name: 'Seaside Resort Barcelona',
+    stage: 'staging'
+  },
+  {
+    id: 'b1a2c3d4-e5f6-7890-abcd-ef1234567890',
+    name: 'Mountain Lodge Switzerland',
+    stage: 'demo'
+  },
+  {
+    id: 'c2d3e4f5-a6b7-8901-cdef-234567890123',
+    name: 'Urban Boutique Hotel Berlin',
+    stage: 'template'
+  },
+  {
+    id: 'd3e4f5a6-b7c8-9012-def3-456789012345',
+    name: 'Historic Palace Hotel Prague',
     stage: 'production'
   }
 ];
@@ -159,15 +185,17 @@ export default function PropertySelector() {
           className="text-secondary-foreground data-[state=open]:bg-accent focus-visible:border-ring focus-visible:outline-ring/20 w-full max-w-[300px] justify-between px-3 text-sm outline-offset-0 focus-visible:outline-[3px]"
         >
           <span className={cn('truncate', !value && 'text-muted-foreground')}>
-            {value
-              ? properties.find(
-                  (property) =>
-                    property.name.toLowerCase() === value.name.toLowerCase()
-                )?.name
-              : intl.formatMessage({
-                  id: 'placeholders.selectProperty',
-                  defaultMessage: 'Select property'
-                })}
+            {value ? (
+              properties.find(
+                (property) =>
+                  property.name.toLowerCase() === value.name.toLowerCase()
+              )?.name
+            ) : (
+              <FormattedMessage
+                id="placeholders.selectProperty"
+                defaultMessage="Select property"
+              />
+            )}
           </span>
           <ChevronsUpDownIcon
             size={16}
@@ -247,26 +275,26 @@ export default function PropertySelector() {
                 )}
               </ScrollArea>
             </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 w-full text-sm font-normal"
-                onClick={handleReloadProperties}
-                disabled={loading}
-              >
-                <RefreshCwIcon
-                  className={cn(
-                    '-ms-2 me-2 mr-0 size-3.5 opacity-60',
-                    loading && 'animate-spin'
-                  )}
-                  aria-hidden="true"
-                />
-                <FormattedMessage id="actions.reload" defaultMessage="Reload" />
-              </Button>
-            </CommandGroup>
           </CommandList>
+          <CommandSeparator />
+          <CommandGroup>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-full text-sm font-normal"
+              onClick={handleReloadProperties}
+              disabled={loading}
+            >
+              <RefreshCwIcon
+                className={cn(
+                  '-ms-2 me-2 mr-1 size-3.5 opacity-60',
+                  loading && 'animate-spin'
+                )}
+                aria-hidden="true"
+              />
+              <FormattedMessage id="actions.reload" defaultMessage="Reload" />
+            </Button>
+          </CommandGroup>
         </Command>
       </PopoverContent>
     </Popover>
