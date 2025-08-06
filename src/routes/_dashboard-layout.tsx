@@ -30,7 +30,7 @@ import {
   TvIcon,
   UsersIcon
 } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
   Sidebar,
@@ -40,11 +40,10 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuAction,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarRail,
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
@@ -52,11 +51,22 @@ import {
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
+  tooltipKey?: string;
 }
 
-function SidebarLink({ icon: Icon, children, ...linkProps }: SidebarLinkProps) {
+function SidebarLink({
+  icon: Icon,
+  children,
+  tooltipKey,
+  ...linkProps
+}: SidebarLinkProps) {
+  const intl = useIntl();
+  const tooltipText = tooltipKey
+    ? intl.formatMessage({ id: tooltipKey, defaultMessage: 'Menu Item' })
+    : undefined;
+
   return (
-    <SidebarMenuButton asChild>
+    <SidebarMenuButton asChild tooltip={tooltipText}>
       <Link
         activeProps={{ className: '!bg-primary/5' }}
         {...(linkProps as LinkProps)}
@@ -71,22 +81,22 @@ function SidebarLink({ icon: Icon, children, ...linkProps }: SidebarLinkProps) {
 // Sample data for content manager items
 const contentManagerItems = [
   {
-    name: 'sidebar.contentManager.mobileCMS',
+    name: 'Mobile CMS',
     url: '/mobile-cms',
     icon: SmartphoneIcon
   },
   {
-    name: 'sidebar.contentManager.tv',
+    name: 'TV',
     url: '/tv',
     icon: TvIcon
   },
   {
-    name: 'sidebar.contentManager.products',
+    name: 'Products',
     url: '/products',
     icon: ShoppingBagIcon
   },
   {
-    name: 'sidebar.contentManager.events',
+    name: 'Events',
     url: '/events',
     icon: CalendarIcon
   }
@@ -123,12 +133,16 @@ function AdminSidebarContent() {
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon}>
+            <SidebarLink to="/" icon={HomeIcon} tooltipKey="sidebar.start">
               <FormattedMessage id="sidebar.start" defaultMessage="Start" />
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/properties" icon={BuildingIcon}>
+            <SidebarLink
+              to="/properties"
+              icon={BuildingIcon}
+              tooltipKey="sidebar.properties"
+            >
               <FormattedMessage
                 id="sidebar.properties"
                 defaultMessage="Properties"
@@ -136,7 +150,11 @@ function AdminSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/customers" icon={UsersIcon}>
+            <SidebarLink
+              to="/customers"
+              icon={UsersIcon}
+              tooltipKey="sidebar.customers"
+            >
               <FormattedMessage
                 id="sidebar.customers"
                 defaultMessage="Customers"
@@ -156,12 +174,16 @@ function UserSidebarContent() {
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon}>
+            <SidebarLink to="/" icon={HomeIcon} tooltipKey="sidebar.start">
               <FormattedMessage id="sidebar.start" defaultMessage="Start" />
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/monitoring" icon={SquareActivityIcon}>
+            <SidebarLink
+              to="/monitoring"
+              icon={SquareActivityIcon}
+              tooltipKey="sidebar.monitoring"
+            >
               <FormattedMessage
                 id="sidebar.monitoring"
                 defaultMessage="Monitoring"
@@ -181,7 +203,11 @@ function UserSidebarContent() {
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/reservations" icon={BedDoubleIcon}>
+            <SidebarLink
+              to="/reservations"
+              icon={BedDoubleIcon}
+              tooltipKey="sidebar.reservations"
+            >
               <FormattedMessage
                 id="sidebar.reservations"
                 defaultMessage="Reservations"
@@ -189,7 +215,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/registration-forms" icon={ListTodoIcon}>
+            <SidebarLink
+              to="/registration-forms"
+              icon={ListTodoIcon}
+              tooltipKey="sidebar.registrationForms"
+            >
               <FormattedMessage
                 id="sidebar.registrationForms"
                 defaultMessage="Registration forms"
@@ -197,7 +227,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/payments" icon={ReceiptTextIcon}>
+            <SidebarLink
+              to="/payments"
+              icon={ReceiptTextIcon}
+              tooltipKey="sidebar.payments"
+            >
               <FormattedMessage
                 id="sidebar.payments"
                 defaultMessage="Payments"
@@ -205,7 +239,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/orders" icon={ShoppingCartIcon}>
+            <SidebarLink
+              to="/orders"
+              icon={ShoppingCartIcon}
+              tooltipKey="sidebar.orders"
+            >
               <FormattedMessage id="sidebar.orders" defaultMessage="Orders" />
             </SidebarLink>
           </SidebarMenuItem>
@@ -223,22 +261,23 @@ function UserSidebarContent() {
         <SidebarMenu>
           {contentManagerItems.map((item) => (
             <SidebarMenuItem key={item.name}>
-              <SidebarLink to={item.url as LinkProps['to']} icon={item.icon}>
+              <SidebarLink
+                to={item.url as LinkProps['to']}
+                icon={item.icon}
+                tooltipKey={`sidebar.contentManager.${item.url.replace('/', '').replace('-', '').replace('cms', 'CMS')}`}
+              >
                 <FormattedMessage
                   id={`sidebar.contentManager.${item.url.replace('/', '').replace('-', '').replace('cms', 'CMS')}`}
                   defaultMessage="Content Manager Item"
                 />
               </SidebarLink>
               {item.url === '/tv' && (
-                <SidebarMenuAction>
-                  <ArrowUpRightIcon className="text-muted-foreground/80" />
-                  <span className="sr-only">
-                    <FormattedMessage
-                      id="common.externalLink"
-                      defaultMessage="External link"
-                    />
-                  </span>
-                </SidebarMenuAction>
+                <SidebarMenuBadge>
+                  <ArrowUpRightIcon
+                    className="text-muted-foreground/80 size-4"
+                    aria-hidden="true"
+                  />
+                </SidebarMenuBadge>
               )}
             </SidebarMenuItem>
           ))}
@@ -255,7 +294,11 @@ function UserSidebarContent() {
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/access-provider" icon={LockIcon}>
+            <SidebarLink
+              to="/access-provider"
+              icon={LockIcon}
+              tooltipKey="sidebar.accessProvider"
+            >
               <FormattedMessage
                 id="sidebar.accessProvider"
                 defaultMessage="Access Provider"
@@ -263,7 +306,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/pms-provider" icon={Grid2X2Icon}>
+            <SidebarLink
+              to="/pms-provider"
+              icon={Grid2X2Icon}
+              tooltipKey="sidebar.pmsProvider"
+            >
               <FormattedMessage
                 id="sidebar.pmsProvider"
                 defaultMessage="PMS Provider"
@@ -271,7 +318,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/payment-provider" icon={CreditCardIcon}>
+            <SidebarLink
+              to="/payment-provider"
+              icon={CreditCardIcon}
+              tooltipKey="sidebar.paymentProvider"
+            >
               <FormattedMessage
                 id="sidebar.paymentProvider"
                 defaultMessage="Payment Provider"
@@ -288,7 +339,11 @@ function UserSidebarContent() {
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/company" icon={BuildingIcon}>
+            <SidebarLink
+              to="/company"
+              icon={BuildingIcon}
+              tooltipKey="sidebar.companyData"
+            >
               <FormattedMessage
                 id="sidebar.companyData"
                 defaultMessage="Company data"
@@ -296,7 +351,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/checkin-page" icon={FileSpreadsheetIcon}>
+            <SidebarLink
+              to="/checkin-page"
+              icon={FileSpreadsheetIcon}
+              tooltipKey="sidebar.checkinPage"
+            >
               <FormattedMessage
                 id="sidebar.checkinPage"
                 defaultMessage="Checkin Page"
@@ -304,17 +363,29 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/users" icon={UsersIcon}>
+            <SidebarLink
+              to="/users"
+              icon={UsersIcon}
+              tooltipKey="sidebar.users"
+            >
               <FormattedMessage id="sidebar.users" defaultMessage="Users" />
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/rooms" icon={BedSingleIcon}>
+            <SidebarLink
+              to="/rooms"
+              icon={BedSingleIcon}
+              tooltipKey="sidebar.rooms"
+            >
               <FormattedMessage id="sidebar.rooms" defaultMessage="Rooms" />
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/devices" icon={TabletIcon}>
+            <SidebarLink
+              to="/devices"
+              icon={TabletIcon}
+              tooltipKey="sidebar.devices"
+            >
               <FormattedMessage id="sidebar.devices" defaultMessage="Devices" />
             </SidebarLink>
           </SidebarMenuItem>
@@ -336,7 +407,6 @@ function DashboardSidebar() {
       ) : (
         <UserSidebarContent />
       )}
-      <SidebarRail />
     </Sidebar>
   );
 }
