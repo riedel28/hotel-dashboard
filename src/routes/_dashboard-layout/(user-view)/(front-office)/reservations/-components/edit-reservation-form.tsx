@@ -1,16 +1,23 @@
 import { useState } from 'react';
 
 import { buildResourceUrl } from '@/config/api';
+import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Edit2, MoreHorizontal, Search, Trash2, User } from 'lucide-react';
+import { Edit2, MoreHorizontal, Trash2, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +38,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NumberInput } from '@/components/ui/number-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { SearchInput } from '@/components/ui/search-input';
 import {
   Select,
   SelectContent,
@@ -44,14 +52,14 @@ import { EditGuestModal } from './edit-guest-modal';
 
 const reservationFormSchema = z.object({
   booking_nr: z.string().min(1, 'Booking number is required'),
-  guests: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string()
-      })
-    )
-    .min(1, 'At least one guest is required'),
+  guests: z.array(
+    z.object({
+      id: z.string(),
+      first_name: z.string(),
+      last_name: z.string(),
+      nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+    })
+  ),
   adults: z.number().min(1, 'At least one adult is required'),
   youth: z.number().min(0, 'Youth count cannot be negative'),
   children: z.number().min(0, 'Children count cannot be negative'),
@@ -63,6 +71,13 @@ const reservationFormSchema = z.object({
 });
 
 export type ReservationFormData = z.infer<typeof reservationFormSchema>;
+
+export type Guest = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  nationality_code: 'DE' | 'US' | 'AT' | 'CH';
+};
 
 async function updateReservation(id: string, data: ReservationFormData) {
   const response = await fetch(buildResourceUrl('reservations', id), {
@@ -131,7 +146,7 @@ export function EditReservationForm({
     form.setValue('guests', updatedGuests);
   };
 
-  const addGuest = (newGuest: { id: string; name: string }) => {
+  const addGuest = (newGuest: Guest) => {
     const currentGuests = form.getValues('guests');
     const updatedGuests = [...currentGuests, newGuest];
     form.setValue('guests', updatedGuests);
@@ -139,18 +154,17 @@ export function EditReservationForm({
 
   const [editingGuest, setEditingGuest] = useState<{
     id: string;
-    name: string;
+    first_name: string;
+    last_name: string;
+    nationality_code: 'DE' | 'US' | 'AT' | 'CH';
   } | null>(null);
 
-  const editGuest = (
-    guestId: string,
-    updatedGuest: { id: string; name: string }
-  ) => {
+  const editGuest = (guestId: string, updatedGuest: Guest) => {
     const currentGuests = form.getValues('guests');
     const updatedGuests = currentGuests.map((guest) =>
       guest.id === guestId ? updatedGuest : guest
     );
-    form.setValue('guests', updatedGuests);
+    form.setValue('guests', updatedGuests, { shouldValidate: true });
   };
 
   // Mock room data - replace with actual data from your API
@@ -192,44 +206,37 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <FormField
-                  control={form.control}
-                  name="booking_nr"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <FormattedMessage
-                          id="reservations.bookingNumber"
-                          defaultMessage="Reservation No."
-                        />
-                      </FormLabel>
-                      <FormDescription id="booking-nr-readonly">
-                        <FormattedMessage
-                          id="reservations.bookingNumberTooltip"
-                          defaultMessage="The booking number can be found in your Property Management System (PMS)"
-                        />
-                      </FormDescription>
+            <FormField
+              control={form.control}
+              name="booking_nr"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <FormattedMessage
+                      id="reservations.bookingNumber"
+                      defaultMessage="Reservation No."
+                    />
+                  </FormLabel>
+                  <FormDescription id="booking-nr-readonly">
+                    <FormattedMessage
+                      id="reservations.bookingNumberTooltip"
+                      defaultMessage="The booking number can be found in your Property Management System (PMS)"
+                    />
+                  </FormDescription>
 
-                      <FormControl>
-                        <Input
-                          {...field}
-                          readOnly
-                          className="cursor-not-allowed bg-gray-50"
-                          aria-describedby="booking-nr-readonly"
-                        />
-                      </FormControl>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      readOnly
+                      className="cursor-not-allowed bg-gray-50"
+                      aria-describedby="booking-nr-readonly"
+                    />
+                  </FormControl>
 
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -243,38 +250,32 @@ export function EditReservationForm({
               />
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
-                {/* Guest Search */}
-                <div className="relative">
-                  <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                  <Input
-                    placeholder={intl.formatMessage({
-                      id: 'placeholders.searchForGuest',
-                      defaultMessage: 'Search for a guest...'
-                    })}
-                    className="pl-10"
-                    type="text"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                      }
-                    }}
-                  />
-                </div>
+          <CardContent className="pb-0">
+            <div className="space-y-4">
+              {/* Guest Search */}
+              <SearchInput
+                placeholder={intl.formatMessage({
+                  id: 'placeholders.searchForGuest',
+                  defaultMessage: 'Search for a guest...'
+                })}
+              />
 
-                {/* Guest List */}
-                <FormField
-                  control={form.control}
-                  name="guests"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="space-y-2">
-                        {field.value.map((guest) => (
+              {/* Guest List */}
+              <FormField
+                control={form.control}
+                name="guests"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="space-y-2">
+                      {field.value.length === 0 ? (
+                        <div className="text-muted-foreground py-4 text-center text-sm">
+                          <FormattedMessage
+                            id="reservations.noGuestsAdded"
+                            defaultMessage="No guests added yet"
+                          />
+                        </div>
+                      ) : (
+                        field.value.map((guest) => (
                           <div
                             key={guest.id}
                             className="flex items-center justify-between rounded-md border px-2 py-1"
@@ -282,7 +283,14 @@ export function EditReservationForm({
                             <div className="flex items-center gap-2">
                               <User className="text-muted-foreground h-4 w-4" />
                               <span className="max-w-md truncate text-sm">
-                                {guest.name}
+                                <FormattedMessage
+                                  id="reservations.guestName"
+                                  defaultMessage="{firstName} {lastName}"
+                                  values={{
+                                    firstName: guest.first_name,
+                                    lastName: guest.last_name
+                                  }}
+                                />
                               </span>
                             </div>
                             <DropdownMenu>
@@ -315,7 +323,7 @@ export function EditReservationForm({
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
-                                  className="text-red-600"
+                                  className="text-destructive"
                                   onClick={() => removeGuest(guest.id)}
                                 >
                                   <Trash2 className="mr-2 h-4 w-4" />
@@ -327,18 +335,18 @@ export function EditReservationForm({
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </div>
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Add New Guest Button */}
-                <AddGuestModal onAddGuest={addGuest} />
-              </form>
-            </Form>
+                        ))
+                      )}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </CardContent>
+          <CardFooter className="border-t-0">
+            <AddGuestModal onAddGuest={addGuest} />
+          </CardFooter>
         </Card>
 
         {/* Number of People Section */}
@@ -352,114 +360,99 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <div className="flex gap-4">
-                  <FormField
-                    control={form.control}
-                    name="adults"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>
-                          <FormattedMessage
-                            id="reservations.adults"
-                            defaultMessage="Adults"
-                          />
-                        </FormLabel>
-                        <FormControl>
-                          <NumberInput
-                            {...field}
-                            min={1}
-                            onValueChange={(value) =>
-                              field.onChange(value || 0)
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="adults"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>
+                      <FormattedMessage
+                        id="reservations.adults"
+                        defaultMessage="Adults"
+                      />
+                    </FormLabel>
+                    <FormControl>
+                      <NumberInput
+                        {...field}
+                        min={1}
+                        onValueChange={(value) => field.onChange(value || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                  <FormField
-                    control={form.control}
-                    name="youth"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>
-                          <FormattedMessage
-                            id="reservations.youth"
-                            defaultMessage="Youth"
-                          />
-                        </FormLabel>
-                        <FormControl>
-                          <NumberInput
-                            {...field}
-                            min={0}
-                            onValueChange={(value) =>
-                              field.onChange(value || 0)
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              <FormField
+                control={form.control}
+                name="youth"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>
+                      <FormattedMessage
+                        id="reservations.youth"
+                        defaultMessage="Youth"
+                      />
+                    </FormLabel>
+                    <FormControl>
+                      <NumberInput
+                        {...field}
+                        min={0}
+                        onValueChange={(value) => field.onChange(value || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                  <FormField
-                    control={form.control}
-                    name="children"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>
-                          <FormattedMessage
-                            id="reservations.children"
-                            defaultMessage="Children"
-                          />
-                        </FormLabel>
-                        <FormControl>
-                          <NumberInput
-                            {...field}
-                            min={0}
-                            onValueChange={(value) =>
-                              field.onChange(value || 0)
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              <FormField
+                control={form.control}
+                name="children"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>
+                      <FormattedMessage
+                        id="reservations.children"
+                        defaultMessage="Children"
+                      />
+                    </FormLabel>
+                    <FormControl>
+                      <NumberInput
+                        {...field}
+                        min={0}
+                        onValueChange={(value) => field.onChange(value || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                  <FormField
-                    control={form.control}
-                    name="infants"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>
-                          <FormattedMessage
-                            id="reservations.infants"
-                            defaultMessage="Infants"
-                          />
-                        </FormLabel>
-                        <FormControl>
-                          <NumberInput
-                            {...field}
-                            min={0}
-                            onValueChange={(value) =>
-                              field.onChange(value || 0)
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </form>
-            </Form>
+              <FormField
+                control={form.control}
+                name="infants"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>
+                      <FormattedMessage
+                        id="reservations.infants"
+                        defaultMessage="Infants"
+                      />
+                    </FormLabel>
+                    <FormControl>
+                      <NumberInput
+                        {...field}
+                        min={0}
+                        onValueChange={(value) => field.onChange(value || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -474,48 +467,41 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <FormField
-                  control={form.control}
-                  name="purpose"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex gap-4"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="private" id="private" />
-                            <Label htmlFor="private">
-                              <FormattedMessage
-                                id="reservations.private"
-                                defaultMessage="Private"
-                              />
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="business" id="business" />
-                            <Label htmlFor="business">
-                              <FormattedMessage
-                                id="reservations.business"
-                                defaultMessage="Business"
-                              />
-                            </Label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
+            <FormField
+              control={form.control}
+              name="purpose"
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="private" id="private" />
+                        <Label htmlFor="private">
+                          <FormattedMessage
+                            id="reservations.private"
+                            defaultMessage="Private"
+                          />
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="business" id="business" />
+                        <Label htmlFor="business">
+                          <FormattedMessage
+                            id="reservations.business"
+                            defaultMessage="Business"
+                          />
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -527,63 +513,55 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <FormField
-                  control={form.control}
-                  name="room"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
+            <FormField
+              control={form.control}
+              name="room"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={intl.formatMessage({
+                            id: 'placeholders.selectRoom',
+                            defaultMessage: 'Select a room...'
+                          })}
                         >
-                          <SelectTrigger className="w-full">
-                            <SelectValue
-                              placeholder={intl.formatMessage({
-                                id: 'placeholders.selectRoom',
-                                defaultMessage: 'Select a room...'
-                              })}
-                            >
-                              {roomOptions.find(
-                                (room) => room.id === field.value
-                              )?.name ??
-                                intl.formatMessage({
-                                  id: 'placeholders.selectRoom',
-                                  defaultMessage: 'Select a room...'
-                                })}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {roomOptions.map((room) => (
-                              <SelectItem
-                                key={room.id}
-                                value={room.id}
-                                className="bg-card hover:bg-accent flex w-full items-center justify-between rounded-md p-3 transition-colors"
-                              >
-                                <div className="flex-1">
-                                  <div className="text-foreground font-medium">
-                                    {room.name}
-                                  </div>
-                                  <div className="text-muted-foreground text-sm">
-                                    {room.description}
-                                  </div>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
+                          {roomOptions.find((room) => room.id === field.value)
+                            ?.name ??
+                            intl.formatMessage({
+                              id: 'placeholders.selectRoom',
+                              defaultMessage: 'Select a room...'
+                            })}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {roomOptions.map((room) => (
+                          <SelectItem
+                            key={room.id}
+                            value={room.id}
+                            className="bg-card hover:bg-accent flex w-full items-center justify-between rounded-md p-3 transition-colors"
+                          >
+                            <div className="flex-1">
+                              <div className="text-foreground font-medium">
+                                {room.name}
+                              </div>
+                              <div className="text-muted-foreground text-sm">
+                                {room.description}
+                              </div>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -599,6 +577,11 @@ export function EditReservationForm({
           open={!!editingGuest}
           onOpenChange={(open) => !open && setEditingGuest(null)}
         />
+      )}
+
+      {/* React Hook Form DevTools - only shown in development */}
+      {process.env.NODE_ENV === 'development' && (
+        <DevTool control={form.control} />
       )}
     </Form>
   );

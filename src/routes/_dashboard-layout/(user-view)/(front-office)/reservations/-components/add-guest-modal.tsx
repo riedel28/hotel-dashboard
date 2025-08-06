@@ -24,6 +24,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
+import type { Guest } from './edit-reservation-form';
+
 // Zod schema for new guest form
 const newGuestSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -31,11 +33,6 @@ const newGuestSchema = z.object({
 });
 
 type NewGuestData = z.infer<typeof newGuestSchema>;
-
-interface Guest {
-  id: string;
-  name: string;
-}
 
 interface AddGuestModalProps {
   onAddGuest: (guest: Guest) => void;
@@ -56,7 +53,9 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
   const onSubmit = (data: NewGuestData) => {
     const newGuest: Guest = {
       id: Date.now().toString(), // Simple ID generation for demo
-      name: `${data.firstName} ${data.lastName}`
+      first_name: data.firstName,
+      last_name: data.lastName,
+      nationality_code: 'DE'
     };
 
     onAddGuest(newGuest);
@@ -92,7 +91,13 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={(e) => {
+              e.stopPropagation();
+              form.handleSubmit(onSubmit)(e);
+            }}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="firstName"

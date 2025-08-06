@@ -55,7 +55,14 @@
       "received_at": "2023-07-18T12:35:30.910+02:00",
       "page_url": "https://example.com/checkin/334455",
       "balance": 1200.99,
-      "guests": [],
+      "guests": [
+        {
+          "id": "1754470926353",
+          "first_name": "One",
+          "last_name": "More",
+          "nationality_code": "DE"
+        }
+      ],
       "adults": 2,
       "youth": 0,
       "children": 2,
@@ -69,7 +76,20 @@
       "guest_email": "jd@example.com",
       "primary_guest_name": "John Doe",
       "booking_id": 519,
-      "guests": [],
+      "guests": [
+        {
+          "id": "1754472649009",
+          "first_name": "1",
+          "last_name": "2",
+          "nationality_code": "DE"
+        },
+        {
+          "id": "1754472748812",
+          "first_name": "3",
+          "last_name": "4",
+          "nationality_code": "DE"
+        }
+      ],
       "booking_from": "2025-01-20",
       "booking_to": "2025-01-25",
       "check_in_via": "web",
@@ -80,7 +100,13 @@
       "booking_nr": "122323",
       "room_name": "104",
       "page_url": "page-url.com",
-      "balance": 223
+      "balance": 223,
+      "adults": 2,
+      "youth": 0,
+      "children": 0,
+      "infants": 0,
+      "purpose": "private",
+      "room": "401"
     },
     {
       "id": "213",

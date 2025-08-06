@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
+import type { Guest } from './edit-reservation-form';
+
 // Zod schema for editing guest form
 const editGuestSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -29,11 +31,6 @@ const editGuestSchema = z.object({
 });
 
 type EditGuestData = z.infer<typeof editGuestSchema>;
-
-interface Guest {
-  id: string;
-  name: string;
-}
 
 interface EditGuestModalProps {
   guest: Guest;
@@ -53,10 +50,8 @@ export function EditGuestModal({
   const setOpen = controlledOnOpenChange ?? setInternalOpen;
   const intl = useIntl();
 
-  // Parse the guest name to get first and last name
-  const nameParts = guest.name.split(' ');
-  const firstName = nameParts[0] || '';
-  const lastName = nameParts.slice(1).join(' ') || '';
+  const firstName = guest.first_name;
+  const lastName = guest.last_name;
 
   const form = useForm<EditGuestData>({
     resolver: zodResolver(editGuestSchema),
@@ -69,7 +64,9 @@ export function EditGuestModal({
   const onSubmit = (data: EditGuestData) => {
     const updatedGuest: Guest = {
       id: guest.id,
-      name: `${data.firstName} ${data.lastName}`.trim()
+      first_name: data.firstName,
+      last_name: data.lastName,
+      nationality_code: 'DE'
     };
 
     onEditGuest(guest.id, updatedGuest);
