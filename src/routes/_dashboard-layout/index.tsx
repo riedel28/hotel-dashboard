@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { useAuth } from '../../auth';
 import { Card, CardDescription, CardTitle } from '../../components/ui/card';
-import ViewAwareContent from '../../layouts/dashboard-layout/view-aware-content';
+import ViewAwareContent from './-components/view-aware-content';
 
 export const Route = createFileRoute('/_dashboard-layout/')({
   component: StartPage

@@ -1,6 +1,6 @@
-import PropertySelector from '@/layouts/dashboard-layout/property-selector';
-import UserMenu from '@/layouts/dashboard-layout/user-menu';
-import ViewSelector from '@/layouts/dashboard-layout/view-selector';
+import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
+import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
+import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
 
 import {
   Breadcrumb,
