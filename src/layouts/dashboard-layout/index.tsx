@@ -5,7 +5,7 @@ import * as React from 'react';
 import { ViewProvider, useView } from '@/contexts/view-context';
 import { AutoViewSwitcher } from '@/layouts/dashboard-layout/auto-view-switcher';
 import Header from '@/layouts/dashboard-layout/header';
-import { Link } from '@tanstack/react-router';
+import { Link, LinkProps } from '@tanstack/react-router';
 import {
   ArrowUpRightIcon,
   BedDoubleIcon,
@@ -45,6 +45,26 @@ import {
   SidebarRail,
   SidebarTrigger
 } from '@/components/ui/sidebar';
+
+// Sidebar link component that extends TanStack Router Link props
+interface SidebarLinkProps extends LinkProps {
+  icon: React.ComponentType<{ className?: string }>;
+  children: React.ReactNode;
+}
+
+function SidebarLink({ icon: Icon, children, ...linkProps }: SidebarLinkProps) {
+  return (
+    <SidebarMenuButton asChild>
+      <Link
+        activeProps={{ className: '!bg-primary/5' }}
+        {...(linkProps as LinkProps)}
+      >
+        <Icon />
+        <span>{children}</span>
+      </Link>
+    </SidebarMenuButton>
+  );
+}
 
 // Sample data for content manager items
 const contentManagerItems = [
@@ -101,40 +121,25 @@ function AdminSidebarContent() {
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/">
-                <HomeIcon />
-                <span>
-                  <FormattedMessage id="sidebar.start" defaultMessage="Start" />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/" icon={HomeIcon}>
+              <FormattedMessage id="sidebar.start" defaultMessage="Start" />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/properties">
-                <BuildingIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.properties"
-                    defaultMessage="Properties"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/properties" icon={BuildingIcon}>
+              <FormattedMessage
+                id="sidebar.properties"
+                defaultMessage="Properties"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/customers">
-                <UsersIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.customers"
-                    defaultMessage="Customers"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/customers" icon={UsersIcon}>
+              <FormattedMessage
+                id="sidebar.customers"
+                defaultMessage="Customers"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
         </SidebarGroup>
       </SidebarMenu>
@@ -146,33 +151,23 @@ function AdminSidebarContent() {
 function UserSidebarContent() {
   return (
     <SidebarContent>
-      <SidebarMenu>
-        <SidebarGroup>
+      <SidebarGroup>
+        <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/">
-                <HomeIcon />
-                <span>
-                  <FormattedMessage id="sidebar.start" defaultMessage="Start" />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/" icon={HomeIcon}>
+              <FormattedMessage id="sidebar.start" defaultMessage="Start" />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/monitoring">
-                <SquareActivityIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.monitoring"
-                    defaultMessage="Monitoring"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/monitoring" icon={SquareActivityIcon}>
+              <FormattedMessage
+                id="sidebar.monitoring"
+                defaultMessage="Monitoring"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
+        </SidebarMenu>
+      </SidebarGroup>
 
       {/* Front Office Section */}
       <SidebarGroup>
@@ -184,56 +179,33 @@ function UserSidebarContent() {
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/reservations" search={{ page: 1, per_page: 10 }}>
-                <BedDoubleIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.reservations"
-                    defaultMessage="Reservations"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/reservations" icon={BedDoubleIcon}>
+              <FormattedMessage
+                id="sidebar.reservations"
+                defaultMessage="Reservations"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/registration-forms">
-                <ListTodoIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.registrationForms"
-                    defaultMessage="Registration forms"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/registration-forms" icon={ListTodoIcon}>
+              <FormattedMessage
+                id="sidebar.registrationForms"
+                defaultMessage="Registration forms"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/payments">
-                <ReceiptTextIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.payments"
-                    defaultMessage="Payments"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/payments" icon={ReceiptTextIcon}>
+              <FormattedMessage
+                id="sidebar.payments"
+                defaultMessage="Payments"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/orders">
-                <ShoppingCartIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.orders"
-                    defaultMessage="Orders"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/orders" icon={ShoppingCartIcon}>
+              <FormattedMessage id="sidebar.orders" defaultMessage="Orders" />
+            </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
@@ -249,17 +221,12 @@ function UserSidebarContent() {
         <SidebarMenu>
           {contentManagerItems.map((item) => (
             <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild>
-                <Link to={item.url}>
-                  <item.icon />
-                  <span>
-                    <FormattedMessage
-                      id={`sidebar.contentManager.${item.url.replace('/', '').replace('-', '').replace('cms', 'CMS')}`}
-                      defaultMessage="Content Manager Item"
-                    />
-                  </span>
-                </Link>
-              </SidebarMenuButton>
+              <SidebarLink to={item.url as LinkProps['to']} icon={item.icon}>
+                <FormattedMessage
+                  id={`sidebar.contentManager.${item.url.replace('/', '').replace('-', '').replace('cms', 'CMS')}`}
+                  defaultMessage="Content Manager Item"
+                />
+              </SidebarLink>
               {item.url === '/tv' && (
                 <SidebarMenuAction>
                   <ArrowUpRightIcon className="text-muted-foreground/80" />
@@ -286,43 +253,28 @@ function UserSidebarContent() {
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/access-provider">
-                <LockIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.accessProvider"
-                    defaultMessage="Access Provider"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/access-provider" icon={LockIcon}>
+              <FormattedMessage
+                id="sidebar.accessProvider"
+                defaultMessage="Access Provider"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/pms-provider">
-                <Grid2X2Icon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.pmsProvider"
-                    defaultMessage="PMS Provider"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/pms-provider" icon={Grid2X2Icon}>
+              <FormattedMessage
+                id="sidebar.pmsProvider"
+                defaultMessage="PMS Provider"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/payment-provider">
-                <CreditCardIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.paymentProvider"
-                    defaultMessage="Payment Provider"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/payment-provider" icon={CreditCardIcon}>
+              <FormattedMessage
+                id="sidebar.paymentProvider"
+                defaultMessage="Payment Provider"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
@@ -334,63 +286,35 @@ function UserSidebarContent() {
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/company">
-                <BuildingIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.companyData"
-                    defaultMessage="Company data"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/company" icon={BuildingIcon}>
+              <FormattedMessage
+                id="sidebar.companyData"
+                defaultMessage="Company data"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/checkin-page">
-                <FileSpreadsheetIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.checkinPage"
-                    defaultMessage="Checkin Page"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/checkin-page" icon={FileSpreadsheetIcon}>
+              <FormattedMessage
+                id="sidebar.checkinPage"
+                defaultMessage="Checkin Page"
+              />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/users">
-                <UsersIcon />
-                <span>
-                  <FormattedMessage id="sidebar.users" defaultMessage="Users" />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/users" icon={UsersIcon}>
+              <FormattedMessage id="sidebar.users" defaultMessage="Users" />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/rooms">
-                <BedSingleIcon />
-                <span>
-                  <FormattedMessage id="sidebar.rooms" defaultMessage="Rooms" />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/rooms" icon={BedSingleIcon}>
+              <FormattedMessage id="sidebar.rooms" defaultMessage="Rooms" />
+            </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/devices">
-                <TabletIcon />
-                <span>
-                  <FormattedMessage
-                    id="sidebar.devices"
-                    defaultMessage="Devices"
-                  />
-                </span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarLink to="/devices" icon={TabletIcon}>
+              <FormattedMessage id="sidebar.devices" defaultMessage="Devices" />
+            </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
