@@ -99,7 +99,7 @@ function FormLabel({
     <Label
       data-slot="form-label"
       data-error={!!error}
-      className={cn('data-[error=true]:text-destructive gap-1', className)}
+      className={cn('gap-1', className)}
       htmlFor={formItemId}
       {...props}
     >

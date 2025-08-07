@@ -1,5 +1,6 @@
-import { useState } from 'react';
-
+import { useAuth } from '@/auth';
+import { sleep } from '@/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Link,
   createFileRoute,
@@ -8,19 +9,25 @@ import {
   useRouterState
 } from '@tanstack/react-router';
 import { MessageCircleIcon } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
 import { cn } from '@/lib/utils';
-
-import { useAuth } from '../../../auth';
-import { sleep } from '../../../utils';
 
 const fallback = '/' as const;
 
@@ -36,47 +43,85 @@ export const Route = createFileRoute('/_auth-layout/auth/login')({
   component: LoginPage
 });
 
+type LoginFormValues = {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+};
+
 function LoginPage() {
   const auth = useAuth();
   const router = useRouter();
   const isLoading = useRouterState({ select: (s) => s.isLoading });
   const navigate = Route.useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const intl = useIntl();
 
   const search = Route.useSearch();
 
-  const onFormSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    setIsSubmitting(true);
+  const loginFormSchema = z.object({
+    email: z
+      .string()
+      .min(
+        1,
+        intl.formatMessage({
+          id: 'validation.email.required',
+          defaultMessage: 'Email is required'
+        })
+      )
+      .email(
+        intl.formatMessage({
+          id: 'validation.email.invalid',
+          defaultMessage: 'Please enter a valid email address'
+        })
+      ),
+    password: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.password.required',
+        defaultMessage: 'Password is required'
+      })
+    ),
+    rememberMe: z.boolean().default(true)
+  });
 
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false
+    }
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
     try {
-      if (!email || !password) {
-        toast.error('Please fill in all fields');
-        return;
-      }
-
-      await auth.login({ email, password });
+      await auth.login({ email: data.email, password: data.password });
       await router.invalidate();
       await sleep(1);
-      toast.success('Successfully logged in!');
+      toast.success(
+        intl.formatMessage({
+          id: 'auth.login.success',
+          defaultMessage: 'Successfully logged in!'
+        })
+      );
       await navigate({ to: search.redirect || fallback });
     } catch (error) {
       console.error('Error logging in: ', error);
-      toast.error('Failed to login. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+      toast.error(
+        intl.formatMessage({
+          id: 'auth.login.error',
+          defaultMessage: 'Failed to login. Please try again.'
+        })
+      );
     }
   };
 
-  const isLoggingIn = isLoading || isSubmitting;
+  const isLoggingIn = isLoading || form.formState.isSubmitting;
 
   return (
     <div className="w-full max-w-md">
       <div className="mb-8 text-center">
-        <div className="bg-primary mb-2 inline-block rounded-md p-2 text-white">
+        <div className="bg-primary mb-2 inline-block rounded-lg p-2 text-white">
           <MessageCircleIcon className="size-10" />
         </div>
         <h1 className="text-2xl font-bold">
@@ -97,76 +142,112 @@ function LoginPage() {
         </p>
       </div>
       <div>
-        <form onSubmit={onFormSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              <FormattedMessage id="auth.login.email" defaultMessage="Email" />
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder={intl.formatMessage({
-                id: 'placeholders.email',
-                defaultMessage: 'Enter your email'
-              })}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoggingIn}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
-              <FormattedMessage
-                id="auth.login.password"
-                defaultMessage="Password"
-              />
-            </label>
-            <PasswordInput
-              placeholder={intl.formatMessage({
-                id: 'placeholders.password',
-                defaultMessage: 'Enter your password'
-              })}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoggingIn}
-              required
-            />
-          </div>
-          <div className="flex justify-between">
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox />
-              <FormattedMessage
-                id="auth.login.rememberMe"
-                defaultMessage="Remember me"
-              />
-            </label>
-            <Link
-              className={cn(
-                buttonVariants({
-                  mode: 'link'
-                }),
-                'underline-offset-4 hover:underline'
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="auth.login.email"
+                      defaultMessage="Email"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder={intl.formatMessage({
+                        id: 'placeholders.email',
+                        defaultMessage: 'Enter your email'
+                      })}
+                      disabled={isLoggingIn}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-              to="/auth/forgot-password"
-            >
-              <FormattedMessage
-                id="auth.login.forgotPassword"
-                defaultMessage="Forgot password?"
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <FormattedMessage
+                      id="auth.login.password"
+                      defaultMessage="Password"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput
+                      {...field}
+                      placeholder={intl.formatMessage({
+                        id: 'placeholders.password',
+                        defaultMessage: 'Enter your password'
+                      })}
+                      disabled={isLoggingIn}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-between">
+              <FormField
+                control={form.control}
+                name="rememberMe"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        disabled={isLoggingIn}
+                      />
+                    </FormControl>
+                    <FormLabel className="text-sm font-normal">
+                      <FormattedMessage
+                        id="auth.login.rememberMe"
+                        defaultMessage="Remember me"
+                      />
+                    </FormLabel>
+                  </FormItem>
+                )}
               />
-            </Link>
-          </div>
-          <Button type="submit" className="w-full" disabled={isLoggingIn}>
-            {isLoggingIn ? (
-              <FormattedMessage
-                id="auth.login.loggingIn"
-                defaultMessage="Logging in..."
-              />
-            ) : (
-              <FormattedMessage id="auth.login.submit" defaultMessage="Login" />
-            )}
-          </Button>
-        </form>
+              <Link
+                className={cn(
+                  buttonVariants({
+                    mode: 'link',
+                    underline: 'solid'
+                  }),
+                  'text-foreground text-sm'
+                )}
+                to="/auth/forgot-password"
+              >
+                <FormattedMessage
+                  id="auth.login.forgotPassword"
+                  defaultMessage="Forgot password?"
+                />
+              </Link>
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoggingIn}>
+              {isLoggingIn ? (
+                <FormattedMessage
+                  id="auth.login.loggingIn"
+                  defaultMessage="Logging in..."
+                />
+              ) : (
+                <FormattedMessage
+                  id="auth.login.submit"
+                  defaultMessage="Login"
+                />
+              )}
+            </Button>
+          </form>
+        </Form>
       </div>
     </div>
   );
