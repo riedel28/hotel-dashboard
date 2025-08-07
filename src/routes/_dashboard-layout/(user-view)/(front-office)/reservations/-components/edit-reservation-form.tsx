@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2, MoreHorizontal, Trash2, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -50,34 +50,71 @@ import {
 import { AddGuestModal } from './add-guest-modal';
 import { EditGuestModal } from './edit-guest-modal';
 
-const reservationFormSchema = z.object({
-  booking_nr: z.string().min(1, 'Booking number is required'),
-  guests: z.array(
-    z.object({
-      id: z.string(),
-      first_name: z.string(),
-      last_name: z.string(),
-      nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
-    })
-  ),
-  adults: z.number().min(1, 'At least one adult is required'),
-  youth: z.number().min(0, 'Youth count cannot be negative'),
-  children: z.number().min(0, 'Children count cannot be negative'),
-  infants: z.number().min(0, 'Infants count cannot be negative'),
-  purpose: z.enum(['private', 'business'], {
-    required_error: 'Please select a purpose of stay'
-  }),
-  room: z.string().min(1, 'Room is required')
-});
-
-export type ReservationFormData = z.infer<typeof reservationFormSchema>;
-
 export type Guest = {
   id: string;
   first_name: string;
   last_name: string;
   nationality_code: 'DE' | 'US' | 'AT' | 'CH';
 };
+
+export const createReservationFormSchema = (intl: IntlShape) =>
+  z.object({
+    booking_nr: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.bookingNumber.required',
+        defaultMessage: 'Booking number is required'
+      })
+    ),
+    guests: z.array(
+      z.object({
+        id: z.string(),
+        first_name: z.string(),
+        last_name: z.string(),
+        nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+      })
+    ),
+    adults: z.number().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.adults.required',
+        defaultMessage: 'At least one adult is required'
+      })
+    ),
+    youth: z.number().min(
+      0,
+      intl.formatMessage({
+        id: 'validation.youth.negative',
+        defaultMessage: 'Youth count cannot be negative'
+      })
+    ),
+    children: z.number().min(
+      0,
+      intl.formatMessage({
+        id: 'validation.children.negative',
+        defaultMessage: 'Children count cannot be negative'
+      })
+    ),
+    infants: z.number().min(
+      0,
+      intl.formatMessage({
+        id: 'validation.infants.negative',
+        defaultMessage: 'Infants count cannot be negative'
+      })
+    ),
+    purpose: z.enum(['private', 'business']),
+    room: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.room.required',
+        defaultMessage: 'Room selection is required'
+      })
+    )
+  });
+
+type ReservationFormData = z.infer<
+  ReturnType<typeof createReservationFormSchema>
+>;
 
 async function updateReservation(id: string, data: ReservationFormData) {
   const response = await fetch(buildResourceUrl('reservations', id), {
@@ -97,15 +134,32 @@ async function updateReservation(id: string, data: ReservationFormData) {
 
 interface EditReservationFormProps {
   reservationId: string;
-  initialData: ReservationFormData;
+  reservationData: ReservationFormData;
 }
+
+const initialData = {
+  booking_nr: '',
+  guests: [],
+  adults: 0,
+  youth: 0,
+  children: 0,
+  infants: 0,
+  purpose: 'private' as const,
+  room: ''
+};
 
 export function EditReservationForm({
   reservationId,
-  initialData
+  reservationData
 }: EditReservationFormProps) {
   const queryClient = useQueryClient();
   const intl = useIntl();
+
+  const form = useForm<ReservationFormData>({
+    resolver: zodResolver(createReservationFormSchema(intl)),
+    defaultValues: initialData,
+    values: reservationData
+  });
 
   const updateReservationMutation = useMutation({
     mutationFn: (data: ReservationFormData) =>
@@ -129,11 +183,6 @@ export function EditReservationForm({
         })
       );
     }
-  });
-
-  const form = useForm<ReservationFormData>({
-    resolver: zodResolver(reservationFormSchema),
-    defaultValues: initialData
   });
 
   const onSubmit = (data: ReservationFormData) => {
@@ -170,19 +219,19 @@ export function EditReservationForm({
   // Mock room data - replace with actual data from your API
   const roomOptions = [
     {
-      id: 'room-1',
+      id: '401',
       name: 'Standard Room',
       description: 'Comfortable standard room',
       price: 120
     },
     {
-      id: 'room-2',
+      id: '402',
       name: 'Deluxe Room',
       description: 'Spacious deluxe room with premium amenities',
       price: 180
     },
     {
-      id: 'room-3',
+      id: '403',
       name: 'Suite',
       description: 'Luxury suite with separate living area',
       price: 250
@@ -268,7 +317,7 @@ export function EditReservationForm({
                   <FormItem>
                     <div className="space-y-2">
                       {field.value.length === 0 ? (
-                        <div className="text-muted-foreground py-4 text-center text-sm">
+                        <div className="text-muted-foreground flex h-[42px] w-full items-center justify-center text-center text-sm">
                           <FormattedMessage
                             id="reservations.noGuestsAdded"
                             defaultMessage="No guests added yet"

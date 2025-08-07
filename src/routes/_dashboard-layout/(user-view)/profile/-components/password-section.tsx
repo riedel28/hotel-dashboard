@@ -1,8 +1,7 @@
-import { useState } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -25,26 +24,46 @@ import {
 import { PasswordInput } from '@/components/ui/password-input';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
 
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(1, 'Current password is required'),
-    newPassword: z
-      .string()
-      .min(8, 'Password must be at least 8 characters long'),
-    confirmPassword: z.string().min(1, 'Please confirm your password')
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword']
-  });
+export const createPasswordSchema = (intl: IntlShape) =>
+  z
+    .object({
+      currentPassword: z.string().min(
+        1,
+        intl.formatMessage({
+          id: 'validation.currentPassword.required',
+          defaultMessage: 'Current password is required'
+        })
+      ),
+      newPassword: z.string().min(
+        8,
+        intl.formatMessage({
+          id: 'validation.newPassword.minLength',
+          defaultMessage: 'Password must be at least 8 characters long'
+        })
+      ),
+      confirmPassword: z.string().min(
+        1,
+        intl.formatMessage({
+          id: 'validation.confirmPassword.required',
+          defaultMessage: 'Please confirm your password'
+        })
+      )
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: intl.formatMessage({
+        id: 'validation.passwords.dontMatch',
+        defaultMessage: "Passwords don't match"
+      }),
+      path: ['confirmPassword']
+    });
 
-type PasswordFormData = z.infer<typeof passwordSchema>;
+type PasswordFormData = z.infer<ReturnType<typeof createPasswordSchema>>;
 
 export function PasswordSection() {
-  const [isLoading, setIsLoading] = useState(false);
+  const intl = useIntl();
 
   const form = useForm<PasswordFormData>({
-    resolver: zodResolver(passwordSchema),
+    resolver: zodResolver(createPasswordSchema(intl)),
     defaultValues: {
       currentPassword: '',
       newPassword: '',
@@ -53,8 +72,6 @@ export function PasswordSection() {
   });
 
   const onSubmit = async (data: PasswordFormData) => {
-    setIsLoading(true);
-
     try {
       // TODO: Implement API call to change password
       console.log('Password change data:', data);
@@ -66,8 +83,6 @@ export function PasswordSection() {
       form.reset();
     } catch {
       toast.error('Error changing password');
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -102,7 +117,7 @@ export function PasswordSection() {
                     />
                   </FormLabel>
                   <FormControl>
-                    <PasswordInput disabled={isLoading} {...field} />
+                    <PasswordInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -122,7 +137,7 @@ export function PasswordSection() {
                   </FormLabel>
                   <FormControl>
                     <div className="space-y-2">
-                      <PasswordInput disabled={isLoading} {...field} />
+                      <PasswordInput {...field} />
                       <PasswordStrengthMeter password={field.value} />
                     </div>
                   </FormControl>
@@ -143,7 +158,7 @@ export function PasswordSection() {
                     />
                   </FormLabel>
                   <FormControl>
-                    <PasswordInput disabled={isLoading} {...field} />
+                    <PasswordInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -151,7 +166,10 @@ export function PasswordSection() {
             />
 
             <div className="flex justify-end">
-              <Button type="submit" loading={isLoading}>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 <FormattedMessage
                   id="profile.save"
                   defaultMessage="Save Changes"

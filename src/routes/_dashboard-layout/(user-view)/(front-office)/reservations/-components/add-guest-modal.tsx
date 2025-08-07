@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -27,12 +27,25 @@ import { Input } from '@/components/ui/input';
 import type { Guest } from './edit-reservation-form';
 
 // Zod schema for new guest form
-const newGuestSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required')
-});
+export const createNewGuestSchema = (intl: IntlShape) =>
+  z.object({
+    firstName: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.firstName.required',
+        defaultMessage: 'First name is required'
+      })
+    ),
+    lastName: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.lastName.required',
+        defaultMessage: 'Last name is required'
+      })
+    )
+  });
 
-type NewGuestData = z.infer<typeof newGuestSchema>;
+type NewGuestData = z.infer<ReturnType<typeof createNewGuestSchema>>;
 
 interface AddGuestModalProps {
   onAddGuest: (guest: Guest) => void;
@@ -43,7 +56,7 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
   const intl = useIntl();
 
   const form = useForm<NewGuestData>({
-    resolver: zodResolver(newGuestSchema),
+    resolver: zodResolver(createNewGuestSchema(intl)),
     defaultValues: {
       firstName: '',
       lastName: ''

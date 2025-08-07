@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { CheckIcon, Loader2, MessageCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -25,35 +25,26 @@ export const Route = createFileRoute('/_auth-layout/auth/forgot-password')({
   component: ForgotPasswordPage
 });
 
-type ForgotPasswordFormValues = {
-  email: string;
-};
+export const createForgotPasswordFormSchema = (intl: IntlShape) =>
+  z.object({
+    email: z.email(
+      intl.formatMessage({
+        id: 'validation.email.required',
+        defaultMessage: 'Email is required'
+      })
+    )
+  });
+
+type ForgotPasswordFormValues = z.infer<
+  ReturnType<typeof createForgotPasswordFormSchema>
+>;
 
 function ForgotPasswordPage() {
   const intl = useIntl();
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Create schema with internationalized messages
-  const forgotPasswordFormSchema = z.object({
-    email: z
-      .string()
-      .min(
-        1,
-        intl.formatMessage({
-          id: 'validation.email.required',
-          defaultMessage: 'Email is required'
-        })
-      )
-      .email(
-        intl.formatMessage({
-          id: 'validation.email.invalid',
-          defaultMessage: 'Please enter a valid email address'
-        })
-      )
-  });
-
   const form = useForm<ForgotPasswordFormValues>({
-    resolver: zodResolver(forgotPasswordFormSchema),
+    resolver: zodResolver(createForgotPasswordFormSchema(intl)),
     defaultValues: {
       email: ''
     }

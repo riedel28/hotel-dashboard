@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { Camera, Trash2 } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -26,19 +26,30 @@ export function AvatarSection({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [avatar, setAvatar] = useState<string | null>(currentAvatar || null);
+  const intl = useIntl();
 
   const handleFileSelect = async (file: File) => {
-    // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+
     if (!validTypes.includes(file.type)) {
-      toast.error('Please select a valid image file (JPG, PNG, GIF)');
+      toast.error(
+        intl.formatMessage({
+          id: 'profile.avatar.error.invalidFileType',
+          defaultMessage: 'Please select a valid image file (JPG, PNG, GIF)'
+        })
+      );
       return;
     }
 
     // Validate file size (5MB limit)
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
-      toast.error('File size must be less than 5MB');
+      toast.error(
+        intl.formatMessage({
+          id: 'profile.avatar.error.fileTooLarge',
+          defaultMessage: 'File size must be less than 5MB'
+        })
+      );
       return;
     }
 
@@ -52,9 +63,19 @@ export function AvatarSection({
       // TODO: Implement API call to upload avatar
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
-      toast.success('Avatar updated successfully');
+      toast.success(
+        intl.formatMessage({
+          id: 'profile.avatar.success.updated',
+          defaultMessage: 'Avatar updated successfully'
+        })
+      );
     } catch {
-      toast.error('Error uploading avatar');
+      toast.error(
+        intl.formatMessage({
+          id: 'profile.avatar.error.uploadFailed',
+          defaultMessage: 'Error uploading avatar'
+        })
+      );
       setAvatar(currentAvatar || null);
     } finally {
       setIsLoading(false);
@@ -76,9 +97,19 @@ export function AvatarSection({
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       setAvatar(null);
-      toast.success('Avatar removed successfully');
+      toast.success(
+        intl.formatMessage({
+          id: 'profile.avatar.success.removed',
+          defaultMessage: 'Avatar removed successfully'
+        })
+      );
     } catch {
-      toast.error('Error removing avatar');
+      toast.error(
+        intl.formatMessage({
+          id: 'profile.avatar.error.removeFailed',
+          defaultMessage: 'Error removing avatar'
+        })
+      );
     } finally {
       setIsLoading(false);
     }

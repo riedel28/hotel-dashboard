@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -24,13 +24,25 @@ import { Input } from '@/components/ui/input';
 
 import type { Guest } from './edit-reservation-form';
 
-// Zod schema for editing guest form
-const editGuestSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required')
-});
+export const createEditGuestSchema = (intl: IntlShape) =>
+  z.object({
+    firstName: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.firstName.required',
+        defaultMessage: 'First name is required'
+      })
+    ),
+    lastName: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.lastName.required',
+        defaultMessage: 'Last name is required'
+      })
+    )
+  });
 
-type EditGuestData = z.infer<typeof editGuestSchema>;
+type EditGuestData = z.infer<ReturnType<typeof createEditGuestSchema>>;
 
 interface EditGuestModalProps {
   guest: Guest;
@@ -54,7 +66,7 @@ export function EditGuestModal({
   const lastName = guest.last_name;
 
   const form = useForm<EditGuestData>({
-    resolver: zodResolver(editGuestSchema),
+    resolver: zodResolver(createEditGuestSchema(intl)),
     defaultValues: {
       firstName,
       lastName

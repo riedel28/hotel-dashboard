@@ -20,10 +20,7 @@ import {
 import { ErrorDisplayError } from '@/components/ui/error-display';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 
-import {
-  EditReservationForm,
-  type ReservationFormData
-} from '../reservations/-components/edit-reservation-form';
+import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
 
 async function fetchReservationById(id: string) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -122,24 +119,10 @@ function ReservationForm() {
     queryFn: () => fetchReservationById(reservationId)
   });
 
-  const initialData: ReservationFormData = {
-    booking_nr: reservationQuery.data?.booking_nr || '',
-    guests: reservationQuery.data?.guests || [
-      { id: '1', name: 'Petro Demydov' },
-      { id: '2', name: 'Surattana Bopp' }
-    ],
-    adults: reservationQuery.data?.adults || 2,
-    youth: reservationQuery.data?.youth || 0,
-    children: reservationQuery.data?.children || 0,
-    infants: reservationQuery.data?.infants || 0,
-    purpose: reservationQuery.data?.purpose || 'private',
-    room: reservationQuery.data?.room || '401'
-  };
-
   return (
     <EditReservationForm
       reservationId={reservationId}
-      initialData={initialData}
+      reservationData={reservationQuery.data}
     />
   );
 }

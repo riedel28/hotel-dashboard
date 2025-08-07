@@ -308,6 +308,7 @@
   "reservations.pushToDevice": "Push to device",
   "reservations.receivedAt": "Received at",
   "reservations.refresh": "Refresh",
+  "reservations.reservationNr": "Reservation:",
   "reservations.room": "Room",
   "reservations.roomWithNumber": "Room {room}",
   "reservations.selectRoom": "Select a room",

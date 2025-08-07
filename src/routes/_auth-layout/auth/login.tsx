@@ -10,7 +10,7 @@ import {
 } from '@tanstack/react-router';
 import { Loader2, MessageCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -43,10 +43,28 @@ export const Route = createFileRoute('/_auth-layout/auth/login')({
   component: LoginPage
 });
 
+export const createLoginFormSchema = (intl: IntlShape) =>
+  z.object({
+    email: z.email(
+      intl.formatMessage({
+        id: 'validation.email.required',
+        defaultMessage: 'Email is required'
+      })
+    ),
+    password: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.password.required',
+        defaultMessage: 'Password is required'
+      })
+    ),
+    rememberMe: z.boolean()
+  });
+
 type LoginFormValues = {
   email: string;
   password: string;
-  rememberMe?: boolean;
+  rememberMe: boolean;
 };
 
 function LoginPage() {
@@ -58,34 +76,8 @@ function LoginPage() {
 
   const search = Route.useSearch();
 
-  const loginFormSchema = z.object({
-    email: z
-      .string()
-      .min(
-        1,
-        intl.formatMessage({
-          id: 'validation.email.required',
-          defaultMessage: 'Email is required'
-        })
-      )
-      .email(
-        intl.formatMessage({
-          id: 'validation.email.invalid',
-          defaultMessage: 'Please enter a valid email address'
-        })
-      ),
-    password: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.password.required',
-        defaultMessage: 'Password is required'
-      })
-    ),
-    rememberMe: z.boolean().default(true)
-  });
-
   const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(createLoginFormSchema(intl)),
     defaultValues: {
       email: '',
       password: '',

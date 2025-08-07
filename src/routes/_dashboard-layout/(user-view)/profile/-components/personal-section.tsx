@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -22,17 +23,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-type PersonalFormValues = {
-  firstName: string;
-  lastName: string;
-  email: string;
-};
-
-export function PersonalSection() {
-  const intl = useIntl();
-
-  // Create schema with internationalized messages
-  const personalFormSchema = z.object({
+export const createPersonalFormSchema = (intl: IntlShape) =>
+  z.object({
     firstName: z.string().min(
       1,
       intl.formatMessage({
@@ -47,25 +39,21 @@ export function PersonalSection() {
         defaultMessage: 'Last name is required'
       })
     ),
-    email: z
-      .string()
-      .min(
-        1,
-        intl.formatMessage({
-          id: 'validation.email.required',
-          defaultMessage: 'Email is required'
-        })
-      )
-      .email(
-        intl.formatMessage({
-          id: 'validation.email.invalid',
-          defaultMessage: 'Please enter a valid email address'
-        })
-      )
+    email: z.email(
+      intl.formatMessage({
+        id: 'validation.email.required',
+        defaultMessage: 'Email is required'
+      })
+    )
   });
 
+type PersonalFormValues = z.infer<ReturnType<typeof createPersonalFormSchema>>;
+
+export function PersonalSection() {
+  const intl = useIntl();
+
   const form = useForm<PersonalFormValues>({
-    resolver: zodResolver(personalFormSchema),
+    resolver: zodResolver(createPersonalFormSchema(intl)),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -190,7 +178,10 @@ export function PersonalSection() {
               )}
             />
             <div className="flex justify-end">
-              <Button type="submit">
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 <FormattedMessage
                   id="profile.save"
                   defaultMessage="Save Changes"

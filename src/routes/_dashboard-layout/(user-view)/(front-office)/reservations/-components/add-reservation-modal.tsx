@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { buildApiUrl, getEndpointUrl } from '@/config/api';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,7 +23,8 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel
+  FormLabel,
+  FormMessage
 } from '@/components/ui/form';
 import { Input, InputWrapper } from '@/components/ui/input';
 import {
@@ -58,6 +61,7 @@ async function createReservation(data: FormValues) {
       booking_nr: data.booking_nr,
       room_name: data.room,
       page_url: data.page_url,
+      guests: [],
       balance: Math.floor(Math.random() * 1000)
     })
   });
@@ -72,7 +76,31 @@ export function AddReservationModal() {
   const queryClient = useQueryClient();
   const intl = useIntl();
 
+  const addReservationSchema = z.object({
+    booking_nr: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.bookingNumber.required',
+        defaultMessage: 'Reservation number is required'
+      })
+    ),
+    room: z.string().min(
+      1,
+      intl.formatMessage({
+        id: 'validation.room.required',
+        defaultMessage: 'Room selection is required'
+      })
+    ),
+    page_url: z.url(
+      intl.formatMessage({
+        id: 'validation.pageUrl.invalid',
+        defaultMessage: 'Please enter a valid URL'
+      })
+    )
+  });
+
   const form = useForm<FormValues>({
+    resolver: zodResolver(addReservationSchema),
     defaultValues: {
       booking_nr: '',
       room: '',
@@ -80,15 +108,26 @@ export function AddReservationModal() {
     }
   });
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      form.reset();
+    }
+  };
+
   const createReservationMutation = useMutation({
     mutationFn: createReservation,
     onSuccess: () => {
+      console.log('Mutation succeeded, about to invalidate queries');
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
-      setIsOpen(false);
-      form.reset();
+      console.log('Queries invalidated, about to close modal');
+      handleOpenChange(false);
+      console.log('Modal closed, showing toast');
       toast.success('Reservation created successfully');
+      console.log('Success flow completed');
     },
     onError: (error) => {
+      console.error('Mutation failed:', error);
       toast.error('Failed to create reservation: ' + error.message);
     }
   });
@@ -97,13 +136,8 @@ export function AddReservationModal() {
     createReservationMutation.mutate(data);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    form.handleSubmit(onSubmit)(e);
-  };
-
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
@@ -123,7 +157,7 @@ export function AddReservationModal() {
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="booking_nr"
@@ -142,9 +176,9 @@ export function AddReservationModal() {
                         id: 'placeholders.reservationNumber',
                         defaultMessage: 'Enter reservation number'
                       })}
-                      required
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -187,6 +221,7 @@ export function AddReservationModal() {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -210,10 +245,10 @@ export function AddReservationModal() {
                           id: 'placeholders.pageUrl',
                           defaultMessage: 'Enter page URL'
                         })}
-                        required
                       />
                     </InputWrapper>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -221,7 +256,7 @@ export function AddReservationModal() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleOpenChange(false)}
               >
                 <FormattedMessage id="actions.cancel" defaultMessage="Cancel" />
               </Button>
@@ -232,7 +267,7 @@ export function AddReservationModal() {
                 {createReservationMutation.isPending && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                <FormattedMessage id="actions.add" defaultMessage="Add" />
+                <FormattedMessage id="actions.create" defaultMessage="Create" />
               </Button>
             </DialogFooter>
           </form>

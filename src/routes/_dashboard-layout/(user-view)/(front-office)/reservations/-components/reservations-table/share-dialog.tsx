@@ -47,17 +47,12 @@ const messageSchema = z.object({
   last_name: z.string().min(1, {
     message: 'Please enter a last name.'
   }),
-  email: z
-    .string()
-    .min(1, 'Please enter an email address.')
-    .email('Please enter a valid email address, e.g.'),
-  prefix: z.string({
-    required_error: 'Please select a country code.'
-  }),
+  email: z.email('Please enter an email address.'),
+  prefix: z.string().min(1, 'Please select a country code.'),
   phone: z.string().min(1, {
     message: 'Please enter a phone number.'
   }),
-  page_url: z.string().optional()
+  page_url: z.url().optional()
 });
 
 type MessageFormValues = z.infer<typeof messageSchema>;
@@ -78,9 +73,9 @@ export function ShareDialog({
       first_name: '',
       last_name: '',
       email: '',
-      prefix: '',
+      prefix: '49',
       phone: '',
-      page_url: ''
+      page_url: reservation.page_url || ''
     },
     resolver: zodResolver(messageSchema)
   });
@@ -342,7 +337,14 @@ export function ShareDialog({
                 )}
               />
 
-              <Button type="button" variant="outline">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  navigator.clipboard.writeText(reservation.page_url);
+                  toast.success('URL copied to clipboard');
+                }}
+              >
                 <Copy className="h-4 w-4" />
               </Button>
             </div>

@@ -70,7 +70,7 @@ export function RowActions({ row }: RowActionsProps) {
               <FormattedMessage id="actions.edit" defaultMessage="Edit" />
             </RouterLink>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setShowShareModal(true)}>
             <MessageSquareDot className="mr-2 h-4 w-4" />
             <FormattedMessage id="actions.share" defaultMessage="Share" />
           </DropdownMenuItem>
