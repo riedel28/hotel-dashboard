@@ -8,7 +8,7 @@ import {
   useRouter,
   useRouterState
 } from '@tanstack/react-router';
-import { MessageCircleIcon } from 'lucide-react';
+import { Loader2, MessageCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
@@ -119,11 +119,12 @@ function LoginPage() {
   const isLoggingIn = isLoading || form.formState.isSubmitting;
 
   return (
-    <div className="w-full max-w-md">
-      <div className="mb-8 text-center">
-        <div className="bg-primary mb-2 inline-block rounded-lg p-2 text-white">
+    <div className="w-full max-w-md space-y-8">
+      <div className="space-y-2 text-center">
+        <div className="bg-primary inline-block rounded-lg p-2 text-white">
           <MessageCircleIcon className="size-10" />
         </div>
+
         <h1 className="text-2xl font-bold">
           <FormattedMessage id="auth.login.title" defaultMessage="Login" />
         </h1>
@@ -141,114 +142,104 @@ function LoginPage() {
           )}
         </p>
       </div>
-      <div>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <FormattedMessage
+                    id="auth.login.email"
+                    defaultMessage="Email"
+                  />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder={intl.formatMessage({
+                      id: 'placeholders.email',
+                      defaultMessage: 'Enter your email'
+                    })}
+                    disabled={isLoggingIn}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <FormattedMessage
+                    id="auth.login.password"
+                    defaultMessage="Password"
+                  />
+                </FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    {...field}
+                    placeholder={intl.formatMessage({
+                      id: 'placeholders.password',
+                      defaultMessage: 'Enter your password'
+                    })}
+                    disabled={isLoggingIn}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-between">
             <FormField
               control={form.control}
-              name="email"
+              name="rememberMe"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <FormattedMessage
-                      id="auth.login.email"
-                      defaultMessage="Email"
-                    />
-                  </FormLabel>
+                <FormItem className="flex items-center gap-2">
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.email',
-                        defaultMessage: 'Enter your email'
-                      })}
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                       disabled={isLoggingIn}
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-sm font-normal">
                     <FormattedMessage
-                      id="auth.login.password"
-                      defaultMessage="Password"
+                      id="auth.login.rememberMe"
+                      defaultMessage="Remember me"
                     />
                   </FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      {...field}
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.password',
-                        defaultMessage: 'Enter your password'
-                      })}
-                      disabled={isLoggingIn}
-                    />
-                  </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="rememberMe"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-2">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        disabled={isLoggingIn}
-                      />
-                    </FormControl>
-                    <FormLabel className="text-sm font-normal">
-                      <FormattedMessage
-                        id="auth.login.rememberMe"
-                        defaultMessage="Remember me"
-                      />
-                    </FormLabel>
-                  </FormItem>
-                )}
+            <Link
+              className={cn(
+                buttonVariants({
+                  mode: 'link',
+                  underline: 'solid'
+                }),
+                'text-foreground text-sm'
+              )}
+              to="/auth/forgot-password"
+            >
+              <FormattedMessage
+                id="auth.login.forgotPassword"
+                defaultMessage="Forgot password?"
               />
-              <Link
-                className={cn(
-                  buttonVariants({
-                    mode: 'link',
-                    underline: 'solid'
-                  }),
-                  'text-foreground text-sm'
-                )}
-                to="/auth/forgot-password"
-              >
-                <FormattedMessage
-                  id="auth.login.forgotPassword"
-                  defaultMessage="Forgot password?"
-                />
-              </Link>
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoggingIn}>
-              {isLoggingIn ? (
-                <FormattedMessage
-                  id="auth.login.loggingIn"
-                  defaultMessage="Logging in..."
-                />
-              ) : (
-                <FormattedMessage
-                  id="auth.login.submit"
-                  defaultMessage="Login"
-                />
-              )}
-            </Button>
-          </form>
-        </Form>
-      </div>
+            </Link>
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoggingIn}>
+            {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <FormattedMessage id="auth.login.submit" defaultMessage="Login" />
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 }
