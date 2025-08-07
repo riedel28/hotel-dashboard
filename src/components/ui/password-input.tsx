@@ -15,7 +15,11 @@ function PasswordInput(props: React.ComponentProps<typeof Input>) {
 
   return (
     <div className="relative">
-      <Input {...props} className="pe-9" type="password" {...props} />
+      <Input
+        {...props}
+        className="pe-9"
+        type={isVisible ? 'text' : 'password'}
+      />
       <button
         className="text-muted-foreground/80 hover:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg outline-offset-2 transition-colors focus:z-10 focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
         type="button"
