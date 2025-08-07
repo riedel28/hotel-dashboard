@@ -22,7 +22,7 @@
   "auth.forgotPassword.submit": "Send Reset Link",
   "auth.forgotPassword.success": "Password reset email sent successfully!",
   "auth.forgotPassword.sending": "Sending...",
-  "auth.forgotPassword.successMessage": "We've sent a password reset link to your email address. Please check your inbox and follow the instructions to reset your password.",
+  "auth.forgotPassword.successMessage": "We've sent a password reset link to <strong>{email}</strong>. Please check your inbox and follow the instructions to reset your password.",
   "auth.forgotPassword.successTitle": "Reset Link Sent",
   "auth.forgotPassword.title": "Forgot Password",
   "auth.login.defaultMessage": "Enter your credentials to access the dashboard",

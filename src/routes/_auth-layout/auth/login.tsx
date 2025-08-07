@@ -160,6 +160,7 @@ function LoginPage() {
                   <Input
                     {...field}
                     type="email"
+                    variant="lg"
                     placeholder={intl.formatMessage({
                       id: 'placeholders.email',
                       defaultMessage: 'Enter your email'
@@ -185,6 +186,7 @@ function LoginPage() {
                 <FormControl>
                   <PasswordInput
                     {...field}
+                    variant="lg"
                     placeholder={intl.formatMessage({
                       id: 'placeholders.password',
                       defaultMessage: 'Enter your password'
@@ -209,7 +211,7 @@ function LoginPage() {
                       disabled={isLoggingIn}
                     />
                   </FormControl>
-                  <FormLabel className="text-sm font-normal">
+                  <FormLabel className="font-normal">
                     <FormattedMessage
                       id="auth.login.rememberMe"
                       defaultMessage="Remember me"
@@ -234,7 +236,12 @@ function LoginPage() {
               />
             </Link>
           </div>
-          <Button type="submit" className="w-full" disabled={isLoggingIn}>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            disabled={isLoggingIn}
+          >
             {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             <FormattedMessage id="auth.login.submit" defaultMessage="Login" />
           </Button>

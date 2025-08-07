@@ -66,6 +66,8 @@ function ForgotPasswordPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       setIsSuccess(true);
+      // Store the email for the success message
+      form.setValue('email', data.email);
       toast.success(
         intl.formatMessage({
           id: 'auth.forgotPassword.success',
@@ -89,9 +91,9 @@ function ForgotPasswordPage() {
   if (isSuccess) {
     return (
       <div className="w-full max-w-md space-y-8">
-        <div className="space-y-2 text-center">
-          <div className="inline-block rounded-full bg-green-100 p-2">
-            <CheckIcon className="size-10 rounded-full text-green-700" />
+        <div className="space-y-4 text-center">
+          <div className="inline-block rounded-full bg-green-100 p-3">
+            <CheckIcon className="size-8 rounded-full text-green-700" />
           </div>
 
           <h1 className="text-2xl font-bold">
@@ -100,10 +102,16 @@ function ForgotPasswordPage() {
               defaultMessage="Reset Link Sent"
             />
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-foreground text-pretty">
             <FormattedMessage
               id="auth.forgotPassword.successMessage"
-              defaultMessage="We've sent a password reset link to your email address. Please check your inbox and follow the instructions to reset your password."
+              defaultMessage="We've sent a password reset link to <strong>{email}</strong>. Please check your inbox and follow the instructions to reset your password."
+              values={{
+                email: form.getValues('email'),
+                strong: (chunks: React.ReactNode) => (
+                  <span className="text-foreground font-medium">{chunks}</span>
+                )
+              }}
             />
           </p>
         </div>
@@ -167,6 +175,7 @@ function ForgotPasswordPage() {
                   <Input
                     {...field}
                     type="email"
+                    variant="lg"
                     placeholder={intl.formatMessage({
                       id: 'placeholders.email',
                       defaultMessage: 'Enter your email'
@@ -178,7 +187,12 @@ function ForgotPasswordPage() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            disabled={isSubmitting}
+          >
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             <FormattedMessage
               id="auth.forgotPassword.submit"

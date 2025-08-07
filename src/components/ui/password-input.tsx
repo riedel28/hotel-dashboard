@@ -7,9 +7,7 @@ import { useIntl } from 'react-intl';
 
 import { Input } from '@/components/ui/input';
 
-function PasswordInput(
-  props: React.ComponentPropsWithoutRef<'input'> & { type?: 'password' }
-) {
+function PasswordInput(props: React.ComponentProps<typeof Input>) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const intl = useIntl();
 
@@ -17,14 +15,9 @@ function PasswordInput(
 
   return (
     <div className="relative">
-      <Input
-        {...props}
-        className="pe-9"
-        type={isVisible ? 'text' : 'password'}
-        {...props}
-      />
+      <Input {...props} className="pe-9" type="password" {...props} />
       <button
-        className="text-muted-foreground/80 hover:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg outline-offset-2 transition-colors focus:z-10 focus-visible:outline focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+        className="text-muted-foreground/80 hover:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg outline-offset-2 transition-colors focus:z-10 focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
         type="button"
         onClick={toggleVisibility}
         aria-label={
