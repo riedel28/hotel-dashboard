@@ -11,12 +11,13 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { ChevronDownIcon, ChevronUpIcon, CopyIcon } from 'lucide-react';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import Flag from 'react-flagkit';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Code } from '@/components/ui/code';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
@@ -117,12 +118,9 @@ export default function ReservationsTable({
                     />
                   </h2>
                   <div className="flex items-center gap-1">
-                    <Badge variant="secondary" appearance="light">
+                    <Code size="sm" showCopyButton copyText={row.booking_nr}>
                       {row.booking_nr}
-                    </Badge>
-                    <Button mode="icon" variant="ghost" size="sm">
-                      <CopyIcon />
-                    </Button>
+                    </Code>
                   </div>
                 </div>
               </div>
