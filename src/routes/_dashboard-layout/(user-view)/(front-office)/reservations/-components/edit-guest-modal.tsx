@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -24,32 +25,19 @@ import { Input } from '@/components/ui/input';
 
 import type { Guest } from './edit-reservation-form';
 
-export const createEditGuestSchema = (intl: IntlShape) =>
-  z.object({
-    firstName: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.firstName.required',
-        defaultMessage: 'First name is required'
-      })
-    ),
-    lastName: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.lastName.required',
-        defaultMessage: 'Last name is required'
-      })
-    )
-  });
-
-type EditGuestData = z.infer<ReturnType<typeof createEditGuestSchema>>;
-
 interface EditGuestModalProps {
   guest: Guest;
   onEditGuest: (guestId: string, updatedGuest: Guest) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
+
+const editGuestSchema = z.object({
+  firstName: z.string().min(1, t`First name is required`),
+  lastName: z.string().min(1, t`Last name is required`)
+});
+
+type EditGuestFormData = z.infer<typeof editGuestSchema>;
 
 export function EditGuestModal({
   guest,
@@ -60,20 +48,19 @@ export function EditGuestModal({
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen ?? internalOpen;
   const setOpen = controlledOnOpenChange ?? setInternalOpen;
-  const intl = useIntl();
 
   const firstName = guest.first_name;
   const lastName = guest.last_name;
 
-  const form = useForm<EditGuestData>({
-    resolver: zodResolver(createEditGuestSchema(intl)),
+  const form = useForm<EditGuestFormData>({
+    resolver: zodResolver(editGuestSchema),
     defaultValues: {
       firstName,
       lastName
     }
   });
 
-  const onSubmit = (data: EditGuestData) => {
+  const onSubmit = (data: EditGuestFormData) => {
     const updatedGuest: Guest = {
       id: guest.id,
       first_name: data.firstName,
@@ -101,10 +88,7 @@ export function EditGuestModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
-            <FormattedMessage
-              id="guests.editGuest"
-              defaultMessage="Edit Guest"
-            />
+            <Trans>Edit Guest</Trans>
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -115,19 +99,10 @@ export function EditGuestModal({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="guests.firstName"
-                      defaultMessage="First Name"
-                    />
+                    <Trans>First Name</Trans>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.enterFirstName',
-                        defaultMessage: 'Enter first name'
-                      })}
-                    />
+                    <Input {...field} placeholder={t`Enter first name`} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,19 +115,10 @@ export function EditGuestModal({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="guests.lastName"
-                      defaultMessage="Last Name"
-                    />
+                    <Trans>Last Name</Trans>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.enterLastName',
-                        defaultMessage: 'Enter last name'
-                      })}
-                    />
+                    <Input {...field} placeholder={t`Enter last name`} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -165,13 +131,10 @@ export function EditGuestModal({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
+                <Trans>Cancel</Trans>
               </Button>
               <Button type="submit">
-                <FormattedMessage
-                  id="guests.saveChanges"
-                  defaultMessage="Save Changes"
-                />
+                <Trans>Save Changes</Trans>
               </Button>
             </div>
           </form>

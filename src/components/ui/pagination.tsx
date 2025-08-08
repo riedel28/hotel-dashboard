@@ -1,11 +1,11 @@
 import * as React from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MoreHorizontalIcon
 } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 
@@ -15,7 +15,6 @@ function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (
     <nav
       role="navigation"
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
       aria-label="pagination"
       data-slot="pagination"
       className={cn('mx-auto flex w-full justify-center', className)}
@@ -73,17 +72,18 @@ function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useLingui();
+
   return (
     <PaginationLink
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      aria-label="Go to previous page"
+      aria-label={t`Go to previous page`}
       size="md"
       className={cn('gap-1 px-2.5 sm:pl-2.5', className)}
       {...props}
     >
       <ChevronLeftIcon />
       <span className="hidden sm:block">
-        <FormattedMessage id="pagination.previous" defaultMessage="Previous" />
+        <Trans>Previous</Trans>
       </span>
     </PaginationLink>
   );
@@ -93,16 +93,17 @@ function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useLingui();
+
   return (
     <PaginationLink
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      aria-label="Go to next page"
+      aria-label={t`Go to next page`}
       size="md"
       className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
       {...props}
     >
       <span className="hidden sm:block">
-        <FormattedMessage id="pagination.next" defaultMessage="Next" />
+        <Trans>Next</Trans>
       </span>
       <ChevronRightIcon />
     </PaginationLink>
@@ -122,10 +123,7 @@ function PaginationEllipsis({
     >
       <MoreHorizontalIcon className="size-4" />
       <span className="sr-only">
-        <FormattedMessage
-          id="pagination.morePages"
-          defaultMessage="More pages"
-        />
+        <Trans>More pages</Trans>
       </span>
     </span>
   );

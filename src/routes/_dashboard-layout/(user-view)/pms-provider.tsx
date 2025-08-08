@@ -1,5 +1,5 @@
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import { FormattedMessage } from 'react-intl';
 
 import {
   Breadcrumb,
@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
-} from '../../../components/ui/breadcrumb';
+} from '@/components/ui/breadcrumb';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/pms-provider'
@@ -23,26 +23,20 @@ function RouteComponent() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
-              <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+              <Trans>Home</Trans>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <FormattedMessage
-                id="pmsProvider.title"
-                defaultMessage="PMS Provider"
-              />
+              <Trans>PMS Provider</Trans>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div>
-        <FormattedMessage
-          id="pmsProvider.title"
-          defaultMessage="Hello '/_dashboard-layout/pms-provider'!"
-        />
+        <Trans>Hello '/_dashboard-layout/pms-provider'!</Trans>
       </div>
     </div>
   );

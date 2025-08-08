@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { CheckIcon, Loader2, MessageCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -25,26 +25,25 @@ export const Route = createFileRoute('/_auth-layout/auth/forgot-password')({
   component: ForgotPasswordPage
 });
 
-export const createForgotPasswordFormSchema = () =>
-  z.object({
-    email: z.email('Email is required')
-  });
-
-type ForgotPasswordFormValues = z.infer<
-  ReturnType<typeof createForgotPasswordFormSchema>
->;
+type ForgotPasswordFormData = { email: string };
 
 function ForgotPasswordPage() {
+  const { t } = useLingui();
+
+  const forgotPasswordFormSchema = z.object({
+    email: z.email(t`Email is required`)
+  });
+
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const form = useForm<ForgotPasswordFormValues>({
-    resolver: zodResolver(createForgotPasswordFormSchema()),
+  const form = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: {
       email: ''
     }
   });
 
-  const onSubmit = async (data: ForgotPasswordFormValues) => {
+  const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
       // TODO: Implement API call to send password reset email
       console.log('Sending password reset email to:', data.email);

@@ -1,6 +1,7 @@
 import { useAuth } from '@/auth';
 import { sleep } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   Link,
   createFileRoute,
@@ -10,7 +11,6 @@ import {
 } from '@tanstack/react-router';
 import { Loader2, MessageCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -43,24 +43,6 @@ export const Route = createFileRoute('/_auth-layout/auth/login')({
   component: LoginPage
 });
 
-export const createLoginFormSchema = (intl: IntlShape) =>
-  z.object({
-    email: z.email(
-      intl.formatMessage({
-        id: 'validation.email.required',
-        defaultMessage: 'Email is required'
-      })
-    ),
-    password: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.password.required',
-        defaultMessage: 'Password is required'
-      })
-    ),
-    rememberMe: z.boolean()
-  });
-
 type LoginFormValues = {
   email: string;
   password: string;
@@ -72,12 +54,18 @@ function LoginPage() {
   const router = useRouter();
   const isLoading = useRouterState({ select: (s) => s.isLoading });
   const navigate = Route.useNavigate();
-  const intl = useIntl();
+  const { t } = useLingui();
+
+  const createLoginFormSchema = z.object({
+    email: z.email(t`Email is required`),
+    password: z.string().min(1, t`Password is required`),
+    rememberMe: z.boolean()
+  });
 
   const search = Route.useSearch();
 
   const form = useForm<LoginFormValues>({
-    resolver: zodResolver(createLoginFormSchema(intl)),
+    resolver: zodResolver(createLoginFormSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -90,21 +78,11 @@ function LoginPage() {
       await auth.login({ email: data.email, password: data.password });
       await router.invalidate();
       await sleep(1);
-      toast.success(
-        intl.formatMessage({
-          id: 'auth.login.success',
-          defaultMessage: 'Successfully logged in!'
-        })
-      );
+      toast.success(t`Successfully logged in!`);
       await navigate({ to: search.redirect || fallback });
     } catch (error) {
       console.error('Error logging in: ', error);
-      toast.error(
-        intl.formatMessage({
-          id: 'auth.login.error',
-          defaultMessage: 'Failed to login. Please try again.'
-        })
-      );
+      toast.error(t`Failed to login. Please try again.`);
     }
   };
 
@@ -118,19 +96,13 @@ function LoginPage() {
         </div>
 
         <h1 className="text-2xl font-bold">
-          <FormattedMessage id="auth.login.title" defaultMessage="Login" />
+          <Trans>Login</Trans>
         </h1>
         <p className="text-muted-foreground">
           {search.redirect ? (
-            <FormattedMessage
-              id="auth.login.redirectMessage"
-              defaultMessage="Please login to access this page"
-            />
+            <Trans>Please login to access this page</Trans>
           ) : (
-            <FormattedMessage
-              id="auth.login.defaultMessage"
-              defaultMessage="Enter your credentials to access the dashboard"
-            />
+            <Trans>Enter your credentials to access the dashboard</Trans>
           )}
         </p>
       </div>
@@ -143,20 +115,14 @@ function LoginPage() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <FormattedMessage
-                    id="auth.login.email"
-                    defaultMessage="Email"
-                  />
+                  <Trans>Email</Trans>
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="email"
                     variant="lg"
-                    placeholder={intl.formatMessage({
-                      id: 'placeholders.email',
-                      defaultMessage: 'Enter your email'
-                    })}
+                    placeholder={t`Enter your email`}
                     disabled={isLoggingIn}
                   />
                 </FormControl>
@@ -170,19 +136,13 @@ function LoginPage() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <FormattedMessage
-                    id="auth.login.password"
-                    defaultMessage="Password"
-                  />
+                  <Trans>Password</Trans>
                 </FormLabel>
                 <FormControl>
                   <PasswordInput
                     {...field}
                     variant="lg"
-                    placeholder={intl.formatMessage({
-                      id: 'placeholders.password',
-                      defaultMessage: 'Enter your password'
-                    })}
+                    placeholder={t`Enter your password`}
                     disabled={isLoggingIn}
                   />
                 </FormControl>
@@ -204,10 +164,7 @@ function LoginPage() {
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
-                    <FormattedMessage
-                      id="auth.login.rememberMe"
-                      defaultMessage="Remember me"
-                    />
+                    <Trans>Remember me</Trans>
                   </FormLabel>
                 </FormItem>
               )}
@@ -222,10 +179,7 @@ function LoginPage() {
               )}
               to="/auth/forgot-password"
             >
-              <FormattedMessage
-                id="auth.login.forgotPassword"
-                defaultMessage="Forgot password?"
-              />
+              <Trans>Forgot password?</Trans>
             </Link>
           </div>
           <Button
@@ -235,7 +189,7 @@ function LoginPage() {
             disabled={isLoggingIn}
           >
             {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <FormattedMessage id="auth.login.submit" defaultMessage="Login" />
+            <Trans>Login</Trans>
           </Button>
         </form>
       </Form>

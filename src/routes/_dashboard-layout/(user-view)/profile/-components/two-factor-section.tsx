@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Shield, ShieldCheck } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
@@ -22,7 +22,7 @@ interface TwoFactorSectionProps {
 }
 
 export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
-  const intl = useIntl();
+  const { t } = useLingui();
   const [isLoading, setIsLoading] = useState(false);
   const [enabled, setEnabled] = useState(isEnabled);
 
@@ -37,17 +37,11 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
 
       toast.success(
         checked
-          ? intl.formatMessage({
-              id: 'profile.twoFactor.enabled',
-              defaultMessage: 'Two-factor authentication is enabled'
-            })
-          : intl.formatMessage({
-              id: 'profile.twoFactor.disabled',
-              defaultMessage: 'Two-factor authentication is disabled'
-            })
+          ? t`Two-factor authentication is enabled`
+          : t`Two-factor authentication is disabled`
       );
     } catch {
-      toast.error('Error updating two-factor authentication');
+      toast.error(t`Error updating two-factor authentication`);
     } finally {
       setIsLoading(false);
     }
@@ -60,9 +54,9 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
       // TODO: Implement 2FA setup flow
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
-      toast.success('Two-factor authentication setup initiated');
+      toast.success(t`Two-factor authentication setup initiated`);
     } catch {
-      toast.error('Error setting up two-factor authentication');
+      toast.error(t`Error setting up two-factor authentication`);
     } finally {
       setIsLoading(false);
     }
@@ -77,10 +71,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
           ) : (
             <Shield className="text-muted-foreground h-5 w-5" />
           )}
-          <FormattedMessage
-            id="profile.twoFactor.title"
-            defaultMessage="Two-Factor Authentication"
-          />
+          <Trans>Two-Factor Authentication</Trans>
           <Badge
             variant="secondary"
             className={
@@ -89,24 +80,13 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 : 'border-red-200 bg-red-100 text-red-800 hover:bg-red-200'
             }
           >
-            {enabled ? (
-              <FormattedMessage
-                id="profile.twoFactor.status.enabled"
-                defaultMessage="Enabled"
-              />
-            ) : (
-              <FormattedMessage
-                id="profile.twoFactor.status.disabled"
-                defaultMessage="Disabled"
-              />
-            )}
+            {enabled ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
           </Badge>
         </CardTitle>
         <CardDescription>
-          <FormattedMessage
-            id="profile.twoFactor.description"
-            defaultMessage="Add an extra layer of security to keep your account safe"
-          />
+          <Trans>
+            Add an extra layer of security to keep your account safe
+          </Trans>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -114,16 +94,12 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
           {!enabled && (
             <div className="space-y-3">
               <p className="text-foreground text-sm">
-                <FormattedMessage
-                  id="profile.twoFactor.disabled.message"
-                  defaultMessage="Two-factor authentication isn't set up on your account yet."
-                />
+                <Trans>
+                  Two-factor authentication isn't set up on your account yet.
+                </Trans>
               </p>
               <p className="text-foreground text-sm">
-                <FormattedMessage
-                  id="profile.twoFactor.apps.intro"
-                  defaultMessage="You can use any of these popular apps:"
-                />
+                <Trans>You can use any of these popular apps:</Trans>
               </p>
               <div className="space-y-2">
                 <div>
@@ -139,11 +115,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <FormattedMessage
-                      id="profile.twoFactor.apps.google"
-                      // eslint-disable-next-line formatjs/no-emoji
-                      defaultMessage="Google Authenticator  ↗"
-                    />
+                    <Trans>Google Authenticator ↗</Trans>
                   </a>
                 </div>
                 <div>
@@ -159,11 +131,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <FormattedMessage
-                      id="profile.twoFactor.apps.microsoft"
-                      // eslint-disable-next-line formatjs/no-emoji
-                      defaultMessage="Microsoft Authenticator ↗"
-                    />
+                    <Trans>Microsoft Authenticator ↗</Trans>
                   </a>
                 </div>
                 <div>
@@ -179,11 +147,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <FormattedMessage
-                      id="profile.twoFactor.apps.authy"
-                      // eslint-disable-next-line formatjs/no-emoji
-                      defaultMessage="Authy ↗"
-                    />
+                    <Trans>Authy ↗</Trans>
                   </a>
                 </div>
               </div>
@@ -194,28 +158,21 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
             <div className="space-y-1">
               <p className="text-sm font-medium">
                 {enabled ? (
-                  <FormattedMessage
-                    id="profile.twoFactor.enabled"
-                    defaultMessage="Two-factor authentication is turned on"
-                  />
+                  <Trans>Two-factor authentication is turned on</Trans>
                 ) : (
-                  <FormattedMessage
-                    id="profile.twoFactor.disabled"
-                    defaultMessage="Two-factor authentication is turned off"
-                  />
+                  <Trans>Two-factor authentication is turned off</Trans>
                 )}
               </p>
               <p className="text-muted-foreground text-sm">
                 {enabled ? (
-                  <FormattedMessage
-                    id="profile.twoFactor.enabled.description"
-                    defaultMessage="Your account is protected with an extra verification step"
-                  />
+                  <Trans>
+                    Your account is protected with an extra verification step
+                  </Trans>
                 ) : (
-                  <FormattedMessage
-                    id="profile.twoFactor.disabled.description"
-                    defaultMessage="Turn on two-factor authentication for better account security"
-                  />
+                  <Trans>
+                    Turn on two-factor authentication for better account
+                    security
+                  </Trans>
                 )}
               </p>
             </div>
@@ -233,10 +190,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 loading={isLoading}
                 variant="outline"
               >
-                <FormattedMessage
-                  id="profile.twoFactor.setup"
-                  defaultMessage="Set up 2FA"
-                />
+                <Trans>Set up 2FA</Trans>
               </Button>
             </div>
           )}

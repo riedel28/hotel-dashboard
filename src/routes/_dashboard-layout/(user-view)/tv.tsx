@@ -1,5 +1,5 @@
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import { FormattedMessage } from 'react-intl';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/tv')({
   component: RouteComponent
@@ -8,10 +8,7 @@ export const Route = createFileRoute('/_dashboard-layout/(user-view)/tv')({
 function RouteComponent() {
   return (
     <div>
-      <FormattedMessage
-        id="tv.title"
-        defaultMessage='Hello "/_dashboard-layout/tv"!'
-      />
+      <Trans>Hello "/_dashboard-layout/tv"!</Trans>
     </div>
   );
 }

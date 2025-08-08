@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import { CheckIcon, XIcon } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 interface PasswordStrengthMeterProps {
   password: string;
@@ -10,7 +10,7 @@ interface PasswordStrengthMeterProps {
 export function PasswordStrengthMeter({
   password
 }: PasswordStrengthMeterProps) {
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const checkStrength = (pass: string) => {
     const requirements = [
@@ -45,11 +45,11 @@ export function PasswordStrengthMeter({
   };
 
   const getStrengthText = (score: number) => {
-    if (score === 0) return 'profile.password.enterPassword';
-    if (score <= 2) return 'profile.password.weakPassword';
-    if (score <= 3) return 'profile.password.mediumPassword';
-    if (score <= 4) return 'profile.password.goodPassword';
-    return 'profile.password.strongPassword';
+    if (score === 0) return <Trans>Enter a password</Trans>;
+    if (score <= 2) return <Trans>Weak password</Trans>;
+    if (score <= 3) return <Trans>Medium password</Trans>;
+    if (score <= 4) return <Trans>Good password</Trans>;
+    return <Trans>Strong password</Trans>;
   };
 
   return (
@@ -61,10 +61,7 @@ export function PasswordStrengthMeter({
         aria-valuenow={strengthScore}
         aria-valuemin={0}
         aria-valuemax={5}
-        aria-label={intl.formatMessage({
-          id: 'profile.password.strength',
-          defaultMessage: 'Password strength'
-        })}
+        aria-label={t`Password strength`}
       >
         <div
           className={`h-full ${getStrengthColor(strengthScore)} transition-all duration-500 ease-out`}
@@ -74,26 +71,12 @@ export function PasswordStrengthMeter({
 
       {/* Password strength description */}
       <p className="text-foreground mb-2 text-sm font-medium">
-        <FormattedMessage
-          id={getStrengthText(strengthScore)}
-          defaultMessage="Enter a password"
-        />
-        <FormattedMessage id="common.period" defaultMessage="." />
-        <FormattedMessage id="common.space" defaultMessage=" " />
-        <FormattedMessage
-          id="profile.password.mustContain"
-          defaultMessage="Must contain:"
-        />
+        {getStrengthText(strengthScore)}
+        <Trans>Enter a password. Must contain:</Trans>
       </p>
 
       {/* Password requirements list */}
-      <ul
-        className="space-y-1.5"
-        aria-label={intl.formatMessage({
-          id: 'profile.password.strength',
-          defaultMessage: 'Password strength'
-        })}
-      >
+      <ul className="space-y-1.5" aria-label={t`Password strength`}>
         {strength.map((req, index) => (
           <li key={index} className="flex items-center gap-2">
             {req.met ? (
@@ -114,19 +97,13 @@ export function PasswordStrengthMeter({
                 req.met ? 'text-emerald-600' : 'text-muted-foreground'
               }`}
             >
-              <FormattedMessage
-                id={req.text}
-                defaultMessage="At least 8 characters"
-              />
+              {req.text}
               <span className="sr-only">
-                <FormattedMessage
-                  id={
-                    req.met
-                      ? 'profile.password.requirement.met'
-                      : 'profile.password.requirement.notMet'
-                  }
-                  defaultMessage=" - Requirement met"
-                />
+                {req.met ? (
+                  <Trans> - Requirement met</Trans>
+                ) : (
+                  <Trans> - Requirement not met</Trans>
+                )}
               </span>
             </span>
           </li>

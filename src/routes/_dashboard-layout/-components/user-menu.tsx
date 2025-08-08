@@ -2,14 +2,13 @@ import { useState } from 'react';
 
 import { useAuth } from '@/auth';
 import { loadCatalog } from '@/i18n';
-import { useIntlContext } from '@/i18n/intl-provider';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
 import { getPackageVersion } from '@/utils/package-info';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
 import { CheckIcon, GlobeIcon, LogOutIcon, UserCircleIcon } from 'lucide-react';
 import Flag from 'react-flagkit';
-import { FormattedMessage } from 'react-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -38,12 +37,19 @@ const languages = [
 
 export default function UserMenu() {
   const auth = useAuth();
+  const { i18n } = useLingui();
+  const locale = i18n.locale;
 
   const navigate = DashboardLayoutRoute.useNavigate();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
-  const { locale, setLocale } = useIntlContext();
+
   const lang = languages.find((l) => l.code === locale);
   const version = getPackageVersion();
+
+  const handleChangeLocale = (value: string) => {
+    loadCatalog(value);
+    localStorage.setItem('locale', value);
+  };
 
   const handleLogout = () => {
     setLogoutDialogOpen(true);
@@ -68,7 +74,7 @@ export default function UserMenu() {
                 alt={`${auth.user?.firstName} ${auth.user?.lastName}`}
               />
               <AvatarFallback className="rounded-lg">
-                <FormattedMessage id="avatar.fallback" defaultMessage="CN" />
+                <Trans>CN</Trans>
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -96,7 +102,7 @@ export default function UserMenu() {
             <DropdownMenuItem asChild>
               <Link to="/profile">
                 <UserCircleIcon />
-                <FormattedMessage id="user.profile" defaultMessage="Profile" />
+                <Trans>Profile</Trans>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSub>
@@ -104,10 +110,7 @@ export default function UserMenu() {
                 <div className="flex w-full items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <GlobeIcon className="text-muted-foreground h-4 w-4" />
-                    <FormattedMessage
-                      id="user.language"
-                      defaultMessage="Language"
-                    />
+                    <Trans>Language</Trans>
                   </div>
                   <Badge
                     variant="outline"
@@ -128,10 +131,7 @@ export default function UserMenu() {
                 <DropdownMenuSubContent className="w-[180px]">
                   <DropdownMenuRadioGroup
                     value={locale}
-                    onValueChange={(value) => {
-                      setLocale(value);
-                      loadCatalog(value);
-                    }}
+                    onValueChange={handleChangeLocale}
                   >
                     {languages.map((lang) => (
                       <DropdownMenuRadioItem
@@ -163,13 +163,9 @@ export default function UserMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOutIcon />
-            <FormattedMessage id="user.logout" defaultMessage="Log out" />
+            <Trans>Log out</Trans>
             <span className="text-muted-foreground ml-auto text-xs">
-              <FormattedMessage
-                id="app.version"
-                defaultMessage="v{version}"
-                values={{ version }}
-              />
+              <Trans>v{version}</Trans>
             </span>
           </DropdownMenuItem>
         </DropdownMenuContent>

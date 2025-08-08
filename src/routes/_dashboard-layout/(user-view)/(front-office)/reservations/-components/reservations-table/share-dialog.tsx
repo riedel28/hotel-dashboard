@@ -4,11 +4,12 @@ import * as React from 'react';
 
 import { useCopyToClipboard } from '@/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import { CheckIcon, CopyIcon, Mail, MessageCircle, User } from 'lucide-react';
 import { MessageSquare } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -48,28 +49,28 @@ import {
 
 import { Reservation } from './reservations-table';
 
-const messageSchema = z.object({
-  first_name: z.string().min(1, {
-    message: 'Please enter a first name.'
-  }),
-  last_name: z.string().min(1, {
-    message: 'Please enter a last name.'
-  }),
-  email: z.email('Please enter an email address.'),
-  prefix: z.string().min(1, 'Please select a country code.'),
-  phone: z.string().min(1, {
-    message: 'Please enter a phone number.'
-  }),
-  page_url: z.url().optional()
-});
-
-type MessageFormValues = z.infer<typeof messageSchema>;
-
 interface ShareDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   reservation: Reservation;
 }
+
+const messageSchema = z.object({
+  first_name: z.string().min(1, {
+    message: t`Please enter a first name.`
+  }),
+  last_name: z.string().min(1, {
+    message: t`Please enter a last name.`
+  }),
+  email: z.email(t`Please enter an email address.`),
+  prefix: z.string().min(1, t`Please select a country code.`),
+  phone: z.string().min(1, {
+    message: t`Please enter a phone number.`
+  }),
+  page_url: z.url().optional()
+});
+
+type MessageFormData = z.infer<typeof messageSchema>;
 
 export function ShareDialog({
   open,
@@ -80,7 +81,6 @@ export function ShareDialog({
   const [isSmsSending, setIsSmsSending] = React.useState(false);
   const [isWhatsAppSending, setIsWhatsAppSending] = React.useState(false);
   const { copy, copied } = useCopyToClipboard();
-  const intl = useIntl();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleCopy = () => {
@@ -89,7 +89,8 @@ export function ShareDialog({
     }
   };
 
-  const form = useForm<MessageFormValues>({
+  const form = useForm<MessageFormData>({
+    resolver: zodResolver(messageSchema),
     defaultValues: {
       first_name: '',
       last_name: '',
@@ -97,8 +98,7 @@ export function ShareDialog({
       prefix: '49',
       phone: '',
       page_url: reservation.page_url || ''
-    },
-    resolver: zodResolver(messageSchema)
+    }
   });
 
   const emailFormButtonRef = React.useRef<HTMLButtonElement>(null);
@@ -132,30 +132,17 @@ export function ShareDialog({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       console.log(messageData);
-      toast.success(
-        <FormattedMessage
-          id="reservations.emailSent"
-          defaultMessage="Email sent successfully"
-        />,
-        {
-          description: (
-            <div className="mt-2 text-sm">
-              <FormattedMessage
-                id="reservations.emailSentDesc"
-                defaultMessage="Check-in email has been sent to {email}"
-                values={{ email: data.email }}
-              />
-            </div>
-          )
-        }
-      );
+      const email = data.email;
+
+      toast.success(<Trans>Email sent successfully</Trans>, {
+        description: (
+          <div className="mt-2 text-sm">
+            <Trans>Check-in email has been sent to {email}</Trans>
+          </div>
+        )
+      });
     } catch {
-      toast.error(
-        <FormattedMessage
-          id="reservations.emailError"
-          defaultMessage="Failed to send email"
-        />
-      );
+      toast.error(<Trans>Failed to send email</Trans>);
     } finally {
       setIsEmailSending(false);
     }
@@ -184,25 +171,14 @@ export function ShareDialog({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       console.log(messageData);
-      toast.success(
-        intl.formatMessage({
-          id: 'reservations.smsSent',
-          defaultMessage: 'SMS sent successfully'
-        }),
-        {
-          description: intl.formatMessage({
-            id: 'reservations.smsSentDesc',
-            defaultMessage: 'Check-in SMS has been sent to +{prefix}{phone}'
-          })
-        }
-      );
+      const prefix = data.prefix;
+      const phone = data.phone;
+
+      toast.success(t`SMS sent successfully`, {
+        description: t`Check-in SMS has been sent to +${prefix}${phone}`
+      });
     } catch {
-      toast.error(
-        intl.formatMessage({
-          id: 'reservations.smsError',
-          defaultMessage: 'Failed to send SMS'
-        })
-      );
+      toast.error(t`Failed to send SMS`);
     } finally {
       setIsSmsSending(false);
     }
@@ -229,50 +205,40 @@ export function ShareDialog({
       // Open WhatsApp in new tab
       window.open(whatsappUrl, '_blank');
 
-      toast.success(
-        <FormattedMessage
-          id="reservations.whatsappOpened"
-          defaultMessage="WhatsApp opened"
-        />,
-        {
-          description: (
-            <div className="mt-2 text-sm">
-              <FormattedMessage
-                id="reservations.whatsappOpenedDesc"
-                defaultMessage="WhatsApp has been opened with your message for +{prefix}{phone}"
-                values={{ prefix: data.prefix, phone: data.phone }}
-              />
-            </div>
-          )
-        }
-      );
+      const prefix = data.prefix;
+      const phone = data.phone;
+
+      toast.success(<Trans>WhatsApp opened</Trans>, {
+        description: (
+          <div className="mt-2 text-sm">
+            <Trans>
+              WhatsApp has been opened with your message for +{prefix}
+              {phone}
+            </Trans>
+          </div>
+        )
+      });
     } catch {
-      toast.error(
-        intl.formatMessage({
-          id: 'reservations.whatsappError',
-          defaultMessage: 'Failed to open WhatsApp'
-        })
-      );
+      toast.error(t`Failed to open WhatsApp`);
     } finally {
       setIsWhatsAppSending(false);
     }
   }
+
+  const lastSent = dayjs().format('DD.MM.YYYY HH:mm');
 
   return (
     <Dialog open={open} onOpenChange={handleCloseModal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <FormattedMessage
-              id="reservations.sendMessage"
-              defaultMessage="Send message"
-            />
+            <Trans>Send message</Trans>
           </DialogTitle>
           <DialogDescription className="text-sm">
-            <FormattedMessage
-              id="reservations.sendMessageDesc"
-              defaultMessage="Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
-            />
+            <Trans>
+              Send message to the guest via email, SMS or WhatsApp to complete
+              the check-in process
+            </Trans>
           </DialogDescription>
         </DialogHeader>
 
@@ -281,10 +247,7 @@ export function ShareDialog({
             <div className="flex items-center gap-2">
               <div>
                 <p className="text-muted-foreground text-xs">
-                  <FormattedMessage
-                    id="reservations.reservationNr"
-                    defaultMessage="Reservation"
-                  />
+                  <Trans>Reservation</Trans>
                 </p>
                 <p className="font-medium">{reservation.booking_nr}</p>
               </div>
@@ -292,10 +255,7 @@ export function ShareDialog({
             <div className="flex items-center gap-2">
               <div>
                 <p className="text-muted-foreground text-xs">
-                  <FormattedMessage
-                    id="reservations.room"
-                    defaultMessage="Room"
-                  />
+                  <Trans>Room</Trans>
                 </p>
                 <p className="font-medium">{reservation.room_name}</p>
               </div>
@@ -309,10 +269,7 @@ export function ShareDialog({
                 <div className="flex items-center gap-2">
                   <User className="text-muted-foreground h-4 w-4" />
                   <h3 className="text-sm font-medium">
-                    <FormattedMessage
-                      id="reservations.guestInformation"
-                      defaultMessage="Guest Information"
-                    />
+                    <Trans>Guest Information</Trans>
                   </h3>
                 </div>
 
@@ -323,19 +280,10 @@ export function ShareDialog({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          <FormattedMessage
-                            id="reservations.firstName"
-                            defaultMessage="First name"
-                          />
+                          <Trans>First name</Trans>
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            {...field}
-                            placeholder={intl.formatMessage({
-                              id: 'placeholders.firstName',
-                              defaultMessage: 'Enter first name'
-                            })}
-                          />
+                          <Input {...field} placeholder={t`Enter first name`} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -348,19 +296,10 @@ export function ShareDialog({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          <FormattedMessage
-                            id="reservations.lastName"
-                            defaultMessage="Last name"
-                          />
+                          <Trans>Last name</Trans>
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            {...field}
-                            placeholder={intl.formatMessage({
-                              id: 'placeholders.lastName',
-                              defaultMessage: 'Enter last name'
-                            })}
-                          />
+                          <Input {...field} placeholder={t`Enter last name`} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -385,10 +324,7 @@ export function ShareDialog({
                           <FormControl>
                             <Input
                               {...field}
-                              placeholder={intl.formatMessage({
-                                id: 'placeholders.email',
-                                defaultMessage: 'guest@example.com'
-                              })}
+                              placeholder={t`guest@example.com`}
                             />
                           </FormControl>
                           <FormMessage />
@@ -407,29 +343,17 @@ export function ShareDialog({
                     {isEmailSending ? (
                       <div className="flex items-center gap-2">
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <FormattedMessage
-                          id="actions.sending"
-                          defaultMessage="Sending"
-                        />
+                        <Trans>Sending</Trans>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <FormattedMessage
-                          id="actions.send"
-                          defaultMessage="Send"
-                        />
+                        <Trans>Send</Trans>
                       </div>
                     )}
                   </Button>
                 </div>
                 <FormDescription className="ml-8 text-xs">
-                  <FormattedMessage
-                    id="reservations.lastSent"
-                    defaultMessage="Last sent: {date}"
-                    values={{
-                      date: dayjs().format('DD.MM.YYYY HH:mm')
-                    }}
-                  />
+                  <Trans>Last sent: {lastSent}</Trans>
                 </FormDescription>
               </div>
 
@@ -455,22 +379,13 @@ export function ShareDialog({
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="49">
-                                <FormattedMessage
-                                  id="phoneCodes.germany"
-                                  defaultMessage="DE +49"
-                                />
+                                <Trans>DE +49</Trans>
                               </SelectItem>
                               <SelectItem value="43">
-                                <FormattedMessage
-                                  id="phoneCodes.austria"
-                                  defaultMessage="AT +43"
-                                />
+                                <Trans>AT +43</Trans>
                               </SelectItem>
                               <SelectItem value="41">
-                                <FormattedMessage
-                                  id="phoneCodes.switzerland"
-                                  defaultMessage="CH +41"
-                                />
+                                <Trans>CH +41</Trans>
                               </SelectItem>
                             </SelectContent>
                           </Select>
@@ -486,13 +401,7 @@ export function ShareDialog({
                     render={({ field }) => (
                       <FormItem className="flex-1">
                         <FormControl>
-                          <Input
-                            {...field}
-                            placeholder={intl.formatMessage({
-                              id: 'placeholders.phone',
-                              defaultMessage: '123 456 789'
-                            })}
-                          />
+                          <Input {...field} placeholder={t`123 456 789`} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -509,17 +418,11 @@ export function ShareDialog({
                     {isSmsSending ? (
                       <div className="flex items-center gap-2">
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <FormattedMessage
-                          id="actions.sending"
-                          defaultMessage="Sending"
-                        />
+                        <Trans>Sending</Trans>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <FormattedMessage
-                          id="actions.send"
-                          defaultMessage="Send"
-                        />
+                        <Trans>Send</Trans>
                       </div>
                     )}
                   </Button>
@@ -548,22 +451,13 @@ export function ShareDialog({
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="49">
-                                <FormattedMessage
-                                  id="phoneCodes.germany"
-                                  defaultMessage="DE +49"
-                                />
+                                <Trans>DE +49</Trans>
                               </SelectItem>
                               <SelectItem value="43">
-                                <FormattedMessage
-                                  id="phoneCodes.austria"
-                                  defaultMessage="AT +43"
-                                />
+                                <Trans>AT +43</Trans>
                               </SelectItem>
                               <SelectItem value="41">
-                                <FormattedMessage
-                                  id="phoneCodes.switzerland"
-                                  defaultMessage="CH +41"
-                                />
+                                <Trans>CH +41</Trans>
                               </SelectItem>
                             </SelectContent>
                           </Select>
@@ -579,13 +473,7 @@ export function ShareDialog({
                     render={({ field }) => (
                       <FormItem className="flex-1">
                         <FormControl>
-                          <Input
-                            {...field}
-                            placeholder={intl.formatMessage({
-                              id: 'placeholders.phone',
-                              defaultMessage: '123 456 789'
-                            })}
-                          />
+                          <Input {...field} placeholder={t`123 456 789`} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -601,17 +489,11 @@ export function ShareDialog({
                     {isWhatsAppSending ? (
                       <div className="flex items-center gap-2">
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <FormattedMessage
-                          id="actions.opening"
-                          defaultMessage="Opening"
-                        />
+                        <Trans>Opening</Trans>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <FormattedMessage
-                          id="actions.send"
-                          defaultMessage="Send"
-                        />
+                        <Trans>Send</Trans>
                       </div>
                     )}
                   </Button>
@@ -625,10 +507,7 @@ export function ShareDialog({
             <InputWrapper className="bg-muted">
               <Input
                 type="text"
-                placeholder={intl.formatMessage({
-                  id: 'placeholders.checkinUrl',
-                  defaultMessage: 'Check-in URL'
-                })}
+                placeholder={t`Check-in URL`}
                 defaultValue={reservation.page_url}
                 readOnly
                 ref={inputRef}
@@ -651,20 +530,16 @@ export function ShareDialog({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent className="px-2 py-1 text-xs">
-                    <FormattedMessage
-                      id="actions.copy"
-                      defaultMessage="Copy to clipboard"
-                    />
+                    <Trans>Copy to clipboard</Trans>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </InputWrapper>
 
             <p className="text-muted-foreground text-xs">
-              <FormattedMessage
-                id="reservations.urlDescription"
-                defaultMessage="Share this URL with guests for direct check-in access"
-              />
+              <Trans>
+                Share this URL with guests for direct check-in access
+              </Trans>
             </p>
           </div>
         </ScrollArea>
@@ -675,7 +550,7 @@ export function ShareDialog({
             onClick={() => handleCloseModal(false)}
             className="flex-1 sm:flex-none"
           >
-            <FormattedMessage id="actions.close" defaultMessage="Close" />
+            <Trans>Close</Trans>
           </Button>
         </DialogFooter>
       </DialogContent>

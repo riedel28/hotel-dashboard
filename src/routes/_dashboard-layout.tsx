@@ -1,11 +1,11 @@
 'use client';
 
-// import DashboardLayout from '@/layouts/dashboard-layout';
 import * as React from 'react';
 
 import { ViewProvider, useView } from '@/contexts/view-context';
 import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
 import Header from '@/routes/_dashboard-layout/-components/header';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 import { Link, LinkProps } from '@tanstack/react-router';
 import {
@@ -30,7 +30,6 @@ import {
   TvIcon,
   UsersIcon
 } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
   Sidebar,
@@ -47,26 +46,20 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
-// Sidebar link component that extends TanStack Router Link props
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
-  tooltipKey?: string;
+  tooltip?: string;
 }
 
 function SidebarLink({
   icon: Icon,
   children,
-  tooltipKey,
+  tooltip,
   ...linkProps
 }: SidebarLinkProps) {
-  const intl = useIntl();
-  const tooltipText = tooltipKey
-    ? intl.formatMessage({ id: tooltipKey, defaultMessage: 'Menu Item' })
-    : undefined;
-
   return (
-    <SidebarMenuButton asChild tooltip={tooltipText}>
+    <SidebarMenuButton asChild tooltip={tooltip}>
       <Link
         activeProps={{ className: '!bg-primary/5' }}
         {...(linkProps as LinkProps)}
@@ -113,10 +106,7 @@ function SidebarHeaderComponent() {
               <MessageCircleIcon className="size-4" />
             </div>
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
-              <FormattedMessage
-                id="app.title"
-                defaultMessage="Backoffice Manager"
-              />
+              <Trans>Backoffice Manager</Trans>
             </span>
             <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
           </SidebarMenuItem>
@@ -128,37 +118,33 @@ function SidebarHeaderComponent() {
 
 // Admin sidebar content
 function AdminSidebarContent() {
+  const { t } = useLingui();
+
   return (
     <SidebarContent>
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon} tooltipKey="sidebar.start">
-              <FormattedMessage id="sidebar.start" defaultMessage="Start" />
+            <SidebarLink to="/" icon={HomeIcon} tooltip={t`Start`}>
+              <Trans>Start</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/properties"
               icon={BuildingIcon}
-              tooltipKey="sidebar.properties"
+              tooltip={t`Properties`}
             >
-              <FormattedMessage
-                id="sidebar.properties"
-                defaultMessage="Properties"
-              />
+              <Trans>Properties</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/customers"
               icon={UsersIcon}
-              tooltipKey="sidebar.customers"
+              tooltip={t`Customers`}
             >
-              <FormattedMessage
-                id="sidebar.customers"
-                defaultMessage="Customers"
-              />
+              <Trans>Customers</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarGroup>
@@ -169,25 +155,24 @@ function AdminSidebarContent() {
 
 // User sidebar content
 function UserSidebarContent() {
+  const { t } = useLingui();
+
   return (
     <SidebarContent>
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon} tooltipKey="sidebar.start">
-              <FormattedMessage id="sidebar.start" defaultMessage="Start" />
+            <SidebarLink to="/" icon={HomeIcon} tooltip={t`Start`}>
+              <Trans>Start</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/monitoring"
               icon={SquareActivityIcon}
-              tooltipKey="sidebar.monitoring"
+              tooltip={t`Monitoring`}
             >
-              <FormattedMessage
-                id="sidebar.monitoring"
-                defaultMessage="Monitoring"
-              />
+              <Trans>Monitoring</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -196,55 +181,43 @@ function UserSidebarContent() {
       {/* Front Office Section */}
       <SidebarGroup>
         <SidebarGroupLabel>
-          <FormattedMessage
-            id="sidebar.frontOffice"
-            defaultMessage="Front Office"
-          />
+          <Trans>Front Office</Trans>
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarLink
               to="/reservations"
               icon={BedDoubleIcon}
-              tooltipKey="sidebar.reservations"
+              tooltip={t`Reservations`}
             >
-              <FormattedMessage
-                id="sidebar.reservations"
-                defaultMessage="Reservations"
-              />
+              <Trans>Reservations</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/registration-forms"
               icon={ListTodoIcon}
-              tooltipKey="sidebar.registrationForms"
+              tooltip={t`Registration forms`}
             >
-              <FormattedMessage
-                id="sidebar.registrationForms"
-                defaultMessage="Registration forms"
-              />
+              <Trans>Registration forms</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/payments"
               icon={ReceiptTextIcon}
-              tooltipKey="sidebar.payments"
+              tooltip={t`Payments`}
             >
-              <FormattedMessage
-                id="sidebar.payments"
-                defaultMessage="Payments"
-              />
+              <Trans>Payments</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/orders"
               icon={ShoppingCartIcon}
-              tooltipKey="sidebar.orders"
+              tooltip={t`Orders`}
             >
-              <FormattedMessage id="sidebar.orders" defaultMessage="Orders" />
+              <Trans>Orders</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -253,80 +226,93 @@ function UserSidebarContent() {
       {/* Content Manager Section */}
       <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
-          <FormattedMessage
-            id="sidebar.contentManager"
-            defaultMessage="Content Manager"
-          />
+          <Trans>Content Manager</Trans>
         </SidebarGroupLabel>
         <SidebarMenu>
-          {contentManagerItems.map((item) => (
-            <SidebarMenuItem key={item.name}>
-              <SidebarLink
-                to={item.url as LinkProps['to']}
-                icon={item.icon}
-                tooltipKey={`sidebar.contentManager.${item.url.replace('/', '').replace('-', '').replace('cms', 'CMS')}`}
-              >
-                <FormattedMessage
-                  id={`sidebar.contentManager.${item.url.replace('/', '').replace('-', '').replace('cms', 'CMS')}`}
-                  defaultMessage="Content Manager Item"
-                />
-              </SidebarLink>
-              {item.url === '/tv' && (
-                <SidebarMenuBadge>
-                  <ArrowUpRightIcon
-                    className="text-muted-foreground/80 size-4"
-                    aria-hidden="true"
-                  />
-                </SidebarMenuBadge>
-              )}
-            </SidebarMenuItem>
-          ))}
+          {contentManagerItems.map((item) => {
+            const getItemLabel = (url: string) => {
+              switch (url) {
+                case '/mobile-cms':
+                  return <Trans>Mobile App</Trans>;
+                case '/tv':
+                  return <Trans>TV App</Trans>;
+                case '/products':
+                  return <Trans>Products</Trans>;
+                case '/events':
+                  return <Trans>Events</Trans>;
+                default:
+                  return item.name;
+              }
+            };
+            const getItemTooltip = (url: string) => {
+              switch (url) {
+                case '/mobile-cms':
+                  return t`Mobile App`;
+                case '/tv':
+                  return t`TV App`;
+                case '/products':
+                  return t`Products`;
+                case '/events':
+                  return t`Events`;
+                default:
+                  return item.name;
+              }
+            };
+
+            return (
+              <SidebarMenuItem key={item.name}>
+                <SidebarLink
+                  to={item.url as LinkProps['to']}
+                  icon={item.icon}
+                  tooltip={getItemTooltip(item.url)}
+                >
+                  {getItemLabel(item.url)}
+                </SidebarLink>
+                {item.url === '/tv' && (
+                  <SidebarMenuBadge>
+                    <ArrowUpRightIcon
+                      className="text-muted-foreground/80 size-4"
+                      aria-hidden="true"
+                    />
+                  </SidebarMenuBadge>
+                )}
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarGroup>
 
       {/* Integrations Section */}
       <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
-          <FormattedMessage
-            id="sidebar.integrations"
-            defaultMessage="Integrations"
-          />
+          <Trans>Integrations</Trans>
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarLink
               to="/access-provider"
               icon={LockIcon}
-              tooltipKey="sidebar.accessProvider"
+              tooltip={t`Access Provider`}
             >
-              <FormattedMessage
-                id="sidebar.accessProvider"
-                defaultMessage="Access Provider"
-              />
+              <Trans>Access Provider</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/pms-provider"
               icon={Grid2X2Icon}
-              tooltipKey="sidebar.pmsProvider"
+              tooltip={t`PMS Provider`}
             >
-              <FormattedMessage
-                id="sidebar.pmsProvider"
-                defaultMessage="PMS Provider"
-              />
+              <Trans>PMS Provider</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/payment-provider"
               icon={CreditCardIcon}
-              tooltipKey="sidebar.paymentProvider"
+              tooltip={t`Payment Provider`}
             >
-              <FormattedMessage
-                id="sidebar.paymentProvider"
-                defaultMessage="Payment Provider"
-              />
+              <Trans>Payment Provider</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -335,58 +321,40 @@ function UserSidebarContent() {
       {/* Settings Section */}
       <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
-          <FormattedMessage id="sidebar.settings" defaultMessage="Settings" />
+          <Trans>Settings</Trans>
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarLink
               to="/company"
               icon={BuildingIcon}
-              tooltipKey="sidebar.companyData"
+              tooltip={t`Company data`}
             >
-              <FormattedMessage
-                id="sidebar.companyData"
-                defaultMessage="Company data"
-              />
+              <Trans>Company data</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
               to="/checkin-page"
               icon={FileSpreadsheetIcon}
-              tooltipKey="sidebar.checkinPage"
+              tooltip={t`Checkin Page`}
             >
-              <FormattedMessage
-                id="sidebar.checkinPage"
-                defaultMessage="Checkin Page"
-              />
+              <Trans>Checkin Page</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink
-              to="/users"
-              icon={UsersIcon}
-              tooltipKey="sidebar.users"
-            >
-              <FormattedMessage id="sidebar.users" defaultMessage="Users" />
+            <SidebarLink to="/users" icon={UsersIcon} tooltip={t`Users`}>
+              <Trans>Users</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink
-              to="/rooms"
-              icon={BedSingleIcon}
-              tooltipKey="sidebar.rooms"
-            >
-              <FormattedMessage id="sidebar.rooms" defaultMessage="Rooms" />
+            <SidebarLink to="/rooms" icon={BedSingleIcon} tooltip={t`Rooms`}>
+              <Trans>Rooms</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink
-              to="/devices"
-              icon={TabletIcon}
-              tooltipKey="sidebar.devices"
-            >
-              <FormattedMessage id="sidebar.devices" defaultMessage="Devices" />
+            <SidebarLink to="/devices" icon={TabletIcon} tooltip={t`Devices`}>
+              <Trans>Devices</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>

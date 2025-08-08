@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -31,25 +31,16 @@ interface DataGridPaginationProps {
 
 function DataGridPagination(props: DataGridPaginationProps) {
   const { table, recordCount, isLoading } = useDataGrid();
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const defaultProps: Partial<DataGridPaginationProps> = {
     sizes: [5, 10, 25, 50, 100],
-    sizesLabel: intl.formatMessage({
-      id: 'pagination.show',
-      defaultMessage: 'Show'
-    }),
-    sizesDescription: intl.formatMessage({
-      id: 'pagination.perPage',
-      defaultMessage: 'Per page'
-    }),
+    sizesLabel: t`Show`,
+    sizesDescription: t`Per page`,
     sizesSkeleton: <Skeleton className="h-8 w-44" />,
     moreLimit: 5,
     more: false,
-    info: intl.formatMessage({
-      id: 'pagination.info',
-      defaultMessage: 'Info'
-    }),
+    info: t`Info`,
     infoSkeleton: <Skeleton className="h-8 w-60" />
   };
 
@@ -119,7 +110,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           variant="ghost"
           onClick={() => table.setPageIndex(currentGroupStart - 1)}
         >
-          <FormattedMessage id="pagination.more" defaultMessage="..." />
+          <Trans>...</Trans>
         </Button>
       );
     }
@@ -137,7 +128,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mode="icon"
           onClick={() => table.setPageIndex(currentGroupEnd)}
         >
-          <FormattedMessage id="pagination.more" defaultMessage="..." />
+          <Trans>...</Trans>
         </Button>
       );
     }
@@ -159,15 +150,9 @@ function DataGridPagination(props: DataGridPaginationProps) {
           <>
             <div className="text-muted-foreground order-2 text-sm text-nowrap sm:order-1">
               {mergedProps?.info?.startsWith('pagination.') ? (
-                <FormattedMessage
-                  id={mergedProps.info}
-                  defaultMessage="{from} - {to} of {count}"
-                  values={{
-                    from,
-                    to,
-                    count: recordCount
-                  }}
-                />
+                <Trans>
+                  {from} - {to} of {recordCount}
+                </Trans>
               ) : (
                 paginationInfo
               )}
@@ -183,10 +168,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
                   disabled={!table.getCanPreviousPage()}
                 >
                   <span className="sr-only">
-                    <FormattedMessage
-                      id="pagination.goToPreviousPage"
-                      defaultMessage="Go to previous page"
-                    />
+                    <Trans>Go to previous page</Trans>
                   </span>
                   <ChevronLeftIcon className="size-4" />
                 </Button>
@@ -206,10 +188,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
                   disabled={!table.getCanNextPage()}
                 >
                   <span className="sr-only">
-                    <FormattedMessage
-                      id="pagination.goToNextPage"
-                      defaultMessage="Go to next page"
-                    />
+                    <Trans>Go to next page</Trans>
                   </span>
                   <ChevronRightIcon className="size-4" />
                 </Button>
@@ -224,10 +203,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
         ) : (
           <>
             <div className="text-muted-foreground text-sm">
-              <FormattedMessage
-                id="pagination.rowsPerPage"
-                defaultMessage="Rows per page"
-              />
+              <Trans>Rows per page</Trans>
             </div>
             <Select
               value={`${pageSize}`}
@@ -238,7 +214,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
               }}
             >
               <SelectTrigger className="w-fit" size="sm">
-                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                 <SelectValue placeholder={`${pageSize}`} />
               </SelectTrigger>
               <SelectContent side="top" className="min-w-[50px]">

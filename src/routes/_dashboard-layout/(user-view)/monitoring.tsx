@@ -1,5 +1,5 @@
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import { FormattedMessage } from 'react-intl';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/monitoring'
@@ -10,10 +10,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <div>
-      <FormattedMessage
-        id="monitoring.title"
-        defaultMessage='Hello "/_dashboard-layout/monitoring"!'
-      />
+      <Trans>Hello "/_dashboard-layout/monitoring"!</Trans>
     </div>
   );
 }

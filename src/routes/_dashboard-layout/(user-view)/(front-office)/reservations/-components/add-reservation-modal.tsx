@@ -2,10 +2,10 @@ import React from 'react';
 
 import { buildApiUrl, getEndpointUrl } from '@/config/api';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -74,29 +74,14 @@ async function createReservation(data: FormValues) {
 export function AddReservationModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const addReservationSchema = z.object({
-    booking_nr: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.bookingNumber.required',
-        defaultMessage: 'Reservation number is required'
-      })
-    ),
-    room: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.room.required',
-        defaultMessage: 'Room selection is required'
-      })
-    ),
-    page_url: z.url(
-      intl.formatMessage({
-        id: 'validation.pageUrl.invalid',
-        defaultMessage: 'Please enter a valid URL'
-      })
-    )
+    booking_nr: z
+      .string()
+      .min(1, t({ message: 'Reservation number is required' })),
+    room: z.string().min(1, t({ message: 'Room selection is required' })),
+    page_url: z.url(t({ message: 'Please enter a valid URL' }))
   });
 
   const form = useForm<FormValues>({
@@ -141,19 +126,13 @@ export function AddReservationModal() {
       <DialogTrigger asChild>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
-          <FormattedMessage
-            id="reservations.add"
-            defaultMessage="Add Reservation"
-          />
+          <Trans>Add Reservation</Trans>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <FormattedMessage
-              id="reservations.createTitle"
-              defaultMessage="Create New Reservation"
-            />
+            <Trans>Create New Reservation</Trans>
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -164,18 +143,12 @@ export function AddReservationModal() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="reservations.reservationNr"
-                      defaultMessage="Reservation Nr."
-                    />
+                    <Trans>Reservation Nr.</Trans>
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.reservationNumber',
-                        defaultMessage: 'Enter reservation number'
-                      })}
+                      placeholder={t`Enter reservation number`}
                     />
                   </FormControl>
                   <FormMessage />
@@ -188,10 +161,7 @@ export function AddReservationModal() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="reservations.room"
-                      defaultMessage="Room"
-                    />
+                    <Trans>Room</Trans>
                   </FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -199,23 +169,14 @@ export function AddReservationModal() {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder={intl.formatMessage({
-                            id: 'placeholders.selectRoom',
-                            defaultMessage: 'Select a room'
-                          })}
-                        />
+                        <SelectValue placeholder={t`Select a room`} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
                         {[101, 102, 103, 104, 105].map((room) => (
                           <SelectItem key={room} value={room.toString()}>
-                            <FormattedMessage
-                              id="reservations.roomWithNumber"
-                              defaultMessage="Room {room}"
-                              values={{ room }}
-                            />
+                            <Trans>Room {room}</Trans>
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -231,21 +192,12 @@ export function AddReservationModal() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="reservations.pageUrl"
-                      defaultMessage="Page URL"
-                    />
+                    <Trans>Page URL</Trans>
                   </FormLabel>
                   <FormControl>
                     <InputWrapper>
                       <LinkIcon />
-                      <Input
-                        {...field}
-                        placeholder={intl.formatMessage({
-                          id: 'placeholders.pageUrl',
-                          defaultMessage: 'Enter page URL'
-                        })}
-                      />
+                      <Input {...field} placeholder={t`Enter page URL`} />
                     </InputWrapper>
                   </FormControl>
                   <FormMessage />
@@ -258,7 +210,7 @@ export function AddReservationModal() {
                 variant="outline"
                 onClick={() => handleOpenChange(false)}
               >
-                <FormattedMessage id="actions.cancel" defaultMessage="Cancel" />
+                <Trans>Cancel</Trans>
               </Button>
               <Button
                 type="submit"
@@ -267,7 +219,7 @@ export function AddReservationModal() {
                 {createReservationMutation.isPending && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                <FormattedMessage id="actions.create" defaultMessage="Create" />
+                <Trans>Create</Trans>
               </Button>
             </DialogFooter>
           </form>

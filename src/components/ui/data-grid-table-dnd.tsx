@@ -17,6 +17,7 @@ import {
   useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useLingui } from '@lingui/react/macro';
 import {
   Cell,
   Header,
@@ -25,7 +26,6 @@ import {
   flexRender
 } from '@tanstack/react-table';
 import { GripVertical } from 'lucide-react';
-import { useIntl } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -51,7 +51,7 @@ function DataGridTableDndHeader<TData>({
   header: Header<TData, unknown>;
 }) {
   const { props } = useDataGrid();
-  const intl = useIntl();
+  const { t } = useLingui();
   const { column } = header;
 
   const {
@@ -89,10 +89,7 @@ function DataGridTableDndHeader<TData>({
           className="-ms-2 size-6"
           {...attributes}
           {...listeners}
-          aria-label={intl.formatMessage({
-            id: 'table.dragToReorder',
-            defaultMessage: 'Drag to reorder'
-          })}
+          aria-label={t`Drag to reorder`}
         >
           <GripVertical className="opacity-50" aria-hidden="true" />
         </Button>

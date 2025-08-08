@@ -1,5 +1,5 @@
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import { FormattedMessage } from 'react-intl';
 
 import {
   Breadcrumb,
@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
-} from '../../../components/ui/breadcrumb';
+} from '@/components/ui/breadcrumb';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/about')({
   component: RouteComponent
@@ -21,20 +21,20 @@ function RouteComponent() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
-              <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+              <Trans>Home</Trans>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <FormattedMessage id="about.title" defaultMessage="About" />
+              <Trans>About</Trans>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div>
-        <FormattedMessage id="about.title" defaultMessage="Hello from About!" />
+        <Trans>Hello from About!</Trans>
       </div>
     </div>
   );

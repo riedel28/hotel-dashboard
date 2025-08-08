@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 
+import { useLingui } from '@lingui/react/macro';
 import { Eye, EyeOff } from 'lucide-react';
-import { useIntl } from 'react-intl';
 
 import { Input } from '@/components/ui/input';
 
 function PasswordInput(props: React.ComponentProps<typeof Input>) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
@@ -24,17 +24,7 @@ function PasswordInput(props: React.ComponentProps<typeof Input>) {
         className="text-muted-foreground/80 hover:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg outline-offset-2 transition-colors focus:z-10 focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
         type="button"
         onClick={toggleVisibility}
-        aria-label={
-          isVisible
-            ? intl.formatMessage({
-                id: 'passwordInput.hide',
-                defaultMessage: 'Hide password'
-              })
-            : intl.formatMessage({
-                id: 'passwordInput.show',
-                defaultMessage: 'Show password'
-              })
-        }
+        aria-label={isVisible ? t`Hide password` : t`Show password`}
         aria-pressed={isVisible}
         aria-controls="password"
       >

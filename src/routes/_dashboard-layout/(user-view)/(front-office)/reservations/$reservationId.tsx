@@ -1,13 +1,13 @@
 import { Suspense } from 'react';
 
 import { buildResourceUrl } from '@/config/api';
+import { Trans } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
   useSuspenseQuery
 } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ErrorBoundary } from 'react-error-boundary';
-import { FormattedMessage } from 'react-intl';
 
 import {
   Breadcrumb,
@@ -48,34 +48,25 @@ function ReservationPage() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/">
-                <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+                <Trans>Home</Trans>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href="/reservations">
-                <FormattedMessage
-                  id="reservations.title"
-                  defaultMessage="Reservations"
-                />
+                <Trans>Reservations</Trans>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage>
-                <FormattedMessage
-                  id="reservations.editTitle"
-                  defaultMessage="Edit reservation"
-                />
+                <Trans>Edit reservation</Trans>
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <h1 className="text-2xl font-bold">
-          <FormattedMessage
-            id="reservations.editTitle"
-            defaultMessage="Edit reservation"
-          />
+          <Trans>Edit reservation</Trans>
         </h1>
       </div>
 
@@ -88,12 +79,7 @@ function ReservationPage() {
                 fallbackRender={({ error, resetErrorBoundary }) => (
                   <div className="flex min-h-[60vh] items-center justify-center">
                     <ErrorDisplayError
-                      title={
-                        <FormattedMessage
-                          id="reservations.error"
-                          defaultMessage="Error"
-                        />
-                      }
+                      title={<Trans>Error</Trans>}
                       message={error.message}
                       showRetry
                       onRetry={resetErrorBoundary}

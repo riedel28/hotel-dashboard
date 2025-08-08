@@ -1,5 +1,5 @@
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import { FormattedMessage } from 'react-intl';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/access-provider'
@@ -10,10 +10,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <div>
-      <FormattedMessage
-        id="accessProvider.title"
-        defaultMessage='Hello "/_dashboard-layout/access-provider"!'
-      />
+      <Trans>Hello "/_dashboard-layout/access-provider"!</Trans>
     </div>
   );
 }

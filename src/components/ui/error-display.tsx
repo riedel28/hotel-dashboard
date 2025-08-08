@@ -43,9 +43,9 @@
  */
 import * as React from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { AlertTriangle, RefreshCw, X } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -165,10 +165,7 @@ function ErrorDisplay({
       {showDetails && details && (
         <details className="mb-8 w-full text-left">
           <summary className="text-muted-foreground hover:text-foreground cursor-pointer text-sm font-medium transition-colors">
-            <FormattedMessage
-              id="error.showDetails"
-              defaultMessage="Show details"
-            />
+            <Trans>Show details</Trans>
           </summary>
           <div className="bg-muted/80 text-foreground mt-2 rounded-md border p-3 font-mono text-sm leading-relaxed">
             {details}
@@ -188,7 +185,7 @@ function ErrorDisplay({
           <RefreshCw
             className={cn('mr-2 h-4 w-4', isRetrying && 'animate-spin')}
           />
-          <FormattedMessage id="error.retry" defaultMessage="Try again" />
+          <Trans>Try again</Trans>
         </Button>
       )}
     </div>
@@ -205,14 +202,7 @@ function ErrorDisplayError({
     <ErrorDisplay
       variant="destructive"
       icon={X}
-      title={
-        title || (
-          <FormattedMessage
-            id="error.title"
-            defaultMessage="Something went wrong"
-          />
-        )
-      }
+      title={title || <Trans>Something went wrong</Trans>}
       message={message}
       {...props}
     />
@@ -228,11 +218,7 @@ function ErrorDisplayWarning({
     <ErrorDisplay
       variant="warning"
       icon={AlertTriangle}
-      title={
-        title || (
-          <FormattedMessage id="error.warning" defaultMessage="Warning" />
-        )
-      }
+      title={title || <Trans>Warning</Trans>}
       message={message}
       {...props}
     />

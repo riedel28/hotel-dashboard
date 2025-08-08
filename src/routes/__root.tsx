@@ -1,6 +1,6 @@
+import { Trans } from '@lingui/react/macro';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { FormattedMessage } from 'react-intl';
 
 import { NotFound } from '@/components/ui/not-found';
 
@@ -21,32 +21,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
         <NotFound
-          title={
-            <FormattedMessage
-              id="notFound.global.title"
-              defaultMessage="Page not found"
-            />
-          }
+          title={<Trans>Page not found</Trans>}
           message={
-            <FormattedMessage
-              id="notFound.global.message"
-              defaultMessage="Sorry, we couldn't find the page you're looking for."
-            />
+            <Trans>Sorry, we couldn't find the page you're looking for.</Trans>
           }
           showHomeButton
           showBackButton
-          homeButtonText={
-            <FormattedMessage
-              id="notFound.global.homeButton"
-              defaultMessage="Go to Dashboard"
-            />
-          }
-          backButtonText={
-            <FormattedMessage
-              id="notFound.global.backButton"
-              defaultMessage="Go back"
-            />
-          }
+          homeButtonText={<Trans>Go to Dashboard</Trans>}
+          backButtonText={<Trans>Go back</Trans>}
         />
       </div>
     );

@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -24,39 +25,32 @@ import {
 } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
 
-type AvailableRole = (typeof AVAILABLE_ROLES)[number];
-
 interface RolesSectionProps {
   initialRoles: AvailableRole[];
 }
 
-const AVAILABLE_ROLES = [
-  'administrators',
-  'roomservice_manager',
-  'housekeeping_manager',
-  'roomservice_order_agent',
-  'housekeeping_agent',
-  'tester'
-] as const;
+const ROLE_NAMES = {
+  administrators: t`Administrators`,
+  roomservice_manager: t`Roomservice Manager`,
+  housekeeping_manager: t`Housekeeping Manager`,
+  roomservice_order_agent: t`Roomservice Order Agent`,
+  housekeeping_agent: t`Housekeeping Agent`,
+  tester: t`Tester`
+};
 
-export const createRolesFormSchema = (intl: IntlShape) =>
-  z.object({
-    roles: z.array(z.enum(AVAILABLE_ROLES)).min(
-      1,
-      intl.formatMessage({
-        id: 'validation.roles.required',
-        defaultMessage: 'Please select at least one role'
-      })
-    )
-  });
+type AvailableRole = keyof typeof ROLE_NAMES;
 
-type RolesFormData = z.infer<ReturnType<typeof createRolesFormSchema>>;
+const rolesFormSchema = z.object({
+  roles: z
+    .array(z.enum(Object.keys(ROLE_NAMES)))
+    .min(1, t`Please select at least one role`)
+});
+
+type RolesFormData = z.infer<typeof rolesFormSchema>;
 
 export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
-  const intl = useIntl();
-
   const form = useForm<RolesFormData>({
-    resolver: zodResolver(createRolesFormSchema(intl)),
+    resolver: zodResolver(rolesFormSchema),
     defaultValues: {
       roles: initialRoles
     }
@@ -68,19 +62,9 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
       console.log('Updating roles with data:', data);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
-      toast.success(
-        intl.formatMessage({
-          id: 'profile.roles.saved',
-          defaultMessage: 'Roles updated successfully'
-        })
-      );
+      toast.success(t`Roles updated successfully`);
     } catch {
-      toast.error(
-        intl.formatMessage({
-          id: 'profile.roles.error',
-          defaultMessage: 'Error updating roles'
-        })
-      );
+      toast.error(t`Error updating roles`);
     }
   };
 
@@ -88,16 +72,10 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
     <Card>
       <CardHeader>
         <CardTitle>
-          <FormattedMessage
-            id="profile.roles.title"
-            defaultMessage="User Roles"
-          />
+          <Trans>User Roles</Trans>
         </CardTitle>
         <CardDescription>
-          <FormattedMessage
-            id="profile.roles.description"
-            defaultMessage="Manage your user roles and permissions"
-          />
+          <Trans>Manage your user roles and permissions</Trans>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -109,13 +87,10 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
               render={() => (
                 <FormItem>
                   <FormLabel className="text-base font-medium">
-                    <FormattedMessage
-                      id="profile.roles.label"
-                      defaultMessage="Roles"
-                    />
+                    <Trans>Roles</Trans>
                   </FormLabel>
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {AVAILABLE_ROLES.map((role) => (
+                    {Object.keys(ROLE_NAMES).map((role) => (
                       <div key={role} className="flex items-center space-x-2">
                         <FormControl>
                           <Checkbox
@@ -143,10 +118,7 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
                           htmlFor={role}
                           className="cursor-pointer text-sm font-normal"
                         >
-                          <FormattedMessage
-                            id={`profile.roles.${role}`}
-                            defaultMessage="Role"
-                          />
+                          {ROLE_NAMES[role as AvailableRole]}
                         </Label>
                       </div>
                     ))}
@@ -161,10 +133,7 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
                 {form.formState.isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                <FormattedMessage
-                  id="profile.roles.save"
-                  defaultMessage="Save Roles"
-                />
+                <Trans>Save Roles</Trans>
               </Button>
             </div>
           </form>

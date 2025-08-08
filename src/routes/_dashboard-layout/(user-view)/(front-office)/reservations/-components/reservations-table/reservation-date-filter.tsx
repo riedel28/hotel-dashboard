@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import {
   endOfMonth,
   endOfYear,
@@ -11,9 +12,9 @@ import {
   subMonths,
   subYears
 } from 'date-fns';
+import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
-import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -150,34 +151,16 @@ function ReservationDateFilter({
           {displayDate?.from ? (
             displayDate.to ? (
               <>
-                <FormattedDate
-                  value={displayDate.from}
-                  day="2-digit"
-                  month="2-digit"
-                  year="numeric"
-                />
+                {dayjs(displayDate.from).format('DD.MM.YYYY')}
                 {' - '}
-                <FormattedDate
-                  value={displayDate.to}
-                  day="2-digit"
-                  month="2-digit"
-                  year="numeric"
-                />
+                {dayjs(displayDate.to).format('DD.MM.YYYY')}
               </>
             ) : (
-              <FormattedDate
-                value={displayDate.from}
-                day="2-digit"
-                month="2-digit"
-                year="numeric"
-              />
+              dayjs(displayDate.to).format('DD.MM.YYYY')
             )
           ) : (
             <span>
-              <FormattedMessage
-                id="reservations.dateFilter.pickDateRange"
-                defaultMessage="Pick a date range"
-              />
+              <Trans>Pick a date range</Trans>
             </span>
           )}
         </Button>
@@ -217,16 +200,10 @@ function ReservationDateFilter({
         </div>
         <div className="border-border flex items-center justify-end gap-1.5 border-t p-3">
           <Button variant="outline" onClick={handleReset}>
-            <FormattedMessage
-              id="reservations.dateFilter.reset"
-              defaultMessage="Reset"
-            />
+            <Trans>Reset</Trans>
           </Button>
           <Button onClick={handleApply}>
-            <FormattedMessage
-              id="reservations.dateFilter.apply"
-              defaultMessage="Apply"
-            />
+            <Trans>Apply</Trans>
           </Button>
         </div>
       </PopoverContent>

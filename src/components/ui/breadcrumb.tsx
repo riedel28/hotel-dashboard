@@ -1,13 +1,12 @@
 import * as React from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import { Slot } from '@radix-ui/react-slot';
 import { MoreHorizontal } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { cn } from '@/lib/utils';
 
 function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
-  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
 }
 
@@ -78,7 +77,6 @@ function BreadcrumbSeparator({
       className={cn('[&>svg]:size-3.5', className)}
       {...props}
     >
-      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
       {children ?? <span className="text-foreground/30 text-sm">/</span>}
     </li>
   );
@@ -98,7 +96,7 @@ function BreadcrumbEllipsis({
     >
       <MoreHorizontal className="size-4" />
       <span className="sr-only">
-        <FormattedMessage id="breadcrumb.more" defaultMessage="More" />
+        <Trans>More</Trans>
       </span>
     </span>
   );

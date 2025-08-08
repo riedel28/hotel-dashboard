@@ -1,9 +1,10 @@
 import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -26,44 +27,29 @@ import { Input } from '@/components/ui/input';
 
 import type { Guest } from './edit-reservation-form';
 
-// Zod schema for new guest form
-export const createNewGuestSchema = (intl: IntlShape) =>
-  z.object({
-    firstName: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.firstName.required',
-        defaultMessage: 'First name is required'
-      })
-    ),
-    lastName: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.lastName.required',
-        defaultMessage: 'Last name is required'
-      })
-    )
-  });
-
-type NewGuestData = z.infer<ReturnType<typeof createNewGuestSchema>>;
-
 interface AddGuestModalProps {
   onAddGuest: (guest: Guest) => void;
 }
 
+const addGuestSchema = z.object({
+  firstName: z.string().min(1, t`First name is required`),
+  lastName: z.string().min(1, t`Last name is required`)
+});
+
+type AddGuestFormData = z.infer<typeof addGuestSchema>;
+
 export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
   const [open, setOpen] = useState(false);
-  const intl = useIntl();
 
-  const form = useForm<NewGuestData>({
-    resolver: zodResolver(createNewGuestSchema(intl)),
+  const form = useForm<AddGuestFormData>({
+    resolver: zodResolver(addGuestSchema),
     defaultValues: {
       firstName: '',
       lastName: ''
     }
   });
 
-  const onSubmit = (data: NewGuestData) => {
+  const onSubmit = (data: AddGuestFormData) => {
     const newGuest: Guest = {
       id: Date.now().toString(), // Simple ID generation for demo
       first_name: data.firstName,
@@ -88,19 +74,13 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
       <DialogTrigger asChild>
         <Button type="button" variant="secondary" className="w-full">
           <PlusCircle className="mr-2 h-4 w-4" />
-          <FormattedMessage
-            id="reservations.addNewGuest"
-            defaultMessage="New Guest"
-          />
+          <Trans>New Guest</Trans>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
-            <FormattedMessage
-              id="guests.addNewGuest"
-              defaultMessage="Add New Guest"
-            />
+            <Trans>Add New Guest</Trans>
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -117,19 +97,10 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="guests.firstName"
-                      defaultMessage="First Name"
-                    />
+                    <Trans>First Name</Trans>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.enterFirstName',
-                        defaultMessage: 'Enter first name'
-                      })}
-                    />
+                    <Input {...field} placeholder={t`Enter first name`} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -142,19 +113,10 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="guests.lastName"
-                      defaultMessage="Last Name"
-                    />
+                    <Trans>Last Name</Trans>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.enterLastName',
-                        defaultMessage: 'Enter last name'
-                      })}
-                    />
+                    <Input {...field} placeholder={t`Enter last name`} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -167,13 +129,10 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
+                <Trans>Cancel</Trans>
               </Button>
               <Button type="submit">
-                <FormattedMessage
-                  id="guests.addGuest"
-                  defaultMessage="Add Guest"
-                />
+                <Trans>Add Guest</Trans>
               </Button>
             </div>
           </form>

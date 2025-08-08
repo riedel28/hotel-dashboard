@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -23,37 +24,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-export const createPersonalFormSchema = (intl: IntlShape) =>
-  z.object({
-    firstName: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.firstName.required',
-        defaultMessage: 'First name is required'
-      })
-    ),
-    lastName: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.lastName.required',
-        defaultMessage: 'Last name is required'
-      })
-    ),
-    email: z.email(
-      intl.formatMessage({
-        id: 'validation.email.required',
-        defaultMessage: 'Email is required'
-      })
-    )
-  });
+const personalFormSchema = z.object({
+  firstName: z.string().min(1, t`First name is required`),
+  lastName: z.string().min(1, t`Last name is required`),
+  email: z.email(t`Invalid email address`)
+});
 
-type PersonalFormValues = z.infer<ReturnType<typeof createPersonalFormSchema>>;
+type PersonalFormData = z.infer<typeof personalFormSchema>;
 
 export function PersonalSection() {
-  const intl = useIntl();
-
-  const form = useForm<PersonalFormValues>({
-    resolver: zodResolver(createPersonalFormSchema(intl)),
+  const form = useForm<PersonalFormData>({
+    resolver: zodResolver(personalFormSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -61,25 +42,15 @@ export function PersonalSection() {
     }
   });
 
-  const onSubmit = async (data: PersonalFormValues) => {
+  const onSubmit = async (data: PersonalFormData) => {
     try {
       // TODO: Implement API call to update personal information
       console.log('Updating profile with data:', data);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
-      toast.success(
-        intl.formatMessage({
-          id: 'profile.saved',
-          defaultMessage: 'Profile updated successfully'
-        })
-      );
+      toast.success(t`Profile updated successfully`);
     } catch {
-      toast.error(
-        intl.formatMessage({
-          id: 'profile.error',
-          defaultMessage: 'Error updating profile'
-        })
-      );
+      toast.error(t`Error updating profile`);
     }
   };
 
@@ -87,16 +58,10 @@ export function PersonalSection() {
     <Card>
       <CardHeader>
         <CardTitle>
-          <FormattedMessage
-            id="profile.personal.title"
-            defaultMessage="Personal Information"
-          />
+          <Trans>Personal Information</Trans>
         </CardTitle>
         <CardDescription>
-          <FormattedMessage
-            id="profile.personal.description"
-            defaultMessage="Update your personal information and contact details"
-          />
+          <Trans>Update your personal information and contact details</Trans>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -109,19 +74,10 @@ export function PersonalSection() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      <FormattedMessage
-                        id="profile.personal.firstName"
-                        defaultMessage="First Name"
-                      />
+                      <Trans>First Name</Trans>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder={intl.formatMessage({
-                          id: 'placeholders.enterFirstName',
-                          defaultMessage: 'Enter first name'
-                        })}
-                      />
+                      <Input {...field} placeholder={t`Enter first name`} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -133,19 +89,10 @@ export function PersonalSection() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      <FormattedMessage
-                        id="profile.personal.lastName"
-                        defaultMessage="Last Name"
-                      />
+                      <Trans>Last Name</Trans>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder={intl.formatMessage({
-                          id: 'placeholders.enterLastName',
-                          defaultMessage: 'Enter last name'
-                        })}
-                      />
+                      <Input {...field} placeholder={t`Enter last name`} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -158,19 +105,13 @@ export function PersonalSection() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="profile.personal.email"
-                      defaultMessage="Email"
-                    />
+                    <Trans>Email</Trans>
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type="email"
-                      placeholder={intl.formatMessage({
-                        id: 'placeholders.email',
-                        defaultMessage: 'Enter your email'
-                      })}
+                      placeholder={t`Enter your email`}
                     />
                   </FormControl>
                   <FormMessage />
@@ -182,10 +123,7 @@ export function PersonalSection() {
                 {form.formState.isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                <FormattedMessage
-                  id="profile.save"
-                  defaultMessage="Save Changes"
-                />
+                <Trans>Save Changes</Trans>
               </Button>
             </div>
           </form>

@@ -1,6 +1,6 @@
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
 import { Camera, Lock, Shield, User, Users } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import {
   Breadcrumb,
@@ -42,13 +42,13 @@ function RouteComponent() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
-              <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+              <Trans>Home</Trans>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <FormattedMessage id="profile.title" defaultMessage="Profile" />
+              <Trans>Profile</Trans>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -56,7 +56,7 @@ function RouteComponent() {
 
       <div className="mb-6">
         <h1 className="text-2xl font-bold">
-          <FormattedMessage id="profile.title" defaultMessage="Profile" />
+          <Trans>Profile</Trans>
         </h1>
       </div>
 
@@ -74,10 +74,7 @@ function RouteComponent() {
               >
                 <User className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">
-                  <FormattedMessage
-                    id="profile.sidebar.personal"
-                    defaultMessage="Personal"
-                  />
+                  <Trans>Personal</Trans>
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -86,10 +83,7 @@ function RouteComponent() {
               >
                 <Lock className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">
-                  <FormattedMessage
-                    id="profile.sidebar.password"
-                    defaultMessage="Password"
-                  />
+                  <Trans>Password</Trans>
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -98,10 +92,7 @@ function RouteComponent() {
               >
                 <Users className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">
-                  <FormattedMessage
-                    id="profile.sidebar.roles"
-                    defaultMessage="Roles"
-                  />
+                  <Trans>Roles</Trans>
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -110,10 +101,7 @@ function RouteComponent() {
               >
                 <Camera className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">
-                  <FormattedMessage
-                    id="profile.sidebar.avatar"
-                    defaultMessage="Avatar"
-                  />
+                  <Trans>Avatar</Trans>
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -122,10 +110,7 @@ function RouteComponent() {
               >
                 <Shield className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">
-                  <FormattedMessage
-                    id="profile.sidebar.twoFactor"
-                    defaultMessage="Two Factor"
-                  />
+                  <Trans>Two Factor</Trans>
                 </span>
               </TabsTrigger>
             </TabsList>

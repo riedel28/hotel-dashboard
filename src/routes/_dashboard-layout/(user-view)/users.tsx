@@ -1,5 +1,5 @@
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import { FormattedMessage } from 'react-intl';
 
 import {
   Breadcrumb,
@@ -23,13 +23,13 @@ function RouteComponent() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
-              <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+              <Trans>Home</Trans>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <FormattedMessage id="users.title" defaultMessage="Users" />
+              <Trans>Users</Trans>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -37,7 +37,7 @@ function RouteComponent() {
 
       <div className="mb-6 flex justify-between">
         <h1 className="text-2xl font-bold">
-          <FormattedMessage id="users.title" defaultMessage="Users" />
+          <Trans>Users</Trans>
         </h1>
       </div>
       <UsersTable />

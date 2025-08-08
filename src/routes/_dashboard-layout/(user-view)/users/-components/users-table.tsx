@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ColumnDef,
   PaginationState,
@@ -10,7 +11,6 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -215,7 +215,7 @@ export default function DataGridDemo() {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'name', desc: true }
   ]);
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const columns = useMemo<ColumnDef<IData>[]>(
     () => [
@@ -224,10 +224,7 @@ export default function DataGridDemo() {
         id: 'name',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'users.table.columns.user',
-              defaultMessage: 'User'
-            })}
+            title={t`User`}
             visibility={true}
             column={column}
           />
@@ -241,7 +238,7 @@ export default function DataGridDemo() {
                   alt={row.original.name}
                 />
                 <AvatarFallback>
-                  <FormattedMessage id="avatar.fallback" defaultMessage="N" />
+                  <Trans>N</Trans>
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-px">
@@ -276,10 +273,7 @@ export default function DataGridDemo() {
         id: 'email',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'users.table.columns.email',
-              defaultMessage: 'Email'
-            })}
+            title={t`Email`}
             visibility={true}
             column={column}
           />
@@ -300,10 +294,7 @@ export default function DataGridDemo() {
         id: 'location',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'users.table.columns.location',
-              defaultMessage: 'Location'
-            })}
+            title={t`Location`}
             visibility={true}
             column={column}
           />
@@ -331,10 +322,7 @@ export default function DataGridDemo() {
         id: 'status',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'users.table.columns.status',
-              defaultMessage: 'Status'
-            })}
+            title={t`Status`}
             visibility={true}
             column={column}
           />
@@ -345,19 +333,13 @@ export default function DataGridDemo() {
           if (status == 'active') {
             return (
               <Badge variant="primary" appearance="outline">
-                <FormattedMessage
-                  id="users.table.status.active"
-                  defaultMessage="Approved"
-                />
+                <Trans>Approved</Trans>
               </Badge>
             );
           } else {
             return (
               <Badge variant="destructive" appearance="outline">
-                <FormattedMessage
-                  id="users.table.status.inactive"
-                  defaultMessage="Pending"
-                />
+                <Trans>Pending</Trans>
               </Badge>
             );
           }
@@ -371,7 +353,7 @@ export default function DataGridDemo() {
         enableResizing: false
       }
     ],
-    [intl]
+    [t]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(

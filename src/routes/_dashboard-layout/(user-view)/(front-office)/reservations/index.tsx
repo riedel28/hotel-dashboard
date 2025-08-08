@@ -1,9 +1,9 @@
 import { reservationsQueryOptions } from '@/api/reservations';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { PaginationState } from '@tanstack/react-table';
 import { RefreshCw, XIcon } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { z } from 'zod';
 
 import {
@@ -52,7 +52,7 @@ const reservationsFilterSchema = z.object({
 function ReservationsPage() {
   const { page, per_page, status, from, to, q } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const reservationsQuery = useQuery(
     reservationsQueryOptions({
@@ -157,12 +157,7 @@ function ReservationsPage() {
       return (
         <div className="flex min-h-[60vh] items-center justify-center">
           <ErrorDisplayError
-            title={
-              <FormattedMessage
-                id="reservations.error"
-                defaultMessage="Error"
-              />
-            }
+            title={<Trans>Error</Trans>}
             message={reservationsQuery.error.message}
             showRetry
             onRetry={handleRefresh}
@@ -192,16 +187,13 @@ function ReservationsPage() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
-              <FormattedMessage id="breadcrumb.home" defaultMessage="Home" />
+              <Trans>Home</Trans>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <FormattedMessage
-                id="reservations.title"
-                defaultMessage="Reservations"
-              />
+              <Trans>Reservations</Trans>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -209,10 +201,7 @@ function ReservationsPage() {
 
       <div className="mb-6 flex justify-between">
         <h1 className="text-2xl font-bold">
-          <FormattedMessage
-            id="reservations.title"
-            defaultMessage="Reservations"
-          />
+          <Trans>Reservations</Trans>
         </h1>
         <AddReservationModal />
       </div>
@@ -224,10 +213,7 @@ function ReservationsPage() {
               <SearchInput
                 value={q || ''}
                 onChange={handleSearchChange}
-                placeholder={intl.formatMessage({
-                  id: 'placeholders.searchReservations',
-                  defaultMessage: 'Search reservations'
-                })}
+                placeholder={t`Search reservations`}
                 wrapperClassName="w-full sm:w-[250px]"
               />
               <Select
@@ -237,24 +223,14 @@ function ReservationsPage() {
                 defaultValue="all"
               >
                 <SelectTrigger className="w-full sm:w-[150px]">
-                  <SelectValue
-                    placeholder={
-                      <FormattedMessage
-                        id="reservations.status.selectPlaceholder"
-                        defaultMessage="Select status"
-                      />
-                    }
-                  />
+                  <SelectValue placeholder={<Trans>Select status</Trans>} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">
                     <span className="flex items-center gap-2">
                       <span className="size-1.5 rounded-full bg-gray-500"></span>
                       <span>
-                        <FormattedMessage
-                          id="reservations.status.all"
-                          defaultMessage="All"
-                        />
+                        <Trans>All</Trans>
                       </span>
                     </span>
                   </SelectItem>
@@ -262,10 +238,7 @@ function ReservationsPage() {
                     <span className="flex items-center gap-2">
                       <span className="size-1.5 rounded-full bg-yellow-500"></span>
                       <span>
-                        <FormattedMessage
-                          id="reservations.status.pending"
-                          defaultMessage="Pending"
-                        />
+                        <Trans>Pending</Trans>
                       </span>
                     </span>
                   </SelectItem>
@@ -273,10 +246,7 @@ function ReservationsPage() {
                     <span className="flex items-center gap-2">
                       <span className="size-1.5 rounded-full bg-violet-500"></span>
                       <span>
-                        <FormattedMessage
-                          id="reservations.status.started"
-                          defaultMessage="Started"
-                        />
+                        <Trans>Started</Trans>
                       </span>
                     </span>
                   </SelectItem>
@@ -284,10 +254,7 @@ function ReservationsPage() {
                     <span className="flex items-center gap-2">
                       <span className="size-1.5 rounded-full bg-green-500"></span>
                       <span>
-                        <FormattedMessage
-                          id="reservations.status.done"
-                          defaultMessage="Done"
-                        />
+                        <Trans>Done</Trans>
                       </span>
                     </span>
                   </SelectItem>
@@ -308,10 +275,7 @@ function ReservationsPage() {
                   className="text-muted-foreground hover:text-foreground"
                 >
                   <XIcon />
-                  <FormattedMessage
-                    id="reservations.clearFilters"
-                    defaultMessage="Clear filters"
-                  />
+                  <Trans>Clear filters</Trans>
                 </Button>
               )}
             </div>
@@ -328,26 +292,16 @@ function ReservationsPage() {
                 reservationsQuery.isFetching && 'animate-spin'
               )}
             />
-            <FormattedMessage
-              id="reservations.refresh"
-              defaultMessage="Refresh"
-            />
+            <Trans>Refresh</Trans>
           </Button>
         </div>
 
         {q && (
           <div className="text-muted-foreground flex items-center gap-2 text-sm">
-            <FormattedMessage
-              id="reservations.showResultsFor"
-              description="Shows the search query that is currently being filtered"
-              defaultMessage='Show results for: <query>\"{searchQuery}\"</query>'
-              values={{
-                query: (chunks) => (
-                  <span className="text-foreground font-medium">{chunks}</span>
-                ),
-                searchQuery: q
-              }}
-            />
+            <Trans>
+              Show results for:{' '}
+              <span className="text-foreground font-medium">"{q}"</span>
+            </Trans>
           </div>
         )}
 

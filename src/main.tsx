@@ -12,7 +12,6 @@ import { AuthProvider, useAuth } from './auth';
 import { Toaster } from './components/ui/sonner';
 import './globals.css';
 import { loadCatalog } from './i18n';
-import { IntlProvider } from './i18n/intl-provider';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
@@ -40,17 +39,20 @@ function InnerApp() {
 }
 
 function App() {
+  const [ready, setReady] = React.useState(false);
+
   React.useEffect(() => {
-    loadCatalog('en');
+    const locale = localStorage.getItem('locale') ?? 'en';
+    loadCatalog(locale).finally(() => setReady(true));
   }, []);
+
+  if (!ready) return null;
 
   return (
     <I18nProvider i18n={i18n}>
-      <IntlProvider>
-        <AuthProvider>
-          <InnerApp />
-        </AuthProvider>
-      </IntlProvider>
+      <AuthProvider>
+        <InnerApp />
+      </AuthProvider>
     </I18nProvider>
   );
 }

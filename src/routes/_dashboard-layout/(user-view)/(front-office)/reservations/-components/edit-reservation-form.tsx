@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { buildResourceUrl } from '@/config/api';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2, MoreHorizontal, Trash2, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -57,64 +58,25 @@ export type Guest = {
   nationality_code: 'DE' | 'US' | 'AT' | 'CH';
 };
 
-export const createReservationFormSchema = (intl: IntlShape) =>
-  z.object({
-    booking_nr: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.bookingNumber.required',
-        defaultMessage: 'Booking number is required'
-      })
-    ),
-    guests: z.array(
-      z.object({
-        id: z.string(),
-        first_name: z.string(),
-        last_name: z.string(),
-        nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
-      })
-    ),
-    adults: z.number().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.adults.required',
-        defaultMessage: 'At least one adult is required'
-      })
-    ),
-    youth: z.number().min(
-      0,
-      intl.formatMessage({
-        id: 'validation.youth.negative',
-        defaultMessage: 'Youth count cannot be negative'
-      })
-    ),
-    children: z.number().min(
-      0,
-      intl.formatMessage({
-        id: 'validation.children.negative',
-        defaultMessage: 'Children count cannot be negative'
-      })
-    ),
-    infants: z.number().min(
-      0,
-      intl.formatMessage({
-        id: 'validation.infants.negative',
-        defaultMessage: 'Infants count cannot be negative'
-      })
-    ),
-    purpose: z.enum(['private', 'business']),
-    room: z.string().min(
-      1,
-      intl.formatMessage({
-        id: 'validation.room.required',
-        defaultMessage: 'Room selection is required'
-      })
-    )
-  });
+const reservationFormSchema = z.object({
+  booking_nr: z.string().min(1, t`Booking number is required`),
+  guests: z.array(
+    z.object({
+      id: z.string(),
+      first_name: z.string(),
+      last_name: z.string(),
+      nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+    })
+  ),
+  adults: z.number().min(1, t`At least one adult is required`),
+  youth: z.number().min(0, t`Youth count cannot be negative`),
+  children: z.number().min(0, t`Children count cannot be negative`),
+  infants: z.number().min(0, t`Infants count cannot be negative`),
+  purpose: z.enum(['private', 'business']),
+  room: z.string().min(1, t`Room selection is required`)
+});
 
-type ReservationFormData = z.infer<
-  ReturnType<typeof createReservationFormSchema>
->;
+type ReservationFormData = z.infer<typeof reservationFormSchema>;
 
 async function updateReservation(id: string, data: ReservationFormData) {
   const response = await fetch(buildResourceUrl('reservations', id), {
@@ -153,10 +115,9 @@ export function EditReservationForm({
   reservationData
 }: EditReservationFormProps) {
   const queryClient = useQueryClient();
-  const intl = useIntl();
 
   const form = useForm<ReservationFormData>({
-    resolver: zodResolver(createReservationFormSchema(intl)),
+    resolver: zodResolver(reservationFormSchema),
     defaultValues: initialData,
     values: reservationData
   });
@@ -168,20 +129,10 @@ export function EditReservationForm({
       queryClient.invalidateQueries({
         queryKey: ['reservations', reservationId]
       });
-      toast.success(
-        intl.formatMessage({
-          id: 'reservations.updateSuccess',
-          defaultMessage: 'Reservation updated successfully!'
-        })
-      );
+      toast.success(t`Reservation updated successfully`);
     },
     onError: () => {
-      toast.error(
-        intl.formatMessage({
-          id: 'reservations.updateError',
-          defaultMessage: 'Failed to update reservation. Please try again.'
-        })
-      );
+      toast.error(t`Failed to update reservation. Please try again.`);
     }
   });
 
@@ -248,10 +199,7 @@ export function EditReservationForm({
         <Card className="shadow-none">
           <CardHeader>
             <CardTitle>
-              <FormattedMessage
-                id="reservations.bookingInformation"
-                defaultMessage="Booking Information"
-              />
+              <Trans>Booking Information</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -261,16 +209,13 @@ export function EditReservationForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
-                    <FormattedMessage
-                      id="reservations.bookingNumber"
-                      defaultMessage="Reservation No."
-                    />
+                    <Trans>Reservation No.</Trans>
                   </FormLabel>
                   <FormDescription id="booking-nr-readonly">
-                    <FormattedMessage
-                      id="reservations.bookingNumberTooltip"
-                      defaultMessage="The booking number can be found in your Property Management System (PMS)"
-                    />
+                    <Trans>
+                      The booking number can be found in your Property
+                      Management System (PMS)
+                    </Trans>
                   </FormDescription>
 
                   <FormControl>
@@ -293,21 +238,13 @@ export function EditReservationForm({
         <Card className="shadow-none">
           <CardHeader>
             <CardTitle>
-              <FormattedMessage
-                id="reservations.guests"
-                defaultMessage="Guests"
-              />
+              <Trans>Guests</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent className="pb-0">
             <div className="space-y-4">
               {/* Guest Search */}
-              <SearchInput
-                placeholder={intl.formatMessage({
-                  id: 'placeholders.searchForGuest',
-                  defaultMessage: 'Search for a guest...'
-                })}
-              />
+              <SearchInput placeholder={t`Search for a guest...`} />
 
               {/* Guest List */}
               <FormField
@@ -318,10 +255,7 @@ export function EditReservationForm({
                     <div className="space-y-2">
                       {field.value.length === 0 ? (
                         <div className="text-muted-foreground flex h-[42px] w-full items-center justify-center text-center text-sm">
-                          <FormattedMessage
-                            id="reservations.noGuestsAdded"
-                            defaultMessage="No guests added yet"
-                          />
+                          <Trans>No guests added yet</Trans>
                         </div>
                       ) : (
                         field.value.map((guest) => (
@@ -332,14 +266,7 @@ export function EditReservationForm({
                             <div className="flex items-center gap-2">
                               <User className="text-muted-foreground h-4 w-4" />
                               <span className="max-w-md truncate text-sm">
-                                <FormattedMessage
-                                  id="reservations.guestName"
-                                  defaultMessage="{firstName} {lastName}"
-                                  values={{
-                                    firstName: guest.first_name,
-                                    lastName: guest.last_name
-                                  }}
-                                />
+                                {guest.first_name} {guest.last_name}
                               </span>
                             </div>
                             <DropdownMenu>
@@ -350,10 +277,7 @@ export function EditReservationForm({
                                 >
                                   <MoreHorizontal className="h-4 w-4" />
                                   <span className="sr-only">
-                                    <FormattedMessage
-                                      id="guests.openMenu"
-                                      defaultMessage="Open guest menu"
-                                    />
+                                    <Trans>Open guest menu</Trans>
                                   </span>
                                 </Button>
                               </DropdownMenuTrigger>
@@ -365,10 +289,7 @@ export function EditReservationForm({
                                   onSelect={() => setEditingGuest(guest)}
                                 >
                                   <Edit2 className="mr-2 h-4 w-4" />
-                                  <FormattedMessage
-                                    id="guests.edit"
-                                    defaultMessage="Edit guest"
-                                  />
+                                  <Trans>Edit guest</Trans>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
@@ -376,10 +297,7 @@ export function EditReservationForm({
                                   onClick={() => removeGuest(guest.id)}
                                 >
                                   <Trash2 className="mr-2 h-4 w-4" />
-                                  <FormattedMessage
-                                    id="guests.remove"
-                                    defaultMessage="Remove"
-                                  />
+                                  <Trans>Remove</Trans>
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
@@ -402,10 +320,7 @@ export function EditReservationForm({
         <Card className="shadow-none">
           <CardHeader>
             <CardTitle>
-              <FormattedMessage
-                id="reservations.numberOfPeople"
-                defaultMessage="Number of People"
-              />
+              <Trans>Number of People</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -416,10 +331,7 @@ export function EditReservationForm({
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel>
-                      <FormattedMessage
-                        id="reservations.adults"
-                        defaultMessage="Adults"
-                      />
+                      <Trans>Adults</Trans>
                     </FormLabel>
                     <FormControl>
                       <NumberInput
@@ -439,10 +351,7 @@ export function EditReservationForm({
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel>
-                      <FormattedMessage
-                        id="reservations.youth"
-                        defaultMessage="Youth"
-                      />
+                      <Trans>Youth</Trans>
                     </FormLabel>
                     <FormControl>
                       <NumberInput
@@ -462,10 +371,7 @@ export function EditReservationForm({
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel>
-                      <FormattedMessage
-                        id="reservations.children"
-                        defaultMessage="Children"
-                      />
+                      <Trans>Children</Trans>
                     </FormLabel>
                     <FormControl>
                       <NumberInput
@@ -485,10 +391,7 @@ export function EditReservationForm({
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel>
-                      <FormattedMessage
-                        id="reservations.infants"
-                        defaultMessage="Infants"
-                      />
+                      <Trans>Infants</Trans>
                     </FormLabel>
                     <FormControl>
                       <NumberInput
@@ -509,10 +412,7 @@ export function EditReservationForm({
         <Card className="shadow-none">
           <CardHeader>
             <CardTitle>
-              <FormattedMessage
-                id="reservations.purposeOfStay"
-                defaultMessage="Purpose of Stay"
-              />
+              <Trans>Purpose of Stay</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -530,19 +430,13 @@ export function EditReservationForm({
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="private" id="private" />
                         <Label htmlFor="private">
-                          <FormattedMessage
-                            id="reservations.private"
-                            defaultMessage="Private"
-                          />
+                          <Trans>Private</Trans>
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="business" id="business" />
                         <Label htmlFor="business">
-                          <FormattedMessage
-                            id="reservations.business"
-                            defaultMessage="Business"
-                          />
+                          <Trans>Business</Trans>
                         </Label>
                       </div>
                     </RadioGroup>
@@ -558,7 +452,7 @@ export function EditReservationForm({
         <Card className="shadow-none">
           <CardHeader>
             <CardTitle>
-              <FormattedMessage id="reservations.room" defaultMessage="Room" />
+              <Trans>Room</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -573,18 +467,9 @@ export function EditReservationForm({
                       defaultValue={field.value}
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue
-                          placeholder={intl.formatMessage({
-                            id: 'placeholders.selectRoom',
-                            defaultMessage: 'Select a room...'
-                          })}
-                        >
+                        <SelectValue placeholder={t`Select a room...`}>
                           {roomOptions.find((room) => room.id === field.value)
-                            ?.name ??
-                            intl.formatMessage({
-                              id: 'placeholders.selectRoom',
-                              defaultMessage: 'Select a room...'
-                            })}
+                            ?.name ?? t`Select a room...`}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
@@ -615,7 +500,7 @@ export function EditReservationForm({
         </Card>
 
         <Button type="submit" loading={updateReservationMutation.isPending}>
-          <FormattedMessage id="common.save" defaultMessage="Save Changes" />
+          <Trans>Save Changes</Trans>
         </Button>
       </form>
 

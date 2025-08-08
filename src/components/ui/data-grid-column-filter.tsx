@@ -1,8 +1,8 @@
 import * as React from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import { Column } from '@tanstack/react-table';
 import { Check, CirclePlus } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -64,10 +64,7 @@ function DataGridColumnFilter<TData, TValue>({
                     className="rounded-sm px-1 font-normal"
                   >
                     {selectedValues.size}
-                    <FormattedMessage
-                      id="filter.selected"
-                      defaultMessage="selected"
-                    />
+                    <Trans>selected</Trans>
                   </Badge>
                 ) : (
                   options
@@ -95,10 +92,7 @@ function DataGridColumnFilter<TData, TValue>({
           <CommandInput placeholder={title} />
           <CommandList>
             <CommandEmpty>
-              <FormattedMessage
-                id="filter.noResults"
-                defaultMessage="No results found."
-              />
+              <Trans>No results found.</Trans>
             </CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
@@ -154,10 +148,7 @@ function DataGridColumnFilter<TData, TValue>({
                     onSelect={() => column?.setFilterValue(undefined)}
                     className="justify-center text-center"
                   >
-                    <FormattedMessage
-                      id="filter.clearFilters"
-                      defaultMessage="Clear filters"
-                    />
+                    <Trans>Clear filters</Trans>
                   </CommandItem>
                 </CommandGroup>
               </>

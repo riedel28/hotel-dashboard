@@ -1,21 +1,47 @@
----
-globs: src/**/*.tsx
-alwaysApply: false
----
+# Translations (Lingui)
 
-# Translation Rules
+This project uses Lingui for i18n with dynamic catalog loading.
 
-- **ALWAYS** add translations for any new text strings in both `src/i18n/en.json` and `src/i18n/de.json`
-- When adding new UI components or pages, check if translations are needed
-- Translation keys should be descriptive and follow the existing naming convention (e.g., `component.action`, `page.title`)
-- Sort translation keys alphabetically within each file
-- Use `FormattedMessage` component for all user-facing text
-- Never hardcode strings in components - always use translation keys
-- When adding new features, add corresponding translation keys immediately
-- **ALWAYS** add translations for any new text strings in both `src/i18n/en.json` and `src/i18n/de.json`
-- When adding new UI components or pages, check if translations are needed
-- Translation keys should be descriptive and follow the existing naming convention (e.g., `component.action`, `page.title`)
-- Sort translation keys alphabetically within each file
-- Use `FormattedMessage` component for all user-facing text
-- Never hardcode strings in components - always use translation keys
-- When adding new features, add corresponding translation keys immediately
+## Daily workflow
+
+- Add messages in code using Lingui macros
+
+- JSX UI text: `import { Trans } from '@lingui/react/macro'` → `<Trans>Forgot Password</Trans>`
+- Strings (validators, toasts, helpers): `import { t } from '@lingui/core/macro'` → `t`Email is required``
+- In arrays/loops, build descriptors with `msg` and render with `useLingui()._` when needed
+
+- Extract messages
+
+```bash
+npm run lingui:extract
+```
+
+- Translate catalogs
+
+- Edit `src/locales/de/messages.po` (and other locales) and fill missing `msgstr`
+
+- Compile catalogs
+
+```bash
+npm run lingui:compile
+```
+
+## Runtime
+
+- `src/i18n.ts` exposes `loadCatalog(locale)` which dynamically imports `src/locales/{locale}/messages.po` and calls `i18n.loadAndActivate`
+- `src/main.tsx` invokes `loadCatalog` on app start (and on locale changes)
+
+## Patterns
+
+- Prefer `Trans` for JSX text
+- Prefer `t` for non-JSX strings (forms, zod, toasts)
+- If translation is needed inside initialization code, create it inside the component (e.g., `useMemo`) so it runs after locale activation
+
+## Troubleshooting
+
+- Error: “Attempted to call a translation function without setting a locale”
+  - Ensure `loadCatalog(locale)` ran before using `t`/`Trans`
+  - Do not call translation macros at module scope if locale may not yet be activated
+- Type issues for generated catalogs
+  - Ensure `.po` import path matches `lingui.config.ts`
+  - Re-run extract/compile and restart the dev server

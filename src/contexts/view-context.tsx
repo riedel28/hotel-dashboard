@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import { useIntl } from 'react-intl';
+import { useLingui } from '@lingui/react/macro';
 import { toast } from 'sonner';
 
 type ViewType = 'user' | 'admin';
@@ -16,7 +16,7 @@ const STORAGE_KEY = 'dashboard-view';
 
 export function ViewProvider({ children }: { children: React.ReactNode }) {
   const [currentView, setCurrentViewState] = useState<ViewType>('user');
-  const intl = useIntl();
+  const { t } = useLingui();
 
   // Load view from localStorage on mount
   useEffect(() => {
@@ -30,46 +30,29 @@ export function ViewProvider({ children }: { children: React.ReactNode }) {
   const getViewDisplayName = (view: ViewType) => {
     try {
       if (view === 'user') {
-        return intl.formatMessage({
-          id: 'header.userView.user',
-          defaultMessage: 'User'
-        });
+        return t`User`;
       } else {
-        return intl.formatMessage({
-          id: 'header.userView.admin',
-          defaultMessage: 'Admin'
-        });
+        return t`Admin`;
       }
     } catch {
-      return view === 'user' ? 'User' : 'Admin';
+      return view === 'user' ? t`User` : t`Admin`;
     }
   };
 
   const showToastNotification = (newView: ViewType, previousView: ViewType) => {
     try {
       const viewName = getViewDisplayName(newView);
-      toast.info(
-        intl.formatMessage(
-          {
-            id: 'view.toast.switched',
-            defaultMessage: 'Switched to {view} view'
-          },
-          { view: viewName }
-        ),
-        {
-          action: {
-            label: intl.formatMessage({
-              id: 'actions.undo',
-              defaultMessage: 'Undo'
-            }),
-            onClick: () => {
-              setCurrentViewState(previousView);
-              localStorage.setItem(STORAGE_KEY, previousView);
-              showRevertToast(previousView);
-            }
+
+      toast.info(t`Switched to ${viewName} view`, {
+        action: {
+          label: t`Undo`,
+          onClick: () => {
+            setCurrentViewState(previousView);
+            localStorage.setItem(STORAGE_KEY, previousView);
+            showRevertToast(previousView);
           }
         }
-      );
+      });
     } catch {
       // Fallback if intl is not available
       const viewName = getViewDisplayName(newView);
@@ -90,15 +73,7 @@ export function ViewProvider({ children }: { children: React.ReactNode }) {
   const showRevertToast = (revertedView: ViewType) => {
     try {
       const viewName = getViewDisplayName(revertedView);
-      toast.info(
-        intl.formatMessage(
-          {
-            id: 'view.toast.reverted',
-            defaultMessage: 'Switched back to {view} view'
-          },
-          { view: viewName }
-        )
-      );
+      toast.info(t`Switched back to ${viewName} view`);
     } catch {
       // Fallback if intl is not available
       const viewName = getViewDisplayName(revertedView);

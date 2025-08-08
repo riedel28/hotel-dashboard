@@ -3,10 +3,10 @@
 import * as React from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
 import { PanelLeftIcon } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -200,13 +200,10 @@ function Sidebar({
         >
           <SheetHeader className="sr-only">
             <SheetTitle>
-              <FormattedMessage id="sidebar.title" defaultMessage="Sidebar" />
+              <Trans>Sidebar</Trans>
             </SheetTitle>
             <SheetDescription>
-              <FormattedMessage
-                id="sidebar.description"
-                defaultMessage="Displays the mobile sidebar."
-              />
+              <Trans>Displays the mobile sidebar.</Trans>
             </SheetDescription>
           </SheetHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
@@ -285,7 +282,7 @@ function SidebarTrigger({
     >
       <PanelLeftIcon />
       <span className="sr-only">
-        <FormattedMessage id="sidebar.toggle" defaultMessage="Toggle Sidebar" />
+        <Trans>Toggle Sidebar</Trans>
       </span>
     </Button>
   );
@@ -293,22 +290,16 @@ function SidebarTrigger({
 
 function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
   const { toggleSidebar } = useSidebar();
-  const intl = useIntl();
+  const { t } = useLingui();
 
   return (
     <button
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label={intl.formatMessage({
-        id: 'sidebar.toggle',
-        defaultMessage: 'Toggle Sidebar'
-      })}
+      aria-label={t`Toggle Sidebar`}
       tabIndex={-1}
       onClick={toggleSidebar}
-      title={intl.formatMessage({
-        id: 'sidebar.toggle',
-        defaultMessage: 'Toggle Sidebar'
-      })}
+      title={t`Toggle Sidebar`}
       className={cn(
         'hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex',
         'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',

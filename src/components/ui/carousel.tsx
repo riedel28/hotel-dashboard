@@ -2,11 +2,11 @@
 
 import * as React from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import useEmblaCarousel, {
   type UseEmblaCarouselType
 } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 
@@ -200,10 +200,7 @@ function CarouselPrevious({
     >
       <ArrowLeft />
       <span className="sr-only">
-        <FormattedMessage
-          id="carousel.previous"
-          defaultMessage="Previous slide"
-        />
+        <Trans>Previous slide</Trans>
       </span>
     </Button>
   );
@@ -235,7 +232,7 @@ function CarouselNext({
     >
       <ArrowRight />
       <span className="sr-only">
-        <FormattedMessage id="carousel.next" defaultMessage="Next slide" />
+        <Trans>Next slide</Trans>
       </span>
     </Button>
   );

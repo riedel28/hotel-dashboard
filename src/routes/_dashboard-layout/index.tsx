@@ -47,11 +47,13 @@ function StartPage() {
     }
   ];
 
+  const userName = auth.user?.firstName;
+
   return (
     <div className="space-y-8">
       <div className="space-y-1">
         <h1 className="text-2xl font-bold tracking-tight">
-          <Trans>Welcome back, {auth.user?.firstName}!</Trans>
+          <Trans>Welcome back, {userName}!</Trans>
         </h1>
         <p className="text-muted-foreground text-lg">
           <Trans>Manage your hotel operations efficiently</Trans>

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronsUpDownIcon, RefreshCwIcon } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 
 import { Badge, BadgeProps } from '@/components/ui/badge';
@@ -48,30 +48,13 @@ const stageVariantMap = {
 const getStageMessage = (stage: keyof typeof stageVariantMap) => {
   switch (stage) {
     case 'demo':
-      return (
-        <FormattedMessage id="property.stage.demo" defaultMessage="Demo" />
-      );
+      return <Trans>Demo</Trans>;
     case 'production':
-      return (
-        <FormattedMessage
-          id="property.stage.production"
-          defaultMessage="Production"
-        />
-      );
+      return <Trans>Production</Trans>;
     case 'staging':
-      return (
-        <FormattedMessage
-          id="property.stage.staging"
-          defaultMessage="Staging"
-        />
-      );
+      return <Trans>Staging</Trans>;
     case 'template':
-      return (
-        <FormattedMessage
-          id="property.stage.template"
-          defaultMessage="Template"
-        />
-      );
+      return <Trans>Template</Trans>;
     default:
       return stage;
   }
@@ -153,25 +136,15 @@ export default function PropertySelector() {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<Property>(() => properties[0]);
   const [loading, setLoading] = useState(false);
-  const intl = useIntl();
+  const { t } = useLingui();
 
   function handleReloadProperties() {
     setLoading(true);
-    toast.info(
-      intl.formatMessage({
-        id: 'property.toast.reloading',
-        defaultMessage: 'Reloading properties'
-      })
-    );
+    toast.info(t`Reloading properties`);
 
     setTimeout(() => {
       setLoading(false);
-      toast.info(
-        intl.formatMessage({
-          id: 'property.toast.reloaded',
-          defaultMessage: 'Properties reloaded'
-        })
-      );
+      toast.info(t`Properties reloaded`);
     }, 2000);
   }
 
@@ -191,10 +164,7 @@ export default function PropertySelector() {
                   property.name.toLowerCase() === value.name.toLowerCase()
               )?.name
             ) : (
-              <FormattedMessage
-                id="placeholders.selectProperty"
-                defaultMessage="Select property"
-              />
+              <Trans>Select property</Trans>
             )}
           </span>
           <ChevronsUpDownIcon
@@ -211,19 +181,11 @@ export default function PropertySelector() {
         side="bottom"
       >
         <Command>
-          <CommandInput
-            placeholder={intl.formatMessage({
-              id: 'placeholders.searchProperty',
-              defaultMessage: 'Search for property'
-            })}
-          />
+          <CommandInput placeholder={t`Search for property`} />
           <CommandList className="w-[400px] max-w-[400px]">
             {!loading && (
               <CommandEmpty>
-                <FormattedMessage
-                  id="properties.notFound"
-                  defaultMessage="No properties found."
-                />
+                <Trans>No properties found.</Trans>
               </CommandEmpty>
             )}
             <CommandGroup>
@@ -236,42 +198,36 @@ export default function PropertySelector() {
                     <Skeleton className="h-[34px] w-full" />
                   </div>
                 ) : (
-                  properties.map((property) => (
-                    <CommandItem
-                      key={property.id}
-                      value={property.id}
-                      onSelect={(currentValue) => {
-                        const selectedProperty =
-                          properties.find(
-                            (property) => property.id === currentValue
-                          ) ?? properties[0];
+                  properties.map((property) => {
+                    const propertyName = truncatePropertyName(property.name);
 
-                        setValue(selectedProperty);
-                        setOpen(false);
+                    return (
+                      <CommandItem
+                        key={property.id}
+                        value={property.id}
+                        onSelect={(currentValue) => {
+                          const selectedProperty =
+                            properties.find(
+                              (property) => property.id === currentValue
+                            ) ?? properties[0];
 
-                        toast.info(
-                          intl.formatMessage(
-                            {
-                              id: 'property.toast.changed.description',
-                              defaultMessage: 'Switched to "{propertyName}"'
-                            },
-                            {
-                              propertyName: truncatePropertyName(property.name)
-                            }
-                          )
-                        );
-                      }}
-                      className="h-[38px] gap-1"
-                    >
-                      <span className="w-[250px] truncate">
-                        {property.name}
-                      </span>
+                          setValue(selectedProperty);
+                          setOpen(false);
 
-                      <CommandShortcut className="text-[9px] font-semibold tracking-wide uppercase">
-                        <StageBadge stage={property.stage} />
-                      </CommandShortcut>
-                    </CommandItem>
-                  ))
+                          toast.info(t`Switched to ${propertyName}`);
+                        }}
+                        className="h-[38px] gap-1"
+                      >
+                        <span className="w-[250px] truncate">
+                          {propertyName}
+                        </span>
+
+                        <CommandShortcut className="text-[9px] font-semibold tracking-wide uppercase">
+                          <StageBadge stage={property.stage} />
+                        </CommandShortcut>
+                      </CommandItem>
+                    );
+                  })
                 )}
               </ScrollArea>
             </CommandGroup>
@@ -292,7 +248,7 @@ export default function PropertySelector() {
                 )}
                 aria-hidden="true"
               />
-              <FormattedMessage id="actions.reload" defaultMessage="Reload" />
+              <Trans>Reload</Trans>
             </Button>
           </CommandGroup>
         </Command>

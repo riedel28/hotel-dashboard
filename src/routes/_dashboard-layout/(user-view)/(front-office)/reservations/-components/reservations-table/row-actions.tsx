@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { Row } from '@tanstack/react-table';
 import {
@@ -10,7 +11,6 @@ import {
   PenSquare,
   Trash
 } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -44,20 +44,14 @@ export function RowActions({ row }: RowActionsProps) {
           >
             <MoreHorizontal className="h-4 w-4" />
             <span className="sr-only">
-              <FormattedMessage
-                id="reservations.openMenu"
-                defaultMessage="Open menu"
-              />
+              <Trans>Open menu</Trans>
             </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[180px]">
           <DropdownMenuItem>
             <MessageSquareDot className="mr-2 h-4 w-4" />
-            <FormattedMessage
-              id="reservations.pushToDevice"
-              defaultMessage="Push to device"
-            />
+            <Trans>Push to device</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <RouterLink
@@ -67,12 +61,12 @@ export function RowActions({ row }: RowActionsProps) {
               }}
             >
               <PenSquare className="mr-2 h-4 w-4" />
-              <FormattedMessage id="actions.edit" defaultMessage="Edit" />
+              <Trans>Edit</Trans>
             </RouterLink>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setShowShareModal(true)}>
             <MessageSquareDot className="mr-2 h-4 w-4" />
-            <FormattedMessage id="actions.share" defaultMessage="Share" />
+            <Trans>Share</Trans>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -80,8 +74,7 @@ export function RowActions({ row }: RowActionsProps) {
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash className="mr-2 h-4 w-4" />
-            <FormattedMessage id="actions.delete" defaultMessage="Delete" />
-            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+            <Trans>Delete</Trans>
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>

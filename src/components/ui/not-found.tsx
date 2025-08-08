@@ -30,10 +30,10 @@
  */
 import * as React from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { ArrowLeft, Home, Search } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -140,22 +140,14 @@ function NotFound({
 
       {title && (
         <h3 className="text-card-foreground mb-2 text-xl font-semibold">
-          {title || (
-            <FormattedMessage
-              id="notFound.title"
-              defaultMessage="Page not found"
-            />
-          )}
+          {title || <Trans>Page not found</Trans>}
         </h3>
       )}
 
       {message && (
         <p className="text-card-foreground mb-8 text-base leading-relaxed">
           {message || (
-            <FormattedMessage
-              id="notFound.message"
-              defaultMessage="Sorry, we couldn't find the page you're looking for."
-            />
+            <Trans>Sorry, we couldn't find the page you're looking for.</Trans>
           )}
         </p>
       )}
@@ -169,24 +161,14 @@ function NotFound({
               className="gap-2"
             >
               <ArrowLeft size={16} />
-              {backButtonText || (
-                <FormattedMessage
-                  id="notFound.backButton"
-                  defaultMessage="Go back"
-                />
-              )}
+              {backButtonText || <Trans>Go back</Trans>}
             </Button>
           )}
 
           {showHomeButton && (
             <Button onClick={() => navigate({ to: '/' })} className="gap-2">
               <Home size={16} />
-              {homeButtonText || (
-                <FormattedMessage
-                  id="notFound.homeButton"
-                  defaultMessage="Go home"
-                />
-              )}
+              {homeButtonText || <Trans>Go home</Trans>}
             </Button>
           )}
 
@@ -197,12 +179,7 @@ function NotFound({
               className="gap-2"
             >
               <Search size={16} />
-              {searchButtonText || (
-                <FormattedMessage
-                  id="notFound.searchButton"
-                  defaultMessage="Search"
-                />
-              )}
+              {searchButtonText || <Trans>Search</Trans>}
             </Button>
           )}
         </div>

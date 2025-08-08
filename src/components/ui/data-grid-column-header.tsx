@@ -1,5 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Column } from '@tanstack/react-table';
 import {
   ArrowDown,
@@ -15,7 +16,6 @@ import {
   PinOff,
   Settings2
 } from 'lucide-react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -54,7 +54,7 @@ function DataGridColumnHeader<TData, TValue>({
   visibility = false
 }: DataGridColumnHeaderProps<TData, TValue>) {
   const { isLoading, table, props, recordCount } = useDataGrid();
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const moveColumn = (direction: 'left' | 'right') => {
     const currentOrder = [...table.getState().columnOrder]; // Get current column order
@@ -137,10 +137,8 @@ function DataGridColumnHeader<TData, TValue>({
   };
 
   const headerPin = () => {
-    const unpinLabel = intl.formatMessage(
-      { id: 'header.unpinColumn', defaultMessage: 'Unpin {title} column' },
-      { title }
-    );
+    const unpinLabel = t`Unpin {title} column`;
+
     return (
       <Button
         mode="icon"
@@ -183,10 +181,7 @@ function DataGridColumnHeader<TData, TValue>({
                 >
                   <ArrowUp className="size-3.5!" />
                   <span className="grow">
-                    <FormattedMessage
-                      id="header.ascending"
-                      defaultMessage="Asc"
-                    />
+                    <Trans>Asc</Trans>
                   </span>
                   {column.getIsSorted() === 'asc' && (
                     <Check className="text-primary size-4 opacity-100!" />
@@ -204,10 +199,7 @@ function DataGridColumnHeader<TData, TValue>({
                 >
                   <ArrowDown className="size-3.5!" />
                   <span className="grow">
-                    <FormattedMessage
-                      id="header.descending"
-                      defaultMessage="Desc"
-                    />
+                    <Trans>Desc</Trans>
                   </span>
                   {column.getIsSorted() === 'desc' && (
                     <Check className="text-primary size-4 opacity-100!" />
@@ -230,10 +222,7 @@ function DataGridColumnHeader<TData, TValue>({
                 >
                   <ArrowLeftToLine className="size-3.5!" aria-hidden="true" />
                   <span className="grow">
-                    <FormattedMessage
-                      id="header.pinToLeft"
-                      defaultMessage="Pin to left"
-                    />
+                    <Trans>Pin to left</Trans>
                   </span>
                   {column.getIsPinned() === 'left' && (
                     <Check className="text-primary size-4 opacity-100!" />
@@ -248,10 +237,7 @@ function DataGridColumnHeader<TData, TValue>({
                 >
                   <ArrowRightToLine className="size-3.5!" aria-hidden="true" />
                   <span className="grow">
-                    <FormattedMessage
-                      id="header.pinToRight"
-                      defaultMessage="Pin to right"
-                    />
+                    <Trans>Pin to right</Trans>
                   </span>
                   {column.getIsPinned() === 'right' && (
                     <Check className="text-primary size-4 opacity-100!" />
@@ -269,10 +255,7 @@ function DataGridColumnHeader<TData, TValue>({
                 >
                   <ArrowLeft className="size-3.5!" aria-hidden="true" />
                   <span>
-                    <FormattedMessage
-                      id="header.moveToLeft"
-                      defaultMessage="Move to Left"
-                    />
+                    <Trans>Move to Left</Trans>
                   </span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -281,10 +264,7 @@ function DataGridColumnHeader<TData, TValue>({
                 >
                   <ArrowRight className="size-3.5!" aria-hidden="true" />
                   <span>
-                    <FormattedMessage
-                      id="header.moveToRight"
-                      defaultMessage="Move to Right"
-                    />
+                    <Trans>Move to Right</Trans>
                   </span>
                 </DropdownMenuItem>
               </>
@@ -301,10 +281,7 @@ function DataGridColumnHeader<TData, TValue>({
                 <DropdownMenuSubTrigger>
                   <Settings2 className="size-3.5!" />
                   <span>
-                    <FormattedMessage
-                      id="header.columns"
-                      defaultMessage="Columns"
-                    />
+                    <Trans>Columns</Trans>
                   </span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>

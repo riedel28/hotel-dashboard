@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { cn } from '@/lib/utils';
 
@@ -68,7 +68,7 @@ function DialogContent({
         <DialogPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
           <XIcon />
           <span className="sr-only">
-            <FormattedMessage id="dialog.close" defaultMessage="Close" />
+            <Trans>Close</Trans>
           </span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>

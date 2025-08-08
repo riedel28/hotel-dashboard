@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import { Table } from '@tanstack/react-table';
-import { FormattedMessage } from 'react-intl';
 
 import {
   DropdownMenu,
@@ -23,10 +23,7 @@ function DataGridColumnVisibility<TData>({
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[150px]">
         <DropdownMenuLabel className="font-medium">
-          <FormattedMessage
-            id="table.columnVisibility.toggleColumns"
-            defaultMessage="Toggle Columns"
-          />
+          <Trans>Toggle Columns</Trans>
         </DropdownMenuLabel>
         {table
           .getAllColumns()

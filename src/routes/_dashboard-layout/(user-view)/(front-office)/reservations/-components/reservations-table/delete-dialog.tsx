@@ -1,7 +1,7 @@
 import { buildResourceUrl } from '@/config/api';
+import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, Loader2 } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 import { toast } from 'sonner';
 
 import {
@@ -61,22 +61,15 @@ export function DeleteDialog({
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
             <span className="font-bold">
-              <FormattedMessage
-                id="reservations.deleted"
-                defaultMessage="Reservation deleted"
-              />
+              <Trans>Reservation deleted</Trans>
             </span>
           </div>
           <div>
-            <FormattedMessage
-              id="reservations.deletedMessage"
-              defaultMessage="The reservation <span className='font-medium'>{reservationNr}</span> has been deleted"
-              values={{
-                reservationNr: (
-                  <span className="font-medium">{reservationNr}</span>
-                )
-              }}
-            />
+            <Trans>
+              The reservation{' '}
+              <span className="font-medium">{reservationNr}</span>
+              has been deleted
+            </Trans>
           </div>
         </div>
       );
@@ -87,10 +80,7 @@ export function DeleteDialog({
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
             <span className="font-bold">
-              <FormattedMessage
-                id="reservations.deleteError"
-                defaultMessage="Error deleting reservation"
-              />
+              <Trans>Error deleting reservation</Trans>
             </span>
           </div>
           <div>{error.message}</div>
@@ -104,26 +94,19 @@ export function DeleteDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            <FormattedMessage
-              id="reservations.deleteConfirmTitle"
-              defaultMessage="Are you sure?"
-            />
+            <Trans>Are you sure?</Trans>
           </AlertDialogTitle>
           <AlertDialogDescription className="py-4">
-            <FormattedMessage
-              id="reservations.deleteConfirmDesc"
-              defaultMessage="The reservation <span className='font-medium'>{reservationNr}</span> will be deleted. This action cannot be undone."
-              values={{
-                reservationNr: (
-                  <span className="font-medium">{reservationNr}</span>
-                )
-              }}
-            />
+            <Trans>
+              The reservation{' '}
+              <span className="font-medium">{reservationNr}</span>
+              will be deleted. This action cannot be undone.
+            </Trans>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>
-            <FormattedMessage id="actions.cancel" defaultMessage="Cancel" />
+            <Trans>Cancel</Trans>
           </AlertDialogCancel>
           <Button
             variant="destructive"
@@ -133,7 +116,7 @@ export function DeleteDialog({
             {deleteReservationMutation.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            <FormattedMessage id="actions.delete" defaultMessage="Delete" />
+            <Trans>Delete</Trans>
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

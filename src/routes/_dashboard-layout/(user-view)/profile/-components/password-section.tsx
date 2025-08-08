@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -24,46 +25,24 @@ import {
 import { PasswordInput } from '@/components/ui/password-input';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
 
-export const createPasswordSchema = (intl: IntlShape) =>
-  z
-    .object({
-      currentPassword: z.string().min(
-        1,
-        intl.formatMessage({
-          id: 'validation.currentPassword.required',
-          defaultMessage: 'Current password is required'
-        })
-      ),
-      newPassword: z.string().min(
-        8,
-        intl.formatMessage({
-          id: 'validation.newPassword.minLength',
-          defaultMessage: 'Password must be at least 8 characters long'
-        })
-      ),
-      confirmPassword: z.string().min(
-        1,
-        intl.formatMessage({
-          id: 'validation.confirmPassword.required',
-          defaultMessage: 'Please confirm your password'
-        })
-      )
-    })
-    .refine((data) => data.newPassword === data.confirmPassword, {
-      message: intl.formatMessage({
-        id: 'validation.passwords.dontMatch',
-        defaultMessage: "Passwords don't match"
-      }),
-      path: ['confirmPassword']
-    });
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, t`Current password is required`),
+    newPassword: z
+      .string()
+      .min(8, t`Password must be at least 8 characters long`),
+    confirmPassword: z.string().min(1, t`Please confirm your password`)
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: t`Passwords don't match`,
+    path: ['confirmPassword']
+  });
 
-type PasswordFormData = z.infer<ReturnType<typeof createPasswordSchema>>;
+type PasswordFormData = z.infer<typeof passwordSchema>;
 
 export function PasswordSection() {
-  const intl = useIntl();
-
   const form = useForm<PasswordFormData>({
-    resolver: zodResolver(createPasswordSchema(intl)),
+    resolver: zodResolver(passwordSchema),
     defaultValues: {
       currentPassword: '',
       newPassword: '',
@@ -77,12 +56,12 @@ export function PasswordSection() {
       console.log('Password change data:', data);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
-      toast.success('Password changed successfully');
+      toast.success(t`Password changed successfully`);
 
       // Reset form
       form.reset();
     } catch {
-      toast.error('Error changing password');
+      toast.error(t`Error changing password`);
     }
   };
 
@@ -90,16 +69,10 @@ export function PasswordSection() {
     <Card>
       <CardHeader>
         <CardTitle>
-          <FormattedMessage
-            id="profile.password.title"
-            defaultMessage="Password"
-          />
+          <Trans>Password</Trans>
         </CardTitle>
         <CardDescription>
-          <FormattedMessage
-            id="profile.password.description"
-            defaultMessage="Change your password to keep your account secure"
-          />
+          <Trans>Change your password to keep your account secure</Trans>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -111,10 +84,7 @@ export function PasswordSection() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="profile.password.currentPassword"
-                      defaultMessage="Current Password"
-                    />
+                    <Trans>Current Password</Trans>
                   </FormLabel>
                   <FormControl>
                     <PasswordInput {...field} />
@@ -130,10 +100,7 @@ export function PasswordSection() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="profile.password.newPassword"
-                      defaultMessage="New Password"
-                    />
+                    <Trans>New Password</Trans>
                   </FormLabel>
                   <FormControl>
                     <div className="space-y-2">
@@ -152,10 +119,7 @@ export function PasswordSection() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <FormattedMessage
-                      id="profile.password.confirmPassword"
-                      defaultMessage="Confirm New Password"
-                    />
+                    <Trans>Confirm New Password</Trans>
                   </FormLabel>
                   <FormControl>
                     <PasswordInput {...field} />
@@ -170,10 +134,7 @@ export function PasswordSection() {
                 {form.formState.isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                <FormattedMessage
-                  id="profile.save"
-                  defaultMessage="Save Changes"
-                />
+                <Trans>Save Changes</Trans>
               </Button>
             </div>
           </form>

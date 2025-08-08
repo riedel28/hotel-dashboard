@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 import { useAuth } from '@/auth';
+import { Trans } from '@lingui/react/macro';
 import { useRouter } from '@tanstack/react-router';
 import { Loader2, LogOut } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import {
   AlertDialog,
@@ -50,21 +50,18 @@ export function LogoutDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            <FormattedMessage
-              id="auth.logout.confirmTitle"
-              defaultMessage="Are you sure you want to logout?"
-            />
+            <Trans>Are you sure you want to logout?</Trans>
           </AlertDialogTitle>
           <AlertDialogDescription className="py-4">
-            <FormattedMessage
-              id="auth.logout.confirmDesc"
-              defaultMessage="You will be logged out of your account and redirected to the login page."
-            />
+            <Trans>
+              You will be logged out of your account and redirected to the login
+              page.
+            </Trans>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>
-            <FormattedMessage id="actions.cancel" defaultMessage="Cancel" />
+            <Trans>Cancel</Trans>
           </AlertDialogCancel>
           <Button
             variant="destructive"
@@ -73,7 +70,7 @@ export function LogoutDialog({
           >
             {isLoggingOut && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             <LogOut className="mr-2 h-4 w-4" />
-            <FormattedMessage id="user.logout" defaultMessage="Log out" />
+            <Trans>Log out</Trans>
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

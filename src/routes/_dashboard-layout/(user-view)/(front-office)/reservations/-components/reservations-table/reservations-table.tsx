@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ColumnDef,
   PaginationState,
@@ -13,7 +14,6 @@ import {
 import dayjs from 'dayjs';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import Flag from 'react-flagkit';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -83,7 +83,7 @@ export default function ReservationsTable({
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'received_at', desc: true }
   ]);
-  const intl = useIntl();
+  const { t } = useLingui();
 
   const columns = useMemo<ColumnDef<Reservation>[]>(
     () => [
@@ -112,10 +112,7 @@ export default function ReservationsTable({
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <h2 className="text-lg font-medium">
-                    <FormattedMessage
-                      id="reservations.details.title"
-                      defaultMessage="Reservation details"
-                    />
+                    <Trans>Reservation details</Trans>
                   </h2>
                   <div className="flex items-center gap-1">
                     <Code size="sm" showCopyButton copyText={row.booking_nr}>
@@ -130,40 +127,28 @@ export default function ReservationsTable({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.reservationId"
-                        defaultMessage="Reservation ID"
-                      />
+                      <Trans>Reservation ID</Trans>
                     </span>
                     <span className="text-sm">{row.id}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.guestEmail"
-                        defaultMessage="Guest Email"
-                      />
+                      <Trans>Guest Email</Trans>
                     </span>
                     <span className="text-sm">{row.guest_email}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.room"
-                        defaultMessage="Room"
-                      />
+                      <Trans>Room</Trans>
                     </span>
                     <span className="text-sm">{row.room_name}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.primaryGuest"
-                        defaultMessage="Primary Guest"
-                      />
+                      <Trans>Primary Guest</Trans>
                     </span>
                     <span className="text-sm">{row.primary_guest_name}</span>
                   </div>
@@ -173,10 +158,7 @@ export default function ReservationsTable({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.arrivalDate"
-                        defaultMessage="Arrival Date"
-                      />
+                      <Trans>Arrival Date</Trans>
                     </span>
                     <span className="text-sm">
                       {dayjs(row.booking_from).format('DD.MM.YYYY')}
@@ -185,10 +167,7 @@ export default function ReservationsTable({
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.departureDate"
-                        defaultMessage="Departure Date"
-                      />
+                      <Trans>Departure Date</Trans>
                     </span>
                     <span className="text-sm">
                       {dayjs(row.booking_to).format('DD.MM.YYYY')}
@@ -197,40 +176,22 @@ export default function ReservationsTable({
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.checkInVia"
-                        defaultMessage="Check-in via"
-                      />
+                      <Trans>Check-in via</Trans>
                     </span>
                     <span className="text-sm">
                       {(() => {
                         const getDisplayText = (value: CheckInCheckOutVia) => {
                           switch (value) {
                             case 'android':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.android',
-                                defaultMessage: 'Android App'
-                              });
+                              return <Trans>Android App</Trans>;
                             case 'ios':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.ios',
-                                defaultMessage: 'iOS App'
-                              });
+                              return <Trans>iOS App</Trans>;
                             case 'tv':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.tv',
-                                defaultMessage: 'TV App'
-                              });
+                              return <Trans>TV App</Trans>;
                             case 'station':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.station',
-                                defaultMessage: 'Station'
-                              });
+                              return <Trans>Station</Trans>;
                             case 'web':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.web',
-                                defaultMessage: 'Web App'
-                              });
+                              return <Trans>Web App</Trans>;
                             default:
                               return value;
                           }
@@ -242,40 +203,22 @@ export default function ReservationsTable({
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.checkOutVia"
-                        defaultMessage="Check-out via"
-                      />
+                      <Trans>Check-out via</Trans>
                     </span>
                     <span className="text-sm">
                       {(() => {
                         const getDisplayText = (value: CheckInCheckOutVia) => {
                           switch (value) {
                             case 'android':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.android',
-                                defaultMessage: 'Android App'
-                              });
+                              return <Trans>Android App</Trans>;
                             case 'ios':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.ios',
-                                defaultMessage: 'iOS App'
-                              });
+                              return <Trans>iOS App</Trans>;
                             case 'tv':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.tv',
-                                defaultMessage: 'TV App'
-                              });
+                              return <Trans>TV App</Trans>;
                             case 'station':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.station',
-                                defaultMessage: 'Station'
-                              });
+                              return <Trans>Station</Trans>;
                             case 'web':
-                              return intl.formatMessage({
-                                id: 'reservations.checkInVia.web',
-                                defaultMessage: 'Web App'
-                              });
+                              return <Trans>Web App</Trans>;
                             default:
                               return value;
                           }
@@ -290,10 +233,7 @@ export default function ReservationsTable({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.balance"
-                        defaultMessage="Balance"
-                      />
+                      <Trans>Balance</Trans>
                     </span>
                     <span className="text-sm">
                       <CurrencyFormatter value={row.balance} currency="EUR" />
@@ -302,10 +242,7 @@ export default function ReservationsTable({
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.receivedAt"
-                        defaultMessage="Received At"
-                      />
+                      <Trans>Received At</Trans>
                     </span>
                     <span className="text-sm">
                       {dayjs(row.received_at).format('DD.MM.YYYY')}
@@ -314,10 +251,7 @@ export default function ReservationsTable({
 
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-sm">
-                      <FormattedMessage
-                        id="reservations.details.completedAt"
-                        defaultMessage="Completed At"
-                      />
+                      <Trans>Completed At</Trans>
                     </span>
                     <span className="text-sm">
                       {dayjs(row.completed_at).format('DD.MM.YYYY')}
@@ -334,10 +268,7 @@ export default function ReservationsTable({
         id: 'state',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'reservations.status',
-              defaultMessage: 'Status'
-            })}
+            title={t`Status`}
             visibility={true}
             column={column}
           />
@@ -361,20 +292,11 @@ export default function ReservationsTable({
           const getStatusMessage = () => {
             switch (status) {
               case 'done':
-                return intl.formatMessage({
-                  id: 'reservations.status.done',
-                  defaultMessage: 'Done'
-                });
+                return t`Done`;
               case 'pending':
-                return intl.formatMessage({
-                  id: 'reservations.status.pending',
-                  defaultMessage: 'Pending'
-                });
+                return t`Pending`;
               case 'started':
-                return intl.formatMessage({
-                  id: 'reservations.status.started',
-                  defaultMessage: 'Started'
-                });
+                return t`Started`;
               default:
                 return status;
             }
@@ -399,10 +321,7 @@ export default function ReservationsTable({
         id: 'booking_nr',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'reservations.bookingNumber',
-              defaultMessage: 'Booking #'
-            })}
+            title={t`Booking #`}
             visibility={true}
             column={column}
           />
@@ -434,10 +353,7 @@ export default function ReservationsTable({
         id: 'room_name',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'reservations.room',
-              defaultMessage: 'Room'
-            })}
+            title={t`Room`}
             visibility={true}
             column={column}
           />
@@ -457,10 +373,7 @@ export default function ReservationsTable({
         id: 'guests',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'reservations.guests',
-              defaultMessage: 'Guests'
-            })}
+            title={t`Guests`}
             visibility={true}
             column={column}
           />
@@ -469,6 +382,9 @@ export default function ReservationsTable({
           return (
             <div className="space-y-0.5">
               {row.original.guests.map((guest) => {
+                const firstName = guest.first_name;
+                const lastName = guest.last_name;
+
                 return (
                   <div
                     key={guest.id}
@@ -480,14 +396,9 @@ export default function ReservationsTable({
                       className="size-3.5 rounded-sm"
                       aria-label={guest.nationality_code}
                     />
-                    <FormattedMessage
-                      id="reservations.guestNameFormat"
-                      defaultMessage="{lastName}, {firstName}"
-                      values={{
-                        lastName: guest.last_name,
-                        firstName: guest.first_name
-                      }}
-                    />
+                    <Trans>
+                      {lastName}, {firstName}
+                    </Trans>
                   </div>
                 );
               })}
@@ -512,10 +423,7 @@ export default function ReservationsTable({
         id: 'booking_from',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'reservations.arrival',
-              defaultMessage: 'Arrival'
-            })}
+            title={t`Arrival`}
             visibility={true}
             column={column}
           />
@@ -536,10 +444,7 @@ export default function ReservationsTable({
         id: 'booking_to',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'reservations.departure',
-              defaultMessage: 'Departure'
-            })}
+            title={t`Departure`}
             visibility={true}
             column={column}
           />
@@ -560,10 +465,7 @@ export default function ReservationsTable({
         id: 'balance',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={intl.formatMessage({
-              id: 'reservations.balance',
-              defaultMessage: 'Balance'
-            })}
+            title={t`Balance`}
             visibility={true}
             column={column}
           />
@@ -612,7 +514,7 @@ export default function ReservationsTable({
         enableResizing: false
       }
     ],
-    [intl]
+    [t]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
