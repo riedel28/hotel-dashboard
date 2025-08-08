@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useAuth } from '@/auth';
+import { loadCatalog } from '@/i18n';
 import { useIntlContext } from '@/i18n/intl-provider';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
@@ -127,7 +128,10 @@ export default function UserMenu() {
                 <DropdownMenuSubContent className="w-[180px]">
                   <DropdownMenuRadioGroup
                     value={locale}
-                    onValueChange={setLocale}
+                    onValueChange={(value) => {
+                      setLocale(value);
+                      loadCatalog(value);
+                    }}
                   >
                     {languages.map((lang) => (
                       <DropdownMenuRadioItem

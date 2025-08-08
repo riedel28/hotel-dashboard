@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Trans } from '@lingui/react/macro';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { CheckIcon, Loader2, MessageCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -25,14 +25,9 @@ export const Route = createFileRoute('/_auth-layout/auth/forgot-password')({
   component: ForgotPasswordPage
 });
 
-export const createForgotPasswordFormSchema = (intl: IntlShape) =>
+export const createForgotPasswordFormSchema = () =>
   z.object({
-    email: z.email(
-      intl.formatMessage({
-        id: 'validation.email.required',
-        defaultMessage: 'Email is required'
-      })
-    )
+    email: z.email('Email is required')
   });
 
 type ForgotPasswordFormValues = z.infer<
@@ -40,11 +35,10 @@ type ForgotPasswordFormValues = z.infer<
 >;
 
 function ForgotPasswordPage() {
-  const intl = useIntl();
   const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm<ForgotPasswordFormValues>({
-    resolver: zodResolver(createForgotPasswordFormSchema(intl)),
+    resolver: zodResolver(createForgotPasswordFormSchema()),
     defaultValues: {
       email: ''
     }
@@ -59,21 +53,10 @@ function ForgotPasswordPage() {
       setIsSuccess(true);
       // Store the email for the success message
       form.setValue('email', data.email);
-      toast.success(
-        intl.formatMessage({
-          id: 'auth.forgotPassword.success',
-          defaultMessage: 'Password reset email sent successfully!'
-        })
-      );
+      toast.success('Password reset email sent successfully!');
     } catch (error) {
       console.error('Error sending password reset email: ', error);
-      toast.error(
-        intl.formatMessage({
-          id: 'auth.forgotPassword.error',
-          defaultMessage:
-            'Failed to send password reset email. Please try again.'
-        })
-      );
+      toast.error('Failed to send password reset email. Please try again.');
     }
   };
 
@@ -88,22 +71,14 @@ function ForgotPasswordPage() {
           </div>
 
           <h1 className="text-2xl font-bold">
-            <FormattedMessage
-              id="auth.forgotPassword.successTitle"
-              defaultMessage="Reset Link Sent"
-            />
+            <Trans>Reset Link Sent</Trans>
           </h1>
           <p className="text-foreground text-pretty">
-            <FormattedMessage
-              id="auth.forgotPassword.successMessage"
-              defaultMessage="We've sent a password reset link to <strong>{email}</strong>. Please check your inbox and follow the instructions to reset your password."
-              values={{
-                email: form.getValues('email'),
-                strong: (chunks: React.ReactNode) => (
-                  <span className="text-foreground font-medium">{chunks}</span>
-                )
-              }}
-            />
+            {`We've sent a password reset link to `}
+            <span className="text-foreground font-medium">
+              {form.getValues('email')}
+            </span>
+            {`. Please check your inbox and follow the instructions to reset your password.`}
           </p>
         </div>
 
@@ -118,10 +93,7 @@ function ForgotPasswordPage() {
             )}
             to="/auth/login"
           >
-            <FormattedMessage
-              id="auth.backToLogin"
-              defaultMessage="Back to login"
-            />
+            Back to login
           </Link>
         </div>
       </div>
@@ -136,16 +108,10 @@ function ForgotPasswordPage() {
         </div>
 
         <h1 className="text-2xl font-bold">
-          <FormattedMessage
-            id="auth.forgotPassword.title"
-            defaultMessage="Forgot Password"
-          />
+          <Trans>Forgot Password</Trans>
         </h1>
         <p className="text-muted-foreground">
-          <FormattedMessage
-            id="auth.forgotPassword.description"
-            defaultMessage="Enter your email address and we'll send you a link to reset your password"
-          />
+          {`Enter your email address and we'll send you a link to reset your password`}
         </p>
       </div>
 
@@ -156,21 +122,13 @@ function ForgotPasswordPage() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <FormattedMessage
-                    id="auth.forgotPassword.email"
-                    defaultMessage="Email"
-                  />
-                </FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="email"
                     variant="lg"
-                    placeholder={intl.formatMessage({
-                      id: 'placeholders.email',
-                      defaultMessage: 'Enter your email'
-                    })}
+                    placeholder="Enter your email"
                     disabled={isSubmitting}
                   />
                 </FormControl>
@@ -185,10 +143,7 @@ function ForgotPasswordPage() {
             disabled={isSubmitting}
           >
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <FormattedMessage
-              id="auth.forgotPassword.submit"
-              defaultMessage="Send Reset Link"
-            />
+            Send Reset Link
           </Button>
         </form>
       </Form>
@@ -204,10 +159,7 @@ function ForgotPasswordPage() {
           )}
           to="/auth/login"
         >
-          <FormattedMessage
-            id="auth.backToLogin"
-            defaultMessage="Back to login"
-          />
+          Back to login
         </Link>
       </div>
     </div>

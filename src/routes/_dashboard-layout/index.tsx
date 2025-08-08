@@ -1,3 +1,4 @@
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import {
   BedDoubleIcon,
@@ -5,7 +6,6 @@ import {
   ReceiptTextIcon,
   ShoppingCartIcon
 } from 'lucide-react';
-import { FormattedMessage } from 'react-intl';
 
 import { useAuth } from '../../auth';
 import { Card, CardDescription, CardTitle } from '../../components/ui/card';
@@ -16,31 +16,32 @@ export const Route = createFileRoute('/_dashboard-layout/')({
 });
 
 function StartPage() {
+  const { t } = useLingui();
   const auth = useAuth();
 
   const quickActions = [
     {
-      title: 'dashboard.quickActions.reservations.title',
-      description: 'dashboard.quickActions.reservations.description',
+      title: t`Reservations`,
+      description: t`Create and manage registration forms, track submissions, and customize check-in processes`,
       icon: BedDoubleIcon,
       href: '/reservations',
       search: { page: 1, per_page: 10 }
     },
     {
-      title: 'dashboard.quickActions.registrationForms.title',
-      description: 'dashboard.quickActions.registrationForms.description',
+      title: t`Registration Forms`,
+      description: t`Create and manage registration forms, track submissions, and customize check-in processes`,
       icon: ListTodoIcon,
       href: '/registration-forms'
     },
     {
-      title: 'dashboard.quickActions.payments.title',
-      description: 'dashboard.quickActions.payments.description',
+      title: t`Payments`,
+      description: t`Process payments, view transaction history, manage billing, and handle refunds`,
       icon: ReceiptTextIcon,
       href: '/payments'
     },
     {
-      title: 'dashboard.quickActions.orders.title',
-      description: 'dashboard.quickActions.orders.description',
+      title: t`Orders`,
+      description: t`Manage orders, track shipments, view order history, and process returns efficiently`,
       icon: ShoppingCartIcon,
       href: '/orders'
     }
@@ -50,17 +51,10 @@ function StartPage() {
     <div className="space-y-8">
       <div className="space-y-1">
         <h1 className="text-2xl font-bold tracking-tight">
-          <FormattedMessage
-            id="dashboard.welcomeTitle"
-            defaultMessage="Welcome back, {email}!"
-            values={{ email: auth.user?.firstName ?? 'Guest' }}
-          />
+          <Trans>Welcome back, {auth.user?.firstName}!</Trans>
         </h1>
         <p className="text-muted-foreground text-lg">
-          <FormattedMessage
-            id="dashboard.welcomeSubtitle"
-            defaultMessage="Manage your hotel operations efficiently"
-          />
+          <Trans>Manage your hotel operations efficiently</Trans>
         </p>
       </div>
 
@@ -87,16 +81,10 @@ function StartPage() {
                     <IconComponent className="text-muted-foreground size-5" />
                   </div>
                   <CardTitle className="mb-1 text-lg font-semibold">
-                    <FormattedMessage
-                      id={action.title}
-                      defaultMessage="Quick Action"
-                    />
+                    {action.title}
                   </CardTitle>
                   <CardDescription className="text-muted-foreground mb-2text-sm leading-relaxed">
-                    <FormattedMessage
-                      id={action.description}
-                      defaultMessage="Manage this section"
-                    />
+                    {action.description}
                   </CardDescription>
                 </div>
               </Link>
