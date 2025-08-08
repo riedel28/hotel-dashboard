@@ -1,51 +1,30 @@
 /**
- * ErrorDisplay Component
+ * ErrorDisplay Component (Compound Components)
  *
  * A reusable error display component that follows the app's design system.
+ * Use it with the provided subcomponents for full control.
  *
  * @example
- * // Basic error display
- * <ErrorDisplayError
- *   message="Failed to load data"
- *   showRetry
- *   onRetry={handleRetry}
- * />
+ * // Compound usage
+ * <ErrorDisplay variant="destructive">
+ *   <ErrorDisplay.Icon icon={XIcon} />
+ *   <ErrorDisplay.Status value={500} />
+ *   <ErrorDisplay.Title>API Error</ErrorDisplay.Title>
+ *   <ErrorDisplay.Message>Failed to connect to server</ErrorDisplay.Message>
+ *   <ErrorDisplay.Details>
+ *     Error 500: Internal Server Error
+ *   </ErrorDisplay.Details>
+ *   <ErrorDisplay.Actions>
+ *     <ErrorDisplay.RetryButton onRetry={handleRetry} />
+ *   </ErrorDisplay.Actions>
+ * </ErrorDisplay>
  *
- * @example
- * // Warning display
- * <ErrorDisplayWarning
- *   title="Connection Warning"
- *   message="Your connection is unstable"
- * />
- *
- * @example
- * // Custom error with details
- * <ErrorDisplay
- *   variant="destructive"
- *   title="API Error"
- *   statusCode={500}
- *   message="Failed to connect to server"
- *   showDetails
- *   details="Error 500: Internal Server Error"
- *   showRetry
- *   onRetry={handleRetry}
- * />
- *
- * @example
- * // Error with custom status code
- * <ErrorDisplayError
- *   title="Database Error"
- *   statusCode="DB_001"
- *   message="Connection failed"
- *   showRetry
- *   onRetry={handleRetry}
- * />
  */
 import * as React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { AlertTriangle, RefreshCw, X } from 'lucide-react';
+import { RefreshCwIcon, XIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -101,128 +80,234 @@ const iconSizes = {
   lg: 36
 } as const;
 
+type ErrorDisplayContextType = {
+  variant: NonNullable<VariantProps<typeof errorDisplayVariants>['variant']>;
+  size: NonNullable<VariantProps<typeof errorDisplayVariants>['size']>;
+};
+
+const ErrorDisplayContext = React.createContext<ErrorDisplayContextType | null>(
+  null
+);
+
+function useErrorDisplayContext(): ErrorDisplayContextType {
+  const ctx = React.useContext(ErrorDisplayContext);
+  if (!ctx) {
+    throw new Error(
+      'useErrorDisplayContext must be used within an <ErrorDisplay> root'
+    );
+  }
+  return ctx;
+}
+
 export interface ErrorDisplayProps
   extends Omit<React.ComponentProps<'div'>, 'title'>,
-    VariantProps<typeof errorDisplayVariants> {
-  title?: React.ReactNode;
-  message?: React.ReactNode;
-  statusCode?: string | number;
-  icon?: React.ComponentType<{ className?: string; size?: number }>;
-  showRetry?: boolean;
-  onRetry?: () => void;
-  isRetrying?: boolean;
-  showDetails?: boolean;
-  details?: React.ReactNode;
-}
+    VariantProps<typeof errorDisplayVariants> {}
 
 function ErrorDisplay({
   className,
   variant = 'destructive',
   size = 'md',
-  title,
-  message,
-  statusCode,
-  icon: Icon = X,
-  showRetry = false,
-  onRetry,
-  isRetrying = false,
-  showDetails = false,
-  details,
   children,
   ...props
 }: ErrorDisplayProps) {
-  const iconSize = iconSizes[size as keyof typeof iconSizes] || 24;
+  // Ensure non-nullable values for context
+  const safeVariant = (variant ?? 'destructive') as NonNullable<
+    VariantProps<typeof errorDisplayVariants>['variant']
+  >;
+  const safeSize = (size ?? 'md') as NonNullable<
+    VariantProps<typeof errorDisplayVariants>['size']
+  >;
+  return (
+    <ErrorDisplayContext.Provider
+      value={{ variant: safeVariant, size: safeSize }}
+    >
+      <div
+        data-slot="error-display"
+        className={cn(
+          errorDisplayVariants({ variant: safeVariant, size: safeSize }),
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    </ErrorDisplayContext.Provider>
+  );
+}
+
+type ErrorDisplayIconProps = {
+  icon?: React.ComponentType<{ className?: string; size?: number }>;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+function ErrorDisplayIcon({
+  icon: Icon = XIcon,
+  className,
+  ...props
+}: ErrorDisplayIconProps) {
+  const { variant, size } = useErrorDisplayContext();
+  const computedIconSize = iconSizes[size as keyof typeof iconSizes] || 24;
 
   return (
-    <div
-      className={cn(errorDisplayVariants({ variant, size }), className)}
+    <Icon
+      data-slot="error-display-icon"
+      size={computedIconSize}
+      className={cn(iconVariants({ variant, size }), 'mb-8', className)}
+      {...props}
+    />
+  );
+}
+
+type ErrorDisplayStatusProps = {
+  value?: string | number;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+function ErrorDisplayStatus({
+  className,
+  children,
+  ...props
+}: ErrorDisplayStatusProps) {
+  return (
+    <Badge
+      data-slot="error-display-status"
+      variant="outline"
+      className={cn('bg-accent text-xl font-medium', className)}
       {...props}
     >
-      <div className={cn(iconVariants({ variant, size }), 'mb-8')}>
-        <Icon size={iconSize} />
-      </div>
-
-      {statusCode && (
-        <div className="mb-4">
-          <Badge variant="outline" className="bg-accent text-xl font-medium">
-            {statusCode}
-          </Badge>
-        </div>
-      )}
-
-      {title && (
-        <h3 className="text-card-foreground mb-2 text-xl font-semibold">
-          {title}
-        </h3>
-      )}
-
-      {message && (
-        <p className="text-card-foreground mb-8 text-base leading-relaxed">
-          {message}
-        </p>
-      )}
-
-      {showDetails && details && (
-        <details className="mb-8 w-full text-left">
-          <summary className="text-muted-foreground hover:text-foreground cursor-pointer text-sm font-medium transition-colors">
-            <Trans>Show details</Trans>
-          </summary>
-          <div className="bg-muted/80 text-foreground mt-2 rounded-md border p-3 font-mono text-sm leading-relaxed">
-            {details}
-          </div>
-        </details>
-      )}
-
       {children}
+    </Badge>
+  );
+}
 
-      {showRetry && onRetry && (
-        <Button
-          variant="destructive"
-          onClick={onRetry}
-          disabled={isRetrying}
-          className="mt-8"
-        >
-          <RefreshCw
-            className={cn('mr-2 h-4 w-4', isRetrying && 'animate-spin')}
-          />
-          <Trans>Try again</Trans>
-        </Button>
+function ErrorDisplayTitle({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
+  return (
+    <h3
+      data-slot="error-display-title"
+      className={cn(
+        'text-card-foreground mb-2 text-xl font-semibold',
+        className
       )}
-    </div>
+      {...props}
+    />
+  );
+}
+
+function ErrorDisplayMessage({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+  return (
+    <p
+      data-slot="error-display-message"
+      className={cn(
+        'text-card-foreground mb-8 text-base leading-relaxed',
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+type ErrorDisplayDetailsProps = {
+  summaryLabel?: React.ReactNode;
+} & React.DetailsHTMLAttributes<HTMLDetailsElement>;
+
+function ErrorDisplayDetails({
+  summaryLabel,
+  className,
+  children,
+  ...props
+}: ErrorDisplayDetailsProps) {
+  return (
+    <details
+      data-slot="error-display-details"
+      className={cn('mb-8 w-full text-left', className)}
+      {...props}
+    >
+      <summary className="text-muted-foreground hover:text-foreground cursor-pointer text-sm font-medium transition-colors">
+        {summaryLabel ?? <Trans>Show details</Trans>}
+      </summary>
+      <div className="bg-muted/80 text-foreground mt-2 rounded-md border p-3 font-mono text-sm leading-relaxed">
+        {children}
+      </div>
+    </details>
+  );
+}
+
+function ErrorDisplayActions({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      data-slot="error-display-actions"
+      className={cn('mt-8', className)}
+      {...props}
+    />
+  );
+}
+
+type ErrorDisplayRetryButtonProps = {
+  onRetry: () => void;
+  isRetrying?: boolean;
+  children?: React.ReactNode;
+} & Omit<React.ComponentProps<typeof Button>, 'onClick' | 'children'>;
+
+function ErrorDisplayRetryButton({
+  onRetry,
+  isRetrying,
+  children,
+  className,
+  ...props
+}: ErrorDisplayRetryButtonProps) {
+  const retrying = isRetrying ?? false;
+  return (
+    <Button
+      data-slot="error-display-retry-button"
+      variant="destructive"
+      onClick={onRetry}
+      disabled={retrying}
+      className={cn('mt-8', className)}
+      {...props}
+    >
+      <RefreshCwIcon
+        className={cn('mr-2 h-4 w-4', retrying && 'animate-spin')}
+      />
+      {children ?? <Trans>Try again</Trans>}
+    </Button>
   );
 }
 
 // Convenience components for common error types
-function ErrorDisplayError({
-  title,
-  message,
-  ...props
-}: Omit<ErrorDisplayProps, 'variant' | 'icon'>) {
+type ErrorDisplayErrorProps = React.ComponentProps<typeof ErrorDisplay> & {
+  statusCode?: string | number;
+  details?: React.ReactNode;
+  showDetails?: boolean;
+  onRetry?: () => void;
+  isRetrying?: boolean;
+  showRetry?: boolean;
+};
+
+function ErrorDisplayError({ children, ...props }: ErrorDisplayErrorProps) {
   return (
-    <ErrorDisplay
-      variant="destructive"
-      icon={X}
-      title={title || <Trans>Something went wrong</Trans>}
-      message={message}
-      {...props}
-    />
+    <ErrorDisplay variant="destructive" {...props}>
+      {children}
+    </ErrorDisplay>
   );
 }
 
-function ErrorDisplayWarning({
-  title,
-  message,
-  ...props
-}: Omit<ErrorDisplayProps, 'variant' | 'icon'>) {
-  return (
-    <ErrorDisplay
-      variant="warning"
-      icon={AlertTriangle}
-      title={title || <Trans>Warning</Trans>}
-      message={message}
-      {...props}
-    />
-  );
-}
-
-export { ErrorDisplay, ErrorDisplayError, ErrorDisplayWarning };
+export {
+  ErrorDisplay,
+  // subcomponents
+  ErrorDisplayIcon,
+  ErrorDisplayStatus,
+  ErrorDisplayTitle,
+  ErrorDisplayMessage,
+  ErrorDisplayDetails,
+  ErrorDisplayActions,
+  ErrorDisplayRetryButton,
+  // convenience wrappers
+  ErrorDisplayError
+};
