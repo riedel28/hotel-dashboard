@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
-import { Trans } from '@lingui/react/macro';
-import { Loader2Icon } from 'lucide-react';
+import { Plural, Trans } from '@lingui/react/macro';
+import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -28,6 +28,7 @@ import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 
 import { cn } from '@/lib/utils';
 
+import { AddProductModal } from './add-product-modal';
 import { DeleteProductDialog } from './delete-product-dialog';
 import { EditProductModal } from './edit-product-modal';
 import { ProductsList } from './products-list';
@@ -141,9 +142,7 @@ export function ProductTreeEditor({
   onChange
 }: ProductTreeEditorProps) {
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
-  const [selectedProductId, setSelectedProductId] = React.useState<
-    number | null
-  >(null);
+  // We no longer highlight a selected product
 
   const indent = 20;
 
@@ -195,6 +194,8 @@ export function ProductTreeEditor({
     categoryId: number;
     product: Product;
   } | null>(null);
+  const [pendingCreateForCategoryId, setPendingCreateForCategoryId] =
+    React.useState<number | null>(null);
   const categoryTitle = selectedNode ? selectedNode.title : '';
   const pendingProductTitle = pendingDelete?.product.title ?? '';
 
@@ -203,9 +204,7 @@ export function ProductTreeEditor({
     setTitleInput(selectedNode?.title ?? '');
   }, [selectedNode]);
 
-  React.useEffect(() => {
-    setSelectedProductId(null);
-  }, [selectedId]);
+  // no-op when category changes
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isTreeLoading, setIsTreeLoading] = React.useState(false);
@@ -230,13 +229,11 @@ export function ProductTreeEditor({
             </CardHeader>
             <CardContent className="pt-0">
               {isTreeLoading ? (
-                <div className="space-y-2">
-                  <Skeleton className="h-6 w-1/2 rounded-md" />
-                  <Skeleton className="h-6 w-1/3 rounded-md" />
-                  <Skeleton className="h-6 w-1/2 rounded-md" />
-                  <Skeleton className="h-6 w-1/3 rounded-md" />
-                  <Skeleton className="h-6 w-1/2 rounded-md" />
-                  <Skeleton className="h-6 w-1/3 rounded-md" />
+                <div className="space-y-2 pl-4">
+                  <Skeleton className="h-7 w-1/2 rounded-md" />
+                  <Skeleton className="h-7 w-1/3 rounded-md" />
+                  <Skeleton className="h-7 w-1/2 rounded-md" />
+                  <Skeleton className="h-7 w-1/3 rounded-md" />
                 </div>
               ) : (
                 <Tree
@@ -256,6 +253,7 @@ export function ProductTreeEditor({
                         : null;
                     const productCount =
                       categoryForCount?.products?.length ?? 0;
+
                     return (
                       <TreeItem key={id} item={item}>
                         <TreeItemLabel
@@ -286,7 +284,12 @@ export function ProductTreeEditor({
                                     </Badge>
                                   </TooltipTrigger>
                                   <TooltipContent side="right" align="center">
-                                    <span>{`${productCount} products in this category`}</span>
+                                    <Plural
+                                      value={productCount}
+                                      _0="No products in this category"
+                                      one="# product in this category"
+                                      other="# products in this category"
+                                    />
                                   </TooltipContent>
                                 </Tooltip>
                               </TooltipProvider>
@@ -385,9 +388,7 @@ export function ProductTreeEditor({
                 selectedNode.products && selectedNode.products.length > 0 ? (
                   <ProductsList
                     products={selectedNode.products}
-                    selectedProductId={selectedProductId}
                     onEdit={(p) => {
-                      setSelectedProductId(p.id);
                       setPendingEdit({
                         categoryId: selectedNode.id,
                         product: p
@@ -401,8 +402,24 @@ export function ProductTreeEditor({
                     }
                   />
                 ) : (
-                  <div className="text-muted-foreground text-center text-base">
-                    <Trans>No products in this category</Trans>
+                  <div className="flex flex-col items-center justify-center gap-3">
+                    <div className="text-muted-foreground text-center text-sm text-pretty">
+                      <Trans>
+                        No products in this category. Add products to this
+                        category by clicking the button below.
+                      </Trans>
+                    </div>
+
+                    <Button
+                      variant="secondary"
+                      className="mt-2"
+                      onClick={() => {
+                        setPendingCreateForCategoryId(selectedNode.id);
+                      }}
+                    >
+                      <PlusCircleIcon className="mr-2 h-4 w-4" />
+                      <Trans>Add product</Trans>
+                    </Button>
                   </div>
                 )
               ) : (
@@ -445,8 +462,29 @@ export function ProductTreeEditor({
                 newTitle
               )
             );
+            // no selection highlight
           }
           setPendingEdit(null);
+        }}
+      />
+      <AddProductModal
+        open={pendingCreateForCategoryId != null}
+        onOpenChange={(open) => !open && setPendingCreateForCategoryId(null)}
+        onSave={(newTitle) => {
+          if (pendingCreateForCategoryId != null && selectedNode) {
+            const newId =
+              Math.max(0, ...selectedNode.products.map((p) => p.id)) + 1;
+            const next = categories.map((cat) =>
+              cat.id === pendingCreateForCategoryId
+                ? {
+                    ...cat,
+                    products: [...cat.products, { id: newId, title: newTitle }]
+                  }
+                : cat
+            );
+            onChange(next);
+          }
+          setPendingCreateForCategoryId(null);
         }}
       />
     </>

@@ -8,14 +8,12 @@ import type { Product } from './product-tree-editor';
 
 interface ProductsListProps {
   products: Product[];
-  selectedProductId?: number | null;
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
 }
 
 export function ProductsList({
   products,
-  selectedProductId,
   onEdit,
   onDelete
 }: ProductsListProps) {
@@ -25,8 +23,7 @@ export function ProductsList({
         <li
           key={p.id}
           className={cn(
-            'border-border bg-card flex items-center justify-between rounded-md border px-3 py-1.5',
-            selectedProductId === p.id && 'ring-primary ring-2'
+            'border-border bg-card flex items-center justify-between rounded-md border px-3 py-1.5 transition-colors'
           )}
         >
           <span className="text-sm font-medium">{p.title}</span>
