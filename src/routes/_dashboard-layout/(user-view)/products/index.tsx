@@ -84,7 +84,7 @@ const initialProductCategories: ProductCategoryLocal[] = [
         ]
       }
     ],
-    products: [{ id: 304, title: 'Premium Toiletries' }]
+    products: []
   },
   {
     id: 8,

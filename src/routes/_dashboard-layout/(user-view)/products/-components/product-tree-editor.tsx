@@ -3,11 +3,18 @@ import * as React from 'react';
 import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
 import { Trans } from '@lingui/react/macro';
-import { Loader2Icon, PencilIcon, Trash2Icon } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -23,6 +30,7 @@ import { cn } from '@/lib/utils';
 
 import { DeleteProductDialog } from './delete-product-dialog';
 import { EditProductModal } from './edit-product-modal';
+import { ProductsList } from './products-list';
 
 export type Product = {
   id: number;
@@ -139,7 +147,7 @@ export function ProductTreeEditor({
 
   const indent = 20;
 
-  const { itemsMap, rootId, initiallyExpanded } = React.useMemo(() => {
+  const { itemsMap, rootId } = React.useMemo(() => {
     const map: Record<string, TreeItemData> = {};
     const topLevelIds: string[] = [];
 
@@ -164,7 +172,7 @@ export function ProductTreeEditor({
   }, [categories]);
 
   const tree = useTree<TreeItemData>({
-    initialState: { expandedItems: initiallyExpanded },
+    initialState: { expandedItems: [] },
     indent,
     rootItemId: rootId,
     getItemName: (item) => item.getItemData().name,
@@ -212,8 +220,8 @@ export function ProductTreeEditor({
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-12 md:col-span-5">
+      <div className="grid grid-cols-12 gap-4 xl:max-w-[1200px]">
+        <div className="col-span-12 md:col-span-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-base">
@@ -294,12 +302,18 @@ export function ProductTreeEditor({
           </Card>
         </div>
 
-        <div className="col-span-12 md:col-span-7">
-          <Card>
+        <div className="col-span-12 md:col-span-6">
+          <Card className="min-h-[200px]">
             <CardHeader>
               <CardTitle className="text-base">
-                <Trans>Details</Trans>
+                <Trans>Category details</Trans>
               </CardTitle>
+              <CardDescription>
+                <Trans>
+                  Edit the category title and save to update the products in
+                  this category.
+                </Trans>
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {selectedNode ? (
@@ -331,18 +345,6 @@ export function ProductTreeEditor({
                       disabled={isSubmitting}
                     />
                   </div>
-                  <div className="flex justify-end">
-                    <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? (
-                        <>
-                          <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-                          <Trans>Saving...</Trans>
-                        </>
-                      ) : (
-                        <Trans>Save</Trans>
-                      )}
-                    </Button>
-                  </div>
                 </form>
               ) : (
                 <div className="text-muted-foreground text-center text-base">
@@ -350,11 +352,25 @@ export function ProductTreeEditor({
                 </div>
               )}
             </CardContent>
+            {selectedNode && (
+              <CardFooter className="flex justify-end border-t-0">
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                      <Trans>Saving...</Trans>
+                    </>
+                  ) : (
+                    <Trans>Save changes</Trans>
+                  )}
+                </Button>
+              </CardFooter>
+            )}
           </Card>
         </div>
 
-        <div className="col-span-12">
-          <Card>
+        <div className="col-span-12 xl:col-span-6">
+          <Card className="min-h-[150px]">
             <CardHeader>
               <CardTitle className="text-base">
                 {selectedNode ? (
@@ -364,58 +380,33 @@ export function ProductTreeEditor({
                 )}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0">
               {selectedNode ? (
                 selectedNode.products && selectedNode.products.length > 0 ? (
-                  <ul className="grid gap-2">
-                    {selectedNode.products.map((p) => (
-                      <li
-                        key={p.id}
-                        className={cn(
-                          'border-border bg-card flex items-center justify-between rounded-md border p-3',
-                          selectedProductId === p.id && 'ring-primary ring-2'
-                        )}
-                      >
-                        <span className="text-sm font-medium">{p.title}</span>
-                        <div className="flex items-center gap-1">
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            aria-label="Edit product"
-                            onClick={() => {
-                              setSelectedProductId(p.id);
-                              setPendingEdit({
-                                categoryId: selectedNode.id,
-                                product: p
-                              });
-                            }}
-                          >
-                            <PencilIcon className="size-4" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            aria-label="Delete product"
-                            onClick={() =>
-                              setPendingDelete({
-                                categoryId: selectedNode.id,
-                                product: p
-                              })
-                            }
-                          >
-                            <Trash2Icon className="size-4" />
-                          </Button>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                  <ProductsList
+                    products={selectedNode.products}
+                    selectedProductId={selectedProductId}
+                    onEdit={(p) => {
+                      setSelectedProductId(p.id);
+                      setPendingEdit({
+                        categoryId: selectedNode.id,
+                        product: p
+                      });
+                    }}
+                    onDelete={(p) =>
+                      setPendingDelete({
+                        categoryId: selectedNode.id,
+                        product: p
+                      })
+                    }
+                  />
                 ) : (
-                  <div className="text-muted-foreground text-sm">
+                  <div className="text-muted-foreground text-center text-base">
                     <Trans>No products in this category</Trans>
                   </div>
                 )
               ) : (
-                <div className="text-muted-foreground text-sm">
+                <div className="text-muted-foreground text-center text-base">
                   <Trans>Select a category to view products</Trans>
                 </div>
               )}
