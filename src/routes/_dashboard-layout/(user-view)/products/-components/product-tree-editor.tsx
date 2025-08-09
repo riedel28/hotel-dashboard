@@ -22,6 +22,7 @@ import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 import { cn } from '@/lib/utils';
 
 import { DeleteProductDialog } from './delete-product-dialog';
+import { EditProductModal } from './edit-product-modal';
 
 export type Product = {
   id: number;
@@ -62,6 +63,36 @@ function updateCategoryTitle(
       return {
         ...node,
         children: updateCategoryTitle(node.children, id, title)
+      };
+    }
+    return node;
+  });
+}
+
+function updateProductTitle(
+  nodes: ProductCategory[],
+  categoryId: number,
+  productId: number,
+  title: string
+): ProductCategory[] {
+  return nodes.map((node) => {
+    if (node.id === categoryId) {
+      return {
+        ...node,
+        products: node.products.map((p) =>
+          p.id === productId ? { ...p, title } : p
+        )
+      };
+    }
+    if (node.children && node.children.length) {
+      return {
+        ...node,
+        children: updateProductTitle(
+          node.children,
+          categoryId,
+          productId,
+          title
+        )
       };
     }
     return node;
@@ -149,6 +180,10 @@ export function ProductTreeEditor({
     return selectedId != null ? findCategoryById(categories, selectedId) : null;
   }, [categories, selectedId]);
   const [pendingDelete, setPendingDelete] = React.useState<{
+    categoryId: number;
+    product: Product;
+  } | null>(null);
+  const [pendingEdit, setPendingEdit] = React.useState<{
     categoryId: number;
     product: Product;
   } | null>(null);
@@ -332,9 +367,9 @@ export function ProductTreeEditor({
             <CardContent>
               {selectedNode ? (
                 selectedNode.products && selectedNode.products.length > 0 ? (
-                  <div className="grid gap-2">
+                  <ul className="grid gap-2">
                     {selectedNode.products.map((p) => (
-                      <div
+                      <li
                         key={p.id}
                         className={cn(
                           'border-border bg-card flex items-center justify-between rounded-md border p-3',
@@ -347,7 +382,13 @@ export function ProductTreeEditor({
                             size="icon"
                             variant="ghost"
                             aria-label="Edit product"
-                            onClick={() => setSelectedProductId(p.id)}
+                            onClick={() => {
+                              setSelectedProductId(p.id);
+                              setPendingEdit({
+                                categoryId: selectedNode.id,
+                                product: p
+                              });
+                            }}
                           >
                             <PencilIcon className="size-4" />
                           </Button>
@@ -365,9 +406,9 @@ export function ProductTreeEditor({
                             <Trash2Icon className="size-4" />
                           </Button>
                         </div>
-                      </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 ) : (
                   <div className="text-muted-foreground text-sm">
                     <Trans>No products in this category</Trans>
@@ -397,6 +438,24 @@ export function ProductTreeEditor({
             );
           }
           setPendingDelete(null);
+        }}
+      />
+      <EditProductModal
+        open={!!pendingEdit}
+        initialTitle={pendingEdit?.product.title ?? ''}
+        onOpenChange={(open) => !open && setPendingEdit(null)}
+        onSave={(newTitle) => {
+          if (pendingEdit) {
+            onChange(
+              updateProductTitle(
+                categories,
+                pendingEdit.categoryId,
+                pendingEdit.product.id,
+                newTitle
+              )
+            );
+          }
+          setPendingEdit(null);
         }}
       />
     </>
