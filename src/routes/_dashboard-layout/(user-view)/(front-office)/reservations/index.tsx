@@ -15,7 +15,12 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { ErrorDisplayError } from '@/components/ui/error-display';
+import {
+  ErrorDisplayActions,
+  ErrorDisplayError,
+  ErrorDisplayMessage,
+  ErrorDisplayTitle
+} from '@/components/ui/error-display';
 import { SearchInput } from '@/components/ui/search-input';
 import {
   Select,
@@ -115,14 +120,11 @@ function ReservationsPage() {
 
     navigate({
       to: '/reservations',
-      search: {
+      search: (prev) => ({
+        ...prev,
         page: pagination.pageIndex + 1, // Convert to 1-based for URL
-        per_page: pagination.pageSize,
-        status,
-        q,
-        from,
-        to
-      }
+        per_page: pagination.pageSize
+      })
     });
   };
 
@@ -156,13 +158,22 @@ function ReservationsPage() {
     if (reservationsQuery.isError) {
       return (
         <div className="flex min-h-[60vh] items-center justify-center">
-          <ErrorDisplayError
-            title={<Trans>Error</Trans>}
-            message={reservationsQuery.error.message}
-            showRetry
-            onRetry={handleRefresh}
-            isRetrying={reservationsQuery.isFetching}
-          />
+          <ErrorDisplayError className="w-md max-w-md">
+            <ErrorDisplayTitle>
+              <Trans>Something went wrong</Trans>
+            </ErrorDisplayTitle>
+            <ErrorDisplayMessage>
+              {reservationsQuery.error.message || (
+                <Trans>An error occurred while fetching reservations</Trans>
+              )}
+            </ErrorDisplayMessage>
+            <ErrorDisplayActions>
+              <Button variant="destructive" onClick={handleRefresh}>
+                <RefreshCw className="mr-2 h-4 w-4" />
+                <Trans>Refresh</Trans>
+              </Button>
+            </ErrorDisplayActions>
+          </ErrorDisplayError>
         </div>
       );
     }

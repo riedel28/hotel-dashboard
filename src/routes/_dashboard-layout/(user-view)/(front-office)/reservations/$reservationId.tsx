@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
 
-import { buildResourceUrl } from '@/config/api';
+import { fetchReservationById } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
   useSuspenseQuery
 } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+import { RefreshCw } from 'lucide-react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import {
@@ -17,28 +18,18 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { ErrorDisplayError } from '@/components/ui/error-display';
+import { Button } from '@/components/ui/button';
+import {
+  ErrorDisplayActions,
+  ErrorDisplayError,
+  ErrorDisplayMessage,
+  ErrorDisplayTitle
+} from '@/components/ui/error-display';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
 
-async function fetchReservationById(id: string) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const response = await fetch(buildResourceUrl('reservations', id));
-
-  if (response.status === 404) {
-    throw new Error('Reservation not found');
-  }
-
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-
-  const data = await response.json();
-
-  return data;
-}
+// fetchReservationById moved to @/api/reservations
 
 function ReservationPage() {
   return (
@@ -77,13 +68,22 @@ function ReservationPage() {
               <ErrorBoundary
                 onReset={reset}
                 fallbackRender={({ error, resetErrorBoundary }) => (
-                  <div className="flex min-h-[60vh] items-center justify-center">
-                    <ErrorDisplayError
-                      title={<Trans>Error</Trans>}
-                      message={error.message}
-                      showRetry
-                      onRetry={resetErrorBoundary}
-                    />
+                  <div className="flex">
+                    <ErrorDisplayError className="w-md max-w-md">
+                      <ErrorDisplayTitle>
+                        <Trans>Something went wrong</Trans>
+                      </ErrorDisplayTitle>
+                      <ErrorDisplayMessage>{error.message}</ErrorDisplayMessage>
+                      <ErrorDisplayActions>
+                        <Button
+                          variant="destructive"
+                          onClick={resetErrorBoundary}
+                        >
+                          <RefreshCw className="mr-2 h-4 w-4" />
+                          <Trans>Refresh</Trans>
+                        </Button>
+                      </ErrorDisplayActions>
+                    </ErrorDisplayError>
                   </div>
                 )}
               >

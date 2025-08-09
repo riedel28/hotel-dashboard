@@ -374,8 +374,8 @@ msgstr "Gast bearbeiten"
 msgid "Edit Guest"
 msgstr "Gast bearbeiten"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:63
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:60
 msgid "Edit reservation"
 msgstr "Reservierung bearbeiten"
 
@@ -442,8 +442,8 @@ msgid "Enter your password"
 msgstr "Passwort eingeben"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:82
-msgid "Error"
-msgstr "Fehler"
+#~ msgid "Error"
+#~ msgstr "Fehler"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:64
 msgid "Error changing password"
@@ -662,7 +662,7 @@ msgstr "Hallo von About!"
 msgid "Hide password"
 msgstr "Passwort ausblenden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:51
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:42
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:201
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:26
@@ -802,6 +802,11 @@ msgstr "Nach rechts verschieben"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:241
 msgid "N"
 msgstr "N"
+
+#: src/api/reservations.ts:76
+#: src/api/reservations.ts:95
+msgid "Network response was not ok"
+msgstr "Netzwerkantwort war nicht in Ordnung"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:77
 msgid "New Guest"
@@ -1046,6 +1051,7 @@ msgstr "An Gerät senden"
 msgid "Received At"
 msgstr "Erhalten am"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:83
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:173
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:306
 msgid "Refresh"
@@ -1100,6 +1106,10 @@ msgstr "Reservierungs-ID"
 msgid "Reservation No."
 msgstr "Reservierung:"
 
+#: src/api/reservations.ts:91
+msgid "Reservation not found"
+msgstr "Reservierung nicht gefunden"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:146
 msgid "Reservation Nr."
 msgstr "Reservation Nr."
@@ -1114,7 +1124,7 @@ msgstr "Reservierung erfolgreich aktualisiert"
 
 #: src/routes/_dashboard-layout.tsx:191
 #: src/routes/_dashboard-layout.tsx:193
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:57
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:207
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:215
 #: src/routes/_dashboard-layout/index.tsx:24
@@ -1297,6 +1307,7 @@ msgstr "Seitenleiste"
 msgid "SMS sent successfully"
 msgstr "SMS erfolgreich gesendet"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:163
 msgid "Something went wrong"
 msgstr "Etwas ist schiefgelaufen"
