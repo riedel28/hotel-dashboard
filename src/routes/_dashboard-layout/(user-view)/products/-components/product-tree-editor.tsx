@@ -3,13 +3,20 @@ import * as React from 'react';
 import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
 import { Trans } from '@lingui/react/macro';
-import { Loader2Icon } from 'lucide-react';
+import { Loader2Icon, PencilIcon, Trash2Icon } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 
 import { cn } from '@/lib/utils';
@@ -59,6 +66,28 @@ function updateCategoryTitle(
   });
 }
 
+function deleteProduct(
+  nodes: ProductCategory[],
+  categoryId: number,
+  productId: number
+): ProductCategory[] {
+  return nodes.map((node) => {
+    if (node.id === categoryId) {
+      return {
+        ...node,
+        products: node.products.filter((p) => p.id !== productId)
+      };
+    }
+    if (node.children && node.children.length) {
+      return {
+        ...node,
+        children: deleteProduct(node.children, categoryId, productId)
+      };
+    }
+    return node;
+  });
+}
+
 interface ProductTreeEditorProps {
   categories: ProductCategory[];
   onChange: (next: ProductCategory[]) => void;
@@ -71,6 +100,9 @@ export function ProductTreeEditor({
   onChange
 }: ProductTreeEditorProps) {
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
+  const [selectedProductId, setSelectedProductId] = React.useState<
+    number | null
+  >(null);
 
   const indent = 20;
 
@@ -114,11 +146,16 @@ export function ProductTreeEditor({
   const selectedNode = React.useMemo(() => {
     return selectedId != null ? findCategoryById(categories, selectedId) : null;
   }, [categories, selectedId]);
+  const categoryTitle = selectedNode ? selectedNode.title : '';
 
   const [titleInput, setTitleInput] = React.useState('');
   React.useEffect(() => {
     setTitleInput(selectedNode?.title ?? '');
   }, [selectedNode]);
+
+  React.useEffect(() => {
+    setSelectedProductId(null);
+  }, [selectedId]);
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isTreeLoading, setIsTreeLoading] = React.useState(false);
@@ -133,14 +170,14 @@ export function ProductTreeEditor({
 
   return (
     <div className="grid grid-cols-12 gap-4">
-      <div className="col-span-12 md:col-span-5 xl:col-span-4">
+      <div className="col-span-12 md:col-span-5">
         <Card>
           <CardHeader>
             <CardTitle className="text-base">
               <Trans>Product categories</Trans>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             {isTreeLoading ? (
               <div className="space-y-2">
                 <Skeleton className="h-6 w-1/2 rounded-md" />
@@ -162,12 +199,17 @@ export function ProductTreeEditor({
                   const numericId = /^\d+$/.test(id) ? Number(id) : null;
                   const isSelected =
                     numericId != null && selectedId === numericId;
+                  const categoryForCount =
+                    numericId != null
+                      ? findCategoryById(categories, numericId)
+                      : null;
+                  const productCount = categoryForCount?.products?.length ?? 0;
                   return (
                     <TreeItem key={id} item={item}>
                       <TreeItemLabel
                         aria-selected={isSelected}
                         className={cn(
-                          'rounded-md px-2.5',
+                          'w-full justify-between rounded-md px-2.5',
                           isSelected
                             ? 'bg-accent text-accent-foreground'
                             : 'hover:bg-accent'
@@ -177,7 +219,28 @@ export function ProductTreeEditor({
                           numericId != null &&
                           setSelectedId(numericId)
                         }
-                      />
+                      >
+                        <span className="flex w-full items-center justify-between">
+                          <span>{item.getItemData().name}</span>
+                          {numericId != null ? (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Badge
+                                    variant="outline"
+                                    className="ml-2 rounded-sm px-1.5 py-0 text-[10px] leading-none"
+                                  >
+                                    {productCount}
+                                  </Badge>
+                                </TooltipTrigger>
+                                <TooltipContent side="right" align="center">
+                                  <span>{`${productCount} products in this category`}</span>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          ) : null}
+                        </span>
+                      </TreeItemLabel>
                     </TreeItem>
                   );
                 })}
@@ -187,44 +250,7 @@ export function ProductTreeEditor({
         </Card>
       </div>
 
-      <div className="col-span-12 md:col-span-7 xl:col-span-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              <Trans>Products</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {selectedNode ? (
-              selectedNode.products && selectedNode.products.length > 0 ? (
-                <div className="grid gap-2">
-                  {selectedNode.products.map((p) => (
-                    <div
-                      key={p.id}
-                      className="border-border bg-card flex items-center justify-between rounded-md border p-3"
-                    >
-                      <span className="text-sm font-medium">{p.title}</span>
-                      <span className="text-muted-foreground text-xs">
-                        #{p.id}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-muted-foreground text-sm">
-                  <Trans>No products in this category</Trans>
-                </div>
-              )
-            ) : (
-              <div className="text-muted-foreground text-sm">
-                <Trans>Select a category to view products</Trans>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="col-span-12 xl:col-span-4">
+      <div className="col-span-12 md:col-span-7">
         <Card>
           <CardHeader>
             <CardTitle className="text-base">
@@ -275,8 +301,71 @@ export function ProductTreeEditor({
                 </div>
               </form>
             ) : (
-              <div className="text-muted-foreground text-sm">
+              <div className="text-muted-foreground text-center text-base">
                 <Trans>Select a category to edit</Trans>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="col-span-12">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">
+              {selectedNode ? (
+                <Trans>Products in {categoryTitle}</Trans>
+              ) : (
+                <Trans>Products</Trans>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {selectedNode ? (
+              selectedNode.products && selectedNode.products.length > 0 ? (
+                <div className="grid gap-2">
+                  {selectedNode.products.map((p) => (
+                    <div
+                      key={p.id}
+                      className={cn(
+                        'border-border bg-card flex items-center justify-between rounded-md border p-3',
+                        selectedProductId === p.id && 'ring-primary ring-2'
+                      )}
+                    >
+                      <span className="text-sm font-medium">{p.title}</span>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Edit product"
+                          onClick={() => setSelectedProductId(p.id)}
+                        >
+                          <PencilIcon className="size-4" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Delete product"
+                          onClick={() =>
+                            onChange(
+                              deleteProduct(categories, selectedNode.id, p.id)
+                            )
+                          }
+                        >
+                          <Trash2Icon className="size-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-muted-foreground text-sm">
+                  <Trans>No products in this category</Trans>
+                </div>
+              )
+            ) : (
+              <div className="text-muted-foreground text-sm">
+                <Trans>Select a category to view products</Trans>
               </div>
             )}
           </CardContent>

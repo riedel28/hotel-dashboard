@@ -27,7 +27,8 @@ const initialProductCategories: ProductCategoryLocal[] = [
     children: [],
     products: [
       { id: 101, title: 'Welcome Pack' },
-      { id: 102, title: 'City Map' }
+      { id: 102, title: 'City Map' },
+      { id: 103, title: 'Welcome Drink' }
     ]
   },
   {
@@ -40,7 +41,8 @@ const initialProductCategories: ProductCategoryLocal[] = [
         children: [],
         products: [
           { id: 201, title: 'Continental Breakfast' },
-          { id: 202, title: 'Vegan Breakfast' }
+          { id: 202, title: 'Vegan Breakfast' },
+          { id: 206, title: 'Gluten-Free Breakfast' }
         ]
       },
       {
@@ -49,7 +51,9 @@ const initialProductCategories: ProductCategoryLocal[] = [
         children: [],
         products: [
           { id: 203, title: 'Pasta Bolognese' },
-          { id: 204, title: 'Grilled Salmon' }
+          { id: 204, title: 'Grilled Salmon' },
+          { id: 207, title: 'Steak Frites' },
+          { id: 208, title: 'Chicken Curry' }
         ]
       }
     ],
@@ -65,14 +69,19 @@ const initialProductCategories: ProductCategoryLocal[] = [
         children: [],
         products: [
           { id: 301, title: 'Full Body Massage' },
-          { id: 302, title: 'Facial Treatment' }
+          { id: 302, title: 'Facial Treatment' },
+          { id: 305, title: 'Aromatherapy Session' }
         ]
       },
       {
         id: 7,
         title: 'Gym Access',
         children: [],
-        products: [{ id: 303, title: 'Personal Training Session' }]
+        products: [
+          { id: 303, title: 'Personal Training Session' },
+          { id: 306, title: 'Yoga Class' },
+          { id: 307, title: 'Spin Class' }
+        ]
       }
     ],
     products: [{ id: 304, title: 'Premium Toiletries' }]
@@ -85,13 +94,19 @@ const initialProductCategories: ProductCategoryLocal[] = [
         id: 9,
         title: 'Restaurant',
         children: [],
-        products: [{ id: 401, title: 'Chef’s Special' }]
+        products: [
+          { id: 401, title: 'Chef’s Special' },
+          { id: 404, title: 'Tasting Menu' }
+        ]
       },
       {
         id: 10,
         title: 'Lobby Bar',
         children: [],
-        products: [{ id: 402, title: 'Signature Cocktail' }]
+        products: [
+          { id: 402, title: 'Signature Cocktail' },
+          { id: 405, title: 'Craft Beer Flight' }
+        ]
       }
     ],
     products: [{ id: 403, title: 'Seasonal Menu' }]
