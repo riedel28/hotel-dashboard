@@ -21,6 +21,8 @@ import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 
 import { cn } from '@/lib/utils';
 
+import { DeleteProductDialog } from './delete-product-dialog';
+
 export type Product = {
   id: number;
   title: string;
@@ -146,7 +148,12 @@ export function ProductTreeEditor({
   const selectedNode = React.useMemo(() => {
     return selectedId != null ? findCategoryById(categories, selectedId) : null;
   }, [categories, selectedId]);
+  const [pendingDelete, setPendingDelete] = React.useState<{
+    categoryId: number;
+    product: Product;
+  } | null>(null);
   const categoryTitle = selectedNode ? selectedNode.title : '';
+  const pendingProductTitle = pendingDelete?.product.title ?? '';
 
   const [titleInput, setTitleInput] = React.useState('');
   React.useEffect(() => {
@@ -169,208 +176,229 @@ export function ProductTreeEditor({
   // Simple loading skeleton: 4 full-width rows
 
   return (
-    <div className="grid grid-cols-12 gap-4">
-      <div className="col-span-12 md:col-span-5">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              <Trans>Product categories</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {isTreeLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-6 w-1/2 rounded-md" />
-                <Skeleton className="h-6 w-1/3 rounded-md" />
-                <Skeleton className="h-6 w-1/2 rounded-md" />
-                <Skeleton className="h-6 w-1/3 rounded-md" />
-                <Skeleton className="h-6 w-1/2 rounded-md" />
-                <Skeleton className="h-6 w-1/3 rounded-md" />
-              </div>
-            ) : (
-              <Tree
-                indent={indent}
-                tree={tree}
-                aria-busy={isTreeLoading}
-                className="relative before:absolute before:inset-0 before:-ms-1 before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)))]"
-              >
-                {tree.getItems().map((item) => {
-                  const id = item.getId() as string;
-                  const numericId = /^\d+$/.test(id) ? Number(id) : null;
-                  const isSelected =
-                    numericId != null && selectedId === numericId;
-                  const categoryForCount =
-                    numericId != null
-                      ? findCategoryById(categories, numericId)
-                      : null;
-                  const productCount = categoryForCount?.products?.length ?? 0;
-                  return (
-                    <TreeItem key={id} item={item}>
-                      <TreeItemLabel
-                        aria-selected={isSelected}
-                        className={cn(
-                          'w-full justify-between rounded-md px-2.5',
-                          isSelected
-                            ? 'bg-accent text-accent-foreground'
-                            : 'hover:bg-accent'
-                        )}
-                        onClick={() =>
-                          !isTreeLoading &&
-                          numericId != null &&
-                          setSelectedId(numericId)
-                        }
-                      >
-                        <span className="flex w-full items-center justify-between">
-                          <span>{item.getItemData().name}</span>
-                          {numericId != null ? (
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Badge
-                                    variant="outline"
-                                    className="ml-2 rounded-sm px-1.5 py-0 text-[10px] leading-none"
-                                  >
-                                    {productCount}
-                                  </Badge>
-                                </TooltipTrigger>
-                                <TooltipContent side="right" align="center">
-                                  <span>{`${productCount} products in this category`}</span>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          ) : null}
-                        </span>
-                      </TreeItemLabel>
-                    </TreeItem>
-                  );
-                })}
-              </Tree>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="col-span-12 md:col-span-7">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              <Trans>Details</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {selectedNode ? (
-              <form
-                className="grid gap-3"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setIsSubmitting(true);
-                  setTimeout(() => {
-                    onChange(
-                      updateCategoryTitle(
-                        categories,
-                        selectedNode.id,
-                        titleInput
-                      )
-                    );
-                    setIsSubmitting(false);
-                  }, 250);
-                }}
-              >
-                <div className="grid gap-2">
-                  <Label htmlFor="title">
-                    <Trans>Title</Trans>
-                  </Label>
-                  <Input
-                    id="title"
-                    value={titleInput}
-                    onChange={(e) => setTitleInput(e.target.value)}
-                    disabled={isSubmitting}
-                  />
+    <>
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-12 md:col-span-5">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">
+                <Trans>Product categories</Trans>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              {isTreeLoading ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-1/2 rounded-md" />
+                  <Skeleton className="h-6 w-1/3 rounded-md" />
+                  <Skeleton className="h-6 w-1/2 rounded-md" />
+                  <Skeleton className="h-6 w-1/3 rounded-md" />
+                  <Skeleton className="h-6 w-1/2 rounded-md" />
+                  <Skeleton className="h-6 w-1/3 rounded-md" />
                 </div>
-                <div className="flex justify-end">
-                  <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                      <>
-                        <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-                        <Trans>Saving...</Trans>
-                      </>
-                    ) : (
-                      <Trans>Save</Trans>
-                    )}
-                  </Button>
-                </div>
-              </form>
-            ) : (
-              <div className="text-muted-foreground text-center text-base">
-                <Trans>Select a category to edit</Trans>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="col-span-12">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              {selectedNode ? (
-                <Trans>Products in {categoryTitle}</Trans>
               ) : (
-                <Trans>Products</Trans>
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {selectedNode ? (
-              selectedNode.products && selectedNode.products.length > 0 ? (
-                <div className="grid gap-2">
-                  {selectedNode.products.map((p) => (
-                    <div
-                      key={p.id}
-                      className={cn(
-                        'border-border bg-card flex items-center justify-between rounded-md border p-3',
-                        selectedProductId === p.id && 'ring-primary ring-2'
-                      )}
-                    >
-                      <span className="text-sm font-medium">{p.title}</span>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          aria-label="Edit product"
-                          onClick={() => setSelectedProductId(p.id)}
-                        >
-                          <PencilIcon className="size-4" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          aria-label="Delete product"
+                <Tree
+                  indent={indent}
+                  tree={tree}
+                  aria-busy={isTreeLoading}
+                  className="relative before:absolute before:inset-0 before:-ms-1 before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)-1px),var(--border)_calc(var(--tree-indent)))]"
+                >
+                  {tree.getItems().map((item) => {
+                    const id = item.getId() as string;
+                    const numericId = /^\d+$/.test(id) ? Number(id) : null;
+                    const isSelected =
+                      numericId != null && selectedId === numericId;
+                    const categoryForCount =
+                      numericId != null
+                        ? findCategoryById(categories, numericId)
+                        : null;
+                    const productCount =
+                      categoryForCount?.products?.length ?? 0;
+                    return (
+                      <TreeItem key={id} item={item}>
+                        <TreeItemLabel
+                          aria-selected={isSelected}
+                          className={cn(
+                            'w-full justify-between rounded-md px-2.5',
+                            isSelected
+                              ? 'bg-accent text-accent-foreground'
+                              : 'hover:bg-accent'
+                          )}
                           onClick={() =>
-                            onChange(
-                              deleteProduct(categories, selectedNode.id, p.id)
-                            )
+                            !isTreeLoading &&
+                            numericId != null &&
+                            setSelectedId(numericId)
                           }
                         >
-                          <Trash2Icon className="size-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+                          <span className="flex w-full items-center justify-between">
+                            <span>{item.getItemData().name}</span>
+                            {numericId != null ? (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Badge
+                                      variant="outline"
+                                      className="ml-2 rounded-sm px-1.5 py-0 text-[10px] leading-none"
+                                    >
+                                      {productCount}
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="right" align="center">
+                                    <span>{`${productCount} products in this category`}</span>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            ) : null}
+                          </span>
+                        </TreeItemLabel>
+                      </TreeItem>
+                    );
+                  })}
+                </Tree>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="col-span-12 md:col-span-7">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">
+                <Trans>Details</Trans>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {selectedNode ? (
+                <form
+                  className="grid gap-3"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setIsSubmitting(true);
+                    setTimeout(() => {
+                      onChange(
+                        updateCategoryTitle(
+                          categories,
+                          selectedNode.id,
+                          titleInput
+                        )
+                      );
+                      setIsSubmitting(false);
+                    }, 250);
+                  }}
+                >
+                  <div className="grid gap-2">
+                    <Label htmlFor="title">
+                      <Trans>Title</Trans>
+                    </Label>
+                    <Input
+                      id="title"
+                      value={titleInput}
+                      onChange={(e) => setTitleInput(e.target.value)}
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <Button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? (
+                        <>
+                          <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                          <Trans>Saving...</Trans>
+                        </>
+                      ) : (
+                        <Trans>Save</Trans>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              ) : (
+                <div className="text-muted-foreground text-center text-base">
+                  <Trans>Select a category to edit</Trans>
                 </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="col-span-12">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">
+                {selectedNode ? (
+                  <Trans>Products in {categoryTitle}</Trans>
+                ) : (
+                  <Trans>Products</Trans>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedNode ? (
+                selectedNode.products && selectedNode.products.length > 0 ? (
+                  <div className="grid gap-2">
+                    {selectedNode.products.map((p) => (
+                      <div
+                        key={p.id}
+                        className={cn(
+                          'border-border bg-card flex items-center justify-between rounded-md border p-3',
+                          selectedProductId === p.id && 'ring-primary ring-2'
+                        )}
+                      >
+                        <span className="text-sm font-medium">{p.title}</span>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            aria-label="Edit product"
+                            onClick={() => setSelectedProductId(p.id)}
+                          >
+                            <PencilIcon className="size-4" />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            aria-label="Delete product"
+                            onClick={() =>
+                              setPendingDelete({
+                                categoryId: selectedNode.id,
+                                product: p
+                              })
+                            }
+                          >
+                            <Trash2Icon className="size-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-muted-foreground text-sm">
+                    <Trans>No products in this category</Trans>
+                  </div>
+                )
               ) : (
                 <div className="text-muted-foreground text-sm">
-                  <Trans>No products in this category</Trans>
+                  <Trans>Select a category to view products</Trans>
                 </div>
-              )
-            ) : (
-              <div className="text-muted-foreground text-sm">
-                <Trans>Select a category to view products</Trans>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+      <DeleteProductDialog
+        open={!!pendingDelete}
+        productTitle={pendingProductTitle}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+        onConfirm={() => {
+          if (pendingDelete) {
+            onChange(
+              deleteProduct(
+                categories,
+                pendingDelete.categoryId,
+                pendingDelete.product.id
+              )
+            );
+          }
+          setPendingDelete(null);
+        }}
+      />
+    </>
   );
 }
