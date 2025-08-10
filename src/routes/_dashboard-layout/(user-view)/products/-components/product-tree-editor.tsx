@@ -43,13 +43,14 @@ import { ProductsList } from './products-list';
 export type Product = {
   id: number;
   title: string;
+  category_id: number;
 };
 
 export type ProductCategory = {
   id: number;
   title: string;
-  children?: ProductCategory[];
-  products: Product[];
+  parent_id: number | null;
+  children: ProductCategory[];
 };
 
 function findCategoryById(
@@ -106,7 +107,12 @@ function addSubcategory(
   return nodes.map((node) => {
     if (node.id === parentId) {
       const nextChildren = node.children ? [...node.children] : [];
-      nextChildren.push({ id: newId, title, children: [], products: [] });
+      nextChildren.push({
+        id: newId,
+        title,
+        parent_id: parentId,
+        children: []
+      });
       return { ...node, children: nextChildren };
     }
     if (node.children && node.children.length) {
@@ -133,68 +139,20 @@ function deleteCategory(
   return filtered;
 }
 
-function updateProductTitle(
-  nodes: ProductCategory[],
-  categoryId: number,
-  productId: number,
-  title: string
-): ProductCategory[] {
-  return nodes.map((node) => {
-    if (node.id === categoryId) {
-      return {
-        ...node,
-        products: node.products.map((p) =>
-          p.id === productId ? { ...p, title } : p
-        )
-      };
-    }
-    if (node.children && node.children.length) {
-      return {
-        ...node,
-        children: updateProductTitle(
-          node.children,
-          categoryId,
-          productId,
-          title
-        )
-      };
-    }
-    return node;
-  });
-}
-
-function deleteProduct(
-  nodes: ProductCategory[],
-  categoryId: number,
-  productId: number
-): ProductCategory[] {
-  return nodes.map((node) => {
-    if (node.id === categoryId) {
-      return {
-        ...node,
-        products: node.products.filter((p) => p.id !== productId)
-      };
-    }
-    if (node.children && node.children.length) {
-      return {
-        ...node,
-        children: deleteProduct(node.children, categoryId, productId)
-      };
-    }
-    return node;
-  });
-}
-
 interface ProductTreeEditorProps {
   categories: ProductCategory[];
-  onChange: (next: ProductCategory[]) => void;
+  products: Product[];
+  onCategoriesChange: (next: ProductCategory[]) => void;
+  onProductsChange: (next: Product[]) => void;
 }
 
 type TreeItemData = { name: string; children?: string[]; nodeId?: number };
 
 export function ProductTreeEditor({
   categories,
-  onChange
+  products,
+  onCategoriesChange,
+  onProductsChange
 }: ProductTreeEditorProps) {
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
   // We no longer highlight a selected product
@@ -318,12 +276,11 @@ export function ProductTreeEditor({
                     const numericId = /^\d+$/.test(id) ? Number(id) : null;
                     const isSelected =
                       numericId != null && selectedId === numericId;
-                    const categoryForCount =
-                      numericId != null
-                        ? findCategoryById(categories, numericId)
-                        : null;
                     const productCount =
-                      categoryForCount?.products?.length ?? 0;
+                      numericId != null
+                        ? products.filter((p) => p.category_id === numericId)
+                            .length
+                        : 0;
 
                     return (
                       <TreeItem key={id} item={item}>
@@ -458,9 +415,12 @@ export function ProductTreeEditor({
             </CardHeader>
             <CardContent className="pt-0">
               {selectedNode ? (
-                selectedNode.products && selectedNode.products.length > 0 ? (
+                products.filter((p) => p.category_id === selectedNode.id)
+                  .length > 0 ? (
                   <ProductsList
-                    products={selectedNode.products}
+                    products={products.filter(
+                      (p) => p.category_id === selectedNode.id
+                    )}
                     onEdit={(p) => {
                       setPendingEdit({
                         categoryId: selectedNode.id,
@@ -510,12 +470,8 @@ export function ProductTreeEditor({
         onOpenChange={(open) => !open && setPendingDelete(null)}
         onConfirm={() => {
           if (pendingDelete) {
-            onChange(
-              deleteProduct(
-                categories,
-                pendingDelete.categoryId,
-                pendingDelete.product.id
-              )
+            onProductsChange(
+              products.filter((p) => p.id !== pendingDelete.product.id)
             );
           }
           setPendingDelete(null);
@@ -527,12 +483,9 @@ export function ProductTreeEditor({
         onOpenChange={(open) => !open && setPendingEdit(null)}
         onSave={(newTitle) => {
           if (pendingEdit) {
-            onChange(
-              updateProductTitle(
-                categories,
-                pendingEdit.categoryId,
-                pendingEdit.product.id,
-                newTitle
+            onProductsChange(
+              products.map((p) =>
+                p.id === pendingEdit.product.id ? { ...p, title: newTitle } : p
               )
             );
             // no selection highlight
@@ -545,17 +498,11 @@ export function ProductTreeEditor({
         onOpenChange={(open) => !open && setPendingCreateForCategoryId(null)}
         onSave={(newTitle) => {
           if (pendingCreateForCategoryId != null && selectedNode) {
-            const newId =
-              Math.max(0, ...selectedNode.products.map((p) => p.id)) + 1;
-            const next = categories.map((cat) =>
-              cat.id === pendingCreateForCategoryId
-                ? {
-                    ...cat,
-                    products: [...cat.products, { id: newId, title: newTitle }]
-                  }
-                : cat
-            );
-            onChange(next);
+            const newId = Math.max(0, ...products.map((p) => p.id)) + 1;
+            onProductsChange([
+              ...products,
+              { id: newId, title: newTitle, category_id: selectedNode.id }
+            ]);
           }
           setPendingCreateForCategoryId(null);
         }}
@@ -566,7 +513,7 @@ export function ProductTreeEditor({
         onSave={(newTitle) => {
           if (pendingAddSubcategoryForId != null) {
             const newId = getMaxCategoryId(categories) + 1;
-            onChange(
+            onCategoriesChange(
               addSubcategory(
                 categories,
                 pendingAddSubcategoryForId,
@@ -584,7 +531,7 @@ export function ProductTreeEditor({
         onOpenChange={(open) => !open && setPendingEditCategory(null)}
         onSave={(newTitle) => {
           if (pendingEditCategory) {
-            onChange(
+            onCategoriesChange(
               updateCategoryTitle(
                 categories,
                 pendingEditCategory.categoryId,
@@ -601,8 +548,37 @@ export function ProductTreeEditor({
         onOpenChange={(open) => !open && setPendingDeleteCategory(null)}
         onConfirm={() => {
           if (pendingDeleteCategory) {
-            onChange(
+            // collect all descendant ids including the category itself
+            const collectIds = (
+              nodes: ProductCategory[],
+              id: number
+            ): number[] => {
+              const result: number[] = [];
+              const traverse = (list: ProductCategory[]) => {
+                for (const n of list) {
+                  if (n.id === id) {
+                    const gather = (node: ProductCategory) => {
+                      result.push(node.id);
+                      node.children.forEach(gather);
+                    };
+                    gather(n);
+                  } else if (n.children.length) {
+                    traverse(n.children);
+                  }
+                }
+              };
+              traverse(nodes);
+              return result;
+            };
+            const idsToRemove = collectIds(
+              categories,
+              pendingDeleteCategory.categoryId
+            );
+            onCategoriesChange(
               deleteCategory(categories, pendingDeleteCategory.categoryId)
+            );
+            onProductsChange(
+              products.filter((p) => !idsToRemove.includes(p.category_id))
             );
             if (selectedId === pendingDeleteCategory.categoryId) {
               setSelectedId(null);
