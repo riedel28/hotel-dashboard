@@ -125,6 +125,14 @@ function addSubcategory(
   });
 }
 
+function addRootCategory(
+  nodes: ProductCategory[],
+  newId: number,
+  title: string
+): ProductCategory[] {
+  return [...nodes, { id: newId, title, parent_id: null, children: [] }];
+}
+
 function deleteCategory(
   nodes: ProductCategory[],
   id: number
@@ -159,7 +167,7 @@ export function ProductTreeEditor({
 
   const indent = 20;
 
-  const { itemsMap, rootId } = React.useMemo(() => {
+  const { itemsMap, rootId, initiallyExpanded } = React.useMemo(() => {
     const map: Record<string, TreeItemData> = {};
     const topLevelIds: string[] = [];
 
@@ -180,7 +188,9 @@ export function ProductTreeEditor({
     });
 
     map.root = { name: 'root', children: topLevelIds };
-    return { itemsMap: map, rootId: 'root', initiallyExpanded: topLevelIds };
+    // Expand root and all top-level categories by default so items render
+    const expanded = ['root', ...topLevelIds];
+    return { itemsMap: map, rootId: 'root', initiallyExpanded: expanded };
   }, [categories]);
 
   const treeKey = React.useMemo(() => {
@@ -196,7 +206,7 @@ export function ProductTreeEditor({
   }, [categories]);
 
   const tree = useTree<TreeItemData>({
-    initialState: { expandedItems: [] },
+    initialState: { expandedItems: initiallyExpanded },
     indent,
     rootItemId: rootId,
     getItemName: (item) => item.getItemData().name,
@@ -225,6 +235,8 @@ export function ProductTreeEditor({
     React.useState<number | null>(null);
   const [pendingAddSubcategoryForId, setPendingAddSubcategoryForId] =
     React.useState<number | null>(null);
+  const [pendingAddRootCategory, setPendingAddRootCategory] =
+    React.useState(false);
   const [pendingEditCategory, setPendingEditCategory] = React.useState<{
     categoryId: number;
     initialTitle: string;
@@ -262,6 +274,22 @@ export function ProductTreeEditor({
                   <Skeleton className="h-7 w-1/3 rounded-md" />
                   <Skeleton className="h-7 w-1/2 rounded-md" />
                   <Skeleton className="h-7 w-1/3 rounded-md" />
+                </div>
+              ) : categories.length === 0 ? (
+                <div className="flex min-h-[140px] flex-col items-center justify-center gap-3 py-4">
+                  <div className="text-muted-foreground text-center text-sm text-pretty">
+                    <Trans>
+                      No categories yet. Add a category to get started.
+                    </Trans>
+                  </div>
+                  <Button
+                    variant="secondary"
+                    className="mt-1"
+                    onClick={() => setPendingAddRootCategory(true)}
+                  >
+                    <PlusCircleIcon className="mr-2 h-4 w-4" />
+                    <Trans>Add category</Trans>
+                  </Button>
                 </div>
               ) : (
                 <Tree
@@ -523,6 +551,17 @@ export function ProductTreeEditor({
             );
           }
           setPendingAddSubcategoryForId(null);
+        }}
+      />
+      <AddCategoryModal
+        open={pendingAddRootCategory}
+        onOpenChange={(open) => !open && setPendingAddRootCategory(false)}
+        onSave={(newTitle) => {
+          const newId = getMaxCategoryId(categories) + 1;
+          onCategoriesChange(
+            addRootCategory(categories, newId, newTitle.trim())
+          );
+          setPendingAddRootCategory(false);
         }}
       />
       <EditCategoryModal

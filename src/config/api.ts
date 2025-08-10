@@ -8,7 +8,9 @@ const API_CONFIG = {
 
   // API endpoints
   endpoints: {
-    reservations: '/reservations'
+    reservations: '/reservations',
+    productCategories: '/product-categories',
+    products: '/products'
   },
 
   // Default headers
