@@ -1,6 +1,4 @@
-// React import not needed; using JSX runtime
 import { Trans } from '@lingui/react/macro';
-import { Trash } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -13,31 +11,31 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 
-interface DeleteProductDialogProps {
+interface DeleteCategoryDialogProps {
   open: boolean;
-  productTitle: string;
+  categoryTitle: string;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
 }
 
-export function DeleteProductDialog({
+export function DeleteCategoryDialog({
   open,
-  productTitle,
+  categoryTitle,
   onOpenChange,
   onConfirm
-}: DeleteProductDialogProps) {
+}: DeleteCategoryDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            <Trans>Delete product?</Trans>
+            <Trans>Delete category?</Trans>
           </AlertDialogTitle>
           <AlertDialogDescription>
             <Trans>
               Are you sure you want to delete&nbsp;
               <span className="text-foreground font-medium">
-                {productTitle}
+                {categoryTitle}
               </span>
               ? This action cannot be undone.
             </Trans>
@@ -51,7 +49,6 @@ export function DeleteProductDialog({
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             onClick={onConfirm}
           >
-            <Trash className="mr-2 h-4 w-4" />
             <Trans>Delete</Trans>
           </AlertDialogAction>
         </AlertDialogFooter>

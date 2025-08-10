@@ -3,20 +3,24 @@ import * as React from 'react';
 import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
 import { Plural, Trans } from '@lingui/react/macro';
-import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
+import {
+  MoreHorizontalIcon,
+  PencilIcon,
+  PlusCircleIcon,
+  PlusIcon,
+  Trash2Icon
+} from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Tooltip,
@@ -28,8 +32,11 @@ import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 
 import { cn } from '@/lib/utils';
 
+import { AddCategoryModal } from './add-category-modal';
 import { AddProductModal } from './add-product-modal';
+import { DeleteCategoryDialog } from './delete-category-dialog';
 import { DeleteProductDialog } from './delete-product-dialog';
+import { EditCategoryModal } from './edit-category-modal';
 import { EditProductModal } from './edit-product-modal';
 import { ProductsList } from './products-list';
 
@@ -76,6 +83,54 @@ function updateCategoryTitle(
     }
     return node;
   });
+}
+
+function getMaxCategoryId(nodes: ProductCategory[]): number {
+  let maxId = 0;
+  const visit = (list: ProductCategory[]) => {
+    for (const node of list) {
+      if (node.id > maxId) maxId = node.id;
+      if (node.children && node.children.length) visit(node.children);
+    }
+  };
+  visit(nodes);
+  return maxId;
+}
+
+function addSubcategory(
+  nodes: ProductCategory[],
+  parentId: number,
+  newId: number,
+  title: string
+): ProductCategory[] {
+  return nodes.map((node) => {
+    if (node.id === parentId) {
+      const nextChildren = node.children ? [...node.children] : [];
+      nextChildren.push({ id: newId, title, children: [], products: [] });
+      return { ...node, children: nextChildren };
+    }
+    if (node.children && node.children.length) {
+      return {
+        ...node,
+        children: addSubcategory(node.children, parentId, newId, title)
+      };
+    }
+    return node;
+  });
+}
+
+function deleteCategory(
+  nodes: ProductCategory[],
+  id: number
+): ProductCategory[] {
+  const filtered = nodes
+    .filter((n) => n.id !== id)
+    .map((n) =>
+      n.children && n.children.length
+        ? { ...n, children: deleteCategory(n.children, id) }
+        : n
+    );
+  return filtered;
 }
 
 function updateProductTitle(
@@ -170,6 +225,18 @@ export function ProductTreeEditor({
     return { itemsMap: map, rootId: 'root', initiallyExpanded: topLevelIds };
   }, [categories]);
 
+  const treeKey = React.useMemo(() => {
+    const ids: number[] = [];
+    const visit = (nodes: ProductCategory[]) => {
+      for (const n of nodes) {
+        ids.push(n.id);
+        if (n.children && n.children.length) visit(n.children);
+      }
+    };
+    visit(categories);
+    return ids.sort((a, b) => a - b).join('-');
+  }, [categories]);
+
   const tree = useTree<TreeItemData>({
     initialState: { expandedItems: [] },
     indent,
@@ -177,7 +244,9 @@ export function ProductTreeEditor({
     getItemName: (item) => item.getItemData().name,
     isItemFolder: (item) => (item.getItemData()?.children?.length ?? 0) > 0,
     dataLoader: {
-      getItem: (itemId) => itemsMap[itemId],
+      // Return a stable fallback object for missing ids to avoid async loading paths
+      getItem: (itemId) =>
+        itemsMap[itemId] ?? { name: 'unknown', children: [] },
       getChildren: (itemId) => itemsMap[itemId]?.children ?? []
     },
     features: [syncDataLoaderFeature, hotkeysCoreFeature]
@@ -196,17 +265,18 @@ export function ProductTreeEditor({
   } | null>(null);
   const [pendingCreateForCategoryId, setPendingCreateForCategoryId] =
     React.useState<number | null>(null);
+  const [pendingAddSubcategoryForId, setPendingAddSubcategoryForId] =
+    React.useState<number | null>(null);
+  const [pendingEditCategory, setPendingEditCategory] = React.useState<{
+    categoryId: number;
+    initialTitle: string;
+  } | null>(null);
+  const [pendingDeleteCategory, setPendingDeleteCategory] = React.useState<{
+    categoryId: number;
+    title: string;
+  } | null>(null);
   const categoryTitle = selectedNode ? selectedNode.title : '';
   const pendingProductTitle = pendingDelete?.product.title ?? '';
-
-  const [titleInput, setTitleInput] = React.useState('');
-  React.useEffect(() => {
-    setTitleInput(selectedNode?.title ?? '');
-  }, [selectedNode]);
-
-  // no-op when category changes
-
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isTreeLoading, setIsTreeLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -237,6 +307,7 @@ export function ProductTreeEditor({
                 </div>
               ) : (
                 <Tree
+                  key={treeKey}
                   indent={indent}
                   tree={tree}
                   aria-busy={isTreeLoading}
@@ -259,7 +330,7 @@ export function ProductTreeEditor({
                         <TreeItemLabel
                           aria-selected={isSelected}
                           className={cn(
-                            'w-full justify-between rounded-md px-2.5',
+                            'group w-full justify-between rounded-md px-2.5',
                             isSelected
                               ? 'bg-accent text-accent-foreground'
                               : 'hover:bg-accent'
@@ -271,28 +342,97 @@ export function ProductTreeEditor({
                           }
                         >
                           <span className="flex w-full items-center justify-between">
-                            <span>{item.getItemData().name}</span>
+                            <span className="flex items-center gap-2">
+                              <span>{item.getItemData().name}</span>
+                              {numericId != null ? (
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Badge
+                                        variant="outline"
+                                        className="rounded-sm px-1.5 py-0 text-[10px] leading-none"
+                                      >
+                                        {productCount}
+                                      </Badge>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right" align="center">
+                                      <Plural
+                                        value={productCount}
+                                        _0="No products in this category"
+                                        one="# product in this category"
+                                        other="# products in this category"
+                                      />
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              ) : null}
+                            </span>
+
                             {numericId != null ? (
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Badge
-                                      variant="outline"
-                                      className="ml-2 rounded-sm px-1.5 py-0 text-[10px] leading-none"
+                              <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button
+                                      size="icon"
+                                      variant="ghost"
+                                      aria-label="Category actions"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                      }}
                                     >
-                                      {productCount}
-                                    </Badge>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="right" align="center">
-                                    <Plural
-                                      value={productCount}
-                                      _0="No products in this category"
-                                      one="# product in this category"
-                                      other="# products in this category"
-                                    />
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
+                                      <MoreHorizontalIcon className="size-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    align="end"
+                                    side="right"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setPendingAddSubcategoryForId(
+                                          numericId
+                                        );
+                                      }}
+                                    >
+                                      <PlusIcon className="mr-2 size-4" />
+                                      <Trans>Add subcategory</Trans>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        const node = findCategoryById(
+                                          categories,
+                                          numericId
+                                        );
+                                        setPendingEditCategory({
+                                          categoryId: numericId,
+                                          initialTitle: node?.title ?? ''
+                                        });
+                                      }}
+                                    >
+                                      <PencilIcon className="mr-2 size-4" />
+                                      <Trans>Edit category</Trans>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                      className="text-destructive focus:text-destructive"
+                                      onClick={() => {
+                                        const node = findCategoryById(
+                                          categories,
+                                          numericId
+                                        );
+                                        setPendingDeleteCategory({
+                                          categoryId: numericId,
+                                          title: node?.title ?? ''
+                                        });
+                                      }}
+                                    >
+                                      <Trash2Icon className="mr-2 size-4" />
+                                      <Trans>Delete category</Trans>
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </span>
                             ) : null}
                           </span>
                         </TreeItemLabel>
@@ -306,73 +446,6 @@ export function ProductTreeEditor({
         </div>
 
         <div className="col-span-12 md:col-span-6">
-          <Card className="min-h-[200px]">
-            <CardHeader>
-              <CardTitle className="text-base">
-                <Trans>Category details</Trans>
-              </CardTitle>
-              <CardDescription>
-                <Trans>
-                  Edit the category title and save to update the products in
-                  this category.
-                </Trans>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {selectedNode ? (
-                <form
-                  className="grid gap-3"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setIsSubmitting(true);
-                    setTimeout(() => {
-                      onChange(
-                        updateCategoryTitle(
-                          categories,
-                          selectedNode.id,
-                          titleInput
-                        )
-                      );
-                      setIsSubmitting(false);
-                    }, 250);
-                  }}
-                >
-                  <div className="grid gap-2">
-                    <Label htmlFor="title">
-                      <Trans>Title</Trans>
-                    </Label>
-                    <Input
-                      id="title"
-                      value={titleInput}
-                      onChange={(e) => setTitleInput(e.target.value)}
-                      disabled={isSubmitting}
-                    />
-                  </div>
-                </form>
-              ) : (
-                <div className="text-muted-foreground text-center text-base">
-                  <Trans>Select a category to edit</Trans>
-                </div>
-              )}
-            </CardContent>
-            {selectedNode && (
-              <CardFooter className="flex justify-end border-t-0">
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <>
-                      <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-                      <Trans>Saving...</Trans>
-                    </>
-                  ) : (
-                    <Trans>Save changes</Trans>
-                  )}
-                </Button>
-              </CardFooter>
-            )}
-          </Card>
-        </div>
-
-        <div className="col-span-12 xl:col-span-6">
           <Card className="min-h-[150px]">
             <CardHeader>
               <CardTitle className="text-base">
@@ -485,6 +558,57 @@ export function ProductTreeEditor({
             onChange(next);
           }
           setPendingCreateForCategoryId(null);
+        }}
+      />
+      <AddCategoryModal
+        open={pendingAddSubcategoryForId != null}
+        onOpenChange={(open) => !open && setPendingAddSubcategoryForId(null)}
+        onSave={(newTitle) => {
+          if (pendingAddSubcategoryForId != null) {
+            const newId = getMaxCategoryId(categories) + 1;
+            onChange(
+              addSubcategory(
+                categories,
+                pendingAddSubcategoryForId,
+                newId,
+                newTitle.trim()
+              )
+            );
+          }
+          setPendingAddSubcategoryForId(null);
+        }}
+      />
+      <EditCategoryModal
+        open={pendingEditCategory != null}
+        initialTitle={pendingEditCategory?.initialTitle ?? ''}
+        onOpenChange={(open) => !open && setPendingEditCategory(null)}
+        onSave={(newTitle) => {
+          if (pendingEditCategory) {
+            onChange(
+              updateCategoryTitle(
+                categories,
+                pendingEditCategory.categoryId,
+                newTitle.trim()
+              )
+            );
+          }
+          setPendingEditCategory(null);
+        }}
+      />
+      <DeleteCategoryDialog
+        open={pendingDeleteCategory != null}
+        categoryTitle={pendingDeleteCategory?.title ?? ''}
+        onOpenChange={(open) => !open && setPendingDeleteCategory(null)}
+        onConfirm={() => {
+          if (pendingDeleteCategory) {
+            onChange(
+              deleteCategory(categories, pendingDeleteCategory.categoryId)
+            );
+            if (selectedId === pendingDeleteCategory.categoryId) {
+              setSelectedId(null);
+            }
+          }
+          setPendingDeleteCategory(null);
         }}
       />
     </>

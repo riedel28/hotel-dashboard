@@ -40,7 +40,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
     sizesSkeleton: <Skeleton className="h-8 w-44" />,
     moreLimit: 5,
     more: false,
-    info: t`Info`,
+    info: '{from} - {to} of {count}',
     infoSkeleton: <Skeleton className="h-8 w-60" />
   };
 
@@ -55,12 +55,13 @@ function DataGridPagination(props: DataGridPaginationProps) {
   const pageCount = table.getPageCount();
 
   // Replace placeholders in paginationInfo
+  // TODO: use t`{from} - {to} of {count}` instead of the following
   const paginationInfo = mergedProps?.info
     ? mergedProps.info
         .replace('{from}', from.toString())
         .replace('{to}', to.toString())
         .replace('{count}', recordCount.toString())
-    : `${from} - ${to} of ${recordCount}`;
+    : t`{from} - {to} of {count}`;
 
   // Pagination limit logic
   const paginationMoreLimit = mergedProps?.moreLimit || 5;
