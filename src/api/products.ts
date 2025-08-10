@@ -1,5 +1,6 @@
 import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
-import type { Product } from '@/routes/_dashboard-layout/(user-view)/products/-components/product-tree-editor';
+
+type Product = { id: number; title: string; category_id: number };
 
 async function fetchProducts(): Promise<Product[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
@@ -7,7 +8,44 @@ async function fetchProducts(): Promise<Product[]> {
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  return response.json();
+  const data = await response.json();
+
+  // Ensure id and category_id are numbers since JSON server returns them as strings
+  return data.map(
+    (product: {
+      id: string | number;
+      title: string;
+      category_id: string | number;
+    }) => ({
+      ...product,
+      id: Number(product.id),
+      category_id: Number(product.category_id)
+    })
+  );
+}
+
+async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  const response = await fetch(
+    buildApiUrl(getEndpointUrl('products'), { category_id: categoryId })
+  );
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data = await response.json();
+
+  // Ensure id and category_id are numbers since JSON server returns them as strings
+  return data.map(
+    (product: {
+      id: string | number;
+      title: string;
+      category_id: string | number;
+    }) => ({
+      ...product,
+      id: Number(product.id),
+      category_id: Number(product.category_id)
+    })
+  );
 }
 
 async function fetchProductById(id: number): Promise<Product> {
@@ -19,11 +57,18 @@ async function fetchProductById(id: number): Promise<Product> {
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  return response.json();
+  const data = await response.json();
+
+  // Ensure id and category_id are numbers since JSON server returns them as strings
+  return {
+    ...data,
+    id: Number(data.id),
+    category_id: Number(data.category_id)
+  };
 }
 
 async function createProduct(payload: Omit<Product, 'id'>): Promise<Product> {
-  const response = await fetch(getEndpointUrl('products'), {
+  const response = await fetch(buildApiUrl(getEndpointUrl('products')), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
@@ -31,7 +76,14 @@ async function createProduct(payload: Omit<Product, 'id'>): Promise<Product> {
   if (!response.ok) {
     throw new Error('Failed to create product');
   }
-  return response.json();
+  const data = await response.json();
+
+  // Ensure id and category_id are numbers since JSON server returns them as strings
+  return {
+    ...data,
+    id: Number(data.id),
+    category_id: Number(data.category_id)
+  };
 }
 
 async function updateProduct(
@@ -46,7 +98,14 @@ async function updateProduct(
   if (!response.ok) {
     throw new Error('Failed to update product');
   }
-  return response.json();
+  const data = await response.json();
+
+  // Ensure id and category_id are numbers since JSON server returns them as strings
+  return {
+    ...data,
+    id: Number(data.id),
+    category_id: Number(data.category_id)
+  };
 }
 
 async function deleteProduct(id: number): Promise<void> {
@@ -60,6 +119,7 @@ async function deleteProduct(id: number): Promise<void> {
 
 export {
   fetchProducts,
+  fetchProductsByCategory,
   fetchProductById,
   createProduct,
   updateProduct,

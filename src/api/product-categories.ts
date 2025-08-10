@@ -1,17 +1,22 @@
 import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
-import type { ProductCategory } from '@/routes/_dashboard-layout/(user-view)/products/-components/product-tree-editor';
 
-export type FlatProductCategory = {
+export type ProductCategory = {
   id: number;
   title: string;
   parent_id: number | null;
 };
 
+export type NestedProductCategory = ProductCategory & {
+  children: NestedProductCategory[];
+};
+
 export function transformFlatCategoriesToTree(
-  flat: FlatProductCategory[]
-): ProductCategory[] {
-  const map = new Map<number, ProductCategory>();
-  const roots: ProductCategory[] = [];
+  flat: ProductCategory[]
+): NestedProductCategory[] {
+  const map = new Map<number, NestedProductCategory>();
+  const roots: NestedProductCategory[] = [];
+
+  // Create all nodes first
   flat.forEach((c) => {
     map.set(c.id, {
       id: c.id,
@@ -20,6 +25,8 @@ export function transformFlatCategoriesToTree(
       children: []
     });
   });
+
+  // Build tree structure
   map.forEach((node) => {
     if (node.parent_id == null) {
       roots.push(node);
@@ -28,9 +35,10 @@ export function transformFlatCategoriesToTree(
       if (parent) parent.children.push(node);
     }
   });
+
   return roots;
 }
-async function fetchProductCategories(): Promise<FlatProductCategory[]> {
+async function fetchProductCategories(): Promise<ProductCategory[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
 
   const response = await fetch(
@@ -40,12 +48,23 @@ async function fetchProductCategories(): Promise<FlatProductCategory[]> {
     throw new Error('Network response was not ok');
   }
 
-  return response.json();
+  const data = await response.json();
+
+  // Ensure id and parent_id are numbers since JSON server returns them as strings
+  return data.map(
+    (category: {
+      id: string | number;
+      title: string;
+      parent_id: string | number | null;
+    }) => ({
+      ...category,
+      id: Number(category.id),
+      parent_id: category.parent_id ? Number(category.parent_id) : null
+    })
+  );
 }
 
-async function fetchProductCategoryById(
-  id: number
-): Promise<FlatProductCategory> {
+async function fetchProductCategoryById(id: number): Promise<ProductCategory> {
   await new Promise((resolve) => setTimeout(resolve, 300));
   const response = await fetch(buildResourceUrl('productCategories', id));
   if (response.status === 404) {
@@ -54,27 +73,41 @@ async function fetchProductCategoryById(
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  return response.json();
+  const data = await response.json();
+
+  // Ensure id is a number since JSON server returns it as a string
+  return {
+    ...data,
+    id: Number(data.id)
+  };
 }
 
 async function createProductCategory(
-  payload: Omit<FlatProductCategory, 'id'>
-): Promise<FlatProductCategory> {
-  const response = await fetch(getEndpointUrl('productCategories'), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
+  payload: Omit<ProductCategory, 'id'>
+): Promise<ProductCategory> {
+  const response = await fetch(
+    buildApiUrl(getEndpointUrl('productCategories')),
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }
+  );
   if (!response.ok) {
     throw new Error('Failed to create category');
   }
-  return response.json();
+  const data = await response.json();
+  // Ensure id is a number since JSON server returns it as a string
+  return {
+    ...data,
+    id: Number(data.id)
+  };
 }
 
 async function updateProductCategory(
   id: number,
-  payload: Partial<Omit<FlatProductCategory, 'id'>>
-): Promise<FlatProductCategory> {
+  payload: Partial<Omit<ProductCategory, 'id'>>
+): Promise<ProductCategory> {
   const response = await fetch(buildResourceUrl('productCategories', id), {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -83,7 +116,12 @@ async function updateProductCategory(
   if (!response.ok) {
     throw new Error('Failed to update category');
   }
-  return response.json();
+  const data = await response.json();
+  // Ensure id is a number since JSON server returns it as a string
+  return {
+    ...data,
+    id: Number(data.id)
+  };
 }
 
 async function deleteProductCategory(id: number): Promise<void> {

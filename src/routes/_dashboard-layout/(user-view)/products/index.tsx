@@ -1,13 +1,6 @@
-import * as React from 'react';
-
-import {
-  fetchProductCategories,
-  transformFlatCategoriesToTree
-} from '@/api/product-categories';
-import { fetchProducts } from '@/api/products';
-import { Trans, useLingui } from '@lingui/react/macro';
-import { useQuery } from '@tanstack/react-query';
+import { Trans } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 
 import {
   Breadcrumb,
@@ -17,47 +10,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayRetryButton,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
 
-import {
-  type ProductCategory,
-  ProductTreeEditor
-} from './-components/product-tree-editor';
-import type { Product } from './-components/product-tree-editor';
+import { ProductCategoriesTree } from './-components/product-categories-tree';
+import { ProductsList } from './-components/products-list';
 
-type ProductCategoryLocal = ProductCategory;
-type ProductLocal = Product;
+const productsSearchSchema = z.object({
+  category_id: z.number().optional()
+});
 
 function ProductsPage() {
-  const { t } = useLingui();
-  const categoriesQuery = useQuery({
-    queryKey: ['product-categories'],
-    queryFn: fetchProductCategories,
-    select: transformFlatCategoriesToTree
-  });
-  const productsQuery = useQuery({
-    queryKey: ['products'],
-    queryFn: fetchProducts
-  });
-
-  const [categories, setCategories] = React.useState<ProductCategoryLocal[]>(
-    []
-  );
-  const [products, setProducts] = React.useState<ProductLocal[]>([]);
-
-  React.useEffect(() => {
-    if (categoriesQuery.data) setCategories(categoriesQuery.data);
-  }, [categoriesQuery.data]);
-  React.useEffect(() => {
-    if (productsQuery.data) setProducts(productsQuery.data);
-  }, [productsQuery.data]);
-
   return (
     <div className="space-y-1">
       <Breadcrumb>
@@ -82,42 +43,14 @@ function ProductsPage() {
         </h1>
       </div>
 
-      {categoriesQuery.isError || productsQuery.isError ? (
-        <div className="flex min-h-[40vh] items-center justify-center">
-          <ErrorDisplayError className="w-md max-w-md">
-            <ErrorDisplayTitle>
-              <Trans>Something went wrong</Trans>
-            </ErrorDisplayTitle>
-            <ErrorDisplayMessage>
-              {categoriesQuery.error?.message ||
-                productsQuery.error?.message ||
-                t`Failed to load data`}
-            </ErrorDisplayMessage>
-            <ErrorDisplayActions>
-              <ErrorDisplayRetryButton
-                onRetry={() => {
-                  categoriesQuery.refetch();
-                  productsQuery.refetch();
-                }}
-                isRetrying={
-                  categoriesQuery.isFetching || productsQuery.isFetching
-                }
-              />
-            </ErrorDisplayActions>
-          </ErrorDisplayError>
+      <div className="grid grid-cols-12 gap-4 xl:max-w-[1200px]">
+        <div className="col-span-12 lg:col-span-6">
+          <ProductCategoriesTree />
         </div>
-      ) : categoriesQuery.isLoading || productsQuery.isLoading ? (
-        <div className="text-muted-foreground flex min-h-[40vh] items-center justify-center">
-          <Trans>Loading products...</Trans>
+        <div className="col-span-12 lg:col-span-6">
+          <ProductsList />
         </div>
-      ) : (
-        <ProductTreeEditor
-          categories={categories}
-          products={products}
-          onCategoriesChange={setCategories}
-          onProductsChange={setProducts}
-        />
-      )}
+      </div>
     </div>
   );
 }
@@ -125,5 +58,6 @@ function ProductsPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/products/'
 )({
-  component: ProductsPage
+  component: ProductsPage,
+  validateSearch: productsSearchSchema
 });

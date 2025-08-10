@@ -42,9 +42,9 @@ const errorDisplayVariants = cva(
           'border-yellow-200/50 bg-yellow-50/50 dark:border-yellow-800/30 dark:bg-yellow-950/10'
       },
       size: {
-        sm: 'max-w-md p-8',
-        md: 'max-w-lg p-12',
-        lg: 'max-w-xl p-16'
+        sm: 'p-8',
+        md: 'p-12',
+        lg: 'p-16'
       }
     },
     defaultVariants: {
@@ -54,7 +54,7 @@ const errorDisplayVariants = cva(
   }
 );
 
-const iconVariants = cva('flex items-center justify-center rounded-full', {
+const iconVariants = cva('flex items-center justify-center rounded-full p-1', {
   variants: {
     variant: {
       default: 'bg-muted/50',
@@ -76,8 +76,8 @@ const iconVariants = cva('flex items-center justify-center rounded-full', {
 
 const iconSizes = {
   sm: 16,
-  md: 32,
-  lg: 36
+  md: 24,
+  lg: 32
 } as const;
 
 type ErrorDisplayContextType = {

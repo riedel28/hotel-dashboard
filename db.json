@@ -338,39 +338,162 @@
     }
   ],
   "product-categories": [
-    { "id": 1, "title": "Welcome", "parent_id": null },
-    { "id": 2, "title": "Room Service", "parent_id": null },
-    { "id": 3, "title": "Breakfast Options", "parent_id": 2 },
-    { "id": 4, "title": "Evening Menu", "parent_id": 2 },
-    { "id": 5, "title": "Amenities", "parent_id": null },
-    { "id": 6, "title": "Spa & Wellness", "parent_id": 5 },
-    { "id": 7, "title": "Gym Access", "parent_id": 5 },
-    { "id": 8, "title": "Dining", "parent_id": null },
-    { "id": 9, "title": "Restaurant", "parent_id": 8 },
-    { "id": 10, "title": "Lobby Bar", "parent_id": 8 }
+    {
+      "id": "1",
+      "title": "Welcome",
+      "parent_id": null
+    },
+    {
+      "id": "2",
+      "title": "Room Service",
+      "parent_id": null
+    },
+    {
+      "id": "4",
+      "title": "Evening Menu",
+      "parent_id": 2
+    },
+    {
+      "id": "5",
+      "title": "Amenities",
+      "parent_id": null
+    },
+    {
+      "id": "6",
+      "title": "Spa & Wellness (1)",
+      "parent_id": 5
+    },
+    {
+      "id": "8",
+      "title": "Dining edited",
+      "parent_id": null
+    },
+    {
+      "id": "9",
+      "title": "Restaurant",
+      "parent_id": 8
+    },
+    {
+      "id": "10",
+      "title": "Lobby Bar",
+      "parent_id": 8
+    },
+    {
+      "id": "5ffc",
+      "title": "sub",
+      "parent_id": 1
+    }
   ],
   "products": [
-    { "id": 101, "title": "Welcome Pack", "category_id": 1 },
-    { "id": 102, "title": "City Map", "category_id": 1 },
-    { "id": 103, "title": "Welcome Drink", "category_id": 1 },
-    { "id": 201, "title": "Continental Breakfast", "category_id": 3 },
-    { "id": 202, "title": "Vegan Breakfast", "category_id": 3 },
-    { "id": 206, "title": "Gluten-Free Breakfast", "category_id": 3 },
-    { "id": 203, "title": "Pasta Bolognese", "category_id": 4 },
-    { "id": 204, "title": "Grilled Salmon", "category_id": 4 },
-    { "id": 207, "title": "Steak Frites", "category_id": 4 },
-    { "id": 208, "title": "Chicken Curry", "category_id": 4 },
-    { "id": 205, "title": "Late-night Snack", "category_id": 2 },
-    { "id": 301, "title": "Full Body Massage", "category_id": 6 },
-    { "id": 302, "title": "Facial Treatment", "category_id": 6 },
-    { "id": 305, "title": "Aromatherapy Session", "category_id": 6 },
-    { "id": 303, "title": "Personal Training Session", "category_id": 7 },
-    { "id": 306, "title": "Yoga Class", "category_id": 7 },
-    { "id": 307, "title": "Spin Class", "category_id": 7 },
-    { "id": 401, "title": "Chef’s Special", "category_id": 9 },
-    { "id": 404, "title": "Tasting Menu", "category_id": 9 },
-    { "id": 402, "title": "Signature Cocktail", "category_id": 10 },
-    { "id": 405, "title": "Craft Beer Flight", "category_id": 10 },
-    { "id": 403, "title": "Seasonal Menu", "category_id": 8 }
+    {
+      "id": "101",
+      "title": "Welcome Pack",
+      "category_id": 1
+    },
+    {
+      "id": "102",
+      "title": "City Map",
+      "category_id": 1
+    },
+    {
+      "id": "103",
+      "title": "Welcome Drink",
+      "category_id": 1
+    },
+    {
+      "id": "201",
+      "title": "Continental Breakfast",
+      "category_id": 3
+    },
+    {
+      "id": "202",
+      "title": "Vegan Breakfast",
+      "category_id": 3
+    },
+    {
+      "id": "206",
+      "title": "Gluten-Free Breakfast",
+      "category_id": 3
+    },
+    {
+      "id": "203",
+      "title": "Pasta Bolognese",
+      "category_id": 4
+    },
+    {
+      "id": "204",
+      "title": "Grilled Salmon",
+      "category_id": 4
+    },
+    {
+      "id": "207",
+      "title": "Steak Frites",
+      "category_id": 4
+    },
+    {
+      "id": "208",
+      "title": "Chicken Curry",
+      "category_id": 4
+    },
+    {
+      "id": "205",
+      "title": "Late-night Snack",
+      "category_id": 2
+    },
+    {
+      "id": "301",
+      "title": "Full Body Massage",
+      "category_id": 6
+    },
+    {
+      "id": "302",
+      "title": "Facial Treatment",
+      "category_id": 6
+    },
+    {
+      "id": "305",
+      "title": "Aromatherapy Session",
+      "category_id": 6
+    },
+    {
+      "id": "303",
+      "title": "Personal Training Session 1",
+      "category_id": 7
+    },
+    {
+      "id": "306",
+      "title": "Yoga Class",
+      "category_id": 7
+    },
+    {
+      "id": "307",
+      "title": "Spin Class",
+      "category_id": 7
+    },
+    {
+      "id": "401",
+      "title": "Chef’s Special",
+      "category_id": 9
+    },
+    {
+      "id": "404",
+      "title": "Tasting Menu",
+      "category_id": 9
+    },
+    {
+      "id": "402",
+      "title": "Signature Cocktail",
+      "category_id": 10
+    },
+    {
+      "id": "405",
+      "title": "Craft Beer Flight",
+      "category_id": 10
+    },
+    {
+      "id": "403",
+      "title": "Seasonal Menu",
+      "category_id": 8
+    }
   ]
 }

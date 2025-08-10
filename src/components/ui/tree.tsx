@@ -40,6 +40,7 @@ function Tree({
   tree,
   className,
   toggleIconType = 'chevron',
+  children,
   ...props
 }: TreeProps) {
   const containerProps =
@@ -64,7 +65,9 @@ function Tree({
         style={mergedStyle}
         className={cn('flex flex-col', className)}
         {...otherProps}
-      />
+      >
+        {children}
+      </div>
     </TreeContext.Provider>
   );
 }
@@ -106,7 +109,7 @@ function TreeItem<T = any>({
         data-slot="tree-item"
         style={mergedStyle}
         className={cn(
-          'z-10 ps-(--tree-padding) outline-hidden select-none not-last:pb-0.5 focus:z-20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+          'z-10 ps-(--tree-padding) outline-hidden select-none focus:z-20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
           className
         )}
         data-focus={
