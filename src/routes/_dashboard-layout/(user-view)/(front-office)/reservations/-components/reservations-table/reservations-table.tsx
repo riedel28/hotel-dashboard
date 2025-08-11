@@ -6,8 +6,6 @@ import {
   PaginationState,
   SortingState,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table';
@@ -80,10 +78,13 @@ export default function ReservationsTable({
   pageCount = 0,
   onPaginationChange
 }: ReservationsTableProps) {
-  const pagination: PaginationState = {
-    pageIndex,
-    pageSize
-  };
+  const pagination = useMemo<PaginationState>(
+    () => ({
+      pageIndex,
+      pageSize
+    }),
+    [pageIndex, pageSize]
+  );
 
   // Use backend response values directly - no manual calculations
   const [sorting, setSorting] = useState<SortingState>([
@@ -542,9 +543,9 @@ export default function ReservationsTable({
     onSortingChange: setSorting,
     onColumnOrderChange: setColumnOrder,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel()
+    getSortedRowModel: getSortedRowModel(),
+    manualPagination: true, // Enable manual pagination for server-side
+    manualSorting: true // Enable manual sorting for server-side
   });
 
   return (
