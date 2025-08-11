@@ -62,6 +62,8 @@ interface ReservationsTableProps {
   isLoading?: boolean;
   pageIndex?: number;
   pageSize?: number;
+  totalCount?: number;
+  pageCount?: number;
   onPaginationChange?: (
     updaterOrValue:
       | PaginationState
@@ -74,12 +76,16 @@ export default function ReservationsTable({
   isLoading = false,
   pageIndex = 0,
   pageSize = 20,
+  totalCount = 0,
+  pageCount = 0,
   onPaginationChange
 }: ReservationsTableProps) {
   const pagination: PaginationState = {
     pageIndex,
     pageSize
   };
+
+  // Use backend response values directly - no manual calculations
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'received_at', desc: true }
   ]);
@@ -524,7 +530,7 @@ export default function ReservationsTable({
   const table = useReactTable({
     columns,
     data: data || [],
-    pageCount: pageSize,
+    pageCount: pageCount, // Calculate from backend values
     getRowId: (row: Reservation) => row.id.toString(),
     getRowCanExpand: (row) => Boolean(row.original.id),
     state: {
@@ -544,7 +550,7 @@ export default function ReservationsTable({
   return (
     <DataGrid
       table={table}
-      recordCount={data?.length || 0}
+      recordCount={totalCount}
       tableClassNames={{
         edgeCell: 'px-5'
       }}

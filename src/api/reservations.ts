@@ -5,7 +5,10 @@ import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 type ReservationsResponse = {
   index: Reservation[];
+  page: number;
+  per_page: number;
   total: number;
+  pageCount: number;
 };
 
 // Details shape expected by the edit reservation form
@@ -57,8 +60,8 @@ async function fetchReservations({
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const params: Record<string, string | number> = {
-    _page: page,
-    _limit: perPage
+    page: page,
+    per_page: perPage
   };
 
   if (status && status !== 'all') {
@@ -76,10 +79,9 @@ async function fetchReservations({
     throw new Error(t`Network response was not ok`);
   }
 
-  const totalCount = response.headers.get('X-Total-Count');
   const data = await response.json();
 
-  return { index: data, total: totalCount ? parseInt(totalCount, 10) : 0 };
+  return data;
 }
 
 async function fetchReservationById(id: string): Promise<ReservationDetails> {

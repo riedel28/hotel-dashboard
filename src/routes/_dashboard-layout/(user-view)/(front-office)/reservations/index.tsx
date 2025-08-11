@@ -122,7 +122,7 @@ function ReservationsPage() {
       to: '/reservations',
       search: (prev) => ({
         ...prev,
-        page: pagination.pageIndex + 1, // Convert to 1-based for URL
+        page: pagination.pageIndex + 1, // Convert to 0-based for URL
         per_page: pagination.pageSize
       })
     });
@@ -133,7 +133,7 @@ function ReservationsPage() {
       to: '/reservations',
       search: {
         page: 1,
-        per_page: 20,
+        per_page: per_page,
         status: 'all',
         q: undefined,
         from: undefined,
@@ -149,7 +149,9 @@ function ReservationsPage() {
           data={[]}
           isLoading={true}
           pageIndex={page - 1} // Convert to 0-based for table
-          pageSize={per_page}
+          pageSize={per_page} // Use URL param for loading state
+          totalCount={0}
+          pageCount={0}
           onPaginationChange={handlePaginationChange}
         />
       );
@@ -183,7 +185,9 @@ function ReservationsPage() {
         <ReservationsTable
           data={reservationsQuery.data.index}
           pageIndex={page - 1} // Convert to 0-based for table
-          pageSize={per_page}
+          pageSize={per_page} // Always use the requested page size from URL
+          totalCount={reservationsQuery.data.total}
+          pageCount={reservationsQuery.data.pageCount}
           onPaginationChange={handlePaginationChange}
         />
       );
@@ -226,6 +230,7 @@ function ReservationsPage() {
                 onChange={handleSearchChange}
                 placeholder={t`Search reservations`}
                 wrapperClassName="w-full sm:w-[250px]"
+                debounceMs={500}
               />
               <Select
                 value={status}
