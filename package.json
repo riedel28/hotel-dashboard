@@ -129,7 +129,6 @@
     "prettier": "^3.6.2",
     "react-flagkit": "^2.0.4",
     "react-intl": "^7.1.11",
-    "react-table": "^7.8.0",
     "semantic-release": "^24.2.7",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
