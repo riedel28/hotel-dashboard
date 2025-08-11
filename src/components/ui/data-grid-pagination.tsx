@@ -74,6 +74,18 @@ function DataGridPagination(props: DataGridPaginationProps) {
     pageCount
   );
 
+  // Helper function to update pagination through the callback
+  const updatePagination = (newPageIndex: number, newPageSize?: number) => {
+    const newPagination = {
+      pageIndex: newPageIndex,
+      pageSize: newPageSize ?? pageSize
+    };
+
+    // Only trigger the callback to update URL and parent state
+    // Don't manipulate table state directly as it will be updated by the parent
+    table.options.onPaginationChange?.(newPagination);
+  };
+
   // Render page buttons based on the current group
   const renderPageButtons = () => {
     const buttons = [];
@@ -89,7 +101,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           })}
           onClick={() => {
             if (pageIndex !== i) {
-              table.setPageIndex(i);
+              updatePagination(i);
             }
           }}
         >
@@ -109,7 +121,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mode="icon"
           className={btnBaseClasses}
           variant="ghost"
-          onClick={() => table.setPageIndex(currentGroupStart - 1)}
+          onClick={() => updatePagination(currentGroupStart - 1)}
         >
           <Trans>...</Trans>
         </Button>
@@ -127,7 +139,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           variant="ghost"
           size="sm"
           mode="icon"
-          onClick={() => table.setPageIndex(currentGroupEnd)}
+          onClick={() => updatePagination(currentGroupEnd)}
         >
           <Trans>...</Trans>
         </Button>
@@ -165,7 +177,11 @@ function DataGridPagination(props: DataGridPaginationProps) {
                   mode="icon"
                   variant="ghost"
                   className={btnArrowClasses}
-                  onClick={() => table.previousPage()}
+                  onClick={() => {
+                    if (table.getCanPreviousPage()) {
+                      updatePagination(pageIndex - 1);
+                    }
+                  }}
                   disabled={!table.getCanPreviousPage()}
                 >
                   <span className="sr-only">
@@ -185,7 +201,11 @@ function DataGridPagination(props: DataGridPaginationProps) {
                   mode="icon"
                   variant="ghost"
                   className={btnArrowClasses}
-                  onClick={() => table.nextPage()}
+                  onClick={() => {
+                    if (table.getCanNextPage()) {
+                      updatePagination(pageIndex + 1);
+                    }
+                  }}
                   disabled={!table.getCanNextPage()}
                 >
                   <span className="sr-only">
@@ -211,7 +231,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
               indicatorPosition="right"
               onValueChange={(value) => {
                 const newPageSize = Number(value);
-                table.setPageSize(newPageSize);
+                updatePagination(0, newPageSize); // Reset to first page when changing page size
               }}
             >
               <SelectTrigger className="w-fit" size="sm">
