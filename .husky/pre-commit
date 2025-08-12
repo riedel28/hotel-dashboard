@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+set -e
+
+echo "husky: running lint"
+npm run -s lint
+
+echo "husky: running type-check:all"
+npm run -s type-check:all
+
+
