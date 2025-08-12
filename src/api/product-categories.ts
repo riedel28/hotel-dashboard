@@ -39,44 +39,51 @@ export function transformFlatCategoriesToTree(
 
   return roots;
 }
+type ProductCategoryRaw = {
+  id: string | number;
+  title: string;
+  parent_id: string | number | null;
+};
+
 async function fetchProductCategories(): Promise<ProductCategory[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  const { data } = await client.get<any[]>('/product-categories');
+  const { data } = await client.get<ProductCategoryRaw[]>('/product-categories');
 
   // Ensure id and parent_id are numbers since JSON server returns them as strings
-  return data.map(
-    (category: {
-      id: string | number;
-      title: string;
-      parent_id: string | number | null;
-    }) => ({
-      ...category,
-      id: Number(category.id),
-      parent_id: category.parent_id ? Number(category.parent_id) : null
-    })
-  );
+  return data.map((category) => ({
+    ...category,
+    id: Number(category.id),
+    parent_id: category.parent_id ? Number(category.parent_id) : null
+  }));
 }
 
 async function fetchProductCategoryById(id: number): Promise<ProductCategory> {
   await new Promise((resolve) => setTimeout(resolve, 300));
-  const { data } = await client.get<any>(`/product-categories/${id}`);
+  const { data } = await client.get<ProductCategoryRaw>(
+    `/product-categories/${id}`
+  );
 
   // Ensure id is a number since JSON server returns it as a string
   return {
     ...data,
-    id: Number(data.id)
+    id: Number(data.id),
+    parent_id: data.parent_id ? Number(data.parent_id) : null
   };
 }
 
 async function createProductCategory(
   payload: Omit<ProductCategory, 'id'>
 ): Promise<ProductCategory> {
-  const { data } = await client.post<any>('/product-categories', payload);
+  const { data } = await client.post<ProductCategoryRaw>(
+    '/product-categories',
+    payload
+  );
   // Ensure id is a number since JSON server returns it as a string
   return {
     ...data,
-    id: Number(data.id)
+    id: Number(data.id),
+    parent_id: data.parent_id ? Number(data.parent_id) : null
   };
 }
 
@@ -84,14 +91,15 @@ async function updateProductCategory(
   id: number,
   payload: Partial<Omit<ProductCategory, 'id'>>
 ): Promise<ProductCategory> {
-  const { data } = await client.patch<any>(
+  const { data } = await client.patch<ProductCategoryRaw>(
     `/product-categories/${id}`,
     payload
   );
   // Ensure id is a number since JSON server returns it as a string
   return {
     ...data,
-    id: Number(data.id)
+    id: Number(data.id),
+    parent_id: data.parent_id ? Number(data.parent_id) : null
   };
 }
 

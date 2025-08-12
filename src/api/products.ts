@@ -3,47 +3,41 @@ import { client } from '@/api/client';
 
 type Product = { id: number; title: string; category_id: number };
 
+type ProductRaw = {
+  id: string | number;
+  title: string;
+  category_id: string | number;
+};
+
 async function fetchProducts(): Promise<Product[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
-  const { data } = await client.get<any[]>('/products');
+  const { data } = await client.get<ProductRaw[]>('/products');
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
-  return data.map(
-    (product: {
-      id: string | number;
-      title: string;
-      category_id: string | number;
-    }) => ({
-      ...product,
-      id: Number(product.id),
-      category_id: Number(product.category_id)
-    })
-  );
+  return data.map((product) => ({
+    ...product,
+    id: Number(product.id),
+    category_id: Number(product.category_id)
+  }));
 }
 
 async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
-  const { data } = await client.get<any[]>('/products', {
+  const { data } = await client.get<ProductRaw[]>('/products', {
     params: { category_id: categoryId }
   });
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
-  return data.map(
-    (product: {
-      id: string | number;
-      title: string;
-      category_id: string | number;
-    }) => ({
-      ...product,
-      id: Number(product.id),
-      category_id: Number(product.category_id)
-    })
-  );
+  return data.map((product) => ({
+    ...product,
+    id: Number(product.id),
+    category_id: Number(product.category_id)
+  }));
 }
 
 async function fetchProductById(id: number): Promise<Product> {
   await new Promise((resolve) => setTimeout(resolve, 200));
-  const { data } = await client.get<any>(`/products/${id}`);
+  const { data } = await client.get<ProductRaw>(`/products/${id}`);
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return {
@@ -54,7 +48,7 @@ async function fetchProductById(id: number): Promise<Product> {
 }
 
 async function createProduct(payload: Omit<Product, 'id'>): Promise<Product> {
-  const { data } = await client.post<any>('/products', payload);
+  const { data } = await client.post<ProductRaw>('/products', payload);
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return {
@@ -68,7 +62,7 @@ async function updateProduct(
   id: number,
   payload: Partial<Omit<Product, 'id'>>
 ): Promise<Product> {
-  const { data } = await client.patch<any>(`/products/${id}`, payload);
+  const { data } = await client.patch<ProductRaw>(`/products/${id}`, payload);
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return {
