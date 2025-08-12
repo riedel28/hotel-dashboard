@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.0.0...v1.1.0) (2025-08-12)
+
+
+### Features
+
+* **api:** implement centralized Axios client and refactor API calls ([819e057](https://github.com/riedel28/tanstack-dashboard/commit/819e057f5ec52818e22d712fcd7a157ea0232ded))
+* **reservations:** add endpoint to fetch reservation details by ID ([75ce199](https://github.com/riedel28/tanstack-dashboard/commit/75ce199012fc30ff9ecc33bda84f74d527f19514))
+* **reservations:** implement create, update, and delete reservation endpoints ([6b6c8ec](https://github.com/riedel28/tanstack-dashboard/commit/6b6c8ec9be67541eaaae7afdd4a7118a75da03fe))
+
 # 1.0.0 (2025-08-11)
 
 ## Bug Fixes
