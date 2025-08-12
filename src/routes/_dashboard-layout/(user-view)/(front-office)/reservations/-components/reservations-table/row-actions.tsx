@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { DeleteDialog } from './delete-dialog';
-import { Reservation } from './reservations-table';
+import type { Reservation } from '@/api/reservations';
 import { ShareDialog } from './share-dialog';
 
 interface RowActionsProps {

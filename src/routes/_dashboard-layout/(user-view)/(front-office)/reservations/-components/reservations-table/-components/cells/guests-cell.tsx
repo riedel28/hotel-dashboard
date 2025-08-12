@@ -1,7 +1,7 @@
 import Flag from 'react-flagkit';
 import { Trans } from '@lingui/react/macro';
 
-import type { Reservation } from '../../reservations-table';
+import type { Reservation } from '@/api/reservations';
 
 interface GuestsCellProps {
   guests: Reservation['guests'];
@@ -10,7 +10,7 @@ interface GuestsCellProps {
 export function GuestsCell({ guests }: GuestsCellProps) {
   return (
     <div className="space-y-0.5">
-      {guests.map((guest) => {
+      {guests.map((guest: Reservation['guests'][number]) => {
         const firstName = guest.first_name;
         const lastName = guest.last_name;
 

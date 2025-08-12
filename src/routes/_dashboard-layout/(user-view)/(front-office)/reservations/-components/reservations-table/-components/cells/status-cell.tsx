@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 
-import type { Reservation } from '../../reservations-table';
+import type { Reservation } from '@/api/reservations';
 
 interface StatusCellProps {
   status: Reservation['state'];
