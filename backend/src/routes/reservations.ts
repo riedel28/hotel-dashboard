@@ -127,4 +127,80 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const idParam = req.params.id;
+  const id = Number(idParam);
+
+  if (!Number.isFinite(id) || id < 1) {
+    return res.status(400).json({
+      error: {
+        code: 'INVALID_ID',
+        message: 'Reservation id must be a positive number'
+      }
+    });
+  }
+
+  try {
+    const sql = `
+      SELECT
+        booking_nr,
+        guests,
+        -- Optional fields that may not exist in schema but are expected by the frontend
+        NULL::int AS adults,
+        NULL::int AS youth,
+        NULL::int AS children,
+        NULL::int AS infants,
+        NULL::text AS purpose,
+        NULL::text AS room,
+        room_name
+      FROM reservations
+      WHERE id = $1
+      LIMIT 1
+    `;
+
+    const result = await query<{
+      booking_nr: string | null;
+      guests: unknown | null;
+      adults: number | null;
+      youth: number | null;
+      children: number | null;
+      infants: number | null;
+      purpose: string | null;
+      room: string | null;
+      room_name: string | null;
+    }>(sql, [id]);
+
+    const row = result.rows[0];
+
+    if (!row) {
+      return res.status(404).json({
+        error: { code: 'NOT_FOUND', message: 'Reservation not found' }
+      });
+    }
+
+    const guests = Array.isArray(row.guests) ? (row.guests as unknown[]) : [];
+
+    res.json({
+      booking_nr: row.booking_nr ?? '',
+      guests,
+      adults: typeof row.adults === 'number' ? row.adults : 0,
+      youth: typeof row.youth === 'number' ? row.youth : 0,
+      children: typeof row.children === 'number' ? row.children : 0,
+      infants: typeof row.infants === 'number' ? row.infants : 0,
+      purpose: row.purpose === 'business' ? 'business' : 'private',
+      room: row.room ?? row.room_name ?? ''
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({
+      error: {
+        code: 'DATABASE_ERROR',
+        message: 'Failed to fetch reservation',
+        details:
+          process.env.NODE_ENV === 'development' ? String(error) : undefined
+      }
+    });
+  }
+});
+
 export default router;
