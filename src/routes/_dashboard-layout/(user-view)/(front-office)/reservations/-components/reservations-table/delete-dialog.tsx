@@ -1,7 +1,8 @@
-import { buildResourceUrl } from '@/config/api';
-import { Trans } from '@lingui/react/macro';
+ 
+import { client } from '@/api/client';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import {  Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import {
@@ -25,18 +26,7 @@ interface DeleteDialogProps {
 async function deleteReservation(reservationId: number) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const response = await fetch(
-    buildResourceUrl('reservations', reservationId),
-    {
-      method: 'DELETE'
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to delete reservation');
-  }
-
-  return response.json();
+  return client.delete(`/reservations/${reservationId}`);
 }
 
 export function DeleteDialog({
@@ -45,6 +35,7 @@ export function DeleteDialog({
   reservationNr,
   reservationId
 }: DeleteDialogProps) {
+  const { t } = useLingui();
   const queryClient = useQueryClient();
 
   const deleteReservationMutation = useMutation({
@@ -57,35 +48,11 @@ export function DeleteDialog({
       await queryClient.invalidateQueries({ queryKey: ['reservations'] });
 
       toast.success(
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-4 w-4" />
-            <span className="font-bold">
-              <Trans>Reservation deleted</Trans>
-            </span>
-          </div>
-          <div>
-            <Trans>
-              The reservation{' '}
-              <span className="font-medium">{reservationNr}</span>
-              has been deleted
-            </Trans>
-          </div>
-        </div>
+       t`The reservation ${reservationNr} has been deleted`
       );
     },
-    onError: (error) => {
-      toast.error(
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-4 w-4" />
-            <span className="font-bold">
-              <Trans>Error deleting reservation</Trans>
-            </span>
-          </div>
-          <div>{error.message}</div>
-        </div>
-      );
+    onError: () => {
+      toast.error(t`Error deleting reservation`);
     }
   });
 
@@ -98,9 +65,7 @@ export function DeleteDialog({
           </AlertDialogTitle>
           <AlertDialogDescription className="py-4">
             <Trans>
-              The reservation{' '}
-              <span className="font-medium">{reservationNr}</span>
-              will be deleted. This action cannot be undone.
+              The reservation&nbsp;<span className="font-medium text-foreground">{reservationNr}</span>&nbsp;will be deleted. This action cannot be undone.
             </Trans>
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -110,11 +75,11 @@ export function DeleteDialog({
           </AlertDialogCancel>
           <Button
             variant="destructive"
-            disabled={deleteReservationMutation.isPending}
             onClick={() => deleteReservationMutation.mutate()}
+            disabled={deleteReservationMutation.isPending}
           >
             {deleteReservationMutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
             )}
             <Trans>Delete</Trans>
           </Button>

@@ -53,6 +53,7 @@ function App() {
       <AuthProvider>
         <InnerApp />
       </AuthProvider>
+      <Toaster richColors />
     </I18nProvider>
   );
 }
@@ -76,7 +77,6 @@ if (!rootElement.innerHTML) {
           initialIsOpen={false}
           buttonPosition="bottom-left"
         />
-        <Toaster richColors />
       </QueryClientProvider>
     </StrictMode>
   );

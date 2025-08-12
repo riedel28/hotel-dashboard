@@ -1,7 +1,6 @@
 # 1.0.0 (2025-08-11)
 
-
-### Bug Fixes
+## Bug Fixes
 
 * **button:** update destructive button variant styling ([1d43e48](https://github.com/riedel28/tanstack-dashboard/commit/1d43e4835a5df25920b6fba6c2d65ca0d069dfbc))
 * **pagination:** refactor DataGridPagination to use a centralized update function ([2f1e869](https://github.com/riedel28/tanstack-dashboard/commit/2f1e869f850ab095cd38b6289918cae7317de4d6))
@@ -13,8 +12,7 @@
 * **server:** update json-server port from 5000 to 3001 for consistency ([edccdf6](https://github.com/riedel28/tanstack-dashboard/commit/edccdf6645cc53755185069d48a311127ed524d2))
 * **vite:** restore TanStack Router plugin with correct package name ([ba6580d](https://github.com/riedel28/tanstack-dashboard/commit/ba6580d2a1256d40967598389b81f57a5dea9730))
 
-
-### Features
+## Features
 
 * add reservations page ([689376a](https://github.com/riedel28/tanstack-dashboard/commit/689376aea66e209d3a89b82e0e389b87500e1a6f))
 * add reservations table ([22b360f](https://github.com/riedel28/tanstack-dashboard/commit/22b360f0a419abfdfe2a478688a13d333a9d838b))

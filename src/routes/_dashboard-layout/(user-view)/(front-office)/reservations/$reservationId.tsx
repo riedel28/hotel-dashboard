@@ -29,7 +29,6 @@ import { FormSkeleton } from '@/components/ui/form-skeleton';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
 
-// fetchReservationById moved to @/api/reservations
 
 function ReservationPage() {
   return (

@@ -24,6 +24,58 @@ type ReservationRow = {
 
 const router = Router();
 
+router.post('/', async (req, res) => {
+  const { booking_nr, room, page_url } = (req.body ?? {}) as {
+    booking_nr?: unknown;
+    room?: unknown;
+    page_url?: unknown;
+  };
+
+  if (typeof booking_nr !== 'string' || booking_nr.trim() === '') {
+    return res.status(400).json({
+      error: { code: 'INVALID_PAYLOAD', message: 'booking_nr is required' }
+    });
+  }
+  if (typeof room !== 'string' || room.trim() === '') {
+    return res.status(400).json({
+      error: { code: 'INVALID_PAYLOAD', message: 'room is required' }
+    });
+  }
+  if (typeof page_url !== 'string' || page_url.trim() === '') {
+    return res.status(400).json({
+      error: { code: 'INVALID_PAYLOAD', message: 'page_url is required' }
+    });
+  }
+
+  try {
+    const insertSql = `
+      INSERT INTO reservations (state, booking_nr, room_name, page_url, received_at)
+      VALUES ('pending', $1, $2, $3, NOW())
+      RETURNING id, state, booking_nr, guest_email, primary_guest_name, booking_id, room_name,
+                booking_from, booking_to, check_in_via, check_out_via, last_opened_at,
+                received_at, completed_at, page_url, balance, guests
+    `;
+    const result = await query<ReservationRow & { id: number }>(insertSql, [
+      booking_nr,
+      room,
+      page_url
+    ]);
+
+    const created = result.rows[0];
+    return res.status(201).json(created);
+  } catch (error) {
+    console.error('Database error:', error);
+    return res.status(500).json({
+      error: {
+        code: 'DATABASE_ERROR',
+        message: 'Failed to create reservation',
+        details:
+          process.env.NODE_ENV === 'development' ? String(error) : undefined
+      }
+    });
+  }
+});
+
 router.get('/', async (req, res) => {
   const page = Math.max(1, Number(req.query.page || 1));
   const requestedLimit = Number(req.query.per_page || 10);
@@ -120,6 +172,200 @@ router.get('/', async (req, res) => {
       error: {
         code: 'DATABASE_ERROR',
         message: 'Failed to fetch reservations',
+        details:
+          process.env.NODE_ENV === 'development' ? String(error) : undefined
+      }
+    });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  const idParam = req.params.id;
+  const id = Number(idParam);
+
+  if (!Number.isFinite(id) || id < 1) {
+    return res.status(400).json({
+      error: {
+        code: 'INVALID_ID',
+        message: 'Reservation id must be a positive number'
+      }
+    });
+  }
+
+  try {
+    const sql = `
+      SELECT
+        booking_nr,
+        guests,
+        -- Optional fields that may not exist in schema but are expected by the frontend
+        NULL::int AS adults,
+        NULL::int AS youth,
+        NULL::int AS children,
+        NULL::int AS infants,
+        NULL::text AS purpose,
+        NULL::text AS room,
+        room_name
+      FROM reservations
+      WHERE id = $1
+      LIMIT 1
+    `;
+
+    const result = await query<{
+      booking_nr: string | null;
+      guests: unknown | null;
+      adults: number | null;
+      youth: number | null;
+      children: number | null;
+      infants: number | null;
+      purpose: string | null;
+      room: string | null;
+      room_name: string | null;
+    }>(sql, [id]);
+
+    const row = result.rows[0];
+
+    if (!row) {
+      return res.status(404).json({
+        error: { code: 'NOT_FOUND', message: 'Reservation not found' }
+      });
+    }
+
+    const guests = Array.isArray(row.guests) ? (row.guests as unknown[]) : [];
+
+    res.json({
+      booking_nr: row.booking_nr ?? '',
+      guests,
+      adults: typeof row.adults === 'number' ? row.adults : 0,
+      youth: typeof row.youth === 'number' ? row.youth : 0,
+      children: typeof row.children === 'number' ? row.children : 0,
+      infants: typeof row.infants === 'number' ? row.infants : 0,
+      purpose: row.purpose === 'business' ? 'business' : 'private',
+      room: row.room ?? row.room_name ?? ''
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({
+      error: {
+        code: 'DATABASE_ERROR',
+        message: 'Failed to fetch reservation',
+        details:
+          process.env.NODE_ENV === 'development' ? String(error) : undefined
+      }
+    });
+  }
+});
+
+type ReservationUpdatePayload = {
+  booking_nr?: string;
+  guests?: unknown;
+  room?: string;
+};
+
+router.patch('/:id', async (req, res) => {
+  const idParam = req.params.id;
+  const id = Number(idParam);
+
+  if (!Number.isFinite(id) || id < 1) {
+    return res.status(400).json({
+      error: {
+        code: 'INVALID_ID',
+        message: 'Reservation id must be a positive number'
+      }
+    });
+  }
+
+  const body = req.body as ReservationUpdatePayload;
+  const { booking_nr, guests, room } = body ?? {};
+
+  // Basic validation for provided fields only
+  if (booking_nr !== undefined && typeof booking_nr !== 'string') {
+    return res.status(400).json({
+      error: { code: 'INVALID_PAYLOAD', message: 'booking_nr must be a string' }
+    });
+  }
+  if (guests !== undefined && !Array.isArray(guests)) {
+    return res.status(400).json({
+      error: { code: 'INVALID_PAYLOAD', message: 'guests must be an array' }
+    });
+  }
+  if (room !== undefined && typeof room !== 'string') {
+    return res.status(400).json({
+      error: { code: 'INVALID_PAYLOAD', message: 'room must be a string' }
+    });
+  }
+
+  try {
+    const sql = `
+      UPDATE reservations
+      SET
+        booking_nr = COALESCE($2, booking_nr),
+        guests = COALESCE($3::jsonb, guests),
+        room_name = COALESCE($4, room_name)
+      WHERE id = $1
+      RETURNING id
+    `;
+
+    const params = [
+      id,
+      booking_nr ?? null,
+      guests !== undefined ? JSON.stringify(guests) : null,
+      room ?? null
+    ];
+
+    const result = await query<{ id: number }>(sql, params);
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: { code: 'NOT_FOUND', message: 'Reservation not found' }
+      });
+    }
+
+    // No response body needed by the frontend; 204 is sufficient
+    return res.status(204).send();
+  } catch (error) {
+    console.error('Database error:', error);
+    return res.status(500).json({
+      error: {
+        code: 'DATABASE_ERROR',
+        message: 'Failed to update reservation',
+        details:
+          process.env.NODE_ENV === 'development' ? String(error) : undefined
+      }
+    });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  const idParam = req.params.id;
+  const id = Number(idParam);
+
+  if (!Number.isFinite(id) || id < 1) {
+    return res.status(400).json({
+      error: {
+        code: 'INVALID_ID',
+        message: 'Reservation id must be a positive number'
+      }
+    });
+  }
+
+  try {
+    const result = await query<{ id: number }>(
+      'DELETE FROM reservations WHERE id = $1 RETURNING id',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: { code: 'NOT_FOUND', message: 'Reservation not found' }
+      });
+    }
+
+    return res.status(204).send();
+  } catch (error) {
+    console.error('Database error:', error);
+    return res.status(500).json({
+      error: {
+        code: 'DATABASE_ERROR',
+        message: 'Failed to delete reservation',
         details:
           process.env.NODE_ENV === 'development' ? String(error) : undefined
       }

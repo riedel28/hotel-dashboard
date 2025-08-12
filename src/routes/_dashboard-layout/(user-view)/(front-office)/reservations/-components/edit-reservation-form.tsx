@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
-import { buildResourceUrl } from '@/config/api';
+ 
+import { updateReservationById } from '@/api/reservations';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Edit2, MoreHorizontal, Trash2, User } from 'lucide-react';
+import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -79,19 +80,8 @@ const reservationFormSchema = z.object({
 type ReservationFormData = z.infer<typeof reservationFormSchema>;
 
 async function updateReservation(id: string, data: ReservationFormData) {
-  const response = await fetch(buildResourceUrl('reservations', id), {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update reservation');
-  }
-
-  return response.json();
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return updateReservationById(id, data);
 }
 
 interface EditReservationFormProps {
@@ -152,12 +142,7 @@ export function EditReservationForm({
     form.setValue('guests', updatedGuests);
   };
 
-  const [editingGuest, setEditingGuest] = useState<{
-    id: string;
-    first_name: string;
-    last_name: string;
-    nationality_code: 'DE' | 'US' | 'AT' | 'CH';
-  } | null>(null);
+  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
 
   const editGuest = (guestId: string, updatedGuest: Guest) => {
     const currentGuests = form.getValues('guests');
@@ -324,7 +309,7 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-start">
               <FormField
                 control={form.control}
                 name="adults"
@@ -499,7 +484,10 @@ export function EditReservationForm({
           </CardContent>
         </Card>
 
-        <Button type="submit" loading={updateReservationMutation.isPending}>
+        <Button type="submit" disabled={updateReservationMutation.isPending}>
+          {updateReservationMutation.isPending && (
+            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+          )}
           <Trans>Save Changes</Trans>
         </Button>
       </form>
