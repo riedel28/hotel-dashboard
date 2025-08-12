@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 
-import { Trans, useLingui } from '@lingui/react/macro';
+import type { Reservation } from '@/api/reservations';
+import { useLingui } from '@lingui/react/macro';
 import {
   ColumnDef,
   PaginationState,
@@ -9,14 +10,9 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import dayjs from 'dayjs';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
-import Flag from 'react-flagkit';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Code } from '@/components/ui/code';
-import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
@@ -24,36 +20,13 @@ import { DataGridTable } from '@/components/ui/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { BalanceCell } from './-components/cells/balance-cell';
+import { BookingNrCell } from './-components/cells/booking-nr-cell';
+import { DateCell } from './-components/cells/date-cell';
+import { GuestsCell } from './-components/cells/guests-cell';
+import { StatusCell } from './-components/cells/status-cell';
+import { ReservationDetails } from './-components/reservation-details';
 import { RowActions } from './row-actions';
-
-type Guest = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  nationality_code: 'DE' | 'US';
-};
-
-type CheckInCheckOutVia = 'android' | 'ios' | 'tv' | 'station' | 'web';
-
-export type Reservation = {
-  id: number;
-  state: 'pending' | 'started' | 'done';
-  booking_nr: string;
-  guest_email: string;
-  guests: Guest[];
-  booking_id: string;
-  room_name: string;
-  booking_from: string;
-  booking_to: string;
-  check_in_via: CheckInCheckOutVia;
-  check_out_via: CheckInCheckOutVia;
-  primary_guest_name: string;
-  last_opened_at: string;
-  received_at: string;
-  completed_at: string;
-  page_url: string;
-  balance: number;
-};
 
 interface ReservationsTableProps {
   data: Reservation[];
@@ -67,6 +40,10 @@ interface ReservationsTableProps {
       | PaginationState
       | ((old: PaginationState) => PaginationState)
   ) => void;
+  sorting?: SortingState;
+  onSortingChange?: (
+    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
+  ) => void;
 }
 
 export default function ReservationsTable({
@@ -76,7 +53,9 @@ export default function ReservationsTable({
   pageSize = 20,
   totalCount = 0,
   pageCount = 0,
-  onPaginationChange
+  onPaginationChange,
+  sorting: sortingProp,
+  onSortingChange
 }: ReservationsTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -87,9 +66,10 @@ export default function ReservationsTable({
   );
 
   // Use backend response values directly - no manual calculations
-  const [sorting, setSorting] = useState<SortingState>([
+  const [internalSorting, setInternalSorting] = useState<SortingState>([
     { id: 'received_at', desc: true }
   ]);
+  const sorting = sortingProp ?? internalSorting;
   const { t } = useLingui();
 
   const columns = useMemo<ColumnDef<Reservation>[]>(
@@ -106,6 +86,10 @@ export default function ReservationsTable({
                 mode: 'icon',
                 variant: 'ghost'
               }}
+              aria-expanded={row.getIsExpanded()}
+              aria-controls={`reservation-details-${row.id}`}
+              aria-label={t`Toggle details`}
+              title={t`Toggle details`}
             >
               {row.getIsExpanded() ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </Button>
@@ -115,157 +99,8 @@ export default function ReservationsTable({
         meta: {
           skeleton: <Skeleton className="h-6 w-6 rounded" />,
           expandedContent: (row) => (
-            <div className="space-y-4 px-6 py-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-lg font-medium">
-                    <Trans>Reservation details</Trans>
-                  </h2>
-                  <div className="flex items-center gap-1">
-                    <Code size="sm" showCopyButton copyText={row.booking_nr}>
-                      {row.booking_nr}
-                    </Code>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid max-w-6xl grid-cols-3 justify-items-stretch gap-x-12 gap-y-3">
-                {/* Column 1 */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Reservation ID</Trans>
-                    </span>
-                    <span className="text-sm">{row.id}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Guest Email</Trans>
-                    </span>
-                    <span className="text-sm">{row.guest_email}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Room</Trans>
-                    </span>
-                    <span className="text-sm">{row.room_name}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Primary Guest</Trans>
-                    </span>
-                    <span className="text-sm">{row.primary_guest_name}</span>
-                  </div>
-                </div>
-
-                {/* Column 2 */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Arrival Date</Trans>
-                    </span>
-                    <span className="text-sm">
-                      {dayjs(row.booking_from).format('DD.MM.YYYY')}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Departure Date</Trans>
-                    </span>
-                    <span className="text-sm">
-                      {dayjs(row.booking_to).format('DD.MM.YYYY')}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Check-in via</Trans>
-                    </span>
-                    <span className="text-sm">
-                      {(() => {
-                        const getDisplayText = (value: CheckInCheckOutVia) => {
-                          switch (value) {
-                            case 'android':
-                              return <Trans>Android App</Trans>;
-                            case 'ios':
-                              return <Trans>iOS App</Trans>;
-                            case 'tv':
-                              return <Trans>TV App</Trans>;
-                            case 'station':
-                              return <Trans>Station</Trans>;
-                            case 'web':
-                              return <Trans>Web App</Trans>;
-                            default:
-                              return value;
-                          }
-                        };
-                        return getDisplayText(row.check_in_via);
-                      })()}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Check-out via</Trans>
-                    </span>
-                    <span className="text-sm">
-                      {(() => {
-                        const getDisplayText = (value: CheckInCheckOutVia) => {
-                          switch (value) {
-                            case 'android':
-                              return <Trans>Android App</Trans>;
-                            case 'ios':
-                              return <Trans>iOS App</Trans>;
-                            case 'tv':
-                              return <Trans>TV App</Trans>;
-                            case 'station':
-                              return <Trans>Station</Trans>;
-                            case 'web':
-                              return <Trans>Web App</Trans>;
-                            default:
-                              return value;
-                          }
-                        };
-                        return getDisplayText(row.check_out_via);
-                      })()}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Column 3 */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Balance</Trans>
-                    </span>
-                    <span className="text-sm">
-                      <CurrencyFormatter value={row.balance} currency="EUR" />
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Received At</Trans>
-                    </span>
-                    <span className="text-sm">
-                      {dayjs(row.received_at).format('DD.MM.YYYY')}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-sm">
-                      <Trans>Completed At</Trans>
-                    </span>
-                    <span className="text-sm">
-                      {dayjs(row.completed_at).format('DD.MM.YYYY')}
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div id={`reservation-details-${row.id}`}>
+              <ReservationDetails reservation={row} />
             </div>
           )
         }
@@ -282,41 +117,11 @@ export default function ReservationsTable({
         ),
         cell: ({ row }) => {
           const status = row.getValue('state') as Reservation['state'];
-
-          const getStatusVariant = () => {
-            switch (status) {
-              case 'done':
-                return 'success';
-              case 'pending':
-                return 'warning';
-              case 'started':
-                return 'info';
-              default:
-                return 'secondary';
-            }
-          };
-
-          const getStatusMessage = () => {
-            switch (status) {
-              case 'done':
-                return t`Done`;
-              case 'pending':
-                return t`Pending`;
-              case 'started':
-                return t`Started`;
-              default:
-                return status;
-            }
-          };
-
-          return (
-            <Badge size="md" variant={getStatusVariant()} appearance="light">
-              {getStatusMessage()}
-            </Badge>
-          );
+          return <StatusCell status={status} />;
         },
         meta: {
-          skeleton: <Skeleton className="h-6 w-16" />
+          skeleton: <Skeleton className="h-6 w-16" />,
+          headerTitle: t`Status`
         },
         size: 100,
         enableSorting: true,
@@ -335,20 +140,12 @@ export default function ReservationsTable({
         ),
         cell: ({ row }) => {
           const bookingNr = row.getValue('booking_nr') as string;
-          const displayText =
-            bookingNr.length > 5
-              ? `${bookingNr.substring(0, 5)}...`
-              : bookingNr;
-
-          return (
-            <span className="font-medium" title={bookingNr}>
-              {displayText}
-            </span>
-          );
+          return <BookingNrCell bookingNr={bookingNr} />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-12" />,
-          cellClassName: 'max-w-[150px] truncate'
+          cellClassName: 'max-w-[150px] truncate',
+          headerTitle: t`Booking #`
         },
         size: 100,
         enableSorting: true,
@@ -367,7 +164,8 @@ export default function ReservationsTable({
         ),
         cell: (info) => <span>{info.getValue() as string}</span>,
         meta: {
-          skeleton: <Skeleton className="h-6 w-16" />
+          skeleton: <Skeleton className="h-6 w-16" />,
+          headerTitle: t`Room`
         },
         size: 100,
         enableSorting: true,
@@ -386,31 +184,7 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return (
-            <div className="space-y-0.5">
-              {row.original.guests.map((guest) => {
-                const firstName = guest.first_name;
-                const lastName = guest.last_name;
-
-                return (
-                  <div
-                    key={guest.id}
-                    className="flex items-center gap-2 text-nowrap"
-                  >
-                    <Flag
-                      country={guest.nationality_code}
-                      title={guest.nationality_code}
-                      className="size-3.5 rounded-sm"
-                      aria-label={guest.nationality_code}
-                    />
-                    <Trans>
-                      {lastName}, {firstName}
-                    </Trans>
-                  </div>
-                );
-              })}
-            </div>
-          );
+          return <GuestsCell guests={row.original.guests} />;
         },
         meta: {
           skeleton: (
@@ -418,7 +192,8 @@ export default function ReservationsTable({
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-4 w-24" />
             </div>
-          )
+          ),
+          headerTitle: t`Guests`
         },
         size: 180,
         enableSorting: true,
@@ -436,10 +211,11 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return dayjs(row.original.booking_from).format('DD.MM.YYYY');
+          return <DateCell isoDate={row.original.booking_from} />;
         },
         meta: {
-          skeleton: <Skeleton className="h-6 w-24" />
+          skeleton: <Skeleton className="h-6 w-24" />,
+          headerTitle: t`Arrival`
         },
         size: 120,
         enableSorting: true,
@@ -457,10 +233,11 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return dayjs(row.original.booking_to).format('DD.MM.YYYY');
+          return <DateCell isoDate={row.original.booking_to} />;
         },
         meta: {
-          skeleton: <Skeleton className="h-6 w-24" />
+          skeleton: <Skeleton className="h-6 w-24" />,
+          headerTitle: t`Departure`
         },
         size: 120,
         enableSorting: true,
@@ -478,18 +255,15 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return (
-            <div className="text-right">
-              <CurrencyFormatter value={row.original.balance} currency="EUR" />
-            </div>
-          );
+          return <BalanceCell value={row.original.balance} currency="EUR" />;
         },
         meta: {
           skeleton: (
             <div className="flex items-center justify-end">
               <Skeleton className="h-6 w-16" />
             </div>
-          )
+          ),
+          headerTitle: t`Balance`
         },
         size: 100,
         enableSorting: true,
@@ -540,7 +314,7 @@ export default function ReservationsTable({
       columnOrder
     },
     onPaginationChange: onPaginationChange,
-    onSortingChange: setSorting,
+    onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

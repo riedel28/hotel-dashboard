@@ -1,7 +1,55 @@
 import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
-import { Reservation } from '@/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table';
 import { t } from '@lingui/core/macro';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
+import { z } from 'zod';
+
+// Schemas and types (moved from src/types/reservations.ts)
+export const ReservationStatusSchema = z.enum(['pending', 'started', 'done']);
+export type ReservationStatus = z.infer<typeof ReservationStatusSchema>;
+
+export const CheckinMethodSchema = z.enum([
+  'android',
+  'ios',
+  'tv',
+  'station',
+  'web'
+]);
+export type CheckinMethod = z.infer<typeof CheckinMethodSchema>;
+
+export const GuestSchema = z.object({
+  id: z.string(),
+  first_name: z.string(),
+  last_name: z.string(),
+  nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+});
+export type Guest = z.infer<typeof GuestSchema>;
+
+export const ReservationSchema = z.object({
+  id: z.number(),
+  state: ReservationStatusSchema,
+  booking_nr: z.string(),
+  guest_email: z.string(),
+  guests: z.array(GuestSchema),
+  booking_id: z.string(),
+  room_name: z.string(),
+  booking_from: z.string(),
+  booking_to: z.string(),
+  check_in_via: CheckinMethodSchema,
+  check_out_via: CheckinMethodSchema,
+  primary_guest_name: z.string(),
+  last_opened_at: z.string(),
+  received_at: z.string(),
+  completed_at: z.string(),
+  page_url: z.string(),
+  balance: z.number(),
+  adults: z.number(),
+  youth: z.number(),
+  children: z.number(),
+  infants: z.number(),
+  purpose: z.enum(['private', 'business']),
+  room: z.string()
+});
+export type Reservation = z.infer<typeof ReservationSchema>;
 
 type ReservationsResponse = {
   index: Reservation[];
@@ -14,12 +62,7 @@ type ReservationsResponse = {
 // Details shape expected by the edit reservation form
 export type ReservationDetails = {
   booking_nr: string;
-  guests: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    nationality_code: 'DE' | 'US' | 'AT' | 'CH';
-  }[];
+  guests: Guest[];
   adults: number;
   youth: number;
   children: number;
