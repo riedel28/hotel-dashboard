@@ -12,6 +12,6 @@ export function CurrencyFormatter({
   return new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: currency,
-    minimumFractionDigits: value === 0 ? 0 : 2
+    minimumFractionDigits: value === 0 ? 1 : 2
   }).format(value);
 }

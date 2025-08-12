@@ -150,3 +150,30 @@ async function fetchReservationById(id: string): Promise<ReservationDetails> {
 }
 
 export { fetchReservations, reservationsQueryOptions, fetchReservationById };
+
+// Update
+export type ReservationUpdateInput = ReservationDetails;
+
+export async function updateReservationById(
+  id: string,
+  data: ReservationUpdateInput
+): Promise<void> {
+  await client.patch(`/reservations/${id}`, data);
+}
+
+// Create
+export type CreateReservationInput = {
+  booking_nr: string;
+  room: string;
+  page_url: string;
+};
+
+export async function createReservation(
+  data: CreateReservationInput
+): Promise<Reservation> {
+  const { data: created } = await client.post<Reservation>(
+    '/reservations',
+    data
+  );
+  return created;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
  
-import { client } from '@/api/client';
+import { createReservation } from '@/api/reservations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -43,23 +43,9 @@ type FormValues = {
   page_url: string;
 };
 
-async function createReservation(data: FormValues) {
+async function createReservationAction(data: FormValues) {
   await new Promise((resolve) => setTimeout(resolve, 1500));
-  return client.post('/reservations', {
-    id: Math.floor(Math.random() * 1000),
-    state: 'pending',
-    guest_email: 'jd@example.com',
-    primary_guest_name: 'John Doe',
-    booking_id: Math.floor(Math.random() * 1000),
-    completed_at: new Date().toISOString(),
-    last_opened_at: new Date().toISOString(),
-    received_at: new Date().toISOString(),
-    booking_nr: data.booking_nr,
-    room_name: data.room,
-    page_url: data.page_url,
-    guests: [],
-    balance: Math.floor(Math.random() * 1000)
-  });
+  return createReservation(data);
 }
 
 export function AddReservationModal() {
@@ -92,19 +78,18 @@ export function AddReservationModal() {
   };
 
   const createReservationMutation = useMutation({
-    mutationFn: createReservation,
+    mutationFn: createReservationAction,
     onSuccess: () => {
-      console.log('Mutation succeeded, about to invalidate queries');
+      
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
-      console.log('Queries invalidated, about to close modal');
+      
       handleOpenChange(false);
-      console.log('Modal closed, showing toast');
-      toast.success('Reservation created successfully');
-      console.log('Success flow completed');
+      
+      toast.success(t`Reservation created successfully`);
+      
     },
-    onError: (error) => {
-      console.error('Mutation failed:', error);
-      toast.error('Failed to create reservation: ' + error.message);
+    onError: () => {
+      toast.error(t`Failed to create reservation`);
     }
   });
 

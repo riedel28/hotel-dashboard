@@ -47,7 +47,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 
-import { Reservation } from './reservations-table';
+import { Reservation } from '@/api/reservations';
 
 interface ShareDialogProps {
   open: boolean;
