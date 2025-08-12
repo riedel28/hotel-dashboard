@@ -1,4 +1,5 @@
-import { buildResourceUrl } from '@/config/api';
+ 
+import { client } from '@/api/client';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, Loader2 } from 'lucide-react';
@@ -25,18 +26,7 @@ interface DeleteDialogProps {
 async function deleteReservation(reservationId: number) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const response = await fetch(
-    buildResourceUrl('reservations', reservationId),
-    {
-      method: 'DELETE'
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to delete reservation');
-  }
-
-  return response.json();
+  return client.delete(`/reservations/${reservationId}`);
 }
 
 export function DeleteDialog({

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { buildResourceUrl } from '@/config/api';
+ 
+import { client } from '@/api/client';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
@@ -79,19 +80,7 @@ const reservationFormSchema = z.object({
 type ReservationFormData = z.infer<typeof reservationFormSchema>;
 
 async function updateReservation(id: string, data: ReservationFormData) {
-  const response = await fetch(buildResourceUrl('reservations', id), {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update reservation');
-  }
-
-  return response.json();
+  return client.patch(`/reservations/${id}`, data);
 }
 
 interface EditReservationFormProps {

@@ -1,14 +1,11 @@
-import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
+ 
+import { client } from '@/api/client';
 
 type Product = { id: number; title: string; category_id: number };
 
 async function fetchProducts(): Promise<Product[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
-  const response = await fetch(buildApiUrl(getEndpointUrl('products')));
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  const data = await response.json();
+  const { data } = await client.get<any[]>('/products');
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return data.map(
@@ -26,13 +23,9 @@ async function fetchProducts(): Promise<Product[]> {
 
 async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
-  const response = await fetch(
-    buildApiUrl(getEndpointUrl('products'), { category_id: categoryId })
-  );
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  const data = await response.json();
+  const { data } = await client.get<any[]>('/products', {
+    params: { category_id: categoryId }
+  });
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return data.map(
@@ -50,14 +43,7 @@ async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
 
 async function fetchProductById(id: number): Promise<Product> {
   await new Promise((resolve) => setTimeout(resolve, 200));
-  const response = await fetch(buildResourceUrl('products', id));
-  if (response.status === 404) {
-    throw new Error('Product not found');
-  }
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  const data = await response.json();
+  const { data } = await client.get<any>(`/products/${id}`);
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return {
@@ -68,15 +54,7 @@ async function fetchProductById(id: number): Promise<Product> {
 }
 
 async function createProduct(payload: Omit<Product, 'id'>): Promise<Product> {
-  const response = await fetch(buildApiUrl(getEndpointUrl('products')), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create product');
-  }
-  const data = await response.json();
+  const { data } = await client.post<any>('/products', payload);
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return {
@@ -90,15 +68,7 @@ async function updateProduct(
   id: number,
   payload: Partial<Omit<Product, 'id'>>
 ): Promise<Product> {
-  const response = await fetch(buildResourceUrl('products', id), {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  if (!response.ok) {
-    throw new Error('Failed to update product');
-  }
-  const data = await response.json();
+  const { data } = await client.patch<any>(`/products/${id}`, payload);
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
   return {
@@ -109,12 +79,7 @@ async function updateProduct(
 }
 
 async function deleteProduct(id: number): Promise<void> {
-  const response = await fetch(buildResourceUrl('products', id), {
-    method: 'DELETE'
-  });
-  if (!response.ok) {
-    throw new Error('Failed to delete product');
-  }
+  await client.delete(`/products/${id}`);
 }
 
 export {

@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { buildApiUrl, getEndpointUrl } from '@/config/api';
+ 
+import { client } from '@/api/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -44,31 +45,21 @@ type FormValues = {
 
 async function createReservation(data: FormValues) {
   await new Promise((resolve) => setTimeout(resolve, 1500));
-  const response = await fetch(buildApiUrl(getEndpointUrl('reservations')), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      id: Math.floor(Math.random() * 1000),
-      state: 'pending',
-      guest_email: 'jd@example.com',
-      primary_guest_name: 'John Doe',
-      booking_id: Math.floor(Math.random() * 1000),
-      completed_at: new Date().toISOString(),
-      last_opened_at: new Date().toISOString(),
-      received_at: new Date().toISOString(),
-      booking_nr: data.booking_nr,
-      room_name: data.room,
-      page_url: data.page_url,
-      guests: [],
-      balance: Math.floor(Math.random() * 1000)
-    })
+  return client.post('/reservations', {
+    id: Math.floor(Math.random() * 1000),
+    state: 'pending',
+    guest_email: 'jd@example.com',
+    primary_guest_name: 'John Doe',
+    booking_id: Math.floor(Math.random() * 1000),
+    completed_at: new Date().toISOString(),
+    last_opened_at: new Date().toISOString(),
+    received_at: new Date().toISOString(),
+    booking_nr: data.booking_nr,
+    room_name: data.room,
+    page_url: data.page_url,
+    guests: [],
+    balance: Math.floor(Math.random() * 1000)
   });
-  if (!response.ok) {
-    throw new Error('Failed to create reservation');
-  }
-  return response.json();
 }
 
 export function AddReservationModal() {

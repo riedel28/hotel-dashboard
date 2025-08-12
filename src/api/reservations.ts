@@ -1,5 +1,4 @@
-import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
-import { t } from '@lingui/core/macro';
+import { client } from '@/api/client';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 import { z } from 'zod';
 
@@ -115,32 +114,28 @@ async function fetchReservations({
     params.q = q;
   }
 
-  const response = await fetch(
-    buildApiUrl(getEndpointUrl('reservations'), params)
-  );
-  if (!response.ok) {
-    throw new Error(t`Network response was not ok`);
-  }
-
-  const data = await response.json();
-
+  const { data } = await client.get<ReservationsResponse>('/reservations', {
+    params
+  });
   return data;
 }
+
+type ReservationRaw = {
+  booking_nr?: string;
+  guests?: Guest[];
+  adults?: number;
+  youth?: number;
+  children?: number;
+  infants?: number;
+  purpose?: 'private' | 'business';
+  room?: string;
+  room_name?: string;
+};
 
 async function fetchReservationById(id: string): Promise<ReservationDetails> {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const response = await fetch(buildResourceUrl('reservations', id));
-
-  if (response.status === 404) {
-    throw new Error(t`Reservation not found`);
-  }
-
-  if (!response.ok) {
-    throw new Error(t`Network response was not ok`);
-  }
-
-  const raw = await response.json();
+  const { data: raw } = await client.get<ReservationRaw>(`/reservations/${id}`);
   const details: ReservationDetails = {
     booking_nr: raw?.booking_nr ?? '',
     guests: Array.isArray(raw?.guests) ? raw.guests : [],
