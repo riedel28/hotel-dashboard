@@ -4,27 +4,13 @@ alwaysApply: true
 
 # Code Style & Structure
 
-- Use TypeScript for all new code
+- Use TypeScript for all new code. Do not use any unless explicitly allowed.
+- Always respect and follow linting rules. Do not introduce new linting errors.
 - Follow existing component patterns in `src/components/ui/`
 - Use TanStack Router for routing
 - Use TanStack Query for data fetching
 - Follow the existing file structure and naming conventions
 - Use shadcn/ui components when available
-- Create reusable components in `src/components/ui/` when appropriate
-- Use proper TypeScript types and interfaces
-- Follow React best practices (hooks, functional components)
-- Use proper error boundaries and loading states
-- Keep related files together in feature folders
-- Use index files for clean imports
-- Follow the existing route structure in `src/routes/`
-- Use TypeScript for all new code
-- Follow existing component patterns in `src/components/ui/`
-- Use TanStack Router for routing
-- Use TanStack Query for data fetching
-- Follow the existing file structure and naming conventions
-- Use shadcn/ui components when available
-- Create reusable components in `src/components/ui/` when appropriate
-- Use proper TypeScript types and interfaces
 - Follow React best practices (hooks, functional components)
 - Use proper error boundaries and loading states
 - Keep related files together in feature folders
