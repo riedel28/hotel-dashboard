@@ -5,15 +5,15 @@ import type { ReactNode } from 'react';
 import { Code } from '@/components/ui/code';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 
-import type { Reservation } from '@/api/reservations';
+import type { Reservation, CheckinMethod } from '@/api/reservations';
 
-type CheckinMenthod = Reservation['check_in_via'];
 
-interface ReservationDetailsProps {
+
+interface ReservationDetailsProps { 
   reservation: Reservation;
 }
 
-const checkinMenthodLabels = new Map<CheckinMenthod, ReactNode>([
+const checkinMenthodLabels = new Map<CheckinMethod, ReactNode>([
   ['android', <Trans>Android App</Trans>],
   ['ios', <Trans>iOS App</Trans>],
   ['tv', <Trans>TV App</Trans>],
@@ -21,7 +21,7 @@ const checkinMenthodLabels = new Map<CheckinMenthod, ReactNode>([
   ['web', <Trans>Web App</Trans>]
 ]);
 
-const getCheckinMethodName = (value: CheckinMenthod) => checkinMenthodLabels.get(value) ?? value;
+const getCheckinMethodName = (value: CheckinMethod) => checkinMenthodLabels.get(value) ?? value;
 
 export function ReservationDetails({ reservation }: ReservationDetailsProps) {
 

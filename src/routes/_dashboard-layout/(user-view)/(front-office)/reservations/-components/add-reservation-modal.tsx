@@ -3,7 +3,8 @@ import React from 'react';
  
 import { createReservation } from '@/api/reservations';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -22,6 +23,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -37,13 +39,20 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-type FormValues = {
-  booking_nr: string;
-  room: string;
-  page_url: string;
-};
 
-async function createReservationAction(data: FormValues) {
+
+
+const addReservationSchema = z.object({
+  booking_nr: z
+    .string()
+    .min(1, t`Reservation number is required`),
+  room: z.string().min(1, t`Room selection is required`),
+  page_url: z.url(t`Please enter a valid URL`)
+});
+
+type AddReservationFormData = z.infer<typeof addReservationSchema>;
+
+async function createReservationAction(data: AddReservationFormData) {
   await new Promise((resolve) => setTimeout(resolve, 1500));
   return createReservation(data);
 }
@@ -51,17 +60,8 @@ async function createReservationAction(data: FormValues) {
 export function AddReservationModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
-  const { t } = useLingui();
 
-  const addReservationSchema = z.object({
-    booking_nr: z
-      .string()
-      .min(1, t({ message: 'Reservation number is required' })),
-    room: z.string().min(1, t({ message: 'Room selection is required' })),
-    page_url: z.url(t({ message: 'Please enter a valid URL' }))
-  });
-
-  const form = useForm<FormValues>({
+  const form = useForm<AddReservationFormData>({
     resolver: zodResolver(addReservationSchema),
     defaultValues: {
       booking_nr: '',
@@ -80,11 +80,8 @@ export function AddReservationModal() {
   const createReservationMutation = useMutation({
     mutationFn: createReservationAction,
     onSuccess: () => {
-      
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
-      
       handleOpenChange(false);
-      
       toast.success(t`Reservation created successfully`);
       
     },
@@ -93,7 +90,7 @@ export function AddReservationModal() {
     }
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: AddReservationFormData) => {
     createReservationMutation.mutate(data);
   };
 
@@ -121,6 +118,12 @@ export function AddReservationModal() {
                   <FormLabel>
                     <Trans>Reservation Nr.</Trans>
                   </FormLabel>
+                  <FormDescription>
+                    <Trans>
+                      The booking number can be found in your Property
+                      Management System (PMS)
+                    </Trans>
+                  </FormDescription>
                   <FormControl>
                     <Input
                       {...field}

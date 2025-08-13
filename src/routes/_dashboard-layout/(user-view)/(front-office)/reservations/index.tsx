@@ -1,10 +1,12 @@
-import { reservationsQueryOptions } from '@/api/reservations';
+import {
+  fetchReservationsParamsSchema,
+  reservationsQueryOptions
+} from '@/api/reservations';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { PaginationState } from '@tanstack/react-table';
 import { RefreshCw, XIcon } from 'lucide-react';
-import { z } from 'zod';
 
 import {
   Breadcrumb,
@@ -36,24 +38,6 @@ import { AddReservationModal } from '../reservations/-components/add-reservation
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
 import { ReservationDateFilter } from './-components/reservations-table/reservation-date-filter';
 
-const reservationsFilterSchema = z.object({
-  page: z.number().default(1),
-  per_page: z.number().default(10),
-  q: z.string().optional(),
-  status: z
-    .enum(['pending', 'started', 'done', 'all'])
-    .default('all')
-    .optional(),
-  from: z
-    .string()
-    .optional()
-    .transform((val) => (val ? new Date(val) : undefined)),
-  to: z
-    .string()
-    .optional()
-    .transform((val) => (val ? new Date(val) : undefined))
-});
-
 function ReservationsPage() {
   const { page, per_page, status, from, to, q } = Route.useSearch();
   const navigate = Route.useNavigate();
@@ -62,9 +46,11 @@ function ReservationsPage() {
   const reservationsQuery = useQuery(
     reservationsQueryOptions({
       page,
-      perPage: per_page,
+      per_page,
       status,
-      q
+      q,
+      from,
+      to
     })
   );
 
@@ -339,6 +325,6 @@ function ReservationsPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/reservations/'
 )({
-  validateSearch: (search) => reservationsFilterSchema.parse(search),
+  validateSearch: (search) => fetchReservationsParamsSchema.parse(search),
   component: () => <ReservationsPage />
 });

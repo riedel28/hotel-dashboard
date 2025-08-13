@@ -2,7 +2,7 @@
 import { client } from '@/api/client';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {  Loader2Icon } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import {
