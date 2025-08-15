@@ -139,13 +139,13 @@ function NotFound({
       )}
 
       {title && (
-        <h3 className="text-card-foreground mb-2 text-xl font-semibold">
+        <h3 className="mb-2 text-xl font-semibold text-card-foreground">
           {title || <Trans>Page not found</Trans>}
         </h3>
       )}
 
       {message && (
-        <p className="text-card-foreground mb-8 text-base leading-relaxed">
+        <p className="mb-8 text-base leading-relaxed text-card-foreground">
           {message || (
             <Trans>Sorry, we couldn't find the page you're looking for.</Trans>
           )}

@@ -1,6 +1,6 @@
+import dotenv from 'dotenv';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import dotenv from 'dotenv';
 import { Pool } from 'pg';
 
 async function loadEnv(): Promise<void> {
@@ -56,5 +56,3 @@ async function main(): Promise<void> {
 }
 
 void main();
-
-

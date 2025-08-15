@@ -3,7 +3,7 @@ import z from 'zod';
 
 // Axios client configured with inline timeout and headers.
 // baseURL is sourced from environment (VITE_API_BASE_URL).
- const client = axios.create({
+const client = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: {

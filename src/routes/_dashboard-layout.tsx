@@ -102,7 +102,7 @@ function SidebarHeaderComponent() {
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-            <div className="bg-primary inline-block rounded-md p-1 text-white transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
+            <div className="inline-block rounded-md bg-primary p-1 text-white transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
               <MessageCircleIcon className="size-4" />
             </div>
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
@@ -271,7 +271,7 @@ function UserSidebarContent() {
                 {item.url === '/tv' && (
                   <SidebarMenuBadge>
                     <ArrowUpRightIcon
-                      className="text-muted-foreground/80 size-4"
+                      className="size-4 text-muted-foreground/80"
                       aria-hidden="true"
                     />
                   </SidebarMenuBadge>

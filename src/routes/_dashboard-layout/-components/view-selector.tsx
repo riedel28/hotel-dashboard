@@ -17,7 +17,7 @@ export default function ViewSelector() {
     <Select value={currentView} onValueChange={setCurrentView}>
       <SelectTrigger
         aria-label={t`Select view`}
-        className="hover:bg-accent data-[state=open]:bg-accent text-secondary-foreground border-none bg-transparent text-sm font-medium shadow-none focus-visible:ring-0"
+        className="border-none bg-transparent text-sm font-medium text-secondary-foreground shadow-none hover:bg-accent focus-visible:ring-0 data-[state=open]:bg-accent"
       >
         <SelectValue placeholder={t`Select view`} />
       </SelectTrigger>

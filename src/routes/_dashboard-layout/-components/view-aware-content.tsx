@@ -12,7 +12,7 @@ export default function ViewAwareContent() {
 
       {currentView === 'user' ? (
         <div className="space-y-2">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             <Trans>
               You are viewing the user interface. This shows limited
               functionality for regular users.
@@ -29,7 +29,7 @@ export default function ViewAwareContent() {
         </div>
       ) : (
         <div className="space-y-2">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             <Trans>
               You are viewing the admin interface. This shows full functionality
               for administrators.

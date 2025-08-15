@@ -72,7 +72,7 @@ export function ProductsList() {
           </CardHeader>
           <CardContent className="pt-0">
             <div className="flex min-h-[140px] items-center justify-center">
-              <div className="text-muted-foreground text-center text-base">
+              <div className="text-center text-base text-muted-foreground">
                 <Trans>Select a category to view products</Trans>
               </div>
             </div>
@@ -132,7 +132,7 @@ export function ProductsList() {
                 <li
                   key={product.id}
                   className={cn(
-                    'border-border bg-card flex items-center justify-between rounded-md border px-3 py-2.5 transition-colors'
+                    'flex items-center justify-between rounded-md border border-border bg-card px-3 py-2.5 transition-colors'
                   )}
                 >
                   <span className="text-sm font-medium">{product.title}</span>

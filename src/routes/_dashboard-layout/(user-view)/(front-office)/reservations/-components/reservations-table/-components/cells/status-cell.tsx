@@ -1,9 +1,9 @@
-import { useLingui } from '@lingui/react/macro';
 import type { ComponentProps } from 'react';
 
-import { Badge } from '@/components/ui/badge';
-
 import type { ReservationStatus } from '@/api/reservations';
+import { useLingui } from '@lingui/react/macro';
+
+import { Badge } from '@/components/ui/badge';
 
 interface StatusCellProps {
   status: ReservationStatus;
@@ -13,10 +13,22 @@ export function StatusCell({ status }: StatusCellProps) {
   const { t } = useLingui();
 
   const variant: ComponentProps<typeof Badge>['variant'] =
-    status === 'done' ? 'success' : status === 'pending' ? 'warning' : status === 'started' ? 'info' : 'secondary';
+    status === 'done'
+      ? 'success'
+      : status === 'pending'
+        ? 'warning'
+        : status === 'started'
+          ? 'info'
+          : 'secondary';
 
   const label =
-    status === 'done' ? t`Done` : status === 'pending' ? t`Pending` : status === 'started' ? t`Started` : status;
+    status === 'done'
+      ? t`Done`
+      : status === 'pending'
+        ? t`Pending`
+        : status === 'started'
+          ? t`Started`
+          : status;
 
   return (
     <Badge size="md" variant={variant} appearance="light">
@@ -24,5 +36,3 @@ export function StatusCell({ status }: StatusCellProps) {
     </Badge>
   );
 }
-
-

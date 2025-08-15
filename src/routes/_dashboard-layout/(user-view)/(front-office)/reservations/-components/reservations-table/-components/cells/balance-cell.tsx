@@ -12,5 +12,3 @@ export function BalanceCell({ value, currency = 'EUR' }: BalanceCellProps) {
     </div>
   );
 }
-
-

@@ -1,7 +1,6 @@
-import Flag from 'react-flagkit';
-import { Trans } from '@lingui/react/macro';
-
 import { Guest } from '@/api/reservations';
+import { Trans } from '@lingui/react/macro';
+import Flag from 'react-flagkit';
 
 interface GuestsCellProps {
   guests: Guest[];
@@ -31,5 +30,3 @@ export function GuestsCell({ guests }: GuestsCellProps) {
     </div>
   );
 }
-
-

@@ -72,9 +72,9 @@ function ForgotPasswordPage() {
           <h1 className="text-2xl font-bold">
             <Trans>Reset Link Sent</Trans>
           </h1>
-          <p className="text-foreground text-pretty">
+          <p className="text-pretty text-foreground">
             {`We've sent a password reset link to `}
-            <span className="text-foreground font-medium">
+            <span className="font-medium text-foreground">
               {form.getValues('email')}
             </span>
             {`. Please check your inbox and follow the instructions to reset your password.`}
@@ -88,7 +88,7 @@ function ForgotPasswordPage() {
                 mode: 'link',
                 underline: 'solid'
               }),
-              'text-foreground text-sm'
+              'text-sm text-foreground'
             )}
             to="/auth/login"
           >
@@ -102,7 +102,7 @@ function ForgotPasswordPage() {
   return (
     <div className="w-full max-w-md space-y-8">
       <div className="space-y-2 text-center">
-        <div className="bg-primary inline-block rounded-lg p-2 text-white">
+        <div className="inline-block rounded-lg bg-primary p-2 text-white">
           <MessageCircleIcon className="size-10" />
         </div>
 
@@ -154,7 +154,7 @@ function ForgotPasswordPage() {
               mode: 'link',
               underline: 'solid'
             }),
-            'text-foreground text-sm'
+            'text-sm text-foreground'
           )}
           to="/auth/login"
         >

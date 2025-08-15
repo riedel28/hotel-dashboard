@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 
+import type { Reservation } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { Row } from '@tanstack/react-table';
@@ -23,7 +24,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { DeleteDialog } from './delete-dialog';
-import type { Reservation } from '@/api/reservations';
 import { ShareDialog } from './share-dialog';
 
 interface RowActionsProps {
@@ -40,7 +40,7 @@ export function RowActions({ row }: RowActionsProps) {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
           >
             <MoreHorizontal className="h-4 w-4" />
             <span className="sr-only">

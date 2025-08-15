@@ -1,14 +1,17 @@
 import { useState } from 'react';
 
- 
-import { updateReservationById, reservationSchema as apiReservationSchema, guestSchema } from '@/api/reservations';
+import {
+  reservationSchema as apiReservationSchema,
+  guestSchema,
+  updateReservationById
+} from '@/api/reservations';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
-import { useForm, type SubmitHandler, type Resolver } from 'react-hook-form';
+import { type Resolver, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -66,14 +69,29 @@ export const reservationFormSchema = z.object({
   ),
   guests: z.array(
     guestSchema.extend({
-      first_name: guestSchema.shape.first_name.min(1, t`First name is required`),
+      first_name: guestSchema.shape.first_name.min(
+        1,
+        t`First name is required`
+      ),
       last_name: guestSchema.shape.last_name.min(1, t`Last name is required`)
     })
   ),
-  adults: z.coerce.number().int().min(1, t`At least one adult is required`),
-  youth: z.coerce.number().int().min(0, t`Youth count cannot be negative`),
-  children: z.coerce.number().int().min(0, t`Children count cannot be negative`),
-  infants: z.coerce.number().int().min(0, t`Infants count cannot be negative`),
+	adults: z.coerce
+    .number()
+    .int()
+    .min(1, t`At least one adult is required`),
+  youth: z.coerce
+    .number()
+    .int()
+    .min(0, t`Youth count cannot be negative`),
+  children: z.coerce
+    .number()
+    .int()
+    .min(0, t`Children count cannot be negative`),
+  infants: z.coerce
+    .number()
+    .int()
+    .min(0, t`Infants count cannot be negative`),
   purpose: z.enum(['private', 'business']),
   room: z.string().min(1, t`Room selection is required`)
 });
@@ -111,7 +129,9 @@ export function EditReservationForm({
   const queryClient = useQueryClient();
 
   const form = useForm<ReservationFormData>({
-    resolver: zodResolver(reservationFormSchema) as unknown as Resolver<ReservationFormData>,
+    resolver: zodResolver(
+      reservationFormSchema
+    ) as unknown as Resolver<ReservationFormData>,
     defaultValues: initialData,
     values: reservationData
   });
@@ -131,7 +151,7 @@ export function EditReservationForm({
   });
 
   const onSubmit: SubmitHandler<ReservationFormData> = (data) => {
-    updateReservationMutation.mutate({...reservationData, ...data});
+    updateReservationMutation.mutate({ ...reservationData, ...data });
   };
 
   const removeGuest = (guestId: string) => {
@@ -146,7 +166,9 @@ export function EditReservationForm({
     form.setValue('guests', updatedGuests);
   };
 
-  const [editingGuest, setEditingGuest] = useState<GuestsFormData[number] | null>(null);
+  const [editingGuest, setEditingGuest] = useState<
+    GuestsFormData[number] | null
+  >(null);
 
   const editGuest = (guestId: string, updatedGuest: Guest) => {
     const currentGuests = form.getValues('guests') as GuestsFormData;
@@ -243,7 +265,7 @@ export function EditReservationForm({
                   <FormItem>
                     <div className="space-y-2">
                       {field.value.length === 0 ? (
-                        <div className="text-muted-foreground flex h-[42px] w-full items-center justify-center text-center text-sm">
+                        <div className="flex h-[42px] w-full items-center justify-center text-center text-sm text-muted-foreground">
                           <Trans>No guests added yet</Trans>
                         </div>
                       ) : (
@@ -253,7 +275,7 @@ export function EditReservationForm({
                             className="flex items-center justify-between rounded-md border px-2 py-1"
                           >
                             <div className="flex items-center gap-2">
-                              <User className="text-muted-foreground h-4 w-4" />
+                              <User className="h-4 w-4 text-muted-foreground" />
                               <span className="max-w-md truncate text-sm">
                                 {guest.first_name} {guest.last_name}
                               </span>
@@ -262,7 +284,7 @@ export function EditReservationForm({
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   variant="ghost"
-                                  className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+                                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
                                 >
                                   <MoreHorizontal className="h-4 w-4" />
                                   <span className="sr-only">
@@ -313,7 +335,7 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-4 items-start">
+            <div className="flex items-start gap-4">
               <FormField
                 control={form.control}
                 name="adults"
@@ -466,13 +488,13 @@ export function EditReservationForm({
                           <SelectItem
                             key={room.id}
                             value={room.id}
-                            className="bg-card hover:bg-accent flex w-full items-center justify-between rounded-md p-3 transition-colors"
+                            className="flex w-full items-center justify-between rounded-md bg-card p-3 transition-colors hover:bg-accent"
                           >
                             <div className="flex-1">
-                              <div className="text-foreground font-medium">
+                              <div className="font-medium text-foreground">
                                 {room.name}
                               </div>
-                              <div className="text-muted-foreground text-sm">
+                              <div className="text-sm text-muted-foreground">
                                 {room.description}
                               </div>
                             </div>

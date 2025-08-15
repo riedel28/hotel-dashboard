@@ -55,7 +55,7 @@ function StartPage() {
         <h1 className="text-2xl font-bold tracking-tight">
           <Trans>Welcome back, {userName}!</Trans>
         </h1>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-lg text-muted-foreground">
           <Trans>Manage your hotel operations efficiently</Trans>
         </p>
       </div>
@@ -71,7 +71,7 @@ function StartPage() {
           return (
             <Card
               key={action.href}
-              className="border-border hover:border-border group cursor-pointer p-0 shadow-none transition-all duration-200 hover:shadow-sm"
+              className="group cursor-pointer border-border p-0 shadow-none transition-all duration-200 hover:border-border hover:shadow-sm"
             >
               <Link
                 to={action.href}
@@ -79,13 +79,13 @@ function StartPage() {
                 className="block p-6"
               >
                 <div className="mb-2">
-                  <div className="bg-muted mb-3 w-fit rounded-lg p-3">
-                    <IconComponent className="text-muted-foreground size-5" />
+                  <div className="mb-3 w-fit rounded-lg bg-muted p-3">
+                    <IconComponent className="size-5 text-muted-foreground" />
                   </div>
                   <CardTitle className="mb-1 text-lg font-semibold">
                     {action.title}
                   </CardTitle>
-                  <CardDescription className="text-muted-foreground mb-2text-sm leading-relaxed">
+                  <CardDescription className="mb-2text-sm leading-relaxed text-muted-foreground">
                     {action.description}
                   </CardDescription>
                 </div>

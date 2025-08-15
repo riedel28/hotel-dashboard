@@ -36,7 +36,7 @@ export function DeleteProductDialog({
           <AlertDialogDescription>
             <Trans>
               Are you sure you want to delete&nbsp;
-              <span className="text-foreground font-medium">
+              <span className="font-medium text-foreground">
                 {productTitle}
               </span>
               ? This action cannot be undone.

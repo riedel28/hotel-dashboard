@@ -1,4 +1,3 @@
- 
 import { client } from '@/api/client';
 
 type Product = { id: number; title: string; category_id: number };

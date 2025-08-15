@@ -167,8 +167,8 @@ function ReservationDateFilter({
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="center">
         <div className="flex max-sm:flex-col">
-          <div className="border-border relative max-sm:order-1 max-sm:border-t sm:w-36">
-            <div className="border-border h-full py-2 sm:border-e">
+          <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
+            <div className="h-full border-border py-2 sm:border-e">
               <div className="flex flex-col gap-[2px] px-2">
                 {presets.map((preset, index) => (
                   <Button
@@ -198,7 +198,7 @@ function ReservationDateFilter({
             numberOfMonths={2}
           />
         </div>
-        <div className="border-border flex items-center justify-end gap-1.5 border-t p-3">
+        <div className="flex items-center justify-end gap-1.5 border-t border-border p-3">
           <Button variant="outline" onClick={handleReset}>
             <Trans>Reset</Trans>
           </Button>

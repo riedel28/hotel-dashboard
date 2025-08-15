@@ -2,7 +2,10 @@ import { Suspense } from 'react';
 
 import { fetchReservationById } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
-import { QueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  QueryErrorResetBoundary,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -25,7 +28,6 @@ import {
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
-
 
 function ReservationPage() {
   return (
@@ -94,7 +96,6 @@ function ReservationPage() {
 }
 
 function ReservationForm() {
-  
   const { reservationId } = Route.useParams();
   const reservationQuery = useSuspenseQuery({
     queryKey: ['reservations', reservationId],
@@ -113,7 +114,12 @@ function ReservationForm() {
     room: data.room ?? data.room_name
   };
 
-  return <EditReservationForm reservationId={reservationId} reservationData={reservationData} />;
+  return (
+    <EditReservationForm
+      reservationId={reservationId}
+      reservationData={reservationData}
+    />
+  );
 }
 
 export const Route = createFileRoute(

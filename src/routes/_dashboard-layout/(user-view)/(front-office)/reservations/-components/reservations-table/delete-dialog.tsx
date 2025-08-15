@@ -1,4 +1,3 @@
- 
 import { client } from '@/api/client';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -47,9 +46,7 @@ export function DeleteDialog({
       // Then update the table and show success message after the update
       await queryClient.invalidateQueries({ queryKey: ['reservations'] });
 
-      toast.success(
-       t`The reservation ${reservationNr} has been deleted`
-      );
+      toast.success(t`The reservation ${reservationNr} has been deleted`);
     },
     onError: () => {
       toast.error(t`Error deleting reservation`);
@@ -65,7 +62,11 @@ export function DeleteDialog({
           </AlertDialogTitle>
           <AlertDialogDescription className="py-4">
             <Trans>
-              The reservation&nbsp;<span className="font-medium text-foreground">{reservationNr}</span>&nbsp;will be deleted. This action cannot be undone.
+              The reservation&nbsp;
+              <span className="font-medium text-foreground">
+                {reservationNr}
+              </span>
+              &nbsp;will be deleted. This action cannot be undone.
             </Trans>
           </AlertDialogDescription>
         </AlertDialogHeader>

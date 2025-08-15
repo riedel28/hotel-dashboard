@@ -299,10 +299,10 @@ function ReservationsPage() {
         </div>
 
         {q && (
-          <div className="text-muted-foreground flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Trans>
               Show results for:{' '}
-              <span className="text-foreground font-medium">"{q}"</span>
+              <span className="font-medium text-foreground">"{q}"</span>
             </Trans>
           </div>
         )}

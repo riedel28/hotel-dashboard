@@ -1,6 +1,5 @@
 import React from 'react';
 
- 
 import { createReservation } from '@/api/reservations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
@@ -39,13 +38,8 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-
-
-
 const addReservationSchema = z.object({
-  booking_nr: z
-    .string()
-    .min(1, t`Reservation number is required`),
+  booking_nr: z.string().min(1, t`Reservation number is required`),
   room: z.string().min(1, t`Room selection is required`),
   page_url: z.url(t`Please enter a valid URL`)
 });
@@ -83,7 +77,6 @@ export function AddReservationModal() {
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
       handleOpenChange(false);
       toast.success(t`Reservation created successfully`);
-      
     },
     onError: () => {
       toast.error(t`Failed to create reservation`);

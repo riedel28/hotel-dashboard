@@ -69,7 +69,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
           {enabled ? (
             <ShieldCheck className="h-5 w-5 text-green-600" />
           ) : (
-            <Shield className="text-muted-foreground h-5 w-5" />
+            <Shield className="h-5 w-5 text-muted-foreground" />
           )}
           <Trans>Two-Factor Authentication</Trans>
           <Badge
@@ -93,12 +93,12 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
         <div className="space-y-6">
           {!enabled && (
             <div className="space-y-3">
-              <p className="text-foreground text-sm">
+              <p className="text-sm text-foreground">
                 <Trans>
                   Two-factor authentication isn't set up on your account yet.
                 </Trans>
               </p>
-              <p className="text-foreground text-sm">
+              <p className="text-sm text-foreground">
                 <Trans>You can use any of these popular apps:</Trans>
               </p>
               <div className="space-y-2">
@@ -163,7 +163,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                   <Trans>Two-factor authentication is turned off</Trans>
                 )}
               </p>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-sm text-muted-foreground">
                 {enabled ? (
                   <Trans>
                     Your account is protected with an extra verification step

@@ -66,7 +66,7 @@ export default function UserMenu() {
           <Button
             variant="ghost"
             size="icon"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground rounded-full border-2"
+            className="rounded-full border-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar className="h-8 w-8 rounded-full">
               <AvatarImage
@@ -91,7 +91,7 @@ export default function UserMenu() {
                 <span className="truncate font-semibold">
                   {auth.user?.firstName} {auth.user?.lastName}
                 </span>
-                <span className="text-muted-foreground truncate text-xs">
+                <span className="truncate text-xs text-muted-foreground">
                   {auth.user?.email}
                 </span>
               </div>
@@ -109,7 +109,7 @@ export default function UserMenu() {
               <DropdownMenuSubTrigger withChevron={false}>
                 <div className="flex w-full items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <GlobeIcon className="text-muted-foreground h-4 w-4" />
+                    <GlobeIcon className="h-4 w-4 text-muted-foreground" />
                     <Trans>Language</Trans>
                   </div>
                   <Badge
@@ -164,7 +164,7 @@ export default function UserMenu() {
           <DropdownMenuItem onClick={handleLogout}>
             <LogOutIcon />
             <Trans>Log out</Trans>
-            <span className="text-muted-foreground ml-auto text-xs">
+            <span className="ml-auto text-xs text-muted-foreground">
               <Trans>v{version}</Trans>
             </span>
           </DropdownMenuItem>

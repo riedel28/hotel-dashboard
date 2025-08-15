@@ -11,7 +11,7 @@ export function CurrencyFormatter({
   locale = 'de-DE'
 }: CurrencyFormatterProps) {
   const isZero = value === 0;
-  
+
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
