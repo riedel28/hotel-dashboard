@@ -76,7 +76,7 @@ export const reservationFormSchema = z.object({
       last_name: guestSchema.shape.last_name.min(1, t`Last name is required`)
     })
   ),
-	adults: z.coerce
+  adults: z.coerce
     .number()
     .int()
     .min(1, t`At least one adult is required`),
