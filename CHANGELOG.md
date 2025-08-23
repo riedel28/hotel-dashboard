@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.1.0...v1.2.0) (2025-08-23)
+
+
+### Bug Fixes
+
+* **currency-formatter:** add locale support and improve formatting logic ([3392436](https://github.com/riedel28/tanstack-dashboard/commit/339243693868f811ec2b575492fc52835fa56078))
+* **db:** ensure numeric types are parsed correctly from PostgreSQL ([41f64c7](https://github.com/riedel28/tanstack-dashboard/commit/41f64c7a7e9cba104b5d4b837b5a5ec1d9c88e34))
+* **dependencies:** update prettier version to remove caret in package.json and package-lock.json ([051845e](https://github.com/riedel28/tanstack-dashboard/commit/051845ee43871bf2d97d9fcbbe0d687f9b016192))
+
+
+### Features
+
+* **reservations:** enhance reservation management with new fields and scripts ([6a87dc0](https://github.com/riedel28/tanstack-dashboard/commit/6a87dc0172120d4e7102c01750fc076523a6b090))
+
 # [1.1.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.0.0...v1.1.0) (2025-08-12)
 
 ## Features
