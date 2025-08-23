@@ -29,7 +29,6 @@ import { FormSkeleton } from '@/components/ui/form-skeleton';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
 
-
 function ReservationPage() {
   return (
     <div className="space-y-6">
@@ -98,16 +97,27 @@ function ReservationPage() {
 
 function ReservationForm() {
   const { reservationId } = Route.useParams();
-
   const reservationQuery = useSuspenseQuery({
     queryKey: ['reservations', reservationId],
     queryFn: () => fetchReservationById(reservationId)
   });
 
+  const data = reservationQuery.data;
+  const reservationData = {
+    booking_nr: data.booking_nr,
+    guests: data.guests,
+    adults: data.adults ?? 1,
+    youth: data.youth ?? 0,
+    children: data.children ?? 0,
+    infants: data.infants ?? 0,
+    purpose: data.purpose ?? 'private',
+    room: data.room ?? data.room_name
+  };
+
   return (
     <EditReservationForm
       reservationId={reservationId}
-      reservationData={reservationQuery.data}
+      reservationData={reservationData}
     />
   );
 }

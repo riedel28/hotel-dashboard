@@ -17,7 +17,7 @@ import {
 
 export default function Component() {
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 border-b px-4 backdrop-blur md:ps-3.5">
+    <header className="sticky top-0 z-50 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:ps-3.5">
       <div className="flex h-14 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">

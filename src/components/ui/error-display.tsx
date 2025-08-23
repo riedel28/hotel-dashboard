@@ -186,7 +186,7 @@ function ErrorDisplayTitle({
     <h3
       data-slot="error-display-title"
       className={cn(
-        'text-card-foreground mb-2 text-xl font-semibold',
+        'mb-2 text-xl font-semibold text-card-foreground',
         className
       )}
       {...props}
@@ -202,7 +202,7 @@ function ErrorDisplayMessage({
     <p
       data-slot="error-display-message"
       className={cn(
-        'text-card-foreground mb-8 text-base leading-relaxed',
+        'mb-8 text-base leading-relaxed text-card-foreground',
         className
       )}
       {...props}
@@ -226,10 +226,10 @@ function ErrorDisplayDetails({
       className={cn('mb-8 w-full text-left', className)}
       {...props}
     >
-      <summary className="text-muted-foreground hover:text-foreground cursor-pointer text-sm font-medium transition-colors">
+      <summary className="cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
         {summaryLabel ?? <Trans>Show details</Trans>}
       </summary>
-      <div className="bg-muted/80 text-foreground mt-2 rounded-md border p-3 font-mono text-sm leading-relaxed">
+      <div className="mt-2 rounded-md border bg-muted/80 p-3 font-mono text-sm leading-relaxed text-foreground">
         {children}
       </div>
     </details>

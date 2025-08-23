@@ -1,14 +1,17 @@
 import { useState } from 'react';
 
- 
-import { updateReservationById } from '@/api/reservations';
+import {
+  reservationSchema as apiReservationSchema,
+  guestSchema,
+  updateReservationById
+} from '@/api/reservations';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { type Resolver, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -59,25 +62,44 @@ export type Guest = {
   nationality_code: 'DE' | 'US' | 'AT' | 'CH';
 };
 
-const reservationFormSchema = z.object({
-  booking_nr: z.string().min(1, t`Booking number is required`),
+export const reservationFormSchema = z.object({
+  booking_nr: apiReservationSchema.shape.booking_nr.min(
+    1,
+    t`Booking number is required`
+  ),
   guests: z.array(
-    z.object({
-      id: z.string(),
-      first_name: z.string(),
-      last_name: z.string(),
-      nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+    guestSchema.extend({
+      first_name: guestSchema.shape.first_name.min(
+        1,
+        t`First name is required`
+      ),
+      last_name: guestSchema.shape.last_name.min(1, t`Last name is required`)
     })
   ),
-  adults: z.number().min(1, t`At least one adult is required`),
-  youth: z.number().min(0, t`Youth count cannot be negative`),
-  children: z.number().min(0, t`Children count cannot be negative`),
-  infants: z.number().min(0, t`Infants count cannot be negative`),
+  adults: z.coerce
+    .number()
+    .int()
+    .min(1, t`At least one adult is required`),
+  youth: z.coerce
+    .number()
+    .int()
+    .min(0, t`Youth count cannot be negative`),
+  children: z.coerce
+    .number()
+    .int()
+    .min(0, t`Children count cannot be negative`),
+  infants: z.coerce
+    .number()
+    .int()
+    .min(0, t`Infants count cannot be negative`),
   purpose: z.enum(['private', 'business']),
   room: z.string().min(1, t`Room selection is required`)
 });
 
+export const guestsFormSchema = reservationFormSchema.shape.guests;
+
 type ReservationFormData = z.infer<typeof reservationFormSchema>;
+type GuestsFormData = z.infer<typeof guestsFormSchema>;
 
 async function updateReservation(id: string, data: ReservationFormData) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -91,8 +113,8 @@ interface EditReservationFormProps {
 
 const initialData = {
   booking_nr: '',
-  guests: [],
-  adults: 0,
+  guests: [] as GuestsFormData,
+  adults: 1,
   youth: 0,
   children: 0,
   infants: 0,
@@ -107,7 +129,9 @@ export function EditReservationForm({
   const queryClient = useQueryClient();
 
   const form = useForm<ReservationFormData>({
-    resolver: zodResolver(reservationFormSchema),
+    resolver: zodResolver(
+      reservationFormSchema
+    ) as unknown as Resolver<ReservationFormData>,
     defaultValues: initialData,
     values: reservationData
   });
@@ -126,12 +150,12 @@ export function EditReservationForm({
     }
   });
 
-  const onSubmit = (data: ReservationFormData) => {
-    updateReservationMutation.mutate(data);
+  const onSubmit: SubmitHandler<ReservationFormData> = (data) => {
+    updateReservationMutation.mutate({ ...reservationData, ...data });
   };
 
   const removeGuest = (guestId: string) => {
-    const currentGuests = form.getValues('guests');
+    const currentGuests = form.getValues('guests') as GuestsFormData;
     const updatedGuests = currentGuests.filter((guest) => guest.id !== guestId);
     form.setValue('guests', updatedGuests);
   };
@@ -142,10 +166,12 @@ export function EditReservationForm({
     form.setValue('guests', updatedGuests);
   };
 
-  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
+  const [editingGuest, setEditingGuest] = useState<
+    GuestsFormData[number] | null
+  >(null);
 
   const editGuest = (guestId: string, updatedGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
+    const currentGuests = form.getValues('guests') as GuestsFormData;
     const updatedGuests = currentGuests.map((guest) =>
       guest.id === guestId ? updatedGuest : guest
     );
@@ -239,17 +265,17 @@ export function EditReservationForm({
                   <FormItem>
                     <div className="space-y-2">
                       {field.value.length === 0 ? (
-                        <div className="text-muted-foreground flex h-[42px] w-full items-center justify-center text-center text-sm">
+                        <div className="flex h-[42px] w-full items-center justify-center text-center text-sm text-muted-foreground">
                           <Trans>No guests added yet</Trans>
                         </div>
                       ) : (
-                        field.value.map((guest) => (
+                        (field.value as GuestsFormData).map((guest) => (
                           <div
                             key={guest.id}
                             className="flex items-center justify-between rounded-md border px-2 py-1"
                           >
                             <div className="flex items-center gap-2">
-                              <User className="text-muted-foreground h-4 w-4" />
+                              <User className="h-4 w-4 text-muted-foreground" />
                               <span className="max-w-md truncate text-sm">
                                 {guest.first_name} {guest.last_name}
                               </span>
@@ -258,7 +284,7 @@ export function EditReservationForm({
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   variant="ghost"
-                                  className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+                                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
                                 >
                                   <MoreHorizontal className="h-4 w-4" />
                                   <span className="sr-only">
@@ -309,7 +335,7 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-4 items-start">
+            <div className="flex items-start gap-4">
               <FormField
                 control={form.control}
                 name="adults"
@@ -462,13 +488,13 @@ export function EditReservationForm({
                           <SelectItem
                             key={room.id}
                             value={room.id}
-                            className="bg-card hover:bg-accent flex w-full items-center justify-between rounded-md p-3 transition-colors"
+                            className="flex w-full items-center justify-between rounded-md bg-card p-3 transition-colors hover:bg-accent"
                           >
                             <div className="flex-1">
-                              <div className="text-foreground font-medium">
+                              <div className="font-medium text-foreground">
                                 {room.name}
                               </div>
-                              <div className="text-muted-foreground text-sm">
+                              <div className="text-sm text-muted-foreground">
                                 {room.description}
                               </div>
                             </div>

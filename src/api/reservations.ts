@@ -1,179 +1,164 @@
-import { client } from '@/api/client';
+import { client, handleApiError } from '@/api/client';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 import { z } from 'zod';
 
-// Schemas and types (moved from src/types/reservations.ts)
-export const ReservationStatusSchema = z.enum(['pending', 'started', 'done']);
-export type ReservationStatus = z.infer<typeof ReservationStatusSchema>;
+const reservationStatusSchema = z.enum(['pending', 'started', 'done', 'all']);
 
-export const CheckinMethodSchema = z.enum([
-  'android',
-  'ios',
-  'tv',
-  'station',
-  'web'
-]);
-export type CheckinMethod = z.infer<typeof CheckinMethodSchema>;
+const checkinMethodSchema = z.enum(['android', 'ios', 'tv', 'station', 'web']);
 
-export const GuestSchema = z.object({
+const guestSchema = z.object({
   id: z.string(),
   first_name: z.string(),
   last_name: z.string(),
   nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
 });
-export type Guest = z.infer<typeof GuestSchema>;
 
-export const ReservationSchema = z.object({
+const reservationSchema = z.object({
   id: z.number(),
-  state: ReservationStatusSchema,
+  state: reservationStatusSchema,
   booking_nr: z.string(),
   guest_email: z.string(),
-  guests: z.array(GuestSchema),
+  guests: z.array(guestSchema),
   booking_id: z.string(),
   room_name: z.string(),
   booking_from: z.string(),
   booking_to: z.string(),
-  check_in_via: CheckinMethodSchema,
-  check_out_via: CheckinMethodSchema,
+  check_in_via: checkinMethodSchema,
+  check_out_via: checkinMethodSchema,
   primary_guest_name: z.string(),
-  last_opened_at: z.string(),
-  received_at: z.string(),
-  completed_at: z.string(),
-  page_url: z.string(),
+  last_opened_at: z.coerce.date().nullable(),
+  received_at: z.coerce.date(),
+  completed_at: z.coerce.date().nullable(),
+  page_url: z.url(),
   balance: z.number(),
-  adults: z.number(),
-  youth: z.number(),
-  children: z.number(),
-  infants: z.number(),
-  purpose: z.enum(['private', 'business']),
-  room: z.string()
+  // Detail view-only fields are optional in list responses
+  adults: z.coerce.number().int().nonnegative().optional(),
+  youth: z.coerce.number().int().nonnegative().optional(),
+  children: z.coerce.number().int().nonnegative().optional(),
+  infants: z.coerce.number().int().nonnegative().optional(),
+  purpose: z.enum(['private', 'business']).optional(),
+  room: z.string().optional()
 });
-export type Reservation = z.infer<typeof ReservationSchema>;
 
-type ReservationsResponse = {
-  index: Reservation[];
-  page: number;
-  per_page: number;
-  total: number;
-  pageCount: number;
-};
+const fetchReservationsParamsSchema = z.object({
+  page: z.number().int().positive().default(1),
+  per_page: z.number().int().positive().default(10),
+  q: z.string().optional(),
+  status: reservationStatusSchema.default('all').optional(),
+  from: z.date().optional(),
+  to: z.date().optional()
+});
 
-// Details shape expected by the edit reservation form
-export type ReservationDetails = {
-  booking_nr: string;
-  guests: Guest[];
-  adults: number;
-  youth: number;
-  children: number;
-  infants: number;
-  purpose: 'private' | 'business';
-  room: string;
-};
+const fetchReservationsResponseSchema = z.object({
+  index: z.array(reservationSchema),
+  page: z.number().int().positive(),
+  per_page: z.number().int().positive(),
+  total: z.number().int().positive(),
+  pageCount: z.number().int().positive()
+});
+
+type CheckinMethod = z.infer<typeof checkinMethodSchema>;
+type ReservationStatus = z.infer<typeof reservationStatusSchema>;
+type Reservation = z.infer<typeof reservationSchema>;
+type Guest = z.infer<typeof guestSchema>;
+type FetchReservationsParams = z.infer<typeof fetchReservationsParamsSchema>;
+type FetchReservationsResponse = z.infer<
+  typeof fetchReservationsResponseSchema
+>;
 
 function reservationsQueryOptions({
   page,
-  perPage,
+  per_page,
   status,
-  q
-}: {
-  page: number;
-  perPage: number;
-  status?: string;
-  q?: string;
-}) {
+  q,
+  from,
+  to
+}: FetchReservationsParams) {
   return queryOptions({
-    queryKey: ['reservations', page, perPage, status, q],
-    queryFn: () => fetchReservations({ page, perPage, status, q }),
+    queryKey: ['reservations', page, per_page, status, q, from, to],
+    queryFn: () => fetchReservations({ page, per_page, status, q, from, to }),
     placeholderData: keepPreviousData
   });
 }
 
-async function fetchReservations({
-  page,
-  perPage,
-  status,
-  q
-}: {
-  page: number;
-  perPage: number;
-  status?: string;
-  q?: string;
-}): Promise<ReservationsResponse> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const params: Record<string, string | number> = {
-    page: page,
-    per_page: perPage
-  };
-
-  if (status && status !== 'all') {
-    params.status = status;
+async function fetchReservations(
+  params: FetchReservationsParams
+): Promise<FetchReservationsResponse> {
+  try {
+    const validatedParams = fetchReservationsParamsSchema.parse(params);
+    const response = await client.get('/reservations', {
+      params: validatedParams
+    });
+    return fetchReservationsResponseSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchReservations');
   }
-
-  if (q) {
-    params.q = q;
-  }
-
-  const { data } = await client.get<ReservationsResponse>('/reservations', {
-    params
-  });
-  return data;
 }
 
-type ReservationRaw = {
-  booking_nr?: string;
-  guests?: Guest[];
-  adults?: number;
-  youth?: number;
-  children?: number;
-  infants?: number;
-  purpose?: 'private' | 'business';
-  room?: string;
-  room_name?: string;
-};
-
-async function fetchReservationById(id: string): Promise<ReservationDetails> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const { data: raw } = await client.get<ReservationRaw>(`/reservations/${id}`);
-  const details: ReservationDetails = {
-    booking_nr: raw?.booking_nr ?? '',
-    guests: Array.isArray(raw?.guests) ? raw.guests : [],
-    adults: typeof raw?.adults === 'number' ? raw.adults : 0,
-    youth: typeof raw?.youth === 'number' ? raw.youth : 0,
-    children: typeof raw?.children === 'number' ? raw.children : 0,
-    infants: typeof raw?.infants === 'number' ? raw.infants : 0,
-    purpose: raw?.purpose === 'business' ? 'business' : 'private',
-    room: raw?.room ?? raw?.room_name ?? ''
-  };
-  return details;
+async function fetchReservationById(id: string): Promise<Reservation> {
+  try {
+    const response = await client.get(`/reservations/${id}`);
+    return reservationSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchReservationById');
+  }
 }
 
-export { fetchReservations, reservationsQueryOptions, fetchReservationById };
-
-// Update
-export type ReservationUpdateInput = ReservationDetails;
-
-export async function updateReservationById(
+async function updateReservationById(
   id: string,
-  data: ReservationUpdateInput
-): Promise<void> {
-  await client.patch(`/reservations/${id}`, data);
-}
-
-// Create
-export type CreateReservationInput = {
-  booking_nr: string;
-  room: string;
-  page_url: string;
-};
-
-export async function createReservation(
-  data: CreateReservationInput
+  updates: Pick<
+    Reservation,
+    | 'booking_nr'
+    | 'guests'
+    | 'adults'
+    | 'youth'
+    | 'children'
+    | 'infants'
+    | 'purpose'
+    | 'room'
+  >
 ): Promise<Reservation> {
-  const { data: created } = await client.post<Reservation>(
-    '/reservations',
-    data
-  );
-  return created;
+  try {
+    const response = await client.patch(`/reservations/${id}`, updates);
+    return reservationSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'updateReservationById');
+  }
 }
+
+async function createReservation(
+  data: Pick<Reservation, 'booking_nr' | 'room' | 'page_url'>
+): Promise<Reservation> {
+  try {
+    const response = await client.post('/reservations', data);
+    return reservationSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'createReservation');
+  }
+}
+
+async function deleteReservationById(id: string): Promise<void> {
+  try {
+    await client.delete(`/reservations/${id}`);
+  } catch (err) {
+    handleApiError(err, 'deleteReservationById');
+  }
+}
+
+export {
+  fetchReservations,
+  fetchReservationById,
+  updateReservationById,
+  createReservation,
+  deleteReservationById,
+  fetchReservationsParamsSchema,
+  fetchReservationsResponseSchema,
+  guestSchema,
+  reservationSchema,
+  reservationStatusSchema,
+  reservationsQueryOptions,
+  type Reservation,
+  type Guest,
+  type CheckinMethod,
+  type ReservationStatus
+};

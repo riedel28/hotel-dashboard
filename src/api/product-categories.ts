@@ -1,4 +1,3 @@
- 
 import { client } from '@/api/client';
 
 export type ProductCategory = {
@@ -48,7 +47,9 @@ type ProductCategoryRaw = {
 async function fetchProductCategories(): Promise<ProductCategory[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  const { data } = await client.get<ProductCategoryRaw[]>('/product-categories');
+  const { data } = await client.get<ProductCategoryRaw[]>(
+    '/product-categories'
+  );
 
   // Ensure id and parent_id are numbers since JSON server returns them as strings
   return data.map((category) => ({

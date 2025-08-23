@@ -102,7 +102,7 @@ export function AvatarSection({
       <CardContent>
         <div className="space-y-4">
           <div className="flex items-center gap-4">
-            <Avatar className="border-border h-20 w-20 border-2">
+            <Avatar className="h-20 w-20 border-2 border-border">
               <AvatarImage src={avatar || undefined} alt="Profile picture" />
               <AvatarFallback className="text-lg font-semibold">
                 {userInitials}
@@ -132,7 +132,7 @@ export function AvatarSection({
                     disabled={isLoading}
                     variant="ghost"
                     size="sm"
-                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 w-fit transition-colors duration-200"
+                    className="w-fit text-muted-foreground transition-colors duration-200 hover:bg-destructive/10 hover:text-destructive"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
                     <Trans>Remove Image</Trans>
@@ -142,7 +142,7 @@ export function AvatarSection({
             </div>
           </div>
 
-          <p className="text-muted-foreground text-xs">
+          <p className="text-xs text-muted-foreground">
             <Trans>Supported formats: JPG, PNG, GIF (max 5MB)</Trans>
           </p>
 

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 
+import { Reservation } from '@/api/reservations';
 import { useCopyToClipboard } from '@/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
@@ -46,8 +47,6 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-
-import { Reservation } from '@/api/reservations';
 
 interface ShareDialogProps {
   open: boolean;
@@ -246,7 +245,7 @@ export function ShareDialog({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex items-center gap-2">
               <div>
-                <p className="text-muted-foreground text-xs">
+                <p className="text-xs text-muted-foreground">
                   <Trans>Reservation</Trans>
                 </p>
                 <p className="font-medium">{reservation.booking_nr}</p>
@@ -254,7 +253,7 @@ export function ShareDialog({
             </div>
             <div className="flex items-center gap-2">
               <div>
-                <p className="text-muted-foreground text-xs">
+                <p className="text-xs text-muted-foreground">
                   <Trans>Room</Trans>
                 </p>
                 <p className="font-medium">{reservation.room_name}</p>
@@ -267,7 +266,7 @@ export function ShareDialog({
               {/* Guest Information */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <User className="text-muted-foreground h-4 w-4" />
+                  <User className="h-4 w-4 text-muted-foreground" />
                   <h3 className="text-sm font-medium">
                     <Trans>Guest Information</Trans>
                   </h3>
@@ -536,7 +535,7 @@ export function ShareDialog({
               </TooltipProvider>
             </InputWrapper>
 
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               <Trans>
                 Share this URL with guests for direct check-in access
               </Trans>

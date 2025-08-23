@@ -56,7 +56,7 @@ export function PasswordStrengthMeter({
     <div>
       {/* Password strength indicator */}
       <div
-        className="bg-border mt-3 mb-4 h-1 w-full overflow-hidden rounded-full"
+        className="mt-3 mb-4 h-1 w-full overflow-hidden rounded-full bg-border"
         role="progressbar"
         aria-valuenow={strengthScore}
         aria-valuemin={0}
@@ -70,7 +70,7 @@ export function PasswordStrengthMeter({
       </div>
 
       {/* Password strength description */}
-      <p className="text-foreground mb-2 text-sm font-medium">
+      <p className="mb-2 text-sm font-medium text-foreground">
         {getStrengthText(strengthScore)}
         <Trans>Enter a password. Must contain:</Trans>
       </p>

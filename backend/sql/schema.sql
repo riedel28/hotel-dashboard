@@ -7,16 +7,23 @@ CREATE TABLE IF NOT EXISTS reservations (
   primary_guest_name TEXT,
   booking_id TEXT,
   room_name TEXT,
-  booking_from DATE,
-  booking_to DATE,
-  check_in_via TEXT,
-  check_out_via TEXT,
+  booking_from TIMESTAMPTZ,
+  booking_to TIMESTAMPTZ,
+  check_in_via TEXT CHECK (check_in_via IN ('android','ios','tv','station','web')),
+  check_out_via TEXT CHECK (check_out_via IN ('android','ios','tv','station','web')),
   last_opened_at TIMESTAMPTZ,
   received_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
   page_url TEXT,
   balance NUMERIC,
-  guests JSONB DEFAULT '[]'::jsonb
+  guests JSONB DEFAULT '[]'::jsonb,
+  -- Optional fields used by the frontend detail view
+  adults INTEGER DEFAULT 0,
+  youth INTEGER DEFAULT 0,
+  children INTEGER DEFAULT 0,
+  infants INTEGER DEFAULT 0,
+  purpose TEXT DEFAULT 'private' CHECK (purpose IN ('private','business')),
+  room TEXT
 );
 
 

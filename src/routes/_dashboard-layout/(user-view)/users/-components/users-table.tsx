@@ -242,7 +242,7 @@ export default function DataGridDemo() {
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-px">
-                <div className="text-foreground font-medium">
+                <div className="font-medium text-foreground">
                   {row.original.name}
                 </div>
                 <div className="text-muted-foreground">

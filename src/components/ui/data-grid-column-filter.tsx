@@ -114,7 +114,7 @@ function DataGridColumnFilter<TData, TValue>({
                   >
                     <div
                       className={cn(
-                        'border-primary me-2 flex h-4 w-4 items-center justify-center rounded-sm border',
+                        'me-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
                         isSelected
                           ? 'bg-primary text-primary-foreground'
                           : 'opacity-50 [&_svg]:invisible'
@@ -123,7 +123,7 @@ function DataGridColumnFilter<TData, TValue>({
                       <Check className={cn('h-4 w-4')} />
                     </div>
                     {option.icon && (
-                      <option.icon className="text-muted-foreground mr-2 h-4 w-4" />
+                      <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                     )}
                     <span>
                       {(() => {

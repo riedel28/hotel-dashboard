@@ -155,7 +155,7 @@ export default function PropertySelector() {
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="text-secondary-foreground data-[state=open]:bg-accent focus-visible:border-ring focus-visible:outline-ring/20 w-full max-w-[300px] justify-between px-3 text-sm outline-offset-0 focus-visible:outline-[3px]"
+          className="w-full max-w-[300px] justify-between px-3 text-sm text-secondary-foreground outline-offset-0 focus-visible:border-ring focus-visible:outline-[3px] focus-visible:outline-ring/20 data-[state=open]:bg-accent"
         >
           <span className={cn('truncate', !value && 'text-muted-foreground')}>
             {value ? (
@@ -170,13 +170,13 @@ export default function PropertySelector() {
           <ChevronsUpDownIcon
             size={16}
             strokeWidth={2}
-            className="text-muted-foreground/80 shrink-0"
+            className="shrink-0 text-muted-foreground/80"
             aria-hidden="true"
           />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
+        className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0"
         align="start"
         side="bottom"
       >

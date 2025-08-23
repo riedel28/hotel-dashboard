@@ -161,7 +161,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mergedProps?.infoSkeleton
         ) : (
           <>
-            <div className="text-muted-foreground order-2 text-sm text-nowrap sm:order-1">
+            <div className="order-2 text-sm text-nowrap text-muted-foreground sm:order-1">
               {mergedProps?.info?.startsWith('pagination.') ? (
                 <Trans>
                   {from} - {to} of {recordCount}
@@ -223,7 +223,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mergedProps?.sizesSkeleton
         ) : (
           <>
-            <div className="text-muted-foreground text-sm">
+            <div className="text-sm text-muted-foreground">
               <Trans>Rows per page</Trans>
             </div>
             <Select

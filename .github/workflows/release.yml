@@ -33,13 +33,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Semantic release (dry run on PR)
-        if: ${{ github.event_name == 'pull_request' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_ENV: production
-        run: npm run release:dry-run
-
       - name: Run semantic-release
         if: ${{ github.event_name == 'push' }}
         env:

@@ -1,16 +1,15 @@
-import Flag from 'react-flagkit';
+import { Guest } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
-
-import type { Reservation } from '@/api/reservations';
+import Flag from 'react-flagkit';
 
 interface GuestsCellProps {
-  guests: Reservation['guests'];
+  guests: Guest[];
 }
 
 export function GuestsCell({ guests }: GuestsCellProps) {
   return (
     <div className="space-y-0.5">
-      {guests.map((guest: Reservation['guests'][number]) => {
+      {guests.map((guest) => {
         const firstName = guest.first_name;
         const lastName = guest.last_name;
 
@@ -31,5 +30,3 @@ export function GuestsCell({ guests }: GuestsCellProps) {
     </div>
   );
 }
-
-

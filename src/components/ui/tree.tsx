@@ -169,7 +169,7 @@ function TreeItemLabel<T = any>({
     <span
       data-slot="tree-item-label"
       className={cn(
-        'in-focus-visible:ring-ring/50 bg-background hover:bg-accent in-data-[selected=true]:bg-accent in-data-[selected=true]:text-accent-foreground in-data-[drag-target=true]:bg-accent flex items-center gap-1 rounded-sm px-2 py-1.5 text-sm transition-colors not-in-data-[folder=true]:ps-7 in-focus-visible:ring-[3px] in-data-[search-match=true]:bg-blue-50! [&_svg]:pointer-events-none [&_svg]:shrink-0',
+        'flex items-center gap-1 rounded-sm bg-background px-2 py-1.5 text-sm transition-colors not-in-data-[folder=true]:ps-7 hover:bg-accent in-focus-visible:ring-[3px] in-focus-visible:ring-ring/50 in-data-[drag-target=true]:bg-accent in-data-[search-match=true]:bg-blue-50! in-data-[selected=true]:bg-accent in-data-[selected=true]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0',
         className
       )}
       {...props}
@@ -178,19 +178,19 @@ function TreeItemLabel<T = any>({
         (toggleIconType === 'plus-minus' ? (
           item.isExpanded() ? (
             <SquareMinus
-              className="text-muted-foreground size-3.5"
+              className="size-3.5 text-muted-foreground"
               stroke="currentColor"
               strokeWidth="1"
             />
           ) : (
             <SquarePlus
-              className="text-muted-foreground size-3.5"
+              className="size-3.5 text-muted-foreground"
               stroke="currentColor"
               strokeWidth="1"
             />
           )
         ) : (
-          <ChevronDownIcon className="text-muted-foreground size-4 in-aria-[expanded=false]:-rotate-90" />
+          <ChevronDownIcon className="size-4 text-muted-foreground in-aria-[expanded=false]:-rotate-90" />
         ))}
       {children ||
         (typeof item.getItemName === 'function' ? item.getItemName() : null)}
@@ -216,7 +216,7 @@ function TreeDragLine({
     <div
       style={dragLine}
       className={cn(
-        'bg-primary before:bg-background before:border-primary absolute z-30 -mt-px h-0.5 w-[unset] before:absolute before:-top-[3px] before:left-0 before:size-2 before:rounded-full before:border-2',
+        'absolute z-30 -mt-px h-0.5 w-[unset] bg-primary before:absolute before:-top-[3px] before:left-0 before:size-2 before:rounded-full before:border-2 before:border-primary before:bg-background',
         className
       )}
       {...props}

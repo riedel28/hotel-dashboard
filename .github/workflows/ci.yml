@@ -1,5 +1,7 @@
 name: CI
 
+# This workflow runs on pull requests and pushes to master
+# It ensures code quality through type checking, linting, formatting, and building
 on:
   pull_request:
     branches:
@@ -30,6 +32,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Format
+        run: npm run format
 
       - name: Build
         run: npm run build

@@ -28,3 +28,6 @@ dist-ssr
 # Environment variables
 .env
 backend/.env
+
+# TypeScript build info files
+*.tsbuildinfo

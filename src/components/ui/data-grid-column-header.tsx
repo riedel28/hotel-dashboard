@@ -91,7 +91,7 @@ function DataGridColumnHeader<TData, TValue>({
     return (
       <div
         className={cn(
-          'text-accent-foreground inline-flex h-full items-center gap-1.5 text-[0.8125rem] leading-[calc(1.125/0.8125)] font-normal [&_svg]:size-3.5 [&_svg]:opacity-60',
+          'inline-flex h-full items-center gap-1.5 text-[0.8125rem] leading-[calc(1.125/0.8125)] font-normal text-accent-foreground [&_svg]:size-3.5 [&_svg]:opacity-60',
           className
         )}
       >
@@ -106,7 +106,7 @@ function DataGridColumnHeader<TData, TValue>({
       <Button
         variant="ghost"
         className={cn(
-          'text-secondary-foreground hover:bg-secondary data-[state=open]:bg-secondary hover:text-foreground data-[state=open]:text-foreground -ms-2 h-7 rounded-md px-2 font-medium',
+          '-ms-2 h-7 rounded-md px-2 font-medium text-secondary-foreground hover:bg-secondary hover:text-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
           className
         )}
         disabled={isLoading || recordCount === 0}
@@ -184,7 +184,7 @@ function DataGridColumnHeader<TData, TValue>({
                     <Trans>Asc</Trans>
                   </span>
                   {column.getIsSorted() === 'asc' && (
-                    <Check className="text-primary size-4 opacity-100!" />
+                    <Check className="size-4 text-primary opacity-100!" />
                   )}
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -202,7 +202,7 @@ function DataGridColumnHeader<TData, TValue>({
                     <Trans>Desc</Trans>
                   </span>
                   {column.getIsSorted() === 'desc' && (
-                    <Check className="text-primary size-4 opacity-100!" />
+                    <Check className="size-4 text-primary opacity-100!" />
                   )}
                 </DropdownMenuItem>
               </>
@@ -225,7 +225,7 @@ function DataGridColumnHeader<TData, TValue>({
                     <Trans>Pin to left</Trans>
                   </span>
                   {column.getIsPinned() === 'left' && (
-                    <Check className="text-primary size-4 opacity-100!" />
+                    <Check className="size-4 text-primary opacity-100!" />
                   )}
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -240,7 +240,7 @@ function DataGridColumnHeader<TData, TValue>({
                     <Trans>Pin to right</Trans>
                   </span>
                   {column.getIsPinned() === 'right' && (
-                    <Check className="text-primary size-4 opacity-100!" />
+                    <Check className="size-4 text-primary opacity-100!" />
                   )}
                 </DropdownMenuItem>
               </>

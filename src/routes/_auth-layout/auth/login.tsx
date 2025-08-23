@@ -91,7 +91,7 @@ function LoginPage() {
   return (
     <div className="w-full max-w-md space-y-8">
       <div className="space-y-2 text-center">
-        <div className="bg-primary inline-block rounded-lg p-2 text-white">
+        <div className="inline-block rounded-lg bg-primary p-2 text-white">
           <MessageCircleIcon className="size-10" />
         </div>
 
@@ -175,7 +175,7 @@ function LoginPage() {
                   mode: 'link',
                   underline: 'solid'
                 }),
-                'text-foreground text-sm'
+                'text-sm text-foreground'
               )}
               to="/auth/forgot-password"
             >
