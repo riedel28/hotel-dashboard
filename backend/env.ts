@@ -1,20 +1,17 @@
-import dotenv from 'dotenv';
+import { env as loadEnv } from 'custom-env';
 import { z } from 'zod';
-
-dotenv.config({
-  path: '.env'
-});
 
 process.env.APP_STAGE = process.env.APP_STAGE || 'dev';
 
-if (isDev()) {
-  dotenv.config({
-    path: '.env.dev'
-  });
-} else {
-  dotenv.config({
-    path: '.env.test'
-  });
+const isProduction = process.env.APP_STAGE === 'production';
+const isDevelopment = process.env.APP_STAGE === 'dev';
+const isTest = process.env.APP_STAGE === 'test';
+
+// Load .env file
+if (isDevelopment) {
+  loadEnv();
+} else if (isTest) {
+  loadEnv('test');
 }
 
 const envSchema = z.object({
@@ -26,8 +23,10 @@ const envSchema = z.object({
   DATABASE_URL: z.string().startsWith('postgresql://')
 });
 
+// Type for the validated environment
 export type Env = z.infer<typeof envSchema>;
 
+// Parse and validate environment variables
 let env: Env;
 
 try {
@@ -48,14 +47,8 @@ try {
   throw error;
 }
 
-function isProd() {
-  return env.APP_STAGE === 'production';
-}
-function isDev() {
-  return env.APP_STAGE === 'development';
-}
-function isTest() {
-  return env.APP_STAGE === 'testing';
-}
+// Export the validated environment object
+export { env, isProduction, isDevelopment, isTest };
 
-export { env, isProd, isDev, isTest };
+// Default export for convenience
+export default env;
