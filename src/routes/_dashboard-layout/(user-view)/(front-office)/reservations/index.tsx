@@ -101,7 +101,7 @@ function ReservationsPage() {
   ) => {
     const pagination =
       typeof updaterOrValue === 'function'
-        ? updaterOrValue({ pageIndex: page - 1, pageSize: per_page })
+        ? updaterOrValue({ pageIndex: (page ?? 1) - 1, pageSize: per_page ?? 10 })
         : updaterOrValue;
 
     navigate({
@@ -134,8 +134,8 @@ function ReservationsPage() {
         <ReservationsTable
           data={[]}
           isLoading={true}
-          pageIndex={page - 1} // Convert to 0-based for table
-          pageSize={per_page} // Use URL param for loading state
+          pageIndex={(page ?? 1) - 1} // Convert to 0-based for table
+          pageSize={per_page ?? 10} // Use URL param for loading state
           totalCount={0}
           pageCount={0}
           onPaginationChange={handlePaginationChange}
@@ -170,10 +170,10 @@ function ReservationsPage() {
       return (
         <ReservationsTable
           data={reservationsQuery.data.index}
-          pageIndex={page - 1} // Convert to 0-based for table
-          pageSize={per_page} // Always use the requested page size from URL
+          pageIndex={(page ?? 1) - 1} // Convert to 0-based for table
+          pageSize={per_page ?? 10} // Always use the requested page size from URL
           totalCount={reservationsQuery.data.total}
-          pageCount={reservationsQuery.data.pageCount}
+          pageCount={reservationsQuery.data.page_count}
           onPaginationChange={handlePaginationChange}
         />
       );

@@ -14,8 +14,9 @@ CREATE TABLE IF NOT EXISTS reservations (
   last_opened_at TIMESTAMPTZ,
   received_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
+  updated_at TIMESTAMPTZ,
   page_url TEXT,
-  balance NUMERIC,
+  balance DOUBLE PRECISION DEFAULT 0,
   guests JSONB DEFAULT '[]'::jsonb,
   -- Optional fields used by the frontend detail view
   adults INTEGER DEFAULT 0,

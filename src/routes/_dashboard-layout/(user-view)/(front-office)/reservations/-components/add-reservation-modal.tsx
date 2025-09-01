@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
+import { InfoIcon, LinkIcon, Loader2, PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -22,7 +22,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -37,6 +36,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 
 const addReservationSchema = z.object({
   booking_nr: z.string().min(1, t`Reservation number is required`),
@@ -108,15 +112,22 @@ export function AddReservationModal() {
               name="booking_nr"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    <Trans>Reservation Nr.</Trans>
-                  </FormLabel>
-                  <FormDescription>
-                    <Trans>
-                      The booking number can be found in your Property
-                      Management System (PMS)
-                    </Trans>
-                  </FormDescription>
+                  <div className="flex items-center gap-1">
+                    <FormLabel>
+                      <Trans>Reservation Nr.</Trans>
+                    </FormLabel>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <InfoIcon className="size-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <Trans>
+                          The booking number can be found in your Property
+                          Management System (PMS)
+                        </Trans>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <FormControl>
                     <Input
                       {...field}

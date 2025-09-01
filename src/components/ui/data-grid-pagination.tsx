@@ -34,7 +34,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
   const { t } = useLingui();
 
   const defaultProps: Partial<DataGridPaginationProps> = {
-    sizes: [5, 10, 25, 50, 100],
+    sizes: [10, 25, 50, 100],
     sizesLabel: t`Show`,
     sizesDescription: t`Per page`,
     sizesSkeleton: <Skeleton className="h-8 w-44" />,

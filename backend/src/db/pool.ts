@@ -1,32 +1,11 @@
-import { Pool, type QueryResultRow, types } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
-const databaseUrl = process.env.DATABASE_URL;
+import { env } from '../../env';
+import * as schema from './schema';
 
-if (!databaseUrl) {
-  throw new Error('DATABASE_URL is required');
-}
-
-export const pool = new Pool({
-  connectionString: databaseUrl
+const pool = new Pool({
+  connectionString: env.DATABASE_URL
 });
 
-export async function query<T extends QueryResultRow = QueryResultRow>(
-  text: string,
-  params?: (string | number | boolean | null)[]
-): Promise<{ rows: T[] }> {
-  return pool.query<T>(text, params);
-}
-
-// Ensure numeric/float values come back as numbers, not strings
-types.setTypeParser(
-  1700,
-  (value) => (value === null ? null : parseFloat(value)) as unknown as string
-);
-types.setTypeParser(
-  700,
-  (value) => (value === null ? null : parseFloat(value)) as unknown as string
-);
-types.setTypeParser(
-  701,
-  (value) => (value === null ? null : parseFloat(value)) as unknown as string
-);
+export const db = drizzle(pool, { schema });

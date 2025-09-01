@@ -1,70 +1,21 @@
 import { client, handleApiError } from '@/api/client';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
-import { z } from 'zod';
 
-const reservationStatusSchema = z.enum(['pending', 'started', 'done', 'all']);
-
-const checkinMethodSchema = z.enum(['android', 'ios', 'tv', 'station', 'web']);
-
-const guestSchema = z.object({
-  id: z.string(),
-  first_name: z.string(),
-  last_name: z.string(),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
-});
-
-const reservationSchema = z.object({
-  id: z.number(),
-  state: reservationStatusSchema,
-  booking_nr: z.string(),
-  guest_email: z.string(),
-  guests: z.array(guestSchema),
-  booking_id: z.string(),
-  room_name: z.string(),
-  booking_from: z.string(),
-  booking_to: z.string(),
-  check_in_via: checkinMethodSchema,
-  check_out_via: checkinMethodSchema,
-  primary_guest_name: z.string(),
-  last_opened_at: z.coerce.date().nullable(),
-  received_at: z.coerce.date(),
-  completed_at: z.coerce.date().nullable(),
-  page_url: z.url(),
-  balance: z.number(),
-  // Detail view-only fields are optional in list responses
-  adults: z.coerce.number().int().nonnegative().optional(),
-  youth: z.coerce.number().int().nonnegative().optional(),
-  children: z.coerce.number().int().nonnegative().optional(),
-  infants: z.coerce.number().int().nonnegative().optional(),
-  purpose: z.enum(['private', 'business']).optional(),
-  room: z.string().optional()
-});
-
-const fetchReservationsParamsSchema = z.object({
-  page: z.number().int().positive().default(1),
-  per_page: z.number().int().positive().default(10),
-  q: z.string().optional(),
-  status: reservationStatusSchema.default('all').optional(),
-  from: z.date().optional(),
-  to: z.date().optional()
-});
-
-const fetchReservationsResponseSchema = z.object({
-  index: z.array(reservationSchema),
-  page: z.number().int().positive(),
-  per_page: z.number().int().positive(),
-  total: z.number().int().positive(),
-  pageCount: z.number().int().positive()
-});
-
-type CheckinMethod = z.infer<typeof checkinMethodSchema>;
-type ReservationStatus = z.infer<typeof reservationStatusSchema>;
-type Reservation = z.infer<typeof reservationSchema>;
-type Guest = z.infer<typeof guestSchema>;
-type FetchReservationsParams = z.infer<typeof fetchReservationsParamsSchema>;
-type FetchReservationsResponse = z.infer<
-  typeof fetchReservationsResponseSchema
->;
+import {
+  reservationStatusSchema,
+  guestSchema,
+  reservationSchema,
+  fetchReservationsParamsSchema,
+  fetchReservationsResponseSchema,
+  createReservationSchema,
+  type CheckinMethod,
+  type ReservationStatus,
+  type Reservation,
+  type Guest,
+  type FetchReservationsParams,
+  type FetchReservationsResponse,
+  type CreateReservationData
+} from '../../shared/types/reservations';
 
 function reservationsQueryOptions({
   page,
@@ -127,7 +78,7 @@ async function updateReservationById(
 }
 
 async function createReservation(
-  data: Pick<Reservation, 'booking_nr' | 'room' | 'page_url'>
+  data: CreateReservationData
 ): Promise<Reservation> {
   try {
     const response = await client.post('/reservations', data);
@@ -153,6 +104,7 @@ export {
   deleteReservationById,
   fetchReservationsParamsSchema,
   fetchReservationsResponseSchema,
+  createReservationSchema,
   guestSchema,
   reservationSchema,
   reservationStatusSchema,
@@ -160,5 +112,6 @@ export {
   type Reservation,
   type Guest,
   type CheckinMethod,
-  type ReservationStatus
+  type ReservationStatus,
+  type CreateReservationData
 };
