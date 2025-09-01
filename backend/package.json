@@ -8,7 +8,7 @@
     "build": "tsc --noEmit",
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
-    "typecheck": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "db:schema": "echo 'See sql/schema.sql for initial schema'",
     "db:seed": "echo 'See sql/seed.sql for sample data'",
     "db:reseed": "tsx src/scripts/db-reseed.ts"
