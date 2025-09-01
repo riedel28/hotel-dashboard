@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.2.0...v1.3.0) (2025-09-01)
+
+
+### Bug Fixes
+
+* **pagination:** update default page sizes for data grid pagination component ([018981d](https://github.com/riedel28/tanstack-dashboard/commit/018981d6ec08d0f2aeec75386c4c5b71c88b2d8d))
+* **reservations:** handle default values for pagination parameters ([5e45129](https://github.com/riedel28/tanstack-dashboard/commit/5e451297406d7bf73e536438933536630daceeb7))
+
+
+### Features
+
+* **reservations:** implement reservation management with CRUD operations ([96ad40f](https://github.com/riedel28/tanstack-dashboard/commit/96ad40fd2cebfbbd12fc43c64dc8c9191623c9b0))
+
 # [1.2.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.1.0...v1.2.0) (2025-08-23)
 
 
