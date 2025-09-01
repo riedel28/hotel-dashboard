@@ -1,51 +1,13 @@
 import { Router } from 'express';
 
+import { createReservationSchema } from '../../../shared/types/reservations';
 import { query } from '../db/pool';
-
-type ReservationRow = {
-  id: number;
-  state: 'pending' | 'started' | 'done';
-  booking_nr: string | null;
-  guest_email: string | null;
-  primary_guest_name: string | null;
-  booking_id: string | number | null;
-  room_name: string | null;
-  booking_from: string | null;
-  booking_to: string | null;
-  check_in_via: string | null;
-  check_out_via: string | null;
-  last_opened_at: string | null;
-  received_at: string | null;
-  completed_at: string | null;
-  page_url: string | null;
-  balance: number | null;
-  guests: unknown[] | null;
-};
+import { validateBody } from '../middleware/validation';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
-  const { booking_nr, room, page_url } = (req.body ?? {}) as {
-    booking_nr?: unknown;
-    room?: unknown;
-    page_url?: unknown;
-  };
-
-  if (typeof booking_nr !== 'string' || booking_nr.trim() === '') {
-    return res.status(400).json({
-      error: { code: 'INVALID_PAYLOAD', message: 'booking_nr is required' }
-    });
-  }
-  if (typeof room !== 'string' || room.trim() === '') {
-    return res.status(400).json({
-      error: { code: 'INVALID_PAYLOAD', message: 'room is required' }
-    });
-  }
-  if (typeof page_url !== 'string' || page_url.trim() === '') {
-    return res.status(400).json({
-      error: { code: 'INVALID_PAYLOAD', message: 'page_url is required' }
-    });
-  }
+router.post('/', validateBody(createReservationSchema), async (req, res) => {
+  const { booking_nr, room, page_url } = req.body;
 
   try {
     const insertSql = `
@@ -141,16 +103,31 @@ router.post('/', async (req, res) => {
       LIMIT 1
     `;
 
-    const selectResult = await query<
-      ReservationRow & {
-        adults: number | null;
-        youth: number | null;
-        children: number | null;
-        infants: number | null;
-        purpose: string | null;
-        room: string | null;
-      }
-    >(selectSql, [newId]);
+    const selectResult = await query<{
+      id: number;
+      state: string;
+      booking_nr: string | null;
+      guest_email: string | null;
+      primary_guest_name: string | null;
+      booking_id: string | number | null;
+      room_name: string | null;
+      booking_from: string | null;
+      booking_to: string | null;
+      check_in_via: string | null;
+      check_out_via: string | null;
+      last_opened_at: string | null;
+      received_at: string | null;
+      completed_at: string | null;
+      page_url: string | null;
+      balance: number | null;
+      guests: unknown[] | null;
+      adults: number | null;
+      youth: number | null;
+      children: number | null;
+      infants: number | null;
+      purpose: string | null;
+      room: string | null;
+    }>(selectSql, [newId]);
 
     const row = selectResult.rows[0];
     const guestsArray = Array.isArray(row.guests)
@@ -175,16 +152,12 @@ router.post('/', async (req, res) => {
       completed_at: row.completed_at,
       page_url: row.page_url ?? 'https://example.com',
       balance: typeof row.balance === 'number' ? row.balance : 0,
-      adults: (row as unknown as { adults: number | null }).adults ?? undefined,
-      youth: (row as unknown as { youth: number | null }).youth ?? undefined,
-      children:
-        (row as unknown as { children: number | null }).children ?? undefined,
-      infants:
-        (row as unknown as { infants: number | null }).infants ?? undefined,
-      purpose:
-        (row as unknown as { purpose: 'private' | 'business' | null })
-          .purpose ?? undefined,
-      room: (row as unknown as { room: string | null }).room ?? undefined
+      adults: row.adults ?? undefined,
+      youth: row.youth ?? undefined,
+      children: row.children ?? undefined,
+      infants: row.infants ?? undefined,
+      purpose: (row.purpose as 'private' | 'business' | null) ?? undefined,
+      room: row.room ?? undefined
     };
 
     return res.status(201).json(responseBody);
@@ -278,11 +251,25 @@ router.get('/', async (req, res) => {
       LIMIT $${params.length + 1}
       OFFSET $${params.length + 2}
     `;
-    const rowsResult = await query<ReservationRow>(rowsSql, [
-      ...params,
-      limit,
-      offset
-    ]);
+    const rowsResult = await query<{
+      id: number;
+      state: string;
+      booking_nr: string | null;
+      guest_email: string | null;
+      primary_guest_name: string | null;
+      booking_id: string | number | null;
+      room_name: string | null;
+      booking_from: string | null;
+      booking_to: string | null;
+      check_in_via: string | null;
+      check_out_via: string | null;
+      last_opened_at: string | null;
+      received_at: string | null;
+      completed_at: string | null;
+      page_url: string | null;
+      balance: number | null;
+      guests: unknown[] | null;
+    }>(rowsSql, [...params, limit, offset]);
 
     res.json({
       index: rowsResult.rows,
@@ -348,27 +335,33 @@ router.get('/:id', async (req, res) => {
       LIMIT 1
     `;
 
-    const result = await query<
-      ReservationRow & {
-        adults: number | null;
-        youth: number | null;
-        children: number | null;
-        infants: number | null;
-        purpose: string | null;
-        room: string | null;
-      }
-    >(sql, [id]);
+    const result = await query<{
+      id: number;
+      state: string;
+      booking_nr: string | null;
+      guest_email: string | null;
+      primary_guest_name: string | null;
+      booking_id: string | number | null;
+      room_name: string | null;
+      booking_from: string | null;
+      booking_to: string | null;
+      check_in_via: string | null;
+      check_out_via: string | null;
+      last_opened_at: string | null;
+      received_at: string | null;
+      completed_at: string | null;
+      page_url: string | null;
+      balance: number | null;
+      guests: unknown[] | null;
+      adults: number | null;
+      youth: number | null;
+      children: number | null;
+      infants: number | null;
+      purpose: string | null;
+      room: string | null;
+    }>(sql, [id]);
 
-    const row = result.rows[0] as
-      | (ReservationRow & {
-          adults: number | null;
-          youth: number | null;
-          children: number | null;
-          infants: number | null;
-          purpose: string | null;
-          room: string | null;
-        })
-      | undefined;
+    const row = result.rows[0];
 
     if (!row) {
       return res.status(404).json({
@@ -597,16 +590,31 @@ router.patch('/:id', async (req, res) => {
       LIMIT 1
     `;
 
-    const selectResult = await query<
-      ReservationRow & {
-        adults: number | null;
-        youth: number | null;
-        children: number | null;
-        infants: number | null;
-        purpose: string | null;
-        room: string | null;
-      }
-    >(selectSql, [id]);
+    const selectResult = await query<{
+      id: number;
+      state: string;
+      booking_nr: string | null;
+      guest_email: string | null;
+      primary_guest_name: string | null;
+      booking_id: string | number | null;
+      room_name: string | null;
+      booking_from: string | null;
+      booking_to: string | null;
+      check_in_via: string | null;
+      check_out_via: string | null;
+      last_opened_at: string | null;
+      received_at: string | null;
+      completed_at: string | null;
+      page_url: string | null;
+      balance: number | null;
+      guests: unknown[] | null;
+      adults: number | null;
+      youth: number | null;
+      children: number | null;
+      infants: number | null;
+      purpose: string | null;
+      room: string | null;
+    }>(selectSql, [id]);
 
     const row = selectResult.rows[0];
     if (!row) {
@@ -637,16 +645,12 @@ router.patch('/:id', async (req, res) => {
       completed_at: row.completed_at,
       page_url: row.page_url ?? 'https://example.com',
       balance: typeof row.balance === 'number' ? row.balance : 0,
-      adults: (row as unknown as { adults: number | null }).adults ?? undefined,
-      youth: (row as unknown as { youth: number | null }).youth ?? undefined,
-      children:
-        (row as unknown as { children: number | null }).children ?? undefined,
-      infants:
-        (row as unknown as { infants: number | null }).infants ?? undefined,
-      purpose:
-        (row as unknown as { purpose: 'private' | 'business' | null })
-          .purpose ?? undefined,
-      room: (row as unknown as { room: string | null }).room ?? undefined
+      adults: row.adults ?? undefined,
+      youth: row.youth ?? undefined,
+      children: row.children ?? undefined,
+      infants: row.infants ?? undefined,
+      purpose: (row.purpose as 'private' | 'business' | null) ?? undefined,
+      room: row.room ?? undefined
     };
 
     return res.status(200).json(responseBody);
@@ -655,7 +659,7 @@ router.patch('/:id', async (req, res) => {
     return res.status(500).json({
       error: {
         code: 'DATABASE_ERROR',
-        message: 'Failed to update reservation',
+        message: 'Failed to fetch reservation',
         details:
           process.env.NODE_ENV === 'development' ? String(error) : undefined
       }

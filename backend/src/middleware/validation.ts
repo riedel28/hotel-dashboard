@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
-import { ZodError, type ZodType } from 'zod';
+import { ZodError } from 'zod';
 
 // Validate request body
-function validateBody<T>(schema: ZodType<T>) {
+function validateBody<T = unknown>(schema: { parse: (data: unknown) => T }) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Parse and validate request body
@@ -28,7 +28,7 @@ function validateBody<T>(schema: ZodType<T>) {
 }
 
 // Validate URL parameters
-function validateParams<T>(schema: ZodType<T>) {
+function validateParams<T = unknown>(schema: { parse: (data: unknown) => T }) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.params);
@@ -49,7 +49,7 @@ function validateParams<T>(schema: ZodType<T>) {
 }
 
 // Validate query parameters
-function validateQuery<T>(schema: ZodType<T>) {
+function validateQuery<T = unknown>(schema: { parse: (data: unknown) => T }) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.query);
