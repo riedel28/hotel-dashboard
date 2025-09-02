@@ -25,13 +25,15 @@ async function getReservations(req: Request, res: Response) {
     const searchCondition =
       conditions.length > 0 ? and(...conditions) : undefined;
 
-    const reservations = await db
-      .select()
-      .from(reservationsTable)
-      .where(searchCondition)
-      .offset(Number(page))
-      .limit(Number(per_page))
-      .orderBy(desc(reservationsTable.received_at));
+    const reservations = await db.query.reservations.findMany({
+      where: searchCondition,
+      with: {
+        guests: true
+      },
+      offset: Number(page),
+      limit: Number(per_page),
+      orderBy: desc(reservationsTable.received_at)
+    });
 
     res.status(200).json({
       index: reservations,
@@ -51,7 +53,10 @@ async function getReservationById(req: Request, res: Response) {
 
   try {
     const reservation = await db.query.reservations.findFirst({
-      where: eq(reservationsTable.id, Number(id))
+      where: eq(reservationsTable.id, Number(id)),
+      with: {
+        guests: true
+      }
     });
 
     if (!reservation) {
@@ -88,7 +93,6 @@ async function createReservation(req: Request, res: Response) {
         updated_at: null,
         page_url,
         balance: 0,
-        guests: [],
         adults: 1,
         youth: 0,
         children: 0,
@@ -98,7 +102,14 @@ async function createReservation(req: Request, res: Response) {
       })
       .returning();
 
-    res.status(201).json(newReservation);
+    const reservationWithGuests = await db.query.reservations.findFirst({
+      where: eq(reservationsTable.id, newReservation.id),
+      with: {
+        guests: true
+      }
+    });
+
+    res.status(201).json(reservationWithGuests);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create reservation ' });
@@ -120,7 +131,14 @@ async function updateReservation(req: Request, res: Response) {
       return res.status(404).json({ error: 'Reservation not found' });
     }
 
-    res.status(200).json(updatedReservation);
+    const reservationWithGuests = await db.query.reservations.findFirst({
+      where: eq(reservationsTable.id, Number(id)),
+      with: {
+        guests: true
+      }
+    });
+
+    res.status(200).json(reservationWithGuests);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update reservation ' });
@@ -131,16 +149,22 @@ async function deleteReservation(req: Request, res: Response) {
   const { id } = req.params;
 
   try {
-    const [deletedReservation] = await db
-      .delete(reservationsTable)
-      .where(eq(reservationsTable.id, Number(id)))
-      .returning();
+    const deletedReservations = await db.query.reservations.findFirst({
+      where: eq(reservationsTable.id, Number(id)),
+      with: {
+        guests: true
+      }
+    });
 
-    if (!deletedReservation) {
+    if (!deletedReservations) {
       return res.status(404).json({ error: 'Reservation not found' });
     }
 
-    res.status(200).json(deletedReservation);
+    await db
+      .delete(reservationsTable)
+      .where(eq(reservationsTable.id, Number(id)));
+
+    res.status(200).json(deletedReservations);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to delete reservation ' });

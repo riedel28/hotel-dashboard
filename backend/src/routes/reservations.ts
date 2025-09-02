@@ -12,7 +12,7 @@ import {
   getReservationById,
   getReservations,
   updateReservation
-} from '../controllers/reservationController';
+} from '../controllers/reservation-controller';
 import {
   validateBody,
   validateParams,

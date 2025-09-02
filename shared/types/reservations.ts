@@ -16,10 +16,14 @@ export const checkinMethodSchema = z.enum([
 ]);
 
 export const guestSchema = z.object({
-  id: z.string(),
+  id: z.number(),
+  reservation_id: z.number(),
   first_name: z.string(),
   last_name: z.string(),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+  email: z.string().optional(),
+  nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date().nullable()
 });
 
 export const reservationSchema = z.object({

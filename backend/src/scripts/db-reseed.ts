@@ -31,8 +31,9 @@ async function main(): Promise<void> {
   ]);
 
   try {
-    console.log('Dropping table if exists...');
-    await pool.query('DROP TABLE IF EXISTS reservations');
+    console.log('Dropping tables if exist...');
+    await pool.query('DROP TABLE IF EXISTS guests CASCADE');
+    await pool.query('DROP TABLE IF EXISTS reservations CASCADE');
 
     console.log('Applying schema...');
     await pool.query(schemaSql);

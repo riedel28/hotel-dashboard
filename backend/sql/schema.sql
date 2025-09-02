@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS reservations (
   updated_at TIMESTAMPTZ,
   page_url TEXT,
   balance DOUBLE PRECISION DEFAULT 0,
-  guests JSONB DEFAULT '[]'::jsonb,
   -- Optional fields used by the frontend detail view
   adults INTEGER DEFAULT 0,
   youth INTEGER DEFAULT 0,
@@ -27,4 +26,15 @@ CREATE TABLE IF NOT EXISTS reservations (
   room TEXT
 );
 
-
+-- Guests table
+CREATE TABLE IF NOT EXISTS guests (
+  id SERIAL PRIMARY KEY,
+  reservation_id INTEGER NOT NULL,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  email TEXT,
+  nationality_code TEXT NOT NULL CHECK (nationality_code IN ('DE', 'US', 'AT', 'CH')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ,
+  FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
+);
