@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import type { Guest } from './edit-reservation-form';
+import type { Guest } from 'shared/types/reservations';
 
 interface AddGuestModalProps {
   onAddGuest: (guest: Guest) => void;
@@ -51,10 +51,13 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
 
   const onSubmit = (data: AddGuestFormData) => {
     const newGuest: Guest = {
-      id: Date.now().toString(), // Simple ID generation for demo
+      id: Date.now(),
+      reservation_id: 0,
       first_name: data.firstName,
       last_name: data.lastName,
-      nationality_code: 'DE'
+      nationality_code: 'DE',
+      created_at: new Date(),
+      updated_at: null
     };
 
     onAddGuest(newGuest);
