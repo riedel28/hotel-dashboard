@@ -1,6 +1,5 @@
 import { and, desc, eq, gte, ilike, lte } from 'drizzle-orm';
 import type { Request, Response } from 'express';
-import type { ReservationStatus } from 'shared/types/reservations';
 
 import { db } from '../db/pool';
 import { reservations as reservationsTable } from '../db/schema';
@@ -8,13 +7,12 @@ import { reservations as reservationsTable } from '../db/schema';
 async function getReservations(req: Request, res: Response) {
   try {
     const { page, per_page, status, q, from, to } = req.query;
-    console.log('Date params:', { from, to });
 
     const conditions = [];
 
     if (status && status !== 'all') {
       conditions.push(
-        eq(reservationsTable.state, status as Exclude<ReservationStatus, 'all'>)
+        eq(reservationsTable.state, status as 'pending' | 'started' | 'done')
       );
     }
 
@@ -24,14 +22,12 @@ async function getReservations(req: Request, res: Response) {
     }
 
     if (from) {
-      const fromDate = new Date(from as string + 'T00:00:00.000Z');
-      console.log('From date:', fromDate);
+      const fromDate = new Date((from as string) + 'T00:00:00.000Z');
       conditions.push(gte(reservationsTable.booking_to, fromDate));
     }
 
     if (to) {
-      const toDate = new Date(to as string + 'T23:59:59.999Z');
-      console.log('To date:', toDate);
+      const toDate = new Date((to as string) + 'T23:59:59.999Z');
       conditions.push(lte(reservationsTable.booking_from, toDate));
     }
 
@@ -43,17 +39,24 @@ async function getReservations(req: Request, res: Response) {
       with: {
         guests: true
       },
-      offset: Number(page),
-      limit: Number(per_page),
+      offset: ((Number(page) || 1) - 1) * (Number(per_page) || 10),
+      limit: Number(per_page) || 10,
       orderBy: desc(reservationsTable.received_at)
     });
+
+    // Get total count for pagination
+    const totalCountResult = await db.query.reservations.findMany({
+      where: searchCondition,
+      columns: { id: true }
+    });
+    const totalCount = totalCountResult.length;
 
     res.status(200).json({
       index: reservations,
       page: Number(page) || 1,
       per_page: Number(per_page) || 10,
-      total: reservations.length,
-      page_count: Math.ceil(reservations.length / Number(per_page)) || 0
+      total: totalCount,
+      page_count: Math.ceil(totalCount / (Number(per_page) || 10))
     });
   } catch (error) {
     console.error(error);
