@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.3.0...v1.4.0) (2025-09-04)
+
+
+### Features
+
+* **database:** integrate @epic-web/remember for connection pooling and update environment schema ([9a05615](https://github.com/riedel28/tanstack-dashboard/commit/9a056158abf9bf5a7316be20f930d8e2f47391fa))
+* **reservations:** enhance reservation filtering with date range support ([8743ebd](https://github.com/riedel28/tanstack-dashboard/commit/8743ebd69c11e68effb7fc0b4be925b046e388c7))
+* **reservations:** implement guests management and update schema ([91972d2](https://github.com/riedel28/tanstack-dashboard/commit/91972d20add051edcb41493e46a4c1b1d503b055))
+
 # [1.3.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.2.0...v1.3.0) (2025-09-01)
 
 ### Bug Fixes
