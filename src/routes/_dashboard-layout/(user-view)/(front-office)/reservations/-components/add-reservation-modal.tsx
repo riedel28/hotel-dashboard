@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { InfoIcon, LinkIcon, Loader2, PlusCircle } from 'lucide-react';
+import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -36,11 +36,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
 
 const addReservationSchema = z.object({
   booking_nr: z.string().min(1, t`Reservation number is required`),
@@ -116,17 +111,6 @@ export function AddReservationModal() {
                     <FormLabel>
                       <Trans>Reservation Nr.</Trans>
                     </FormLabel>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <InfoIcon className="size-4 text-muted-foreground" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <Trans>
-                          The booking number can be found in your Property
-                          Management System (PMS)
-                        </Trans>
-                      </TooltipContent>
-                    </Tooltip>
                   </div>
                   <FormControl>
                     <Input
