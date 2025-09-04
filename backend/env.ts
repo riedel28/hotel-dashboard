@@ -16,9 +16,7 @@ if (isDevelopment) {
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production']).default('development'),
-  APP_STAGE: z
-    .enum(['development', 'production', 'testing'])
-    .default('development'),
+  APP_STAGE: z.enum(['dev', 'production', 'test']).default('dev'),
   PORT: z.coerce.number().positive().default(5001),
   DATABASE_URL: z.string().startsWith('postgresql://')
 });
@@ -46,6 +44,10 @@ try {
 
   throw error;
 }
+
+// Helper functions for environment checks
+export const isProd = () => env.NODE_ENV === 'production';
+export const isDev = () => env.NODE_ENV === 'development';
 
 // Export the validated environment object
 export { env, isProduction, isDevelopment, isTest };

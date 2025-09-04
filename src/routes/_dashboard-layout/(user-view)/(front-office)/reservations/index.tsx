@@ -6,6 +6,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { PaginationState } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { RefreshCw, XIcon } from 'lucide-react';
 
 import {
@@ -77,8 +78,10 @@ function ReservationsPage() {
       search: (prev) => ({
         ...prev,
         page: 1,
-        from: dateRange?.from || undefined,
-        to: dateRange?.to || undefined
+        from: dateRange?.from
+          ? dayjs(dateRange.from).format('YYYY-MM-DD')
+          : undefined,
+        to: dateRange?.to ? dayjs(dateRange.to).format('YYYY-MM-DD') : undefined
       })
     });
   };
@@ -101,7 +104,10 @@ function ReservationsPage() {
   ) => {
     const pagination =
       typeof updaterOrValue === 'function'
-        ? updaterOrValue({ pageIndex: (page ?? 1) - 1, pageSize: per_page ?? 10 })
+        ? updaterOrValue({
+            pageIndex: (page ?? 1) - 1,
+            pageSize: per_page ?? 10
+          })
         : updaterOrValue;
 
     navigate({
@@ -265,8 +271,8 @@ function ReservationsPage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <ReservationDateFilter
-                from={from}
-                to={to}
+                from={from ? new Date(from) : undefined}
+                to={to ? new Date(to) : undefined}
                 onDateChange={handleDateChange}
                 className="w-full sm:w-[208px]"
               />

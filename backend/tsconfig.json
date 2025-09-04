@@ -4,6 +4,7 @@
     "target": "esnext",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "skipLibCheck": true,
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,

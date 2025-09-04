@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import type { Guest } from './edit-reservation-form';
+import type { Guest } from 'shared/types/reservations';
 
 interface EditGuestModalProps {
   guest: Guest;
@@ -63,12 +63,16 @@ export function EditGuestModal({
   const onSubmit = (data: EditGuestFormData) => {
     const updatedGuest: Guest = {
       id: guest.id,
+      reservation_id: guest.reservation_id,
       first_name: data.firstName,
       last_name: data.lastName,
-      nationality_code: 'DE'
+      email: guest.email,
+      nationality_code: guest.nationality_code,
+      created_at: guest.created_at,
+      updated_at: new Date()
     };
 
-    onEditGuest(guest.id, updatedGuest);
+    onEditGuest(guest.id.toString(), updatedGuest);
     setOpen(false);
   };
 

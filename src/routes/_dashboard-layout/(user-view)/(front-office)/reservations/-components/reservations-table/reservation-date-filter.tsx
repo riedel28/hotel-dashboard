@@ -3,15 +3,6 @@
 import { useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import {
-  endOfMonth,
-  endOfYear,
-  startOfMonth,
-  startOfYear,
-  subDays,
-  subMonths,
-  subYears
-} from 'date-fns';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
@@ -46,24 +37,24 @@ function ReservationDateFilter({
     { label: 'Today', range: { from: today, to: today } },
     {
       label: 'Yesterday',
-      range: { from: subDays(today, 1), to: subDays(today, 1) }
+      range: { from: dayjs().subtract(1, 'day').toDate(), to: dayjs().subtract(1, 'day').toDate() }
     },
-    { label: 'Last 7 days', range: { from: subDays(today, 6), to: today } },
-    { label: 'Last 30 days', range: { from: subDays(today, 29), to: today } },
-    { label: 'Month to date', range: { from: startOfMonth(today), to: today } },
+    { label: 'Last 7 days', range: { from: dayjs().subtract(6, 'day').toDate(), to: today } },
+    { label: 'Last 30 days', range: { from: dayjs().subtract(29, 'day').toDate(), to: today } },
+    { label: 'Month to date', range: { from: dayjs().startOf('month').toDate(), to: today } },
     {
       label: 'Last month',
       range: {
-        from: startOfMonth(subMonths(today, 1)),
-        to: endOfMonth(subMonths(today, 1))
+        from: dayjs().subtract(1, 'month').startOf('month').toDate(),
+        to: dayjs().subtract(1, 'month').endOf('month').toDate()
       }
     },
-    { label: 'Year to date', range: { from: startOfYear(today), to: today } },
+    { label: 'Year to date', range: { from: dayjs().startOf('year').toDate(), to: today } },
     {
       label: 'Last year',
       range: {
-        from: startOfYear(subYears(today, 1)),
-        to: endOfYear(subYears(today, 1))
+        from: dayjs().subtract(1, 'year').startOf('year').toDate(),
+        to: dayjs().subtract(1, 'year').endOf('year').toDate()
       }
     }
   ];

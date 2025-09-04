@@ -6,12 +6,14 @@
   "type": "module",
   "scripts": {
     "build": "tsc --noEmit",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx --watch src/index.ts",
     "start": "tsx src/index.ts",
     "type-check": "tsc --noEmit",
     "db:schema": "echo 'See sql/schema.sql for initial schema'",
-    "db:seed": "echo 'See sql/seed.sql for sample data'",
-    "db:reseed": "tsx src/scripts/db-reseed.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx src/scripts/seed.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {

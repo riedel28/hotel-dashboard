@@ -1,19 +1,18 @@
-import { and, desc, eq, ilike } from 'drizzle-orm';
+import { and, desc, eq, gte, ilike, lte } from 'drizzle-orm';
 import type { Request, Response } from 'express';
-import type { ReservationStatus } from 'shared/types/reservations';
 
 import { db } from '../db/pool';
 import { reservations as reservationsTable } from '../db/schema';
 
 async function getReservations(req: Request, res: Response) {
   try {
-    const { page, per_page, status, q } = req.query;
+    const { page, per_page, status, q, from, to } = req.query;
 
     const conditions = [];
 
     if (status && status !== 'all') {
       conditions.push(
-        eq(reservationsTable.state, status as Exclude<ReservationStatus, 'all'>)
+        eq(reservationsTable.state, status as 'pending' | 'started' | 'done')
       );
     }
 
@@ -22,23 +21,42 @@ async function getReservations(req: Request, res: Response) {
       conditions.push(ilike(reservationsTable.booking_nr, `%${q}%`));
     }
 
+    if (from) {
+      const fromDate = new Date((from as string) + 'T00:00:00.000Z');
+      conditions.push(gte(reservationsTable.booking_to, fromDate));
+    }
+
+    if (to) {
+      const toDate = new Date((to as string) + 'T23:59:59.999Z');
+      conditions.push(lte(reservationsTable.booking_from, toDate));
+    }
+
     const searchCondition =
       conditions.length > 0 ? and(...conditions) : undefined;
 
-    const reservations = await db
-      .select()
-      .from(reservationsTable)
-      .where(searchCondition)
-      .offset(Number(page))
-      .limit(Number(per_page))
-      .orderBy(desc(reservationsTable.received_at));
+    const reservations = await db.query.reservations.findMany({
+      where: searchCondition,
+      with: {
+        guests: true
+      },
+      offset: ((Number(page) || 1) - 1) * (Number(per_page) || 10),
+      limit: Number(per_page) || 10,
+      orderBy: desc(reservationsTable.received_at)
+    });
+
+    // Get total count for pagination
+    const totalCountResult = await db.query.reservations.findMany({
+      where: searchCondition,
+      columns: { id: true }
+    });
+    const totalCount = totalCountResult.length;
 
     res.status(200).json({
       index: reservations,
       page: Number(page) || 1,
       per_page: Number(per_page) || 10,
-      total: reservations.length,
-      page_count: Math.ceil(reservations.length / Number(per_page)) || 0
+      total: totalCount,
+      page_count: Math.ceil(totalCount / (Number(per_page) || 10))
     });
   } catch (error) {
     console.error(error);
@@ -51,7 +69,10 @@ async function getReservationById(req: Request, res: Response) {
 
   try {
     const reservation = await db.query.reservations.findFirst({
-      where: eq(reservationsTable.id, Number(id))
+      where: eq(reservationsTable.id, Number(id)),
+      with: {
+        guests: true
+      }
     });
 
     if (!reservation) {
@@ -88,7 +109,6 @@ async function createReservation(req: Request, res: Response) {
         updated_at: null,
         page_url,
         balance: 0,
-        guests: [],
         adults: 1,
         youth: 0,
         children: 0,
@@ -98,7 +118,14 @@ async function createReservation(req: Request, res: Response) {
       })
       .returning();
 
-    res.status(201).json(newReservation);
+    const reservationWithGuests = await db.query.reservations.findFirst({
+      where: eq(reservationsTable.id, newReservation.id),
+      with: {
+        guests: true
+      }
+    });
+
+    res.status(201).json(reservationWithGuests);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create reservation ' });
@@ -120,7 +147,14 @@ async function updateReservation(req: Request, res: Response) {
       return res.status(404).json({ error: 'Reservation not found' });
     }
 
-    res.status(200).json(updatedReservation);
+    const reservationWithGuests = await db.query.reservations.findFirst({
+      where: eq(reservationsTable.id, Number(id)),
+      with: {
+        guests: true
+      }
+    });
+
+    res.status(200).json(reservationWithGuests);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update reservation ' });
@@ -131,16 +165,22 @@ async function deleteReservation(req: Request, res: Response) {
   const { id } = req.params;
 
   try {
-    const [deletedReservation] = await db
-      .delete(reservationsTable)
-      .where(eq(reservationsTable.id, Number(id)))
-      .returning();
+    const deletedReservations = await db.query.reservations.findFirst({
+      where: eq(reservationsTable.id, Number(id)),
+      with: {
+        guests: true
+      }
+    });
 
-    if (!deletedReservation) {
+    if (!deletedReservations) {
       return res.status(404).json({ error: 'Reservation not found' });
     }
 
-    res.status(200).json(deletedReservation);
+    await db
+      .delete(reservationsTable)
+      .where(eq(reservationsTable.id, Number(id)));
+
+    res.status(200).json(deletedReservations);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to delete reservation ' });

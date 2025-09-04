@@ -1,17 +1,13 @@
 import { useState } from 'react';
 
-import {
-  reservationSchema as apiReservationSchema,
-  guestSchema,
-  updateReservationById
-} from '@/api/reservations';
+import { updateReservationById } from '@/api/reservations';
 import { DevTool } from '@hookform/devtools';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
-import { type Resolver, type SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { Guest } from 'shared/types/reservations';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -55,25 +51,18 @@ import {
 import { AddGuestModal } from './add-guest-modal';
 import { EditGuestModal } from './edit-guest-modal';
 
-export type Guest = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  nationality_code: 'DE' | 'US' | 'AT' | 'CH';
-};
-
 export const reservationFormSchema = z.object({
-  booking_nr: apiReservationSchema.shape.booking_nr.min(
-    1,
-    t`Booking number is required`
-  ),
+  booking_nr: z.string().min(1, t`Booking number is required`),
   guests: z.array(
-    guestSchema.extend({
-      first_name: guestSchema.shape.first_name.min(
-        1,
-        t`First name is required`
-      ),
-      last_name: guestSchema.shape.last_name.min(1, t`Last name is required`)
+    z.object({
+      id: z.number(),
+      reservation_id: z.number(),
+      first_name: z.string().min(1, t`First name is required`),
+      last_name: z.string().min(1, t`Last name is required`),
+      email: z.string().optional(),
+      nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
+      created_at: z.coerce.date(),
+      updated_at: z.coerce.date().nullable()
     })
   ),
   adults: z.coerce
@@ -96,10 +85,7 @@ export const reservationFormSchema = z.object({
   room: z.string().min(1, t`Room selection is required`)
 });
 
-export const guestsFormSchema = reservationFormSchema.shape.guests;
-
 type ReservationFormData = z.infer<typeof reservationFormSchema>;
-type GuestsFormData = z.infer<typeof guestsFormSchema>;
 
 async function updateReservation(id: string, data: ReservationFormData) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -111,14 +97,14 @@ interface EditReservationFormProps {
   reservationData: ReservationFormData;
 }
 
-const initialData = {
+const initialData: ReservationFormData = {
   booking_nr: '',
-  guests: [] as GuestsFormData,
+  guests: [],
   adults: 1,
   youth: 0,
   children: 0,
   infants: 0,
-  purpose: 'private' as const,
+  purpose: 'private',
   room: ''
 };
 
@@ -129,9 +115,6 @@ export function EditReservationForm({
   const queryClient = useQueryClient();
 
   const form = useForm<ReservationFormData>({
-    resolver: zodResolver(
-      reservationFormSchema
-    ) as unknown as Resolver<ReservationFormData>,
     defaultValues: initialData,
     values: reservationData
   });
@@ -150,12 +133,12 @@ export function EditReservationForm({
     }
   });
 
-  const onSubmit: SubmitHandler<ReservationFormData> = (data) => {
-    updateReservationMutation.mutate({ ...reservationData, ...data });
+  const onSubmit = (data: ReservationFormData) => {
+    updateReservationMutation.mutate(data);
   };
 
-  const removeGuest = (guestId: string) => {
-    const currentGuests = form.getValues('guests') as GuestsFormData;
+  const removeGuest = (guestId: number) => {
+    const currentGuests = form.getValues('guests');
     const updatedGuests = currentGuests.filter((guest) => guest.id !== guestId);
     form.setValue('guests', updatedGuests);
   };
@@ -166,14 +149,12 @@ export function EditReservationForm({
     form.setValue('guests', updatedGuests);
   };
 
-  const [editingGuest, setEditingGuest] = useState<
-    GuestsFormData[number] | null
-  >(null);
+  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
 
   const editGuest = (guestId: string, updatedGuest: Guest) => {
-    const currentGuests = form.getValues('guests') as GuestsFormData;
+    const currentGuests = form.getValues('guests');
     const updatedGuests = currentGuests.map((guest) =>
-      guest.id === guestId ? updatedGuest : guest
+      guest.id === Number(guestId) ? updatedGuest : guest
     );
     form.setValue('guests', updatedGuests, { shouldValidate: true });
   };
@@ -269,7 +250,7 @@ export function EditReservationForm({
                           <Trans>No guests added yet</Trans>
                         </div>
                       ) : (
-                        (field.value as GuestsFormData).map((guest) => (
+                        field.value.map((guest) => (
                           <div
                             key={guest.id}
                             className="flex items-center justify-between rounded-md border px-2 py-1"
@@ -297,7 +278,7 @@ export function EditReservationForm({
                                 className="w-[160px]"
                               >
                                 <DropdownMenuItem
-                                  onSelect={() => setEditingGuest(guest)}
+                                  onSelect={() => setEditingGuest(guest as Guest)}
                                 >
                                   <Edit2 className="mr-2 h-4 w-4" />
                                   <Trans>Edit guest</Trans>
@@ -305,7 +286,7 @@ export function EditReservationForm({
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   className="text-destructive"
-                                  onClick={() => removeGuest(guest.id)}
+                                  onClick={() => removeGuest(guest.id!)}
                                 >
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   <Trans>Remove</Trans>
@@ -347,6 +328,7 @@ export function EditReservationForm({
                     <FormControl>
                       <NumberInput
                         {...field}
+                        value={field.value}
                         min={1}
                         onValueChange={(value) => field.onChange(value || 0)}
                       />
@@ -367,6 +349,7 @@ export function EditReservationForm({
                     <FormControl>
                       <NumberInput
                         {...field}
+                        value={field.value}
                         min={0}
                         onValueChange={(value) => field.onChange(value || 0)}
                       />
@@ -387,6 +370,7 @@ export function EditReservationForm({
                     <FormControl>
                       <NumberInput
                         {...field}
+                        value={field.value}
                         min={0}
                         onValueChange={(value) => field.onChange(value || 0)}
                       />
@@ -407,6 +391,7 @@ export function EditReservationForm({
                     <FormControl>
                       <NumberInput
                         {...field}
+                        value={field.value}
                         min={0}
                         onValueChange={(value) => field.onChange(value || 0)}
                       />

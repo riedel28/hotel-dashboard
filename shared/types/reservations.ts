@@ -16,10 +16,14 @@ export const checkinMethodSchema = z.enum([
 ]);
 
 export const guestSchema = z.object({
-  id: z.string(),
+  id: z.number(),
+  reservation_id: z.number(),
   first_name: z.string(),
   last_name: z.string(),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+  email: z.string().optional(),
+  nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date().nullable()
 });
 
 export const reservationSchema = z.object({
@@ -63,16 +67,16 @@ export const fetchReservationsParamsSchema = z.object({
     .optional(),
   q: z.string().optional(),
   status: reservationStatusSchema.default('all').optional(),
-  from: z.coerce.date().optional(),
-  to: z.coerce.date().optional()
+  from: z.iso.date().optional(),
+  to: z.iso.date().optional()
 });
 
 export const fetchReservationsResponseSchema = z.object({
   index: z.array(reservationSchema),
   page: z.number().int().positive(),
   per_page: z.number().int().positive(),
-  total: z.number().int().positive(),
-  page_count: z.number().int().positive()
+  total: z.number().int().nonnegative(),
+  page_count: z.number().int().nonnegative()
 });
 
 export const fetchReservationByIdSchema = z.object({
@@ -85,10 +89,12 @@ export const createReservationSchema = z.object({
   page_url: z.url()
 });
 
-export const updateReservationSchema = reservationSchema.omit({
-  id: true,
-  updated_at: true
-}).partial();
+export const updateReservationSchema = reservationSchema
+  .omit({
+    id: true,
+    updated_at: true
+  })
+  .partial();
 
 // Type exports
 export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
