@@ -67,8 +67,8 @@ export const fetchReservationsParamsSchema = z.object({
     .optional(),
   q: z.string().optional(),
   status: reservationStatusSchema.default('all').optional(),
-  from: z.coerce.date().optional(),
-  to: z.coerce.date().optional()
+  from: z.iso.date().optional(),
+  to: z.iso.date().optional()
 });
 
 export const fetchReservationsResponseSchema = z.object({
@@ -89,10 +89,12 @@ export const createReservationSchema = z.object({
   page_url: z.url()
 });
 
-export const updateReservationSchema = reservationSchema.omit({
-  id: true,
-  updated_at: true
-}).partial();
+export const updateReservationSchema = reservationSchema
+  .omit({
+    id: true,
+    updated_at: true
+  })
+  .partial();
 
 // Type exports
 export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
