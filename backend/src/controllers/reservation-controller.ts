@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike } from 'drizzle-orm';
+import { and, desc, eq, gte, ilike, lte } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 import type { ReservationStatus } from 'shared/types/reservations';
 
@@ -7,7 +7,8 @@ import { reservations as reservationsTable } from '../db/schema';
 
 async function getReservations(req: Request, res: Response) {
   try {
-    const { page, per_page, status, q } = req.query;
+    const { page, per_page, status, q, from, to } = req.query;
+    console.log('Date params:', { from, to });
 
     const conditions = [];
 
@@ -20,6 +21,18 @@ async function getReservations(req: Request, res: Response) {
     if (q) {
       // Only add condition if q is truthy
       conditions.push(ilike(reservationsTable.booking_nr, `%${q}%`));
+    }
+
+    if (from) {
+      const fromDate = new Date(from as string + 'T00:00:00.000Z');
+      console.log('From date:', fromDate);
+      conditions.push(gte(reservationsTable.booking_to, fromDate));
+    }
+
+    if (to) {
+      const toDate = new Date(to as string + 'T23:59:59.999Z');
+      console.log('To date:', toDate);
+      conditions.push(lte(reservationsTable.booking_from, toDate));
     }
 
     const searchCondition =

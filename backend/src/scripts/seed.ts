@@ -1,5 +1,5 @@
 import { db } from '../db/pool';
-import { reservations, guests } from '../db/schema';
+import { guests, reservations } from '../db/schema';
 
 async function seed() {
   console.log('🌱 Starting database seed...');
@@ -7,12 +7,12 @@ async function seed() {
   try {
     // Step 1: Clear existing data (order matters!)
     console.log('Clearing existing data...');
-    await db.delete(guests);      // Delete guests first (foreign keys)
+    await db.delete(guests); // Delete guests first (foreign keys)
     await db.delete(reservations); // Delete reservations
 
     // Step 2: Create sample reservations
     console.log('Creating demo reservations...');
-    
+
     const [reservation1] = await db
       .insert(reservations)
       .values({
@@ -28,7 +28,7 @@ async function seed() {
         check_out_via: 'web',
         received_at: new Date(),
         page_url: 'https://booking.example.com/res-001',
-        balance: 450.00,
+        balance: 450.0,
         adults: 2,
         youth: 0,
         children: 1,
@@ -54,7 +54,7 @@ async function seed() {
         received_at: new Date(),
         last_opened_at: new Date(),
         page_url: 'https://booking.example.com/res-002',
-        balance: 280.00,
+        balance: 280.0,
         adults: 1,
         youth: 1,
         children: 0,
@@ -81,7 +81,7 @@ async function seed() {
         last_opened_at: new Date('2024-03-11'),
         completed_at: new Date('2024-03-12'),
         page_url: 'https://booking.example.com/res-003',
-        balance: 0.00,
+        balance: 0.0,
         adults: 1,
         youth: 0,
         children: 0,
@@ -93,7 +93,7 @@ async function seed() {
 
     // Step 3: Create guests for each reservation
     console.log('Creating demo guests...');
-    
+
     // Guests for reservation 1
     await db.insert(guests).values([
       {
@@ -114,7 +114,7 @@ async function seed() {
         reservation_id: reservation1.id,
         first_name: 'Emma',
         last_name: 'Doe',
-        email: null,
+        email: 'emma.doe@example.com',
         nationality_code: 'US'
       }
     ]);
@@ -159,12 +159,15 @@ async function seed() {
     console.log('✅ Database seeded successfully!');
     console.log('\n📊 Seed Summary:');
     console.log(`- Created ${reservationsWithGuests.length} reservations`);
-    console.log(`- Total guests: ${reservationsWithGuests.reduce((sum, res) => sum + res.guests.length, 0)}`);
+    console.log(
+      `- Total guests: ${reservationsWithGuests.reduce((sum, res) => sum + res.guests.length, 0)}`
+    );
     console.log('\n🏨 Sample Reservations:');
-    reservationsWithGuests.forEach(res => {
-      console.log(`- ${res.booking_nr}: ${res.primary_guest_name} (${res.state}) - ${res.guests.length} guest(s)`);
+    reservationsWithGuests.forEach((res) => {
+      console.log(
+        `- ${res.booking_nr}: ${res.primary_guest_name} (${res.state}) - ${res.guests.length} guest(s)`
+      );
     });
-
   } catch (error) {
     console.error('❌ Seed failed:', error);
     throw error;

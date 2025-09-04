@@ -75,8 +75,8 @@ export const fetchReservationsResponseSchema = z.object({
   index: z.array(reservationSchema),
   page: z.number().int().positive(),
   per_page: z.number().int().positive(),
-  total: z.number().int().positive(),
-  page_count: z.number().int().positive()
+  total: z.number().int().nonnegative(),
+  page_count: z.number().int().nonnegative()
 });
 
 export const fetchReservationByIdSchema = z.object({
