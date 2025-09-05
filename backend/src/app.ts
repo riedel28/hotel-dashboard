@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 
+import authRouter from './routes/auth';
 import reservationsRouter from './routes/reservations';
 
 const app = express();
@@ -14,11 +15,12 @@ app.use(
   })
 );
 
-app.get('/health', (_req, res) => {
+app.get('/api/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
-app.use('/reservations', reservationsRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/reservations', reservationsRouter);
 
 // Basic 404
 app.use((_req, res) => {

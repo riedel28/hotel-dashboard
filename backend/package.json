@@ -17,12 +17,15 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^17.2.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.5",
     "drizzle-zod": "^0.8.3",
     "express": "^5.1.0",
+    "jose": "^6.1.0",
     "pg": "^8.16.3",
     "zod": "^4.1.3"
   },

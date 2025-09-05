@@ -1,16 +1,49 @@
 import { db } from '../db/pool';
-import { guests, reservations } from '../db/schema';
+import { guests, reservations, users } from '../db/schema';
+import { hashPassword } from '../utils/password';
 
 async function seed() {
   console.log('🌱 Starting database seed...');
 
   try {
+    // Step 0: Create tables if they don't exist
+    console.log("Creating tables if they don't exist...");
+
     // Step 1: Clear existing data (order matters!)
     console.log('Clearing existing data...');
-    await db.delete(guests); // Delete guests first (foreign keys)
-    await db.delete(reservations); // Delete reservations
+    try {
+      await db.delete(guests); // Delete guests first (foreign keys)
+      await db.delete(reservations); // Delete reservations
+      await db.delete(users); // Delete users
+    } catch {
+      console.log('Some tables may not exist yet, continuing...');
+    }
 
-    // Step 2: Create sample reservations
+    // Step 2: Create demo users
+    console.log('Creating demo users...');
+    const hashedPassword = await hashPassword('very_cool_password');
+
+    await db
+      .insert(users)
+      .values({
+        email: 'cool_new_user@example.com',
+        password: hashedPassword,
+        first_name: 'Very',
+        last_name: 'Cool'
+      })
+      .returning();
+
+    await db
+      .insert(users)
+      .values({
+        email: 'john@example.com',
+        password: hashedPassword,
+        first_name: 'John',
+        last_name: 'Doe'
+      })
+      .returning();
+
+    // Step 3: Create sample reservations
     console.log('Creating demo reservations...');
 
     const [reservation1] = await db
