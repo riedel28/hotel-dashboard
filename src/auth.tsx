@@ -1,66 +1,68 @@
 import * as React from 'react';
 
-import { sleep } from './utils';
-
-interface User {
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-}
+import { login as apiLogin } from './api/auth';
+import type { AuthResponse, User } from './lib/schemas';
 
 export interface AuthContext {
   isAuthenticated: boolean;
-  login: (credentials: { email: string; password: string }) => Promise<void>;
+  login: (credentials: { email: string; password: string }) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   user: User | null;
+  token: string | null;
 }
 
 const AuthContext = React.createContext<AuthContext | null>(null);
 
-const key = 'tanstack.auth.user';
+const userKey = 'tanstack.auth.user';
+const tokenKey = 'tanstack.auth.token';
 
 function getStoredUser(): User | null {
-  const stored = localStorage.getItem(key);
+  const stored = localStorage.getItem(userKey);
   return stored ? JSON.parse(stored) : null;
 }
 
-function setStoredUser(user: User | null) {
-  if (user) {
-    localStorage.setItem(key, JSON.stringify(user));
+function getStoredToken(): string | null {
+  return localStorage.getItem(tokenKey);
+}
+
+function setStoredAuth(user: User | null, token: string | null) {
+  if (user && token) {
+    localStorage.setItem(userKey, JSON.stringify(user));
+    localStorage.setItem(tokenKey, token);
   } else {
-    localStorage.removeItem(key);
+    localStorage.removeItem(userKey);
+    localStorage.removeItem(tokenKey);
   }
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(getStoredUser());
-  const isAuthenticated = Boolean(user); // In a real app, you would check for a valid user
+  const [token, setToken] = React.useState<string | null>(getStoredToken());
+  const isAuthenticated = Boolean(user && token);
 
   const logout = React.useCallback(async () => {
-    await sleep(150);
-    setStoredUser(null);
+    setStoredAuth(null, null);
     setUser(null);
+    setToken(null);
   }, []);
 
   const login = React.useCallback(
     async (credentials: { email: string; password: string }) => {
-      await sleep(500);
-      // In a real app, you would validate credentials here
-      const user = {
-        email: credentials.email,
-        password: credentials.password,
-        firstName: 'John',
-        lastName: 'Doe'
-      };
-      setStoredUser(user);
-      setUser(user);
+      const response = await apiLogin(credentials);
+      if (response) {
+        setStoredAuth(response.user, response.token);
+        setUser(response.user);
+        setToken(response.token);
+        return response;
+      }
+      throw new Error('Login failed');
     },
     []
   );
 
   React.useEffect(() => {
     setUser(getStoredUser());
+    setToken(getStoredToken());
   }, []);
 
   return (
@@ -69,7 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated,
         login,
         logout,
-        user
+        user,
+        token
       }}
     >
       {children}

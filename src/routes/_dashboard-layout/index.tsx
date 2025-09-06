@@ -47,7 +47,7 @@ function StartPage() {
     }
   ];
 
-  const userName = auth.user?.firstName;
+  const userName = auth.user?.first_name;
 
   return (
     <div className="space-y-8">

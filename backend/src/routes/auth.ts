@@ -18,10 +18,13 @@ const registerSchema = z.object({
 
 const loginSchema = z.object({
   email: z.email('Invalid email format'),
-  password: z.string().min(1, 'Passwords is required')
+  password: z.string().min(1, 'Passwords is required'),
+  rememberMe: z.boolean().optional()
 });
 
 router.post('/register', validateBody(registerSchema), register);
 router.post('/login', validateBody(loginSchema), login);
+
+export { registerSchema, loginSchema };
 
 export default router;

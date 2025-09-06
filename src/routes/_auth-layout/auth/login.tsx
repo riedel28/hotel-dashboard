@@ -1,13 +1,12 @@
 import { useAuth } from '@/auth';
-import { sleep } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
+import { useMutation } from '@tanstack/react-query';
 import {
   Link,
   createFileRoute,
   redirect,
-  useRouter,
-  useRouterState
+  useRouter
 } from '@tanstack/react-router';
 import { Loader2, MessageCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -27,6 +26,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
+import { loginSchema } from '@/lib/schemas';
 import { cn } from '@/lib/utils';
 
 const fallback = '/' as const;
@@ -43,29 +43,18 @@ export const Route = createFileRoute('/_auth-layout/auth/login')({
   component: LoginPage
 });
 
-type LoginFormValues = {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-};
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 function LoginPage() {
   const auth = useAuth();
   const router = useRouter();
-  const isLoading = useRouterState({ select: (s) => s.isLoading });
   const navigate = Route.useNavigate();
   const { t } = useLingui();
-
-  const createLoginFormSchema = z.object({
-    email: z.email(t`Email is required`),
-    password: z.string().min(1, t`Password is required`),
-    rememberMe: z.boolean()
-  });
 
   const search = Route.useSearch();
 
   const form = useForm<LoginFormValues>({
-    resolver: zodResolver(createLoginFormSchema),
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -73,20 +62,21 @@ function LoginPage() {
     }
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
-    try {
-      await auth.login({ email: data.email, password: data.password });
+  const loginMutation = useMutation({
+    mutationFn: auth.login,
+    onSuccess: async () => {
       await router.invalidate();
-      await sleep(1);
-      toast.success(t`Successfully logged in!`);
       await navigate({ to: search.redirect || fallback });
-    } catch (error) {
-      console.error('Error logging in: ', error);
+      toast.success(t`Successfully logged in!`);
+    },
+    onError: () => {
       toast.error(t`Failed to login. Please try again.`);
     }
-  };
+  });
 
-  const isLoggingIn = isLoading || form.formState.isSubmitting;
+  const onSubmit = async (data: LoginFormValues) => {
+    loginMutation.mutate(data);
+  };
 
   return (
     <div className="w-full max-w-md space-y-8">
@@ -123,7 +113,6 @@ function LoginPage() {
                     type="email"
                     variant="lg"
                     placeholder={t`Enter your email`}
-                    disabled={isLoggingIn}
                   />
                 </FormControl>
                 <FormMessage />
@@ -143,7 +132,6 @@ function LoginPage() {
                     {...field}
                     variant="lg"
                     placeholder={t`Enter your password`}
-                    disabled={isLoggingIn}
                   />
                 </FormControl>
                 <FormMessage />
@@ -160,7 +148,6 @@ function LoginPage() {
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={field.onChange}
-                      disabled={isLoggingIn}
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
@@ -186,9 +173,11 @@ function LoginPage() {
             type="submit"
             size="lg"
             className="w-full"
-            disabled={isLoggingIn}
+            disabled={loginMutation.isPending}
           >
-            {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {loginMutation.isPending && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
             <Trans>Login</Trans>
           </Button>
         </form>

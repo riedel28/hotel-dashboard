@@ -35,8 +35,8 @@ async function register(req: Request, res: Response) {
     const token = await generateToken({
       id: String(newUser.id),
       email: newUser.email,
-      first_name: newUser.first_name,
-      last_name: newUser.last_name
+      first_name: newUser.first_name || '',
+      last_name: newUser.last_name || ''
     });
 
     res.status(201).json({
@@ -74,8 +74,8 @@ async function login(req: Request, res: Response) {
     const token = await generateToken({
       id: String(user.id),
       email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name
+      first_name: user.first_name || '',
+      last_name: user.last_name || ''
     });
 
     res.status(200).json({
