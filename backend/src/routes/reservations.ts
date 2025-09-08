@@ -13,6 +13,7 @@ import {
   getReservations,
   updateReservation
 } from '../controllers/reservation-controller';
+import { authenticateToken } from '../middleware/auth';
 import {
   validateBody,
   validateParams,
@@ -20,6 +21,9 @@ import {
 } from '../middleware/validation';
 
 const router = Router();
+
+// Apply authentication to all routes
+router.use(authenticateToken);
 
 // Create reservation
 router.post('/', validateBody(createReservationSchema), createReservation);
