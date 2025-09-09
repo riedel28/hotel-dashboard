@@ -1,19 +1,17 @@
 import cors from 'cors';
 import express from 'express';
+import morgan from 'morgan';
 
+import { errorHandler, notFound } from './middleware/error';
 import authRouter from './routes/auth';
 import reservationsRouter from './routes/reservations';
 
 const app = express();
 
-app.disable('x-powered-by');
+app.use(cors());
 app.use(express.json());
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-    credentials: true
-  })
-);
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
 
 app.get('/api/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
@@ -22,9 +20,10 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/reservations', reservationsRouter);
 
-// Basic 404
-app.use((_req, res) => {
-  res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Not found' } });
-});
+// 404 handler - MUST come after all valid routes
+app.use(notFound);
+
+// Global error handler - MUST be last
+app.use(errorHandler);
 
 export default app;
