@@ -16,7 +16,9 @@ if (isDevelopment) {
 
 const envSchema = z.object({
   // Node environment
-  NODE_ENV: z.enum(['development', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
   APP_STAGE: z.enum(['dev', 'production', 'test']).default('dev'),
 
   // Server
@@ -82,9 +84,10 @@ try {
 // Helper functions for environment checks
 export const isProd = () => env.NODE_ENV === 'production';
 export const isDev = () => env.NODE_ENV === 'development';
+export const isTestDev = () => env.NODE_ENV === 'test';
 
 // Export the validated environment object
-export { env, isProduction, isDevelopment, isTest };
+export { env };
 
 // Default export for convenience
 export default env;
