@@ -40,6 +40,6 @@ export async function createTestUser(
 
 export async function cleanupDatabase() {
   // Clean up in the right order due to foreign key constraints
-  await db.delete(users);
   await db.delete(reservations);
+  await db.delete(users);
 }

@@ -76,7 +76,7 @@ async function getReservationById(req: Request, res: Response) {
     });
 
     if (!reservation) {
-      res.status(404).json({ error: 'Reservation not found' });
+      return res.status(404).json({ error: 'Reservation not found' });
     }
 
     res.status(200).json(reservation);
