@@ -1,4 +1,4 @@
-import { db } from '../../src/db/connection.ts';
+import { db } from '../../src/db/pool.ts';
 import { reservations, users } from '../../src/db/schema.ts';
 import { generateToken } from '../../src/utils/jwt.ts';
 import { hashPassword } from '../../src/utils/password.ts';
