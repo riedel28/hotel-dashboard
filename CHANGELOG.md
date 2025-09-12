@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.4.0...v1.5.0) (2025-09-12)
+
+
+### Features
+
+* **auth:** add authentication middleware for token verification ([17d6ef5](https://github.com/riedel28/tanstack-dashboard/commit/17d6ef58bd917f973909b928c5be10eefcfad3f9))
+* **auth:** implement login on frontend ([27640f7](https://github.com/riedel28/tanstack-dashboard/commit/27640f79f6c4a8087805c40c6cbd9d06e6a4aacb))
+* **auth:** implement user authentication with registration and login endpoints ([6eaa763](https://github.com/riedel28/tanstack-dashboard/commit/6eaa763ac66ab0206e022e8c8d3745bf15516274))
+* **dependencies:** update package.json and package-lock.json for testing enhancements ([db62a44](https://github.com/riedel28/tanstack-dashboard/commit/db62a440ce60b6844371d66a92c39eb6751cbbf1))
+* **logging:** integrate morgan for HTTP request logging and add global error handling middleware ([8ee2ffd](https://github.com/riedel28/tanstack-dashboard/commit/8ee2ffdcba4ca369f86229ce4e94bb4a4dfcd39c))
+* **tests:** add Vitest configuration and setup for testing ([91c20ee](https://github.com/riedel28/tanstack-dashboard/commit/91c20ee9db25df83057aa9e3c641598aed6c119f))
+
 # [1.4.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.3.0...v1.4.0) (2025-09-04)
 
 ### Features
