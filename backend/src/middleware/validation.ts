@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
-import { ZodError } from 'zod';
+import { ZodError, ZodObject } from 'zod';
 
 // Validate request body
-function validateBody<T = unknown>(schema: { parse: (data: unknown) => T }) {
+function validateBody<T>(schema: ZodObject<T>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Parse and validate request body
@@ -28,7 +28,7 @@ function validateBody<T = unknown>(schema: { parse: (data: unknown) => T }) {
 }
 
 // Validate URL parameters
-function validateParams<T = unknown>(schema: { parse: (data: unknown) => T }) {
+function validateParams<T>(schema: ZodObject<T>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.params);
@@ -49,7 +49,7 @@ function validateParams<T = unknown>(schema: { parse: (data: unknown) => T }) {
 }
 
 // Validate query parameters
-function validateQuery<T = unknown>(schema: { parse: (data: unknown) => T }) {
+function validateQuery<T>(schema: ZodObject<T>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.query);

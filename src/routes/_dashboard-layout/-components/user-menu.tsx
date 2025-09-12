@@ -71,7 +71,7 @@ export default function UserMenu() {
             <Avatar className="h-8 w-8 rounded-full">
               <AvatarImage
                 src="https://github.com/shadcn.png"
-                alt={`${auth.user?.firstName} ${auth.user?.lastName}`}
+                alt={`${auth.user?.first_name} ${auth.user?.last_name}`}
               />
               <AvatarFallback className="rounded-lg">
                 <Trans>CN</Trans>
@@ -89,7 +89,7 @@ export default function UserMenu() {
             <div className="flex items-center gap-2 px-1.5 py-1.5 text-left text-sm">
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {auth.user?.firstName} {auth.user?.lastName}
+                  {auth.user?.first_name} {auth.user?.last_name}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
                   {auth.user?.email}
