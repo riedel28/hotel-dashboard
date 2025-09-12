@@ -1,12 +1,13 @@
+import { relations } from 'drizzle-orm';
 import {
   doublePrecision,
   integer,
   pgTable,
   serial,
   text,
-  timestamp
+  timestamp,
+  varchar
 } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 export const reservations = pgTable('reservations', {
@@ -45,9 +46,22 @@ export const guests = pgTable('guests', {
   first_name: text('first_name').notNull(),
   last_name: text('last_name').notNull(),
   email: text('email'),
-  nationality_code: text('nationality_code').notNull().$type<'DE' | 'US' | 'AT' | 'CH'>(),
+  nationality_code: text('nationality_code')
+    .notNull()
+    .$type<'DE' | 'US' | 'AT' | 'CH'>(),
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updated_at: timestamp('updated_at', { withTimezone: true })
+});
+
+// Users table
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  password: varchar('password', { length: 255 }).notNull(),
+  first_name: varchar('first_name', { length: 50 }),
+  last_name: varchar('last_name', { length: 50 }),
+  created_at: timestamp('created_at').defaultNow().notNull(),
+  updated_at: timestamp('updated_at').defaultNow().notNull()
 });
 
 export const reservationsRelations = relations(reservations, ({ many }) => ({
@@ -61,12 +75,22 @@ export const guestsRelations = relations(guests, ({ one }) => ({
   })
 }));
 
+// Zod schemas for validation (optional but recommended)
 export const insertReservationSchema = createInsertSchema(reservations);
 export const selectReservationSchema = createSelectSchema(reservations);
+
 export const insertGuestSchema = createInsertSchema(guests);
 export const selectGuestSchema = createSelectSchema(guests);
 
+export const insertUserSchema = createInsertSchema(users);
+export const selectUserSchema = createSelectSchema(users);
+
+// Type exports
 export type Reservation = typeof reservations.$inferSelect;
 export type NewReservation = typeof reservations.$inferInsert;
+
 export type Guest = typeof guests.$inferSelect;
 export type NewGuest = typeof guests.$inferInsert;
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;

@@ -86,7 +86,7 @@ export const fetchReservationByIdSchema = z.object({
 export const createReservationSchema = z.object({
   booking_nr: z.string(),
   room: z.string(),
-  page_url: z.url()
+  page_url: z.url().optional()
 });
 
 export const updateReservationSchema = reservationSchema

@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run type-check` - Run TypeScript type checking
 - `npm run type-check:all` - Check both main and node TypeScript configs
 - `npm run lint` - Run ESLint with strict rules (max 0 warnings)
-- `npm run format` - Format code with Prettier
+- `npm run format:fix` - Format code with Prettier
 - `npm run format:check` - Check code formatting
 - `npm run preview` - Preview production build
 

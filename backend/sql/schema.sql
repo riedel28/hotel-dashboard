@@ -38,3 +38,14 @@ CREATE TABLE IF NOT EXISTS guests (
   updated_at TIMESTAMPTZ,
   FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
 );
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  first_name VARCHAR(50),
+  last_name VARCHAR(50),
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
