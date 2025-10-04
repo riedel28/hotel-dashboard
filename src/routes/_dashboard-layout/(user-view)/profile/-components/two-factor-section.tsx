@@ -7,12 +7,15 @@ import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemHeader,
+  ItemMedia,
+  ItemTitle
+} from '@/components/ui/item';
 import { Switch } from '@/components/ui/switch';
 
 import { cn } from '@/lib/utils';
@@ -63,139 +66,133 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <Item variant="outline">
+      <ItemHeader>
+        <ItemMedia>
           {enabled ? (
-            <ShieldCheck className="h-5 w-5 text-green-600" />
+            <ShieldCheck className="size-5" />
           ) : (
-            <Shield className="h-5 w-5 text-muted-foreground" />
+            <Shield className="size-5" />
           )}
-          <Trans>Two-Factor Authentication</Trans>
-          <Badge
-            variant="secondary"
-            className={
-              enabled
-                ? 'border-green-200 bg-green-100 text-green-800 hover:bg-green-200'
-                : 'border-red-200 bg-red-100 text-red-800 hover:bg-red-200'
-            }
-          >
-            {enabled ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
-          </Badge>
-        </CardTitle>
-        <CardDescription>
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>
+            <div className="flex items-center gap-2">
+              <ItemTitle className="text-base">
+                <Trans>Two-Factor Authentication</Trans>
+              </ItemTitle>
+              {enabled ? (
+                <Badge variant="success" appearance="outline">
+                  <Trans>Enabled</Trans>
+                </Badge>
+              ) : (
+                <Badge variant="destructive" appearance="outline">
+                  <Trans>Disabled</Trans>
+                </Badge>
+              )}
+            </div>{' '}
+          </ItemTitle>
+          <ItemDescription>
+            <Trans>
+              Add an extra layer of security to keep your account safe
+            </Trans>
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Button variant="outline" onClick={handleSetup} loading={isLoading}>
+            <Trans>Set up 2FA</Trans>
+          </Button>
+        </ItemActions>
+      </ItemHeader>
+      <ItemContent className="space-y-2">
+        <p>
           <Trans>
-            Add an extra layer of security to keep your account safe
+            Two-factor authentication isn't set up on your account yet.
           </Trans>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          {!enabled && (
-            <div className="space-y-3">
-              <p className="text-sm text-foreground">
-                <Trans>
-                  Two-factor authentication isn't set up on your account yet.
-                </Trans>
-              </p>
-              <p className="text-sm text-foreground">
-                <Trans>You can use any of these popular apps:</Trans>
-              </p>
-              <div className="space-y-2">
-                <div>
-                  <a
-                    href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-                    className={cn(
-                      buttonVariants({
-                        mode: 'link',
-                        underline: 'solid'
-                      }),
-                      'text-foreground'
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Trans>Google Authenticator ↗</Trans>
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-                    className={cn(
-                      buttonVariants({
-                        mode: 'link',
-                        underline: 'solid'
-                      }),
-                      'text-foreground'
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Trans>Microsoft Authenticator ↗</Trans>
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-                    className={cn(
-                      buttonVariants({
-                        mode: 'link',
-                        underline: 'solid'
-                      }),
-                      'text-foreground'
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Trans>Authy ↗</Trans>
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
+        </p>
 
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="text-sm font-medium">
-                {enabled ? (
-                  <Trans>Two-factor authentication is turned on</Trans>
-                ) : (
-                  <Trans>Two-factor authentication is turned off</Trans>
-                )}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {enabled ? (
-                  <Trans>
-                    Your account is protected with an extra verification step
-                  </Trans>
-                ) : (
-                  <Trans>
-                    Turn on two-factor authentication for better account
-                    security
-                  </Trans>
-                )}
-              </p>
-            </div>
-            <Switch
-              checked={enabled}
-              onCheckedChange={handleToggle}
-              disabled={isLoading}
-            />
-          </div>
+        <p>
+          <Trans>You can use any of these popular apps:</Trans>
+        </p>
 
-          {!enabled && (
-            <div className="flex justify-end">
-              <Button
-                onClick={handleSetup}
-                loading={isLoading}
-                variant="outline"
-              >
-                <Trans>Set up 2FA</Trans>
-              </Button>
-            </div>
-          )}
+        <div className="flex flex-col items-start space-y-2">
+          <a
+            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+            className={cn(
+              buttonVariants({
+                mode: 'link',
+                underline: 'solid'
+              }),
+              'text-foreground'
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Trans>Google Authenticator ↗</Trans>
+          </a>
+
+          <a
+            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+            className={cn(
+              buttonVariants({
+                mode: 'link',
+                underline: 'solid'
+              }),
+              'text-foreground'
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Trans>Microsoft Authenticator ↗</Trans>
+          </a>
+
+          <a
+            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+            className={cn(
+              buttonVariants({
+                mode: 'link',
+                underline: 'solid'
+              }),
+              'text-foreground'
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Trans>Authy ↗</Trans>
+          </a>
         </div>
-      </CardContent>
-    </Card>
+      </ItemContent>
+
+      <ItemFooter>
+        <ItemContent>
+          <ItemHeader>
+            {enabled ? (
+              <Trans>Two-factor authentication is turned on</Trans>
+            ) : (
+              <Trans>Two-factor authentication is turned off</Trans>
+            )}
+          </ItemHeader>
+          <ItemDescription>
+            {enabled ? (
+              <Trans>
+                Your account is protected with an extra verification step
+              </Trans>
+            ) : (
+              <Trans>
+                Turn on two-factor authentication for better account security
+              </Trans>
+            )}
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Switch
+            checked={enabled}
+            onCheckedChange={handleToggle}
+            disabled={isLoading}
+            className="self-end"
+          />
+        </ItemActions>
+      </ItemFooter>
+    </Item>
   );
 }
