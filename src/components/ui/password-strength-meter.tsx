@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import { t } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { CheckIcon, XIcon } from 'lucide-react';
 
@@ -11,32 +10,32 @@ interface PasswordStrengthMeterProps {
 export function PasswordStrengthMeter({
   password
 }: PasswordStrengthMeterProps) {
-  const { i18n } = useLingui();
+  const { t } = useLingui();
 
   const requirements = useMemo(
     () => [
       {
         regex: /.{8,}/,
-        text: i18n._(t`At least 8 characters`)
+        text: t`At least 8 characters`
       },
       {
         regex: /[0-9]/,
-        text: i18n._(t`Contains a number`)
+        text: t`Contains a number`
       },
       {
         regex: /[a-z]/,
-        text: i18n._(t`Contains a lowercase letter`)
+        text: t`Contains a lowercase letter`
       },
       {
         regex: /[A-Z]/,
-        text: i18n._(t`Contains an uppercase letter`)
+        text: t`Contains an uppercase letter`
       },
       {
         regex: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
-        text: i18n._(t`Contains a special character`)
+        text: t`Contains a special character`
       }
     ],
-    [i18n.locale]
+    [t]
   );
 
   const strength = useMemo(
@@ -77,7 +76,7 @@ export function PasswordStrengthMeter({
         aria-valuenow={strengthScore}
         aria-valuemin={0}
         aria-valuemax={5}
-        aria-label={i18n._(t`Password strength`)}
+        aria-label={t`Password strength`}
       >
         <div
           className={`h-full ${getStrengthColor(strengthScore)} transition-all duration-500 ease-out`}
@@ -94,7 +93,7 @@ export function PasswordStrengthMeter({
       {/* Password requirements list */}
       <ul
         className="space-y-1.5"
-        aria-label={i18n._(t`Password strength requirements`)}
+        aria-label={t`Password strength requirements`}
       >
         {strength.map((req, index) => (
           <li key={index} className="flex items-center gap-2">
