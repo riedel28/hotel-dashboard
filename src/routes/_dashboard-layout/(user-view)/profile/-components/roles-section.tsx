@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -16,14 +16,14 @@ import {
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Label } from '@/components/ui/label';
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 
 interface RolesSectionProps {
   initialRoles: AvailableRole[];
@@ -79,65 +79,78 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FieldSet className="gap-4">
+            <Controller
               control={form.control}
               name="roles"
-              render={() => (
-                <FormItem>
-                  <FormLabel className="text-base font-medium">
-                    <Trans>Roles</Trans>
-                  </FormLabel>
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {Object.keys(ROLE_NAMES).map((role) => (
-                      <div key={role} className="flex items-center space-x-2">
-                        <FormControl>
-                          <Checkbox
-                            id={role}
-                            checked={form.watch('roles').includes(role)}
-                            onCheckedChange={(checked) => {
-                              const currentRoles = form.watch('roles');
-                              if (checked) {
-                                form.setValue(
-                                  'roles',
-                                  [...currentRoles, role],
-                                  { shouldValidate: true }
-                                );
-                              } else {
-                                form.setValue(
-                                  'roles',
-                                  currentRoles.filter((r) => r !== role),
-                                  { shouldValidate: true }
-                                );
-                              }
-                            }}
-                          />
-                        </FormControl>
-                        <Label
-                          htmlFor={role}
-                          className="cursor-pointer text-sm font-normal"
-                        >
-                          {ROLE_NAMES[role as AvailableRole]}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                  <FormMessage />
-                </FormItem>
+              render={({ field, fieldState }) => (
+                <FieldGroup
+                  data-slot="checkbox-group"
+                  className="gap-4"
+                >
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    orientation="vertical"
+                    className="gap-3"
+                  >
+                    <FieldContent className="gap-4">
+                      <FieldLabel className="text-base font-medium">
+                        <Trans>Roles</Trans>
+                      </FieldLabel>
+                      <FieldDescription>
+                        <Trans>Select one or more roles to assign.</Trans>
+                      </FieldDescription>
+                    </FieldContent>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {Object.keys(ROLE_NAMES).map((role) => {
+                        const assigned = field.value.includes(role as AvailableRole);
+                        return (
+                          <Field
+                            key={role}
+                            orientation="horizontal"
+                            className="gap-3 rounded-md border bg-muted/20 p-3"
+                          >
+                            <Checkbox
+                              id={role}
+                              name={field.name}
+                              checked={assigned}
+                              onCheckedChange={(checked) => {
+                                const nextRoles = checked
+                                  ? [...field.value, role]
+                                  : field.value.filter((r) => r !== role);
+                                field.onChange(nextRoles);
+                              }}
+                              aria-invalid={fieldState.invalid}
+                            />
+                            <FieldLabel
+                              htmlFor={role}
+                              className="cursor-pointer text-sm font-normal"
+                            >
+                              {ROLE_NAMES[role as AvailableRole]}
+                            </FieldLabel>
+                          </Field>
+                        );
+                      })}
+                    </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                </FieldGroup>
               )}
             />
+          </FieldSet>
 
-            <div className="flex justify-end">
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                <Trans>Save Roles</Trans>
-              </Button>
-            </div>
-          </form>
-        </Form>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <Trans>Save Roles</Trans>
+            </Button>
+          </div>
+        </form>
       </CardContent>
     </Card>
   );
