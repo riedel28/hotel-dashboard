@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Shield, ShieldCheck } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -17,6 +20,13 @@ import {
   ItemTitle
 } from '@/components/ui/item';
 import { Switch } from '@/components/ui/switch';
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel
+} from '@/components/ui/field';
 
 import { cn } from '@/lib/utils';
 
@@ -24,19 +34,33 @@ interface TwoFactorSectionProps {
   isEnabled?: boolean;
 }
 
+const twoFactorFormSchema = z.object({
+  enabled: z.boolean()
+});
+
+type TwoFactorFormData = z.infer<typeof twoFactorFormSchema>;
+
 export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
   const { t } = useLingui();
   const [isLoading, setIsLoading] = useState(false);
-  const [enabled, setEnabled] = useState(isEnabled);
+  const form = useForm<TwoFactorFormData>({
+    resolver: zodResolver(twoFactorFormSchema),
+    defaultValues: {
+      enabled: isEnabled
+    }
+  });
+  const enabled = form.watch('enabled');
+  const switchId = useId();
 
-  const handleToggle = async (checked: boolean) => {
+  const handleToggleChange = async (
+    checked: boolean,
+    previousValue: boolean
+  ) => {
     setIsLoading(true);
 
     try {
       // TODO: Implement API call to enable/disable 2FA
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      setEnabled(checked);
 
       toast.success(
         checked
@@ -44,6 +68,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
           : t`Two-factor authentication is disabled`
       );
     } catch {
+      form.setValue('enabled', previousValue, { shouldDirty: false });
       toast.error(t`Error updating two-factor authentication`);
     } finally {
       setIsLoading(false);
@@ -106,9 +131,13 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
       </ItemHeader>
       <ItemContent className="space-y-2">
         <p>
-          <Trans>
-            Two-factor authentication isn't set up on your account yet.
-          </Trans>
+          {enabled ? (
+            <Trans>Two-factor authentication is active on your account.</Trans>
+          ) : (
+            <Trans>
+              Two-factor authentication isn't set up on your account yet.
+            </Trans>
+          )}
         </p>
 
         <p>
@@ -164,34 +193,55 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
       </ItemContent>
 
       <ItemFooter>
-        <ItemContent>
-          <ItemHeader>
-            {enabled ? (
-              <Trans>Two-factor authentication is turned on</Trans>
-            ) : (
-              <Trans>Two-factor authentication is turned off</Trans>
-            )}
-          </ItemHeader>
-          <ItemDescription>
-            {enabled ? (
-              <Trans>
-                Your account is protected with an extra verification step
-              </Trans>
-            ) : (
-              <Trans>
-                Turn on two-factor authentication for better account security
-              </Trans>
-            )}
-          </ItemDescription>
-        </ItemContent>
-        <ItemActions>
-          <Switch
-            checked={enabled}
-            onCheckedChange={handleToggle}
-            disabled={isLoading}
-            className="self-end"
-          />
-        </ItemActions>
+        <Controller
+          control={form.control}
+          name="enabled"
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="gap-3"
+            >
+              <FieldContent>
+                <FieldLabel htmlFor={switchId}>
+                  {enabled ? (
+                    <Trans>Two-factor authentication is turned on</Trans>
+                  ) : (
+                    <Trans>Two-factor authentication is turned off</Trans>
+                  )}
+                </FieldLabel>
+                <FieldDescription>
+                  {enabled ? (
+                    <Trans>
+                      Your account is protected with an extra verification step
+                    </Trans>
+                  ) : (
+                    <Trans>
+                      Turn on two-factor authentication for better account
+                      security
+                    </Trans>
+                  )}
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
+              <Switch
+                id={switchId}
+                name={field.name}
+                checked={field.value}
+                onCheckedChange={(checked) => {
+                  const previousValue = field.value;
+                  field.onChange(checked);
+                  void handleToggleChange(checked, previousValue);
+                }}
+                disabled={isLoading}
+                aria-invalid={fieldState.invalid}
+                className="self-end"
+              />
+            </Field>
+          )}
+        />
       </ItemFooter>
     </Item>
   );
