@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -15,13 +15,12 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 const personalFormSchema = z.object({
@@ -55,69 +54,90 @@ export function PersonalSection() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          <Trans>Personal Information</Trans>
-        </CardTitle>
-        <CardDescription>
-          <Trans>Update your personal information and contact details</Trans>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
+    <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <Trans>Personal Information</Trans>
+          </CardTitle>
+          <CardDescription>
+            <Trans>Update your personal information and contact details</Trans>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Trans>First Name</Trans>
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t`Enter first name`} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Trans>Last Name</Trans>
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder={t`Enter last name`} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>Email</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder={t`Enter your email`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FieldSet className="gap-4">
+              <FieldGroup className="gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Controller
+                    control={form.control}
+                    name="firstName"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid} className="gap-2">
+                        <FieldLabel htmlFor={field.name}>
+                          <Trans>First Name</Trans>
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          id={field.name}
+                          placeholder={t`Enter first name`}
+                          autoComplete="given-name"
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="lastName"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid} className="gap-2">
+                        <FieldLabel htmlFor={field.name}>
+                          <Trans>Last Name</Trans>
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          id={field.name}
+                          placeholder={t`Enter last name`}
+                          autoComplete="family-name"
+                          aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                </div>
+
+                <Controller
+                  control={form.control}
+                  name="email"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Email</Trans>
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        type="email"
+                        placeholder={t`Enter your email`}
+                        autoComplete="email"
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </FieldSet>
+
             <div className="flex justify-end">
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting && (
@@ -127,8 +147,8 @@ export function PersonalSection() {
               </Button>
             </div>
           </form>
-        </Form>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
