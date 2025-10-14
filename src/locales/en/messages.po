@@ -1286,7 +1286,7 @@ msgstr "Reset Link Sent"
 #~ msgstr "Role"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:95
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:90
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:99
 msgid "Roles"
 msgstr "Roles"
 
@@ -1346,7 +1346,7 @@ msgstr "Save"
 msgid "Save Changes"
 msgstr "Save Changes"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:150
 msgid "Save Roles"
 msgstr "Save Roles"
 
@@ -1390,6 +1390,10 @@ msgstr "Select a room..."
 #: src/components/ui/data-grid-table.tsx:486
 msgid "Select all"
 msgstr "Select all"
+
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:102
+msgid "Select one or more roles to assign."
+msgstr "Select one or more roles to assign."
 
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:167
 msgid "Select property"
