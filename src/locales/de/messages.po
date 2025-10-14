@@ -187,11 +187,11 @@ msgstr "Authy ↗"
 msgid "Avatar"
 msgstr "Avatar"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:103
 msgid "Avatar removed successfully"
 msgstr "Avatar erfolgreich entfernt"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:56
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:74
 msgid "Avatar updated successfully"
 msgstr "Avatar erfolgreich aktualisiert"
 
@@ -250,7 +250,7 @@ msgstr "Kategoriename"
 msgid "CH +41"
 msgstr "CH +41"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:122
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:158
 msgid "Change Image"
 msgstr "Bild ändern"
 
@@ -551,7 +551,7 @@ msgstr "Fehler beim Ändern des Passworts"
 msgid "Error deleting reservation"
 msgstr "Fehler beim Löschen der Reservierung"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:105
 msgid "Error removing avatar"
 msgstr "Fehler beim Entfernen des Avatars"
 
@@ -571,7 +571,7 @@ msgstr "Fehler beim Aktualisieren der Rollen"
 msgid "Error updating two-factor authentication"
 msgstr "Fehler beim Aktualisieren der Zwei-Faktor-Authentifizierung"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:76
 msgid "Error uploading avatar"
 msgstr "Fehler beim Hochladen des Avatars"
 
@@ -612,7 +612,7 @@ msgstr "SMS konnte nicht gesendet werden"
 msgid "Failed to update reservation. Please try again."
 msgstr "Fehler beim Aktualisieren der Reservierung. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:58
 msgid "File size must be less than 5MB"
 msgstr "Dateigröße muss kleiner als 5 MB sein"
 
@@ -1095,7 +1095,7 @@ msgstr "Bitte melden Sie sich an, um auf diese Seite zuzugreifen"
 msgid "Please select a country code."
 msgstr "Bitte wählen Sie eine Ländervorwahl."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:35
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:51
 msgid "Please select a valid image file (JPG, PNG, GIF)"
 msgstr "Bitte wählen Sie eine gültige Bilddatei (JPG, PNG, GIF)"
 
@@ -1160,9 +1160,17 @@ msgstr "Produkte"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:96
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:138
+msgid "Profile picture"
+msgstr "Profilbild"
+
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:128
 msgid "Profile Picture"
 msgstr "Profilbild"
+
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:145
+msgid "Profile picture upload"
+msgstr "Profilbild hochladen"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:50
 msgid "Profile updated successfully"
@@ -1220,7 +1228,7 @@ msgstr "Angemeldet bleiben"
 msgid "Remove"
 msgstr "Entfernen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:174
 msgid "Remove Image"
 msgstr "Bild entfernen"
 
@@ -1391,7 +1399,7 @@ msgstr "Zimmer auswählen..."
 msgid "Select all"
 msgstr "Alle auswählen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:102
 msgid "Select one or more roles to assign."
 msgstr "Wählen Sie eine oder mehrere Rollen aus."
 
@@ -1519,7 +1527,7 @@ msgstr "Starkes Passwort"
 msgid "Successfully logged in!"
 msgstr "Erfolgreich angemeldet!"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:146
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:179
 msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 msgstr "Unterstützte Formate: JPG, PNG, GIF (max. 5MB)"
 
@@ -1657,11 +1665,11 @@ msgstr "Spalte {title} lösen"
 msgid "Update your personal information and contact details"
 msgstr "Aktualisieren Sie Ihre persönlichen Informationen und Kontaktdaten"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:131
 msgid "Upload a profile picture to personalize your account"
 msgstr "Laden Sie ein Profilbild hoch, um Ihr Konto zu personalisieren"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:160
 msgid "Upload Image"
 msgstr "Bild hochladen"
 
