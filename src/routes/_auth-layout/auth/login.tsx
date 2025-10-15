@@ -9,20 +9,20 @@ import {
   useRouter
 } from '@tanstack/react-router';
 import { Loader2, MessageCircleIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
+import { Item, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
@@ -79,7 +79,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="w-full max-w-md space-y-8">
+    <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
           <MessageCircleIcon className="size-10" />
@@ -97,91 +97,126 @@ function LoginPage() {
         </p>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <Trans>Email</Trans>
-                </FormLabel>
-                <FormControl>
+      <Item
+        variant="muted"
+        className="border border-blue-200 bg-blue-50 text-blue-900 shadow-none"
+      >
+        <ItemContent>
+          <ItemTitle className="text-blue-900">
+            <Trans>Demo credentials</Trans>
+          </ItemTitle>
+          <ItemDescription className="text-blue-900/90">
+            <Trans>
+              Login: <span className="font-medium">john@example.com</span>{' '}
+              Password:{' '}
+              <span className="font-medium">very_cool_password</span>
+            </Trans>
+          </ItemDescription>
+        </ItemContent>
+      </Item>
+
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FieldSet className="gap-6">
+          <FieldGroup className="gap-4">
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Email</Trans>
+                  </FieldLabel>
                   <Input
                     {...field}
+                    id={field.name}
                     type="email"
-                    variant="lg"
                     placeholder={t`Enter your email`}
+                    autoComplete="email"
+                    aria-invalid={fieldState.invalid}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <Trans>Password</Trans>
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput
-                    {...field}
-                    variant="lg"
-                    placeholder={t`Enter your password`}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-between">
-            <FormField
-              control={form.control}
-              name="rememberMe"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-2">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className="font-normal">
-                    <Trans>Remember me</Trans>
-                  </FormLabel>
-                </FormItem>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
-            <Link
-              className={cn(
-                buttonVariants({
-                  mode: 'link',
-                  underline: 'solid'
-                }),
-                'text-sm text-foreground'
+
+            <Controller
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Password</Trans>
+                  </FieldLabel>
+                  <PasswordInput
+                    {...field}
+                    id={field.name}
+                    placeholder={t`Enter your password`}
+                    autoComplete="current-password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
-              to="/auth/forgot-password"
-            >
-              <Trans>Forgot password?</Trans>
-            </Link>
-          </div>
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full"
-            disabled={loginMutation.isPending}
-          >
-            {loginMutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            />
+          </FieldGroup>
+        </FieldSet>
+
+        <div className="flex items-center justify-between">
+          <Controller
+            control={form.control}
+            name="rememberMe"
+            render={({ field }) => (
+              <Field
+                orientation="horizontal"
+                className="w-auto items-center gap-2"
+              >
+                <Checkbox
+                  id={field.name}
+                  checked={field.value}
+                  onCheckedChange={(checked) =>
+                    field.onChange(checked === true)
+                  }
+                />
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-sm font-normal"
+                >
+                  <Trans>Remember me</Trans>
+                </FieldLabel>
+              </Field>
             )}
-            <Trans>Login</Trans>
-          </Button>
-        </form>
-      </Form>
+          />
+
+          <Link
+            className={cn(
+              buttonVariants({
+                mode: 'link',
+                underline: 'solid'
+              }),
+              'text-sm text-foreground'
+            )}
+            to="/auth/forgot-password"
+          >
+            <Trans>Forgot password?</Trans>
+          </Link>
+        </div>
+
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending && (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          <Trans>Login</Trans>
+        </Button>
+      </form>
     </div>
   );
 }
