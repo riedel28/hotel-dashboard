@@ -14,6 +14,7 @@ import './globals.css';
 import { loadCatalog } from './i18n';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
+import { setUnauthorizedHandler } from './api/client';
 
 // Create a new router instance
 const router = createRouter({
@@ -35,6 +36,31 @@ declare module '@tanstack/react-router' {
 // Render the app
 function InnerApp() {
   const auth = useAuth();
+  const logout = auth.logout;
+
+  React.useEffect(() => {
+    const handler = () => {
+      void logout()
+        .catch((error) => {
+          console.error('Auto logout failed', error);
+        })
+        .finally(() => {
+          void router.navigate({
+            to: '/auth/login',
+            search: {
+              redirect: router.state.location.href
+            }
+          });
+        });
+    };
+
+    setUnauthorizedHandler(handler);
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [logout]);
+
   return <RouterProvider router={router} context={{ auth }} />;
 }
 
