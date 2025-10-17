@@ -2,7 +2,10 @@ import { and, desc, eq, gte, ilike, lte } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
-import { reservations as reservationsTable } from '../db/schema';
+import {
+  guests as guestsTable,
+  reservations as reservationsTable
+} from '../db/schema';
 
 async function getReservations(req: Request, res: Response) {
   try {
@@ -134,25 +137,77 @@ async function createReservation(req: Request, res: Response) {
 
 async function updateReservation(req: Request, res: Response) {
   const { id } = req.params;
-  const updates = req.body;
+  const updates = req.body ?? {};
+  const reservationId = Number(id);
 
   try {
-    const [updatedReservation] = await db
-      .update(reservationsTable)
-      .set({ ...updates, updated_at: new Date() })
-      .where(eq(reservationsTable.id, Number(id)))
-      .returning();
+    const reservationWithGuests = await db.transaction(async (tx) => {
+      const { guests: guestPayload, ...reservationUpdates } = updates;
 
-    if (!updatedReservation) {
+      const [updatedReservation] = await tx
+        .update(reservationsTable)
+        .set({ ...reservationUpdates, updated_at: new Date() })
+        .where(eq(reservationsTable.id, reservationId))
+        .returning();
+
+      if (!updatedReservation) {
+        return null;
+      }
+
+      if (Array.isArray(guestPayload)) {
+        await tx
+          .delete(guestsTable)
+          .where(eq(guestsTable.reservation_id, reservationId));
+
+        const sanitizedGuests = guestPayload
+          .map((guest: Record<string, unknown>) => {
+            const firstName =
+              (guest.first_name as string | undefined) ??
+              (guest.firstName as string | undefined);
+            const lastName =
+              (guest.last_name as string | undefined) ??
+              (guest.lastName as string | undefined);
+
+            if (!firstName || !lastName) {
+              return null;
+            }
+
+            const nationality =
+              (guest.nationality_code as 'DE' | 'US' | 'AT' | 'CH' | undefined) ??
+              'DE';
+
+            return {
+              reservation_id: reservationId,
+              first_name: firstName,
+              last_name: lastName,
+              email: (guest.email as string | null | undefined) ?? null,
+              nationality_code: nationality
+            };
+          })
+          .filter(Boolean) as Array<{
+          reservation_id: number;
+          first_name: string;
+          last_name: string;
+          email: string | null;
+          nationality_code: 'DE' | 'US' | 'AT' | 'CH';
+        }>;
+
+        if (sanitizedGuests.length > 0) {
+          await tx.insert(guestsTable).values(sanitizedGuests);
+        }
+      }
+
+      return tx.query.reservations.findFirst({
+        where: eq(reservationsTable.id, reservationId),
+        with: {
+          guests: true
+        }
+      });
+    });
+
+    if (!reservationWithGuests) {
       return res.status(404).json({ error: 'Reservation not found' });
     }
-
-    const reservationWithGuests = await db.query.reservations.findFirst({
-      where: eq(reservationsTable.id, Number(id)),
-      with: {
-        guests: true
-      }
-    });
 
     res.status(200).json(reservationWithGuests);
   } catch (error) {
