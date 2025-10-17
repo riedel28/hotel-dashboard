@@ -115,9 +115,8 @@ export function EditReservationForm({
     mutationFn: (data: ReservationFormData) =>
       updateReservation(reservationId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['reservations', reservationId]
-      });
+      queryClient.invalidateQueries({ queryKey: ['reservations'] });
+
       toast.success(t`Reservation updated successfully`);
     },
     onError: () => {
