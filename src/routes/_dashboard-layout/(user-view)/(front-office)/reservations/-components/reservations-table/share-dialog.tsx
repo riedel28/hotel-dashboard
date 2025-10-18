@@ -10,7 +10,7 @@ import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import { CheckIcon, CopyIcon, Mail, MessageCircle, User } from 'lucide-react';
 import { MessageSquare } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -23,15 +23,6 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
 import { Input, InputWrapper } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -47,6 +38,12 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel
+} from '@/components/ui/field';
 
 interface ShareDialogProps {
   open: boolean;
@@ -261,245 +258,318 @@ export function ShareDialog({
             </div>
           </div>
 
-          <Form {...form}>
-            <form className="mt-4 space-y-6">
-              {/* Guest Information */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="text-sm font-medium">
-                    <Trans>Guest Information</Trans>
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="first_name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Trans>First name</Trans>
-                        </FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder={t`Enter first name`} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="last_name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          <Trans>Last name</Trans>
-                        </FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder={t`Enter last name`} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+          <form className="mt-4 space-y-6">
+            {/* Guest Information */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4 text-muted-foreground" />
+                <h3 className="text-sm font-medium">
+                  <Trans>Guest Information</Trans>
+                </h3>
               </div>
 
-              {/* Email Section */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center rounded-lg bg-blue-100 p-2">
-                    <Mail className="size-4 text-blue-600" />
-                  </div>
+              <div className="grid grid-cols-2 gap-4">
+                <Controller
+                  control={form.control}
+                  name="first_name"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>First name</Trans>
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        placeholder={t`Enter first name`}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
 
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <>
-                        <FormItem className="flex-1">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder={t`guest@example.com`}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      </>
-                    )}
-                  />
-
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    ref={emailFormButtonRef}
-                    onClick={handleEmailSend}
-                    disabled={isEmailSending}
-                  >
-                    {isEmailSending ? (
-                      <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <Trans>Sending</Trans>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Trans>Send</Trans>
-                      </div>
-                    )}
-                  </Button>
-                </div>
-                <FormDescription className="ml-8 text-xs">
-                  <Trans>Last sent: {lastSent}</Trans>
-                </FormDescription>
+                <Controller
+                  control={form.control}
+                  name="last_name"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Last name</Trans>
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        placeholder={t`Enter last name`}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
               </div>
+            </div>
 
-              {/* SMS Section */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center rounded-lg bg-emerald-100 p-2">
-                    <MessageCircle className="size-4 text-emerald-600" />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="prefix"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Select
-                            defaultValue="49"
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="49">
-                                <Trans>DE +49</Trans>
-                              </SelectItem>
-                              <SelectItem value="43">
-                                <Trans>AT +43</Trans>
-                              </SelectItem>
-                              <SelectItem value="41">
-                                <Trans>CH +41</Trans>
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <Input {...field} placeholder={t`123 456 789`} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    ref={phoneFormButtonRef}
-                    onClick={handleSmsSend}
-                    disabled={isSmsSending}
-                  >
-                    {isSmsSending ? (
-                      <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <Trans>Sending</Trans>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Trans>Send</Trans>
-                      </div>
-                    )}
-                  </Button>
+            {/* Email Section */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center rounded-lg bg-blue-100 p-2">
+                  <Mail className="size-4 text-blue-600" />
                 </div>
+
+                <Controller
+                  control={form.control}
+                  name="email"
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className="flex-1 gap-2"
+                    >
+                      <FieldLabel
+                        htmlFor={field.name}
+                        className="sr-only"
+                      >
+                        <Trans>Email</Trans>
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        placeholder={t`guest@example.com`}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Button
+                  type="button"
+                  variant="secondary"
+                  ref={emailFormButtonRef}
+                  onClick={handleEmailSend}
+                  disabled={isEmailSending}
+                >
+                  {isEmailSending ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <Trans>Sending</Trans>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Trans>Send</Trans>
+                    </div>
+                  )}
+                </Button>
               </div>
+              <FieldDescription className="ml-8 text-xs">
+                <Trans>Last sent: {lastSent}</Trans>
+              </FieldDescription>
+            </div>
 
-              {/* WhatsApp Section */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center rounded-lg bg-emerald-100 p-2">
-                    <MessageSquare className="size-4 text-emerald-600" />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="prefix"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Select
-                            defaultValue="49"
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="49">
-                                <Trans>DE +49</Trans>
-                              </SelectItem>
-                              <SelectItem value="43">
-                                <Trans>AT +43</Trans>
-                              </SelectItem>
-                              <SelectItem value="41">
-                                <Trans>CH +41</Trans>
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <Input {...field} placeholder={t`123 456 789`} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={handleWhatsAppSend}
-                    disabled={isWhatsAppSending}
-                  >
-                    {isWhatsAppSending ? (
-                      <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        <Trans>Opening</Trans>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Trans>Send</Trans>
-                      </div>
-                    )}
-                  </Button>
+            {/* SMS Section */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center rounded-lg bg-emerald-100 p-2">
+                  <MessageCircle className="size-4 text-emerald-600" />
                 </div>
+
+                <Controller
+                  control={form.control}
+                  name="prefix"
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className="w-[120px] gap-2"
+                    >
+                      <FieldLabel
+                        id="sms-prefix-label"
+                        className="sr-only"
+                      >
+                        <Trans>Country code</Trans>
+                      </FieldLabel>
+                      <Select
+                        value={field.value || undefined}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger
+                          aria-invalid={fieldState.invalid}
+                          aria-labelledby="sms-prefix-label"
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="49">
+                            <Trans>DE +49</Trans>
+                          </SelectItem>
+                          <SelectItem value="43">
+                            <Trans>AT +43</Trans>
+                          </SelectItem>
+                          <SelectItem value="41">
+                            <Trans>CH +41</Trans>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Controller
+                  control={form.control}
+                  name="phone"
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className="flex-1 gap-2"
+                    >
+                      <FieldLabel
+                        id="sms-phone-label"
+                        className="sr-only"
+                        htmlFor="sms-phone"
+                      >
+                        <Trans>Phone number</Trans>
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="sms-phone"
+                        placeholder={t`123 456 789`}
+                        aria-invalid={fieldState.invalid}
+                        aria-labelledby="sms-phone-label"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Button
+                  type="button"
+                  variant="secondary"
+                  ref={phoneFormButtonRef}
+                  onClick={handleSmsSend}
+                  disabled={isSmsSending}
+                >
+                  {isSmsSending ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <Trans>Sending</Trans>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Trans>Send</Trans>
+                    </div>
+                  )}
+                </Button>
               </div>
-            </form>
-          </Form>
+            </div>
+
+            {/* WhatsApp Section */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center rounded-lg bg-emerald-100 p-2">
+                  <MessageSquare className="size-4 text-emerald-600" />
+                </div>
+
+                <Controller
+                  control={form.control}
+                  name="prefix"
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className="w-[120px] gap-2"
+                    >
+                      <FieldLabel
+                        id="whatsapp-prefix-label"
+                        className="sr-only"
+                      >
+                        <Trans>Country code</Trans>
+                      </FieldLabel>
+                      <Select
+                        value={field.value || undefined}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger
+                          aria-invalid={fieldState.invalid}
+                          aria-labelledby="whatsapp-prefix-label"
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="49">
+                            <Trans>DE +49</Trans>
+                          </SelectItem>
+                          <SelectItem value="43">
+                            <Trans>AT +43</Trans>
+                          </SelectItem>
+                          <SelectItem value="41">
+                            <Trans>CH +41</Trans>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Controller
+                  control={form.control}
+                  name="phone"
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className="flex-1 gap-2"
+                    >
+                      <FieldLabel
+                        id="whatsapp-phone-label"
+                        className="sr-only"
+                        htmlFor="whatsapp-phone"
+                      >
+                        <Trans>Phone number</Trans>
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="whatsapp-phone"
+                        placeholder={t`123 456 789`}
+                        aria-invalid={fieldState.invalid}
+                        aria-labelledby="whatsapp-phone-label"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleWhatsAppSend}
+                  disabled={isWhatsAppSending}
+                >
+                  {isWhatsAppSending ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <Trans>Opening</Trans>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Trans>Send</Trans>
+                    </div>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </form>
 
           {/* Check-in URL Section */}
           <div className="mt-6 space-y-2">
