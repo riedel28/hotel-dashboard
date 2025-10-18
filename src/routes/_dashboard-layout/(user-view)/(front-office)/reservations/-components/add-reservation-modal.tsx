@@ -6,7 +6,7 @@ import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -19,14 +19,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
 import { Input, InputWrapper } from '@/components/ui/input';
 import {
   Select,
@@ -36,6 +28,13 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 
 const addReservationSchema = z.object({
   booking_nr: z.string().min(1, t`Reservation number is required`),
@@ -100,97 +99,109 @@ export function AddReservationModal() {
             <Trans>Create New Reservation</Trans>
           </DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="booking_nr"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center gap-1">
-                    <FormLabel>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FieldSet className="gap-6">
+            <FieldGroup className="gap-4">
+              <Controller
+                control={form.control}
+                name="booking_nr"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
                       <Trans>Reservation Nr.</Trans>
-                    </FormLabel>
-                  </div>
-                  <FormControl>
+                    </FieldLabel>
                     <Input
                       {...field}
+                      id={field.name}
                       placeholder={t`Enter reservation number`}
+                      aria-invalid={fieldState.invalid}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="room"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>Room</Trans>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
+                name="room"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Room</Trans>
+                    </FieldLabel>
+                    <Select
+                      value={field.value || undefined}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                      >
                         <SelectValue placeholder={t`Select a room`} />
                       </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectGroup>
-                        {[101, 102, 103, 104, 105].map((room) => (
-                          <SelectItem key={room} value={room.toString()}>
-                            <Trans>Room {room}</Trans>
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="page_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>Page URL</Trans>
-                  </FormLabel>
-                  <FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          {[101, 102, 103, 104, 105].map((room) => (
+                            <SelectItem key={room} value={room.toString()}>
+                              <Trans>Room {room}</Trans>
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
+                name="page_url"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Page URL</Trans>
+                    </FieldLabel>
                     <InputWrapper>
                       <LinkIcon />
-                      <Input {...field} placeholder={t`Enter page URL`} />
+                      <Input
+                        {...field}
+                        id={field.name}
+                        placeholder={t`Enter page URL`}
+                        aria-invalid={fieldState.invalid}
+                      />
                     </InputWrapper>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleOpenChange(false)}
-              >
-                <Trans>Cancel</Trans>
-              </Button>
-              <Button
-                type="submit"
-                disabled={createReservationMutation.isPending}
-              >
-                {createReservationMutation.isPending && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-                <Trans>Create</Trans>
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              />
+            </FieldGroup>
+          </FieldSet>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleOpenChange(false)}
+            >
+              <Trans>Cancel</Trans>
+            </Button>
+            <Button
+              type="submit"
+              disabled={createReservationMutation.isPending}
+            >
+              {createReservationMutation.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <Trans>Create</Trans>
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
