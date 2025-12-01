@@ -92,10 +92,10 @@ This project uses [Lingui](https://lingui.dev) for internationalization.
    - Strings/validators/toasts: `import { t } from '@lingui/core/macro'` → `t\`Email is required\``
    - In loops/arrays: use `msg` + `useLingui()._` if you need descriptors, or just `t` for strings
 2. Extract new/changed messages:
-   - `npm run lingui:extract`
+   - `bun run lingui:extract`
 3. Fill translations in `src/locales/de/messages.po` (and other locales as needed)
 4. Compile catalogs:
-   - `npm run lingui:compile`
+   - `bun run lingui:compile`
 
 ## Runtime loading
 
