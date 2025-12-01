@@ -7,7 +7,7 @@ import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-vi
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
-import { Link, LinkProps } from '@tanstack/react-router';
+import { Link, type LinkProps } from '@tanstack/react-router';
 import {
   ArrowUpRightIcon,
   BedDoubleIcon,
@@ -380,7 +380,7 @@ function DashboardSidebar() {
 }
 
 // Main layout component
-export default function DashboardLayout() {
+function DashboardLayout() {
   return (
     <ViewProvider>
       <SidebarProvider>
