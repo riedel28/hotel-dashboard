@@ -85,10 +85,7 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
               control={form.control}
               name="roles"
               render={({ field, fieldState }) => (
-                <FieldGroup
-                  data-slot="checkbox-group"
-                  className="gap-4"
-                >
+                <FieldGroup data-slot="checkbox-group" className="gap-4">
                   <Field
                     data-invalid={fieldState.invalid}
                     orientation="vertical"
@@ -104,7 +101,9 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
                     </FieldContent>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {Object.keys(ROLE_NAMES).map((role) => {
-                        const assigned = field.value.includes(role as AvailableRole);
+                        const assigned = field.value?.includes(
+                          role as AvailableRole
+                        );
                         return (
                           <Field
                             key={role}
@@ -117,8 +116,10 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
                               checked={assigned}
                               onCheckedChange={(checked) => {
                                 const nextRoles = checked
-                                  ? [...field.value, role]
-                                  : field.value.filter((r) => r !== role);
+                                  ? [...(field.value ?? []), role]
+                                  : (field.value ?? []).filter(
+                                      (r) => r !== role
+                                    );
                                 field.onChange(nextRoles);
                               }}
                               aria-invalid={fieldState.invalid}

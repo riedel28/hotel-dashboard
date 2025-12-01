@@ -10,6 +10,13 @@ import { z } from 'zod';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel
+} from '@/components/ui/field';
+import {
   Item,
   ItemActions,
   ItemContent,
@@ -20,13 +27,6 @@ import {
   ItemTitle
 } from '@/components/ui/item';
 import { Switch } from '@/components/ui/switch';
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldLabel
-} from '@/components/ui/field';
 
 import { cn } from '@/lib/utils';
 
@@ -231,7 +231,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 name={field.name}
                 checked={field.value}
                 onCheckedChange={(checked) => {
-                  const previousValue = field.value;
+                  const previousValue = field.value ?? false;
                   field.onChange(checked);
                   void handleToggleChange(checked, previousValue);
                 }}
