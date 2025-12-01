@@ -14,12 +14,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import {
-  Field,
-  FieldError,
-  FieldLabel,
-  FieldSet
-} from '@/components/ui/field';
+import { Field, FieldError, FieldLabel, FieldSet } from '@/components/ui/field';
 import { PasswordInput } from '@/components/ui/password-input';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
 
@@ -112,7 +107,7 @@ export function PasswordSection() {
                       autoComplete="new-password"
                       aria-invalid={fieldState.invalid}
                     />
-                    <PasswordStrengthMeter password={field.value} />
+                    <PasswordStrengthMeter password={field.value ?? ''} />
                   </div>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

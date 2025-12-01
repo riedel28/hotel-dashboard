@@ -229,12 +229,12 @@ export function EditReservationForm({
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid} className="gap-2">
                       <div className="space-y-2">
-                        {field.value.length === 0 ? (
+                        {field.value?.length === 0 ? (
                           <div className="flex h-10 items-center justify-center text-sm text-muted-foreground">
                             <Trans>No guests added yet</Trans>
                           </div>
                         ) : (
-                          field.value.map((guest) => (
+                          field.value?.map((guest) => (
                             <div
                               key={guest.id}
                               className="flex items-center justify-between rounded-md border px-2 py-1"
