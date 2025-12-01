@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useId } from 'react';
+import { type CSSProperties, Fragment, useId } from 'react';
 
 import {
   DndContext,
@@ -19,10 +19,10 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Cell,
-  Header,
-  HeaderGroup,
-  Row,
+  type Cell,
+  type Header,
+  type HeaderGroup,
+  type Row,
   flexRender
 } from '@tanstack/react-table';
 import { GripVertical } from 'lucide-react';

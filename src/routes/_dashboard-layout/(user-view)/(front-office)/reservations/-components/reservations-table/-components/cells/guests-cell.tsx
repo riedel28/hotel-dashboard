@@ -1,4 +1,4 @@
-import { Guest } from '@/api/reservations';
+import { type Guest } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import Flag from 'react-flagkit';
 

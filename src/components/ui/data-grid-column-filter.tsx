@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Column } from '@tanstack/react-table';
+import { type Column } from '@tanstack/react-table';
 import { Check, CirclePlus } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';

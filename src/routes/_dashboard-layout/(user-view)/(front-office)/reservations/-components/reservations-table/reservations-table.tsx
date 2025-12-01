@@ -3,9 +3,9 @@ import { useMemo, useState } from 'react';
 import type { Reservation } from '@/api/reservations';
 import { useLingui } from '@lingui/react/macro';
 import {
-  ColumnDef,
-  PaginationState,
-  SortingState,
+  type ColumnDef,
+  type PaginationState,
+  type SortingState,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable

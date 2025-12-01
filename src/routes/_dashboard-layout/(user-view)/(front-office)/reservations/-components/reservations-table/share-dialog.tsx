@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { Reservation } from '@/api/reservations';
+import { type Reservation } from '@/api/reservations';
 import { useCopyToClipboard } from '@/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';

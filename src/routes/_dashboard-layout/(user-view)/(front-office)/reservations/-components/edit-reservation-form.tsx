@@ -7,7 +7,7 @@ import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import { Guest } from 'shared/types/reservations';
+import { type Guest } from 'shared/types/reservations';
 import { toast } from 'sonner';
 import { z } from 'zod';
 

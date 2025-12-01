@@ -5,7 +5,7 @@ import {
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { PaginationState } from '@tanstack/react-table';
+import { type PaginationState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { RefreshCw, XIcon } from 'lucide-react';
 

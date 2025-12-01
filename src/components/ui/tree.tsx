@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { ItemInstance } from '@headless-tree/core';
+import { type ItemInstance } from '@headless-tree/core';
 import { Slot } from '@radix-ui/react-slot';
 import { ChevronDownIcon, SquareMinus, SquarePlus } from 'lucide-react';
 

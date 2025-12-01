@@ -5,7 +5,7 @@ import * as React from 'react';
 import type { Reservation } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
-import { Row } from '@tanstack/react-table';
+import { type Row } from '@tanstack/react-table';
 import {
   MessageSquareDot,
   MoreHorizontal,

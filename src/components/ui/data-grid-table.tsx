@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { CSSProperties, Fragment, ReactNode } from 'react';
+import { type CSSProperties, Fragment, type ReactNode } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  Cell,
-  Column,
-  Header,
-  HeaderGroup,
-  Row,
+  type Cell,
+  type Column,
+  type Header,
+  type HeaderGroup,
+  type Row,
   flexRender
 } from '@tanstack/react-table';
 import { cva } from 'class-variance-authority';
