@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  ColumnDef,
-  PaginationState,
-  SortingState,
+  type ColumnDef,
+  type PaginationState,
+  type SortingState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,

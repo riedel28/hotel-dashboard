@@ -73,7 +73,10 @@ export function PersonalSection() {
                     control={form.control}
                     name="firstName"
                     render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <Field
+                        data-invalid={fieldState.invalid}
+                        className="gap-2"
+                      >
                         <FieldLabel htmlFor={field.name}>
                           <Trans>First Name</Trans>
                         </FieldLabel>
@@ -94,7 +97,10 @@ export function PersonalSection() {
                     control={form.control}
                     name="lastName"
                     render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <Field
+                        data-invalid={fieldState.invalid}
+                        className="gap-2"
+                      >
                         <FieldLabel htmlFor={field.name}>
                           <Trans>Last Name</Trans>
                         </FieldLabel>

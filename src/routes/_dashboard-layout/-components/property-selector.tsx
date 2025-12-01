@@ -6,7 +6,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronsUpDownIcon, RefreshCwIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Badge, BadgeProps } from '@/components/ui/badge';
+import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -134,7 +134,7 @@ const truncatePropertyName = (name: string, maxLength: number = 40) => {
 
 export default function PropertySelector() {
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<Property>(() => properties[0]);
+  const [value, setValue] = useState<Property>(properties[0]!);
   const [loading, setLoading] = useState(false);
   const { t } = useLingui();
 
@@ -209,12 +209,14 @@ export default function PropertySelector() {
                           const selectedProperty =
                             properties.find(
                               (property) => property.id === currentValue
-                            ) ?? properties[0];
+                            ) ?? properties[0]!;
 
-                          setValue(selectedProperty);
-                          setOpen(false);
+                          if (selectedProperty) {
+                            setValue(selectedProperty);
+                            setOpen(false);
 
-                          toast.info(t`Switched to ${propertyName}`);
+                            toast.info(t`Switched to ${propertyName}`);
+                          }
                         }}
                         className="h-[38px] gap-1"
                       >

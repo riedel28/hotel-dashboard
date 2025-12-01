@@ -1,7 +1,7 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Column } from '@tanstack/react-table';
+import { type Column } from '@tanstack/react-table';
 import {
   ArrowDown,
   ArrowLeft,
@@ -64,16 +64,20 @@ function DataGridColumnHeader<TData, TValue>({
       // Move column left
       const newOrder = [...currentOrder];
       const [movedColumn] = newOrder.splice(currentIndex, 1);
-      newOrder.splice(currentIndex - 1, 0, movedColumn);
-      table.setColumnOrder(newOrder); // Update column order
+      if (movedColumn) {
+        newOrder.splice(currentIndex - 1, 0, movedColumn);
+        table.setColumnOrder(newOrder); // Update column order
+      }
     }
 
     if (direction === 'right' && currentIndex < currentOrder.length - 1) {
       // Move column right
       const newOrder = [...currentOrder];
       const [movedColumn] = newOrder.splice(currentIndex, 1);
-      newOrder.splice(currentIndex + 1, 0, movedColumn);
-      table.setColumnOrder(newOrder); // Update column order
+      if (movedColumn) {
+        newOrder.splice(currentIndex + 1, 0, movedColumn);
+        table.setColumnOrder(newOrder); // Update column order
+      }
     }
   };
 

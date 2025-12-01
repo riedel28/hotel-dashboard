@@ -1,4 +1,4 @@
-import { CSSProperties, useId } from 'react';
+import { type CSSProperties, useId } from 'react';
 
 import {
   DndContext,
@@ -6,7 +6,7 @@ import {
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  UniqueIdentifier,
+  type UniqueIdentifier,
   closestCenter,
   useSensor,
   useSensors
@@ -18,7 +18,7 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Cell, HeaderGroup, Row, flexRender } from '@tanstack/react-table';
+import { type Cell, type HeaderGroup, type Row, flexRender } from '@tanstack/react-table';
 import { GripHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';

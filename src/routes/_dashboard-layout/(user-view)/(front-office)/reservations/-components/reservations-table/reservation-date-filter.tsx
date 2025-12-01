@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { DateRange } from 'react-day-picker';
+import { type DateRange } from 'react-day-picker';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
