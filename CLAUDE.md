@@ -6,28 +6,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Frontend (Root Directory)
 
-- `npm run dev` - Start full-stack development (client + backend concurrently)
-- `npm run client` - Start frontend only with Vite
-- `npm run build` - Build for production (includes type-check)
-- `npm run type-check` - Run TypeScript type checking
-- `npm run type-check:all` - Check both main and node TypeScript configs
-- `npm run lint` - Run ESLint with strict rules (max 0 warnings)
-- `npm run format:fix` - Format code with Prettier
-- `npm run format:check` - Check code formatting
-- `npm run preview` - Preview production build
+- `bun run dev` - Start full-stack development (client + backend concurrently)
+- `bun run client` - Start frontend only with Vite
+- `bun run build` - Build for production (includes type-check)
+- `bun run type-check` - Run TypeScript type checking
+- `bun run type-check:all` - Check both main and node TypeScript configs
+- `bun run lint` - Run ESLint with strict rules (max 0 warnings)
+- `bun run format:fix` - Format code with Prettier
+- `bun run format:check` - Check code formatting
+- `bun run preview` - Preview production build
 
 ### Backend (./backend/)
 
-- `npm run dev` - Start backend in watch mode
-- `npm run start` - Start backend in production mode
-- `npm run build` - TypeScript build check (no output)
-- `npm run typecheck` - TypeScript type checking
-- `npm run db:reseed` - Reseed database with sample data
+- `bun run dev` - Start backend in watch mode
+- `bun run start` - Start backend in production mode
+- `bun run build` - TypeScript build check (no output)
+- `bun run typecheck` - TypeScript type checking
+- `bun run db:reseed` - Reseed database with sample data
 
 ### Internationalization
 
-- `npm run lingui:extract` - Extract translatable strings
-- `npm run lingui:compile` - Compile translation catalogs
+- `bun run lingui:extract` - Extract translatable strings
+- `bun run lingui:compile` - Compile translation catalogs
 
 ## Architecture Overview
 
@@ -99,7 +99,7 @@ The application features a sophisticated dual-view system:
 
 - PostgreSQL schema in `backend/sql/schema.sql`
 - Seed data in `backend/sql/seed.sql`
-- Use `npm run db:reseed` to reset database
+- Use `bun run db:reseed` to reset database
 
 ### Development Guidelines
 
@@ -113,8 +113,8 @@ The application features a sophisticated dual-view system:
 
 - Use `<Trans>` components for JSX text
 - Use `t` macro for strings, validation messages, toasts
-- Extract strings with `npm run lingui:extract`
-- Compile with `npm run lingui:compile`
+- Extract strings with `bun run lingui:extract`
+- Compile with `bun run lingui:compile`
 
 #### Styling
 
@@ -150,8 +150,8 @@ The application features a sophisticated dual-view system:
 
 Always run the linting and type-checking commands before committing:
 
-- `npm run type-check:all` - Verify TypeScript compilation
-- `npm run lint` - Ensure code quality standards
-- `npm run format:check` - Verify code formatting
+- `bun run type-check:all` - Verify TypeScript compilation
+- `bun run lint` - Ensure code quality standards
+- `bun run format:check` - Verify code formatting
 
 The application includes comprehensive error boundaries, loading states, and form validation to ensure a robust user experience.
