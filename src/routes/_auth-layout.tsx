@@ -4,7 +4,7 @@ export const Route = createFileRoute('/_auth-layout')({
   component: AuthLayout
 });
 
-export default function AuthLayout() {
+function AuthLayout() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <div className="hidden md:block md:w-1/2 xl:w-2/3"></div>
