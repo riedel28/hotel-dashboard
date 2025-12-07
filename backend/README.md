@@ -10,7 +10,7 @@ Node.js + Express + Postgres (no ORM). Only endpoints:
 Install deps
 
 ```sh
-bun install
+cd ./backend && bun install
 ```
 
 Create a Postgres database and set env
