@@ -12,6 +12,7 @@ const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     tanstackRouter({
       target: 'react',
       autoCodeSplitting: true
@@ -21,8 +22,7 @@ export default defineConfig({
         plugins: ['@lingui/babel-plugin-lingui-macro']
       }
     }),
-    lingui(),
-    tailwindcss()
+    lingui()
   ],
   server: {
     open: true
@@ -38,5 +38,13 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['crypto']
+  },
+  build: {
+    cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name].[ext]'
+      }
+    }
   }
 });
