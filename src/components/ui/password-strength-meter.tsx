@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { CheckIcon, XIcon } from 'lucide-react';
+import { useMemo } from 'react';
 
 interface PasswordStrengthMeterProps {
   password: string;

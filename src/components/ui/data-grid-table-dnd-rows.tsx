@@ -1,13 +1,11 @@
-import { type CSSProperties, useId } from 'react';
-
 import {
+  closestCenter,
   DndContext,
   type DragEndEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
   type UniqueIdentifier,
-  closestCenter,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -18,8 +16,14 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { type Cell, type HeaderGroup, type Row, flexRender } from '@tanstack/react-table';
+import {
+  type Cell,
+  flexRender,
+  type HeaderGroup,
+  type Row
+} from '@tanstack/react-table';
 import { GripHorizontal } from 'lucide-react';
+import { type CSSProperties, useId } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';

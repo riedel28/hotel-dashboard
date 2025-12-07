@@ -1,7 +1,6 @@
-import { type ReactNode } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { type ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';

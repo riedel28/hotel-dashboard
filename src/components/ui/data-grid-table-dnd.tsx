@@ -1,31 +1,30 @@
-import { type CSSProperties, Fragment, useId } from 'react';
-
 import {
+  closestCenter,
   DndContext,
   type DragEndEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  closestCenter,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import {
-  SortableContext,
   horizontalListSortingStrategy,
+  SortableContext,
   useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useLingui } from '@lingui/react/macro';
 import {
   type Cell,
+  flexRender,
   type Header,
   type HeaderGroup,
-  type Row,
-  flexRender
+  type Row
 } from '@tanstack/react-table';
 import { GripVertical } from 'lucide-react';
+import { type CSSProperties, Fragment, useId } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';

@@ -1,20 +1,20 @@
-import { client, handleApiError } from '@/api/client';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
+import { client, handleApiError } from '@/api/client';
 
 import {
-  reservationStatusSchema,
-  guestSchema,
-  reservationSchema,
-  fetchReservationsParamsSchema,
-  fetchReservationsResponseSchema,
-  createReservationSchema,
   type CheckinMethod,
-  type ReservationStatus,
-  type Reservation,
-  type Guest,
+  type CreateReservationData,
+  createReservationSchema,
   type FetchReservationsParams,
   type FetchReservationsResponse,
-  type CreateReservationData
+  fetchReservationsParamsSchema,
+  fetchReservationsResponseSchema,
+  type Guest,
+  guestSchema,
+  type Reservation,
+  type ReservationStatus,
+  reservationSchema,
+  reservationStatusSchema
 } from '../../shared/types/reservations';
 
 function reservationsQueryOptions({

@@ -1,6 +1,3 @@
-import { Suspense } from 'react';
-
-import { fetchReservationById } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
@@ -8,7 +5,9 @@ import {
 } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { fetchReservationById } from '@/api/reservations';
 
 import {
   Breadcrumb,

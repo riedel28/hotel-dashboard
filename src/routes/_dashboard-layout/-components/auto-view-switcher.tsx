@@ -1,8 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
-
 import { useView } from '@/contexts/view-context';
 import { useRouteViewDetection } from '@/hooks/use-route-view-detection';
-import { useNavigate } from '@tanstack/react-router';
 
 export function AutoViewSwitcher() {
   const { currentView, setCurrentView } = useView();

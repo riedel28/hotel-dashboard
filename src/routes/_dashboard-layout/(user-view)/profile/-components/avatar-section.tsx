@@ -1,7 +1,6 @@
-import { useEffect, useId, useRef, useState } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Camera, Trash2 } from 'lucide-react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -119,7 +118,7 @@ export function AvatarSection({
     return () => {
       cleanupPreview();
     };
-  }, []);
+  });
 
   return (
     <Card>

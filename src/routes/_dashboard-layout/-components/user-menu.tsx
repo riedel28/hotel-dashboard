@@ -1,15 +1,9 @@
-import { useState } from 'react';
-
-import { useAuth } from '@/auth';
-import { loadCatalog } from '@/i18n';
-import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
-import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
-import { getPackageVersion } from '@/utils/package-info';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
 import { CheckIcon, GlobeIcon, LogOutIcon, UserCircleIcon } from 'lucide-react';
+import { useState } from 'react';
 import Flag from 'react-flagkit';
-
+import { useAuth } from '@/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,6 +23,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { loadCatalog } from '@/i18n';
+import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
+import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
+import { getPackageVersion } from '@/utils/package-info';
 
 const languages = [
   { code: 'en', label: 'English', country: 'GB' },

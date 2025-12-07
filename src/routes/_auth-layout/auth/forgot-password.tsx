@@ -1,9 +1,8 @@
-import * as React from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { CheckIcon, Loader2, MessageCircleIcon } from 'lucide-react';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -16,6 +15,7 @@ import {
   FieldLabel,
   FieldSet
 } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import {
   Item,
   ItemContent,
@@ -23,7 +23,6 @@ import {
   ItemMedia,
   ItemTitle
 } from '@/components/ui/item';
-import { Input } from '@/components/ui/input';
 
 import { cn } from '@/lib/utils';
 
@@ -35,7 +34,9 @@ type ForgotPasswordFormData = { email: string };
 
 function ForgotPasswordPage() {
   const { t } = useLingui();
-  const [submittedEmail, setSubmittedEmail] = React.useState<string | null>(null);
+  const [submittedEmail, setSubmittedEmail] = React.useState<string | null>(
+    null
+  );
 
   const forgotPasswordFormSchema = z.object({
     email: z.email(t`Email is required`)
@@ -132,8 +133,8 @@ function ForgotPasswordPage() {
         </h1>
         <p className="text-muted-foreground">
           <Trans>
-            Enter your email address and we&apos;ll send you a link to reset your
-            password.
+            Enter your email address and we&apos;ll send you a link to reset
+            your password.
           </Trans>
         </p>
       </div>
@@ -172,9 +173,7 @@ function ForgotPasswordPage() {
           className="w-full"
           disabled={isSubmitting}
         >
-          {isSubmitting && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          )}
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           <Trans>Send reset link</Trans>
         </Button>
       </form>

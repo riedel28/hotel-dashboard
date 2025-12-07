@@ -1,6 +1,4 @@
-import { useView } from '@/contexts/view-context';
 import { Trans, useLingui } from '@lingui/react/macro';
-
 import {
   Select,
   SelectContent,
@@ -8,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { useView } from '@/contexts/view-context';
 
 export default function ViewSelector() {
   const { t } = useLingui();

@@ -1,16 +1,15 @@
-import * as React from 'react';
-import { type CSSProperties, Fragment, type ReactNode } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   type Cell,
   type Column,
+  flexRender,
   type Header,
   type HeaderGroup,
-  type Row,
-  flexRender
+  type Row
 } from '@tanstack/react-table';
 import { cva } from 'class-variance-authority';
+import * as React from 'react';
+import { type CSSProperties, Fragment, type ReactNode } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { useDataGrid } from '@/components/ui/data-grid';

@@ -1,7 +1,6 @@
-import * as React from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans } from '@lingui/react/macro';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -13,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import {
   Field,
   FieldError,
@@ -21,6 +19,7 @@ import {
   FieldLabel,
   FieldSet
 } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 
 interface EditCategoryModalProps {
   open: boolean;
@@ -47,7 +46,7 @@ export function EditCategoryModal({
 
   React.useEffect(() => {
     form.reset({ title: initialTitle });
-  }, [initialTitle, open, form]);
+  }, [initialTitle, form]);
 
   const onSubmit = (values: { title: string }) => {
     onSave(values.title.trim());
@@ -61,7 +60,10 @@ export function EditCategoryModal({
             <Trans>Edit category</Trans>
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2 py-2">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid gap-2 py-2"
+        >
           <FieldSet className="gap-2">
             <FieldGroup className="gap-2">
               <Controller

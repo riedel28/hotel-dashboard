@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-
 import { useLingui } from '@lingui/react/macro';
 import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 
 import { Input } from '@/components/ui/input';
 

@@ -1,5 +1,5 @@
-import { useView } from '@/contexts/view-context';
 import { Trans } from '@lingui/react/macro';
+import { useView } from '@/contexts/view-context';
 
 export default function ViewAwareContent() {
   const { currentView } = useView();

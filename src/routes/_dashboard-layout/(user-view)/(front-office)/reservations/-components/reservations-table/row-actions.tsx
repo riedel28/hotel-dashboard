@@ -1,8 +1,5 @@
 'use client';
 
-import * as React from 'react';
-
-import type { Reservation } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
@@ -12,6 +9,8 @@ import {
   PenSquare,
   Trash
 } from 'lucide-react';
+import * as React from 'react';
+import type { Reservation } from '@/api/reservations';
 
 import { Button } from '@/components/ui/button';
 import {

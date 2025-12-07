@@ -1,7 +1,6 @@
-import { type ReactNode } from 'react';
-
 import { Trans } from '@lingui/react/macro';
 import { type Table } from '@tanstack/react-table';
+import { type ReactNode } from 'react';
 
 import {
   DropdownMenu,

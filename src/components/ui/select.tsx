@@ -1,11 +1,10 @@
 'use client';
 
-import * as React from 'react';
-import { type ReactNode, isValidElement } from 'react';
-
 import * as SelectPrimitive from '@radix-ui/react-select';
-import { type VariantProps, cva } from 'class-variance-authority';
-import { CheckIcon, ChevronUpIcon, ChevronsUpDownIcon } from 'lucide-react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { CheckIcon, ChevronsUpDownIcon, ChevronUpIcon } from 'lucide-react';
+import * as React from 'react';
+import { isValidElement, type ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
 

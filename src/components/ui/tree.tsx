@@ -1,20 +1,23 @@
 'use client';
 
-import * as React from 'react';
-
 import { type ItemInstance } from '@headless-tree/core';
 import { Slot } from '@radix-ui/react-slot';
 import { ChevronDownIcon, SquareMinus, SquarePlus } from 'lucide-react';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
 type ToggleIconType = 'chevron' | 'plus-minus';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-interface TreeContextValue<T = any> {
+interface TreeInstance {
+  getContainerProps?: () => Record<string, unknown>;
+  getDragLineStyle?: () => React.CSSProperties;
+}
+
+interface TreeContextValue<T = unknown> {
   indent: number;
   currentItem?: ItemInstance<T>;
-  tree?: any;
+  tree?: TreeInstance;
   toggleIconType?: ToggleIconType;
 }
 
@@ -25,13 +28,13 @@ const TreeContext = React.createContext<TreeContextValue>({
   toggleIconType: 'plus-minus'
 });
 
-function useTreeContext<T = any>() {
+function useTreeContext<T = unknown>() {
   return React.useContext(TreeContext) as TreeContextValue<T>;
 }
 
 interface TreeProps extends React.HTMLAttributes<HTMLDivElement> {
   indent?: number;
-  tree?: any;
+  tree?: TreeInstance;
   toggleIconType?: ToggleIconType;
 }
 
@@ -43,10 +46,9 @@ function Tree({
   children,
   ...props
 }: TreeProps) {
-  const containerProps =
-    tree && typeof tree.getContainerProps === 'function'
-      ? tree.getContainerProps()
-      : {};
+  const containerProps = tree?.getContainerProps
+    ? tree.getContainerProps()
+    : {};
   const mergedProps = { ...props, ...containerProps };
 
   // Extract style from mergedProps to merge with our custom styles
@@ -72,14 +74,14 @@ function Tree({
   );
 }
 
-interface TreeItemProps<T = any>
+interface TreeItemProps<T = unknown>
   extends React.HTMLAttributes<HTMLButtonElement> {
   item: ItemInstance<T>;
   indent?: number;
   asChild?: boolean;
 }
 
-function TreeItem<T = any>({
+function TreeItem<T = unknown>({
   item,
   className,
   asChild,
@@ -104,12 +106,14 @@ function TreeItem<T = any>({
   const Comp = asChild ? Slot : 'button';
 
   return (
-    <TreeContext.Provider value={{ ...parentContext, currentItem: item }}>
+    <TreeContext.Provider
+      value={{ ...parentContext, currentItem: item as ItemInstance<unknown> }}
+    >
       <Comp
         data-slot="tree-item"
         style={mergedStyle}
         className={cn(
-          'z-10 ps-(--tree-padding) outline-hidden select-none focus:z-20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+          'z-10 ps-(--tree-padding) outline-hidden select-none focus:z-20 data-disabled:pointer-events-none data-disabled:opacity-50',
           className
         )}
         data-focus={
@@ -146,12 +150,12 @@ function TreeItem<T = any>({
   );
 }
 
-interface TreeItemLabelProps<T = any>
+interface TreeItemLabelProps<T = unknown>
   extends React.HTMLAttributes<HTMLSpanElement> {
   item?: ItemInstance<T>;
 }
 
-function TreeItemLabel<T = any>({
+function TreeItemLabel<T = unknown>({
   item: propItem,
   children,
   className,
@@ -204,7 +208,7 @@ function TreeDragLine({
 }: React.HTMLAttributes<HTMLDivElement>) {
   const { tree } = useTreeContext();
 
-  if (!tree || typeof tree.getDragLineStyle !== 'function') {
+  if (!tree?.getDragLineStyle) {
     console.warn(
       'TreeDragLine: No tree provided via context or tree does not have getDragLineStyle method'
     );

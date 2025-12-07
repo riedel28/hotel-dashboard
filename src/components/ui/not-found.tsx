@@ -28,12 +28,12 @@
  *   onBack={() => navigate(-1)}
  * />
  */
-import * as React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { useNavigate, useRouter } from '@tanstack/react-router';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { ArrowLeft, Home, Search } from 'lucide-react';
+import * as React from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

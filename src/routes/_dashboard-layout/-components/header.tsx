@@ -1,7 +1,3 @@
-import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
-import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
-import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,6 +10,9 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
+import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
+import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
 
 export default function Component() {
   return (
