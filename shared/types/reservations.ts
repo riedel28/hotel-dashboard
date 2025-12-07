@@ -30,12 +30,12 @@ export const reservationSchema = z.object({
   id: z.number(),
   state: reservationStatusSchema,
   booking_nr: z.string(),
-  guest_email: z.string(),
+  guest_email: z.email(),
   guests: z.array(guestSchema),
   booking_id: z.string(),
   room_name: z.string(),
-  booking_from: z.string(),
-  booking_to: z.string(),
+  booking_from: z.coerce.date(),
+  booking_to: z.coerce.date(),
   check_in_via: checkinMethodSchema,
   check_out_via: checkinMethodSchema,
   primary_guest_name: z.string(),
@@ -79,14 +79,14 @@ export const fetchReservationsResponseSchema = z.object({
   page_count: z.number().int().nonnegative()
 });
 
-export const fetchReservationByIdSchema = z.object({
-  id: z.coerce.number().int().positive()
+export const fetchReservationByIdSchema = reservationSchema.pick({
+  id: true
 });
 
-export const createReservationSchema = z.object({
-  booking_nr: z.string(),
-  room: z.string(),
-  page_url: z.url().optional()
+export const createReservationSchema = reservationSchema.pick({
+  booking_nr: true,
+  room: true,
+  page_url: true
 });
 
 export const updateReservationSchema = reservationSchema

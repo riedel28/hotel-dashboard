@@ -211,7 +211,7 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return <DateCell isoDate={row.original.booking_from} />;
+          return <DateCell isoDate={row.original.booking_from.toISOString()} />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
@@ -233,7 +233,7 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return <DateCell isoDate={row.original.booking_to} />;
+          return <DateCell isoDate={row.original.booking_to.toISOString()} />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
