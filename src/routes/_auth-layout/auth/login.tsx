@@ -1,5 +1,4 @@
 import { useAuth } from '@/auth';
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
@@ -9,7 +8,7 @@ import {
   redirect,
   useRouter
 } from '@tanstack/react-router';
-import { CheckIcon, CopyIcon, Loader2, MessageCircleIcon } from 'lucide-react';
+import { Loader2, MessageCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -24,12 +23,6 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemTitle
-} from '@/components/ui/item';
 import { PasswordInput } from '@/components/ui/password-input';
 
 import { loginSchema } from '@/lib/schemas';
@@ -58,8 +51,6 @@ function LoginPage() {
   const { t } = useLingui();
 
   const search = Route.useSearch();
-  const loginCopy = useCopyToClipboard();
-  const passwordCopy = useCopyToClipboard();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -83,7 +74,10 @@ function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    loginMutation.mutate(data);
+    loginMutation.mutate({
+      email: data.email,
+      password: data.password
+    });
   };
 
   return (
@@ -104,64 +98,6 @@ function LoginPage() {
           )}
         </p>
       </div>
-
-      <Item
-        variant="muted"
-        className="border border-blue-200 bg-blue-50 text-blue-900 shadow-none"
-      >
-        <ItemContent>
-          <ItemTitle className="text-blue-900">
-            <Trans>Demo credentials</Trans>
-          </ItemTitle>
-          <ItemDescription className="text-blue-900/90">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="flex items-center gap-2">
-                <Trans>
-                  Login: <span className="font-medium">john@example.com</span>
-                </Trans>
-                <Button
-                  type="button"
-                  mode="icon"
-                  size="sm"
-                  variant="ghost"
-                  className="h-6 w-6 p-0 text-blue-900 opacity-70 hover:bg-blue-100 hover:opacity-100"
-                  onClick={() => {
-                    loginCopy.copy('john@example.com');
-                  }}
-                >
-                  {loginCopy.copied ? (
-                    <CheckIcon className="h-3.5 w-3.5 text-green-600" />
-                  ) : (
-                    <CopyIcon className="h-3.5 w-3.5" />
-                  )}
-                </Button>
-              </div>
-              <div className="flex items-center gap-2">
-                <Trans>
-                  Password:{' '}
-                  <span className="font-medium">very_cool_password</span>
-                </Trans>
-                <Button
-                  type="button"
-                  mode="icon"
-                  size="sm"
-                  variant="ghost"
-                  className="h-6 w-6 p-0 text-blue-900 opacity-70 hover:bg-blue-100 hover:opacity-100"
-                  onClick={() => {
-                    passwordCopy.copy('very_cool_password');
-                  }}
-                >
-                  {passwordCopy.copied ? (
-                    <CheckIcon className="h-3.5 w-3.5 text-green-600" />
-                  ) : (
-                    <CopyIcon className="h-3.5 w-3.5" />
-                  )}
-                </Button>
-              </div>
-            </div>
-          </ItemDescription>
-        </ItemContent>
-      </Item>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FieldSet className="gap-6">
