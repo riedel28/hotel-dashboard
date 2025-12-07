@@ -7,9 +7,9 @@ if [ -d "$HOME/.bun/bin" ]; then
 fi
 
 echo "husky: running lint"
-bun run lint
+bun run --silent lint
 
 echo "husky: running type-check:all"
-bun run type-check:all
+bun run --silent type-check:all
 
 
