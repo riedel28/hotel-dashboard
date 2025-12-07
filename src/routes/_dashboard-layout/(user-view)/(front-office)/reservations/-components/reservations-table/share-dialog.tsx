@@ -1,19 +1,22 @@
 'use client';
 
-import * as React from 'react';
-
-import { type Reservation } from '@/api/reservations';
-import { useCopyToClipboard } from '@/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
-import { CheckIcon, CopyIcon, Mail, MessageCircle, User } from 'lucide-react';
-import { MessageSquare } from 'lucide-react';
+import {
+  CheckIcon,
+  CopyIcon,
+  Mail,
+  MessageCircle,
+  MessageSquare,
+  User
+} from 'lucide-react';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
+import { type Reservation } from '@/api/reservations';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -23,6 +26,12 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel
+} from '@/components/ui/field';
 import { Input, InputWrapper } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -38,12 +47,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel
-} from '@/components/ui/field';
+import { useCopyToClipboard } from '@/hooks';
 
 interface ShareDialogProps {
   open: boolean;
@@ -328,10 +332,7 @@ export function ShareDialog({
                       data-invalid={fieldState.invalid}
                       className="flex-1 gap-2"
                     >
-                      <FieldLabel
-                        htmlFor={field.name}
-                        className="sr-only"
-                      >
+                      <FieldLabel htmlFor={field.name} className="sr-only">
                         <Trans>Email</Trans>
                       </FieldLabel>
                       <Input
@@ -386,10 +387,7 @@ export function ShareDialog({
                       data-invalid={fieldState.invalid}
                       className="w-[120px] gap-2"
                     >
-                      <FieldLabel
-                        id="sms-prefix-label"
-                        className="sr-only"
-                      >
+                      <FieldLabel id="sms-prefix-label" className="sr-only">
                         <Trans>Country code</Trans>
                       </FieldLabel>
                       <Select

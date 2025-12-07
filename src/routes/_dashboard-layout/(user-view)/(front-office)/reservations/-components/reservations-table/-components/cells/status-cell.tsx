@@ -1,7 +1,6 @@
-import type { ComponentProps } from 'react';
-
-import type { ReservationStatus } from '@/api/reservations';
 import { useLingui } from '@lingui/react/macro';
+import type { ComponentProps } from 'react';
+import type { ReservationStatus } from '@/api/reservations';
 
 import { Badge } from '@/components/ui/badge';
 

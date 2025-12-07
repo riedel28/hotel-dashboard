@@ -1,16 +1,15 @@
-import { useMemo, useState } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
-  type PaginationState,
-  type SortingState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type PaginationState,
+  type SortingState,
   useReactTable
 } from '@tanstack/react-table';
+import { useMemo, useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';

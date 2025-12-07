@@ -1,5 +1,3 @@
-import { type HTMLAttributes, type ReactNode } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { type Column } from '@tanstack/react-table';
 import {
@@ -11,11 +9,12 @@ import {
   ArrowUp,
   Check,
   ChevronDownIcon,
-  ChevronUpIcon,
   ChevronsUpDown,
+  ChevronUpIcon,
   PinOff,
   Settings2
 } from 'lucide-react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';

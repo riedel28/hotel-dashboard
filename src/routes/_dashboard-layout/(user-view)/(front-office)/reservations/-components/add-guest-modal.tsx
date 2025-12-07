@@ -1,12 +1,11 @@
-import { useState } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { PlusCircle } from 'lucide-react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import type { Guest } from 'shared/types/reservations';
 import { z } from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -15,7 +14,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import {
   Field,
   FieldError,
@@ -23,8 +21,7 @@ import {
   FieldLabel,
   FieldSet
 } from '@/components/ui/field';
-
-import type { Guest } from 'shared/types/reservations';
+import { Input } from '@/components/ui/input';
 
 interface AddGuestModalProps {
   onAddGuest: (guest: Guest) => void;

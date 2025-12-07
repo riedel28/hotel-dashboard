@@ -1,8 +1,7 @@
-import type { ReactNode } from 'react';
-
-import type { CheckinMethod, Reservation } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
+import type { ReactNode } from 'react';
+import type { CheckinMethod, Reservation } from '@/api/reservations';
 
 import { Code } from '@/components/ui/code';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';

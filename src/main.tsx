@@ -1,20 +1,18 @@
-import { StrictMode } from 'react';
-import React from 'react';
-
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { AuthProvider, useAuth } from './auth';
 import { Toaster } from './components/ui/sonner';
 import './globals.css';
+import { setUnauthorizedHandler } from './api/client';
 import { loadCatalog } from './i18n';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
-import { setUnauthorizedHandler } from './api/client';
 
 // Create a new router instance
 const router = createRouter({

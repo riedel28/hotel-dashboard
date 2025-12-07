@@ -1,18 +1,17 @@
 'use client';
 
-import { type ReactNode, createContext, useContext } from 'react';
-
 import {
   type ColumnFiltersState,
   type RowData,
   type SortingState,
   type Table
 } from '@tanstack/react-table';
+import { createContext, type ReactNode, useContext } from 'react';
 
 import { cn } from '@/lib/utils';
 
 declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // biome-ignore lint/correctness/noUnusedVariables: TValue is part of the interface signature
   interface ColumnMeta<TData extends RowData, TValue> {
     headerTitle?: string;
     headerClassName?: string;
@@ -93,7 +92,7 @@ export interface DataGridProps<TData extends object> {
 }
 
 const DataGridContext = createContext<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: DataGrid requires flexible typing
   DataGridContextProps<any> | undefined
 >(undefined);
 

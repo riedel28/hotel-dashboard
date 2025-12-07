@@ -1,13 +1,13 @@
 'use client';
 
-import * as React from 'react';
-
-import { ViewProvider, useView } from '@/contexts/view-context';
-import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
-import Header from '@/routes/_dashboard-layout/-components/header';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
-import { Link, type LinkProps } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  type LinkProps,
+  Outlet,
+  redirect
+} from '@tanstack/react-router';
 import {
   ArrowUpRightIcon,
   BedDoubleIcon,
@@ -30,7 +30,7 @@ import {
   TvIcon,
   UsersIcon
 } from 'lucide-react';
-
+import * as React from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -45,6 +45,9 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
+import { useView, ViewProvider } from '@/contexts/view-context';
+import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
+import Header from '@/routes/_dashboard-layout/-components/header';
 
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;

@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { RefreshCwIcon } from 'lucide-react';
 

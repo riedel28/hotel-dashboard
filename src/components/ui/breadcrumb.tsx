@@ -1,8 +1,7 @@
-import * as React from 'react';
-
 import { Trans } from '@lingui/react/macro';
 import { Slot } from '@radix-ui/react-slot';
 import { MoreHorizontal } from 'lucide-react';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 

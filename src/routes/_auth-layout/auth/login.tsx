@@ -1,10 +1,9 @@
-import { useAuth } from '@/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import {
-  Link,
   createFileRoute,
+  Link,
   redirect,
   useRouter
 } from '@tanstack/react-router';
@@ -12,6 +11,7 @@ import { Loader2, MessageCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useAuth } from '@/auth';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';

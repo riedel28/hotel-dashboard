@@ -1,16 +1,15 @@
-import { useMemo, useState } from 'react';
-
-import type { Reservation } from '@/api/reservations';
 import { useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
-  type PaginationState,
-  type SortingState,
   getCoreRowModel,
   getSortedRowModel,
+  type PaginationState,
+  type SortingState,
   useReactTable
 } from '@tanstack/react-table';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import type { Reservation } from '@/api/reservations';
 
 import { Button } from '@/components/ui/button';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';

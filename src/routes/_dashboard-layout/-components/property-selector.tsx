@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronsUpDownIcon, RefreshCwIcon } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { Badge, type BadgeProps } from '@/components/ui/badge';

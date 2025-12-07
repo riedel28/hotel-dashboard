@@ -1,9 +1,8 @@
-import { useState } from 'react';
-
-import { useAuth } from '@/auth';
 import { Trans } from '@lingui/react/macro';
 import { useRouter } from '@tanstack/react-router';
 import { Loader2, LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { useAuth } from '@/auth';
 
 import {
   AlertDialog,

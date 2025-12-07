@@ -5,7 +5,10 @@ import type { AuthResponse, User } from './lib/schemas';
 
 export interface AuthContext {
   isAuthenticated: boolean;
-  login: (credentials: { email: string; password: string }) => Promise<AuthResponse>;
+  login: (credentials: {
+    email: string;
+    password: string;
+  }) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   user: User | null;
   token: string | null;

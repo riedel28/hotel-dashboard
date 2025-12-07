@@ -1,15 +1,14 @@
-import { useState } from 'react';
-
-import { updateReservationById } from '@/api/reservations';
 import { DevTool } from '@hookform/devtools';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { type Guest } from 'shared/types/reservations';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { updateReservationById } from '@/api/reservations';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -57,22 +56,13 @@ export const reservationFormSchema = z.object({
       updated_at: z.coerce.date().nullable()
     })
   ),
-  adults: z.coerce
-    .number()
-    .int()
-    .min(1, t`At least one adult is required`),
-  youth: z.coerce
-    .number()
-    .int()
-    .min(0, t`Youth count cannot be negative`),
+  adults: z.coerce.number().int().min(1, t`At least one adult is required`),
+  youth: z.coerce.number().int().min(0, t`Youth count cannot be negative`),
   children: z.coerce
     .number()
     .int()
     .min(0, t`Children count cannot be negative`),
-  infants: z.coerce
-    .number()
-    .int()
-    .min(0, t`Infants count cannot be negative`),
+  infants: z.coerce.number().int().min(0, t`Infants count cannot be negative`),
   purpose: z.enum(['private', 'business']),
   room: z.string().min(1, t`Room selection is required`)
 });

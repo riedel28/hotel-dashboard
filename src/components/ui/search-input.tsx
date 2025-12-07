@@ -1,10 +1,8 @@
-import { useCallback, useState } from 'react';
-
-import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { type VariantProps } from 'class-variance-authority';
 import { Search } from 'lucide-react';
-
+import { useCallback, useState } from 'react';
 import { Input, InputWrapper, inputVariants } from '@/components/ui/input';
+import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 
 import { cn } from '@/lib/utils';
 

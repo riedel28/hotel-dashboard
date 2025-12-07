@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
+import { useState } from 'react';
 import { type DateRange } from 'react-day-picker';
 
 import { Button } from '@/components/ui/button';
@@ -37,11 +36,23 @@ function ReservationDateFilter({
     { label: 'Today', range: { from: today, to: today } },
     {
       label: 'Yesterday',
-      range: { from: dayjs().subtract(1, 'day').toDate(), to: dayjs().subtract(1, 'day').toDate() }
+      range: {
+        from: dayjs().subtract(1, 'day').toDate(),
+        to: dayjs().subtract(1, 'day').toDate()
+      }
     },
-    { label: 'Last 7 days', range: { from: dayjs().subtract(6, 'day').toDate(), to: today } },
-    { label: 'Last 30 days', range: { from: dayjs().subtract(29, 'day').toDate(), to: today } },
-    { label: 'Month to date', range: { from: dayjs().startOf('month').toDate(), to: today } },
+    {
+      label: 'Last 7 days',
+      range: { from: dayjs().subtract(6, 'day').toDate(), to: today }
+    },
+    {
+      label: 'Last 30 days',
+      range: { from: dayjs().subtract(29, 'day').toDate(), to: today }
+    },
+    {
+      label: 'Month to date',
+      range: { from: dayjs().startOf('month').toDate(), to: today }
+    },
     {
       label: 'Last month',
       range: {
@@ -49,7 +60,10 @@ function ReservationDateFilter({
         to: dayjs().subtract(1, 'month').endOf('month').toDate()
       }
     },
-    { label: 'Year to date', range: { from: dayjs().startOf('year').toDate(), to: today } },
+    {
+      label: 'Year to date',
+      range: { from: dayjs().startOf('year').toDate(), to: today }
+    },
     {
       label: 'Last year',
       range: {
