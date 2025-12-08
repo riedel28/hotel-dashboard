@@ -1,18 +1,18 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const reservationStatusSchema = z.enum([
-  'pending',
-  'started',
-  'done',
-  'all'
+  "pending",
+  "started",
+  "done",
+  "all",
 ]);
 
 export const checkinMethodSchema = z.enum([
-  'android',
-  'ios',
-  'tv',
-  'station',
-  'web'
+  "android",
+  "ios",
+  "tv",
+  "station",
+  "web",
 ]);
 
 export const guestSchema = z.object({
@@ -21,9 +21,9 @@ export const guestSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
   email: z.string().optional(),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
+  nationality_code: z.enum(["DE", "US", "AT", "CH"]),
   created_at: z.coerce.date(),
-  updated_at: z.coerce.date().nullable()
+  updated_at: z.coerce.date().nullable(),
 });
 
 export const reservationSchema = z.object({
@@ -50,8 +50,8 @@ export const reservationSchema = z.object({
   youth: z.coerce.number().int().nonnegative().optional(),
   children: z.coerce.number().int().nonnegative().optional(),
   infants: z.coerce.number().int().nonnegative().optional(),
-  purpose: z.enum(['private', 'business']).optional(),
-  room: z.string().optional()
+  purpose: z.enum(["private", "business"]).optional(),
+  room: z.string().optional(),
 });
 
 export const fetchReservationsParamsSchema = z.object({
@@ -61,14 +61,14 @@ export const fetchReservationsParamsSchema = z.object({
     .int()
     .positive()
     .refine((val) => [5, 10, 25, 50, 100].includes(val), {
-      message: 'per_page must be one of: 5, 10, 25, 50, 100'
+      message: "per_page must be one of: 5, 10, 25, 50, 100",
     })
     .default(10)
     .optional(),
   q: z.string().optional(),
-  status: reservationStatusSchema.default('all').optional(),
+  status: reservationStatusSchema.default("all").optional(),
   from: z.iso.date().optional(),
-  to: z.iso.date().optional()
+  to: z.iso.date().optional(),
 });
 
 export const fetchReservationsResponseSchema = z.object({
@@ -76,23 +76,25 @@ export const fetchReservationsResponseSchema = z.object({
   page: z.number().int().positive(),
   per_page: z.number().int().positive(),
   total: z.number().int().nonnegative(),
-  page_count: z.number().int().nonnegative()
+  page_count: z.number().int().nonnegative(),
 });
 
-export const fetchReservationByIdSchema = reservationSchema.pick({
-  id: true
+export const reservationIdParamsSchema = z.object({
+  id: z.coerce.number().int().positive(),
 });
+
+export const fetchReservationByIdSchema = reservationIdParamsSchema;
 
 export const createReservationSchema = reservationSchema.pick({
   booking_nr: true,
   room: true,
-  page_url: true
+  page_url: true,
 });
 
 export const updateReservationSchema = reservationSchema
   .omit({
     id: true,
-    updated_at: true
+    updated_at: true,
   })
   .partial();
 
