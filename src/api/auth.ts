@@ -1,4 +1,4 @@
-import { authResponseSchema, type LoginData } from '@/lib/schemas';
+import { authResponseSchema, type LoginData, type RegisterData } from '@/lib/schemas';
 import { client, handleApiError } from './client';
 
 async function login(user: LoginData) {
@@ -10,4 +10,13 @@ async function login(user: LoginData) {
   }
 }
 
-export { login };
+async function register(user: RegisterData) {
+  try {
+    const response = await client.post('/auth/register', user);
+    return authResponseSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'register');
+  }
+}
+
+export { login, register };

@@ -7,14 +7,13 @@ import {
   redirect,
   useRouter,
 } from "@tanstack/react-router";
-import { Loader2, MessageCircleIcon } from "lucide-react";
+import { Loader2, UserPlusIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useAuth } from "@/auth";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldError,
@@ -25,12 +24,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 
-import { loginSchema } from "@/lib/schemas";
-import { cn } from "@/lib/utils";
+import { registerSchema } from "@/lib/schemas";
 
 const fallback = "/" as const;
 
-export const Route = createFileRoute("/_auth-layout/auth/login")({
+export const Route = createFileRoute("/_auth-layout/auth/sign-up")({
   validateSearch: z.object({
     redirect: z.string().optional().catch(""),
   }),
@@ -39,12 +37,12 @@ export const Route = createFileRoute("/_auth-layout/auth/login")({
       throw redirect({ to: search.redirect || fallback });
     }
   },
-  component: LoginPage,
+  component: SignUpPage,
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type SignUpFormValues = z.infer<typeof registerSchema>;
 
-function LoginPage() {
+function SignUpPage() {
   const auth = useAuth();
   const router = useRouter();
   const navigate = Route.useNavigate();
@@ -52,49 +50,47 @@ function LoginPage() {
 
   const search = Route.useSearch();
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<SignUpFormValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: "john@example.com",
-      password: "very_cool_password",
-      rememberMe: false,
+      email: "",
+      first_name: "",
+      last_name: "",
+      password: "",
     },
   });
 
-  const loginMutation = useMutation({
-    mutationFn: auth.login,
+  const registerMutation = useMutation({
+    mutationFn: auth.register,
     onSuccess: async () => {
       await router.invalidate();
       await navigate({ to: search.redirect || fallback });
-      toast.success(t`Successfully logged in!`);
+      toast.success(t`Successfully registered!`);
     },
     onError: () => {
-      toast.error(t`Failed to login. Please try again.`);
+      toast.error(t`Failed to register. Please try again.`);
     },
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
-    loginMutation.mutate({
-      email: data.email,
-      password: data.password,
-    });
+  const onSubmit = async (data: SignUpFormValues) => {
+    registerMutation.mutate(data);
   };
 
   return (
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
-          <MessageCircleIcon className="size-10" />
+          <UserPlusIcon className="size-10" />
         </div>
 
         <h1 className="text-2xl font-bold">
-          <Trans>Login</Trans>
+          <Trans>Sign Up</Trans>
         </h1>
         <p className="text-muted-foreground">
           {search.redirect ? (
-            <Trans>Please login to access this page</Trans>
+            <Trans>Please create an account to access this page</Trans>
           ) : (
-            <Trans>Enter your credentials to access the dashboard</Trans>
+            <Trans>Create an account to access the dashboard</Trans>
           )}
         </p>
       </div>
@@ -105,6 +101,52 @@ function LoginPage() {
       >
         <FieldSet className="gap-6">
           <FieldGroup className="gap-4">
+            <Controller
+              control={form.control}
+              name="first_name"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>First Name</Trans>
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="text"
+                    placeholder={t`Enter your first name`}
+                    autoComplete="given-name"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              control={form.control}
+              name="last_name"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Last Name</Trans>
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="text"
+                    placeholder={t`Enter your last name`}
+                    autoComplete="family-name"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
             <Controller
               control={form.control}
               name="email"
@@ -140,7 +182,7 @@ function LoginPage() {
                     {...field}
                     id={field.name}
                     placeholder={t`Enter your password`}
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     aria-invalid={fieldState.invalid}
                   />
                   {fieldState.invalid && (
@@ -152,70 +194,31 @@ function LoginPage() {
           </FieldGroup>
         </FieldSet>
 
-        <div className="flex items-center justify-between">
-          <Controller
-            control={form.control}
-            name="rememberMe"
-            render={({ field }) => (
-              <Field
-                orientation="horizontal"
-                className="w-auto items-center gap-2"
-              >
-                <Checkbox
-                  id={field.name}
-                  checked={field.value}
-                  onCheckedChange={(checked) =>
-                    field.onChange(checked === true)
-                  }
-                />
-                <FieldLabel
-                  htmlFor={field.name}
-                  className="text-sm font-normal"
-                >
-                  <Trans>Remember me</Trans>
-                </FieldLabel>
-              </Field>
-            )}
-          />
-
-          <Link
-            className={cn(
-              buttonVariants({
-                mode: "link",
-                underline: "solid",
-              }),
-              "text-sm text-foreground"
-            )}
-            to="/auth/forgot-password"
-          >
-            <Trans>Forgot password?</Trans>
-          </Link>
+        <div className="flex items-center justify-center">
+          <p className="text-sm text-muted-foreground">
+            <Trans>Already have an account?</Trans>{" "}
+            <Link
+              to="/auth/login"
+              className="text-primary hover:underline font-medium"
+            >
+              <Trans>Login</Trans>
+            </Link>
+          </p>
         </div>
 
         <Button
           type="submit"
           size="lg"
           className="w-full"
-          disabled={loginMutation.isPending}
+          disabled={registerMutation.isPending}
         >
-          {loginMutation.isPending && (
+          {registerMutation.isPending && (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}
-          <Trans>Login</Trans>
+          <Trans>Sign Up</Trans>
         </Button>
       </form>
-
-      <div className="flex items-center justify-center">
-        <p className="text-sm text-muted-foreground">
-          <Trans>Don't have an account?</Trans>{" "}
-          <Link
-            to="/auth/sign-up"
-            className="text-primary hover:underline font-medium"
-          >
-            <Trans>Sign up</Trans>
-          </Link>
-        </p>
-      </div>
     </div>
   );
 }
+

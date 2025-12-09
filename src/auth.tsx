@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { login as apiLogin } from './api/auth';
-import type { AuthResponse, User } from './lib/schemas';
+import { login as apiLogin, register as apiRegister } from './api/auth';
+import type { AuthResponse, RegisterData, User } from './lib/schemas';
 
 export interface AuthContext {
   isAuthenticated: boolean;
@@ -9,6 +9,7 @@ export interface AuthContext {
     email: string;
     password: string;
   }) => Promise<AuthResponse>;
+  register: (data: RegisterData) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   user: User | null;
   token: string | null;
@@ -63,6 +64,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
+  const register = React.useCallback(
+    async (data: RegisterData) => {
+      const response = await apiRegister(data);
+      if (response) {
+        setStoredAuth(response.user, response.token);
+        setUser(response.user);
+        setToken(response.token);
+        return response;
+      }
+      throw new Error('Registration failed');
+    },
+    []
+  );
+
   React.useEffect(() => {
     setUser(getStoredUser());
     setToken(getStoredToken());
@@ -73,6 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         isAuthenticated,
         login,
+        register,
         logout,
         user,
         token
