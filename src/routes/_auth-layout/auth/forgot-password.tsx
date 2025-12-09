@@ -102,7 +102,7 @@ function ForgotPasswordPage() {
         <h1 className="text-2xl font-bold">
           <Trans>Forgot Password</Trans>
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-balance">
           <Trans>
             Enter your email address and we&apos;ll send you a link to reset
             your password.
