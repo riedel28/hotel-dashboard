@@ -29,6 +29,7 @@ import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './rou
 import { Route as DashboardLayoutuserViewAboutRouteImport } from './routes/_dashboard-layout/(user-view)/about'
 import { Route as DashboardLayoutadminViewPropertiesRouteImport } from './routes/_dashboard-layout/(admin-view)/properties'
 import { Route as DashboardLayoutadminViewCustomersRouteImport } from './routes/_dashboard-layout/(admin-view)/customers'
+import { Route as AuthLayoutAuthSignUpRouteImport } from './routes/_auth-layout/auth/sign-up'
 import { Route as AuthLayoutAuthLoginRouteImport } from './routes/_auth-layout/auth/login'
 import { Route as AuthLayoutAuthForgotPasswordRouteImport } from './routes/_auth-layout/auth/forgot-password'
 import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
@@ -153,6 +154,11 @@ const DashboardLayoutadminViewCustomersRoute =
     path: '/customers',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
+const AuthLayoutAuthSignUpRoute = AuthLayoutAuthSignUpRouteImport.update({
+  id: '/auth/sign-up',
+  path: '/auth/sign-up',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
 const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
@@ -207,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/': typeof DashboardLayoutIndexRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/customers': typeof DashboardLayoutadminViewCustomersRoute
   '/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
@@ -235,6 +242,7 @@ export interface FileRoutesByTo {
   '/': typeof DashboardLayoutIndexRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/customers': typeof DashboardLayoutadminViewCustomersRoute
   '/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
@@ -266,6 +274,7 @@ export interface FileRoutesById {
   '/_dashboard-layout/': typeof DashboardLayoutIndexRoute
   '/_auth-layout/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/_auth-layout/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/_auth-layout/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/_dashboard-layout/(admin-view)/customers': typeof DashboardLayoutadminViewCustomersRoute
   '/_dashboard-layout/(admin-view)/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/_dashboard-layout/(user-view)/about': typeof DashboardLayoutuserViewAboutRoute
@@ -296,6 +305,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/forgot-password'
     | '/auth/login'
+    | '/auth/sign-up'
     | '/customers'
     | '/properties'
     | '/about'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/forgot-password'
     | '/auth/login'
+    | '/auth/sign-up'
     | '/customers'
     | '/properties'
     | '/about'
@@ -354,6 +365,7 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/'
     | '/_auth-layout/auth/forgot-password'
     | '/_auth-layout/auth/login'
+    | '/_auth-layout/auth/sign-up'
     | '/_dashboard-layout/(admin-view)/customers'
     | '/_dashboard-layout/(admin-view)/properties'
     | '/_dashboard-layout/(user-view)/about'
@@ -526,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutadminViewCustomersRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
+    '/_auth-layout/auth/sign-up': {
+      id: '/_auth-layout/auth/sign-up'
+      path: '/auth/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthLayoutAuthSignUpRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
     '/_auth-layout/auth/login': {
       id: '/_auth-layout/auth/login'
       path: '/auth/login'
@@ -588,11 +607,13 @@ declare module '@tanstack/react-router' {
 interface AuthLayoutRouteChildren {
   AuthLayoutAuthForgotPasswordRoute: typeof AuthLayoutAuthForgotPasswordRoute
   AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
+  AuthLayoutAuthSignUpRoute: typeof AuthLayoutAuthSignUpRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutAuthForgotPasswordRoute: AuthLayoutAuthForgotPasswordRoute,
   AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
+  AuthLayoutAuthSignUpRoute: AuthLayoutAuthSignUpRoute,
 }
 
 const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
