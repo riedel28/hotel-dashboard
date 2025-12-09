@@ -1,4 +1,8 @@
-import { authResponseSchema, type LoginData, type RegisterData } from '@/lib/schemas';
+import {
+  authResponseSchema,
+  type LoginData,
+  type RegisterData
+} from '@/lib/schemas';
 import { client, handleApiError } from './client';
 
 async function login(user: LoginData) {

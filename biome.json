@@ -9,8 +9,7 @@
     "includes": [
       "**",
       "!!src/routeTree.gen.ts",
-      "!!src/locales/**/messages.js",
-      "!!backend"
+      "!!src/locales/**/messages.js"
     ],
     "ignoreUnknown": false
   },
@@ -93,55 +92,25 @@
       "jsxQuoteStyle": "double",
       "trailingCommas": "none",
       "semicolons": "always"
-    }
+    },
+    "globals": [
+      "describe",
+      "it",
+      "test",
+      "expect",
+      "beforeEach",
+      "afterEach",
+      "beforeAll",
+      "afterAll",
+      "vi",
+      "vitest"
+    ]
   },
   "css": {
     "parser": {
       "tailwindDirectives": true
     }
   },
-  "overrides": [
-    {
-      "includes": ["**/*.{ts,tsx}"],
-      "javascript": {
-        "globals": []
-      },
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noUselessTypeConstraint": "error"
-          },
-          "correctness": {
-            "noUndeclaredVariables": "off",
-            "noUnusedVariables": "error",
-            "useExhaustiveDependencies": "warn",
-            "useHookAtTopLevel": "error"
-          },
-          "style": {
-            "noCommonJs": "error",
-            "noNamespace": "error",
-            "useArrayLiterals": "error",
-            "useAsConstAssertion": "error"
-          },
-          "suspicious": {
-            "noExplicitAny": "error",
-            "noExtraNonNullAssertion": "error",
-            "noMisleadingInstantiator": "error",
-            "noNonNullAssertedOptionalChain": "error",
-            "noRedeclare": "off",
-            "noUnsafeDeclarationMerging": "error",
-            "useNamespaceKeyword": "error"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["commitlint.config.js"],
-      "linter": {
-        "enabled": false
-      }
-    }
-  ],
   "assist": {
     "enabled": true,
     "actions": {

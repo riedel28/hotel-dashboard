@@ -124,9 +124,11 @@ describe('Reservations API', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.body.index.every((r: { state: string }) => r.state === 'pending')).toBe(
-        true
-      );
+      expect(
+        response.body.index.every(
+          (r: { state: string }) => r.state === 'pending'
+        )
+      ).toBe(true);
     });
 
     test('should search reservations by booking number', async () => {
@@ -136,7 +138,9 @@ describe('Reservations API', () => {
         .expect(200);
 
       expect(
-        response.body.index.every((r: { booking_nr: string }) => r.booking_nr.includes('BK123'))
+        response.body.index.every((r: { booking_nr: string }) =>
+          r.booking_nr.includes('BK123')
+        )
       ).toBe(true);
     });
 
