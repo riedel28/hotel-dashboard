@@ -1,116 +1,87 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Trans, useLingui } from '@lingui/react/macro';
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { CheckIcon, Loader2, MessageCircleIcon } from 'lucide-react';
-import * as React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CheckIcon, Loader2, MessageCircleIcon } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSet
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle
-} from '@/components/ui/item';
+  FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute('/_auth-layout/auth/forgot-password')({
-  component: ForgotPasswordPage
+export const Route = createFileRoute("/_auth-layout/auth/forgot-password")({
+  component: ForgotPasswordPage,
 });
 
 type ForgotPasswordFormData = { email: string };
 
 function ForgotPasswordPage() {
   const { t } = useLingui();
-  const [submittedEmail, setSubmittedEmail] = React.useState<string | null>(
-    null
-  );
 
   const forgotPasswordFormSchema = z.object({
-    email: z.email(t`Email is required`)
+    email: z.email(t`Email is required`),
   });
 
   const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: {
-      email: ''
-    }
+      email: "",
+    },
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
       // TODO: Implement API call to send password reset email
-      console.log('Sending password reset email to:', data.email);
+      console.log("Sending password reset email to:", data.email);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
-      setSubmittedEmail(data.email);
+      // setSubmittedEmail(data.email);
       toast.success(t`Password reset email sent successfully!`);
     } catch (error) {
-      console.error('Error sending password reset email: ', error);
+      console.error("Error sending password reset email: ", error);
       toast.error(t`Failed to send password reset email. Please try again.`);
     }
   };
 
   const isSubmitting = form.formState.isSubmitting;
+  const isSubmitted = form.formState.isSubmitted;
 
-  if (submittedEmail) {
+  if (isSubmitted) {
     return (
       <div className="w-full max-w-lg space-y-8">
-        <div className="space-y-2 text-center">
-          <div className="inline-block rounded-lg bg-primary p-2 text-white">
-            <MessageCircleIcon className="size-10" />
+        <div className="space-y-4 text-center">
+          <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
+            <CheckIcon className="size-8" />
           </div>
           <h1 className="text-2xl font-bold">
-            <Trans>Forgot Password</Trans>
+            <Trans>Reset link sent</Trans>
           </h1>
           <p className="text-muted-foreground">
-            <Trans>Check your inbox for the password reset link</Trans>
+            <Trans>
+              We&apos;ve sent a password reset email to{" "}
+              <span className="font-medium">{form.getValues("email")}</span>.
+              Follow the instructions to finish resetting your password.
+            </Trans>
           </p>
         </div>
-
-        <Item
-          variant="muted"
-          className="border border-green-200 bg-green-50 text-green-900 shadow-none"
-        >
-          <ItemMedia variant="icon" className="bg-green-200 text-green-800">
-            <CheckIcon className="size-4" />
-          </ItemMedia>
-          <ItemContent>
-            <ItemTitle className="text-green-900">
-              <Trans>Reset link sent</Trans>
-            </ItemTitle>
-            <ItemDescription className="text-green-900/90">
-              <Trans>
-                We&apos;ve sent a password reset email to{' '}
-                <span className="font-medium text-green-900">
-                  {submittedEmail}
-                </span>
-                . Follow the instructions to finish resetting your password.
-              </Trans>
-            </ItemDescription>
-          </ItemContent>
-        </Item>
 
         <div className="text-center">
           <Link
             className={cn(
               buttonVariants({
-                mode: 'link',
-                underline: 'solid'
+                mode: "link",
+                underline: "solid",
               }),
-              'text-sm text-foreground'
+              "text-sm text-foreground"
             )}
             to="/auth/login"
           >
@@ -139,7 +110,10 @@ function ForgotPasswordPage() {
         </p>
       </div>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="max-w-sm mx-auto space-y-6"
+      >
         <FieldSet>
           <FieldGroup className="gap-4">
             <Controller
@@ -182,10 +156,10 @@ function ForgotPasswordPage() {
         <Link
           className={cn(
             buttonVariants({
-              mode: 'link',
-              underline: 'solid'
+              mode: "link",
+              underline: "solid",
             }),
-            'text-sm text-foreground'
+            "text-sm text-foreground"
           )}
           to="/auth/login"
         >
