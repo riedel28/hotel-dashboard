@@ -11,18 +11,9 @@
     "allowImportingTsExtensions": true,
     "baseUrl": "..",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
-    "types": [
-      "vitest/globals",
-      "node"
-    ]
+    "types": ["vitest/globals", "node"]
   },
-  "include": [
-    "src",
-    "types",
-    "tests"
-  ]
+  "include": ["src", "types", "tests"]
 }

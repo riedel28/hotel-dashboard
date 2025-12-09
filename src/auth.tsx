@@ -64,19 +64,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
-  const register = React.useCallback(
-    async (data: RegisterData) => {
-      const response = await apiRegister(data);
-      if (response) {
-        setStoredAuth(response.user, response.token);
-        setUser(response.user);
-        setToken(response.token);
-        return response;
-      }
-      throw new Error('Registration failed');
-    },
-    []
-  );
+  const register = React.useCallback(async (data: RegisterData) => {
+    const response = await apiRegister(data);
+    if (response) {
+      setStoredAuth(response.user, response.token);
+      setUser(response.user);
+      setToken(response.token);
+      return response;
+    }
+    throw new Error('Registration failed');
+  }, []);
 
   React.useEffect(() => {
     setUser(getStoredUser());

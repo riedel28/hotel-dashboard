@@ -173,8 +173,12 @@ async function updateReservation(req: Request, res: Response) {
             }
 
             const nationality =
-              (guest.nationality_code as 'DE' | 'US' | 'AT' | 'CH' | undefined) ??
-              'DE';
+              (guest.nationality_code as
+                | 'DE'
+                | 'US'
+                | 'AT'
+                | 'CH'
+                | undefined) ?? 'DE';
 
             return {
               reservation_id: reservationId,
