@@ -1,24 +1,26 @@
-import cors from 'cors';
-import express from 'express';
-import morgan from 'morgan';
+import cors from "cors";
+import express from "express";
+import morgan from "morgan";
 
-import { errorHandler, notFound } from './middleware/error';
-import authRouter from './routes/auth';
-import reservationsRouter from './routes/reservations';
+import { errorHandler, notFound } from "./middleware/error";
+import authRouter from "./routes/auth";
+import propertiesRouter from "./routes/properties";
+import reservationsRouter from "./routes/reservations";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
-app.get('/api/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' });
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
 });
 
-app.use('/api/auth', authRouter);
-app.use('/api/reservations', reservationsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/properties", propertiesRouter);
+app.use("/api/reservations", reservationsRouter);
 
 // 404 handler - MUST come after all valid routes
 app.use(notFound);
