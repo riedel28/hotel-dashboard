@@ -1,45 +1,49 @@
-import { execSync } from 'child_process';
-import { sql } from 'drizzle-orm';
+import { execSync } from "child_process";
+import { sql } from "drizzle-orm";
 
-import { db } from '../../src/db/pool.ts';
-import { reservations, users } from '../../src/db/schema.ts';
+import { db } from "../../src/db/pool.ts";
 
 export default async function setup() {
-  console.log('🗄️  Setting up test database...');
+  console.log("🗄️  Setting up test database...");
 
   try {
     // Drop all tables if they exist to ensure clean state
-    await db.execute(sql`DROP TABLE IF EXISTS ${reservations} CASCADE`);
-    await db.execute(sql`DROP TABLE IF EXISTS ${users} CASCADE`);
+    // Order matters due to foreign key constraints: guests -> reservations -> properties -> users
+    await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
 
     // Use drizzle-kit CLI to push schema to database
-    console.log('🚀 Pushing schema using drizzle-kit...');
+    console.log("🚀 Pushing schema using drizzle-kit...");
     execSync(
       `npx drizzle-kit push --url="${process.env.DATABASE_URL}" --schema="./src/db/schema.ts" --dialect="postgresql"`,
       {
-        stdio: 'inherit',
-        cwd: process.cwd()
+        stdio: "inherit",
+        cwd: process.cwd(),
       }
     );
 
-    console.log('✅ Test database setup complete');
+    console.log("✅ Test database setup complete");
   } catch (error) {
-    console.error('❌ Failed to setup test database:', error);
+    console.error("❌ Failed to setup test database:", error);
     throw error;
   }
 
   return async () => {
-    console.log('🧹 Tearing down test database...');
+    console.log("🧹 Tearing down test database...");
 
     try {
-      // Final cleanup - drop all test data
-      await db.execute(sql`DROP TABLE IF EXISTS ${users} CASCADE`);
-      await db.execute(sql`DROP TABLE IF EXISTS ${reservations} CASCADE`);
+      // Final cleanup - drop all tables in correct order
+      await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
+      await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
+      await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
+      await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
 
-      console.log('✅ Test database teardown complete');
+      console.log("✅ Test database teardown complete");
       process.exit(0);
     } catch (error) {
-      console.error('❌ Failed to teardown test database:', error);
+      console.error("❌ Failed to teardown test database:", error);
     }
   };
 }

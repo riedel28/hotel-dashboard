@@ -1,5 +1,10 @@
 import { db } from "../../src/db/pool.ts";
-import { properties, reservations, users } from "../../src/db/schema.ts";
+import {
+  guests,
+  properties,
+  reservations,
+  users,
+} from "../../src/db/schema.ts";
 import { generateToken } from "../../src/utils/jwt.ts";
 import { hashPassword } from "../../src/utils/password.ts";
 
@@ -40,6 +45,8 @@ export async function createTestUser(
 
 export async function cleanupDatabase() {
   // Clean up in the right order due to foreign key constraints
+  // guests -> reservations -> properties -> users
+  await db.delete(guests);
   await db.delete(reservations);
   await db.delete(properties);
   await db.delete(users);
