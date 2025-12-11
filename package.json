@@ -11,6 +11,7 @@
     "type-check:all": "bun run type-check && bun run type-check:node",
     "lint": "biome lint --write",
     "check": "biome check --write",
+    "check:ci": "biome check",
     "format": "biome format --write",
     "dev": "concurrently \"bun run client\" \"bun run server\"",
     "client": "bun --bun vite",
