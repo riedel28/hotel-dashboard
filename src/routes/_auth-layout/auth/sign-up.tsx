@@ -1,43 +1,43 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Trans, useLingui } from "@lingui/react/macro";
-import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Trans, useLingui } from '@lingui/react/macro';
+import { useMutation } from '@tanstack/react-query';
 import {
   createFileRoute,
   Link,
   redirect,
-  useRouter,
-} from "@tanstack/react-router";
-import { Loader2, MessageCircleIcon } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { useAuth } from "@/auth";
+  useRouter
+} from '@tanstack/react-router';
+import { Loader2, MessageCircleIcon } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { useAuth } from '@/auth';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSet,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
+  FieldSet
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 
-import { registerSchema } from "@/lib/schemas";
+import { registerSchema } from '@/lib/schemas';
 
-const fallback = "/" as const;
+const fallback = '/' as const;
 
-export const Route = createFileRoute("/_auth-layout/auth/sign-up")({
+export const Route = createFileRoute('/_auth-layout/auth/sign-up')({
   validateSearch: z.object({
-    redirect: z.string().optional().catch(""),
+    redirect: z.string().optional().catch('')
   }),
   beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
       throw redirect({ to: search.redirect || fallback });
     }
   },
-  component: SignUpPage,
+  component: SignUpPage
 });
 
 type SignUpFormValues = z.infer<typeof registerSchema>;
@@ -53,11 +53,11 @@ function SignUpPage() {
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: "",
-      first_name: "",
-      last_name: "",
-      password: "",
-    },
+      email: '',
+      first_name: '',
+      last_name: '',
+      password: ''
+    }
   });
 
   const registerMutation = useMutation({
@@ -69,7 +69,7 @@ function SignUpPage() {
     },
     onError: () => {
       toast.error(t`Failed to register. Please try again.`);
-    },
+    }
   });
 
   const onSubmit = async (data: SignUpFormValues) => {
@@ -209,7 +209,7 @@ function SignUpPage() {
 
       <div className="flex items-center justify-center">
         <p className="text-sm text-muted-foreground">
-          <Trans>Already have an account?</Trans>{" "}
+          <Trans>Already have an account?</Trans>{' '}
           <Link
             to="/auth/login"
             className="text-primary hover:underline font-medium"

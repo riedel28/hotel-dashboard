@@ -1,8 +1,8 @@
-import { ilike } from "drizzle-orm";
-import type { Request, Response } from "express";
+import { ilike } from 'drizzle-orm';
+import type { Request, Response } from 'express';
 
-import { db } from "../db/pool";
-import { properties as propertiesTable } from "../db/schema";
+import { db } from '../db/pool';
+import { properties as propertiesTable } from '../db/schema';
 
 async function getProperties(req: Request, res: Response) {
   try {
@@ -35,7 +35,7 @@ async function getProperties(req: Request, res: Response) {
     const transformedProperties = properties.map((property) => ({
       id: property.id,
       name: property.name,
-      stage: property.stage,
+      stage: property.stage
     }));
 
     res.status(200).json({
@@ -43,11 +43,11 @@ async function getProperties(req: Request, res: Response) {
       page: pageNum,
       per_page: perPageNum,
       total: totalCount,
-      page_count: Math.ceil(totalCount / perPageNum),
+      page_count: Math.ceil(totalCount / perPageNum)
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch properties" });
+    res.status(500).json({ error: 'Failed to fetch properties' });
   }
 }
 

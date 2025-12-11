@@ -1,25 +1,25 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Trans, useLingui } from "@lingui/react/macro";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckIcon, Loader2, MessageCircleIcon } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Trans, useLingui } from '@lingui/react/macro';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { CheckIcon, Loader2, MessageCircleIcon } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSet,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+  FieldSet
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-export const Route = createFileRoute("/_auth-layout/auth/forgot-password")({
-  component: ForgotPasswordPage,
+export const Route = createFileRoute('/_auth-layout/auth/forgot-password')({
+  component: ForgotPasswordPage
 });
 
 type ForgotPasswordFormData = { email: string };
@@ -28,26 +28,26 @@ function ForgotPasswordPage() {
   const { t } = useLingui();
 
   const forgotPasswordFormSchema = z.object({
-    email: z.email(t`Email is required`),
+    email: z.email(t`Email is required`)
   });
 
   const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: {
-      email: "",
-    },
+      email: ''
+    }
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
       // TODO: Implement API call to send password reset email
-      console.log("Sending password reset email to:", data.email);
+      console.log('Sending password reset email to:', data.email);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       // setSubmittedEmail(data.email);
       toast.success(t`Password reset email sent successfully!`);
     } catch (error) {
-      console.error("Error sending password reset email: ", error);
+      console.error('Error sending password reset email: ', error);
       toast.error(t`Failed to send password reset email. Please try again.`);
     }
   };
@@ -67,8 +67,8 @@ function ForgotPasswordPage() {
           </h1>
           <p className="text-muted-foreground">
             <Trans>
-              We&apos;ve sent a password reset email to{" "}
-              <span className="font-medium">{form.getValues("email")}</span>.
+              We&apos;ve sent a password reset email to{' '}
+              <span className="font-medium">{form.getValues('email')}</span>.
               Follow the instructions to finish resetting your password.
             </Trans>
           </p>
@@ -78,10 +78,10 @@ function ForgotPasswordPage() {
           <Link
             className={cn(
               buttonVariants({
-                mode: "link",
-                underline: "solid",
+                mode: 'link',
+                underline: 'solid'
               }),
-              "text-sm text-foreground"
+              'text-sm text-foreground'
             )}
             to="/auth/login"
           >
@@ -156,10 +156,10 @@ function ForgotPasswordPage() {
         <Link
           className={cn(
             buttonVariants({
-              mode: "link",
-              underline: "solid",
+              mode: 'link',
+              underline: 'solid'
             }),
-            "text-sm text-foreground"
+            'text-sm text-foreground'
           )}
           to="/auth/login"
         >

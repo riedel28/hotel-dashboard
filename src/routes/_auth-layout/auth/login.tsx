@@ -1,45 +1,45 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Trans, useLingui } from "@lingui/react/macro";
-import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Trans, useLingui } from '@lingui/react/macro';
+import { useMutation } from '@tanstack/react-query';
 import {
   createFileRoute,
   Link,
   redirect,
-  useRouter,
-} from "@tanstack/react-router";
-import { Loader2, MessageCircleIcon } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { useAuth } from "@/auth";
+  useRouter
+} from '@tanstack/react-router';
+import { Loader2, MessageCircleIcon } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { useAuth } from '@/auth';
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSet,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
+  FieldSet
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 
-import { loginSchema } from "@/lib/schemas";
-import { cn } from "@/lib/utils";
+import { loginSchema } from '@/lib/schemas';
+import { cn } from '@/lib/utils';
 
-const fallback = "/" as const;
+const fallback = '/' as const;
 
-export const Route = createFileRoute("/_auth-layout/auth/login")({
+export const Route = createFileRoute('/_auth-layout/auth/login')({
   validateSearch: z.object({
-    redirect: z.string().optional().catch(""),
+    redirect: z.string().optional().catch('')
   }),
   beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
       throw redirect({ to: search.redirect || fallback });
     }
   },
-  component: LoginPage,
+  component: LoginPage
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -55,10 +55,10 @@ function LoginPage() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "john@example.com",
-      password: "very_cool_password",
-      rememberMe: false,
-    },
+      email: 'john@example.com',
+      password: 'very_cool_password',
+      rememberMe: false
+    }
   });
 
   const loginMutation = useMutation({
@@ -70,13 +70,13 @@ function LoginPage() {
     },
     onError: () => {
       toast.error(t`Failed to login. Please try again.`);
-    },
+    }
   });
 
   const onSubmit = async (data: LoginFormValues) => {
     loginMutation.mutate({
       email: data.email,
-      password: data.password,
+      password: data.password
     });
   };
 
@@ -181,10 +181,10 @@ function LoginPage() {
           <Link
             className={cn(
               buttonVariants({
-                mode: "link",
-                underline: "solid",
+                mode: 'link',
+                underline: 'solid'
               }),
-              "text-sm text-foreground"
+              'text-sm text-foreground'
             )}
             to="/auth/forgot-password"
           >
@@ -207,7 +207,7 @@ function LoginPage() {
 
       <div className="flex items-center justify-center">
         <p className="text-sm text-muted-foreground">
-          <Trans>Don't have an account?</Trans>{" "}
+          <Trans>Don't have an account?</Trans>{' '}
           <Link
             to="/auth/sign-up"
             className="text-primary hover:underline font-medium"
