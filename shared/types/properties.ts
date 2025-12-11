@@ -1,16 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const propertyStageSchema = z.enum([
-  "demo",
-  "production",
-  "staging",
-  "template",
+  'demo',
+  'production',
+  'staging',
+  'template'
 ]);
 
 export const propertySchema = z.object({
   id: z.uuid(),
   name: z.string().min(1),
-  stage: propertyStageSchema,
+  stage: propertyStageSchema
 });
 
 export const fetchPropertiesParamsSchema = z.object({
@@ -20,11 +20,11 @@ export const fetchPropertiesParamsSchema = z.object({
     .int()
     .positive()
     .refine((val) => [5, 10, 25, 50, 100].includes(val), {
-      message: "per_page must be one of: 5, 10, 25, 50, 100",
+      message: 'per_page must be one of: 5, 10, 25, 50, 100'
     })
     .default(10)
     .optional(),
-  q: z.string().optional(),
+  q: z.string().optional()
 });
 
 export const fetchPropertiesResponseSchema = z.object({
@@ -32,7 +32,7 @@ export const fetchPropertiesResponseSchema = z.object({
   page: z.number().int().positive(),
   per_page: z.number().int().positive(),
   total: z.number().int().nonnegative(),
-  page_count: z.number().int().nonnegative(),
+  page_count: z.number().int().nonnegative()
 });
 
 // Type exports

@@ -1,6 +1,6 @@
-import { cleanupDatabase, createTestUser } from "../helpers/dbHelpers";
+import { cleanupDatabase, createTestUser } from '../helpers/dbHelpers';
 
-describe("Test Setup Verification", () => {
+describe('Test Setup Verification', () => {
   beforeEach(async () => {
     await cleanupDatabase();
   });
@@ -9,11 +9,11 @@ describe("Test Setup Verification", () => {
     await cleanupDatabase();
   });
 
-  test("should connect to test database", async () => {
+  test('should connect to test database', async () => {
     const { user, token } = await createTestUser();
 
     expect(user).toBeDefined();
-    expect(user.email).toContain("@example.com");
+    expect(user.email).toContain('@example.com');
     expect(token).toBeDefined();
   });
 });

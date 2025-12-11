@@ -121,12 +121,22 @@ async function createReservation(req: Request, res: Response) {
       })
       .returning();
 
+    if (!newReservation) {
+      return res.status(500).json({ error: 'Failed to create reservation' });
+    }
+
     const reservationWithGuests = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, newReservation.id),
       with: {
         guests: true
       }
     });
+
+    if (!reservationWithGuests) {
+      return res
+        .status(500)
+        .json({ error: 'Failed to fetch created reservation' });
+    }
 
     res.status(201).json(reservationWithGuests);
   } catch (error) {

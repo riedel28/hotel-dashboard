@@ -30,7 +30,7 @@ export const reservationSchema = z.object({
   id: z.number(),
   state: reservationStatusSchema,
   booking_nr: z.string(),
-  guest_email: z.email(),
+  guest_email: z.email().nullable(),
   guests: z.array(guestSchema),
   booking_id: z.string(),
   room_name: z.string(),

@@ -62,7 +62,7 @@ const getStageMessage = (stage: keyof typeof stageVariantMap) => {
 function StageBadge({ stage, ...props }: StageBadgeProps) {
   return (
     <Badge
-      variant={stageVariantMap[stage]}
+      variant={stageVariantMap[stage] ?? 'secondary'}
       appearance="outline"
       size="sm"
       className="capitalize"

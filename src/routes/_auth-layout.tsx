@@ -1,8 +1,8 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { LanguageSwitcher } from "./_auth-layout/-components/language-switcher";
+import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { LanguageSwitcher } from './_auth-layout/-components/language-switcher';
 
-export const Route = createFileRoute("/_auth-layout")({
-  component: AuthLayout,
+export const Route = createFileRoute('/_auth-layout')({
+  component: AuthLayout
 });
 
 function AuthLayout() {

@@ -1,9 +1,9 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import { fetchPropertiesParamsSchema } from "../../../shared/types/properties";
-import { getProperties } from "../controllers/property-controller";
-import { authenticateToken } from "../middleware/auth";
-import { validateQuery } from "../middleware/validation";
+import { fetchPropertiesParamsSchema } from '../../../shared/types/properties';
+import { getProperties } from '../controllers/property-controller';
+import { authenticateToken } from '../middleware/auth';
+import { validateQuery } from '../middleware/validation';
 
 const router = Router();
 
@@ -11,6 +11,6 @@ const router = Router();
 router.use(authenticateToken);
 
 // Get properties
-router.get("/", validateQuery(fetchPropertiesParamsSchema), getProperties);
+router.get('/', validateQuery(fetchPropertiesParamsSchema), getProperties);
 
 export default router;
