@@ -212,7 +212,7 @@ function SignUpPage() {
           <Trans>Already have an account?</Trans>{' '}
           <Link
             to="/auth/login"
-            className="text-primary hover:underline font-medium"
+            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
           >
             <Trans>Login</Trans>
           </Link>

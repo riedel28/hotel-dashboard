@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useAuth } from '@/auth';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Field,
@@ -26,7 +26,6 @@ import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
 import { loginSchema } from '@/lib/schemas';
-import { cn } from '@/lib/utils';
 
 const fallback = '/' as const;
 
@@ -179,14 +178,8 @@ function LoginPage() {
           />
 
           <Link
-            className={cn(
-              buttonVariants({
-                mode: 'link',
-                underline: 'solid'
-              }),
-              'text-sm text-foreground'
-            )}
             to="/auth/forgot-password"
+            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
           >
             <Trans>Forgot password?</Trans>
           </Link>
@@ -210,7 +203,7 @@ function LoginPage() {
           <Trans>Don't have an account?</Trans>{' '}
           <Link
             to="/auth/sign-up"
-            className="text-primary hover:underline font-medium"
+            className="text-primary hover:underline underline-offset-4 font-medium"
           >
             <Trans>Sign up</Trans>
           </Link>
