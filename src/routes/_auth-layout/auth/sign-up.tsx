@@ -7,7 +7,7 @@ import {
   redirect,
   useRouter
 } from '@tanstack/react-router';
-import { Loader2, MessageCircleIcon } from 'lucide-react';
+import { Loader2Icon, MessageCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -72,9 +72,9 @@ function SignUpPage() {
     }
   });
 
-  const onSubmit = async (data: SignUpFormValues) => {
+  function handleSubmit(data: SignUpFormValues) {
     registerMutation.mutate(data);
-  };
+  }
 
   return (
     <div className="w-full max-w-lg space-y-8">
@@ -96,7 +96,7 @@ function SignUpPage() {
       </div>
 
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="max-w-sm mx-auto space-y-6"
       >
         <FieldSet className="gap-6">
@@ -201,7 +201,7 @@ function SignUpPage() {
           disabled={registerMutation.isPending}
         >
           {registerMutation.isPending && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
           )}
           <Trans>Sign Up</Trans>
         </Button>
