@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
-import { CheckIcon, GlobeIcon, LogOutIcon, UserCircleIcon } from 'lucide-react';
+import { GlobeIcon, LogOutIcon, UserCircleIcon } from 'lucide-react';
 import { useState } from 'react';
 import Flag from 'react-flagkit';
 import { useAuth } from '@/auth';
@@ -12,9 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuItemIndicator,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
@@ -60,7 +58,7 @@ export default function UserMenu() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger>
           <Button
             variant="ghost"
             size="icon"
@@ -78,33 +76,33 @@ export default function UserMenu() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+          className="min-w-56 rounded-lg"
           side="bottom"
           align="end"
           sideOffset={4}
         >
-          <DropdownMenuLabel className="p-0 font-normal">
-            <div className="flex items-center gap-2 px-1.5 py-1.5 text-left text-sm">
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {auth.user?.first_name} {auth.user?.last_name}
-                </span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {auth.user?.email}
-                </span>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-center gap-2 px-1.5 py-1.5 text-left text-sm">
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium text-foreground">
+                    {auth.user?.first_name} {auth.user?.last_name}
+                  </span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    {auth.user?.email}
+                  </span>
+                </div>
               </div>
-            </div>
-          </DropdownMenuLabel>
+            </DropdownMenuLabel>
+          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem asChild>
-              <Link to="/profile">
-                <UserCircleIcon />
-                <Trans>Profile</Trans>
-              </Link>
+            <DropdownMenuItem render={<Link to="/profile" />}>
+              <UserCircleIcon />
+              <Trans>Profile</Trans>
             </DropdownMenuItem>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger withChevron={false}>
+              <DropdownMenuSubTrigger hasChevron={false}>
                 <div className="flex w-full items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <GlobeIcon className="h-4 w-4 text-muted-foreground" />
@@ -125,44 +123,35 @@ export default function UserMenu() {
                   </Badge>
                 </div>
               </DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent className="w-[180px]">
-                  <DropdownMenuRadioGroup
-                    value={locale}
-                    onValueChange={handleChangeLocale}
-                  >
-                    {languages.map((lang) => (
-                      <DropdownMenuRadioItem
-                        key={lang.code}
-                        value={lang.code}
-                        className="overflow-hidden [&>svg]:shrink-0"
-                      >
-                        <Flag
-                          country={lang.country}
-                          title={lang.label}
-                          className="size-3.5 rounded-sm"
-                          aria-label={lang.label}
-                        />
-
-                        {lang.label}
-
-                        <span className="pointer-events-none absolute right-2 flex size-3.5 items-center justify-center">
-                          <DropdownMenuItemIndicator>
-                            <CheckIcon />
-                          </DropdownMenuItemIndicator>
-                        </span>
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
+              <DropdownMenuSubContent className="w-[180px]">
+                <DropdownMenuRadioGroup
+                  value={locale}
+                  onValueChange={handleChangeLocale}
+                >
+                  {languages.map((lang) => (
+                    <DropdownMenuRadioItem
+                      key={lang.code}
+                      value={lang.code}
+                      className="overflow-hidden [&>svg]:shrink-0"
+                    >
+                      <Flag
+                        country={lang.country}
+                        title={lang.label}
+                        className="size-3.5 rounded-sm"
+                        aria-label={lang.label}
+                      />
+                      {lang.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
             </DropdownMenuSub>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
+          <DropdownMenuItem className="group" onClick={handleLogout}>
             <LogOutIcon />
             <Trans>Log out</Trans>
-            <span className="ml-auto text-xs text-muted-foreground">
+            <span className="ml-auto text-xs text-muted-foreground!">
               <Trans>v{version}</Trans>
             </span>
           </DropdownMenuItem>
