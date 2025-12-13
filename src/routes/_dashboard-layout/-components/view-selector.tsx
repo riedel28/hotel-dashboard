@@ -2,25 +2,35 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import {
   Select,
   SelectContent,
+  SelectIcon,
   SelectItem,
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { useView } from '@/contexts/view-context';
+import { useView, type ViewType } from '@/contexts/view-context';
+import { ChevronsUpDownIcon } from 'lucide-react';
 
 export default function ViewSelector() {
   const { t } = useLingui();
   const { currentView, setCurrentView } = useView();
 
   return (
-    <Select value={currentView} onValueChange={setCurrentView}>
+    <Select
+      defaultValue="user"
+      value={currentView}
+      onValueChange={(value) => setCurrentView(value as ViewType)}
+    >
       <SelectTrigger
+        className="text-foreground border-none shadow-none hover:bg-accent px-3 min-w-[90px]"
+        hasIcon={false}
         aria-label={t`Select view`}
-        className="border-none bg-transparent text-sm font-medium text-secondary-foreground shadow-none hover:bg-accent focus-visible:ring-0 data-[state=open]:bg-accent"
       >
-        <SelectValue placeholder={t`Select view`} />
+        <SelectValue className="capitalize" />
+        <SelectIcon>
+          <ChevronsUpDownIcon className="size-4" />
+        </SelectIcon>
       </SelectTrigger>
-      <SelectContent className="w-[150px] [&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
+      <SelectContent>
         <SelectItem value="user">
           <Trans>User</Trans>
         </SelectItem>
