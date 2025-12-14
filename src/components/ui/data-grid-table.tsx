@@ -274,7 +274,7 @@ function DataGridTableBodyRowSkeletonCell<TData>({
   );
 }
 
-function DataGridTableBodyRow<TData>({
+function DataGridTableBodyRow<TData extends object>({
   children,
   row,
   dndRef,
@@ -285,7 +285,7 @@ function DataGridTableBodyRow<TData>({
   dndRef?: React.Ref<HTMLTableRowElement>;
   dndStyle?: CSSProperties;
 }) {
-  const { props, table } = useDataGrid();
+  const { props, table } = useDataGrid<TData>();
 
   return (
     <tr
@@ -296,7 +296,7 @@ function DataGridTableBodyRow<TData>({
           ? 'selected'
           : undefined
       }
-      onClick={() => props.onRowClick && props.onRowClick(row.original)}
+      onClick={() => props.onRowClick && props.onRowClick(row.original as TData)}
       className={cn(
         'hover:bg-muted/40 data-[state=selected]:bg-muted/50',
         props.onRowClick && 'cursor-pointer',
@@ -315,8 +315,8 @@ function DataGridTableBodyRow<TData>({
   );
 }
 
-function DataGridTableBodyRowExpandded<TData>({ row }: { row: Row<TData> }) {
-  const { props, table } = useDataGrid();
+function DataGridTableBodyRowExpandded<TData extends object>({ row }: { row: Row<TData> }) {
+  const { props, table } = useDataGrid<TData>();
 
   return (
     <tr
@@ -328,7 +328,7 @@ function DataGridTableBodyRowExpandded<TData>({ row }: { row: Row<TData> }) {
         {table
           .getAllColumns()
           .find((column) => column.columnDef.meta?.expandedContent)
-          ?.columnDef.meta?.expandedContent?.(row.original)}
+          ?.columnDef.meta?.expandedContent?.(row.original as TData)}
       </td>
     </tr>
   );
@@ -489,8 +489,8 @@ function DataGridTableRowSelectAll({ size }: { size?: 'sm' | 'md' | 'lg' }) {
   );
 }
 
-function DataGridTable<TData>() {
-  const { table, isLoading, props } = useDataGrid();
+function DataGridTable<TData extends object>() {
+  const { table, isLoading, props } = useDataGrid<TData>();
   const pagination = table.getState().pagination;
 
   return (
@@ -547,11 +547,12 @@ function DataGridTable<TData>() {
             </DataGridTableBodyRowSkeleton>
           ))
         ) : table.getRowModel().rows.length ? (
-          table.getRowModel().rows.map((row: Row<TData>, index) => {
+          table.getRowModel().rows.map((row, index) => {
+            const typedRow = row as Row<TData>;
             return (
-              <Fragment key={row.id}>
-                <DataGridTableBodyRow row={row} key={index}>
-                  {row
+              <Fragment key={typedRow.id}>
+                <DataGridTableBodyRow row={typedRow} key={index}>
+                  {typedRow
                     .getVisibleCells()
                     .map((cell: Cell<TData, unknown>, colIndex) => {
                       return (
@@ -564,8 +565,8 @@ function DataGridTable<TData>() {
                       );
                     })}
                 </DataGridTableBodyRow>
-                {row.getIsExpanded() && (
-                  <DataGridTableBodyRowExpandded row={row} />
+                {typedRow.getIsExpanded() && (
+                  <DataGridTableBodyRowExpandded row={typedRow} />
                 )}
               </Fragment>
             );
