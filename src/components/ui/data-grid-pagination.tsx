@@ -93,7 +93,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
         <Button
           key={i}
           size="sm"
-          mode="icon"
           variant="ghost"
           className={cn(btnBaseClasses, 'text-muted-foreground', {
             'bg-accent text-accent-foreground': pageIndex === i
@@ -117,7 +116,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
       return (
         <Button
           size="sm"
-          mode="icon"
           className={btnBaseClasses}
           variant="ghost"
           onClick={() => updatePagination(currentGroupStart - 1)}
@@ -137,7 +135,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
           className={btnBaseClasses}
           variant="ghost"
           size="sm"
-          mode="icon"
           onClick={() => updatePagination(currentGroupEnd)}
         >
           <Trans>...</Trans>
@@ -173,7 +170,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
               <div className="order-1 flex items-center space-x-1 sm:order-2">
                 <Button
                   size="sm"
-                  mode="icon"
                   variant="ghost"
                   className={btnArrowClasses}
                   onClick={() => {
@@ -197,7 +193,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
 
                 <Button
                   size="sm"
-                  mode="icon"
                   variant="ghost"
                   className={btnArrowClasses}
                   onClick={() => {
@@ -227,14 +222,13 @@ function DataGridPagination(props: DataGridPaginationProps) {
             </div>
             <Select
               value={`${pageSize}`}
-              indicatorPosition="right"
               onValueChange={(value) => {
                 const newPageSize = Number(value);
                 updatePagination(0, newPageSize); // Reset to first page when changing page size
               }}
             >
-              <SelectTrigger className="w-fit" size="sm">
-                <SelectValue placeholder={`${pageSize}`} />
+              <SelectTrigger className="w-fit min-w-[70px]" size="sm">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent side="top" className="min-w-[50px]">
                 {mergedProps?.sizes?.map((size: number) => (

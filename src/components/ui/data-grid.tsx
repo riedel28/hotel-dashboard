@@ -11,13 +11,17 @@ import { createContext, type ReactNode, useContext } from 'react';
 import { cn } from '@/lib/utils';
 
 declare module '@tanstack/react-table' {
-  // biome-ignore lint/correctness/noUnusedVariables: TValue is part of the interface signature
   interface ColumnMeta<TData extends RowData, TValue> {
     headerTitle?: string;
     headerClassName?: string;
     cellClassName?: string;
     skeleton?: ReactNode;
     expandedContent?: (row: TData) => ReactNode;
+    /**
+     * Used to keep TanStack's `TValue` generic parameter "in use" for TS/IDE
+     * diagnostics. You generally shouldn't set this.
+     */
+    __valueType?: TValue;
   }
 }
 
@@ -91,17 +95,18 @@ export interface DataGridProps<TData extends object> {
   };
 }
 
+type DataGridContextRow = Record<string, unknown>;
+
 const DataGridContext = createContext<
-  // biome-ignore lint/suspicious/noExplicitAny: DataGrid requires flexible typing
-  DataGridContextProps<any> | undefined
+  DataGridContextProps<DataGridContextRow> | undefined
 >(undefined);
 
-function useDataGrid() {
+function useDataGrid<TData extends object = DataGridContextRow>() {
   const context = useContext(DataGridContext);
   if (!context) {
     throw new Error('useDataGrid must be used within a DataGridProvider');
   }
-  return context;
+  return context as unknown as DataGridContextProps<TData>;
 }
 
 function DataGridProvider<TData extends object>({
@@ -112,8 +117,8 @@ function DataGridProvider<TData extends object>({
   return (
     <DataGridContext.Provider
       value={{
-        props,
-        table,
+        props: props as unknown as DataGridProps<DataGridContextRow>,
+        table: table as unknown as Table<DataGridContextRow>,
         recordCount: props.recordCount,
         isLoading: props.isLoading || false
       }}
