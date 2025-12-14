@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
+import { LinkIcon, Loader2Icon, PlusCircleIcon } from 'lucide-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -25,7 +25,12 @@ import {
   FieldLabel,
   FieldSet
 } from '@/components/ui/field';
-import { Input, InputWrapper } from '@/components/ui/input';
+import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput
+} from '@/components/ui/input-group';
 import {
   Select,
   SelectContent,
@@ -86,9 +91,9 @@ export function AddReservationModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
+          <PlusCircleIcon className="mr-2 h-4 w-4" />
           <Trans>Add Reservation</Trans>
         </Button>
       </DialogTrigger>
@@ -138,7 +143,17 @@ export function AddReservationModal() {
                         id={field.name}
                         aria-invalid={fieldState.invalid}
                       >
-                        <SelectValue placeholder={t`Select a room`} />
+                        <SelectValue>
+                          {(value) =>
+                            value ? (
+                              <span>{value}</span>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {t`Select a room`}
+                              </span>
+                            )
+                          }
+                        </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
@@ -165,15 +180,17 @@ export function AddReservationModal() {
                     <FieldLabel htmlFor={field.name}>
                       <Trans>Page URL</Trans>
                     </FieldLabel>
-                    <InputWrapper>
-                      <LinkIcon />
-                      <Input
+                    <InputGroup>
+                      <InputGroupAddon align="inline-start">
+                        <LinkIcon />
+                      </InputGroupAddon>
+                      <InputGroupInput
                         {...field}
                         id={field.name}
                         placeholder={t`Enter page URL`}
                         aria-invalid={fieldState.invalid}
                       />
-                    </InputWrapper>
+                    </InputGroup>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -195,7 +212,7 @@ export function AddReservationModal() {
               disabled={createReservationMutation.isPending}
             >
               {createReservationMutation.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
               )}
               <Trans>Create</Trans>
             </Button>

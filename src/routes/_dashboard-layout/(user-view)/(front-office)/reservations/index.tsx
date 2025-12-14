@@ -59,7 +59,8 @@ function ReservationsPage() {
     reservationsQuery.refetch();
   };
 
-  const handleStatusChange = (newStatus: string) => {
+  const handleStatusChange = (newStatus: string | null) => {
+    if (!newStatus) return;
     navigate({
       to: '/reservations',
       search: (prev) => ({
@@ -225,13 +226,22 @@ function ReservationsPage() {
                 debounceMs={500}
               />
               <Select
-                value={status}
+                value={status ?? 'all'}
                 onValueChange={handleStatusChange}
-                indicatorPosition="right"
                 defaultValue="all"
               >
                 <SelectTrigger className="w-full sm:w-[150px]">
-                  <SelectValue placeholder={<Trans>Select status</Trans>} />
+                  <SelectValue>
+                    {(value) =>
+                      value ? (
+                        <span className="capitalize">{t(value)}</span>
+                      ) : (
+                        <span className="text-muted-foreground">
+                          <Trans>Select status</Trans>
+                        </span>
+                      )
+                    }
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">

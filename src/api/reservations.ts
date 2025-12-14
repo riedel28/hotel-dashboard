@@ -14,7 +14,8 @@ import {
   type Reservation,
   type ReservationStatus,
   reservationSchema,
-  reservationStatusSchema
+  reservationStatusSchema,
+  type UpdateReservationData
 } from '../../shared/types/reservations';
 
 function reservationsQueryOptions({
@@ -57,17 +58,7 @@ async function fetchReservationById(id: string): Promise<Reservation> {
 
 async function updateReservationById(
   id: string,
-  updates: Pick<
-    Reservation,
-    | 'booking_nr'
-    | 'guests'
-    | 'adults'
-    | 'youth'
-    | 'children'
-    | 'infants'
-    | 'purpose'
-    | 'room'
-  >
+  updates: UpdateReservationData
 ): Promise<Reservation> {
   try {
     const response = await client.patch(`/reservations/${id}`, updates);

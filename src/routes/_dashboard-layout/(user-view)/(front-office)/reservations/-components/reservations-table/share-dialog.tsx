@@ -7,10 +7,10 @@ import dayjs from 'dayjs';
 import {
   CheckIcon,
   CopyIcon,
-  Mail,
-  MessageCircle,
-  MessageSquare,
-  User
+  MailIcon,
+  MessageCircleIcon,
+  MessageSquareIcon,
+  UserIcon
 } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -32,7 +32,13 @@ import {
   FieldError,
   FieldLabel
 } from '@/components/ui/field';
-import { Input, InputWrapper } from '@/components/ui/input';
+import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput
+} from '@/components/ui/input-group';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
@@ -266,7 +272,7 @@ export function ShareDialog({
             {/* Guest Information */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
+                <UserIcon className="h-4 w-4 text-muted-foreground" />
                 <h3 className="text-sm font-medium">
                   <Trans>Guest Information</Trans>
                 </h3>
@@ -321,7 +327,7 @@ export function ShareDialog({
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center rounded-lg bg-blue-100 p-2">
-                  <Mail className="size-4 text-blue-600" />
+                  <MailIcon className="size-4 text-blue-600" />
                 </div>
 
                 <Controller
@@ -376,7 +382,7 @@ export function ShareDialog({
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center rounded-lg bg-emerald-100 p-2">
-                  <MessageCircle className="size-4 text-emerald-600" />
+                  <MessageCircleIcon className="size-4 text-emerald-600" />
                 </div>
 
                 <Controller
@@ -473,7 +479,7 @@ export function ShareDialog({
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center rounded-lg bg-emerald-100 p-2">
-                  <MessageSquare className="size-4 text-emerald-600" />
+                  <MessageSquareIcon className="size-4 text-emerald-600" />
                 </div>
 
                 <Controller
@@ -571,37 +577,38 @@ export function ShareDialog({
 
           {/* Check-in URL Section */}
           <div className="mt-6 space-y-2">
-            <InputWrapper className="bg-muted">
-              <Input
+            <InputGroup className="bg-muted">
+              <InputGroupInput
                 type="text"
                 placeholder={t`Check-in URL`}
                 defaultValue={reservation.page_url}
                 readOnly
                 ref={inputRef}
               />
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      type="button"
-                      onClick={handleCopy}
-                      variant="dim"
-                      disabled={copied}
-                      className="-me-3.5"
-                    >
-                      {copied ? (
-                        <CheckIcon className="stroke-green-600" size={16} />
-                      ) : (
-                        <CopyIcon size={16} />
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="px-2 py-1 text-xs">
-                    <Trans>Copy to clipboard</Trans>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </InputWrapper>
+              <InputGroupAddon align="inline-end">
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <InputGroupButton
+                        type="button"
+                        onClick={handleCopy}
+                        variant="ghost"
+                        disabled={copied}
+                      >
+                        {copied ? (
+                          <CheckIcon className="stroke-green-600" size={16} />
+                        ) : (
+                          <CopyIcon size={16} />
+                        )}
+                      </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent className="px-2 py-1 text-xs">
+                      <Trans>Copy to clipboard</Trans>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </InputGroupAddon>
+            </InputGroup>
 
             <p className="text-xs text-muted-foreground">
               <Trans>
