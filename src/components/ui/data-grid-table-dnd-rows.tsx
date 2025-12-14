@@ -49,7 +49,7 @@ function DataGridTableDndRowHandle({ rowId }: { rowId: string }) {
 
   return (
     <Button
-      variant="dim"
+      variant="ghost"
       size="sm"
       className="size-7"
       {...attributes}

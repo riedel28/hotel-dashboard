@@ -104,16 +104,18 @@ function DataGridColumnHeader<TData, TValue>({
     );
   };
 
-  const headerButton = () => {
+  const headerButton = (triggerProps?: React.ComponentProps<'button'>) => {
+    const { onClick: triggerOnClick, ...restTriggerProps } = triggerProps || {};
     return (
       <Button
         variant="ghost"
         className={cn(
-          '-ms-2 h-7 rounded-md px-2 font-medium text-secondary-foreground hover:bg-secondary hover:text-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
+          '-ms-2 h-7 rounded-md px-2 font-medium text-muted-foreground hover:bg-secondary data-[state=open]:bg-secondary data-[state=open]:text-foreground',
           className
         )}
         disabled={isLoading || recordCount === 0}
-        onClick={() => {
+        onClick={(e) => {
+          triggerOnClick?.(e);
           const isSorted = column.getIsSorted();
           if (isSorted === 'asc') {
             column.toggleSorting(true);
@@ -123,6 +125,7 @@ function DataGridColumnHeader<TData, TValue>({
             column.toggleSorting(false);
           }
         }}
+        {...restTriggerProps}
       >
         {icon && icon}
         {title}
@@ -144,8 +147,7 @@ function DataGridColumnHeader<TData, TValue>({
 
     return (
       <Button
-        mode="icon"
-        size="sm"
+        size="icon-sm"
         variant="ghost"
         className="-me-1 size-7 rounded-md"
         onClick={() => column.pin(false)}
@@ -161,7 +163,7 @@ function DataGridColumnHeader<TData, TValue>({
     return (
       <div className="flex h-full items-center justify-between gap-1.5">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>{headerButton()}</DropdownMenuTrigger>
+          <DropdownMenuTrigger render={(props) => headerButton(props)} />
           <DropdownMenuContent className="w-40" align="start">
             {filter && <DropdownMenuLabel>{filter}</DropdownMenuLabel>}
 

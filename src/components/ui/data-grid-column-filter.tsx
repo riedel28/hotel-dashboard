@@ -43,48 +43,46 @@ function DataGridColumnFilter<TData, TValue>({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" size="sm">
-          <CirclePlus className="size-4" />
-          {title}
-          {selectedValues?.size > 0 && (
-            <>
-              <Separator orientation="vertical" className="mx-2 h-4" />
-              <Badge
-                variant="secondary"
-                className="rounded-sm px-1 font-normal lg:hidden"
-              >
-                {selectedValues.size}
-              </Badge>
-              <div className="hidden space-x-1 lg:flex">
-                {selectedValues.size > 2 ? (
-                  <Badge
-                    variant="secondary"
-                    className="rounded-sm px-1 font-normal"
-                  >
-                    {selectedValues.size}
-                    <Trans>selected</Trans>
-                  </Badge>
-                ) : (
-                  options
-                    .filter((option) => selectedValues.has(option.value))
-                    .map((option) => {
-                      const label = option.label;
-                      return (
-                        <Badge
-                          variant="secondary"
-                          key={option.value}
-                          className="rounded-sm px-1 font-normal"
-                        >
-                          {label}
-                        </Badge>
-                      );
-                    })
-                )}
-              </div>
-            </>
-          )}
-        </Button>
+      <PopoverTrigger className="inline-flex h-8 items-center gap-1 rounded-[min(var(--radius-md),10px)] border border-border bg-background px-2.5 text-sm hover:bg-muted hover:text-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 shadow-xs">
+        <CirclePlus className="size-4" />
+        {title}
+        {selectedValues?.size > 0 && (
+          <>
+            <Separator orientation="vertical" className="mx-2 h-4" />
+            <Badge
+              variant="secondary"
+              className="rounded-sm px-1 font-normal lg:hidden"
+            >
+              {selectedValues.size}
+            </Badge>
+            <div className="hidden space-x-1 lg:flex">
+              {selectedValues.size > 2 ? (
+                <Badge
+                  variant="secondary"
+                  className="rounded-sm px-1 font-normal"
+                >
+                  {selectedValues.size}
+                  <Trans>selected</Trans>
+                </Badge>
+              ) : (
+                options
+                  .filter((option) => selectedValues.has(option.value))
+                  .map((option) => {
+                    const label = option.label;
+                    return (
+                      <Badge
+                        variant="secondary"
+                        key={option.value}
+                        className="rounded-sm px-1 font-normal"
+                      >
+                        {label}
+                      </Badge>
+                    );
+                  })
+              )}
+            </div>
+          </>
+        )}
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">
         <Command>
