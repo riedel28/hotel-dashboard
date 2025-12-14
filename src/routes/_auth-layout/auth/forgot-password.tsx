@@ -5,7 +5,7 @@ import { CheckIcon, Loader2Icon, MessageCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Field,
   FieldError,
@@ -14,9 +14,11 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { loginSchema } from '@/lib/schemas';
+import type z from 'zod';
 
-import { forgotPasswordSchema, type ForgotPasswordData } from '@/lib/schemas';
-import { cn } from '@/lib/utils';
+const forgotPasswordSchema = loginSchema.pick({ email: true });
+type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
 
 export const Route = createFileRoute('/_auth-layout/auth/forgot-password')({
   component: ForgotPasswordPage
@@ -31,12 +33,12 @@ function SuccessView({ email }: SuccessViewProps) {
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-4 text-center">
         <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
-          <CheckIcon className="size-8" />
+          <CheckIcon className="size-7" />
         </div>
         <h1 className="text-2xl font-bold">
           <Trans>Reset link sent</Trans>
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-balance">
           <Trans>
             We&apos;ve sent a password reset email to{' '}
             <span className="font-medium">{email}</span>. Follow the
@@ -47,14 +49,8 @@ function SuccessView({ email }: SuccessViewProps) {
 
       <div className="text-center">
         <Link
-          className={cn(
-            buttonVariants({
-              mode: 'link',
-              underline: 'solid'
-            }),
-            'text-sm text-foreground'
-          )}
           to="/auth/login"
+          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
         >
           <Trans>Back to login</Trans>
         </Link>
@@ -84,9 +80,9 @@ function ForgotPasswordPage() {
     }
   }
 
-  const { isSubmitting, isSubmitted } = form.formState;
+  const { isSubmitting, isSubmitSuccessful } = form.formState;
 
-  if (isSubmitted) {
+  if (isSubmitSuccessful) {
     return <SuccessView email={form.getValues('email')} />;
   }
 
@@ -152,19 +148,16 @@ function ForgotPasswordPage() {
         </Button>
       </form>
 
-      <div className="text-center">
-        <Link
-          className={cn(
-            buttonVariants({
-              mode: 'link',
-              underline: 'solid'
-            }),
-            'text-sm text-foreground'
-          )}
-          to="/auth/login"
-        >
-          <Trans>Back to login</Trans>
-        </Link>
+      <div className="text-center -mt-2">
+        <Button
+          variant="link"
+          size="sm"
+          render={
+            <Link to="/auth/login">
+              <Trans>Back to login</Trans>
+            </Link>
+          }
+        />
       </div>
     </div>
   );

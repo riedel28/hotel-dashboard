@@ -7,19 +7,23 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { useView, type ViewType } from '@/contexts/view-context';
 import { ChevronsUpDownIcon } from 'lucide-react';
+import { useView, type ViewType } from '@/contexts/view-context';
 
 export default function ViewSelector() {
   const { t } = useLingui();
   const { currentView, setCurrentView } = useView();
 
+  const handleValueChange = (value: string | null) => {
+    const validView: ViewType | null =
+      value === 'user' || value === 'admin' ? value : null;
+    if (validView) {
+      setCurrentView(validView);
+    }
+  };
+
   return (
-    <Select
-      defaultValue="user"
-      value={currentView}
-      onValueChange={(value) => setCurrentView(value as ViewType)}
-    >
+    <Select value={currentView} onValueChange={handleValueChange}>
       <SelectTrigger
         className="text-foreground border-none shadow-none hover:bg-accent px-3 min-w-[90px]"
         hasIcon={false}
@@ -27,7 +31,7 @@ export default function ViewSelector() {
       >
         <SelectValue className="capitalize" />
         <SelectIcon>
-          <ChevronsUpDownIcon className="size-4" />
+          <ChevronsUpDownIcon className="size-4 text-muted-foreground" />
         </SelectIcon>
       </SelectTrigger>
       <SelectContent>
