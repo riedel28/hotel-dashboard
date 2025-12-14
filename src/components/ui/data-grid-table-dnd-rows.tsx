@@ -90,14 +90,14 @@ function DataGridTableDndRow<TData>({ row }: { row: Row<TData> }) {
   );
 }
 
-function DataGridTableDndRows<TData>({
+function DataGridTableDndRows<TData extends object>({
   handleDragEnd,
   dataIds
 }: {
   handleDragEnd: (event: DragEndEvent) => void;
   dataIds: UniqueIdentifier[];
 }) {
-  const { table, isLoading, props } = useDataGrid();
+  const { table, isLoading, props } = useDataGrid<TData>();
   const pagination = table.getState().pagination;
 
   const sensors = useSensors(
@@ -172,8 +172,8 @@ function DataGridTableDndRows<TData>({
                 items={dataIds}
                 strategy={verticalListSortingStrategy}
               >
-                {table.getRowModel().rows.map((row: Row<TData>) => {
-                  return <DataGridTableDndRow row={row} key={row.id} />;
+                {table.getRowModel().rows.map((row) => {
+                  return <DataGridTableDndRow row={row as Row<TData>} key={row.id} />;
                 })}
               </SortableContext>
             ) : (
