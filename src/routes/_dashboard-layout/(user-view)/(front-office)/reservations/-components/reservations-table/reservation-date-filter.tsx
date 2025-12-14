@@ -144,44 +144,42 @@ function ReservationDateFilter({
 
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          mode="input"
-          placeholder={!displayDate?.from && !displayDate?.to}
-          className={cn('shadow-xs', className)}
-        >
-          <CalendarIcon />
-          {displayDate?.from ? (
-            displayDate.to ? (
-              <>
-                {dayjs(displayDate.from).format('DD.MM.YYYY')}
-                {' - '}
-                {dayjs(displayDate.to).format('DD.MM.YYYY')}
-              </>
-            ) : (
-              dayjs(displayDate.to).format('DD.MM.YYYY')
-            )
+      <PopoverTrigger
+        className={cn(
+          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
+          className
+        )}
+      >
+        <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
+
+        {displayDate?.from ? (
+          displayDate.to ? (
+            <>
+              {dayjs(displayDate.from).format('DD.MM.YYYY')}
+              {' - '}
+              {dayjs(displayDate.to).format('DD.MM.YYYY')}
+            </>
           ) : (
-            <span>
-              <Trans>Pick a date range</Trans>
-            </span>
-          )}
-        </Button>
+            dayjs(displayDate.from).format('DD.MM.YYYY')
+          )
+        ) : (
+          <span className="text-muted-foreground">
+            <Trans>Pick a date range</Trans>
+          </span>
+        )}
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="center">
+      <PopoverContent className="w-auto p-0" align="start">
         <div className="flex max-sm:flex-col">
           <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
             <div className="h-full border-border py-2 sm:border-e">
-              <div className="flex flex-col gap-[2px] px-2">
+              <div className="flex flex-col gap-0.5 px-2">
                 {presets.map((preset, index) => (
                   <Button
                     key={index}
                     type="button"
                     variant="ghost"
                     className={cn(
-                      'h-8 w-full justify-start',
+                      'h-8 w-full justify-start font-normal',
                       selectedPreset === preset.label && 'bg-accent'
                     )}
                     onClick={() => handlePresetSelect(preset)}
