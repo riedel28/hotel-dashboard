@@ -13,8 +13,11 @@ import {
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
 import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
+import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 
-export default function Component() {
+export default function Header() {
+  const { properties } = DashboardLayoutRoute.useLoaderData();
+
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:ps-3.5">
       <div className="flex h-14 items-center justify-between gap-4">
@@ -68,7 +71,7 @@ export default function Component() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <PropertySelector />
+                <PropertySelector properties={properties.index} />
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
