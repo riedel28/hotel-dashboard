@@ -60,7 +60,7 @@ function DataGridTableDndRowHandle({ rowId }: { rowId: string }) {
   );
 }
 
-function DataGridTableDndRow<TData>({ row }: { row: Row<TData> }) {
+function DataGridTableDndRow<TData extends object>({ row }: { row: Row<TData> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.id
   });
@@ -74,7 +74,7 @@ function DataGridTableDndRow<TData>({ row }: { row: Row<TData> }) {
   };
   return (
     <DataGridTableBodyRow
-      row={row}
+      row={row as Row<TData>}
       dndRef={setNodeRef}
       dndStyle={style}
       key={row.id}
