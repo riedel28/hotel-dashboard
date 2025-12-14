@@ -6,7 +6,7 @@ import {
   Trash2Icon
 } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 interface CategoryActionsDropdownProps {
   categoryId: number;
@@ -33,17 +34,14 @@ export function CategoryActionsDropdown({
   return (
     <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            size="icon"
-            variant="ghost"
-            aria-label="Category actions"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <MoreHorizontalIcon className="size-4" />
-          </Button>
+        <DropdownMenuTrigger
+          className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }))}
+          aria-label="Category actions"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <MoreHorizontalIcon className="size-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"

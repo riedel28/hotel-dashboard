@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import type { Guest } from 'shared/types/reservations';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -14,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 import {
   Field,
   FieldError,
@@ -70,11 +72,11 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button type="button" variant="secondary" className="w-full">
-          <PlusCircle className="mr-2 h-4 w-4" />
-          <Trans>New Guest</Trans>
-        </Button>
+      <DialogTrigger
+        className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}
+      >
+        <PlusCircle className="mr-2 h-4 w-4" />
+        <Trans>New Guest</Trans>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
