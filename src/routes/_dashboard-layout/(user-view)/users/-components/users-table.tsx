@@ -331,13 +331,13 @@ export default function DataGridDemo() {
 
           if (status == 'active') {
             return (
-              <Badge variant="primary" appearance="outline">
+              <Badge variant="success">
                 <Trans>Approved</Trans>
               </Badge>
             );
           } else {
             return (
-              <Badge variant="destructive" appearance="outline">
+              <Badge variant="destructive">
                 <Trans>Pending</Trans>
               </Badge>
             );
