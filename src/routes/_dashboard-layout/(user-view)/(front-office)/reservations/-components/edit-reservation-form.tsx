@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { updateReservationById } from '@/api/reservations';
 
 import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 import {
   Field,
   FieldError,
@@ -236,16 +238,16 @@ export function EditReservationForm({
                                 </span>
                               </div>
                               <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-                                  >
-                                    <MoreHorizontal className="h-4 w-4" />
-                                    <span className="sr-only">
-                                      <Trans>Open guest menu</Trans>
-                                    </span>
-                                  </Button>
+                                <DropdownMenuTrigger
+                                  className={cn(
+                                    buttonVariants({ variant: 'ghost' }),
+                                    'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
+                                  )}
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">
+                                    <Trans>Open guest menu</Trans>
+                                  </span>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
                                   align="end"
@@ -468,7 +470,7 @@ export function EditReservationForm({
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder={t`Select a room...`}>
+                          <SelectValue>
                             {roomOptions.find((room) => room.id === field.value)
                               ?.name ?? t`Select a room...`}
                           </SelectValue>

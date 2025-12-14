@@ -76,7 +76,7 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label={t`Go to previous page`}
-      size="md"
+      size="default"
       className={cn('gap-1 px-2.5 sm:pl-2.5', className)}
       {...props}
     >
@@ -97,7 +97,7 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label={t`Go to next page`}
-      size="md"
+      size="default"
       className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
       {...props}
     >
