@@ -199,14 +199,17 @@ function LoginPage() {
       </form>
 
       <div className="flex items-center justify-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground -mt-2">
           <Trans>Don't have an account?</Trans>{' '}
-          <Link
-            to="/auth/sign-up"
-            className="text-primary hover:underline underline-offset-4 font-medium"
-          >
-            <Trans>Sign up</Trans>
-          </Link>
+          <Button
+            variant="link"
+            size="sm"
+            render={
+              <Link to="/auth/sign-up">
+                <Trans>Sign up</Trans>
+              </Link>
+            }
+          />
         </p>
       </div>
     </div>

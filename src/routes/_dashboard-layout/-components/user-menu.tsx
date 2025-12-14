@@ -83,7 +83,7 @@ function LanguageSubmenu({
           </div>
           <Badge
             variant="outline"
-            className="flex h-6 min-w-6 items-center gap-2 rounded-sm"
+            className="flex h-6 min-w-6 items-center text-xs gap-2 rounded-sm"
           >
             {currentLanguage?.label}
             <Flag

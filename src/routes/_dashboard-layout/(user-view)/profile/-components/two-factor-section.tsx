@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Shield, ShieldCheck } from 'lucide-react';
+import { ArrowUpRightIcon, Shield, ShieldCheck } from 'lucide-react';
 import { useId, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Badge } from '@/components/ui/badge';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Field,
   FieldContent,
@@ -26,8 +26,6 @@ import {
   ItemTitle
 } from '@/components/ui/item';
 import { Switch } from '@/components/ui/switch';
-
-import { cn } from '@/lib/utils';
 
 interface TwoFactorSectionProps {
   isEnabled?: boolean;
@@ -106,11 +104,11 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 <Trans>Two-Factor Authentication</Trans>
               </ItemTitle>
               {enabled ? (
-                <Badge variant="success" appearance="outline">
+                <Badge variant="secondary" size="sm">
                   <Trans>Enabled</Trans>
                 </Badge>
               ) : (
-                <Badge variant="destructive" appearance="outline">
+                <Badge variant="destructive" size="sm">
                   <Trans>Disabled</Trans>
                 </Badge>
               )}
@@ -123,7 +121,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button variant="outline" onClick={handleSetup} loading={isLoading}>
+          <Button variant="outline" onClick={handleSetup} disabled={isLoading}>
             <Trans>Set up 2FA</Trans>
           </Button>
         </ItemActions>
@@ -143,51 +141,50 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
           <Trans>You can use any of these popular apps:</Trans>
         </p>
 
-        <div className="flex flex-col items-start space-y-2">
-          <a
-            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-            className={cn(
-              buttonVariants({
-                mode: 'link',
-                underline: 'solid'
-              }),
-              'text-foreground'
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Trans>Google Authenticator ↗</Trans>
-          </a>
+        <div className="flex flex-col items-start space-y-0 -ml-0.5">
+          <Button
+            variant="link"
+            size="sm"
+            render={
+              <a
+                href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Trans>Google Authenticator</Trans>
+                <ArrowUpRightIcon className="-ml-0.5 size-4" />
+              </a>
+            }
+          />
+          <Button
+            variant="link"
+            size="sm"
+            render={
+              <a
+                href="https://www.microsoft.com/de-de/security/mobile-authenticator-app"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Trans>Microsoft Authenticator</Trans>
+                <ArrowUpRightIcon className="-ml-0.5 size-4" />
+              </a>
+            }
+          />
 
-          <a
-            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-            className={cn(
-              buttonVariants({
-                mode: 'link',
-                underline: 'solid'
-              }),
-              'text-foreground'
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Trans>Microsoft Authenticator ↗</Trans>
-          </a>
-
-          <a
-            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-            className={cn(
-              buttonVariants({
-                mode: 'link',
-                underline: 'solid'
-              }),
-              'text-foreground'
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Trans>Authy ↗</Trans>
-          </a>
+          <Button
+            variant="link"
+            size="sm"
+            render={
+              <a
+                href="https://www.authy.com/"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Trans>Authy</Trans>
+                <ArrowUpRightIcon className="-ml-0.5 size-4" />
+              </a>
+            }
+          />
         </div>
       </ItemContent>
 

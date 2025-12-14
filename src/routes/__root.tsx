@@ -45,6 +45,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
               <ErrorDisplayActions>
                 <Button
                   variant="destructive"
+                  size="lg"
                   onClick={() => {
                     reset();
                     resetQuery();

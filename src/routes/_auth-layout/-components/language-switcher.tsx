@@ -52,7 +52,7 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
         )}
       />
 
-      <DropdownMenuContent align={align} className="w-[180px]">
+      <DropdownMenuContent align={align} className="w-[160px]">
         <DropdownMenuRadioGroup
           value={locale}
           onValueChange={handleChangeLocale}

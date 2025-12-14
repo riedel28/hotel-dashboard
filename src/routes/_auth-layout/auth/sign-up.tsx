@@ -208,14 +208,17 @@ function SignUpPage() {
       </form>
 
       <div className="flex items-center justify-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground -mt-2">
           <Trans>Already have an account?</Trans>{' '}
-          <Link
-            to="/auth/login"
-            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
-          >
-            <Trans>Login</Trans>
-          </Link>
+          <Button
+            variant="link"
+            size="sm"
+            render={
+              <Link to="/auth/login">
+                <Trans>Login</Trans>
+              </Link>
+            }
+          />
         </p>
       </div>
     </div>

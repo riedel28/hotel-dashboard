@@ -9,7 +9,6 @@ import {
 
 import { useAuth } from '../../auth';
 import { Card, CardDescription, CardTitle } from '../../components/ui/card';
-import ViewAwareContent from './-components/view-aware-content';
 
 export const Route = createFileRoute('/_dashboard-layout/')({
   component: StartPage
@@ -52,16 +51,13 @@ function StartPage() {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">
+        <h1 className="text-2xl font-bold">
           <Trans>Welcome back, {userName}!</Trans>
         </h1>
         <p className="text-lg text-muted-foreground">
           <Trans>Manage your hotel operations efficiently</Trans>
         </p>
       </div>
-
-      {/* View Switching Demo */}
-      <ViewAwareContent />
 
       {/* Quick Actions Grid */}
       <div className="grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
@@ -80,7 +76,7 @@ function StartPage() {
               >
                 <div className="mb-2">
                   <div className="mb-3 w-fit rounded-lg bg-muted p-3">
-                    <IconComponent className="size-5 text-muted-foreground" />
+                    <IconComponent className="size-5 text-primary" />
                   </div>
                   <CardTitle className="mb-1 text-lg font-semibold">
                     {action.title}

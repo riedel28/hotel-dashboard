@@ -48,6 +48,7 @@ import {
 import { useView, ViewProvider } from '@/contexts/view-context';
 import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
 import Header from '@/routes/_dashboard-layout/-components/header';
+import { fetchProperties } from '@/api/properties';
 
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -412,6 +413,11 @@ export const Route = createFileRoute('/_dashboard-layout')({
         }
       });
     }
+  },
+  loader: async () => {
+    const properties = await fetchProperties();
+
+    return { properties };
   },
   component: DashboardLayout
 });
