@@ -296,7 +296,9 @@ function DataGridTableBodyRow<TData extends object>({
           ? 'selected'
           : undefined
       }
-      onClick={() => props.onRowClick && props.onRowClick(row.original as TData)}
+      onClick={() =>
+        props.onRowClick && props.onRowClick(row.original as TData)
+      }
       className={cn(
         'hover:bg-muted/40 data-[state=selected]:bg-muted/50',
         props.onRowClick && 'cursor-pointer',
@@ -315,7 +317,11 @@ function DataGridTableBodyRow<TData extends object>({
   );
 }
 
-function DataGridTableBodyRowExpandded<TData extends object>({ row }: { row: Row<TData> }) {
+function DataGridTableBodyRowExpandded<TData extends object>({
+  row
+}: {
+  row: Row<TData>;
+}) {
   const { props, table } = useDataGrid<TData>();
 
   return (
