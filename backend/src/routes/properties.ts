@@ -14,3 +14,5 @@ router.use(authenticateToken);
 router.get('/', validateQuery(fetchPropertiesParamsSchema), getProperties);
 
 export default router;
+
+
