@@ -30,7 +30,7 @@ export const reservationSchema = z.object({
   id: z.number(),
   state: reservationStatusSchema,
   booking_nr: z.string(),
-  guest_email: z.email().nullable(),
+  guest_email: z.union([z.email(), z.literal(''), z.null()]),
   guests: z.array(guestSchema),
   booking_id: z.string(),
   room_name: z.string(),
@@ -99,10 +99,8 @@ export const reservationIdParamsSchema = z.object({
 
 export const fetchReservationByIdSchema = reservationIdParamsSchema;
 
-export const createReservationSchema = reservationSchema.pick({
-  booking_nr: true,
-  room: true,
-  page_url: true
+export const createReservationSchema = z.object({
+  room_name: z.string().min(1)
 });
 
 export const updateReservationSchema = reservationSchema
