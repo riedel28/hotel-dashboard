@@ -161,7 +161,6 @@ function PropertySelector({
 
   const handleReloadProperties = async () => {
     setLoading(true);
-    toast.info(t`Reloading properties`);
 
     try {
       if (onReload) {
@@ -169,7 +168,7 @@ function PropertySelector({
       } else {
         await new Promise((resolve) => setTimeout(resolve, RELOAD_TIMEOUT_MS));
       }
-      toast.info(t`Properties reloaded`);
+      toast.info(t`Properties updated`);
     } catch (error) {
       console.error('Failed to reload properties:', error);
       toast.error(t`Failed to reload properties`);
