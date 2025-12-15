@@ -1,14 +1,16 @@
 import * as React from 'react';
 
 import { login as apiLogin, register as apiRegister } from './api/auth';
-import type { AuthResponse, RegisterData, User } from './lib/schemas';
+import type {
+  AuthResponse,
+  LoginData,
+  RegisterData,
+  User
+} from './lib/schemas';
 
 export interface AuthContext {
   isAuthenticated: boolean;
-  login: (credentials: {
-    email: string;
-    password: string;
-  }) => Promise<AuthResponse>;
+  login: (credentials: LoginData) => Promise<AuthResponse>;
   register: (data: RegisterData) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   user: User | null;
@@ -50,19 +52,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setToken(null);
   }, []);
 
-  const login = React.useCallback(
-    async (credentials: { email: string; password: string }) => {
-      const response = await apiLogin(credentials);
-      if (response) {
-        setStoredAuth(response.user, response.token);
-        setUser(response.user);
-        setToken(response.token);
-        return response;
-      }
-      throw new Error('Login failed');
-    },
-    []
-  );
+  const login = React.useCallback(async (credentials: LoginData) => {
+    const response = await apiLogin(credentials);
+    if (response) {
+      setStoredAuth(response.user, response.token);
+      setUser(response.user);
+      setToken(response.token);
+      return response;
+    }
+    throw new Error('Login failed');
+  }, []);
 
   const register = React.useCallback(async (data: RegisterData) => {
     const response = await apiRegister(data);
