@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, ilike, lte } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gte, ilike, lte } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
@@ -9,7 +9,8 @@ import {
 
 async function getReservations(req: Request, res: Response) {
   try {
-    const { page, per_page, status, q, from, to } = req.query;
+    const { page, per_page, status, q, from, to, sort_by, sort_order } =
+      req.query;
 
     const conditions = [];
 
@@ -37,6 +38,48 @@ async function getReservations(req: Request, res: Response) {
     const searchCondition =
       conditions.length > 0 ? and(...conditions) : undefined;
 
+    // Build dynamic orderBy clause
+    const sortColumn = sort_by as
+      | 'state'
+      | 'booking_nr'
+      | 'room_name'
+      | 'booking_from'
+      | 'booking_to'
+      | 'balance'
+      | 'received_at'
+      | undefined;
+    const sortDirection = sort_order as 'asc' | 'desc' | undefined;
+
+    let orderByColumn;
+    switch (sortColumn) {
+      case 'state':
+        orderByColumn = reservationsTable.state;
+        break;
+      case 'booking_nr':
+        orderByColumn = reservationsTable.booking_nr;
+        break;
+      case 'room_name':
+        orderByColumn = reservationsTable.room_name;
+        break;
+      case 'booking_from':
+        orderByColumn = reservationsTable.booking_from;
+        break;
+      case 'booking_to':
+        orderByColumn = reservationsTable.booking_to;
+        break;
+      case 'balance':
+        orderByColumn = reservationsTable.balance;
+        break;
+      case 'received_at':
+        orderByColumn = reservationsTable.received_at;
+        break;
+      default:
+        orderByColumn = reservationsTable.received_at;
+    }
+
+    const orderBy =
+      sortDirection === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
+
     const reservations = await db.query.reservations.findMany({
       where: searchCondition,
       with: {
@@ -44,15 +87,15 @@ async function getReservations(req: Request, res: Response) {
       },
       offset: ((Number(page) || 1) - 1) * (Number(per_page) || 10),
       limit: Number(per_page) || 10,
-      orderBy: desc(reservationsTable.received_at)
+      orderBy
     });
 
     // Get total count for pagination
-    const totalCountResult = await db.query.reservations.findMany({
-      where: searchCondition,
-      columns: { id: true }
-    });
-    const totalCount = totalCountResult.length;
+    const totalCountResult = await db
+      .select({ count: count() })
+      .from(reservationsTable)
+      .where(searchCondition);
+    const totalCount = totalCountResult[0]?.count ?? 0;
 
     res.status(200).json({
       index: reservations,
@@ -85,7 +128,7 @@ async function getReservationById(req: Request, res: Response) {
     res.status(200).json(reservation);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch reservation ' });
+    res.status(500).json({ error: 'Failed to fetch reservation' });
   }
 }
 
@@ -141,7 +184,7 @@ async function createReservation(req: Request, res: Response) {
     res.status(201).json(reservationWithGuests);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to create reservation ' });
+    res.status(500).json({ error: 'Failed to create reservation' });
   }
 }
 
@@ -226,7 +269,7 @@ async function updateReservation(req: Request, res: Response) {
     res.status(200).json(reservationWithGuests);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to update reservation ' });
+    res.status(500).json({ error: 'Failed to update reservation' });
   }
 }
 
@@ -252,7 +295,7 @@ async function deleteReservation(req: Request, res: Response) {
     res.status(200).json(deletedReservations);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to delete reservation ' });
+    res.status(500).json({ error: 'Failed to delete reservation' });
   }
 }
 

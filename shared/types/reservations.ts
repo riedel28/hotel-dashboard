@@ -43,7 +43,7 @@ export const reservationSchema = z.object({
   received_at: z.coerce.date(),
   completed_at: z.coerce.date().nullable(),
   updated_at: z.coerce.date().nullable(),
-  page_url: z.url(),
+  page_url: z.union([z.url(), z.literal(''), z.null()]),
   balance: z.number(),
   // Detail view-only fields are optional in list responses
   adults: z.coerce.number().int().nonnegative().optional(),
@@ -53,6 +53,18 @@ export const reservationSchema = z.object({
   purpose: z.enum(['private', 'business']).optional(),
   room: z.string().optional()
 });
+
+export const sortableColumnsSchema = z.enum([
+  'state',
+  'booking_nr',
+  'room_name',
+  'booking_from',
+  'booking_to',
+  'balance',
+  'received_at'
+]);
+
+export const sortOrderSchema = z.enum(['asc', 'desc']);
 
 export const fetchReservationsParamsSchema = z.object({
   page: z.coerce.number().int().positive().default(1).optional(),
@@ -68,7 +80,9 @@ export const fetchReservationsParamsSchema = z.object({
   q: z.string().optional(),
   status: reservationStatusSchema.default('all').optional(),
   from: z.iso.date().optional(),
-  to: z.iso.date().optional()
+  to: z.iso.date().optional(),
+  sort_by: sortableColumnsSchema.optional(),
+  sort_order: sortOrderSchema.default('desc').optional()
 });
 
 export const fetchReservationsResponseSchema = z.object({

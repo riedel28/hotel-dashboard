@@ -24,11 +24,33 @@ function reservationsQueryOptions({
   status,
   q,
   from,
-  to
+  to,
+  sort_by,
+  sort_order
 }: FetchReservationsParams) {
   return queryOptions({
-    queryKey: ['reservations', page, per_page, status, q, from, to],
-    queryFn: () => fetchReservations({ page, per_page, status, q, from, to }),
+    queryKey: [
+      'reservations',
+      page,
+      per_page,
+      status,
+      q,
+      from,
+      to,
+      sort_by,
+      sort_order
+    ],
+    queryFn: () =>
+      fetchReservations({
+        page,
+        per_page,
+        status,
+        q,
+        from,
+        to,
+        sort_by,
+        sort_order
+      }),
     placeholderData: keepPreviousData
   });
 }
