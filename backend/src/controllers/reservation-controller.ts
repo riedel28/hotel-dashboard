@@ -133,7 +133,10 @@ async function getReservationById(req: Request, res: Response) {
 }
 
 async function createReservation(req: Request, res: Response) {
-  const { booking_nr, room, page_url } = req.body;
+  const { room_name } = req.body;
+
+  // Generate a unique booking number
+  const booking_nr = `RES-${Date.now().toString(36).toUpperCase()}`;
 
   try {
     const [newReservation] = await db
@@ -141,10 +144,10 @@ async function createReservation(req: Request, res: Response) {
       .values({
         state: 'pending',
         booking_nr,
-        guest_email: '',
+        guest_email: null,
         primary_guest_name: '',
         booking_id: '',
-        room_name: room,
+        room_name,
         booking_from: new Date(),
         booking_to: new Date(),
         check_in_via: 'web',
@@ -153,14 +156,14 @@ async function createReservation(req: Request, res: Response) {
         received_at: new Date(),
         completed_at: null,
         updated_at: null,
-        page_url,
+        page_url: null,
         balance: 0,
         adults: 1,
         youth: 0,
         children: 0,
         infants: 0,
         purpose: 'private',
-        room
+        room: room_name
       })
       .returning();
 
