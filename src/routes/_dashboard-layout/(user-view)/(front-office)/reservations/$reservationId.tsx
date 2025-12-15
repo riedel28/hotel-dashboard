@@ -35,13 +35,13 @@ function ReservationPage() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">
+              <BreadcrumbLink to="/">
                 <Trans>Home</Trans>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/reservations">
+              <BreadcrumbLink to="/reservations">
                 <Trans>Reservations</Trans>
               </BreadcrumbLink>
             </BreadcrumbItem>

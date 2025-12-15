@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { type PaginationState } from '@tanstack/react-table';
+import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { RefreshCw, XIcon } from 'lucide-react';
 import {
@@ -40,7 +40,8 @@ import ReservationsTable from '../reservations/-components/reservations-table/re
 import { ReservationDateFilter } from './-components/reservations-table/reservation-date-filter';
 
 function ReservationsPage() {
-  const { page, per_page, status, from, to, q } = Route.useSearch();
+  const { page, per_page, status, from, to, q, sort_by, sort_order } =
+    Route.useSearch();
   const navigate = Route.useNavigate();
   const { t } = useLingui();
 
@@ -51,7 +52,9 @@ function ReservationsPage() {
       status,
       q,
       from,
-      to
+      to,
+      sort_by,
+      sort_order
     })
   );
 
@@ -121,6 +124,51 @@ function ReservationsPage() {
     });
   };
 
+  const handleSortingChange = (
+    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
+  ) => {
+    const sorting =
+      typeof updaterOrValue === 'function'
+        ? updaterOrValue(
+            sort_by
+              ? [{ id: sort_by, desc: sort_order === 'desc' }]
+              : [{ id: 'received_at', desc: true }]
+          )
+        : updaterOrValue;
+
+    // Convert TanStack Table SortingState to URL params
+    const firstSort = sorting[0];
+    if (firstSort) {
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({
+          ...prev,
+          page: 1, // Reset to first page when sorting changes
+          sort_by: firstSort.id as
+            | 'state'
+            | 'booking_nr'
+            | 'room_name'
+            | 'booking_from'
+            | 'booking_to'
+            | 'balance'
+            | 'received_at',
+          sort_order: firstSort.desc ? ('desc' as const) : ('asc' as const)
+        })
+      });
+    } else {
+      // Clear sorting - use default
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({
+          ...prev,
+          page: 1,
+          sort_by: undefined,
+          sort_order: undefined
+        })
+      });
+    }
+  };
+
   const handleClearFilters = () => {
     navigate({
       to: '/reservations',
@@ -130,10 +178,17 @@ function ReservationsPage() {
         status: 'all',
         q: undefined,
         from: undefined,
-        to: undefined
+        to: undefined,
+        sort_by: undefined,
+        sort_order: undefined
       }
     });
   };
+
+  // Convert URL params to TanStack Table SortingState
+  const sorting: SortingState = sort_by
+    ? [{ id: sort_by, desc: sort_order === 'desc' }]
+    : [{ id: 'received_at', desc: true }];
 
   const renderTableContent = () => {
     if (reservationsQuery.isLoading) {
@@ -146,6 +201,8 @@ function ReservationsPage() {
           totalCount={0}
           pageCount={0}
           onPaginationChange={handlePaginationChange}
+          sorting={sorting}
+          onSortingChange={handleSortingChange}
         />
       );
     }
@@ -182,6 +239,8 @@ function ReservationsPage() {
           totalCount={reservationsQuery.data.total}
           pageCount={reservationsQuery.data.page_count}
           onPaginationChange={handlePaginationChange}
+          sorting={sorting}
+          onSortingChange={handleSortingChange}
         />
       );
     }
@@ -194,7 +253,7 @@ function ReservationsPage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">
+            <BreadcrumbLink to="/">
               <Trans>Home</Trans>
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -243,7 +302,7 @@ function ReservationsPage() {
                     }
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent align="start">
                   <SelectItem value="all">
                     <span className="flex items-center gap-2">
                       <span className="size-1.5 rounded-full bg-gray-500"></span>

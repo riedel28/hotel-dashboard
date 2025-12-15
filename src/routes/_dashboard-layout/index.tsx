@@ -74,14 +74,14 @@ function StartPage() {
                 search={action.search}
                 className="block p-6"
               >
-                <div className="mb-2">
-                  <div className="mb-3 w-fit rounded-lg bg-muted p-3">
+                <div className="mb-2 space-y-2">
+                  <div className="w-fit rounded-lg bg-muted p-3">
                     <IconComponent className="size-5 text-primary" />
                   </div>
-                  <CardTitle className="mb-1 text-lg font-semibold">
+                  <CardTitle className="text-lg font-semibold">
                     {action.title}
                   </CardTitle>
-                  <CardDescription className="mb-2text-sm leading-relaxed text-muted-foreground">
+                  <CardDescription className="text-sm leading-relaxed text-muted-foreground text-balance">
                     {action.description}
                   </CardDescription>
                 </div>
