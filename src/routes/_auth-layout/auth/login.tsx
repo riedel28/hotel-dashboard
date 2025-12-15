@@ -73,10 +73,7 @@ function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    loginMutation.mutate({
-      email: data.email,
-      password: data.password
-    });
+    loginMutation.mutate(data);
   };
 
   return (
@@ -167,10 +164,7 @@ function LoginPage() {
                     field.onChange(checked === true)
                   }
                 />
-                <FieldLabel
-                  htmlFor={field.name}
-                  className="text-sm font-normal"
-                >
+                <FieldLabel htmlFor={field.name} className="text-sm">
                   <Trans>Remember me</Trans>
                 </FieldLabel>
               </Field>
