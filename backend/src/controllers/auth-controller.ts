@@ -51,7 +51,7 @@ async function register(req: Request, res: Response) {
 
 async function login(req: Request, res: Response) {
   try {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
 
     // Find user
     const [user] = await db.select().from(users).where(eq(users.email, email));
@@ -71,12 +71,15 @@ async function login(req: Request, res: Response) {
     }
 
     // Generate JWT
-    const token = await generateToken({
-      id: String(user.id),
-      email: user.email,
-      first_name: user.first_name || '',
-      last_name: user.last_name || ''
-    });
+    const token = await generateToken(
+      {
+        id: String(user.id),
+        email: user.email,
+        first_name: user.first_name || '',
+        last_name: user.last_name || ''
+      },
+      { rememberMe: Boolean(rememberMe) }
+    );
 
     res.status(200).json({
       user,

@@ -11,7 +11,10 @@ export interface JWTPayload {
   [key: string]: unknown;
 }
 
-async function generateToken(payload: JWTPayload): Promise<string> {
+async function generateToken(
+  payload: JWTPayload,
+  options?: { rememberMe?: boolean }
+): Promise<string> {
   const secret = env.JWT_SECRET;
 
   if (!secret) {
@@ -20,10 +23,15 @@ async function generateToken(payload: JWTPayload): Promise<string> {
 
   const secretKey = createSecretKey(secret, 'utf-8');
 
+  const shortExpiration = '24h';
+  const longExpiration = env.JWT_EXPIRES_IN || '30d';
+
+  const expiration = options?.rememberMe ? longExpiration : shortExpiration;
+
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime(env.JWT_EXPIRES_IN || '7d')
+    .setExpirationTime(expiration)
     .sign(secretKey);
 }
 
