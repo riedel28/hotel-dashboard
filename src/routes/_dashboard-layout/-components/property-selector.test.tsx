@@ -12,10 +12,10 @@ const mockToastWarning = vi.fn();
 
 vi.mock('sonner', () => ({
   toast: {
-    info: () => mockToastInfo(),
-    error: () => mockToastError(),
-    success: () => mockToastSuccess(),
-    warning: () => mockToastWarning()
+    info: (...args: unknown[]) => mockToastInfo(...args),
+    error: (...args: unknown[]) => mockToastError(...args),
+    success: (...args: unknown[]) => mockToastSuccess(...args),
+    warning: (...args: unknown[]) => mockToastWarning(...args)
   }
 }));
 
@@ -389,14 +389,12 @@ describe('PropertySelector', () => {
       const reloadButton = screen.getByLabelText(/reload properties/i);
       await user.click(reloadButton);
 
-      await waitFor(() => {
-        expect(mockToast.info).toHaveBeenCalled();
-      });
-
-      // Wait for the default timeout (2000ms) to complete
+      // Wait for the default timeout (2000ms) to complete and toast to be called
       await waitFor(
         () => {
-          expect(mockToast.info).toHaveBeenCalledTimes(2);
+          expect(mockToast.info).toHaveBeenCalledWith(
+            expect.stringContaining('Properties updated')
+          );
         },
         { timeout: 3000 }
       );
