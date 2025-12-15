@@ -41,7 +41,7 @@ function RouteComponent() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">
+            <BreadcrumbLink to="/">
               <Trans>Home</Trans>
             </BreadcrumbLink>
           </BreadcrumbItem>

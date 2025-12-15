@@ -126,8 +126,8 @@ function AdminSidebarContent() {
 
   return (
     <SidebarContent>
-      <SidebarMenu>
-        <SidebarGroup>
+      <SidebarGroup>
+        <SidebarMenu>
           <SidebarMenuItem>
             <SidebarLink to="/" icon={HomeIcon} tooltip={t`Start`}>
               <Trans>Start</Trans>
@@ -151,8 +151,8 @@ function AdminSidebarContent() {
               <Trans>Customers</Trans>
             </SidebarLink>
           </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
+        </SidebarMenu>
+      </SidebarGroup>
     </SidebarContent>
   );
 }

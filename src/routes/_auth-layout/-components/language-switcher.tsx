@@ -36,6 +36,7 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
+        nativeButton
         render={(props: ButtonProps) => (
           <Button
             variant="ghost"

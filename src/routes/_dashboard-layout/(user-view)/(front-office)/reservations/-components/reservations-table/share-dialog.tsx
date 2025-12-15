@@ -581,7 +581,7 @@ export function ShareDialog({
               <InputGroupInput
                 type="text"
                 placeholder={t`Check-in URL`}
-                defaultValue={reservation.page_url}
+                defaultValue={reservation.page_url ?? ''}
                 readOnly
                 ref={inputRef}
               />

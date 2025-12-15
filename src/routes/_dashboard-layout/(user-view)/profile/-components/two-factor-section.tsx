@@ -88,9 +88,9 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
   };
 
   return (
-    <Item variant="outline">
+    <Item variant="outline" className="p-6 gap-6">
       <ItemHeader>
-        <ItemMedia>
+        <ItemMedia variant="icon" className="mr-2">
           {enabled ? (
             <ShieldCheck className="size-5" />
           ) : (
@@ -126,7 +126,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
           </Button>
         </ItemActions>
       </ItemHeader>
-      <ItemContent className="space-y-2">
+      <ItemContent className="space-y-0">
         <p>
           {enabled ? (
             <Trans>Two-factor authentication is active on your account.</Trans>
