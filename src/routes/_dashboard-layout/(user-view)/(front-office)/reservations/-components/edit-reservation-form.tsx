@@ -2,16 +2,21 @@ import { DevTool } from '@hookform/devtools';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
+import {
+  Edit2Icon,
+  Loader2Icon,
+  MoreHorizontalIcon,
+  Trash2Icon,
+  UserIcon
+} from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { type Guest } from 'shared/types/reservations';
+import type { Guest } from 'shared/types/reservations';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { updateReservationById } from '@/api/reservations';
 
-import { Button } from '@/components/ui/button';
-import { buttonVariants } from '@/components/ui/button';
+import { updateReservationById } from '@/api/reservations';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
@@ -20,7 +25,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 import {
   Field,
   FieldError,
@@ -40,6 +44,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
 import { AddGuestModal } from './add-guest-modal';
 import { EditGuestModal } from './edit-guest-modal';
@@ -71,35 +76,24 @@ export const reservationFormSchema = z.object({
 
 type ReservationFormData = z.infer<typeof reservationFormSchema>;
 
-async function updateReservation(id: string, data: ReservationFormData) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return updateReservationById(id, data);
-}
-
 interface EditReservationFormProps {
   reservationId: string;
   reservationData: ReservationFormData;
 }
 
-const initialData: ReservationFormData = {
-  booking_nr: '',
-  guests: [],
-  adults: 1,
-  youth: 0,
-  children: 0,
-  infants: 0,
-  purpose: 'private',
-  room: ''
-};
+async function updateReservation(id: string, data: ReservationFormData) {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return updateReservationById(id, data);
+}
 
 export function EditReservationForm({
   reservationId,
   reservationData
 }: EditReservationFormProps) {
   const queryClient = useQueryClient();
+  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
 
   const form = useForm<ReservationFormData>({
-    defaultValues: initialData,
     values: reservationData
   });
 
@@ -108,7 +102,6 @@ export function EditReservationForm({
       updateReservation(reservationId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
-
       toast.success(t`Reservation updated successfully`);
     },
     onError: () => {
@@ -116,30 +109,28 @@ export function EditReservationForm({
     }
   });
 
-  const onSubmit = (data: ReservationFormData) => {
-    updateReservationMutation.mutate(data);
-  };
-
-  const removeGuest = (guestId: number) => {
+  const handleRemoveGuest = (guestId: number) => {
     const currentGuests = form.getValues('guests');
-    const updatedGuests = currentGuests.filter((guest) => guest.id !== guestId);
-    form.setValue('guests', updatedGuests);
-  };
-
-  const addGuest = (newGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
-    const updatedGuests = [...currentGuests, newGuest];
-    form.setValue('guests', updatedGuests);
-  };
-
-  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
-
-  const editGuest = (guestId: string, updatedGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
-    const updatedGuests = currentGuests.map((guest) =>
-      guest.id === Number(guestId) ? updatedGuest : guest
+    form.setValue(
+      'guests',
+      currentGuests.filter((guest) => guest.id !== guestId)
     );
-    form.setValue('guests', updatedGuests, { shouldValidate: true });
+  };
+
+  const handleAddGuest = (newGuest: Guest) => {
+    const currentGuests = form.getValues('guests');
+    form.setValue('guests', [...currentGuests, newGuest]);
+  };
+
+  const handleEditGuest = (guestId: string, updatedGuest: Guest) => {
+    const currentGuests = form.getValues('guests');
+    form.setValue(
+      'guests',
+      currentGuests.map((guest) =>
+        guest.id === Number(guestId) ? updatedGuest : guest
+      ),
+      { shouldValidate: true }
+    );
   };
 
   // Mock room data - replace with actual data from your API
@@ -162,7 +153,11 @@ export function EditReservationForm({
       description: 'Luxury suite with separate living area',
       price: 250
     }
-  ];
+  ] as const;
+
+  const onSubmit = (data: ReservationFormData) => {
+    updateReservationMutation.mutate(data);
+  };
 
   return (
     <>
@@ -170,7 +165,7 @@ export function EditReservationForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="max-w-xl space-y-6"
       >
-        <Card className="gap-0">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Booking Information</Trans>
@@ -205,7 +200,7 @@ export function EditReservationForm({
           </CardContent>
         </Card>
 
-        <Card className="gap-0">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Guests</Trans>
@@ -221,18 +216,18 @@ export function EditReservationForm({
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid} className="gap-2">
                       <div className="space-y-2">
-                        {field.value?.length === 0 ? (
+                        {field.value.length === 0 ? (
                           <div className="flex h-10 items-center justify-center text-sm text-muted-foreground">
                             <Trans>No guests added yet</Trans>
                           </div>
                         ) : (
-                          field.value?.map((guest) => (
+                          field.value.map((guest) => (
                             <div
                               key={guest.id}
                               className="flex items-center justify-between rounded-md border px-2 py-1"
                             >
                               <div className="flex items-center gap-2">
-                                <User className="h-4 w-4 text-muted-foreground" />
+                                <UserIcon className="h-4 w-4 text-muted-foreground" />
                                 <span className="max-w-md truncate text-sm">
                                   {guest.first_name} {guest.last_name}
                                 </span>
@@ -244,29 +239,27 @@ export function EditReservationForm({
                                     'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
                                   )}
                                 >
-                                  <MoreHorizontal className="h-4 w-4" />
+                                  <MoreHorizontalIcon className="h-4 w-4" />
                                   <span className="sr-only">
                                     <Trans>Open guest menu</Trans>
                                   </span>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
                                   align="end"
-                                  className="w-[160px]"
+                                  className="w-[180px]"
                                 >
                                   <DropdownMenuItem
-                                    onSelect={() =>
-                                      setEditingGuest(guest as Guest)
-                                    }
+                                    onSelect={() => setEditingGuest(guest)}
                                   >
-                                    <Edit2 className="mr-2 h-4 w-4" />
+                                    <Edit2Icon className="mr-2 h-4 w-4" />
                                     <Trans>Edit guest</Trans>
                                   </DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem
                                     className="text-destructive"
-                                    onClick={() => removeGuest(guest.id!)}
+                                    onClick={() => handleRemoveGuest(guest.id)}
                                   >
-                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    <Trash2Icon className="mr-2 h-4 w-4" />
                                     <Trans>Remove</Trans>
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
@@ -283,13 +276,13 @@ export function EditReservationForm({
                 />
               </FieldGroup>
             </FieldSet>
-            <div className="flex justify-end border-t pt-4">
-              <AddGuestModal onAddGuest={addGuest} />
+            <div className="flex justify-end">
+              <AddGuestModal onAddGuest={handleAddGuest} />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="gap-0">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Number of People</Trans>
@@ -311,7 +304,7 @@ export function EditReservationForm({
                         id={field.name}
                         value={field.value}
                         min={1}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -333,7 +326,7 @@ export function EditReservationForm({
                         id={field.name}
                         value={field.value}
                         min={0}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -355,7 +348,7 @@ export function EditReservationForm({
                         id={field.name}
                         value={field.value}
                         min={0}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -377,7 +370,7 @@ export function EditReservationForm({
                         id={field.name}
                         value={field.value}
                         min={0}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -390,7 +383,7 @@ export function EditReservationForm({
           </CardContent>
         </Card>
 
-        <Card className="gap-0">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Purpose of Stay</Trans>
@@ -448,7 +441,7 @@ export function EditReservationForm({
           </CardContent>
         </Card>
 
-        <Card className="gap-0">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Room</Trans>
@@ -516,9 +509,11 @@ export function EditReservationForm({
       {editingGuest && (
         <EditGuestModal
           guest={editingGuest}
-          onEditGuest={editGuest}
-          open={!!editingGuest}
-          onOpenChange={(open) => !open && setEditingGuest(null)}
+          onEditGuest={handleEditGuest}
+          open={true}
+          onOpenChange={(open) => {
+            if (!open) setEditingGuest(null);
+          }}
         />
       )}
 

@@ -94,7 +94,7 @@ function DataGridColumnHeader<TData, TValue>({
     return (
       <div
         className={cn(
-          'inline-flex h-full items-center gap-1.5 text-[0.8125rem] leading-[calc(1.125/0.8125)] font-normal text-accent-foreground [&_svg]:size-3.5 [&_svg]:opacity-60',
+          'inline-flex h-full items-center gap-1.5 text-[0.8125rem] leading-[calc(1.125/0.8125)] font-medium text-muted-foreground [&_svg]:size-3.5 [&_svg]:opacity-60',
           className
         )}
       >
@@ -110,7 +110,7 @@ function DataGridColumnHeader<TData, TValue>({
       <Button
         variant="ghost"
         className={cn(
-          '-ms-2 h-7 rounded-md px-2 font-medium text-muted-foreground hover:bg-secondary data-[state=open]:bg-secondary data-[state=open]:text-foreground',
+          '-ms-2 h-8 rounded-md px-2 text-[13px] font-medium text-muted-foreground hover:bg-secondary hover:text-muted-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
           className
         )}
         disabled={isLoading || recordCount === 0}
@@ -163,7 +163,10 @@ function DataGridColumnHeader<TData, TValue>({
     return (
       <div className="flex h-full items-center justify-between gap-1.5">
         <DropdownMenu>
-          <DropdownMenuTrigger render={(props) => headerButton(props)} />
+          <DropdownMenuTrigger
+            nativeButton
+            render={(props) => headerButton(props)}
+          />
           <DropdownMenuContent className="w-40" align="start">
             {filter && <DropdownMenuLabel>{filter}</DropdownMenuLabel>}
 
