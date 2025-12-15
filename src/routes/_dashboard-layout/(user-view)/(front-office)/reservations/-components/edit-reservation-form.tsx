@@ -11,9 +11,8 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import type { Guest } from 'shared/types/reservations';
+import type { Guest, ReservationFormData } from 'shared/types/reservations';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { updateReservationById } from '@/api/reservations';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -47,34 +46,7 @@ import {
 import { cn } from '@/lib/utils';
 
 import { AddGuestModal } from './add-guest-modal';
-import { EditGuestModal } from './edit-guest-modal';
-
-export const reservationFormSchema = z.object({
-  booking_nr: z.string().min(1, t`Booking number is required`),
-  guests: z.array(
-    z.object({
-      id: z.number(),
-      reservation_id: z.number(),
-      first_name: z.string().min(1, t`First name is required`),
-      last_name: z.string().min(1, t`Last name is required`),
-      email: z.string().optional(),
-      nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
-      created_at: z.coerce.date(),
-      updated_at: z.coerce.date().nullable()
-    })
-  ),
-  adults: z.coerce.number().int().min(1, t`At least one adult is required`),
-  youth: z.coerce.number().int().min(0, t`Youth count cannot be negative`),
-  children: z.coerce
-    .number()
-    .int()
-    .min(0, t`Children count cannot be negative`),
-  infants: z.coerce.number().int().min(0, t`Infants count cannot be negative`),
-  purpose: z.enum(['private', 'business']),
-  room: z.string().min(1, t`Room selection is required`)
-});
-
-type ReservationFormData = z.infer<typeof reservationFormSchema>;
+import { EditGuestForm } from './edit-guest-form';
 
 interface EditReservationFormProps {
   reservationId: string;
@@ -82,7 +54,6 @@ interface EditReservationFormProps {
 }
 
 async function updateReservation(id: string, data: ReservationFormData) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   return updateReservationById(id, data);
 }
 
@@ -104,7 +75,8 @@ export function EditReservationForm({
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
       toast.success(t`Reservation updated successfully`);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Failed to update reservation:', error);
       toast.error(t`Failed to update reservation. Please try again.`);
     }
   });
@@ -120,17 +92,6 @@ export function EditReservationForm({
   const handleAddGuest = (newGuest: Guest) => {
     const currentGuests = form.getValues('guests');
     form.setValue('guests', [...currentGuests, newGuest]);
-  };
-
-  const handleEditGuest = (guestId: string, updatedGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
-    form.setValue(
-      'guests',
-      currentGuests.map((guest) =>
-        guest.id === Number(guestId) ? updatedGuest : guest
-      ),
-      { shouldValidate: true }
-    );
   };
 
   // Mock room data - replace with actual data from your API
@@ -249,7 +210,12 @@ export function EditReservationForm({
                                   className="w-[180px]"
                                 >
                                   <DropdownMenuItem
-                                    onSelect={() => setEditingGuest(guest)}
+                                    onClick={() => {
+                                      // Delay to allow dropdown to close first
+                                      requestAnimationFrame(() => {
+                                        setEditingGuest(guest);
+                                      });
+                                    }}
                                   >
                                     <Edit2Icon className="mr-2 h-4 w-4" />
                                     <Trans>Edit guest</Trans>
@@ -290,7 +256,7 @@ export function EditReservationForm({
           </CardHeader>
           <CardContent>
             <FieldSet>
-              <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+              <FieldGroup className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <Controller
                   control={form.control}
                   name="adults"
@@ -507,9 +473,10 @@ export function EditReservationForm({
       </form>
 
       {editingGuest && (
-        <EditGuestModal
+        <EditGuestForm
+          key={editingGuest.id}
           guest={editingGuest}
-          onEditGuest={handleEditGuest}
+          reservationId={reservationId}
           open={true}
           onOpenChange={(open) => {
             if (!open) setEditingGuest(null);
