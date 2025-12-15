@@ -146,7 +146,7 @@ function ReservationDateFilter({
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <PopoverTrigger
         className={cn(
-          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
+          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
           className
         )}
       >
