@@ -73,7 +73,7 @@ export function RowActions({ row }: RowActionsProps) {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="text-red-600"
+            variant="destructive"
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash className="mr-2 h-4 w-4" />

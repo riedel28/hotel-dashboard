@@ -222,7 +222,7 @@ export function EditReservationForm({
                                   </DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem
-                                    className="text-destructive"
+                                    variant="destructive"
                                     onClick={() => handleRemoveGuest(guest.id)}
                                   >
                                     <Trash2Icon className="mr-2 h-4 w-4" />
