@@ -200,6 +200,11 @@ async function updateReservation(req: Request, res: Response) {
     const reservationWithGuests = await db.transaction(async (tx) => {
       const { guests: guestPayload, ...reservationUpdates } = updates;
 
+      // Sync room_name with room if room is being updated
+      if (reservationUpdates.room !== undefined) {
+        reservationUpdates.room_name = reservationUpdates.room;
+      }
+
       const [updatedReservation] = await tx
         .update(reservationsTable)
         .set({ ...reservationUpdates, updated_at: new Date() })
