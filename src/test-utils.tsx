@@ -1,7 +1,7 @@
-import React, { type ReactElement } from 'react';
-import { render, type RenderOptions } from '@testing-library/react';
-import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
+import { I18nProvider } from '@lingui/react';
+import { type RenderOptions, render } from '@testing-library/react';
+import React, { type ReactElement } from 'react';
 import type { Property, PropertyStage } from 'shared/types/properties';
 
 /**
@@ -37,4 +37,3 @@ export const createMockProperty = (
   name,
   stage
 });
-

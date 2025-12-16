@@ -60,7 +60,11 @@ function DataGridTableDndRowHandle({ rowId }: { rowId: string }) {
   );
 }
 
-function DataGridTableDndRow<TData extends object>({ row }: { row: Row<TData> }) {
+function DataGridTableDndRow<TData extends object>({
+  row
+}: {
+  row: Row<TData>;
+}) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.id
   });
@@ -173,7 +177,9 @@ function DataGridTableDndRows<TData extends object>({
                 strategy={verticalListSortingStrategy}
               >
                 {table.getRowModel().rows.map((row) => {
-                  return <DataGridTableDndRow row={row as Row<TData>} key={row.id} />;
+                  return (
+                    <DataGridTableDndRow row={row as Row<TData>} key={row.id} />
+                  );
                 })}
               </SortableContext>
             ) : (

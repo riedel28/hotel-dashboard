@@ -6,8 +6,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import type { Guest } from 'shared/types/reservations';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -15,7 +14,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
 import {
   Field,
   FieldError,
@@ -24,6 +22,7 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 interface AddGuestModalProps {
   onAddGuest: (guest: Guest) => void;
