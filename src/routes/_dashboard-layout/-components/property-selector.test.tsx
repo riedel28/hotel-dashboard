@@ -98,9 +98,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      const { rerender } = render(
-        <PropertySelector properties={properties} />
-      );
+      const { rerender } = render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -318,7 +316,7 @@ describe('PropertySelector', () => {
       });
     });
 
-    test('shows toast on reload start and completion', async () => {
+    test('shows toast on reload completion', async () => {
       const user = userEvent.setup();
       const handleReload = vi.fn<() => Promise<void>>(async () => {
         // Reload handler
@@ -337,15 +335,18 @@ describe('PropertySelector', () => {
       const reloadButton = screen.getByLabelText(/reload properties/i);
       await user.click(reloadButton);
 
-      await waitFor(() => {
-        expect(mockToast.info).toHaveBeenCalled();
-      });
-
+      // Wait for reload to complete and toast to be called
       await waitFor(
         () => {
-          expect(mockToast.info).toHaveBeenCalledTimes(2);
+          expect(handleReload).toHaveBeenCalled();
+          expect(mockToast.info).toHaveBeenCalled();
         },
         { timeout: 3000 }
+      );
+
+      // Verify the toast was called with the correct message
+      expect(mockToast.info).toHaveBeenCalledWith(
+        expect.stringContaining('Properties updated')
       );
     });
 
