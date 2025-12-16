@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { useRouteViewDetection } from './use-route-view-detection';
 
 // Mock TanStack Router

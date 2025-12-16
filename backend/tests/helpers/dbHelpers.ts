@@ -14,6 +14,7 @@ export async function createTestUser(
     password: string;
     first_name: string;
     last_name: string;
+    is_admin: boolean;
   }> = {}
 ) {
   const defaultData = {
@@ -21,6 +22,7 @@ export async function createTestUser(
     password: 'TestPassword123!',
     first_name: `Test-${Date.now()}`,
     last_name: 'User',
+    is_admin: false,
     ...userData
   };
 
@@ -36,8 +38,9 @@ export async function createTestUser(
   const token = await generateToken({
     id: String(user.id),
     email: user.email,
-    first_name: user.first_name,
-    last_name: user.last_name
+    first_name: user.first_name || '',
+    last_name: user.last_name || '',
+    is_admin: user.is_admin
   });
 
   return { user, token, rawPassword: defaultData.password };

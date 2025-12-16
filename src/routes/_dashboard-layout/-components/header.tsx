@@ -1,3 +1,4 @@
+import { useAuth } from '@/auth';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,13 +10,15 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
 import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
-import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 
 export default function Header() {
   const { properties } = DashboardLayoutRoute.useLoaderData();
+  const { user } = useAuth();
+  const isAdmin = user?.is_admin === true;
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:ps-3.5">
@@ -59,10 +62,14 @@ export default function Header() {
           {/* Breadcrumb */}
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem>
-                <ViewSelector />
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              {isAdmin && (
+                <>
+                  <BreadcrumbItem>
+                    <ViewSelector />
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                </>
+              )}
               <BreadcrumbItem>
                 <PropertySelector properties={properties.index} />
               </BreadcrumbItem>

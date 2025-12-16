@@ -28,7 +28,8 @@ async function register(req: Request, res: Response) {
         email: users.email,
         first_name: users.first_name,
         last_name: users.last_name,
-        created_at: users.created_at
+        created_at: users.created_at,
+        is_admin: users.is_admin
       });
 
     // Generate JWT Token
@@ -36,7 +37,8 @@ async function register(req: Request, res: Response) {
       id: String(newUser.id),
       email: newUser.email,
       first_name: newUser.first_name || '',
-      last_name: newUser.last_name || ''
+      last_name: newUser.last_name || '',
+      is_admin: newUser.is_admin
     });
 
     res.status(201).json({
@@ -76,7 +78,8 @@ async function login(req: Request, res: Response) {
         id: String(user.id),
         email: user.email,
         first_name: user.first_name || '',
-        last_name: user.last_name || ''
+        last_name: user.last_name || '',
+        is_admin: user.is_admin
       },
       { rememberMe: Boolean(rememberMe) }
     );

@@ -1,4 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
+import { ChevronsUpDownIcon } from 'lucide-react';
+import { useAuth } from '@/auth';
 import {
   Select,
   SelectContent,
@@ -7,12 +9,17 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { ChevronsUpDownIcon } from 'lucide-react';
 import { useView, type ViewType } from '@/contexts/view-context';
 
 export default function ViewSelector() {
   const { t } = useLingui();
   const { currentView, setCurrentView } = useView();
+  const { user } = useAuth();
+
+  // Hide view selector if user is not admin
+  if (!user?.is_admin) {
+    return null;
+  }
 
   const handleValueChange = (value: string | null) => {
     const validView: ViewType | null =
