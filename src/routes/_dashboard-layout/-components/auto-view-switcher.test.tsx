@@ -1,8 +1,9 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 // All mocks must be defined before any imports that use them
 const mockNavigate = vi.fn();
 const mockUseRouteViewDetection = vi.fn();
+const mockUseAuth = vi.fn();
 
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => mockNavigate
@@ -10,6 +11,10 @@ vi.mock('@tanstack/react-router', () => ({
 
 vi.mock('@/hooks/use-route-view-detection', () => ({
   useRouteViewDetection: () => mockUseRouteViewDetection()
+}));
+
+vi.mock('@/auth', () => ({
+  useAuth: () => mockUseAuth()
 }));
 
 vi.mock('sonner', () => ({
@@ -22,38 +27,38 @@ vi.mock('sonner', () => ({
 vi.mock('@/contexts/view-context', async () => {
   const React = await import('react');
   const { createContext, useContext, useState, useEffect } = React;
-  
+
   type ViewType = 'user' | 'admin';
   interface ViewContextType {
     currentView: ViewType;
     setCurrentView: (view: ViewType) => void;
   }
-  
+
   const ViewContext = createContext<ViewContextType | undefined>(undefined);
   const STORAGE_KEY = 'dashboard-view';
-  
+
   function ViewProvider({ children }: { children: React.ReactNode }) {
     const [currentView, setCurrentViewState] = useState<ViewType>('user');
-    
+
     useEffect(() => {
       const storedView = localStorage.getItem(STORAGE_KEY) as ViewType;
       if (storedView && (storedView === 'user' || storedView === 'admin')) {
         setCurrentViewState(storedView);
       }
     }, []);
-    
+
     const setCurrentView = (view: ViewType) => {
       setCurrentViewState(view);
       localStorage.setItem(STORAGE_KEY, view);
     };
-    
+
     return (
       <ViewContext.Provider value={{ currentView, setCurrentView }}>
         {children}
       </ViewContext.Provider>
     );
   }
-  
+
   function useView() {
     const context = useContext(ViewContext);
     if (context === undefined) {
@@ -61,16 +66,16 @@ vi.mock('@/contexts/view-context', async () => {
     }
     return context;
   }
-  
+
   return {
     ViewProvider,
     useView
   };
 });
 
+import { ViewProvider } from '@/contexts/view-context';
 import { render, waitFor } from '@/test-utils';
 import { AutoViewSwitcher } from './auto-view-switcher';
-import { ViewProvider } from '@/contexts/view-context';
 
 describe('AutoViewSwitcher', () => {
   beforeEach(() => {
@@ -82,6 +87,11 @@ describe('AutoViewSwitcher', () => {
       currentPath: '/',
       targetView: null,
       shouldSwitchView: false
+    });
+    // Default mock: not authenticated
+    mockUseAuth.mockReturnValue({
+      isAuthenticated: false,
+      user: null
     });
   });
 
@@ -217,9 +227,12 @@ describe('AutoViewSwitcher', () => {
       renderWithProvider(initialView);
 
       // Wait a bit to ensure no switching occurs
-      await waitFor(() => {
-        expect(localStorage.getItem('dashboard-view')).toBe(initialView);
-      }, { timeout: 100 });
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe(initialView);
+        },
+        { timeout: 100 }
+      );
 
       // Should not navigate
       expect(mockNavigate).not.toHaveBeenCalled();
@@ -235,9 +248,12 @@ describe('AutoViewSwitcher', () => {
       const initialView = 'user';
       renderWithProvider(initialView);
 
-      await waitFor(() => {
-        expect(localStorage.getItem('dashboard-view')).toBe(initialView);
-      }, { timeout: 100 });
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe(initialView);
+        },
+        { timeout: 100 }
+      );
 
       expect(mockNavigate).not.toHaveBeenCalled();
     });
@@ -252,9 +268,12 @@ describe('AutoViewSwitcher', () => {
       const initialView = 'user';
       renderWithProvider(initialView);
 
-      await waitFor(() => {
-        expect(localStorage.getItem('dashboard-view')).toBe(initialView);
-      }, { timeout: 100 });
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe(initialView);
+        },
+        { timeout: 100 }
+      );
 
       expect(mockNavigate).not.toHaveBeenCalled();
     });
@@ -296,6 +315,532 @@ describe('AutoViewSwitcher', () => {
     test('component does not render any visible content', () => {
       const { container } = renderWithProvider();
       expect(container.firstChild).toBeNull();
+    });
+  });
+
+  describe('Admin Auto-Switching', () => {
+    test('automatically switches to admin view when admin user logs in', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      renderWithProvider('user');
+
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+    });
+
+    test('does not switch to admin view if user is not admin', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
+      renderWithProvider('user');
+
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('user');
+        },
+        { timeout: 100 }
+      );
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    test('does not switch if user is already in admin view', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      renderWithProvider('admin');
+
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('admin');
+        },
+        { timeout: 100 }
+      );
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    test('navigates to / when switching to admin view from non-root path', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/reservations',
+        targetView: null,
+        shouldSwitchView: false
+      });
+
+      renderWithProvider('user');
+
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+        expect(mockNavigate).toHaveBeenCalledWith({ to: '/' });
+      });
+    });
+
+    test('does not switch when user is not authenticated', async () => {
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: false,
+        user: null
+      });
+
+      renderWithProvider('user');
+
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('user');
+        },
+        { timeout: 100 }
+      );
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    test('resets admin check ref when user logs out and allows re-switch on re-login', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      const { rerender } = renderWithProvider('user');
+
+      // First render: authenticated admin
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+
+      // Second render: logged out
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: false,
+        user: null
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      // View should remain admin (localStorage persists)
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('admin');
+        },
+        { timeout: 100 }
+      );
+
+      // Third render: re-login as admin (should not switch again since already admin)
+      // But if we manually set to user view, it should switch back
+      localStorage.setItem('dashboard-view', 'user');
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      // Should switch back to admin since ref was reset on logout
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+    });
+
+    test('admin auto-switch takes precedence over route-based switching', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      // Admin user on /properties (admin route) but currently in user view
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
+      });
+
+      renderWithProvider('user');
+
+      // Should switch to admin view via admin check (not route check)
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+
+      // Navigation should be called once (from admin auto-switch)
+      expect(mockNavigate).toHaveBeenCalledWith({ to: '/' });
+    });
+
+    test('handles user admin status change from false to true', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      const { rerender } = renderWithProvider('user');
+
+      // First render: regular user
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('user');
+        },
+        { timeout: 100 }
+      );
+
+      // Second render: user becomes admin
+      const adminUser = {
+        ...regularUser,
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      // Should switch to admin view
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+    });
+
+    test('forces non-admin user out of admin view', async () => {
+      const regularUser = {
+        id: 1,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      // Start with admin view in localStorage (e.g., from previous admin session)
+      localStorage.setItem('dashboard-view', 'admin');
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
+      renderWithProvider('admin');
+
+      // Should force switch to user view
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('user');
+      });
+
+      expect(mockNavigate).toHaveBeenCalledWith({ to: '/' });
+    });
+
+    test('handles user admin status change from true to false', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      const { rerender } = renderWithProvider('user');
+
+      // First render: admin user
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+
+      // Second render: user is no longer admin
+      const regularUser = {
+        ...adminUser,
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      // Should force switch to user view when admin status changes to false
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('user');
+        },
+        { timeout: 100 }
+      );
+
+      expect(mockNavigate).toHaveBeenCalledWith({ to: '/' });
+    });
+
+    test('handles different user logging in', async () => {
+      const adminUser1 = {
+        id: 1,
+        email: 'admin1@example.com',
+        first_name: 'Admin',
+        last_name: 'One',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      const { rerender } = renderWithProvider('user');
+
+      // First render: first admin user
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser1
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+
+      // Second render: different admin user logs in
+      const adminUser2 = {
+        id: 2,
+        email: 'admin2@example.com',
+        first_name: 'Admin',
+        last_name: 'Two',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      localStorage.setItem('dashboard-view', 'user');
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser2
+      });
+
+      rerender(
+        <ViewProvider>
+          <AutoViewSwitcher />
+        </ViewProvider>
+      );
+
+      // Should switch to admin view again (ref was reset for new user)
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('admin');
+      });
+    });
+
+    test('does not auto-switch to admin view when user is not admin', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
+      renderWithProvider('user');
+
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('user');
+        },
+        { timeout: 100 }
+      );
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    test('prevents route-based switching to admin view for non-admin users', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
+      // User navigates to /properties (admin route)
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
+      });
+
+      renderWithProvider('user');
+
+      // Should NOT switch to admin view
+      await waitFor(
+        () => {
+          expect(localStorage.getItem('dashboard-view')).toBe('user');
+        },
+        { timeout: 100 }
+      );
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    test('allows route-based switching to user view for non-admin users', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
+      // User navigates to /reservations (user route) from admin view
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/reservations',
+        targetView: 'user',
+        shouldSwitchView: true
+      });
+
+      renderWithProvider('admin');
+
+      // Should switch to user view
+      await waitFor(() => {
+        expect(localStorage.getItem('dashboard-view')).toBe('user');
+      });
     });
   });
 

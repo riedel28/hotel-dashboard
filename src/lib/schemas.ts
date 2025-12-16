@@ -20,11 +20,12 @@ export const registerSchema = z.object({
 // User schemas
 export const userSchema = z.object({
   id: z.number(),
-  email: z.string().email(),
+  email: z.email(),
   first_name: z.string().nullable(),
   last_name: z.string().nullable(),
   created_at: z.string(),
-  updated_at: z.string()
+  updated_at: z.string(),
+  is_admin: z.boolean()
 });
 
 export const authResponseSchema = z.object({

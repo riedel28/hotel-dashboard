@@ -8,6 +8,7 @@ export interface JWTPayload {
   email: string;
   first_name: string;
   last_name: string;
+  is_admin: boolean;
   [key: string]: unknown;
 }
 
@@ -43,7 +44,8 @@ async function verifyToken(token: string): Promise<JWTPayload> {
     id: payload.id as string,
     email: payload.email as string,
     first_name: payload.first_name as string,
-    last_name: payload.last_name as string
+    last_name: payload.last_name as string,
+    is_admin: payload.is_admin as boolean
   };
 }
 

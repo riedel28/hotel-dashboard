@@ -1,5 +1,6 @@
 import { relations } from 'drizzle-orm';
 import {
+  boolean,
   doublePrecision,
   integer,
   pgTable,
@@ -62,7 +63,8 @@ export const users = pgTable('users', {
   first_name: varchar('first_name', { length: 50 }),
   last_name: varchar('last_name', { length: 50 }),
   created_at: timestamp('created_at').defaultNow().notNull(),
-  updated_at: timestamp('updated_at').defaultNow().notNull()
+  updated_at: timestamp('updated_at').defaultNow().notNull(),
+  is_admin: boolean('is_admin').default(false).notNull()
 });
 
 // Properties table
