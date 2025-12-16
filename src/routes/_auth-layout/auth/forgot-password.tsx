@@ -4,7 +4,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { CheckIcon, Loader2Icon, MessageCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-
+import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { loginSchema } from '@/lib/schemas';
-import type z from 'zod';
 
 const forgotPasswordSchema = loginSchema.pick({ email: true });
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;

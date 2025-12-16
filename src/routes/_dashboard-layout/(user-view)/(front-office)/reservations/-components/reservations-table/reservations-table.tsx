@@ -20,9 +20,9 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { BalanceCell } from './-components/cells/balance-cell';
-import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { DateCell } from './-components/cells/date-cell';
 import { GuestsCell } from './-components/cells/guests-cell';
+import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { StatusCell } from './-components/cells/status-cell';
 import { ReservationDetails } from './-components/reservation-details';
 import { RowActions } from './row-actions';

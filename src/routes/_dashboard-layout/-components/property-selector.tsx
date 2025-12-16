@@ -1,3 +1,9 @@
+import { Trans, useLingui } from '@lingui/react/macro';
+import { RefreshCwIcon, SearchIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import type { Property, PropertyStage } from 'shared/types/properties';
+import { toast } from 'sonner';
+import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Combobox,
@@ -10,13 +16,6 @@ import {
   ComboboxTrigger,
   ComboboxValue
 } from '@/components/ui/combobox';
-import { Badge, type BadgeProps } from '@/components/ui/badge';
-import { Trans, useLingui } from '@lingui/react/macro';
-import { RefreshCwIcon, SearchIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { toast } from 'sonner';
-
-import type { Property, PropertyStage } from 'shared/types/properties';
 import { cn } from '@/lib/utils';
 
 const RELOAD_TIMEOUT_MS = 2000;

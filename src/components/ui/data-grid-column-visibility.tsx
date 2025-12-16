@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro';
 import { type Table } from '@tanstack/react-table';
-import { type ReactElement, cloneElement } from 'react';
+import { cloneElement, type ReactElement } from 'react';
 
 import {
   DropdownMenu,

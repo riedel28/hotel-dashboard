@@ -1,9 +1,8 @@
-import * as React from 'react';
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
-
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { XIcon } from 'lucide-react';
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -81,7 +80,10 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn('gap-2 flex flex-col text-base font-semibold [&_p]:font-normal', className)}
+      className={cn(
+        'gap-2 flex flex-col text-base font-semibold [&_p]:font-normal',
+        className
+      )}
       {...props}
     />
   );
