@@ -107,7 +107,9 @@ export function PasswordSection() {
                       autoComplete="new-password"
                       aria-invalid={fieldState.invalid}
                     />
-                    <PasswordStrengthMeter password={field.value ?? ''} />
+                    {fieldState.isDirty && (
+                      <PasswordStrengthMeter password={field.value ?? ''} />
+                    )}
                   </div>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
