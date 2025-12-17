@@ -103,7 +103,7 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-xl space-y-6">
       <FieldSet className="gap-6">
-        <FieldGroup className="gap-4">
+        <FieldGroup className="gap-6">
           <Controller
             control={form.control}
             name="email"
