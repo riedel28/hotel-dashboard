@@ -111,9 +111,6 @@ export default function UsersTable({
                 <div className="font-medium text-foreground truncate">
                   {fullName || <Trans>No name</Trans>}
                 </div>
-                <div className="text-muted-foreground truncate">
-                  {row.original.email}
-                </div>
               </div>
             </div>
           );

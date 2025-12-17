@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
-import { Outlet, createFileRoute, useLocation } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import { XIcon } from 'lucide-react';
 
@@ -28,15 +28,8 @@ import UsersTable from './-components/users-table';
 function UsersPage() {
   const { page, per_page, q, sort_by, sort_order } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const location = useLocation();
-  const { t } = useLingui();
 
-  // IMPORTANT: `/users/$userId` is a child route of `/users`. If we don't render an
-  // `<Outlet />` here, the URL will change but the child page will never render.
-  // Also, we don't want to show the table UI on detail routes.
-  if (location.pathname !== '/users') {
-    return <Outlet />;
-  }
+  const { t } = useLingui();
 
   const usersQuery = useQuery(
     usersQueryOptions({
@@ -218,24 +211,30 @@ function UsersPage() {
       </div>
 
       <div className="space-y-2.5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <SearchInput
-            value={q || ''}
-            onChange={handleSearchChange}
-            placeholder={t`Search users`}
-            wrapperClassName="w-full sm:w-[250px]"
-            debounceMs={500}
-          />
-          {q && (
-            <Button
-              variant="ghost"
-              onClick={handleClearFilters}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <XIcon />
-              <Trans>Clear filters</Trans>
-            </Button>
-          )}
+        <div className="flex items-center justify-between gap-3 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-2">
+            <SearchInput
+              value={q || ''}
+              onChange={handleSearchChange}
+              placeholder={t`Search users`}
+              wrapperClassName="w-full sm:w-[250px]"
+              debounceMs={500}
+            />
+            {q && (
+              <Button
+                variant="ghost"
+                onClick={handleClearFilters}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <XIcon />
+                <Trans>Clear filters</Trans>
+              </Button>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground">
+            You have <span className="font-medium">3</span> of{' '}
+            <span className="font-medium">12</span> invitations available
+          </p>
         </div>
 
         {q && (
