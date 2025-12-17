@@ -131,7 +131,7 @@ function RouteComponent() {
               <PasswordSection />
             </TabsContent>
             <TabsContent value="roles" className="mt-0">
-              <RolesSection initialRoles={['administrators']} />
+              <RolesSection initialRoles={[1]} />
             </TabsContent>
             <TabsContent value="twoFactor" className="mt-0">
               <TwoFactorSection isEnabled={userData.twoFactorEnabled} />
