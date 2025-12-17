@@ -8,12 +8,13 @@ export default async function setup() {
 
   try {
     // Drop all tables if they exist to ensure clean state
-    // Order matters due to foreign key constraints: guests -> reservations -> properties -> users
+    // Order matters due to foreign key constraints: user_roles -> guests -> reservations -> properties -> roles -> users
+    await db.execute(sql`DROP TABLE IF EXISTS user_roles CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
-    await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS roles CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
 
     // Use drizzle-kit CLI to push schema to database
     console.log('🚀 Pushing schema using drizzle-kit...');
@@ -36,11 +37,12 @@ export default async function setup() {
 
     try {
       // Final cleanup - drop all tables in correct order
+      await db.execute(sql`DROP TABLE IF EXISTS user_roles CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
-      await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS roles CASCADE`);
+      await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
 
       console.log('✅ Test database teardown complete');
       process.exit(0);

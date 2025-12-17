@@ -62,6 +62,7 @@ export const users = pgTable('users', {
   password: varchar('password', { length: 255 }).notNull(),
   first_name: varchar('first_name', { length: 50 }),
   last_name: varchar('last_name', { length: 50 }),
+  country_code: varchar('country_code', { length: 2 }),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull(),
   is_admin: boolean('is_admin').default(false).notNull()
@@ -118,8 +119,47 @@ export const roles = pgTable('roles', {
   name: text('name').notNull()
 });
 
+// User-Roles junction table for many-to-many relationship
+export const userRoles = pgTable('user_roles', {
+  id: serial('id').primaryKey(),
+  user_id: integer('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  role_id: integer('role_id')
+    .notNull()
+    .references(() => roles.id, { onDelete: 'cascade' })
+});
+
+// Users relations
+export const usersRelations = relations(users, ({ many }) => ({
+  userRoles: many(userRoles)
+}));
+
+// Roles relations
+export const rolesRelations = relations(roles, ({ many }) => ({
+  userRoles: many(userRoles)
+}));
+
+// UserRoles relations (junction table)
+export const userRolesRelations = relations(userRoles, ({ one }) => ({
+  user: one(users, {
+    fields: [userRoles.user_id],
+    references: [users.id]
+  }),
+  role: one(roles, {
+    fields: [userRoles.role_id],
+    references: [roles.id]
+  })
+}));
+
 export const insertRoleSchema = createInsertSchema(roles);
 export const selectRoleSchema = createSelectSchema(roles);
 
+export const insertUserRoleSchema = createInsertSchema(userRoles);
+export const selectUserRoleSchema = createSelectSchema(userRoles);
+
 export type Role = typeof roles.$inferSelect;
 export type NewRole = typeof roles.$inferInsert;
+
+export type UserRole = typeof userRoles.$inferSelect;
+export type NewUserRole = typeof userRoles.$inferInsert;
