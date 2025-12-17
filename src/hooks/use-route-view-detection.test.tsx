@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { useRouteViewDetection } from './use-route-view-detection';
+// import { useRouteViewDetection } from './use-route-view-detection';
+
 
 // Mock TanStack Router
 const mockUseLocation = vi.fn();

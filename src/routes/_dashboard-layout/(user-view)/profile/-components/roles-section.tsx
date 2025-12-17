@@ -1,11 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
-import { Controller, useForm } from 'react-hook-form';
+import { Suspense } from 'react';
+import { type Control, Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { rolesQueryOptions } from '@/api/roles';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -24,26 +27,14 @@ import {
   FieldLabel,
   FieldSet
 } from '@/components/ui/field';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface RolesSectionProps {
-  initialRoles: AvailableRole[];
+  initialRoles?: number[];
 }
 
-const ROLE_NAMES = {
-  administrators: t`Administrators`,
-  roomservice_manager: t`Roomservice Manager`,
-  housekeeping_manager: t`Housekeeping Manager`,
-  roomservice_order_agent: t`Roomservice Order Agent`,
-  housekeeping_agent: t`Housekeeping Agent`,
-  tester: t`Tester`
-};
-
-type AvailableRole = keyof typeof ROLE_NAMES;
-
 const rolesFormSchema = z.object({
-  roles: z
-    .array(z.enum(Object.keys(ROLE_NAMES)))
-    .min(1, t`Please select at least one role`)
+  roles: z.array(z.number()).min(1, t`Please select at least one role`)
 });
 
 type RolesFormData = z.infer<typeof rolesFormSchema>;
@@ -84,14 +75,14 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
             <Controller
               control={form.control}
               name="roles"
-              render={({ field, fieldState }) => (
+              render={({ fieldState }) => (
                 <FieldGroup data-slot="checkbox-group" className="gap-4">
                   <Field
                     data-invalid={fieldState.invalid}
                     orientation="vertical"
                     className="gap-3"
                   >
-                    <FieldContent className="gap-4">
+                    <FieldContent>
                       <FieldLabel className="text-base font-medium">
                         <Trans>Roles</Trans>
                       </FieldLabel>
@@ -99,41 +90,11 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
                         <Trans>Select one or more roles to assign.</Trans>
                       </FieldDescription>
                     </FieldContent>
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      {Object.keys(ROLE_NAMES).map((role) => {
-                        const assigned = field.value?.includes(
-                          role as AvailableRole
-                        );
-                        return (
-                          <Field
-                            key={role}
-                            orientation="horizontal"
-                            className="gap-3 rounded-md border bg-muted/20 p-3"
-                          >
-                            <Checkbox
-                              id={role}
-                              name={field.name}
-                              checked={assigned}
-                              onCheckedChange={(checked) => {
-                                const nextRoles = checked
-                                  ? [...(field.value ?? []), role]
-                                  : (field.value ?? []).filter(
-                                      (r) => r !== role
-                                    );
-                                field.onChange(nextRoles);
-                              }}
-                              aria-invalid={fieldState.invalid}
-                            />
-                            <FieldLabel
-                              htmlFor={role}
-                              className="cursor-pointer text-sm font-normal"
-                            >
-                              {ROLE_NAMES[role as AvailableRole]}
-                            </FieldLabel>
-                          </Field>
-                        );
-                      })}
-                    </div>
+                    
+                    <Suspense fallback={<RolesSkeleton />}>
+                      <RolesList control={form.control} name="roles" />
+                    </Suspense>
+
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -154,5 +115,70 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+function RolesList({
+  control,
+  name
+}: {
+  control: Control<RolesFormData>;
+  name: 'roles';
+}) {
+  const { data: roles } = useSuspenseQuery(rolesQueryOptions());
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {roles.map((role) => {
+            const assigned = field.value?.includes(role.id);
+            return (
+              <Field
+                key={role.id}
+                orientation="horizontal"
+                className="gap-3 rounded-md border bg-muted/20 p-3"
+              >
+                <Checkbox
+                  id={String(role.id)}
+                  name={field.name}
+                  checked={assigned}
+                  onCheckedChange={(checked) => {
+                    const nextRoles = checked
+                      ? [...(field.value ?? []), role.id]
+                      : (field.value ?? []).filter((r) => r !== role.id);
+                    field.onChange(nextRoles);
+                  }}
+                />
+                <FieldLabel
+                  htmlFor={String(role.id)}
+                  className="cursor-pointer text-sm font-normal"
+                >
+                  {role.name}
+                </FieldLabel>
+              </Field>
+            );
+          })}
+        </div>
+      )}
+    />
+  );
+}
+
+function RolesSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-3 rounded-md border bg-muted/20 p-3"
+        >
+          <Skeleton className="h-4 w-4 rounded-sm" />
+          <Skeleton className="h-4 w-32" />
+        </div>
+      ))}
+    </div>
   );
 }

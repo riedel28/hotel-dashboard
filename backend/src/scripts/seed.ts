@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 
 import { db } from '../db/pool';
-import { guests, properties, reservations, users } from '../db/schema';
+import { guests, properties, reservations, roles, users } from '../db/schema';
 import { hashPassword } from '../utils/password';
 
 async function seed() {
@@ -16,6 +16,15 @@ async function seed() {
     await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS roles CASCADE`);
+
+    // Create roles table
+    await db.execute(sql`
+      CREATE TABLE roles (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL
+      )
+    `);
 
     // Create reservations table
     await db.execute(sql`
@@ -55,7 +64,8 @@ async function seed() {
         first_name VARCHAR(50),
         last_name VARCHAR(50),
         created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-        updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+        updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+        is_admin BOOLEAN DEFAULT FALSE NOT NULL
       )
     `);
 
@@ -109,6 +119,18 @@ async function seed() {
         last_name: 'Cool'
       })
       .returning();
+
+    // Step 2b: Create roles
+    console.log('Creating roles...');
+    await db.insert(roles).values([
+      { id: 1, name: 'Administrators' },
+      { id: 2, name: 'Roomservice Manager' },
+      { id: 3, name: 'Housekeeping Manager' },
+      { id: 4, name: 'Roomservice Order Agent' },
+      { id: 5, name: 'Housekeeping Agent' },
+      { id: 6, name: 'Tester' }
+    ]);
+
 
     await db
       .insert(users)
