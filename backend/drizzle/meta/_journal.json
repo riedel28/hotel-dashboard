@@ -8,6 +8,13 @@
       "when": 1756791928370,
       "tag": "0000_even_gladiator",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765970967439,
+      "tag": "0001_salty_mauler",
+      "breakpoints": true
     }
   ]
 }

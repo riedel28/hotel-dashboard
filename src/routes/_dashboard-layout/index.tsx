@@ -4,7 +4,7 @@ import {
   BedDoubleIcon,
   ListTodoIcon,
   ReceiptTextIcon,
-  ShoppingCartIcon
+  UsersIcon
 } from 'lucide-react';
 
 import { useAuth } from '../../auth';
@@ -39,10 +39,10 @@ function StartPage() {
       href: '/payments'
     },
     {
-      title: t`Orders`,
-      description: t`Manage orders, track shipments, view order history, and process returns efficiently`,
-      icon: ShoppingCartIcon,
-      href: '/orders'
+      title: t`Users`,
+      description: t`Manage users, view user details, and manage user roles`,
+      icon: UsersIcon,
+      href: '/users'
     }
   ];
 
