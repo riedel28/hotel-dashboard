@@ -1,13 +1,20 @@
 import request from 'supertest';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import app from '../src/app';
 
 import { db } from '../src/db/pool';
 import { roles } from '../src/db/schema';
+import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
 
 describe('Roles API', () => {
+  let authToken: string;
+
   beforeAll(async () => {
+    await cleanupDatabase();
+    const { token } = await createTestUser();
+    authToken = token;
+
     await db.insert(roles).values([
       { id: 1, name: 'Administrators' },
       { id: 2, name: 'Roomservice Manager' },
@@ -20,7 +27,9 @@ describe('Roles API', () => {
 
   describe('GET /api/roles', () => {
     it('should return a list of roles', async () => {
-      const response = await request(app).get('/api/roles');
+      const response = await request(app)
+        .get('/api/roles')
+        .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
