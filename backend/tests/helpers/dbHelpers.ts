@@ -1,6 +1,7 @@
 import { db } from '../../src/db/pool.ts';
 import {
   guests,
+  monitoringLogs,
   properties,
   reservations,
   roles,
@@ -67,6 +68,7 @@ export async function cleanupDatabase() {
   // user_roles -> guests -> reservations -> properties -> roles -> users
   await db.delete(userRoles);
   await db.delete(guests);
+  await db.delete(monitoringLogs);
   await db.delete(reservations);
   await db.delete(properties);
   await db.delete(roles);

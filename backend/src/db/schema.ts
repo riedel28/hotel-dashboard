@@ -77,6 +77,17 @@ export const properties = pgTable('properties', {
     .$type<'demo' | 'production' | 'staging' | 'template'>()
 });
 
+export const monitoringLogs = pgTable('monitoring_logs', {
+  id: serial('id').primaryKey(),
+  status: text('status').notNull().$type<'success' | 'error'>(),
+  date: timestamp('date', { withTimezone: true }).notNull().defaultNow(),
+  type: text('type').notNull().$type<'pms' | 'door lock' | 'payment'>(),
+  booking_nr: text('booking_nr'),
+  event: text('event').notNull(),
+  sub: text('sub'),
+  log_message: text('log_message').notNull()
+});
+
 export const reservationsRelations = relations(reservations, ({ many }) => ({
   guests: many(guests)
 }));

@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 import { ZodError, ZodObject } from 'zod';
 
 // Validate request body
-function validateBody<T>(schema: ZodObject<T>) {
+function validateBody(schema: ZodObject<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Parse and validate request body
@@ -28,7 +28,7 @@ function validateBody<T>(schema: ZodObject<T>) {
 }
 
 // Validate URL parameters
-function validateParams<T>(schema: ZodObject<T>) {
+function validateParams(schema: ZodObject<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.params);
@@ -49,7 +49,7 @@ function validateParams<T>(schema: ZodObject<T>) {
 }
 
 // Validate query parameters
-function validateQuery<T>(schema: ZodObject<T>) {
+function validateQuery(schema: ZodObject<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.query);

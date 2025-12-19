@@ -4,6 +4,7 @@ import morgan from 'morgan';
 
 import { errorHandler, notFound } from './middleware/error';
 import authRouter from './routes/auth';
+import monitoringRouter from './routes/monitoring';
 import propertiesRouter from './routes/properties';
 import reservationsRouter from './routes/reservations';
 import rolesRouter from './routes/roles';
@@ -21,6 +22,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/monitoring', monitoringRouter);
 app.use('/api/properties', propertiesRouter);
 app.use('/api/reservations', reservationsRouter);
 app.use('/api/roles', rolesRouter);

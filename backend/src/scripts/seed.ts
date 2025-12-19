@@ -1,7 +1,14 @@
 import { sql } from 'drizzle-orm';
 
 import { db } from '../db/pool';
-import { guests, properties, reservations, roles, users } from '../db/schema';
+import {
+  guests,
+  monitoringLogs,
+  properties,
+  reservations,
+  roles,
+  users
+} from '../db/schema';
 import { hashPassword } from '../utils/password';
 
 async function seed() {
@@ -13,6 +20,7 @@ async function seed() {
 
     // Drop tables if they exist (to ensure clean schema)
     await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS monitoring_logs CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
@@ -52,6 +60,20 @@ async function seed() {
         infants INTEGER DEFAULT 0,
         purpose TEXT DEFAULT 'private' CHECK (purpose IN ('private','business')),
         room TEXT
+      )
+    `);
+
+    // Create monitoring_logs table
+    await db.execute(sql`
+      CREATE TABLE monitoring_logs (
+        id SERIAL PRIMARY KEY,
+        status TEXT NOT NULL CHECK (status IN ('success','error')),
+        date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        type TEXT NOT NULL CHECK (type IN ('pms','door lock','payment')),
+        booking_nr TEXT,
+        event TEXT NOT NULL,
+        sub TEXT,
+        log_message TEXT NOT NULL
       )
     `);
 
@@ -99,6 +121,7 @@ async function seed() {
     console.log('Clearing existing data...');
     try {
       await db.delete(guests); // Delete guests first (foreign keys)
+      await db.delete(monitoringLogs); // Delete monitoring logs
       await db.delete(reservations); // Delete reservations
       await db.delete(properties); // Delete properties
       await db.delete(users); // Delete users
@@ -335,7 +358,48 @@ async function seed() {
       }
     ]);
 
-    // Step 5: Test relational queries
+    // Step 5: Create demo monitoring logs
+    console.log('Creating demo monitoring logs...');
+    await db.insert(monitoringLogs).values([
+      {
+        status: 'success',
+        date: new Date(),
+        type: 'pms',
+        booking_nr: 'RES-001',
+        event: 'System Status',
+        sub: 'PMS Connection',
+        log_message: 'PMS connection established successfully.\nAll systems green.'
+      },
+      {
+        status: 'error',
+        date: new Date(Date.now() - 3600000), // 1 hour ago
+        type: 'door lock',
+        booking_nr: 'RES-002',
+        event: 'Checkout Booking',
+        sub: 'Key Card',
+        log_message: 'Failed to invalidate key card.\nServer timeout after 30s.'
+      },
+      {
+        status: 'success',
+        date: new Date(Date.now() - 7200000), // 2 hours ago
+        type: 'payment',
+        booking_nr: 'RES-003',
+        event: 'Fetch Booking',
+        sub: 'Payment Gateway',
+        log_message: 'Payment processed successfully for invoice #INV-1234.'
+      },
+      {
+        status: 'success',
+        date: new Date(Date.now() - 86400000), // 1 day ago
+        type: 'pms',
+        booking_nr: null,
+        event: 'Night Audit',
+        sub: 'Scheduled Task',
+        log_message: 'Night audit completed for all properties.'
+      }
+    ]);
+
+    // Step 6: Test relational queries
     console.log('\n🔍 Testing relational queries...');
     const reservationsWithGuests = await db.query.reservations.findMany({
       with: {
@@ -344,6 +408,7 @@ async function seed() {
     });
 
     const allProperties = await db.select().from(properties);
+    const allLogs = await db.select().from(monitoringLogs);
 
     console.log('✅ Database seeded successfully!');
     console.log('\n📊 Seed Summary:');
@@ -352,6 +417,7 @@ async function seed() {
       `- Total guests: ${reservationsWithGuests.reduce((sum, res) => sum + res.guests.length, 0)}`
     );
     console.log(`- Created ${allProperties.length} properties`);
+    console.log(`- Created ${allLogs.length} monitoring logs`);
     console.log('\n🏨 Sample Reservations:');
     reservationsWithGuests.forEach((res) => {
       console.log(
