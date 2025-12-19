@@ -85,7 +85,7 @@ export const monitoringLogs = pgTable('monitoring_logs', {
   booking_nr: text('booking_nr'),
   event: text('event').notNull(),
   sub: text('sub'),
-  log_message: text('log_message').notNull()
+  log_message: text('log_message')
 });
 
 export const reservationsRelations = relations(reservations, ({ many }) => ({
