@@ -12,7 +12,7 @@ export const monitoringLogSchema = z.object({
   booking_nr: z.string().nullable(),
   event: z.string(),
   sub: z.string().nullable(),
-  log_message: z.string()
+  log_message: z.string().nullable()
 });
 
 export const sortableMonitoringColumnsSchema = z.enum([

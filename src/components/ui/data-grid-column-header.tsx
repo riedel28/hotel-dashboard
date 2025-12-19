@@ -120,7 +120,11 @@ function DataGridColumnHeader<TData, TValue>({
           if (isSorted === 'asc') {
             column.toggleSorting(true);
           } else if (isSorted === 'desc') {
-            column.clearSorting();
+            if (table.options.enableSortingRemoval !== false) {
+              column.clearSorting();
+            } else {
+              column.toggleSorting(false);
+            }
           } else {
             column.toggleSorting(false);
           }
@@ -179,7 +183,10 @@ function DataGridColumnHeader<TData, TValue>({
               <>
                 <DropdownMenuItem
                   onClick={() => {
-                    if (column.getIsSorted() === 'asc') {
+                    if (
+                      column.getIsSorted() === 'asc' &&
+                      table.options.enableSortingRemoval !== false
+                    ) {
                       column.clearSorting();
                     } else {
                       column.toggleSorting(false);
@@ -197,7 +204,10 @@ function DataGridColumnHeader<TData, TValue>({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    if (column.getIsSorted() === 'desc') {
+                    if (
+                      column.getIsSorted() === 'desc' &&
+                      table.options.enableSortingRemoval !== false
+                    ) {
                       column.clearSorting();
                     } else {
                       column.toggleSorting(true);

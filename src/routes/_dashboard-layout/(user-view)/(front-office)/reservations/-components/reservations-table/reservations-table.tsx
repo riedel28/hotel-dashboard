@@ -319,7 +319,8 @@ export default function ReservationsTable({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true, // Enable manual pagination for server-side
-    manualSorting: true // Enable manual sorting for server-side
+    manualSorting: true, // Enable manual sorting for server-side
+    enableSortingRemoval: false
   });
 
   return (
