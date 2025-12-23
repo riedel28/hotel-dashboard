@@ -55,6 +55,13 @@ function reservationsQueryOptions({
   });
 }
 
+function reservationByIdQueryOptions(id: string) {
+  return queryOptions({
+    queryKey: ['reservations', id],
+    queryFn: () => fetchReservationById(id)
+  });
+}
+
 async function fetchReservations(
   params: FetchReservationsParams
 ): Promise<FetchReservationsResponse> {
@@ -122,6 +129,7 @@ export {
   reservationSchema,
   reservationStatusSchema,
   reservationsQueryOptions,
+  reservationByIdQueryOptions,
   type Reservation,
   type Guest,
   type CheckinMethod,
