@@ -7,7 +7,9 @@ import { createFileRoute } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { fetchReservationById } from '@/api/reservations';
+import {
+  reservationByIdQueryOptions
+} from '@/api/reservations';
 
 import {
   Breadcrumb,
@@ -96,10 +98,9 @@ function ReservationPage() {
 
 function ReservationForm() {
   const { reservationId } = Route.useParams();
-  const reservationQuery = useSuspenseQuery({
-    queryKey: ['reservations', reservationId],
-    queryFn: () => fetchReservationById(reservationId)
-  });
+  const reservationQuery = useSuspenseQuery(
+    reservationByIdQueryOptions(reservationId)
+  );
 
   const data = reservationQuery.data;
   const reservationData = {
@@ -124,5 +125,7 @@ function ReservationForm() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
 )({
+  loader: ({ context: { queryClient }, params: { reservationId } }) =>
+    queryClient.ensureQueryData(reservationByIdQueryOptions(reservationId)),
   component: ReservationPage
 });

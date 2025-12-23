@@ -15,12 +15,22 @@ import { loadCatalog } from './i18n';
 import { routeTree } from './routeTree.gen';
 
 // Create a new router instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      staleTime: 1000 * 60 * 5 // 5 minutes
+    }
+  }
+});
+
 const router = createRouter({
   routeTree,
   context: {
     // auth will initially be undefined
     // We'll be passing down the auth state from within a React component
-    auth: undefined!
+    auth: undefined!,
+    queryClient
   }
 });
 
@@ -59,7 +69,7 @@ function InnerApp() {
     };
   }, [logout]);
 
-  return <RouterProvider router={router} context={{ auth }} />;
+  return <RouterProvider router={router} context={{ auth, queryClient }} />;
 }
 
 function App() {
@@ -85,14 +95,6 @@ function App() {
 const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        staleTime: 1000 * 60 * 1 // 5 minutes
-      }
-    }
-  });
 
   root.render(
     <StrictMode>

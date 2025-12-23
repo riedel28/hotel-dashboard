@@ -61,6 +61,7 @@ export function RowActions({ row }: RowActionsProps) {
                 params={{
                   reservationId: String(row.original.id)
                 }}
+                preload="intent"
               >
                 <PenSquare className="mr-2 h-4 w-4" />
                 <Trans>Edit</Trans>
