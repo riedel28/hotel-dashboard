@@ -31,7 +31,7 @@ import {
   UsersIcon
 } from 'lucide-react';
 import * as React from 'react';
-import { fetchProperties } from '@/api/properties';
+import { propertiesQueryOptions } from '@/api/properties';
 import {
   Sidebar,
   SidebarContent,
@@ -414,9 +414,10 @@ export const Route = createFileRoute('/_dashboard-layout')({
       });
     }
   },
-  loader: async () => {
-    const properties = await fetchProperties();
-
+  loader: async ({ context: { queryClient } }) => {
+    const properties = await queryClient.ensureQueryData(
+      propertiesQueryOptions()
+    );
     return { properties };
   },
   component: DashboardLayout
