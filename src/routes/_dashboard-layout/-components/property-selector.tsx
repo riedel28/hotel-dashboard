@@ -18,8 +18,6 @@ import {
 } from '@/components/ui/combobox';
 import { cn } from '@/lib/utils';
 
-const RELOAD_TIMEOUT_MS = 2000;
-
 const stageVariantMap = {
   demo: 'info',
   production: 'success',
@@ -35,7 +33,7 @@ interface PropertySelectorProps {
   properties?: Property[];
   value?: string;
   onValueChange?: (propertyId: string) => void;
-  onReload?: () => Promise<void> | void;
+  onReload: () => Promise<void>;
 }
 
 interface PropertyItem {
@@ -162,11 +160,7 @@ function PropertySelector({
     setLoading(true);
 
     try {
-      if (onReload) {
-        await onReload();
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, RELOAD_TIMEOUT_MS));
-      }
+      await onReload();
       toast.info(t`Properties updated`);
     } catch (error) {
       console.error('Failed to reload properties:', error);
