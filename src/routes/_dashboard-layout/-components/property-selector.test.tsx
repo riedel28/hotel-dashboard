@@ -26,6 +26,12 @@ const mockToast = {
   warning: mockToastWarning
 };
 
+// Helper function to create a mock onReload function
+const createMockOnReload = () =>
+  vi.fn<() => Promise<void>>(async () => {
+    // Mock reload function
+  });
+
 describe('PropertySelector', () => {
   beforeEach(() => {
     mockToast.info.mockClear();
@@ -36,18 +42,28 @@ describe('PropertySelector', () => {
 
   describe('Rendering', () => {
     test('renders with empty properties list', () => {
-      render(<PropertySelector properties={[]} />);
+      render(
+        <PropertySelector properties={[]} onReload={createMockOnReload()} />
+      );
       expect(screen.getByLabelText(/select property/i)).toBeInTheDocument();
     });
 
     test('renders placeholder when no property is selected', () => {
-      render(<PropertySelector properties={[]} />);
+      render(
+        <PropertySelector properties={[]} onReload={createMockOnReload()} />
+      );
       expect(screen.getByText(/select property/i)).toBeInTheDocument();
     });
 
     test('renders selected property name', () => {
       const properties = [createMockProperty('1', 'Test Hotel', 'production')];
-      render(<PropertySelector properties={properties} value="1" />);
+      render(
+        <PropertySelector
+          properties={properties}
+          value="1"
+          onReload={createMockOnReload()}
+        />
+      );
       expect(screen.getByText('Test Hotel')).toBeInTheDocument();
     });
 
@@ -57,7 +73,12 @@ describe('PropertySelector', () => {
         createMockProperty('2', 'Hotel B', 'staging'),
         createMockProperty('3', 'Hotel C', 'demo')
       ];
-      render(<PropertySelector properties={properties} />);
+      render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
       expect(screen.getByLabelText(/select property/i)).toBeInTheDocument();
     });
   });
@@ -75,6 +96,7 @@ describe('PropertySelector', () => {
         <PropertySelector
           properties={properties}
           onValueChange={handleValueChange}
+          onReload={createMockOnReload()}
         />
       );
 
@@ -98,7 +120,12 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      const { rerender } = render(<PropertySelector properties={properties} />);
+      const { rerender } = render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -111,7 +138,12 @@ describe('PropertySelector', () => {
       await user.click(hotelA);
 
       // Rerender to see the updated state
-      rerender(<PropertySelector properties={properties} />);
+      rerender(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       await waitFor(() => {
         expect(screen.getByText('Hotel A')).toBeInTheDocument();
@@ -123,7 +155,11 @@ describe('PropertySelector', () => {
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
       render(
-        <PropertySelector properties={properties} onValueChange={vi.fn()} />
+        <PropertySelector
+          properties={properties}
+          onValueChange={vi.fn()}
+          onReload={createMockOnReload()}
+        />
       );
 
       const trigger = screen.getByLabelText(/select property/i);
@@ -147,7 +183,13 @@ describe('PropertySelector', () => {
       const longName = 'A'.repeat(50);
       const properties = [createMockProperty('1', longName, 'production')];
 
-      render(<PropertySelector properties={properties} value="1" />);
+      render(
+        <PropertySelector
+          properties={properties}
+          value="1"
+          onReload={createMockOnReload()}
+        />
+      );
 
       // The component truncates to 40 characters, so we should see "A" repeated 40 times + "..."
       const expectedTruncated = `${'A'.repeat(40)}...`;
@@ -161,7 +203,13 @@ describe('PropertySelector', () => {
       const shortName = 'Hotel A';
       const properties = [createMockProperty('1', shortName, 'production')];
 
-      render(<PropertySelector properties={properties} value="1" />);
+      render(
+        <PropertySelector
+          properties={properties}
+          value="1"
+          onReload={createMockOnReload()}
+        />
+      );
 
       expect(screen.getByText(shortName)).toBeInTheDocument();
     });
@@ -172,7 +220,12 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      render(<PropertySelector properties={properties} />);
+      render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -187,7 +240,12 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'staging')];
 
-      render(<PropertySelector properties={properties} />);
+      render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -202,7 +260,12 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'demo')];
 
-      render(<PropertySelector properties={properties} />);
+      render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -217,7 +280,12 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'template')];
 
-      render(<PropertySelector properties={properties} />);
+      render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -232,7 +300,9 @@ describe('PropertySelector', () => {
   describe('Reload Functionality', () => {
     test('renders reload button', async () => {
       const user = userEvent.setup();
-      render(<PropertySelector properties={[]} />);
+      render(
+        <PropertySelector properties={[]} onReload={createMockOnReload()} />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -373,33 +443,6 @@ describe('PropertySelector', () => {
         expect(mockToast.error).toHaveBeenCalled();
       });
     });
-
-    test('uses default timeout when onReload is not provided', async () => {
-      const user = userEvent.setup();
-
-      render(<PropertySelector properties={[]} />);
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-
-      const reloadButton = screen.getByLabelText(/reload properties/i);
-      await user.click(reloadButton);
-
-      // Wait for the default timeout (2000ms) to complete and toast to be called
-      await waitFor(
-        () => {
-          expect(mockToast.info).toHaveBeenCalledWith(
-            expect.stringContaining('Properties updated')
-          );
-        },
-        { timeout: 3000 }
-      );
-    });
   });
 
   describe('Controlled vs Uncontrolled', () => {
@@ -410,12 +453,22 @@ describe('PropertySelector', () => {
       ];
 
       const { rerender } = render(
-        <PropertySelector properties={properties} value="1" />
+        <PropertySelector
+          properties={properties}
+          value="1"
+          onReload={createMockOnReload()}
+        />
       );
 
       expect(screen.getByText('Hotel A')).toBeInTheDocument();
 
-      rerender(<PropertySelector properties={properties} value="2" />);
+      rerender(
+        <PropertySelector
+          properties={properties}
+          value="2"
+          onReload={createMockOnReload()}
+        />
+      );
 
       expect(screen.getByText('Hotel B')).toBeInTheDocument();
     });
@@ -424,7 +477,12 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      render(<PropertySelector properties={properties} />);
+      render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -448,7 +506,12 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      render(<PropertySelector properties={properties} />);
+      render(
+        <PropertySelector
+          properties={properties}
+          onReload={createMockOnReload()}
+        />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -469,13 +532,17 @@ describe('PropertySelector', () => {
 
   describe('Accessibility', () => {
     test('has proper aria-label on trigger', () => {
-      render(<PropertySelector properties={[]} />);
+      render(
+        <PropertySelector properties={[]} onReload={createMockOnReload()} />
+      );
       expect(screen.getByLabelText(/select property/i)).toBeInTheDocument();
     });
 
     test('has proper aria-label on reload button', async () => {
       const user = userEvent.setup();
-      render(<PropertySelector properties={[]} />);
+      render(
+        <PropertySelector properties={[]} onReload={createMockOnReload()} />
+      );
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
