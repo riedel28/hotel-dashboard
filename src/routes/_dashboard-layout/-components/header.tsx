@@ -14,6 +14,8 @@ import { MobileMenu } from '@/routes/_dashboard-layout/-components/mobile-menu';
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
 import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
+import { TextAlignJustifyIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function Header() {
   const { properties } = DashboardLayoutRoute.useLoaderData();
@@ -39,38 +41,15 @@ export default function Header() {
           {/* Left side */}
           <div className="flex items-center gap-2">
             {/* Mobile menu trigger */}
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={() => setMobileMenuOpen(true)}
-              className="group size-8 hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 md:hidden inline-flex items-center justify-center rounded-md"
               aria-label="Open menu"
             >
-              <svg
-                className="pointer-events-none"
-                width={16}
-                height={16}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4 12L20 12"
-                  className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-315"
-                />
-                <path
-                  d="M4 12H20"
-                  className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
-                />
-                <path
-                  d="M4 12H20"
-                  className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-135"
-                />
-              </svg>
-            </button>
+              <TextAlignJustifyIcon className="size-4" />
+            </Button>
             {/* Breadcrumb */}
             <Breadcrumb>
               <BreadcrumbList>
