@@ -22,7 +22,8 @@ import {
   SquareActivityIcon,
   TabletIcon,
   TvIcon,
-  UsersIcon
+  UsersIcon,
+  XIcon
 } from 'lucide-react';
 import * as React from 'react';
 import {
@@ -43,6 +44,7 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar';
 import { useView } from '@/contexts/view-context';
+import { Button } from '@/components/ui/button';
 
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -368,6 +370,15 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
                   <span className="text-sm font-semibold whitespace-nowrap">
                     <Trans>Backoffice Manager</Trans>
                   </span>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => onOpenChange(false)}
+                    aria-label="Close menu"
+                    className="ml-auto"
+                  >
+                    <XIcon className="size-4" />
+                  </Button>
                 </SidebarMenuItem>
               </SidebarGroup>
             </SidebarMenu>
