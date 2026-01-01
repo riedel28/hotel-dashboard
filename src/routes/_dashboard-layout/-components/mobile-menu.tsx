@@ -1,11 +1,7 @@
 'use client';
 
-import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  Link,
-  type LinkProps,
-  useLocation
-} from '@tanstack/react-router';
+import { Trans } from '@lingui/react/macro';
+import { Link, type LinkProps } from '@tanstack/react-router';
 import {
   ArrowUpRightIcon,
   BedDoubleIcon,
@@ -29,49 +25,48 @@ import {
   UsersIcon
 } from 'lucide-react';
 import * as React from 'react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet';
+import {
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem
+} from '@/components/ui/sidebar';
 import { useView } from '@/contexts/view-context';
-import { cn } from '@/lib/utils';
 
-interface MobileMenuLinkProps extends LinkProps {
+interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
   onNavigate?: () => void;
-  className?: string;
 }
 
-function MobileMenuLink({
+function SidebarLink({
   icon: Icon,
   children,
   onNavigate,
-  className,
   ...linkProps
-}: MobileMenuLinkProps) {
-  const location = useLocation();
-  const isActive = location.pathname === linkProps.to;
-
+}: SidebarLinkProps) {
   return (
-    <Link
-      {...(linkProps as LinkProps)}
-      onClick={onNavigate}
-      className={cn(
-        'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-        isActive
-          ? 'bg-primary/10 text-primary'
-          : 'text-foreground hover:bg-muted',
-        className
-      )}
-    >
-      <Icon className="size-5" />
-      <span>{children}</span>
-    </Link>
+    <SidebarMenuButton asChild>
+      <Link
+        activeProps={{ className: '!bg-primary/5' }}
+        onClick={onNavigate}
+        {...(linkProps as LinkProps)}
+      >
+        <Icon />
+        <span>{children}</span>
+      </Link>
+    </SidebarMenuButton>
   );
 }
 
@@ -106,7 +101,6 @@ interface MobileMenuProps {
 
 export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
   const { currentView } = useView();
-  const { t } = useLingui();
 
   const handleNavigate = () => {
     onOpenChange(false);
@@ -114,224 +108,273 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
 
   // Admin menu content
   const AdminMenuContent = () => (
-    <div className="flex flex-col gap-4">
-      <MobileMenuLink
-        to="/"
-        icon={HomeIcon}
-        onNavigate={handleNavigate}
-      >
-        <Trans>Start</Trans>
-      </MobileMenuLink>
-      <MobileMenuLink
-        to="/properties"
-        icon={BuildingIcon}
-        onNavigate={handleNavigate}
-      >
-        <Trans>Properties</Trans>
-      </MobileMenuLink>
-      <MobileMenuLink
-        to="/customers"
-        icon={UsersIcon}
-        onNavigate={handleNavigate}
-      >
-        <Trans>Customers</Trans>
-      </MobileMenuLink>
-    </div>
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarLink to="/" icon={HomeIcon} onNavigate={handleNavigate}>
+              <Trans>Start</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/properties"
+              icon={BuildingIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Properties</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/customers"
+              icon={UsersIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Customers</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+    </SidebarContent>
   );
 
   // User menu content
-  const UserMenuContent = () => (
-    <div className="flex flex-col gap-4">
-      <MobileMenuLink
-        to="/"
-        icon={HomeIcon}
-        onNavigate={handleNavigate}
-      >
-        <Trans>Start</Trans>
-      </MobileMenuLink>
-      <MobileMenuLink
-        to="/monitoring"
-        icon={SquareActivityIcon}
-        onNavigate={handleNavigate}
-      >
-        <Trans>Monitoring</Trans>
-      </MobileMenuLink>
+  const UserMenuContent = () => {
+    const getItemLabel = (url: string) => {
+      switch (url) {
+        case '/mobile-cms':
+          return <Trans>Mobile App</Trans>;
+        case '/tv':
+          return <Trans>TV App</Trans>;
+        case '/products':
+          return <Trans>Products</Trans>;
+        case '/events':
+          return <Trans>Events</Trans>;
+        default:
+          return '';
+      }
+    };
 
-      <Separator />
-
-      <div className="flex flex-col gap-2">
-        <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          <Trans>Front Office</Trans>
-        </h3>
-        <MobileMenuLink
-          to="/reservations"
-          icon={BedDoubleIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Reservations</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/registration-forms"
-          icon={ListTodoIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Registration forms</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/payments"
-          icon={ReceiptTextIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Payments</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/orders"
-          icon={ShoppingCartIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Orders</Trans>
-        </MobileMenuLink>
-      </div>
-
-      <Separator />
-
-      <div className="flex flex-col gap-2">
-        <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          <Trans>Content Manager</Trans>
-        </h3>
-        {contentManagerItems.map((item) => {
-          const getItemLabel = (url: string) => {
-            switch (url) {
-              case '/mobile-cms':
-                return <Trans>Mobile App</Trans>;
-              case '/tv':
-                return <Trans>TV App</Trans>;
-              case '/products':
-                return <Trans>Products</Trans>;
-              case '/events':
-                return <Trans>Events</Trans>;
-              default:
-                return item.name;
-            }
-          };
-
-          return (
-            <div key={item.name} className="flex items-center gap-2">
-              <MobileMenuLink
-                to={item.url as LinkProps['to']}
-                icon={item.icon}
+    return (
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarLink to="/" icon={HomeIcon} onNavigate={handleNavigate}>
+                <Trans>Start</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/monitoring"
+                icon={SquareActivityIcon}
                 onNavigate={handleNavigate}
-                className="flex-1"
               >
-                {getItemLabel(item.url)}
-              </MobileMenuLink>
-              {item.url === '/tv' && (
-                <ArrowUpRightIcon
-                  className="size-4 text-muted-foreground/80"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+                <Trans>Monitoring</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
 
-      <Separator />
+        {/* Front Office Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <Trans>Front Office</Trans>
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/reservations"
+                icon={BedDoubleIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Reservations</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/registration-forms"
+                icon={ListTodoIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Registration forms</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/payments"
+                icon={ReceiptTextIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Payments</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/orders"
+                icon={ShoppingCartIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Orders</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
 
-      <div className="flex flex-col gap-2">
-        <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          <Trans>Integrations</Trans>
-        </h3>
-        <MobileMenuLink
-          to="/access-provider"
-          icon={LockIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Access Provider</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/pms-provider"
-          icon={Grid2X2Icon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>PMS Provider</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/payment-provider"
-          icon={CreditCardIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Payment Provider</Trans>
-        </MobileMenuLink>
-      </div>
+        {/* Content Manager Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <Trans>Content Manager</Trans>
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            {contentManagerItems.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarLink
+                  to={item.url as LinkProps['to']}
+                  icon={item.icon}
+                  onNavigate={handleNavigate}
+                >
+                  {getItemLabel(item.url)}
+                </SidebarLink>
+                {item.url === '/tv' && (
+                  <SidebarMenuBadge>
+                    <ArrowUpRightIcon
+                      className="size-4 text-muted-foreground/80"
+                      aria-hidden="true"
+                    />
+                  </SidebarMenuBadge>
+                )}
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
 
-      <Separator />
+        {/* Integrations Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <Trans>Integrations</Trans>
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/access-provider"
+                icon={LockIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Access Provider</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/pms-provider"
+                icon={Grid2X2Icon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>PMS Provider</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/payment-provider"
+                icon={CreditCardIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Payment Provider</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
 
-      <div className="flex flex-col gap-2">
-        <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          <Trans>Settings</Trans>
-        </h3>
-        <MobileMenuLink
-          to="/company"
-          icon={BuildingIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Company data</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/checkin-page"
-          icon={FileSpreadsheetIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Checkin Page</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/users"
-          icon={UsersIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Users</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/rooms"
-          icon={BedSingleIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Rooms</Trans>
-        </MobileMenuLink>
-        <MobileMenuLink
-          to="/devices"
-          icon={TabletIcon}
-          onNavigate={handleNavigate}
-        >
-          <Trans>Devices</Trans>
-        </MobileMenuLink>
-      </div>
-    </div>
-  );
+        {/* Settings Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <Trans>Settings</Trans>
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/company"
+                icon={BuildingIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Company data</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/checkin-page"
+                icon={FileSpreadsheetIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Checkin Page</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/users"
+                icon={UsersIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Users</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/rooms"
+                icon={BedSingleIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Rooms</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarLink
+                to="/devices"
+                icon={TabletIcon}
+                onNavigate={handleNavigate}
+              >
+                <Trans>Devices</Trans>
+              </SidebarLink>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+    );
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-80 overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <div className="inline-block rounded-md bg-primary p-1 text-white">
-              <MessageCircleIcon className="size-4" />
-            </div>
-            <span className="text-sm font-semibold">
-              <Trans>Backoffice Manager</Trans>
-            </span>
+      <SheetContent
+        side="left"
+        className="w-[18rem] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+      >
+        <SheetHeader className="sr-only">
+          <SheetTitle>
+            <Trans>Sidebar</Trans>
           </SheetTitle>
+          <SheetDescription>
+            <Trans>Displays the mobile sidebar.</Trans>
+          </SheetDescription>
         </SheetHeader>
-        <div className="mt-6">
-          {currentView === 'admin' ? (
-            <AdminMenuContent />
-          ) : (
-            <UserMenuContent />
-          )}
+        <div className="flex h-full w-full flex-col">
+          <SidebarHeader>
+            <SidebarMenu>
+              <SidebarGroup>
+                <SidebarMenuItem className="flex items-center gap-2">
+                  <div className="inline-block rounded-md bg-primary p-1 text-white">
+                    <MessageCircleIcon className="size-4" />
+                  </div>
+                  <span className="text-sm font-semibold whitespace-nowrap">
+                    <Trans>Backoffice Manager</Trans>
+                  </span>
+                </SidebarMenuItem>
+              </SidebarGroup>
+            </SidebarMenu>
+          </SidebarHeader>
+          {currentView === 'admin' ? <AdminMenuContent /> : <UserMenuContent />}
         </div>
       </SheetContent>
     </Sheet>
   );
 }
-
