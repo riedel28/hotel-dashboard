@@ -28,7 +28,9 @@ async function register(req: Request, res: Response) {
         email: users.email,
         first_name: users.first_name,
         last_name: users.last_name,
+        selected_property_id: users.selected_property_id,
         created_at: users.created_at,
+        updated_at: users.updated_at,
         is_admin: users.is_admin
       });
 
@@ -84,8 +86,11 @@ async function login(req: Request, res: Response) {
       { rememberMe: Boolean(rememberMe) }
     );
 
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = user;
+
     res.status(200).json({
-      user,
+      user: userWithoutPassword,
       token
     });
   } catch (error) {

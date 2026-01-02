@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 
 export default function Header() {
   const { properties } = DashboardLayoutRoute.useLoaderData();
-  const { user } = useAuth();
+  const { user, updateSelectedProperty } = useAuth();
   const isAdmin = user?.is_admin === true;
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -32,6 +32,10 @@ export default function Header() {
     });
     // Invalidate the router to trigger loader refetch
     await router.invalidate();
+  };
+
+  const handlePropertyChange = async (propertyId: string) => {
+    await updateSelectedProperty(propertyId);
   };
 
   return (
@@ -64,6 +68,8 @@ export default function Header() {
                 <BreadcrumbItem>
                   <PropertySelector
                     properties={properties.index}
+                    value={user?.selected_property_id ?? undefined}
+                    onValueChange={handlePropertyChange}
                     onReload={handleReloadProperties}
                   />
                 </BreadcrumbItem>

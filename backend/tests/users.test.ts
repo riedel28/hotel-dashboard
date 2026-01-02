@@ -4,6 +4,7 @@ import app from '../src/app';
 import {
   assignRoleToUser,
   cleanupDatabase,
+  createTestProperty,
   createTestRole,
   createTestUser
 } from './helpers/dbHelpers';
@@ -366,6 +367,98 @@ describe('Users API', () => {
     });
   });
 
+  describe('PATCH /api/users/me/selected-property', () => {
+    test('should update selected property successfully', async () => {
+      const property = await createTestProperty({ name: 'Test Hotel' });
+
+      const response = await request(app)
+        .patch('/api/users/me/selected-property')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ selected_property_id: property.id })
+        .expect(200);
+
+      expect(response.body.selected_property_id).toBe(property.id);
+      expect(response.body.id).toBe(testUserId);
+    });
+
+    test('should clear selected property when null is provided', async () => {
+      const property = await createTestProperty({ name: 'Test Hotel' });
+
+      // First set a property
+      await request(app)
+        .patch('/api/users/me/selected-property')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ selected_property_id: property.id })
+        .expect(200);
+
+      // Then clear it
+      const response = await request(app)
+        .patch('/api/users/me/selected-property')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ selected_property_id: null })
+        .expect(200);
+
+      expect(response.body.selected_property_id).toBeNull();
+    });
+
+    test('should not expose password in response', async () => {
+      const property = await createTestProperty({ name: 'Test Hotel' });
+
+      const response = await request(app)
+        .patch('/api/users/me/selected-property')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ selected_property_id: property.id })
+        .expect(200);
+
+      expect(response.body).not.toHaveProperty('password');
+    });
+
+    test('should return 401 without authentication', async () => {
+      const property = await createTestProperty({ name: 'Test Hotel' });
+
+      await request(app)
+        .patch('/api/users/me/selected-property')
+        .send({ selected_property_id: property.id })
+        .expect(401);
+    });
+
+    test('should update the updated_at timestamp', async () => {
+      const property = await createTestProperty({ name: 'Test Hotel' });
+
+      const response = await request(app)
+        .patch('/api/users/me/selected-property')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ selected_property_id: property.id })
+        .expect(200);
+
+      expect(response.body.updated_at).toBeTruthy();
+    });
+
+    test('should return 400 for non-existent property', async () => {
+      const nonExistentPropertyId = '00000000-0000-0000-0000-000000000000';
+
+      const response = await request(app)
+        .patch('/api/users/me/selected-property')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ selected_property_id: nonExistentPropertyId })
+        .expect(400);
+
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toBe('Property not found');
+    });
+
+    test('should return 400 for invalid UUID format', async () => {
+      const response = await request(app)
+        .patch('/api/users/me/selected-property')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ selected_property_id: 'invalid-uuid' })
+        .expect(400);
+
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toBe('Validation failed');
+    });
+  });
+
   describe('Edge Cases', () => {
     test('should handle empty search results', async () => {
       const response = await request(app)
@@ -414,4 +507,6 @@ describe('Users API', () => {
     });
   });
 });
+
+
 

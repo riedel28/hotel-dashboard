@@ -63,6 +63,10 @@ export const users = pgTable('users', {
   first_name: varchar('first_name', { length: 50 }),
   last_name: varchar('last_name', { length: 50 }),
   country_code: varchar('country_code', { length: 2 }),
+  selected_property_id: uuid('selected_property_id').references(
+    () => properties.id,
+    { onDelete: 'set null' }
+  ),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull(),
   is_admin: boolean('is_admin').default(false).notNull()
@@ -142,8 +146,12 @@ export const userRoles = pgTable('user_roles', {
 });
 
 // Users relations
-export const usersRelations = relations(users, ({ many }) => ({
-  userRoles: many(userRoles)
+export const usersRelations = relations(users, ({ many, one }) => ({
+  userRoles: many(userRoles),
+  selectedProperty: one(properties, {
+    fields: [users.selected_property_id],
+    references: [properties.id]
+  })
 }));
 
 // Roles relations

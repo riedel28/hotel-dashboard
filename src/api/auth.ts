@@ -1,7 +1,9 @@
 import {
   authResponseSchema,
   type LoginData,
-  type RegisterData
+  type RegisterData,
+  type User,
+  userSchema
 } from '@/lib/schemas';
 import { client, handleApiError } from './client';
 
@@ -23,4 +25,17 @@ async function register(user: RegisterData) {
   }
 }
 
-export { login, register };
+async function updateSelectedProperty(
+  propertyId: string | null
+): Promise<User> {
+  try {
+    const response = await client.patch('/users/me/selected-property', {
+      selected_property_id: propertyId
+    });
+    return userSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'updateSelectedProperty');
+  }
+}
+
+export { login, register, updateSelectedProperty };

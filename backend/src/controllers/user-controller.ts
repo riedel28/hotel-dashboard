@@ -3,7 +3,8 @@ import { and, asc, count, desc, eq, ilike, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
-import { roles, userRoles, users } from '../db/schema';
+import { properties, roles, userRoles, users } from '../db/schema';
+import type { AuthenticatedRequest } from '../middleware/auth';
 
 async function getUsers(req: Request, res: Response) {
   try {
@@ -345,4 +346,58 @@ async function deleteUser(req: Request, res: Response) {
   }
 }
 
-export { getUsers, getUserById, createUser, updateUser, deleteUser };
+async function updateSelectedProperty(req: Request, res: Response) {
+  const authenticatedReq = req as AuthenticatedRequest;
+  const userId = authenticatedReq.user?.id;
+  const { selected_property_id } = req.body;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  try {
+    // Validate property exists if provided
+    if (selected_property_id) {
+      const propertyExists = await db.query.properties.findFirst({
+        where: eq(properties.id, selected_property_id)
+      });
+
+      if (!propertyExists) {
+        return res.status(400).json({ error: 'Property not found' });
+      }
+    }
+
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        selected_property_id: selected_property_id || null,
+        updated_at: new Date()
+      })
+      .where(eq(users.id, Number(userId)))
+      .returning();
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Return the updated user without password
+    const { password: _, ...userWithoutPassword } = updatedUser;
+    res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    console.error('Failed to update selected property:', error);
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : 'Failed to update selected property';
+    res.status(500).json({ error: errorMessage });
+  }
+}
+
+export {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  updateSelectedProperty
+};
