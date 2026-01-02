@@ -4,6 +4,7 @@ import {
   createUserSchema,
   fetchUserByIdSchema,
   fetchUsersParamsSchema,
+  updateSelectedPropertySchema,
   updateUserSchema,
   userIdParamsSchema
 } from '../../../shared/types/users';
@@ -12,6 +13,7 @@ import {
   deleteUser,
   getUserById,
   getUsers,
+  updateSelectedProperty,
   updateUser
 } from '../controllers/user-controller';
 import { authenticateToken } from '../middleware/auth';
@@ -31,6 +33,13 @@ router.post('/', validateBody(createUserSchema), createUser);
 
 // Get users (paginated)
 router.get('/', validateQuery(fetchUsersParamsSchema), getUsers);
+
+// Update current user's selected property
+router.patch(
+  '/me/selected-property',
+  validateBody(updateSelectedPropertySchema),
+  updateSelectedProperty
+);
 
 // Get user by id
 router.get('/:id', validateParams(fetchUserByIdSchema), getUserById);

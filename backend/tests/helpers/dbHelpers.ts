@@ -55,6 +55,26 @@ export async function createTestRole(name: string) {
   return role;
 }
 
+export async function createTestProperty(
+  propertyData: Partial<{
+    name: string;
+    stage: 'demo' | 'production' | 'staging' | 'template';
+  }> = {}
+) {
+  const defaultData = {
+    name: `Test Property ${Date.now()}`,
+    stage: 'demo' as const,
+    ...propertyData
+  };
+
+  const [property] = await db
+    .insert(properties)
+    .values(defaultData)
+    .returning();
+
+  return property;
+}
+
 export async function assignRoleToUser(userId: number, roleId: number) {
   const [userRole] = await db
     .insert(userRoles)

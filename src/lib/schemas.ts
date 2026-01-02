@@ -23,6 +23,7 @@ export const userSchema = z.object({
   email: z.email(),
   first_name: z.string().nullable(),
   last_name: z.string().nullable(),
+  selected_property_id: z.string().uuid().nullable().optional(),
   created_at: z.string(),
   updated_at: z.string(),
   is_admin: z.boolean()

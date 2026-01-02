@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-import { login as apiLogin, register as apiRegister } from './api/auth';
+import {
+  login as apiLogin,
+  register as apiRegister,
+  updateSelectedProperty as apiUpdateSelectedProperty
+} from './api/auth';
 import type {
   AuthResponse,
   LoginData,
@@ -13,6 +17,7 @@ export interface AuthContext {
   login: (credentials: LoginData) => Promise<AuthResponse>;
   register: (data: RegisterData) => Promise<AuthResponse>;
   logout: () => Promise<void>;
+  updateSelectedProperty: (propertyId: string | null) => Promise<User>;
   user: User | null;
   token: string | null;
 }
@@ -39,6 +44,10 @@ function setStoredAuth(user: User | null, token: string | null) {
     localStorage.removeItem(userKey);
     localStorage.removeItem(tokenKey);
   }
+}
+
+function setStoredUser(user: User) {
+  localStorage.setItem(userKey, JSON.stringify(user));
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -74,6 +83,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     throw new Error('Registration failed');
   }, []);
 
+  const updateSelectedProperty = React.useCallback(
+    async (propertyId: string | null) => {
+      const updatedUser = await apiUpdateSelectedProperty(propertyId);
+      setStoredUser(updatedUser);
+      setUser(updatedUser);
+      return updatedUser;
+    },
+    []
+  );
+
   React.useEffect(() => {
     setUser(getStoredUser());
     setToken(getStoredToken());
@@ -86,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         logout,
+        updateSelectedProperty,
         user,
         token
       }}

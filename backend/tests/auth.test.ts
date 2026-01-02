@@ -1,7 +1,14 @@
 import request from 'supertest';
 
 import app from '../src/app';
-import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
+import {
+  cleanupDatabase,
+  createTestProperty,
+  createTestUser
+} from './helpers/dbHelpers';
+import { db } from '../src/db/pool';
+import { users } from '../src/db/schema';
+import { eq } from 'drizzle-orm';
 
 describe('Auth API', () => {
   // Clean up before and after each test to ensure isolation
@@ -157,6 +164,83 @@ describe('Auth API', () => {
         .expect(400);
 
       expect(response.body).toHaveProperty('error');
+    });
+
+    test('should include selected_property_id in login response', async () => {
+      const property = await createTestProperty({ name: 'Login Test Hotel' });
+      const { user, rawPassword } = await createTestUser({
+        password: 'Password123!'
+      });
+
+      // Set selected property for the user
+      await db
+        .update(users)
+        .set({ selected_property_id: property.id })
+        .where(eq(users.id, user.id));
+
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: user.email,
+          password: rawPassword
+        })
+        .expect(200);
+
+      expect(response.body.user).toHaveProperty('selected_property_id');
+      expect(response.body.user.selected_property_id).toBe(property.id);
+    });
+
+    test('should return null selected_property_id when not set', async () => {
+      const { user, rawPassword } = await createTestUser({
+        password: 'Password123!'
+      });
+
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: user.email,
+          password: rawPassword
+        })
+        .expect(200);
+
+      expect(response.body.user).toHaveProperty('selected_property_id');
+      expect(response.body.user.selected_property_id).toBeNull();
+    });
+
+    test('should not expose password in login response', async () => {
+      const { user, rawPassword } = await createTestUser({
+        password: 'Password123!'
+      });
+
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: user.email,
+          password: rawPassword
+        })
+        .expect(200);
+
+      expect(response.body.user).not.toHaveProperty('password');
+    });
+  });
+
+  describe('POST /auth/register - selected_property_id', () => {
+    test('should include selected_property_id (null) in register response', async () => {
+      const uniqueEmail = `test-${Date.now()}@example.com`;
+      const userData = {
+        email: uniqueEmail,
+        password: 'Password123!',
+        first_name: 'John',
+        last_name: 'Doe'
+      };
+
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(201);
+
+      expect(response.body.user).toHaveProperty('selected_property_id');
+      expect(response.body.user.selected_property_id).toBeNull();
     });
   });
 });

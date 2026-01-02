@@ -11,6 +11,7 @@ export const userSchema = z.object({
   first_name: z.string().nullable(),
   last_name: z.string().nullable(),
   country_code: z.string().length(2).nullable(),
+  selected_property_id: z.string().uuid().nullable().optional(),
   is_admin: z.boolean(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
@@ -77,6 +78,10 @@ export const updateUserSchema = z.object({
   role_ids: z.array(z.number().int().positive()).optional()
 });
 
+export const updateSelectedPropertySchema = z.object({
+  selected_property_id: z.string().uuid().nullable().optional()
+});
+
 // Type exports
 export type Role = z.infer<typeof roleSchema>;
 export type User = z.infer<typeof userSchema>;
@@ -84,3 +89,6 @@ export type FetchUsersParams = z.infer<typeof fetchUsersParamsSchema>;
 export type FetchUsersResponse = z.infer<typeof fetchUsersResponseSchema>;
 export type CreateUserData = z.infer<typeof createUserSchema>;
 export type UpdateUserData = z.infer<typeof updateUserSchema>;
+export type UpdateSelectedPropertyData = z.infer<
+  typeof updateSelectedPropertySchema
+>;
