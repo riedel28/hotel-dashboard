@@ -26,11 +26,13 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const handleReloadProperties = async () => {
-    // Invalidate the properties query to force a refetch
-    await queryClient.invalidateQueries({
+    // Remove query from cache to force fresh fetch
+    queryClient.removeQueries({
       queryKey: propertiesQueryOptions().queryKey
     });
-    // Invalidate the router to trigger loader refetch
+    // Fetch fresh data and update cache
+    await queryClient.fetchQuery(propertiesQueryOptions());
+    // Invalidate the router to trigger loader refetch with fresh data
     await router.invalidate();
   };
 
