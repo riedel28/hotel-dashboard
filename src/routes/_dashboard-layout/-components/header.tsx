@@ -53,6 +53,7 @@ export default function Header() {
               size="icon"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
+              className="inline-flex md:hidden"
             >
               <TextAlignJustifyIcon className="size-4" />
             </Button>
