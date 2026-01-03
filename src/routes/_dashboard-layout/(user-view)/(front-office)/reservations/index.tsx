@@ -34,6 +34,12 @@ import {
 import { cn } from '@/lib/utils';
 
 import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
+import { ReservationClearFilters } from '../reservations/-components/reservation-clear-filters';
+import { ReservationDateFilter } from '../reservations/-components/reservations-table/reservation-date-filter';
+import { ReservationRefresh } from '../reservations/-components/reservation-refresh';
+import { ReservationSearch } from '../reservations/-components/reservation-search';
+import { ReservationSearchResults } from '../reservations/-components/reservation-search-results';
+import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
 import { ReservationsFilters } from '../reservations/-components/reservations-filters';
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
 
@@ -276,29 +282,32 @@ function ReservationsContent() {
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
     : [{ id: 'received_at', desc: true }];
 
+  const hasActiveFilters = Boolean(
+    q || from || to || (status && status !== 'all')
+  );
+
   return (
     <div className="space-y-2.5">
-      <ReservationsFilters
-        q={q}
-        status={status}
-        from={from ? new Date(from) : undefined}
-        to={to ? new Date(to) : undefined}
-        isFetching={reservationsQuery.isFetching}
-        onSearchChange={handleSearchChange}
-        onStatusChange={handleStatusChange}
-        onDateChange={handleDateChange}
-        onClearFilters={handleClearFilters}
-        onRefresh={handleRefresh}
-      />
+      <ReservationsFilters>
+        <ReservationSearch value={q} onChange={handleSearchChange} />
+        <ReservationStatusFilter value={status} onChange={handleStatusChange} />
+        <ReservationDateFilter
+          from={from ? new Date(from) : undefined}
+          to={to ? new Date(to) : undefined}
+          onDateChange={handleDateChange}
+          className="w-full sm:w-[208px]"
+        />
+        <ReservationClearFilters
+          hasActiveFilters={hasActiveFilters}
+          onClear={handleClearFilters}
+        />
+        <ReservationRefresh
+          isRefreshing={reservationsQuery.isFetching}
+          onRefresh={handleRefresh}
+        />
+      </ReservationsFilters>
 
-      {q && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Trans>
-            Show results for:{' '}
-            <span className="font-medium text-foreground">"{q}"</span>
-          </Trans>
-        </div>
-      )}
+      <ReservationSearchResults searchQuery={q} />
 
       <div
         className={cn(
