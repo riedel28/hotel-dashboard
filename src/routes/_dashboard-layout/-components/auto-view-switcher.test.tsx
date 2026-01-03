@@ -112,6 +112,21 @@ describe('AutoViewSwitcher', () => {
 
   describe('View Switching', () => {
     test('switches to admin view when navigating to /properties', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/properties',
         targetView: 'admin',
@@ -126,6 +141,21 @@ describe('AutoViewSwitcher', () => {
     });
 
     test('switches to user view when navigating to /reservations', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/reservations',
         targetView: 'user',
@@ -140,6 +170,21 @@ describe('AutoViewSwitcher', () => {
     });
 
     test('switches to admin view when navigating to /customers', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/customers',
         targetView: 'admin',
@@ -154,6 +199,21 @@ describe('AutoViewSwitcher', () => {
     });
 
     test('switches to user view when navigating to /orders', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/orders',
         targetView: 'user',
@@ -170,6 +230,21 @@ describe('AutoViewSwitcher', () => {
 
   describe('Navigation Behavior', () => {
     test('navigates to / when switching views from non-root path', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/reservations/123',
         targetView: 'user',
@@ -184,6 +259,21 @@ describe('AutoViewSwitcher', () => {
     });
 
     test('navigates to / when switching views from /properties', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/properties',
         targetView: 'admin',
@@ -198,6 +288,21 @@ describe('AutoViewSwitcher', () => {
     });
 
     test('does not navigate when already on root path', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/',
         targetView: 'user',
@@ -281,6 +386,21 @@ describe('AutoViewSwitcher', () => {
 
   describe('Nested Routes', () => {
     test('switches view and navigates for nested reservation route', async () => {
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/reservations/123/edit',
         targetView: 'user',
@@ -296,6 +416,21 @@ describe('AutoViewSwitcher', () => {
     });
 
     test('switches view and navigates for nested property route', async () => {
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/properties/456/details',
         targetView: 'admin',
@@ -333,6 +468,12 @@ describe('AutoViewSwitcher', () => {
       mockUseAuth.mockReturnValue({
         isAuthenticated: true,
         user: adminUser
+      });
+
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
       });
 
       renderWithProvider('user');
@@ -416,8 +557,8 @@ describe('AutoViewSwitcher', () => {
 
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/reservations',
-        targetView: null,
-        shouldSwitchView: false
+        targetView: 'admin',
+        shouldSwitchView: true
       });
 
       renderWithProvider('user');
@@ -457,13 +598,19 @@ describe('AutoViewSwitcher', () => {
         is_admin: true
       };
 
-      const { rerender } = renderWithProvider('user');
-
       // First render: authenticated admin
       mockUseAuth.mockReturnValue({
         isAuthenticated: true,
         user: adminUser
       });
+
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
+      });
+
+      const { rerender } = renderWithProvider('user');
 
       rerender(
         <ViewProvider>
@@ -503,7 +650,15 @@ describe('AutoViewSwitcher', () => {
         user: adminUser
       });
 
-      rerender(
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
+      });
+
+      // Create a new ViewProvider instance to pick up the new localStorage value
+      const { rerender: rerender2 } = renderWithProvider('user');
+      rerender2(
         <ViewProvider>
           <AutoViewSwitcher />
         </ViewProvider>
@@ -560,13 +715,13 @@ describe('AutoViewSwitcher', () => {
         is_admin: false
       };
 
-      const { rerender } = renderWithProvider('user');
-
       // First render: regular user
       mockUseAuth.mockReturnValue({
         isAuthenticated: true,
         user: regularUser
       });
+
+      const { rerender } = renderWithProvider('user');
 
       rerender(
         <ViewProvider>
@@ -590,6 +745,12 @@ describe('AutoViewSwitcher', () => {
       mockUseAuth.mockReturnValue({
         isAuthenticated: true,
         user: adminUser
+      });
+
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
       });
 
       rerender(
@@ -623,6 +784,12 @@ describe('AutoViewSwitcher', () => {
         user: regularUser
       });
 
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: null,
+        shouldSwitchView: false
+      });
+
       renderWithProvider('admin');
 
       // Should force switch to user view
@@ -644,13 +811,19 @@ describe('AutoViewSwitcher', () => {
         is_admin: true
       };
 
-      const { rerender } = renderWithProvider('user');
-
       // First render: admin user
       mockUseAuth.mockReturnValue({
         isAuthenticated: true,
         user: adminUser
       });
+
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
+      });
+
+      const { rerender } = renderWithProvider('user');
 
       rerender(
         <ViewProvider>
@@ -671,6 +844,12 @@ describe('AutoViewSwitcher', () => {
       mockUseAuth.mockReturnValue({
         isAuthenticated: true,
         user: regularUser
+      });
+
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: null,
+        shouldSwitchView: false
       });
 
       rerender(
@@ -701,13 +880,19 @@ describe('AutoViewSwitcher', () => {
         is_admin: true
       };
 
-      const { rerender } = renderWithProvider('user');
-
       // First render: first admin user
       mockUseAuth.mockReturnValue({
         isAuthenticated: true,
         user: adminUser1
       });
+
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
+      });
+
+      const { rerender } = renderWithProvider('user');
 
       rerender(
         <ViewProvider>
@@ -736,7 +921,15 @@ describe('AutoViewSwitcher', () => {
         user: adminUser2
       });
 
-      rerender(
+      mockUseRouteViewDetection.mockReturnValue({
+        currentPath: '/properties',
+        targetView: 'admin',
+        shouldSwitchView: true
+      });
+
+      // Create a new ViewProvider instance to pick up the new localStorage value
+      const { rerender: rerender2 } = renderWithProvider('user');
+      rerender2(
         <ViewProvider>
           <AutoViewSwitcher />
         </ViewProvider>
@@ -846,14 +1039,39 @@ describe('AutoViewSwitcher', () => {
 
   describe('Multiple Route Changes', () => {
     test('handles multiple route changes correctly', async () => {
-      const { rerender } = renderWithProvider('user');
+      const adminUser = {
+        id: 1,
+        email: 'admin@example.com',
+        first_name: 'Admin',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: true
+      };
+
+      const regularUser = {
+        id: 2,
+        email: 'user@example.com',
+        first_name: 'Regular',
+        last_name: 'User',
+        created_at: '2024-01-01',
+        updated_at: '2024-01-01',
+        is_admin: false
+      };
 
       // First change: switch to admin
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: adminUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/properties',
         targetView: 'admin',
         shouldSwitchView: true
       });
+
+      const { rerender } = renderWithProvider('user');
 
       rerender(
         <ViewProvider>
@@ -866,6 +1084,11 @@ describe('AutoViewSwitcher', () => {
       });
 
       // Second change: switch back to user
+      mockUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        user: regularUser
+      });
+
       mockUseRouteViewDetection.mockReturnValue({
         currentPath: '/reservations',
         targetView: 'user',
