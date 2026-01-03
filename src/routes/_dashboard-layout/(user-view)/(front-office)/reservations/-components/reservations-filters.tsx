@@ -7,9 +7,7 @@ interface ReservationsFiltersProps {
 export function ReservationsFilters({ children }: ReservationsFiltersProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }
