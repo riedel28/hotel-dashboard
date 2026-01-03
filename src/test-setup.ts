@@ -27,7 +27,10 @@ if (typeof globalThis.localStorage === 'undefined') {
   });
 }
 
-if (typeof window !== 'undefined' && typeof window.localStorage === 'undefined') {
+if (
+  typeof window !== 'undefined' &&
+  typeof window.localStorage === 'undefined'
+) {
   Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
     writable: true

@@ -1,4 +1,4 @@
-import { Trans, useLingui } from '@lingui/react/macro';
+import { Trans } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
   useQueryClient,
@@ -7,7 +7,7 @@ import {
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { RefreshCw, XIcon } from 'lucide-react';
+import { RefreshCwIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
@@ -30,20 +30,12 @@ import {
   ErrorDisplayMessage,
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
-import { SearchInput } from '@/components/ui/search-input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 
 import { cn } from '@/lib/utils';
 
 import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
+import { ReservationsFilters } from '../reservations/-components/reservations-filters';
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
-import { ReservationDateFilter } from './-components/reservations-table/reservation-date-filter';
 
 function ReservationsPage() {
   return (
@@ -105,7 +97,7 @@ function ReservationsPage() {
                         variant="destructive"
                         onClick={resetErrorBoundary}
                       >
-                        <RefreshCw className="mr-2 h-4 w-4" />
+                        <RefreshCwIcon className="mr-2 h-4 w-4" />
                         <Trans>Refresh</Trans>
                       </Button>
                     </ErrorDisplayActions>
@@ -127,7 +119,6 @@ function ReservationsContent() {
     Route.useSearch();
   const navigate = Route.useNavigate();
   const queryClient = useQueryClient();
-  const { t } = useLingui();
 
   const reservationsQuery = useSuspenseQuery(
     reservationsQueryOptions({
@@ -287,104 +278,18 @@ function ReservationsContent() {
 
   return (
     <div className="space-y-2.5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <SearchInput
-              value={q || ''}
-              onChange={handleSearchChange}
-              placeholder={t`Search reservations`}
-              wrapperClassName="w-full sm:w-[250px]"
-              debounceMs={500}
-            />
-            <Select
-              value={status ?? 'all'}
-              onValueChange={handleStatusChange}
-              defaultValue="all"
-            >
-              <SelectTrigger className="w-full sm:w-[150px]">
-                <SelectValue>
-                  {(value) =>
-                    value ? (
-                      <span className="capitalize">{t(value)}</span>
-                    ) : (
-                      <span className="text-muted-foreground">
-                        <Trans>Select status</Trans>
-                      </span>
-                    )
-                  }
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent align="start">
-                <SelectItem value="all">
-                  <span className="flex items-center gap-2">
-                    <span className="size-1.5 rounded-full bg-gray-500"></span>
-                    <span>
-                      <Trans>All</Trans>
-                    </span>
-                  </span>
-                </SelectItem>
-                <SelectItem value="pending">
-                  <span className="flex items-center gap-2">
-                    <span className="size-1.5 rounded-full bg-yellow-500"></span>
-                    <span>
-                      <Trans>Pending</Trans>
-                    </span>
-                  </span>
-                </SelectItem>
-                <SelectItem value="started">
-                  <span className="flex items-center gap-2">
-                    <span className="size-1.5 rounded-full bg-violet-500"></span>
-                    <span>
-                      <Trans>Started</Trans>
-                    </span>
-                  </span>
-                </SelectItem>
-                <SelectItem value="done">
-                  <span className="flex items-center gap-2">
-                    <span className="size-1.5 rounded-full bg-green-500"></span>
-                    <span>
-                      <Trans>Done</Trans>
-                    </span>
-                  </span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <ReservationDateFilter
-              from={from ? new Date(from) : undefined}
-              to={to ? new Date(to) : undefined}
-              onDateChange={handleDateChange}
-              className="w-full sm:w-[208px]"
-            />
-            {(q || from || to || (status && status !== 'all')) && (
-              <Button
-                variant="ghost"
-                onClick={handleClearFilters}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <XIcon />
-                <Trans>Clear filters</Trans>
-              </Button>
-            )}
-          </div>
-        </div>
-        <Button
-          variant="outline"
-          onClick={handleRefresh}
-          disabled={reservationsQuery.isFetching}
-          className="w-full sm:w-auto"
-        >
-          <RefreshCw
-            className={cn(
-              'mr-2 h-4 w-4',
-              reservationsQuery.isFetching && 'animate-spin'
-            )}
-          />
-          <Trans>Refresh</Trans>
-        </Button>
-      </div>
+      <ReservationsFilters
+        q={q}
+        status={status}
+        from={from ? new Date(from) : undefined}
+        to={to ? new Date(to) : undefined}
+        isFetching={reservationsQuery.isFetching}
+        onSearchChange={handleSearchChange}
+        onStatusChange={handleStatusChange}
+        onDateChange={handleDateChange}
+        onClearFilters={handleClearFilters}
+        onRefresh={handleRefresh}
+      />
 
       {q && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
