@@ -11,7 +11,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="input-group"
       role="group"
       className={cn(
-        'border-input dark:bg-input/30 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot=input-group-control]:focus-visible]:ring-[2px] has-[[data-slot=input-group-control]:focus-visible]:ring-primary has-[[data-slot=input-group-control]:focus-visible]:ring-offset-0 has-[[data-slot=input-group-control]:focus-visible]:ring-offset-background h-9 rounded-md border shadow-xs transition-[color,box-shadow] has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5 in-data-[slot=combobox-content]:focus-within:border-inherit in-data-[slot=combobox-content]:focus-within:ring-0 group/input-group relative flex w-full min-w-0 items-center outline-none has-[>textarea]:h-auto',
+        'border-input dark:bg-input/30 has-[[data-slot][aria-invalid=true]]:border-destructive focus-within:outline focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-primary h-9 rounded-md border transition-[color,box-shadow] has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5 in-data-[slot=combobox-content]:focus-within:border-inherit in-data-[slot=combobox-content]:focus-within:ring-0 group/input-group relative flex w-full min-w-0 items-center has-[>textarea]:h-auto',
         className
       )}
       {...props}
@@ -121,7 +121,7 @@ function InputGroupInput({
     <Input
       data-slot="input-group-control"
       className={cn(
-        'rounded-none text-sm border-0 bg-transparent shadow-none ring-0 focus-visible:ring-0 focus:outline-0 aria-invalid:ring-0 dark:bg-transparent flex-1',
+        'rounded-none text-sm border-0 bg-transparent shadow-none ring-0 focus-visible:ring-0 focus:outline-none focus-visible:outline-none aria-invalid:ring-0 dark:bg-transparent flex-1',
         className
       )}
       {...props}
