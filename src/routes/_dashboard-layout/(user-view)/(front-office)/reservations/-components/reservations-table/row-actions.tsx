@@ -1,6 +1,6 @@
 'use client';
 
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
 import {
@@ -10,6 +10,7 @@ import {
   Trash
 } from 'lucide-react';
 import * as React from 'react';
+import { toast } from 'sonner';
 import type { Reservation } from '@/api/reservations';
 
 import { buttonVariants } from '@/components/ui/button';
@@ -31,6 +32,7 @@ interface RowActionsProps {
 
 export function RowActions({ row }: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
+  const { t } = useLingui();
 
   return (
     <>
@@ -47,7 +49,11 @@ export function RowActions({ row }: RowActionsProps) {
           </span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[180px]">
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              toast.info(t`Pushed to device`);
+            }}
+          >
             <MessageSquareDot className="mr-2 h-4 w-4" />
             <Trans>Push to device</Trans>
           </DropdownMenuItem>
