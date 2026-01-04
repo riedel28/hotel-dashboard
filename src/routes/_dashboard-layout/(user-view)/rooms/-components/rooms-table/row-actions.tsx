@@ -1,6 +1,6 @@
 'use client';
 
-import { Trans, useLingui } from '@lingui/react/macro';
+import { Trans } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
 import { MoreHorizontalIcon, PenSquareIcon, Trash2Icon } from 'lucide-react';
@@ -25,7 +25,6 @@ interface RowActionsProps {
 
 export function RowActions({ row }: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
-  const { t } = useLingui();
 
   return (
     <>
