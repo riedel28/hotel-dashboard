@@ -8,6 +8,7 @@ import monitoringRouter from './routes/monitoring';
 import propertiesRouter from './routes/properties';
 import reservationsRouter from './routes/reservations';
 import rolesRouter from './routes/roles';
+import roomsRouter from './routes/rooms';
 import usersRouter from './routes/users';
 
 const app = express();
@@ -26,6 +27,7 @@ app.use('/api/monitoring', monitoringRouter);
 app.use('/api/properties', propertiesRouter);
 app.use('/api/reservations', reservationsRouter);
 app.use('/api/roles', rolesRouter);
+app.use('/api/rooms', roomsRouter);
 app.use('/api/users', usersRouter);
 
 // 404 handler - MUST come after all valid routes
