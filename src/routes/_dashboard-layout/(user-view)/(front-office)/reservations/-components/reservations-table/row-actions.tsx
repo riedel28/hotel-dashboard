@@ -24,7 +24,6 @@ import {
 import { cn } from '@/lib/utils';
 
 import { DeleteDialog } from './delete-dialog';
-import { ShareDialog } from './share-dialog';
 
 interface RowActionsProps {
   row: Row<Reservation>;
@@ -32,7 +31,6 @@ interface RowActionsProps {
 
 export function RowActions({ row }: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
-  const [showShareModal, setShowShareModal] = React.useState(false);
 
   return (
     <>
@@ -68,10 +66,6 @@ export function RowActions({ row }: RowActionsProps) {
               </RouterLink>
             )}
           />
-          <DropdownMenuItem onClick={() => setShowShareModal(true)}>
-            <MessageSquareDot className="mr-2 h-4 w-4" />
-            <Trans>Share</Trans>
-          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"
@@ -88,11 +82,6 @@ export function RowActions({ row }: RowActionsProps) {
         onOpenChange={setShowDeleteDialog}
         reservationNr={row.original.booking_nr}
         reservationId={row.original.id}
-      />
-      <ShareDialog
-        open={showShareModal}
-        onOpenChange={setShowShareModal}
-        reservation={row.original}
       />
     </>
   );
