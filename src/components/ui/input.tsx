@@ -19,7 +19,6 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
         bg-transparent
         aria-invalid:ring-[1px]
         aria-invalid:focus:outline-destructive
-        shadow-xs
         w-full 
         min-w-0 
         aria-invalid:border-destructive
