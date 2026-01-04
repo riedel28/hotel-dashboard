@@ -31,7 +31,11 @@ export const fetchRoomsParamsSchema = z.object({
     .optional(),
   q: z.string().optional(),
   property_id: z.string().uuid().optional(),
-  status: roomStatusSchema.optional()
+  status: roomStatusSchema.optional(),
+  sort_by: z
+    .enum(['name', 'room_number', 'room_type', 'status'])
+    .optional(),
+  sort_order: z.enum(['asc', 'desc']).optional()
 });
 
 export const fetchRoomsResponseSchema = z.object({

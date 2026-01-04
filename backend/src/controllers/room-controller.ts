@@ -1,4 +1,4 @@
-import { and, eq, ilike, or } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
@@ -6,7 +6,8 @@ import { rooms as roomsTable } from '../db/schema';
 
 async function getRooms(req: Request, res: Response) {
   try {
-    const { page, per_page, q, property_id, status } = req.query;
+    const { page, per_page, q, property_id, status, sort_by, sort_order } =
+      req.query;
 
     const conditions = [];
 
@@ -33,6 +34,36 @@ async function getRooms(req: Request, res: Response) {
 
     const whereCondition = conditions.length > 0 ? and(...conditions) : undefined;
 
+    // Build dynamic orderBy clause
+    const sortColumn = sort_by as
+      | 'name'
+      | 'room_number'
+      | 'room_type'
+      | 'status'
+      | undefined;
+    const sortDirection = sort_order as 'asc' | 'desc' | undefined;
+
+    let orderByColumn;
+    switch (sortColumn) {
+      case 'name':
+        orderByColumn = roomsTable.name;
+        break;
+      case 'room_number':
+        orderByColumn = roomsTable.room_number;
+        break;
+      case 'room_type':
+        orderByColumn = roomsTable.room_type;
+        break;
+      case 'status':
+        orderByColumn = roomsTable.status;
+        break;
+      default:
+        orderByColumn = roomsTable.name;
+    }
+
+    const orderBy =
+      sortDirection === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
+
     const pageNum = Number(page) || 1;
     const perPageNum = Number(per_page) || 10;
     const offset = (pageNum - 1) * perPageNum;
@@ -42,6 +73,7 @@ async function getRooms(req: Request, res: Response) {
       .select()
       .from(roomsTable)
       .where(whereCondition)
+      .orderBy(orderBy)
       .limit(perPageNum)
       .offset(offset);
 

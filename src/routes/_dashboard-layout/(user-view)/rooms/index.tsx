@@ -5,7 +5,7 @@ import {
   useSuspenseQuery
 } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { type PaginationState } from '@tanstack/react-table';
+import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import { RefreshCwIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -113,7 +113,7 @@ function RoomsPage() {
 }
 
 function RoomsContent() {
-  const { page, per_page, status, q } = Route.useSearch();
+  const { page, per_page, status, q, sort_by, sort_order } = Route.useSearch();
   const navigate = Route.useNavigate();
   const queryClient = useQueryClient();
 
@@ -122,7 +122,9 @@ function RoomsContent() {
       page,
       per_page,
       status,
-      q
+      q,
+      sort_by,
+      sort_order
     })
   );
 
@@ -132,7 +134,9 @@ function RoomsContent() {
         page,
         per_page,
         status,
-        q
+        q,
+        sort_by,
+        sort_order
       }).queryKey
     });
   };
@@ -190,6 +194,48 @@ function RoomsContent() {
     });
   };
 
+  const handleSortingChange = (
+    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
+  ) => {
+    const sorting =
+      typeof updaterOrValue === 'function'
+        ? updaterOrValue(
+            sort_by
+              ? [{ id: sort_by, desc: sort_order === 'desc' }]
+              : [{ id: 'name', desc: false }]
+          )
+        : updaterOrValue;
+
+    // Convert TanStack Table SortingState to URL params
+    const firstSort = sorting[0];
+    if (firstSort) {
+      navigate({
+        to: '/rooms',
+        search: (prev) => ({
+          ...prev,
+          page: 1, // Reset to first page when sorting changes
+          sort_by: firstSort.id as
+            | 'name'
+            | 'room_number'
+            | 'room_type'
+            | 'status',
+          sort_order: firstSort.desc ? ('desc' as const) : ('asc' as const)
+        })
+      });
+    } else {
+      // Clear sorting - use default
+      navigate({
+        to: '/rooms',
+        search: (prev) => ({
+          ...prev,
+          page: 1,
+          sort_by: undefined,
+          sort_order: undefined
+        })
+      });
+    }
+  };
+
   const handleClearFilters = () => {
     navigate({
       to: '/rooms',
@@ -201,6 +247,11 @@ function RoomsContent() {
       }
     });
   };
+
+  // Convert URL params to TanStack Table SortingState
+  const sorting: SortingState = sort_by
+    ? [{ id: sort_by, desc: sort_order === 'desc' }]
+    : [{ id: 'name', desc: false }];
 
   const hasActiveFilters = Boolean(q || status);
 
@@ -237,6 +288,8 @@ function RoomsContent() {
           totalCount={roomsQuery.data.total}
           pageCount={roomsQuery.data.page_count}
           onPaginationChange={handlePaginationChange}
+          sorting={sorting}
+          onSortingChange={handleSortingChange}
         />
       </div>
     </div>

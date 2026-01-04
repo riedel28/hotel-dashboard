@@ -15,7 +15,16 @@ import { client, handleApiError } from './client';
 
 export function roomsQueryOptions(params: FetchRoomsParams) {
   return queryOptions({
-    queryKey: ['rooms', params.page, params.per_page, params.q, params.property_id, params.status],
+    queryKey: [
+      'rooms',
+      params.page,
+      params.per_page,
+      params.q,
+      params.property_id,
+      params.status,
+      params.sort_by,
+      params.sort_order
+    ],
     queryFn: () => fetchRooms(params),
     placeholderData: keepPreviousData
   });
