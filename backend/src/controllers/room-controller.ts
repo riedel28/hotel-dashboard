@@ -29,7 +29,12 @@ async function getRooms(req: Request, res: Response) {
 
     // Status filter
     if (status) {
-      conditions.push(eq(roomsTable.status, status as string));
+      conditions.push(
+        eq(
+          roomsTable.status,
+          status as 'available' | 'occupied' | 'maintenance' | 'out_of_order'
+        )
+      );
     }
 
     const whereCondition = conditions.length > 0 ? and(...conditions) : undefined;

@@ -10,7 +10,6 @@ import {
 import { useMemo, useState } from 'react';
 import type { Room } from 'shared/types/rooms';
 
-import { Button } from '@/components/ui/button';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
