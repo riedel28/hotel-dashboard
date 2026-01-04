@@ -5,6 +5,7 @@ import {
   properties,
   reservations,
   roles,
+  rooms,
   userRoles,
   users
 } from '../../src/db/schema.ts';
@@ -75,6 +76,28 @@ export async function createTestProperty(
   return property;
 }
 
+export async function createTestRoom(
+  roomData: Partial<{
+    name: string;
+    property_id: string;
+    room_number: string;
+    room_type: string;
+    status: 'available' | 'occupied' | 'maintenance' | 'out_of_order';
+  }> = {}
+) {
+  const defaultData = {
+    name: `Test Room ${Date.now()}`,
+    room_number: `R${Date.now()}`,
+    room_type: 'Standard',
+    status: 'available' as const,
+    ...roomData
+  };
+
+  const [room] = await db.insert(rooms).values(defaultData).returning();
+
+  return room;
+}
+
 export async function assignRoleToUser(userId: number, roleId: number) {
   const [userRole] = await db
     .insert(userRoles)
@@ -85,11 +108,12 @@ export async function assignRoleToUser(userId: number, roleId: number) {
 
 export async function cleanupDatabase() {
   // Clean up in the right order due to foreign key constraints
-  // user_roles -> guests -> reservations -> properties -> roles -> users
+  // user_roles -> guests -> reservations -> rooms -> properties -> roles -> users
   await db.delete(userRoles);
   await db.delete(guests);
   await db.delete(monitoringLogs);
   await db.delete(reservations);
+  await db.delete(rooms);
   await db.delete(properties);
   await db.delete(roles);
   await db.delete(users);

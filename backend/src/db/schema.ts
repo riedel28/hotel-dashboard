@@ -81,6 +81,22 @@ export const properties = pgTable('properties', {
     .$type<'demo' | 'production' | 'staging' | 'template'>()
 });
 
+// Rooms table
+export const rooms = pgTable('rooms', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  property_id: uuid('property_id').references(() => properties.id, {
+    onDelete: 'cascade'
+  }),
+  room_number: text('room_number'),
+  room_type: text('room_type'),
+  status: text('status')
+    .default('available')
+    .$type<'available' | 'occupied' | 'maintenance' | 'out_of_order'>(),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow()
+});
+
 export const monitoringLogs = pgTable('monitoring_logs', {
   id: serial('id').primaryKey(),
   status: text('status').notNull().$type<'success' | 'error'>(),
@@ -116,6 +132,9 @@ export const selectUserSchema = createSelectSchema(users);
 export const insertPropertySchema = createInsertSchema(properties);
 export const selectPropertySchema = createSelectSchema(properties);
 
+export const insertRoomSchema = createInsertSchema(rooms);
+export const selectRoomSchema = createSelectSchema(rooms);
+
 // Type exports
 export type Reservation = typeof reservations.$inferSelect;
 export type NewReservation = typeof reservations.$inferInsert;
@@ -128,6 +147,9 @@ export type NewUser = typeof users.$inferInsert;
 
 export type Property = typeof properties.$inferSelect;
 export type NewProperty = typeof properties.$inferInsert;
+
+export type Room = typeof rooms.$inferSelect;
+export type NewRoom = typeof rooms.$inferInsert;
 
 export const roles = pgTable('roles', {
   id: serial('id').primaryKey(),
@@ -157,6 +179,19 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 // Roles relations
 export const rolesRelations = relations(roles, ({ many }) => ({
   userRoles: many(userRoles)
+}));
+
+// Rooms relations
+export const roomsRelations = relations(rooms, ({ one }) => ({
+  property: one(properties, {
+    fields: [rooms.property_id],
+    references: [properties.id]
+  })
+}));
+
+// Properties relations
+export const propertiesRelations = relations(properties, ({ many }) => ({
+  rooms: many(rooms)
 }));
 
 // UserRoles relations (junction table)
