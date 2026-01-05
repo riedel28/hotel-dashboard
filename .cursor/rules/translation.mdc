@@ -1,3 +1,7 @@
+---
+globs: *.tsx
+alwaysApply: false
+---
 # Translations (Lingui)
 
 This project uses Lingui for i18n with dynamic catalog loading.
