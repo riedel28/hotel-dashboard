@@ -51,10 +51,10 @@ function StartPage() {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl md:text-2xl font-bold">
           <Trans>Welcome back, {userName}!</Trans>
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-sm md:text-lg text-muted-foreground">
           <Trans>Manage your hotel operations efficiently</Trans>
         </p>
       </div>
@@ -72,16 +72,16 @@ function StartPage() {
               <Link
                 to={action.href}
                 search={action.search}
-                className="block p-6"
+                className="block md:p-6 p-4"
               >
                 <div className="mb-2 space-y-2">
-                  <div className="w-fit rounded-lg bg-muted p-3">
-                    <IconComponent className="size-5 text-primary" />
+                  <div className="w-fit rounded-lg bg-muted md:p-3 p-2">
+                    <IconComponent className="md:size-5 size-4 text-primary" />
                   </div>
-                  <CardTitle className="text-lg font-semibold">
+                  <CardTitle className="md:text-lg text-base font-semibold">
                     {action.title}
                   </CardTitle>
-                  <CardDescription className="text-sm leading-relaxed text-muted-foreground text-balance">
+                  <CardDescription className="md:text-sm text-xs leading-relaxed text-muted-foreground text-balance">
                     {action.description}
                   </CardDescription>
                 </div>
