@@ -65,7 +65,7 @@ function RouteComponent() {
           {/* Sidebar Navigation */}
           <div className="space-y-4">
             <TabsList
-              variant="line"
+              variant="button"
               className="h-auto w-full flex-col bg-transparent py-2"
             >
               <TabsTrigger
