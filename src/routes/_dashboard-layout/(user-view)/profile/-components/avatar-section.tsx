@@ -133,7 +133,7 @@ export function AvatarSection({
       <CardContent>
         <FieldSet className="gap-4">
           <Field orientation="horizontal" className="items-start gap-4">
-            <Avatar className="h-20 w-20 border-2 border-border">
+            <Avatar className="size-20 border border-border">
               <AvatarImage src={avatar || undefined} alt={t`Profile picture`} />
               <AvatarFallback className="text-lg font-semibold">
                 {userInitials}

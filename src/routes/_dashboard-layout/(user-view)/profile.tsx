@@ -18,7 +18,7 @@ import { AvatarSection } from './profile/-components/avatar-section';
 import { PasswordSection } from './profile/-components/password-section';
 import { PersonalSection } from './profile/-components/personal-section';
 import { RolesSection } from './profile/-components/roles-section';
-import { TwoFactorSection } from './profile/-components/two-factor-section';
+import { TwoFactorSection } from './profile/-components/2fa-section';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
   component: RouteComponent
@@ -60,7 +60,7 @@ function RouteComponent() {
         </h1>
       </div>
 
-      <Tabs defaultValue="personal" className="w-full">
+      <Tabs defaultValue="personal" orientation="horizontal" className="w-full">
         <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
           {/* Sidebar Navigation */}
           <div className="space-y-4">

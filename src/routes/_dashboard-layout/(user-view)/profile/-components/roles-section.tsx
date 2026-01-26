@@ -20,8 +20,6 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Field,
-  FieldContent,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -82,15 +80,6 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
                     orientation="vertical"
                     className="gap-3"
                   >
-                    <FieldContent>
-                      <FieldLabel className="text-base font-medium">
-                        <Trans>Roles</Trans>
-                      </FieldLabel>
-                      <FieldDescription>
-                        <Trans>Select one or more roles to assign.</Trans>
-                      </FieldDescription>
-                    </FieldContent>
-                    
                     <Suspense fallback={<RolesSkeleton />}>
                       <RolesList control={form.control} name="roles" />
                     </Suspense>
