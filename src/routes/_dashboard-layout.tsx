@@ -63,15 +63,18 @@ function SidebarLink({
   ...linkProps
 }: SidebarLinkProps) {
   return (
-    <SidebarMenuButton asChild tooltip={tooltip}>
-      <Link
-        activeProps={{ className: '!bg-primary/5' }}
-        {...(linkProps as LinkProps)}
-      >
-        <Icon />
-        <span>{children}</span>
-      </Link>
-    </SidebarMenuButton>
+    <SidebarMenuButton
+      // tooltip={tooltip}
+      render={
+        <Link
+          activeProps={{ className: '!bg-primary/5' }}
+          {...(linkProps as LinkProps)}
+        >
+          <Icon />
+          <span>{children}</span>
+        </Link>
+      }
+    />
   );
 }
 
