@@ -247,12 +247,12 @@ export interface FileRoutesByFullPath {
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   '/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
-  '/products': typeof DashboardLayoutuserViewProductsIndexRoute
-  '/rooms': typeof DashboardLayoutuserViewRoomsIndexRoute
-  '/users': typeof DashboardLayoutuserViewUsersIndexRoute
+  '/products/': typeof DashboardLayoutuserViewProductsIndexRoute
+  '/rooms/': typeof DashboardLayoutuserViewRoomsIndexRoute
+  '/users/': typeof DashboardLayoutuserViewUsersIndexRoute
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
-  '/monitoring': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
-  '/reservations': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
+  '/monitoring/': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
+  '/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof DashboardLayoutIndexRoute
@@ -345,12 +345,12 @@ export interface FileRouteTypes {
     | '/registration-forms'
     | '/rooms/$roomId'
     | '/users/$userId'
-    | '/products'
-    | '/rooms'
-    | '/users'
+    | '/products/'
+    | '/rooms/'
+    | '/users/'
     | '/reservations/$reservationId'
-    | '/monitoring'
-    | '/reservations'
+    | '/monitoring/'
+    | '/reservations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -427,14 +427,14 @@ declare module '@tanstack/react-router' {
     '/_dashboard-layout': {
       id: '/_dashboard-layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof DashboardLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth-layout': {
       id: '/_auth-layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -567,21 +567,21 @@ declare module '@tanstack/react-router' {
     '/_dashboard-layout/(user-view)/users/': {
       id: '/_dashboard-layout/(user-view)/users/'
       path: '/users'
-      fullPath: '/users'
+      fullPath: '/users/'
       preLoaderRoute: typeof DashboardLayoutuserViewUsersIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/rooms/': {
       id: '/_dashboard-layout/(user-view)/rooms/'
       path: '/rooms'
-      fullPath: '/rooms'
+      fullPath: '/rooms/'
       preLoaderRoute: typeof DashboardLayoutuserViewRoomsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/products/': {
       id: '/_dashboard-layout/(user-view)/products/'
       path: '/products'
-      fullPath: '/products'
+      fullPath: '/products/'
       preLoaderRoute: typeof DashboardLayoutuserViewProductsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
@@ -623,14 +623,14 @@ declare module '@tanstack/react-router' {
     '/_dashboard-layout/(user-view)/(front-office)/reservations/': {
       id: '/_dashboard-layout/(user-view)/(front-office)/reservations/'
       path: '/reservations'
-      fullPath: '/reservations'
+      fullPath: '/reservations/'
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/(front-office)/monitoring/': {
       id: '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
       path: '/monitoring'
-      fullPath: '/monitoring'
+      fullPath: '/monitoring/'
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
