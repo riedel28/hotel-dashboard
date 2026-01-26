@@ -64,7 +64,7 @@ function SidebarLink({
 }: SidebarLinkProps) {
   return (
     <SidebarMenuButton
-      // tooltip={tooltip}
+      tooltip={tooltip}
       render={
         <Link
           activeProps={{ className: '!bg-primary/5' }}
