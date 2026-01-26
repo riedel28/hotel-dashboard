@@ -59,16 +59,18 @@ function SidebarLink({
   ...linkProps
 }: SidebarLinkProps) {
   return (
-    <SidebarMenuButton asChild>
-      <Link
-        activeProps={{ className: '!bg-primary/5' }}
-        onClick={onNavigate}
-        {...(linkProps as LinkProps)}
-      >
-        <Icon />
-        <span>{children}</span>
-      </Link>
-    </SidebarMenuButton>
+    <SidebarMenuButton
+      render={
+        <Link
+          activeProps={{ className: '!bg-primary/5' }}
+          onClick={onNavigate}
+          {...(linkProps as LinkProps)}
+        >
+          <Icon />
+          <span>{children}</span>
+        </Link>
+      }
+    />
   );
 }
 

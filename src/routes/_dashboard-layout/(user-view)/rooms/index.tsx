@@ -86,7 +86,7 @@ function RoomsPage() {
                       <Trans>Something went wrong</Trans>
                     </ErrorDisplayTitle>
                     <ErrorDisplayMessage>
-                      {error.message || (
+                      {(error instanceof Error ? error.message : null) || (
                         <Trans>An error occurred while fetching rooms</Trans>
                       )}
                     </ErrorDisplayMessage>

@@ -92,7 +92,7 @@ function ReservationsPage() {
                       <Trans>Something went wrong</Trans>
                     </ErrorDisplayTitle>
                     <ErrorDisplayMessage>
-                      {error.message || (
+                      {(error instanceof Error ? error.message : null) || (
                         <Trans>
                           An error occurred while fetching reservations
                         </Trans>
