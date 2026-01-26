@@ -49,6 +49,7 @@ import {
 import { useView, ViewProvider } from '@/contexts/view-context';
 import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
 import Header from '@/routes/_dashboard-layout/-components/header';
+import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
 
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -377,6 +378,7 @@ function DashboardSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeaderComponent />
+      <SidebarViewToggle />
       {currentView === 'admin' ? (
         <AdminSidebarContent />
       ) : (
