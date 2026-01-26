@@ -88,9 +88,9 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
   };
 
   return (
-    <Item variant="outline" className="p-6 gap-6">
+    <Item variant="outline" className="p-6 gap-6 rounded-xl">
       <ItemHeader>
-        <ItemMedia variant="icon" className="mr-2">
+        <ItemMedia variant="icon" className="mr-2 rounded-lg">
           {enabled ? (
             <ShieldCheck className="size-5" />
           ) : (
