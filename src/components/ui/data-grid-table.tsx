@@ -449,11 +449,9 @@ function DataGridTableLoader() {
 }
 
 function DataGridTableRowSelect<TData>({
-  row,
-  size
+  row
 }: {
   row: Row<TData>;
-  size?: 'sm' | 'md' | 'lg';
 }) {
   const { t } = useLingui();
 
@@ -469,27 +467,23 @@ function DataGridTableRowSelect<TData>({
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label={t`Select row`}
-        size={size ?? 'sm'}
         className="align-[inherit]"
       />
     </>
   );
 }
 
-function DataGridTableRowSelectAll({ size }: { size?: 'sm' | 'md' | 'lg' }) {
+function DataGridTableRowSelectAll() {
   const { table, recordCount, isLoading } = useDataGrid();
   const { t } = useLingui();
 
   return (
     <Checkbox
-      checked={
-        table.getIsAllPageRowsSelected() ||
-        (table.getIsSomePageRowsSelected() && 'indeterminate')
-      }
+      checked={table.getIsAllPageRowsSelected()}
+      indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
       disabled={isLoading || recordCount === 0}
       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
       aria-label={t`Select all`}
-      size={size}
       className="align-[inherit]"
     />
   );

@@ -72,7 +72,7 @@ function ReservationPage() {
                       <ErrorDisplayTitle>
                         <Trans>Something went wrong</Trans>
                       </ErrorDisplayTitle>
-                      <ErrorDisplayMessage>{error.message}</ErrorDisplayMessage>
+                      <ErrorDisplayMessage>{error instanceof Error ? error.message : String(error)}</ErrorDisplayMessage>
                       <ErrorDisplayActions>
                         <Button
                           variant="destructive"
