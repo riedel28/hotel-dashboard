@@ -510,41 +510,50 @@ function SidebarMenuButton({
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const { isMobile, state } = useSidebar();
-  const comp = useRender({
-    defaultTagName: 'button',
-    props: mergeProps<'button'>(
-      {
-        className: cn(sidebarMenuButtonVariants({ variant, size }), className)
-      },
-      props
-    ),
-    render: !tooltip ? render : TooltipTrigger,
-    state: {
-      slot: 'sidebar-menu-button',
-      sidebar: 'menu-button',
-      size,
-      active: isActive
-    }
-  });
 
+  const buttonClassName = cn(
+    sidebarMenuButtonVariants({ variant, size }),
+    className
+  );
+
+  const buttonState = {
+    slot: 'sidebar-menu-button',
+    sidebar: 'menu-button',
+    size,
+    active: isActive
+  };
+
+  // When no tooltip, render normally
   if (!tooltip) {
-    return comp;
+    return useRender({
+      defaultTagName: 'button',
+      props: mergeProps<'button'>({ className: buttonClassName }, props),
+      render,
+      state: buttonState
+    });
   }
 
-  if (typeof tooltip === 'string') {
-    tooltip = {
-      children: tooltip
-    };
-  }
+  // Normalize tooltip to object form
+  const tooltipProps =
+    typeof tooltip === 'string' ? { children: tooltip } : tooltip;
 
+  // When tooltip is needed, wrap the custom render element with TooltipTrigger
   return (
     <Tooltip>
-      {comp}
+      <TooltipTrigger
+        className={buttonClassName}
+        render={render}
+        data-slot={buttonState.slot}
+        data-sidebar={buttonState.sidebar}
+        data-size={buttonState.size}
+        data-active={buttonState.active || undefined}
+        {...props}
+      />
       <TooltipContent
         side="right"
         align="center"
         hidden={state !== 'collapsed' || isMobile}
-        {...tooltip}
+        {...tooltipProps}
       />
     </Tooltip>
   );
