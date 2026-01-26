@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Context
+
+This is a **hotel management dashboard** application with a dual-view system (User View for front-office operations, Admin View for administrative functions).
+
 ## Development Commands
 
 ### Frontend (Root Directory)
@@ -11,20 +15,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `bun run build` - Build for production (includes type-check)
 - `bun run type-check` - Run TypeScript type checking
 - `bun run type-check:all` - Check both main and node TypeScript configs
-- `bun run lint` - Run ESLint with strict rules (max 0 warnings)
-- `bun run format:fix` - Format code with Prettier
-- `bun run format:check` - Check code formatting
+- `bun run lint` - Run Biome linter with auto-fix
+- `bun run check` - Run Biome check with auto-fix (lint + format)
+- `bun run format` - Format code with Biome
+- `bun run test` - Run tests once
+- `bun run test:watch` - Run tests in watch mode
+- `bun run test:coverage` - Run tests with coverage
 - `bun run preview` - Preview production build
 
 ### Backend (./backend/)
 
 - `bun run dev` - Start backend in watch mode
 - `bun run start` - Start backend in production mode
-- `bun run build` - TypeScript build check (no output)
-- `bun run typecheck` - TypeScript type checking
-- `bun run db:reseed` - Reseed database with sample data
+- `bun run test` - Run backend tests
+- `bun run test:watch` - Run backend tests in watch mode
 
-### Internationalization
+### Database (./backend/)
+
+- `bun run db:seed` - Seed database with sample data
+- `bun run db:generate` - Generate Drizzle migrations
+- `bun run db:push` - Push schema changes to database
+- `bun run db:studio` - Open Drizzle Studio GUI
+
+### Extract/compile internationalization
 
 - `bun run lingui:extract` - Extract translatable strings
 - `bun run lingui:compile` - Compile translation catalogs
@@ -40,20 +53,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Lingui** for internationalization (English/German)
 - **Tailwind CSS** with shadcn/ui components
 - **Radix UI** primitives for accessibility
-- **Axios** for HTTP client with error handling
 
 ### Backend Stack
 
 - **Express.js** with TypeScript
-- **PostgreSQL** with custom connection pool
+- **PostgreSQL** with **Drizzle ORM**
 - **Zod** for runtime validation
-- **CORS** configured for local development
 
 ### Key Architectural Patterns
 
 #### View-Based Architecture
-
-The application features a sophisticated dual-view system:
 
 - **User View**: Front-office operations (reservations, payments, content management)
 - **Admin View**: Administrative functions (properties, customers)
@@ -67,91 +76,58 @@ The application features a sophisticated dual-view system:
 - Layout routes: `_auth-layout.tsx`, `_dashboard-layout.tsx`
 - Nested routing with view-specific folders: `(admin-view)`, `(user-view)`
 - Authentication guards at layout level
-- Type-safe navigation with route context
-
-#### Data Management
-
-- Centralized API client with environment-based configuration
-- Error handling with user-friendly messages
-- Consistent data validation using Zod schemas
-- TanStack Query for caching, background updates, and optimistic updates
 
 #### Component Architecture
 
 - shadcn/ui components in `src/components/ui/`
 - Feature-specific components co-located with routes
 - Component folders use `-components/` naming convention
-- Reusable data grid components with sorting, filtering, pagination
 
 ### Environment Configuration
 
-#### Frontend Environment Variables
+#### Frontend
 
 - `VITE_API_BASE_URL` - Backend API URL (default: <http://localhost:3001>)
 
-#### Backend Environment Variables
+#### Backend
 
 - `DATABASE_URL` - PostgreSQL connection string
 - `CORS_ORIGIN` - Allowed frontend origin (default: <http://localhost:5173>)
 - Port defaults to 3001
 
-### Database
+## Development Guidelines
 
-- PostgreSQL schema in `backend/sql/schema.sql`
-- Seed data in `backend/sql/seed.sql`
-- Use `bun run db:reseed` to reset database
-
-### Development Guidelines
-
-#### TypeScript
+### TypeScript
 
 - Strict TypeScript configuration
 - No `any` types allowed without explicit permission
-- Type-safe routing and API calls
 
-#### Internationalization
+### Icon Imports
 
-- Use `<Trans>` components for JSX text
-- Use `t` macro for strings, validation messages, toasts
-- Extract strings with `bun run lingui:extract`
-- Compile with `bun run lingui:compile`
+Always import icons with the `Icon` suffix for clarity:
 
-#### Styling
+```typescript
+import { UserIcon, LockIcon, ShieldIcon } from 'lucide-react'
+```
 
-- Tailwind CSS with custom design system
-- Component variants using `class-variance-authority`
-- Consistent spacing and typography scale
+### Internationalization
 
-#### Code Quality
+- Use `<Trans>` components for JSX text: `<Trans>Forgot Password</Trans>`
+- Use `t` macro for strings, validation messages, toasts: `` t`Email is required` ``
+- Do not call translation macros at module scope (locale may not be activated yet)
+- Extract strings with `bun run lingui:extract`, compile with `bun run lingui:compile`
 
-- ESLint with strict rules (0 warnings allowed)
-- Prettier for consistent formatting
-- Husky hooks for pre-commit validation
-- Semantic release workflow
+### Git Commits
 
-### Key Files and Folders
+Use conventional commit format: `type(scope): description`
 
-#### Frontend Structure
+- `feat(header): add sticky positioning`
+- `fix(scroll): prevent iOS bounce effect`
+- `refactor(layout): improve sidebar structure`
 
-- `src/routes/` - File-based routing structure
-- `src/components/ui/` - Reusable UI components
-- `src/contexts/` - React contexts (view switching)
-- `src/hooks/` - Custom React hooks
-- `src/api/` - API client and service functions
-- `src/lib/` - Utility functions and helpers
+### Pre-Commit Validation
 
-#### Backend Structure
-
-- `backend/src/routes/` - Express route handlers
-- `backend/src/db/` - Database connection and utilities
-- `backend/sql/` - Database schema and seed files
-
-### Testing and Validation
-
-Always run the linting and type-checking commands before committing:
+Always run before committing:
 
 - `bun run type-check:all` - Verify TypeScript compilation
-- `bun run lint` - Ensure code quality standards
-- `bun run format:check` - Verify code formatting
-
-The application includes comprehensive error boundaries, loading states, and form validation to ensure a robust user experience.
+- `bun run check` - Ensure code quality and formatting
