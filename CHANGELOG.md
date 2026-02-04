@@ -1,3 +1,59 @@
+# [1.6.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.5.0...v1.6.0) (2026-02-04)
+
+
+### Bug Fixes
+
+* add object constraint to DataGridTableDndRow ([b2b961c](https://github.com/riedel28/tanstack-dashboard/commit/b2b961c49c854cbbe458ee8d38bbb3d9e8a5e248))
+* **auth:** enforce authentication check in dashboard loader ([1800e7d](https://github.com/riedel28/tanstack-dashboard/commit/1800e7d2649bd2a5422ab370c4376f630e5f89c6))
+* **ci:** add Node.js 22 setup for semantic-release compatibility ([0f3e44b](https://github.com/riedel28/tanstack-dashboard/commit/0f3e44bb00ee24cf534d0771ac59d0ae1e3613ff))
+* **controllers:** prevent ILIKE injection and mass-assignment vulnerabilities ([0a098bd](https://github.com/riedel28/tanstack-dashboard/commit/0a098bd30ba3b3f8411163830cd28bc58a815ec6))
+* **dropdown-menu:** update shortcut styles for destructive variant ([a052ed6](https://github.com/riedel28/tanstack-dashboard/commit/a052ed6ffa42a57d9cb43df788d17f80356a72d7))
+* **forms:** handle optional values in reservation and profile components ([61d3ce7](https://github.com/riedel28/tanstack-dashboard/commit/61d3ce759fb93f13f8d2bd5c79255d839ca11cd5))
+* **header:** update mobile menu button styles to show only on mobile ([728d0c9](https://github.com/riedel28/tanstack-dashboard/commit/728d0c992839d707f077f0d51aebe98787fa6cd9))
+* **login:** set default values for email and password in login form ([b6600ff](https://github.com/riedel28/tanstack-dashboard/commit/b6600ff6ca597da24641b088def81c7c3138a607))
+* **reservations:** synchronize room_name with room updates and enhance schema types ([90f271f](https://github.com/riedel28/tanstack-dashboard/commit/90f271fe6dbe866bf58fd52c2b07f65bcdc55012))
+* **reservations:** update reservation creation logic and schema ([0b1ddff](https://github.com/riedel28/tanstack-dashboard/commit/0b1ddff1d24c313f4e8d8638ba0c602f24c7526d))
+* **reservations:** update reservation tests and schemas for room_name consistency ([307e33f](https://github.com/riedel28/tanstack-dashboard/commit/307e33f7e0cdc436aa8515f86275a739484d4330))
+* resolve remaining type issues in data-grid components ([264b4d8](https://github.com/riedel28/tanstack-dashboard/commit/264b4d8c8f0d47559fefadcc6f57800fb11e2d0c))
+* resolve type issues and remove asChild from PopoverTrigger ([a9fcf2d](https://github.com/riedel28/tanstack-dashboard/commit/a9fcf2dff9dd3cb1a45a0ac723b4cbcf521f1e06))
+* **rooms:** refine room status filtering and clean up imports ([cbf5299](https://github.com/riedel28/tanstack-dashboard/commit/cbf5299c647f18862ed87c3d8233255c1beeefda))
+* **ui:** conditionally render PasswordStrengthMeter based on field state ([5b484c1](https://github.com/riedel28/tanstack-dashboard/commit/5b484c1276e7efa08171f35f6e7f3b602c154e75))
+* **ui:** update badge variants in users table for improved status representation ([d81a3bd](https://github.com/riedel28/tanstack-dashboard/commit/d81a3bda73a8dcd0b7cad8992a0f8b7ba2beec4d))
+
+
+### Features
+
+* **auth-layout:** add language switcher and enhance layout responsiveness ([346e531](https://github.com/riedel28/tanstack-dashboard/commit/346e531cf067f90f434fcd4709ed510989983230))
+* **auth:** add is_admin field to user model and enhance view switching logic ([8d7d695](https://github.com/riedel28/tanstack-dashboard/commit/8d7d695c027389f999c02e1944f42f0718562745))
+* **auth:** enhance login functionality with rememberMe option and update token generation ([40f91d9](https://github.com/riedel28/tanstack-dashboard/commit/40f91d9579f4cc924ede69220b1cf3c65e1382d1))
+* **auth:** implement auto logout on unauthorized access ([b2b5476](https://github.com/riedel28/tanstack-dashboard/commit/b2b5476b815bd46302034dcf2de2ba1ec26e2d96))
+* **auth:** implement sign-up functionality and enhance login page ([4eae91d](https://github.com/riedel28/tanstack-dashboard/commit/4eae91d09b0da29f24de7f4ac320785a9ae5eaf5))
+* **configuration:** update project settings and enhance component functionality ([9ab5512](https://github.com/riedel28/tanstack-dashboard/commit/9ab551285df5378e90319bd0385cd654ad0ec02f))
+* **docs:** add code review guidelines to code-review.md ([8817807](https://github.com/riedel28/tanstack-dashboard/commit/881780741fcca3597b5819533caba18b5a4f4e76))
+* **error-handling:** implement global error boundary for enhanced user feedback ([f723661](https://github.com/riedel28/tanstack-dashboard/commit/f7236619cdeb52b001b63c95e21ff37fbbf95418))
+* **header, mobile-menu:** implement mobile menu in header component ([5b1606e](https://github.com/riedel28/tanstack-dashboard/commit/5b1606ed613b6dd35fad5d2d1dab4432a619341b))
+* **header:** add property reload functionality to header component ([6dbab26](https://github.com/riedel28/tanstack-dashboard/commit/6dbab26b8d050cf8ff15aaf7696eee176a74a82a))
+* **locales:** update German and English translations with new phrases and corrections ([8879ca3](https://github.com/riedel28/tanstack-dashboard/commit/8879ca3a05a090627c1b345f2714b6764568775e))
+* **monitoring:** enhance monitoring logs functionality and UI ([647c098](https://github.com/riedel28/tanstack-dashboard/commit/647c0988516d46bec1dbebc6ee60c61768af5e2c))
+* **monitoring:** implement monitoring logs API and database schema ([e4a900c](https://github.com/riedel28/tanstack-dashboard/commit/e4a900c94fa241307cca5402150e8575394bf768))
+* **neon-postgres:** add comprehensive documentation for Neon Postgres integration ([8f1274d](https://github.com/riedel28/tanstack-dashboard/commit/8f1274d5b13d72b052612496913f2d42f71ef892))
+* **properties:** implement properties management with CRUD functionality ([35af350](https://github.com/riedel28/tanstack-dashboard/commit/35af350b71abe3cd09a32081d17c8d5022bfe9ad))
+* **properties:** implement properties query options for improved data fetching ([5e09d45](https://github.com/riedel28/tanstack-dashboard/commit/5e09d45606ca9ae48e89ea152b2cb31f3b813c1a))
+* **properties:** update property seeding and API integration ([3b35948](https://github.com/riedel28/tanstack-dashboard/commit/3b3594809c6b8e2f70a9463627343c235bc1d201))
+* **reservations:** add sorting functionality to reservations retrieval ([69f63df](https://github.com/riedel28/tanstack-dashboard/commit/69f63df9122d3980eed6dd8e95b5a5e5857ac5d5))
+* **reservations:** add toast notification for "Push to device" action ([88e4ab0](https://github.com/riedel28/tanstack-dashboard/commit/88e4ab083cabc3f37cd6665249606851b28071e7))
+* **reservations:** integrate query client and enhance reservation fetching ([8fc2ade](https://github.com/riedel28/tanstack-dashboard/commit/8fc2adeae1a322fffc89ddc3fbcbb6993e7170a4))
+* **roles:** implement roles management API and database schema ([13733aa](https://github.com/riedel28/tanstack-dashboard/commit/13733aa752ebd2c5f9cfe457198e701742bceab8))
+* **rooms:** add sorting functionality to room queries ([0ff0a5f](https://github.com/riedel28/tanstack-dashboard/commit/0ff0a5f410f7f1cf6ce2a72cb9979f16bc0efdac))
+* **rooms:** enhance rooms management with new routes and components ([4fe7dd0](https://github.com/riedel28/tanstack-dashboard/commit/4fe7dd0f99aa194f247fd6a66833150264a37068))
+* **rooms:** implement rooms management API and routing ([4f213a2](https://github.com/riedel28/tanstack-dashboard/commit/4f213a2768d90ed0f1eaac6987abb20aba64fae0))
+* **selected-property:** implement user-selected property persistence feature ([faa52ea](https://github.com/riedel28/tanstack-dashboard/commit/faa52ea086989ed3461681dd37ee5a1454da8878))
+* **sidebar:** add SidebarViewToggle component for view switching ([5ed3a8c](https://github.com/riedel28/tanstack-dashboard/commit/5ed3a8c53e83f8ed71c92f20f9faab788e1f3cb1))
+* **tests:** add testing framework and setup for unit tests ([c8c2319](https://github.com/riedel28/tanstack-dashboard/commit/c8c231995a154e0f7265d7031ab13347198e34f2))
+* **ui:** introduce Field and Item components for enhanced form and list structures ([33bd998](https://github.com/riedel28/tanstack-dashboard/commit/33bd998f876a914511d333240d8d18d0a08de29c))
+* **ui:** refactor components to use base-ui library ([d0a2866](https://github.com/riedel28/tanstack-dashboard/commit/d0a2866a4b5c5e3b035c7109e552cb6c675292a8))
+* **users:** implement user management API and database schema ([d9a2805](https://github.com/riedel28/tanstack-dashboard/commit/d9a28055c4d146331228f38fdc19c417c28289e2))
+
 # [1.5.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.4.0...v1.5.0) (2025-09-12)
 
 
