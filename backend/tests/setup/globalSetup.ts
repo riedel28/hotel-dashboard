@@ -11,6 +11,7 @@ export default async function setup() {
     // Order matters due to foreign key constraints: user_roles -> guests -> reservations -> rooms -> properties -> roles -> users
     await db.execute(sql`DROP TABLE IF EXISTS user_roles CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS monitoring_logs CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS rooms CASCADE`);
     await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
@@ -40,6 +41,7 @@ export default async function setup() {
       // Final cleanup - drop all tables in correct order
       await db.execute(sql`DROP TABLE IF EXISTS user_roles CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
+      await db.execute(sql`DROP TABLE IF EXISTS monitoring_logs CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS rooms CASCADE`);
       await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);

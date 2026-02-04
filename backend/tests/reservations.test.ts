@@ -36,7 +36,7 @@ describe('Reservations API', () => {
       expect(response.body.booking_nr).toBeTruthy();
       expect(response.body.room_name).toBe(reservationData.room_name);
       expect(response.body.state).toBe('pending');
-      expect(response.body.balance).toBe(0);
+      expect(response.body.balance).toBe('0.00');
       expect(response.body.adults).toBe(1);
     });
 

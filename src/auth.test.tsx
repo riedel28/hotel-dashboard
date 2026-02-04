@@ -148,9 +148,8 @@ describe('AuthContext', () => {
 
       let returnedUser;
       await act(async () => {
-        returnedUser = await result.current.updateSelectedProperty(
-          'property-456'
-        );
+        returnedUser =
+          await result.current.updateSelectedProperty('property-456');
       });
 
       expect(returnedUser).toEqual(mockUpdatedUser);
@@ -227,4 +226,3 @@ describe('AuthContext', () => {
     });
   });
 });
-

@@ -1,8 +1,8 @@
 import request from 'supertest';
 import app from '../src/app';
-import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
 import { db } from '../src/db/pool';
 import { monitoringLogs } from '../src/db/schema';
+import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
 
 describe('Monitoring API', () => {
   let authToken: string;
@@ -18,7 +18,7 @@ describe('Monitoring API', () => {
     await db.insert(monitoringLogs).values([
       {
         status: 'success',
-        date: new Date('2024-01-01T10:00:00Z'),
+        logged_at: new Date('2024-01-01T10:00:00Z'),
         type: 'pms',
         booking_nr: 'BK-001',
         event: 'System Status',
@@ -27,7 +27,7 @@ describe('Monitoring API', () => {
       },
       {
         status: 'error',
-        date: new Date('2024-01-01T11:00:00Z'),
+        logged_at: new Date('2024-01-01T11:00:00Z'),
         type: 'door lock',
         booking_nr: 'BK-002',
         event: 'Checkout Booking',
@@ -36,7 +36,7 @@ describe('Monitoring API', () => {
       },
       {
         status: 'success',
-        date: new Date('2024-01-01T12:00:00Z'),
+        logged_at: new Date('2024-01-01T12:00:00Z'),
         type: 'payment',
         booking_nr: 'BK-003',
         event: 'Fetch Booking',
@@ -130,15 +130,15 @@ describe('Monitoring API', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      const dates = response.body.index.map((log: any) => new Date(log.date).getTime());
+      const dates = response.body.index.map((log: { logged_at: string }) =>
+        new Date(log.logged_at).getTime()
+      );
       expect(dates[0]).toBeGreaterThan(dates[1]);
       expect(dates[1]).toBeGreaterThan(dates[2]);
     });
 
     test('should return 401 without authentication', async () => {
-      await request(app)
-        .get('/api/monitoring')
-        .expect(401);
+      await request(app).get('/api/monitoring').expect(401);
     });
 
     test('should return 400 for invalid query parameters', async () => {
@@ -149,4 +149,3 @@ describe('Monitoring API', () => {
     });
   });
 });
-

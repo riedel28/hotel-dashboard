@@ -15,14 +15,16 @@ describe('Roles API', () => {
     const { token } = await createTestUser();
     authToken = token;
 
-    await db.insert(roles).values([
-      { id: 1, name: 'Administrators' },
-      { id: 2, name: 'Roomservice Manager' },
-      { id: 3, name: 'Housekeeping Manager' },
-      { id: 4, name: 'Roomservice Order Agent' },
-      { id: 5, name: 'Housekeeping Agent' },
-      { id: 6, name: 'Tester' }
-    ]);
+    await db
+      .insert(roles)
+      .values([
+        { name: 'Administrators' },
+        { name: 'Roomservice Manager' },
+        { name: 'Housekeeping Manager' },
+        { name: 'Roomservice Order Agent' },
+        { name: 'Housekeeping Agent' },
+        { name: 'Tester' }
+      ]);
   });
 
   describe('GET /api/roles', () => {
@@ -34,7 +36,7 @@ describe('Roles API', () => {
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeGreaterThan(0);
-      
+
       const roles = response.body;
       const expectedRoles = [
         'Administrators',
