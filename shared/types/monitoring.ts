@@ -7,7 +7,7 @@ export const monitoringTypeSchema = z.enum(['pms', 'door lock', 'payment']);
 export const monitoringLogSchema = z.object({
   id: z.number(),
   status: monitoringStatusSchema,
-  date: z.coerce.date(),
+  logged_at: z.coerce.date(),
   type: monitoringTypeSchema,
   booking_nr: z.string().nullable(),
   event: z.string(),
@@ -16,7 +16,7 @@ export const monitoringLogSchema = z.object({
 });
 
 export const sortableMonitoringColumnsSchema = z.enum([
-  'date',
+  'logged_at',
   'status',
   'type',
   'booking_nr',
@@ -38,8 +38,8 @@ export const fetchMonitoringLogsParamsSchema = z.object({
   status: monitoringStatusSchema.optional(),
   type: monitoringTypeSchema.optional(),
   from: z.string().optional(), // ISO date string
-  to: z.string().optional(),   // ISO date string
-  sort_by: sortableMonitoringColumnsSchema.default('date').optional(),
+  to: z.string().optional(), // ISO date string
+  sort_by: sortableMonitoringColumnsSchema.default('logged_at').optional(),
   sort_order: z.enum(['asc', 'desc']).default('desc').optional()
 });
 
@@ -60,4 +60,3 @@ export type FetchMonitoringLogsParams = z.infer<
 export type FetchMonitoringLogsResponse = z.infer<
   typeof fetchMonitoringLogsResponseSchema
 >;
-
