@@ -7,10 +7,7 @@ interface ReservationSearchProps {
   onChange: (searchTerm: string) => void;
 }
 
-export function ReservationSearch({
-  value,
-  onChange
-}: ReservationSearchProps) {
+export function ReservationSearch({ value, onChange }: ReservationSearchProps) {
   const { t } = useLingui();
 
   return (
@@ -23,4 +20,3 @@ export function ReservationSearch({
     />
   );
 }
-

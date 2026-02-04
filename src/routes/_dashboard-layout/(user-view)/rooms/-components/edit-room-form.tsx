@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { updateRoomById } from '@/api/rooms';
 import type { Room } from '@/api/rooms';
+import { updateRoomById } from '@/api/rooms';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,7 +30,7 @@ interface EditRoomFormData {
   room_number: string | null;
   room_type: string | null;
   status: Room['status'];
-  property_id: string | null;
+  property_id: string;
 }
 
 interface EditRoomFormProps {
@@ -51,7 +51,7 @@ export function EditRoomForm({ roomId, roomData }: EditRoomFormProps) {
       room_number: roomData.room_number || null,
       room_type: roomData.room_type || null,
       status: roomData.status || 'available',
-      property_id: roomData.property_id || null
+      property_id: roomData.property_id || ''
     }
   });
 
@@ -73,10 +73,7 @@ export function EditRoomForm({ roomId, roomData }: EditRoomFormProps) {
   };
 
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="max-w-xl space-y-6"
-    >
+    <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-xl space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>
@@ -214,4 +211,3 @@ export function EditRoomForm({ roomId, roomData }: EditRoomFormProps) {
     </form>
   );
 }
-

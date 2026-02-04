@@ -6,13 +6,11 @@ import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
-import { updateUserById, type UpdateUserData } from '@/api/users';
 import { rolesQueryOptions } from '@/api/roles';
+import { type UpdateUserData, updateUserById } from '@/api/users';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Switch } from '@/components/ui/switch';
 import {
   Field,
   FieldContent,
@@ -30,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 
 const updateUserFormSchema = z.object({
   email: z.string().email(t`Invalid email address`).optional(),

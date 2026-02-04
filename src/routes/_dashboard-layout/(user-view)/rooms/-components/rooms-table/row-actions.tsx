@@ -75,4 +75,3 @@ export function RowActions({ row }: RowActionsProps) {
     </>
   );
 }
-

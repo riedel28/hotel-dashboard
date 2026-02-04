@@ -59,7 +59,7 @@ export function MonitoringTable({
   );
 
   const [internalSorting, setInternalSorting] = useState<SortingState>([
-    { id: 'date', desc: true }
+    { id: 'logged_at', desc: true }
   ]);
   const sorting = sortingProp ?? internalSorting;
   const { t } = useLingui();
@@ -87,8 +87,8 @@ export function MonitoringTable({
         enableResizing: false
       },
       {
-        accessorKey: 'date',
-        id: 'date',
+        accessorKey: 'logged_at',
+        id: 'logged_at',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={t`Date`}
@@ -96,7 +96,7 @@ export function MonitoringTable({
             column={column}
           />
         ),
-        cell: ({ row }) => <DateCell date={row.original.date} />,
+        cell: ({ row }) => <DateCell date={row.original.logged_at} />,
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Date`

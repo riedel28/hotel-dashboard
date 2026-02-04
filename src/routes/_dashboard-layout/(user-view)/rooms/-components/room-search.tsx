@@ -20,4 +20,3 @@ export function RoomSearch({ value, onChange }: RoomSearchProps) {
     />
   );
 }
-

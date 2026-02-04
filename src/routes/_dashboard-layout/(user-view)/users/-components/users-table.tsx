@@ -12,15 +12,14 @@ import Flag from 'react-flagkit';
 
 import type { User } from '@/api/users';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-
 import { RowActions } from './row-actions';
-import { Badge } from '@/components/ui/badge';
 
 interface UsersTableProps {
   data: User[];

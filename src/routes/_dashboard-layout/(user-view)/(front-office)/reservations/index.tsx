@@ -35,12 +35,12 @@ import { cn } from '@/lib/utils';
 
 import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
 import { ReservationClearFilters } from '../reservations/-components/reservation-clear-filters';
-import { ReservationDateFilter } from '../reservations/-components/reservations-table/reservation-date-filter';
 import { ReservationRefresh } from '../reservations/-components/reservation-refresh';
 import { ReservationSearch } from '../reservations/-components/reservation-search';
 import { ReservationSearchResults } from '../reservations/-components/reservation-search-results';
 import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
 import { ReservationsFilters } from '../reservations/-components/reservations-filters';
+import { ReservationDateFilter } from '../reservations/-components/reservations-table/reservation-date-filter';
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
 
 function ReservationsPage() {

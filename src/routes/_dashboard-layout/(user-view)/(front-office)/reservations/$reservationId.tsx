@@ -7,9 +7,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import {
-  reservationByIdQueryOptions
-} from '@/api/reservations';
+import { reservationByIdQueryOptions } from '@/api/reservations';
 
 import {
   Breadcrumb,
@@ -72,7 +70,9 @@ function ReservationPage() {
                       <ErrorDisplayTitle>
                         <Trans>Something went wrong</Trans>
                       </ErrorDisplayTitle>
-                      <ErrorDisplayMessage>{error instanceof Error ? error.message : String(error)}</ErrorDisplayMessage>
+                      <ErrorDisplayMessage>
+                        {error instanceof Error ? error.message : String(error)}
+                      </ErrorDisplayMessage>
                       <ErrorDisplayActions>
                         <Button
                           variant="destructive"

@@ -45,4 +45,3 @@ export function RoomStatusCell({ status }: RoomStatusCellProps) {
     </Badge>
   );
 }
-

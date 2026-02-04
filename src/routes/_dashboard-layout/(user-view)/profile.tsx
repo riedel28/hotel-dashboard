@@ -13,12 +13,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { getUserInitials } from '@/lib/utils';
-
+import { TwoFactorSection } from './profile/-components/2fa-section';
 import { AvatarSection } from './profile/-components/avatar-section';
 import { PasswordSection } from './profile/-components/password-section';
 import { PersonalSection } from './profile/-components/personal-section';
 import { RolesSection } from './profile/-components/roles-section';
-import { TwoFactorSection } from './profile/-components/2fa-section';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
   component: RouteComponent

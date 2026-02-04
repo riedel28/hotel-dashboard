@@ -1,8 +1,8 @@
 'use client';
 
 import { Trans } from '@lingui/react/macro';
-import { type Row } from '@tanstack/react-table';
 import { Link as RouterLink } from '@tanstack/react-router';
+import { type Row } from '@tanstack/react-table';
 import { MoreHorizontalIcon, PenSquareIcon, TrashIcon } from 'lucide-react';
 import * as React from 'react';
 
