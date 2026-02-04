@@ -448,11 +448,7 @@ function DataGridTableLoader() {
   );
 }
 
-function DataGridTableRowSelect<TData>({
-  row
-}: {
-  row: Row<TData>;
-}) {
+function DataGridTableRowSelect<TData>({ row }: { row: Row<TData> }) {
   const { t } = useLingui();
 
   return (
@@ -480,7 +476,9 @@ function DataGridTableRowSelectAll() {
   return (
     <Checkbox
       checked={table.getIsAllPageRowsSelected()}
-      indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
+      indeterminate={
+        table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
+      }
       disabled={isLoading || recordCount === 0}
       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
       aria-label={t`Select all`}
