@@ -227,9 +227,9 @@ export interface FileRoutesByFullPath {
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  '/products': typeof DashboardLayoutuserViewProductsIndexRoute
+  '/products/': typeof DashboardLayoutuserViewProductsIndexRoute
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
-  '/reservations': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
+  '/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof DashboardLayoutIndexRoute
@@ -316,9 +316,9 @@ export interface FileRouteTypes {
     | '/orders'
     | '/payments'
     | '/registration-forms'
-    | '/products'
+    | '/products/'
     | '/reservations/$reservationId'
-    | '/reservations'
+    | '/reservations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -389,14 +389,14 @@ declare module '@tanstack/react-router' {
     '/_dashboard-layout': {
       id: '/_dashboard-layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof DashboardLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth-layout': {
       id: '/_auth-layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -543,7 +543,7 @@ declare module '@tanstack/react-router' {
     '/_dashboard-layout/(user-view)/products/': {
       id: '/_dashboard-layout/(user-view)/products/'
       path: '/products'
-      fullPath: '/products'
+      fullPath: '/products/'
       preLoaderRoute: typeof DashboardLayoutuserViewProductsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
@@ -571,7 +571,7 @@ declare module '@tanstack/react-router' {
     '/_dashboard-layout/(user-view)/(front-office)/reservations/': {
       id: '/_dashboard-layout/(user-view)/(front-office)/reservations/'
       path: '/reservations'
-      fullPath: '/reservations'
+      fullPath: '/reservations/'
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
