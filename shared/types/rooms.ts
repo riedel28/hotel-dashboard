@@ -10,12 +10,12 @@ export const roomStatusSchema = z.enum([
 export const roomSchema = z.object({
   id: z.number().int().positive(),
   name: z.string().min(1),
-  property_id: z.string().uuid().nullable(),
+  property_id: z.string().uuid(),
   room_number: z.string().nullable(),
   room_type: z.string().nullable(),
   status: roomStatusSchema.default('available'),
-  created_at: z.string().datetime().nullable(),
-  updated_at: z.string().datetime().nullable()
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime()
 });
 
 export const fetchRoomsParamsSchema = z.object({
@@ -32,9 +32,7 @@ export const fetchRoomsParamsSchema = z.object({
   q: z.string().optional(),
   property_id: z.string().uuid().optional(),
   status: roomStatusSchema.optional(),
-  sort_by: z
-    .enum(['name', 'room_number', 'room_type', 'status'])
-    .optional(),
+  sort_by: z.enum(['name', 'room_number', 'room_type', 'status']).optional(),
   sort_order: z.enum(['asc', 'desc']).optional()
 });
 
@@ -48,7 +46,7 @@ export const fetchRoomsResponseSchema = z.object({
 
 export const createRoomSchema = z.object({
   name: z.string().min(1, 'Room name is required'),
-  property_id: z.string().uuid().nullable().optional(),
+  property_id: z.string().uuid(),
   room_number: z.string().nullable().optional(),
   room_type: z.string().nullable().optional(),
   status: roomStatusSchema.optional()
@@ -73,4 +71,3 @@ export type FetchRoomsParams = z.infer<typeof fetchRoomsParamsSchema>;
 export type FetchRoomsResponse = z.infer<typeof fetchRoomsResponseSchema>;
 export type CreateRoomData = z.infer<typeof createRoomSchema>;
 export type UpdateRoomData = z.infer<typeof updateRoomSchema>;
-

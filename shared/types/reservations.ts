@@ -44,7 +44,7 @@ export const reservationSchema = z.object({
   completed_at: z.coerce.date().nullable(),
   updated_at: z.coerce.date().nullable(),
   page_url: z.union([z.url(), z.literal(''), z.null()]),
-  balance: z.number(),
+  balance: z.coerce.number(),
   // Detail view-only fields are optional in list responses
   adults: z.coerce.number().int().nonnegative().optional(),
   youth: z.coerce.number().int().nonnegative().optional(),
