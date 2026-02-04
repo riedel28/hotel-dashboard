@@ -1,14 +1,13 @@
+import { eq } from 'drizzle-orm';
 import request from 'supertest';
-
 import app from '../src/app';
+import { db } from '../src/db/pool';
+import { users } from '../src/db/schema';
 import {
   cleanupDatabase,
   createTestProperty,
   createTestUser
 } from './helpers/dbHelpers';
-import { db } from '../src/db/pool';
-import { users } from '../src/db/schema';
-import { eq } from 'drizzle-orm';
 
 describe('Auth API', () => {
   // Clean up before and after each test to ensure isolation

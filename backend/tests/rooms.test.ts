@@ -2,7 +2,10 @@ import request from 'supertest';
 
 import app from '../src/app';
 import { db } from '../src/db/pool';
-import { properties as propertiesTable, rooms as roomsTable } from '../src/db/schema';
+import {
+  properties as propertiesTable,
+  rooms as roomsTable
+} from '../src/db/schema';
 import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
 
 describe('Rooms API', () => {
@@ -389,7 +392,12 @@ describe('Rooms API', () => {
     });
 
     test('should accept valid status values', async () => {
-      const validStatusValues = ['available', 'occupied', 'maintenance', 'out_of_order'];
+      const validStatusValues = [
+        'available',
+        'occupied',
+        'maintenance',
+        'out_of_order'
+      ];
 
       for (const status of validStatusValues) {
         const response = await request(app)
@@ -397,11 +405,12 @@ describe('Rooms API', () => {
           .set('Authorization', `Bearer ${authToken}`)
           .expect(200);
 
-        expect(response.body.index.every(
-          (room: { status: string }) => room.status === status
-        )).toBe(true);
+        expect(
+          response.body.index.every(
+            (room: { status: string }) => room.status === status
+          )
+        ).toBe(true);
       }
     });
   });
 });
-
