@@ -117,7 +117,7 @@ function MonitoringPage() {
         ? updaterOrValue(
             sort_by
               ? [{ id: sort_by, desc: sort_order === 'desc' }]
-              : [{ id: 'date', desc: true }]
+              : [{ id: 'logged_at', desc: true }]
           )
         : updaterOrValue;
 
@@ -128,7 +128,7 @@ function MonitoringPage() {
           ...prev,
           page: 1,
           sort_by: firstSort.id as
-            | 'date'
+            | 'logged_at'
             | 'status'
             | 'type'
             | 'booking_nr'
@@ -165,7 +165,7 @@ function MonitoringPage() {
 
   const sorting: SortingState = sort_by
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
-    : [{ id: 'date', desc: true }];
+    : [{ id: 'logged_at', desc: true }];
 
   const renderTableContent = () => {
     if (monitoringQuery.isLoading) {

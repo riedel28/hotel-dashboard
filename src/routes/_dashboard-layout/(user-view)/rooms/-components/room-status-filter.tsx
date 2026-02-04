@@ -13,10 +13,7 @@ interface RoomStatusFilterProps {
   onChange: (status: string | null) => void;
 }
 
-export function RoomStatusFilter({
-  value,
-  onChange
-}: RoomStatusFilterProps) {
+export function RoomStatusFilter({ value, onChange }: RoomStatusFilterProps) {
   const { t } = useLingui();
 
   return (
@@ -79,4 +76,3 @@ export function RoomStatusFilter({
     </Select>
   );
 }
-

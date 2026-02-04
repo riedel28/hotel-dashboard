@@ -53,7 +53,7 @@ export function AddRoomModal() {
       room_number: '',
       room_type: '',
       status: 'available',
-      property_id: null
+      property_id: ''
     }
   });
 
@@ -223,10 +223,7 @@ export function AddRoomModal() {
             >
               <Trans>Cancel</Trans>
             </Button>
-            <Button
-              type="submit"
-              disabled={createRoomMutation.isPending}
-            >
+            <Button type="submit" disabled={createRoomMutation.isPending}>
               {createRoomMutation.isPending && (
                 <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
               )}
@@ -238,4 +235,3 @@ export function AddRoomModal() {
     </Dialog>
   );
 }
-

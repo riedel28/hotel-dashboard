@@ -4,11 +4,11 @@ import {
   createRoomSchema,
   type FetchRoomsParams,
   type FetchRoomsResponse,
-  type Room,
-  type UpdateRoomData,
   fetchRoomsParamsSchema,
   fetchRoomsResponseSchema,
+  type Room,
   roomSchema,
+  type UpdateRoomData,
   updateRoomSchema
 } from 'shared/types/rooms';
 import { client, handleApiError } from './client';
@@ -30,7 +30,9 @@ export function roomsQueryOptions(params: FetchRoomsParams) {
   });
 }
 
-async function fetchRooms(params: FetchRoomsParams): Promise<FetchRoomsResponse> {
+async function fetchRooms(
+  params: FetchRoomsParams
+): Promise<FetchRoomsResponse> {
   try {
     const validatedParams = fetchRoomsParamsSchema.parse(params);
     const response = await client.get('/rooms', {
@@ -101,4 +103,3 @@ export {
   updateRoomSchema,
   type Room
 };
-

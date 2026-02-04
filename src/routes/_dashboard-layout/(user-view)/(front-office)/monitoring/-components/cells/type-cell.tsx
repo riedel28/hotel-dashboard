@@ -1,6 +1,6 @@
 import { CreditCard, LayoutGrid, Lock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { type MonitoringType } from 'shared/types/monitoring';
+import { Badge } from '@/components/ui/badge';
 
 interface TypeCellProps {
   type: MonitoringType;

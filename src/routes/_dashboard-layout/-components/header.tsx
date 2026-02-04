@@ -1,6 +1,8 @@
-import * as React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
+import { TextAlignJustifyIcon } from 'lucide-react';
+import * as React from 'react';
+import { propertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
 import {
   Breadcrumb,
@@ -8,14 +10,12 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { propertiesQueryOptions } from '@/api/properties';
+import { Button } from '@/components/ui/button';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import { MobileMenu } from '@/routes/_dashboard-layout/-components/mobile-menu';
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
 import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
-import { TextAlignJustifyIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export default function Header() {
   const { properties } = DashboardLayoutRoute.useLoaderData();
