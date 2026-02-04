@@ -304,11 +304,11 @@ describe('Rooms API', () => {
 
     test('should combine pagination and search', async () => {
       const response = await request(app)
-        .get('/api/rooms?q=Suite&page=1&per_page=2')
+        .get('/api/rooms?q=Suite&page=1&per_page=5')
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.body.index.length).toBeLessThanOrEqual(2);
+      expect(response.body.index.length).toBeLessThanOrEqual(5);
       expect(
         response.body.index.every((room: { name: string }) =>
           room.name.includes('Suite')

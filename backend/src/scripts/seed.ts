@@ -1,5 +1,3 @@
-import { sql } from 'drizzle-orm';
-
 import { db } from '../db/pool';
 import {
   guests,
@@ -7,6 +5,8 @@ import {
   properties,
   reservations,
   roles,
+  rooms,
+  userRoles,
   users
 } from '../db/schema';
 import { hashPassword } from '../utils/password';
@@ -15,119 +15,16 @@ async function seed() {
   console.log('🌱 Starting database seed...');
 
   try {
-    // Step 0: Create tables if they don't exist
-    console.log("Creating tables if they don't exist...");
-
-    // Drop tables if they exist (to ensure clean schema)
-    await db.execute(sql`DROP TABLE IF EXISTS guests CASCADE`);
-    await db.execute(sql`DROP TABLE IF EXISTS monitoring_logs CASCADE`);
-    await db.execute(sql`DROP TABLE IF EXISTS reservations CASCADE`);
-    await db.execute(sql`DROP TABLE IF EXISTS properties CASCADE`);
-    await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
-    await db.execute(sql`DROP TABLE IF EXISTS roles CASCADE`);
-
-    // Create roles table
-    await db.execute(sql`
-      CREATE TABLE roles (
-        id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL
-      )
-    `);
-
-    // Create reservations table
-    await db.execute(sql`
-      CREATE TABLE reservations (
-        id SERIAL PRIMARY KEY,
-        state TEXT NOT NULL CHECK (state IN ('pending','started','done')),
-        booking_nr TEXT,
-        guest_email TEXT,
-        primary_guest_name TEXT,
-        booking_id TEXT,
-        room_name TEXT,
-        booking_from TIMESTAMPTZ,
-        booking_to TIMESTAMPTZ,
-        check_in_via TEXT CHECK (check_in_via IN ('android','ios','tv','station','web')),
-        check_out_via TEXT CHECK (check_out_via IN ('android','ios','tv','station','web')),
-        last_opened_at TIMESTAMPTZ,
-        received_at TIMESTAMPTZ,
-        completed_at TIMESTAMPTZ,
-        updated_at TIMESTAMPTZ,
-        page_url TEXT,
-        balance DOUBLE PRECISION DEFAULT 0,
-        adults INTEGER DEFAULT 0,
-        youth INTEGER DEFAULT 0,
-        children INTEGER DEFAULT 0,
-        infants INTEGER DEFAULT 0,
-        purpose TEXT DEFAULT 'private' CHECK (purpose IN ('private','business')),
-        room TEXT
-      )
-    `);
-
-    // Create monitoring_logs table
-    await db.execute(sql`
-      CREATE TABLE monitoring_logs (
-        id SERIAL PRIMARY KEY,
-        status TEXT NOT NULL CHECK (status IN ('success','error')),
-        date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        type TEXT NOT NULL CHECK (type IN ('pms','door lock','payment')),
-        booking_nr TEXT,
-        event TEXT NOT NULL,
-        sub TEXT,
-        log_message TEXT NOT NULL
-      )
-    `);
-
-    // Create users table
-    await db.execute(sql`
-      CREATE TABLE users (
-        id SERIAL PRIMARY KEY,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL,
-        first_name VARCHAR(50),
-        last_name VARCHAR(50),
-        created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-        updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-        is_admin BOOLEAN DEFAULT FALSE NOT NULL
-      )
-    `);
-
-    // Create guests table (after reservations due to foreign key)
-    await db.execute(sql`
-      CREATE TABLE guests (
-        id SERIAL PRIMARY KEY,
-        reservation_id INTEGER NOT NULL,
-        first_name TEXT NOT NULL,
-        last_name TEXT NOT NULL,
-        email TEXT,
-        nationality_code TEXT NOT NULL CHECK (nationality_code IN ('DE', 'US', 'AT', 'CH')),
-        created_at TIMESTAMPTZ DEFAULT NOW(),
-        updated_at TIMESTAMPTZ,
-        FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
-      )
-    `);
-
-    // Create properties table
-    await db.execute(sql`
-      CREATE TABLE properties (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        name TEXT NOT NULL,
-        stage TEXT NOT NULL CHECK (stage IN ('demo', 'production', 'staging', 'template'))
-      )
-    `);
-
-    console.log('✅ Tables created/verified');
-
-    // Step 1: Clear existing data (order matters!)
+    // Clear existing data (order matters due to foreign keys!)
     console.log('Clearing existing data...');
-    try {
-      await db.delete(guests); // Delete guests first (foreign keys)
-      await db.delete(monitoringLogs); // Delete monitoring logs
-      await db.delete(reservations); // Delete reservations
-      await db.delete(properties); // Delete properties
-      await db.delete(users); // Delete users
-    } catch {
-      console.log('Some tables may not exist yet, continuing...');
-    }
+    await db.delete(guests);
+    await db.delete(userRoles);
+    await db.delete(monitoringLogs);
+    await db.delete(reservations);
+    await db.delete(rooms);
+    await db.delete(users);
+    await db.delete(properties);
+    await db.delete(roles);
 
     // Step 2: Create demo users
     console.log('Creating demo users...');
