@@ -42,15 +42,16 @@ async function seed() {
 
     // Step 2b: Create roles
     console.log('Creating roles...');
-    await db.insert(roles).values([
-      { id: 1, name: 'Administrators' },
-      { id: 2, name: 'Roomservice Manager' },
-      { id: 3, name: 'Housekeeping Manager' },
-      { id: 4, name: 'Roomservice Order Agent' },
-      { id: 5, name: 'Housekeeping Agent' },
-      { id: 6, name: 'Tester' }
-    ]);
-
+    await db
+      .insert(roles)
+      .values([
+        { name: 'Administrators' },
+        { name: 'Roomservice Manager' },
+        { name: 'Housekeeping Manager' },
+        { name: 'Roomservice Order Agent' },
+        { name: 'Housekeeping Agent' },
+        { name: 'Tester' }
+      ]);
 
     await db
       .insert(users)
@@ -80,7 +81,7 @@ async function seed() {
         check_out_via: 'web',
         received_at: new Date(),
         page_url: 'https://booking.example.com/res-001',
-        balance: 450.0,
+        balance: '450.00',
         adults: 2,
         youth: 0,
         children: 1,
@@ -106,7 +107,7 @@ async function seed() {
         received_at: new Date(),
         last_opened_at: new Date(),
         page_url: 'https://booking.example.com/res-002',
-        balance: 280.0,
+        balance: '280.00',
         adults: 1,
         youth: 1,
         children: 0,
@@ -133,7 +134,7 @@ async function seed() {
         last_opened_at: new Date('2024-03-11'),
         completed_at: new Date('2024-03-12'),
         page_url: 'https://booking.example.com/res-003',
-        balance: 0.0,
+        balance: '0.00',
         adults: 1,
         youth: 0,
         children: 0,
@@ -260,16 +261,17 @@ async function seed() {
     await db.insert(monitoringLogs).values([
       {
         status: 'success',
-        date: new Date(),
+        logged_at: new Date(),
         type: 'pms',
         booking_nr: 'RES-001',
         event: 'System Status',
         sub: 'PMS Connection',
-        log_message: 'PMS connection established successfully.\nAll systems green.'
+        log_message:
+          'PMS connection established successfully.\nAll systems green.'
       },
       {
         status: 'error',
-        date: new Date(Date.now() - 3600000), // 1 hour ago
+        logged_at: new Date(Date.now() - 3600000), // 1 hour ago
         type: 'door lock',
         booking_nr: 'RES-002',
         event: 'Checkout Booking',
@@ -278,7 +280,7 @@ async function seed() {
       },
       {
         status: 'success',
-        date: new Date(Date.now() - 7200000), // 2 hours ago
+        logged_at: new Date(Date.now() - 7200000), // 2 hours ago
         type: 'payment',
         booking_nr: 'RES-003',
         event: 'Fetch Booking',
@@ -287,7 +289,7 @@ async function seed() {
       },
       {
         status: 'success',
-        date: new Date(Date.now() - 86400000), // 1 day ago
+        logged_at: new Date(Date.now() - 86400000), // 1 day ago
         type: 'pms',
         booking_nr: null,
         event: 'Night Audit',
