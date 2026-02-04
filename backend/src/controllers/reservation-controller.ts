@@ -7,6 +7,10 @@ import {
   reservations as reservationsTable
 } from '../db/schema';
 
+function escapeLikePattern(value: string): string {
+  return value.replace(/[%_\\]/g, '\\$&');
+}
+
 async function getReservations(req: Request, res: Response) {
   try {
     const { page, per_page, status, q, from, to, sort_by, sort_order } =
@@ -21,8 +25,8 @@ async function getReservations(req: Request, res: Response) {
     }
 
     if (q) {
-      // Only add condition if q is truthy
-      conditions.push(ilike(reservationsTable.booking_nr, `%${q}%`));
+      const escaped = escapeLikePattern(q as string);
+      conditions.push(ilike(reservationsTable.booking_nr, `%${escaped}%`));
     }
 
     if (from) {
@@ -157,7 +161,7 @@ async function createReservation(req: Request, res: Response) {
         completed_at: null,
         updated_at: null,
         page_url: null,
-        balance: 0,
+        balance: '0',
         adults: 1,
         youth: 0,
         children: 0,
@@ -193,17 +197,61 @@ async function createReservation(req: Request, res: Response) {
 
 async function updateReservation(req: Request, res: Response) {
   const { id } = req.params;
-  const updates = req.body ?? {};
+  const body = req.body ?? {};
   const reservationId = Number(id);
 
   try {
     const reservationWithGuests = await db.transaction(async (tx) => {
-      const { guests: guestPayload, ...reservationUpdates } = updates;
+      const {
+        guests: guestPayload,
+        state,
+        booking_nr,
+        guest_email,
+        booking_id,
+        room_name,
+        booking_from,
+        booking_to,
+        check_in_via,
+        check_out_via,
+        primary_guest_name,
+        last_opened_at,
+        received_at,
+        completed_at,
+        page_url,
+        balance,
+        adults,
+        youth,
+        children,
+        infants,
+        purpose,
+        room
+      } = body;
 
-      // Sync room_name with room if room is being updated
-      if (reservationUpdates.room !== undefined) {
-        reservationUpdates.room_name = reservationUpdates.room;
-      }
+      const reservationUpdates = Object.fromEntries(
+        Object.entries({
+          state,
+          booking_nr,
+          guest_email,
+          booking_id,
+          room_name: room !== undefined ? room : room_name,
+          booking_from,
+          booking_to,
+          check_in_via,
+          check_out_via,
+          primary_guest_name,
+          last_opened_at,
+          received_at,
+          completed_at,
+          page_url,
+          balance,
+          adults,
+          youth,
+          children,
+          infants,
+          purpose,
+          room
+        }).filter(([, v]) => v !== undefined)
+      );
 
       const [updatedReservation] = await tx
         .update(reservationsTable)
