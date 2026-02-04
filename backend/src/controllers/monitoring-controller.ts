@@ -4,55 +4,55 @@ import type { Request, Response } from 'express';
 import { db } from '../db/pool';
 import { monitoringLogs as monitoringTable } from '../db/schema';
 
+function escapeLikePattern(value: string): string {
+  return value.replace(/[%_\\]/g, '\\$&');
+}
+
 async function getMonitoringLogs(req: Request, res: Response) {
   try {
-    const {
-      page,
-      per_page,
-      status,
-      type,
-      q,
-      from,
-      to,
-      sort_by,
-      sort_order
-    } = req.query;
+    const { page, per_page, status, type, q, from, to, sort_by, sort_order } =
+      req.query;
 
     const conditions = [];
 
     if (status) {
-      conditions.push(eq(monitoringTable.status, status as 'success' | 'error'));
+      conditions.push(
+        eq(monitoringTable.status, status as 'success' | 'error')
+      );
     }
 
     if (type) {
-      conditions.push(eq(monitoringTable.type, type as 'pms' | 'door lock' | 'payment'));
+      conditions.push(
+        eq(monitoringTable.type, type as 'pms' | 'door lock' | 'payment')
+      );
     }
 
     if (q) {
+      const escaped = escapeLikePattern(q as string);
       conditions.push(
         or(
-          ilike(monitoringTable.booking_nr, `%${q}%`),
-          ilike(monitoringTable.log_message, `%${q}%`),
-          ilike(monitoringTable.event, `%${q}%`),
-          ilike(monitoringTable.sub, `%${q}%`)
+          ilike(monitoringTable.booking_nr, `%${escaped}%`),
+          ilike(monitoringTable.log_message, `%${escaped}%`),
+          ilike(monitoringTable.event, `%${escaped}%`),
+          ilike(monitoringTable.sub, `%${escaped}%`)
         )
       );
     }
 
     if (from) {
       const fromDate = new Date(from as string);
-      conditions.push(gte(monitoringTable.date, fromDate));
+      conditions.push(gte(monitoringTable.logged_at, fromDate));
     }
 
     if (to) {
       const toDate = new Date(to as string);
-      conditions.push(lte(monitoringTable.date, toDate));
+      conditions.push(lte(monitoringTable.logged_at, toDate));
     }
 
     const searchCondition =
       conditions.length > 0 ? and(...conditions) : undefined;
 
-    const sortColumn = (sort_by as string) || 'date';
+    const sortColumn = (sort_by as string) || 'logged_at';
     const sortDirection = (sort_order as string) || 'desc';
 
     let orderByColumn;
@@ -69,9 +69,9 @@ async function getMonitoringLogs(req: Request, res: Response) {
       case 'event':
         orderByColumn = monitoringTable.event;
         break;
-      case 'date':
+      case 'logged_at':
       default:
-        orderByColumn = monitoringTable.date;
+        orderByColumn = monitoringTable.logged_at;
     }
 
     const orderBy =
@@ -107,4 +107,3 @@ async function getMonitoringLogs(req: Request, res: Response) {
 }
 
 export { getMonitoringLogs };
-

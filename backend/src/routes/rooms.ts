@@ -32,11 +32,7 @@ router.post('/', validateBody(createRoomSchema), createRoom);
 router.get('/', validateQuery(fetchRoomsParamsSchema), getRooms);
 
 // Get room by id
-router.get(
-  '/:id',
-  validateParams(roomIdParamsSchema),
-  getRoomById
-);
+router.get('/:id', validateParams(roomIdParamsSchema), getRoomById);
 
 // Update room
 router.patch(
@@ -47,11 +43,6 @@ router.patch(
 );
 
 // Delete room
-router.delete(
-  '/:id',
-  validateParams(roomIdParamsSchema),
-  deleteRoom
-);
+router.delete('/:id', validateParams(roomIdParamsSchema), deleteRoom);
 
 export default router;
-

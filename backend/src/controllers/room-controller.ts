@@ -1,8 +1,12 @@
-import { and, asc, desc, eq, ilike, or } from 'drizzle-orm';
+import { and, asc, count, desc, eq, ilike, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { rooms as roomsTable } from '../db/schema';
+
+function escapeLikePattern(value: string): string {
+  return value.replace(/[%_\\]/g, '\\$&');
+}
 
 async function getRooms(req: Request, res: Response) {
   try {
@@ -13,11 +17,12 @@ async function getRooms(req: Request, res: Response) {
 
     // Search condition
     if (q) {
+      const escaped = escapeLikePattern(q as string);
       conditions.push(
         or(
-          ilike(roomsTable.name, `%${q}%`),
-          ilike(roomsTable.room_number, `%${q}%`),
-          ilike(roomsTable.room_type, `%${q}%`)
+          ilike(roomsTable.name, `%${escaped}%`),
+          ilike(roomsTable.room_number, `%${escaped}%`),
+          ilike(roomsTable.room_type, `%${escaped}%`)
         )
       );
     }
@@ -37,7 +42,8 @@ async function getRooms(req: Request, res: Response) {
       );
     }
 
-    const whereCondition = conditions.length > 0 ? and(...conditions) : undefined;
+    const whereCondition =
+      conditions.length > 0 ? and(...conditions) : undefined;
 
     // Build dynamic orderBy clause
     const sortColumn = sort_by as
@@ -83,11 +89,11 @@ async function getRooms(req: Request, res: Response) {
       .offset(offset);
 
     // Get total count for pagination
-    const allRooms = await db
-      .select({ id: roomsTable.id })
+    const totalCountResult = await db
+      .select({ count: count() })
       .from(roomsTable)
       .where(whereCondition);
-    const totalCount = allRooms.length;
+    const totalCount = totalCountResult[0]?.count ?? 0;
 
     // Transform database records to match API schema
     const transformedRooms = rooms.map((room) => ({
@@ -97,8 +103,8 @@ async function getRooms(req: Request, res: Response) {
       room_number: room.room_number,
       room_type: room.room_type,
       status: room.status,
-      created_at: room.created_at?.toISOString() ?? null,
-      updated_at: room.updated_at?.toISOString() ?? null
+      created_at: room.created_at.toISOString(),
+      updated_at: room.updated_at.toISOString()
     }));
 
     res.status(200).json({
@@ -118,11 +124,15 @@ async function createRoom(req: Request, res: Response) {
   try {
     const { name, property_id, room_number, room_type, status } = req.body;
 
+    if (!property_id) {
+      return res.status(400).json({ error: 'property_id is required' });
+    }
+
     const [newRoom] = await db
       .insert(roomsTable)
       .values({
         name,
-        property_id: property_id || null,
+        property_id,
         room_number: room_number || null,
         room_type: room_type || null,
         status: status || 'available'
@@ -141,8 +151,8 @@ async function createRoom(req: Request, res: Response) {
       room_number: newRoom.room_number,
       room_type: newRoom.room_type,
       status: newRoom.status,
-      created_at: newRoom.created_at?.toISOString() ?? null,
-      updated_at: newRoom.updated_at?.toISOString() ?? null
+      created_at: newRoom.created_at.toISOString(),
+      updated_at: newRoom.updated_at.toISOString()
     };
 
     res.status(201).json(transformedRoom);
@@ -173,8 +183,8 @@ async function getRoomById(req: Request, res: Response) {
       room_number: room.room_number,
       room_type: room.room_type,
       status: room.status,
-      created_at: room.created_at?.toISOString() ?? null,
-      updated_at: room.updated_at?.toISOString() ?? null
+      created_at: room.created_at.toISOString(),
+      updated_at: room.updated_at.toISOString()
     };
 
     res.status(200).json(transformedRoom);
@@ -187,8 +197,19 @@ async function getRoomById(req: Request, res: Response) {
 async function updateRoom(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const updates = req.body ?? {};
+    const { name, property_id, room_number, room_type, status } =
+      req.body ?? {};
     const roomId = Number(id);
+
+    const updates = Object.fromEntries(
+      Object.entries({
+        name,
+        property_id,
+        room_number,
+        room_type,
+        status
+      }).filter(([, v]) => v !== undefined)
+    );
 
     const [updatedRoom] = await db
       .update(roomsTable)
@@ -208,8 +229,8 @@ async function updateRoom(req: Request, res: Response) {
       room_number: updatedRoom.room_number,
       room_type: updatedRoom.room_type,
       status: updatedRoom.status,
-      created_at: updatedRoom.created_at?.toISOString() ?? null,
-      updated_at: updatedRoom.updated_at?.toISOString() ?? null
+      created_at: updatedRoom.created_at.toISOString(),
+      updated_at: updatedRoom.updated_at.toISOString()
     };
 
     res.status(200).json(transformedRoom);
@@ -242,4 +263,3 @@ async function deleteRoom(req: Request, res: Response) {
 }
 
 export { getRooms, createRoom, getRoomById, updateRoom, deleteRoom };
-

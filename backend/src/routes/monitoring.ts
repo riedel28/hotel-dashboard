@@ -11,7 +11,10 @@ const router = Router();
 router.use(authenticateToken);
 
 // Get monitoring logs
-router.get('/', validateQuery(fetchMonitoringLogsParamsSchema), getMonitoringLogs);
+router.get(
+  '/',
+  validateQuery(fetchMonitoringLogsParamsSchema),
+  getMonitoringLogs
+);
 
 export default router;
-
