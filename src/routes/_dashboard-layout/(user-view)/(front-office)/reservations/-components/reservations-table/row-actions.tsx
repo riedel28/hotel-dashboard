@@ -1,19 +1,19 @@
 'use client';
 
-import * as React from 'react';
-
-import type { Reservation } from '@/api/reservations';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
-import { Row } from '@tanstack/react-table';
+import { type Row } from '@tanstack/react-table';
 import {
   MessageSquareDot,
   MoreHorizontal,
   PenSquare,
   Trash
 } from 'lucide-react';
+import * as React from 'react';
+import { toast } from 'sonner';
+import type { Reservation } from '@/api/reservations';
 
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,9 +22,9 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 import { DeleteDialog } from './delete-dialog';
-import { ShareDialog } from './share-dialog';
 
 interface RowActionsProps {
   row: Row<Reservation>;
@@ -32,45 +32,49 @@ interface RowActionsProps {
 
 export function RowActions({ row }: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
-  const [showShareModal, setShowShareModal] = React.useState(false);
+  const { t } = useLingui();
 
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-          >
-            <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">
-              <Trans>Open menu</Trans>
-            </span>
-          </Button>
+        <DropdownMenuTrigger
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
+          )}
+        >
+          <MoreHorizontal className="h-4 w-4" />
+          <span className="sr-only">
+            <Trans>Open menu</Trans>
+          </span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[180px]">
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              toast.info(t`Pushed to device`);
+            }}
+          >
             <MessageSquareDot className="mr-2 h-4 w-4" />
             <Trans>Push to device</Trans>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <RouterLink
-              to="/reservations/$reservationId"
-              params={{
-                reservationId: String(row.original.id)
-              }}
-            >
-              <PenSquare className="mr-2 h-4 w-4" />
-              <Trans>Edit</Trans>
-            </RouterLink>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setShowShareModal(true)}>
-            <MessageSquareDot className="mr-2 h-4 w-4" />
-            <Trans>Share</Trans>
-          </DropdownMenuItem>
+          <DropdownMenuItem
+            render={(props) => (
+              <RouterLink
+                {...props}
+                to="/reservations/$reservationId"
+                params={{
+                  reservationId: String(row.original.id)
+                }}
+                preload="intent"
+              >
+                <PenSquare className="mr-2 h-4 w-4" />
+                <Trans>Edit</Trans>
+              </RouterLink>
+            )}
+          />
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="text-red-600"
+            variant="destructive"
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash className="mr-2 h-4 w-4" />
@@ -84,11 +88,6 @@ export function RowActions({ row }: RowActionsProps) {
         onOpenChange={setShowDeleteDialog}
         reservationNr={row.original.booking_nr}
         reservationId={row.original.id}
-      />
-      <ShareDialog
-        open={showShareModal}
-        onOpenChange={setShowShareModal}
-        reservation={row.original}
       />
     </>
   );

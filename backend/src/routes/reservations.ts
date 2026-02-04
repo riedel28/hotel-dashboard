@@ -4,6 +4,7 @@ import {
   createReservationSchema,
   fetchReservationByIdSchema,
   fetchReservationsParamsSchema,
+  reservationIdParamsSchema,
   updateReservationSchema
 } from '../../../shared/types/reservations';
 import {
@@ -39,9 +40,18 @@ router.get(
 );
 
 // Update reservation
-router.patch('/:id', validateBody(updateReservationSchema), updateReservation);
+router.patch(
+  '/:id',
+  validateParams(reservationIdParamsSchema),
+  validateBody(updateReservationSchema),
+  updateReservation
+);
 
 // Delete reservation
-router.delete('/:id', deleteReservation);
+router.delete(
+  '/:id',
+  validateParams(reservationIdParamsSchema),
+  deleteReservation
+);
 
 export default router;

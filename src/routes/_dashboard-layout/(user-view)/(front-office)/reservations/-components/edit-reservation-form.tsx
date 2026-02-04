@@ -1,24 +1,22 @@
-import { useState } from 'react';
-
-import { updateReservationById } from '@/api/reservations';
 import { DevTool } from '@hookform/devtools';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Edit2, Loader2Icon, MoreHorizontal, Trash2, User } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { Guest } from 'shared/types/reservations';
-import { toast } from 'sonner';
-import { z } from 'zod';
-
-import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+  Edit2Icon,
+  Loader2Icon,
+  MoreHorizontalIcon,
+  Trash2Icon,
+  UserIcon
+} from 'lucide-react';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type { Guest, ReservationFormData } from 'shared/types/reservations';
+import { toast } from 'sonner';
+
+import { updateReservationById } from '@/api/reservations';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,14 +25,12 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NumberInput } from '@/components/ui/number-input';
@@ -47,75 +43,28 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
 import { AddGuestModal } from './add-guest-modal';
-import { EditGuestModal } from './edit-guest-modal';
-
-export const reservationFormSchema = z.object({
-  booking_nr: z.string().min(1, t`Booking number is required`),
-  guests: z.array(
-    z.object({
-      id: z.number(),
-      reservation_id: z.number(),
-      first_name: z.string().min(1, t`First name is required`),
-      last_name: z.string().min(1, t`Last name is required`),
-      email: z.string().optional(),
-      nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
-      created_at: z.coerce.date(),
-      updated_at: z.coerce.date().nullable()
-    })
-  ),
-  adults: z.coerce
-    .number()
-    .int()
-    .min(1, t`At least one adult is required`),
-  youth: z.coerce
-    .number()
-    .int()
-    .min(0, t`Youth count cannot be negative`),
-  children: z.coerce
-    .number()
-    .int()
-    .min(0, t`Children count cannot be negative`),
-  infants: z.coerce
-    .number()
-    .int()
-    .min(0, t`Infants count cannot be negative`),
-  purpose: z.enum(['private', 'business']),
-  room: z.string().min(1, t`Room selection is required`)
-});
-
-type ReservationFormData = z.infer<typeof reservationFormSchema>;
-
-async function updateReservation(id: string, data: ReservationFormData) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return updateReservationById(id, data);
-}
+import { EditGuestForm } from './edit-guest-form';
 
 interface EditReservationFormProps {
   reservationId: string;
   reservationData: ReservationFormData;
 }
 
-const initialData: ReservationFormData = {
-  booking_nr: '',
-  guests: [],
-  adults: 1,
-  youth: 0,
-  children: 0,
-  infants: 0,
-  purpose: 'private',
-  room: ''
-};
+async function updateReservation(id: string, data: ReservationFormData) {
+  return updateReservationById(id, data);
+}
 
 export function EditReservationForm({
   reservationId,
   reservationData
 }: EditReservationFormProps) {
   const queryClient = useQueryClient();
+  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
 
   const form = useForm<ReservationFormData>({
-    defaultValues: initialData,
     values: reservationData
   });
 
@@ -123,40 +72,26 @@ export function EditReservationForm({
     mutationFn: (data: ReservationFormData) =>
       updateReservation(reservationId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['reservations', reservationId]
-      });
+      queryClient.invalidateQueries({ queryKey: ['reservations'] });
       toast.success(t`Reservation updated successfully`);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Failed to update reservation:', error);
       toast.error(t`Failed to update reservation. Please try again.`);
     }
   });
 
-  const onSubmit = (data: ReservationFormData) => {
-    updateReservationMutation.mutate(data);
-  };
-
-  const removeGuest = (guestId: number) => {
+  const handleRemoveGuest = (guestId: number) => {
     const currentGuests = form.getValues('guests');
-    const updatedGuests = currentGuests.filter((guest) => guest.id !== guestId);
-    form.setValue('guests', updatedGuests);
-  };
-
-  const addGuest = (newGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
-    const updatedGuests = [...currentGuests, newGuest];
-    form.setValue('guests', updatedGuests);
-  };
-
-  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
-
-  const editGuest = (guestId: string, updatedGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
-    const updatedGuests = currentGuests.map((guest) =>
-      guest.id === Number(guestId) ? updatedGuest : guest
+    form.setValue(
+      'guests',
+      currentGuests.filter((guest) => guest.id !== guestId)
     );
-    form.setValue('guests', updatedGuests, { shouldValidate: true });
+  };
+
+  const handleAddGuest = (newGuest: Guest) => {
+    const currentGuests = form.getValues('guests');
+    form.setValue('guests', [...currentGuests, newGuest]);
   };
 
   // Mock room data - replace with actual data from your API
@@ -179,319 +114,353 @@ export function EditReservationForm({
       description: 'Luxury suite with separate living area',
       price: 250
     }
-  ];
+  ] as const;
+
+  const onSubmit = (data: ReservationFormData) => {
+    updateReservationMutation.mutate(data);
+  };
 
   return (
-    <Form {...form}>
+    <>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-xl space-y-3"
+        className="max-w-xl space-y-6"
       >
-        {/* Reservation Number Section */}
-        <Card className="shadow-none">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Booking Information</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <FormField
-              control={form.control}
-              name="booking_nr"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Trans>Reservation No.</Trans>
-                  </FormLabel>
-                  <FormDescription id="booking-nr-readonly">
-                    <Trans>
-                      The booking number can be found in your Property
-                      Management System (PMS)
-                    </Trans>
-                  </FormDescription>
-
-                  <FormControl>
-                    <Input
-                      {...field}
-                      readOnly
-                      className="cursor-not-allowed bg-gray-50"
-                      aria-describedby="booking-nr-readonly"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FieldSet className="gap-4">
+              <FieldGroup className="gap-4">
+                <Controller
+                  control={form.control}
+                  name="booking_nr"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Reservation No.</Trans>
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        readOnly
+                        className="cursor-not-allowed bg-muted"
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </FieldSet>
           </CardContent>
         </Card>
 
-        {/* Guests Section */}
-        <Card className="shadow-none">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Guests</Trans>
             </CardTitle>
           </CardHeader>
-          <CardContent className="pb-0">
-            <div className="space-y-4">
-              {/* Guest Search */}
-              <SearchInput placeholder={t`Search for a guest...`} />
-
-              {/* Guest List */}
-              <FormField
-                control={form.control}
-                name="guests"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="space-y-2">
-                      {field.value.length === 0 ? (
-                        <div className="flex h-[42px] w-full items-center justify-center text-center text-sm text-muted-foreground">
-                          <Trans>No guests added yet</Trans>
-                        </div>
-                      ) : (
-                        field.value.map((guest) => (
-                          <div
-                            key={guest.id}
-                            className="flex items-center justify-between rounded-md border px-2 py-1"
-                          >
-                            <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-muted-foreground" />
-                              <span className="max-w-md truncate text-sm">
-                                {guest.first_name} {guest.last_name}
-                              </span>
-                            </div>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+          <CardContent className="space-y-4">
+            <SearchInput placeholder={t`Search for a guest...`} />
+            <FieldSet className="gap-4">
+              <FieldGroup className="gap-4">
+                <Controller
+                  control={form.control}
+                  name="guests"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <div className="space-y-2">
+                        {field.value.length === 0 ? (
+                          <div className="flex h-10 items-center justify-center text-sm text-muted-foreground">
+                            <Trans>No guests added yet</Trans>
+                          </div>
+                        ) : (
+                          field.value.map((guest) => (
+                            <div
+                              key={guest.id}
+                              className="flex items-center justify-between rounded-md border px-2 py-1"
+                            >
+                              <div className="flex items-center gap-2">
+                                <UserIcon className="h-4 w-4 text-muted-foreground" />
+                                <span className="max-w-md truncate text-sm">
+                                  {guest.first_name} {guest.last_name}
+                                </span>
+                              </div>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger
+                                  className={cn(
+                                    buttonVariants({ variant: 'ghost' }),
+                                    'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
+                                  )}
                                 >
-                                  <MoreHorizontal className="h-4 w-4" />
+                                  <MoreHorizontalIcon className="h-4 w-4" />
                                   <span className="sr-only">
                                     <Trans>Open guest menu</Trans>
                                   </span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent
-                                align="end"
-                                className="w-[160px]"
-                              >
-                                <DropdownMenuItem
-                                  onSelect={() => setEditingGuest(guest as Guest)}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                  align="end"
+                                  className="w-[180px]"
                                 >
-                                  <Edit2 className="mr-2 h-4 w-4" />
-                                  <Trans>Edit guest</Trans>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                  className="text-destructive"
-                                  onClick={() => removeGuest(guest.id!)}
-                                >
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  <Trans>Remove</Trans>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
-                        ))
+                                  <DropdownMenuItem
+                                    onClick={() => {
+                                      // Delay to allow dropdown to close first
+                                      requestAnimationFrame(() => {
+                                        setEditingGuest(guest);
+                                      });
+                                    }}
+                                  >
+                                    <Edit2Icon className="mr-2 h-4 w-4" />
+                                    <Trans>Edit guest</Trans>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem
+                                    variant="destructive"
+                                    onClick={() => handleRemoveGuest(guest.id)}
+                                  >
+                                    <Trash2Icon className="mr-2 h-4 w-4" />
+                                    <Trans>Remove</Trans>
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
                       )}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </FieldSet>
+            <div className="flex justify-end">
+              <AddGuestModal onAddGuest={handleAddGuest} />
             </div>
           </CardContent>
-          <CardFooter className="border-t-0">
-            <AddGuestModal onAddGuest={addGuest} />
-          </CardFooter>
         </Card>
 
-        {/* Number of People Section */}
-        <Card className="shadow-none">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Number of People</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-start gap-4">
-              <FormField
-                control={form.control}
-                name="adults"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>
-                      <Trans>Adults</Trans>
-                    </FormLabel>
-                    <FormControl>
+            <FieldSet>
+              <FieldGroup className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <Controller
+                  control={form.control}
+                  name="adults"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Adults</Trans>
+                      </FieldLabel>
                       <NumberInput
                         {...field}
+                        id={field.name}
                         value={field.value}
                         min={1}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="youth"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>
-                      <Trans>Youth</Trans>
-                    </FormLabel>
-                    <FormControl>
+                <Controller
+                  control={form.control}
+                  name="youth"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Youth</Trans>
+                      </FieldLabel>
                       <NumberInput
                         {...field}
+                        id={field.name}
                         value={field.value}
                         min={0}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="children"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>
-                      <Trans>Children</Trans>
-                    </FormLabel>
-                    <FormControl>
+                <Controller
+                  control={form.control}
+                  name="children"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Children</Trans>
+                      </FieldLabel>
                       <NumberInput
                         {...field}
+                        id={field.name}
                         value={field.value}
                         min={0}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="infants"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>
-                      <Trans>Infants</Trans>
-                    </FormLabel>
-                    <FormControl>
+                <Controller
+                  control={form.control}
+                  name="infants"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Infants</Trans>
+                      </FieldLabel>
                       <NumberInput
                         {...field}
+                        id={field.name}
                         value={field.value}
                         min={0}
-                        onValueChange={(value) => field.onChange(value || 0)}
+                        onValueChange={(value) => field.onChange(value ?? 0)}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </FieldSet>
           </CardContent>
         </Card>
 
-        {/* Purpose of Stay Section */}
-        <Card className="shadow-none">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Purpose of Stay</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <FormField
-              control={form.control}
-              name="purpose"
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex gap-4"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="private" id="private" />
-                        <Label htmlFor="private">
-                          <Trans>Private</Trans>
+            <FieldSet>
+              <FieldGroup className="gap-4">
+                <Controller
+                  control={form.control}
+                  name="purpose"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel>
+                        <Trans>Select purpose</Trans>
+                      </FieldLabel>
+                      <RadioGroup
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        className="grid gap-2 sm:grid-cols-2"
+                      >
+                        <Label
+                          htmlFor="purpose-private"
+                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-3 text-left text-sm font-medium transition hover:bg-accent data-[state=checked]:border-primary data-[state=checked]:bg-primary/5"
+                        >
+                          <RadioGroupItem
+                            value="private"
+                            id="purpose-private"
+                          />
+                          <span className="leading-none">
+                            <Trans>Private</Trans>
+                          </span>
                         </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="business" id="business" />
-                        <Label htmlFor="business">
-                          <Trans>Business</Trans>
+                        <Label
+                          htmlFor="purpose-business"
+                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-3 text-left text-sm font-medium transition hover:bg-accent data-[state=checked]:border-primary data-[state=checked]:bg-primary/5"
+                        >
+                          <RadioGroupItem
+                            value="business"
+                            id="purpose-business"
+                          />
+                          <span className="leading-none">
+                            <Trans>Business</Trans>
+                          </span>
                         </Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                      </RadioGroup>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </FieldSet>
           </CardContent>
         </Card>
 
-        {/* Room Section */}
-        <Card className="shadow-none">
+        <Card>
           <CardHeader>
             <CardTitle>
               <Trans>Room</Trans>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <FormField
-              control={form.control}
-              name="room"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t`Select a room...`}>
-                          {roomOptions.find((room) => room.id === field.value)
-                            ?.name ?? t`Select a room...`}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {roomOptions.map((room) => (
-                          <SelectItem
-                            key={room.id}
-                            value={room.id}
-                            className="flex w-full items-center justify-between rounded-md bg-card p-3 transition-colors hover:bg-accent"
-                          >
-                            <div className="flex-1">
-                              <div className="font-medium text-foreground">
-                                {room.name}
+            <FieldSet>
+              <FieldGroup className="gap-4">
+                <Controller
+                  control={form.control}
+                  name="room"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="gap-2">
+                      <FieldLabel>
+                        <Trans>Select room</Trans>
+                      </FieldLabel>
+                      <Select
+                        value={field.value || undefined}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue>
+                            {roomOptions.find((room) => room.id === field.value)
+                              ?.name ?? t`Select a room...`}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {roomOptions.map((room) => (
+                            <SelectItem
+                              key={room.id}
+                              value={room.id}
+                              className="flex w-full items-center justify-between rounded-md bg-card p-3 transition-colors hover:bg-accent"
+                            >
+                              <div className="flex-1">
+                                <div className="font-medium text-foreground">
+                                  {room.name}
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  {room.description}
+                                </div>
                               </div>
-                              <div className="text-sm text-muted-foreground">
-                                {room.description}
-                              </div>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </FieldSet>
           </CardContent>
         </Card>
 
@@ -504,18 +473,20 @@ export function EditReservationForm({
       </form>
 
       {editingGuest && (
-        <EditGuestModal
+        <EditGuestForm
+          key={editingGuest.id}
           guest={editingGuest}
-          onEditGuest={editGuest}
-          open={!!editingGuest}
-          onOpenChange={(open) => !open && setEditingGuest(null)}
+          reservationId={reservationId}
+          open={true}
+          onOpenChange={(open) => {
+            if (!open) setEditingGuest(null);
+          }}
         />
       )}
 
-      {/* React Hook Form DevTools - only shown in development */}
       {process.env.NODE_ENV === 'development' && (
         <DevTool control={form.control} />
       )}
-    </Form>
+    </>
   );
 }

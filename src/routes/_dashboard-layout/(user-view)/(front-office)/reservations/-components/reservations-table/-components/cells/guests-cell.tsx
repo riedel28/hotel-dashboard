@@ -1,6 +1,6 @@
-import { Guest } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import Flag from 'react-flagkit';
+import { type Guest } from '@/api/reservations';
 
 interface GuestsCellProps {
   guests: Guest[];

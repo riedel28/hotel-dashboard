@@ -1,13 +1,12 @@
+import { Trans } from '@lingui/react/macro';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { PencilIcon, Trash2Icon, XIcon } from 'lucide-react';
 import * as React from 'react';
-
 import {
   deleteProduct,
   fetchProductsByCategory,
   updateProduct
 } from '@/api/products';
-import { Trans } from '@lingui/react/macro';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { PencilIcon, Trash2Icon, XIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

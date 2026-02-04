@@ -1,7 +1,5 @@
-import { HTMLAttributes, ReactNode } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Column } from '@tanstack/react-table';
+import { type Column } from '@tanstack/react-table';
 import {
   ArrowDown,
   ArrowLeft,
@@ -11,11 +9,12 @@ import {
   ArrowUp,
   Check,
   ChevronDownIcon,
-  ChevronUpIcon,
   ChevronsUpDown,
+  ChevronUpIcon,
   PinOff,
   Settings2
 } from 'lucide-react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -64,16 +63,20 @@ function DataGridColumnHeader<TData, TValue>({
       // Move column left
       const newOrder = [...currentOrder];
       const [movedColumn] = newOrder.splice(currentIndex, 1);
-      newOrder.splice(currentIndex - 1, 0, movedColumn);
-      table.setColumnOrder(newOrder); // Update column order
+      if (movedColumn) {
+        newOrder.splice(currentIndex - 1, 0, movedColumn);
+        table.setColumnOrder(newOrder); // Update column order
+      }
     }
 
     if (direction === 'right' && currentIndex < currentOrder.length - 1) {
       // Move column right
       const newOrder = [...currentOrder];
       const [movedColumn] = newOrder.splice(currentIndex, 1);
-      newOrder.splice(currentIndex + 1, 0, movedColumn);
-      table.setColumnOrder(newOrder); // Update column order
+      if (movedColumn) {
+        newOrder.splice(currentIndex + 1, 0, movedColumn);
+        table.setColumnOrder(newOrder); // Update column order
+      }
     }
   };
 
@@ -91,7 +94,7 @@ function DataGridColumnHeader<TData, TValue>({
     return (
       <div
         className={cn(
-          'inline-flex h-full items-center gap-1.5 text-[0.8125rem] leading-[calc(1.125/0.8125)] font-normal text-accent-foreground [&_svg]:size-3.5 [&_svg]:opacity-60',
+          'inline-flex h-full items-center gap-1.5 text-[0.8125rem] leading-[calc(1.125/0.8125)] font-medium text-muted-foreground [&_svg]:size-3.5 [&_svg]:opacity-60',
           className
         )}
       >
@@ -101,25 +104,32 @@ function DataGridColumnHeader<TData, TValue>({
     );
   };
 
-  const headerButton = () => {
+  const headerButton = (triggerProps?: React.ComponentProps<'button'>) => {
+    const { onClick: triggerOnClick, ...restTriggerProps } = triggerProps || {};
     return (
       <Button
         variant="ghost"
         className={cn(
-          '-ms-2 h-7 rounded-md px-2 font-medium text-secondary-foreground hover:bg-secondary hover:text-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
+          '-ms-2 h-8 rounded-md px-2 text-[13px] font-medium text-muted-foreground hover:bg-secondary hover:text-muted-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
           className
         )}
         disabled={isLoading || recordCount === 0}
-        onClick={() => {
+        onClick={(e) => {
+          triggerOnClick?.(e);
           const isSorted = column.getIsSorted();
           if (isSorted === 'asc') {
             column.toggleSorting(true);
           } else if (isSorted === 'desc') {
-            column.clearSorting();
+            if (table.options.enableSortingRemoval !== false) {
+              column.clearSorting();
+            } else {
+              column.toggleSorting(false);
+            }
           } else {
             column.toggleSorting(false);
           }
         }}
+        {...restTriggerProps}
       >
         {icon && icon}
         {title}
@@ -141,8 +151,7 @@ function DataGridColumnHeader<TData, TValue>({
 
     return (
       <Button
-        mode="icon"
-        size="sm"
+        size="icon-sm"
         variant="ghost"
         className="-me-1 size-7 rounded-md"
         onClick={() => column.pin(false)}
@@ -158,7 +167,10 @@ function DataGridColumnHeader<TData, TValue>({
     return (
       <div className="flex h-full items-center justify-between gap-1.5">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>{headerButton()}</DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            nativeButton
+            render={(props) => headerButton(props)}
+          />
           <DropdownMenuContent className="w-40" align="start">
             {filter && <DropdownMenuLabel>{filter}</DropdownMenuLabel>}
 
@@ -171,7 +183,10 @@ function DataGridColumnHeader<TData, TValue>({
               <>
                 <DropdownMenuItem
                   onClick={() => {
-                    if (column.getIsSorted() === 'asc') {
+                    if (
+                      column.getIsSorted() === 'asc' &&
+                      table.options.enableSortingRemoval !== false
+                    ) {
                       column.clearSorting();
                     } else {
                       column.toggleSorting(false);
@@ -189,7 +204,10 @@ function DataGridColumnHeader<TData, TValue>({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    if (column.getIsSorted() === 'desc') {
+                    if (
+                      column.getIsSorted() === 'desc' &&
+                      table.options.enableSortingRemoval !== false
+                    ) {
                       column.clearSorting();
                     } else {
                       column.toggleSorting(true);

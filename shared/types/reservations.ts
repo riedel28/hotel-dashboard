@@ -20,7 +20,7 @@ export const guestSchema = z.object({
   reservation_id: z.number(),
   first_name: z.string(),
   last_name: z.string(),
-  email: z.string().optional(),
+  email: z.union([z.string(), z.null()]).optional(),
   nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date().nullable()
@@ -30,21 +30,21 @@ export const reservationSchema = z.object({
   id: z.number(),
   state: reservationStatusSchema,
   booking_nr: z.string(),
-  guest_email: z.string(),
+  guest_email: z.union([z.email(), z.literal(''), z.null()]),
   guests: z.array(guestSchema),
-  booking_id: z.string(),
+  booking_id: z.union([z.string(), z.literal(''), z.null()]),
   room_name: z.string(),
-  booking_from: z.string(),
-  booking_to: z.string(),
+  booking_from: z.coerce.date(),
+  booking_to: z.coerce.date(),
   check_in_via: checkinMethodSchema,
   check_out_via: checkinMethodSchema,
-  primary_guest_name: z.string(),
+  primary_guest_name: z.union([z.string(), z.literal(''), z.null()]),
   last_opened_at: z.coerce.date().nullable(),
   received_at: z.coerce.date(),
   completed_at: z.coerce.date().nullable(),
   updated_at: z.coerce.date().nullable(),
-  page_url: z.url(),
-  balance: z.number(),
+  page_url: z.union([z.url(), z.literal(''), z.null()]),
+  balance: z.coerce.number(),
   // Detail view-only fields are optional in list responses
   adults: z.coerce.number().int().nonnegative().optional(),
   youth: z.coerce.number().int().nonnegative().optional(),
@@ -53,6 +53,18 @@ export const reservationSchema = z.object({
   purpose: z.enum(['private', 'business']).optional(),
   room: z.string().optional()
 });
+
+export const sortableColumnsSchema = z.enum([
+  'state',
+  'booking_nr',
+  'room_name',
+  'booking_from',
+  'booking_to',
+  'balance',
+  'received_at'
+]);
+
+export const sortOrderSchema = z.enum(['asc', 'desc']);
 
 export const fetchReservationsParamsSchema = z.object({
   page: z.coerce.number().int().positive().default(1).optional(),
@@ -68,7 +80,9 @@ export const fetchReservationsParamsSchema = z.object({
   q: z.string().optional(),
   status: reservationStatusSchema.default('all').optional(),
   from: z.iso.date().optional(),
-  to: z.iso.date().optional()
+  to: z.iso.date().optional(),
+  sort_by: sortableColumnsSchema.optional(),
+  sort_order: sortOrderSchema.default('desc').optional()
 });
 
 export const fetchReservationsResponseSchema = z.object({
@@ -79,14 +93,14 @@ export const fetchReservationsResponseSchema = z.object({
   page_count: z.number().int().nonnegative()
 });
 
-export const fetchReservationByIdSchema = z.object({
+export const reservationIdParamsSchema = z.object({
   id: z.coerce.number().int().positive()
 });
 
+export const fetchReservationByIdSchema = reservationIdParamsSchema;
+
 export const createReservationSchema = z.object({
-  booking_nr: z.string(),
-  room: z.string(),
-  page_url: z.url().optional()
+  room_name: z.string().min(1)
 });
 
 export const updateReservationSchema = reservationSchema
@@ -95,6 +109,30 @@ export const updateReservationSchema = reservationSchema
     updated_at: true
   })
   .partial();
+
+// Guest schema for forms (only editable fields)
+export const guestFormSchema = z.object({
+  id: z.number(),
+  reservation_id: z.number(),
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  email: z.union([z.string(), z.null()]).optional(),
+  nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
+  created_at: z.date(),
+  updated_at: z.date().nullable()
+});
+
+// Form schema for editing reservations (subset of fields that are editable)
+export const reservationFormSchema = z.object({
+  booking_nr: z.string().min(1),
+  guests: z.array(guestFormSchema),
+  adults: z.coerce.number().int().min(1),
+  youth: z.coerce.number().int().min(0),
+  children: z.coerce.number().int().min(0),
+  infants: z.coerce.number().int().min(0),
+  purpose: z.enum(['private', 'business']),
+  room: z.string().min(1)
+});
 
 // Type exports
 export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
@@ -109,3 +147,4 @@ export type FetchReservationsResponse = z.infer<
 >;
 export type CreateReservationData = z.infer<typeof createReservationSchema>;
 export type UpdateReservationData = z.infer<typeof updateReservationSchema>;
+export type ReservationFormData = z.infer<typeof reservationFormSchema>;

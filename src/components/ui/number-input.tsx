@@ -1,7 +1,6 @@
-import { useId } from 'react';
-
 import { NumberField } from '@base-ui-components/react/number-field';
 import { MinusIcon, PlusIcon } from 'lucide-react';
+import { useId } from 'react';
 
 import { cn } from '@/lib/utils';
 

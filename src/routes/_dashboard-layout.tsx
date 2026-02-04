@@ -1,13 +1,13 @@
 'use client';
 
-import * as React from 'react';
-
-import { ViewProvider, useView } from '@/contexts/view-context';
-import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
-import Header from '@/routes/_dashboard-layout/-components/header';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
-import { Link, LinkProps } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  type LinkProps,
+  Outlet,
+  redirect
+} from '@tanstack/react-router';
 import {
   ArrowUpRightIcon,
   BedDoubleIcon,
@@ -30,7 +30,8 @@ import {
   TvIcon,
   UsersIcon
 } from 'lucide-react';
-
+import * as React from 'react';
+import { propertiesQueryOptions } from '@/api/properties';
 import {
   Sidebar,
   SidebarContent,
@@ -45,6 +46,10 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
+import { useView, ViewProvider } from '@/contexts/view-context';
+import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
+import Header from '@/routes/_dashboard-layout/-components/header';
+import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
 
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -59,15 +64,18 @@ function SidebarLink({
   ...linkProps
 }: SidebarLinkProps) {
   return (
-    <SidebarMenuButton asChild tooltip={tooltip}>
-      <Link
-        activeProps={{ className: '!bg-primary/5' }}
-        {...(linkProps as LinkProps)}
-      >
-        <Icon />
-        <span>{children}</span>
-      </Link>
-    </SidebarMenuButton>
+    <SidebarMenuButton
+      tooltip={tooltip}
+      render={
+        <Link
+          activeProps={{ className: '!bg-primary/5' }}
+          {...(linkProps as LinkProps)}
+        >
+          <Icon />
+          <span>{children}</span>
+        </Link>
+      }
+    />
   );
 }
 
@@ -122,8 +130,8 @@ function AdminSidebarContent() {
 
   return (
     <SidebarContent>
-      <SidebarMenu>
-        <SidebarGroup>
+      <SidebarGroup>
+        <SidebarMenu>
           <SidebarMenuItem>
             <SidebarLink to="/" icon={HomeIcon} tooltip={t`Start`}>
               <Trans>Start</Trans>
@@ -147,8 +155,8 @@ function AdminSidebarContent() {
               <Trans>Customers</Trans>
             </SidebarLink>
           </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
+        </SidebarMenu>
+      </SidebarGroup>
     </SidebarContent>
   );
 }
@@ -370,6 +378,7 @@ function DashboardSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeaderComponent />
+      <SidebarViewToggle />
       {currentView === 'admin' ? (
         <AdminSidebarContent />
       ) : (
@@ -380,7 +389,7 @@ function DashboardSidebar() {
 }
 
 // Main layout component
-export default function DashboardLayout() {
+function DashboardLayout() {
   return (
     <ViewProvider>
       <SidebarProvider>
@@ -409,6 +418,22 @@ export const Route = createFileRoute('/_dashboard-layout')({
         }
       });
     }
+  },
+  loader: async ({ context: { auth, queryClient }, location }) => {
+    // Double-check authentication before making API call
+    // This prevents the loader from running if auth check in beforeLoad somehow fails
+    if (!auth.isAuthenticated) {
+      throw redirect({
+        to: '/auth/login',
+        search: {
+          redirect: location.href
+        }
+      });
+    }
+    const properties = await queryClient.ensureQueryData(
+      propertiesQueryOptions()
+    );
+    return { properties };
   },
   component: DashboardLayout
 });

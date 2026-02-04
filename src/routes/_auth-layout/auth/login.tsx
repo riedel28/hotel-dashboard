@@ -1,33 +1,31 @@
-import { useAuth } from '@/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import {
-  Link,
   createFileRoute,
+  Link,
   redirect,
   useRouter
 } from '@tanstack/react-router';
 import { Loader2, MessageCircleIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useAuth } from '@/auth';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
 import { loginSchema } from '@/lib/schemas';
-import { cn } from '@/lib/utils';
 
 const fallback = '/' as const;
 
@@ -56,8 +54,8 @@ function LoginPage() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'john@example.com',
+      password: 'very_cool_password',
       rememberMe: false
     }
   });
@@ -66,7 +64,7 @@ function LoginPage() {
     mutationFn: auth.login,
     onSuccess: async () => {
       await router.invalidate();
-      await navigate({ to: search.redirect || fallback });
+      await navigate({ to: search.redirect || '' });
       toast.success(t`Successfully logged in!`);
     },
     onError: () => {
@@ -79,7 +77,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="w-full max-w-md space-y-8">
+    <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
           <MessageCircleIcon className="size-10" />
@@ -97,91 +95,117 @@ function LoginPage() {
         </p>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <Trans>Email</Trans>
-                </FormLabel>
-                <FormControl>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="max-w-sm mx-auto space-y-6"
+      >
+        <FieldSet className="gap-6">
+          <FieldGroup className="gap-4">
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Email</Trans>
+                  </FieldLabel>
                   <Input
                     {...field}
+                    id={field.name}
                     type="email"
-                    variant="lg"
                     placeholder={t`Enter your email`}
+                    autoComplete="email"
+                    aria-invalid={fieldState.invalid}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <Trans>Password</Trans>
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput
-                    {...field}
-                    variant="lg"
-                    placeholder={t`Enter your password`}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-between">
-            <FormField
-              control={form.control}
-              name="rememberMe"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-2">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className="font-normal">
-                    <Trans>Remember me</Trans>
-                  </FormLabel>
-                </FormItem>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
-            <Link
-              className={cn(
-                buttonVariants({
-                  mode: 'link',
-                  underline: 'solid'
-                }),
-                'text-sm text-foreground'
+
+            <Controller
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Password</Trans>
+                  </FieldLabel>
+                  <PasswordInput
+                    {...field}
+                    id={field.name}
+                    placeholder={t`Enter your password`}
+                    autoComplete="current-password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
-              to="/auth/forgot-password"
-            >
-              <Trans>Forgot password?</Trans>
-            </Link>
-          </div>
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full"
-            disabled={loginMutation.isPending}
-          >
-            {loginMutation.isPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            />
+          </FieldGroup>
+        </FieldSet>
+
+        <div className="flex items-center justify-between">
+          <Controller
+            control={form.control}
+            name="rememberMe"
+            render={({ field }) => (
+              <Field
+                orientation="horizontal"
+                className="w-auto items-center gap-2"
+              >
+                <Checkbox
+                  id={field.name}
+                  checked={field.value}
+                  onCheckedChange={(checked) =>
+                    field.onChange(checked === true)
+                  }
+                />
+                <FieldLabel htmlFor={field.name} className="text-sm">
+                  <Trans>Remember me</Trans>
+                </FieldLabel>
+              </Field>
             )}
-            <Trans>Login</Trans>
-          </Button>
-        </form>
-      </Form>
+          />
+
+          <Link
+            to="/auth/forgot-password"
+            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+          >
+            <Trans>Forgot password?</Trans>
+          </Link>
+        </div>
+
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending && (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          <Trans>Login</Trans>
+        </Button>
+      </form>
+
+      <div className="flex items-center justify-center">
+        <p className="text-sm text-muted-foreground -mt-2">
+          <Trans>Don't have an account?</Trans>{' '}
+          <Button
+            variant="link"
+            size="sm"
+            render={
+              <Link to="/auth/sign-up">
+                <Trans>Sign up</Trans>
+              </Link>
+            }
+          />
+        </p>
+      </div>
     </div>
   );
 }

@@ -1,13 +1,11 @@
-import { CSSProperties, useId } from 'react';
-
 import {
+  closestCenter,
   DndContext,
   type DragEndEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  UniqueIdentifier,
-  closestCenter,
+  type UniqueIdentifier,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -18,8 +16,14 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Cell, HeaderGroup, Row, flexRender } from '@tanstack/react-table';
+import {
+  type Cell,
+  flexRender,
+  type HeaderGroup,
+  type Row
+} from '@tanstack/react-table';
 import { GripHorizontal } from 'lucide-react';
+import { type CSSProperties, useId } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -45,7 +49,7 @@ function DataGridTableDndRowHandle({ rowId }: { rowId: string }) {
 
   return (
     <Button
-      variant="dim"
+      variant="ghost"
       size="sm"
       className="size-7"
       {...attributes}
@@ -56,7 +60,11 @@ function DataGridTableDndRowHandle({ rowId }: { rowId: string }) {
   );
 }
 
-function DataGridTableDndRow<TData>({ row }: { row: Row<TData> }) {
+function DataGridTableDndRow<TData extends object>({
+  row
+}: {
+  row: Row<TData>;
+}) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.id
   });
@@ -70,7 +78,7 @@ function DataGridTableDndRow<TData>({ row }: { row: Row<TData> }) {
   };
   return (
     <DataGridTableBodyRow
-      row={row}
+      row={row as Row<TData>}
       dndRef={setNodeRef}
       dndStyle={style}
       key={row.id}
@@ -86,14 +94,14 @@ function DataGridTableDndRow<TData>({ row }: { row: Row<TData> }) {
   );
 }
 
-function DataGridTableDndRows<TData>({
+function DataGridTableDndRows<TData extends object>({
   handleDragEnd,
   dataIds
 }: {
   handleDragEnd: (event: DragEndEvent) => void;
   dataIds: UniqueIdentifier[];
 }) {
-  const { table, isLoading, props } = useDataGrid();
+  const { table, isLoading, props } = useDataGrid<TData>();
   const pagination = table.getState().pagination;
 
   const sensors = useSensors(
@@ -168,8 +176,10 @@ function DataGridTableDndRows<TData>({
                 items={dataIds}
                 strategy={verticalListSortingStrategy}
               >
-                {table.getRowModel().rows.map((row: Row<TData>) => {
-                  return <DataGridTableDndRow row={row} key={row.id} />;
+                {table.getRowModel().rows.map((row) => {
+                  return (
+                    <DataGridTableDndRow row={row as Row<TData>} key={row.id} />
+                  );
                 })}
               </SortableContext>
             ) : (

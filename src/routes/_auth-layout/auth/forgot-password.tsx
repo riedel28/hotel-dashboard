@@ -1,106 +1,92 @@
-import { useState } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Link, createFileRoute } from '@tanstack/react-router';
-import { CheckIcon, Loader2, MessageCircleIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { CheckIcon, Loader2Icon, MessageCircleIcon } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
-
-import { Button, buttonVariants } from '@/components/ui/button';
+import type z from 'zod';
+import { Button } from '@/components/ui/button';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { loginSchema } from '@/lib/schemas';
 
-import { cn } from '@/lib/utils';
+const forgotPasswordSchema = loginSchema.pick({ email: true });
+type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
 
 export const Route = createFileRoute('/_auth-layout/auth/forgot-password')({
   component: ForgotPasswordPage
 });
 
-type ForgotPasswordFormData = { email: string };
+interface SuccessViewProps {
+  email: string;
+}
+
+function SuccessView({ email }: SuccessViewProps) {
+  return (
+    <div className="w-full max-w-lg space-y-8">
+      <div className="space-y-4 text-center">
+        <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
+          <CheckIcon className="size-7" />
+        </div>
+        <h1 className="text-2xl font-bold">
+          <Trans>Reset link sent</Trans>
+        </h1>
+        <p className="text-muted-foreground text-balance">
+          <Trans>
+            We&apos;ve sent a password reset email to{' '}
+            <span className="font-medium">{email}</span>. Follow the
+            instructions to finish resetting your password.
+          </Trans>
+        </p>
+      </div>
+
+      <div className="text-center">
+        <Link
+          to="/auth/login"
+          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+        >
+          <Trans>Back to login</Trans>
+        </Link>
+      </div>
+    </div>
+  );
+}
 
 function ForgotPasswordPage() {
   const { t } = useLingui();
 
-  const forgotPasswordFormSchema = z.object({
-    email: z.email(t`Email is required`)
-  });
-
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const form = useForm<ForgotPasswordFormData>({
-    resolver: zodResolver(forgotPasswordFormSchema),
+  const form = useForm<ForgotPasswordData>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: ''
     }
   });
 
-  const onSubmit = async (data: ForgotPasswordFormData) => {
+  async function handleSubmit(_data: ForgotPasswordData) {
     try {
-      // TODO: Implement API call to send password reset email
-      console.log('Sending password reset email to:', data.email);
+      // TODO: Implement API call to send password reset email to _data.email
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
-      setIsSuccess(true);
-      // Store the email for the success message
-      form.setValue('email', data.email);
-      toast.success('Password reset email sent successfully!');
-    } catch (error) {
-      console.error('Error sending password reset email: ', error);
-      toast.error('Failed to send password reset email. Please try again.');
+      toast.success(t`Password reset email sent successfully!`);
+    } catch {
+      toast.error(t`Failed to send password reset email. Please try again.`);
     }
-  };
+  }
 
-  const isSubmitting = form.formState.isSubmitting;
+  const { isSubmitting, isSubmitSuccessful } = form.formState;
 
-  if (isSuccess) {
-    return (
-      <div className="w-full max-w-md space-y-8">
-        <div className="space-y-4 text-center">
-          <div className="inline-block rounded-full bg-green-100 p-3">
-            <CheckIcon className="size-8 rounded-full text-green-700" />
-          </div>
-
-          <h1 className="text-2xl font-bold">
-            <Trans>Reset Link Sent</Trans>
-          </h1>
-          <p className="text-pretty text-foreground">
-            {`We've sent a password reset link to `}
-            <span className="font-medium text-foreground">
-              {form.getValues('email')}
-            </span>
-            {`. Please check your inbox and follow the instructions to reset your password.`}
-          </p>
-        </div>
-
-        <div className="text-center">
-          <Link
-            className={cn(
-              buttonVariants({
-                mode: 'link',
-                underline: 'solid'
-              }),
-              'text-sm text-foreground'
-            )}
-            to="/auth/login"
-          >
-            Back to login
-          </Link>
-        </div>
-      </div>
-    );
+  if (isSubmitSuccessful) {
+    return <SuccessView email={form.getValues('email')} />;
   }
 
   return (
-    <div className="w-full max-w-md space-y-8">
+    <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
           <MessageCircleIcon className="size-10" />
@@ -109,57 +95,68 @@ function ForgotPasswordPage() {
         <h1 className="text-2xl font-bold">
           <Trans>Forgot Password</Trans>
         </h1>
-        <p className="text-muted-foreground">
-          {`Enter your email address and we'll send you a link to reset your password`}
+        <p className="text-muted-foreground text-balance">
+          <Trans>
+            Enter your email address and we&apos;ll send you a link to reset
+            your password.
+          </Trans>
         </p>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="max-w-sm mx-auto space-y-6"
+      >
+        <FieldSet>
+          <FieldGroup className="gap-4">
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Email</Trans>
+                  </FieldLabel>
                   <Input
                     {...field}
+                    id={field.name}
                     type="email"
-                    variant="lg"
-                    placeholder="Enter your email"
+                    placeholder={t`Enter your email`}
+                    autoComplete="email"
+                    aria-invalid={fieldState.invalid}
                     disabled={isSubmitting}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Send Reset Link
-          </Button>
-        </form>
-      </Form>
-
-      <div className="-mt-4 text-center">
-        <Link
-          className={cn(
-            buttonVariants({
-              mode: 'link',
-              underline: 'solid'
-            }),
-            'text-sm text-foreground'
-          )}
-          to="/auth/login"
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </FieldSet>
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={isSubmitting}
         >
-          Back to login
-        </Link>
+          {isSubmitting && (
+            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          <Trans>Send reset link</Trans>
+        </Button>
+      </form>
+
+      <div className="text-center -mt-2">
+        <Button
+          variant="link"
+          size="sm"
+          render={
+            <Link to="/auth/login">
+              <Trans>Back to login</Trans>
+            </Link>
+          }
+        />
       </div>
     </div>
   );

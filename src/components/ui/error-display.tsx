@@ -20,11 +20,11 @@
  * </ErrorDisplay>
  *
  */
-import * as React from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { RefreshCwIcon, XIcon } from 'lucide-react';
+import * as React from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

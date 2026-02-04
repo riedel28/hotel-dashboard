@@ -1,3 +1,7 @@
+---
+globs: *.tsx
+alwaysApply: false
+---
 # Translations (Lingui)
 
 This project uses Lingui for i18n with dynamic catalog loading.
@@ -13,7 +17,7 @@ This project uses Lingui for i18n with dynamic catalog loading.
 - Extract messages
 
 ```bash
-npm run lingui:extract
+bun run lingui:extract
 ```
 
 - Translate catalogs
@@ -23,7 +27,7 @@ npm run lingui:extract
 - Compile catalogs
 
 ```bash
-npm run lingui:compile
+bun run lingui:compile
 ```
 
 ## Runtime

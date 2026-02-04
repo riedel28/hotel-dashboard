@@ -7,8 +7,10 @@ describe('Reservations API', () => {
   let authToken: string;
 
   beforeEach(async () => {
+    // Clean up first to ensure a clean slate
+    await cleanupDatabase();
+
     const { token } = await createTestUser({
-      email: 'test@example.com',
       password: 'Password123!'
     });
     authToken = token;
@@ -21,9 +23,7 @@ describe('Reservations API', () => {
   describe('POST /api/reservations', () => {
     test('should create a new reservation successfully', async () => {
       const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101',
-        page_url: 'https://example.com/booking'
+        room_name: 'Room 101'
       };
 
       const response = await request(app)
@@ -33,17 +33,16 @@ describe('Reservations API', () => {
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
-      expect(response.body.booking_nr).toBe(reservationData.booking_nr);
-      expect(response.body.room).toBe(reservationData.room);
+      expect(response.body.booking_nr).toBeTruthy();
+      expect(response.body.room_name).toBe(reservationData.room_name);
       expect(response.body.state).toBe('pending');
-      expect(response.body.balance).toBe(0);
+      expect(response.body.balance).toBe('0.00');
       expect(response.body.adults).toBe(1);
     });
 
     test('should return 401 without authentication', async () => {
       const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101'
+        room_name: 'Room 101'
       };
 
       await request(app)
@@ -53,23 +52,7 @@ describe('Reservations API', () => {
     });
 
     test('should return 400 for missing required fields', async () => {
-      const reservationData = {
-        room: 'Room 101'
-      };
-
-      await request(app)
-        .post('/api/reservations')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(reservationData)
-        .expect(400);
-    });
-
-    test('should return 400 for invalid URL', async () => {
-      const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101',
-        page_url: 'not-a-valid-url'
-      };
+      const reservationData = {};
 
       await request(app)
         .post('/api/reservations')
@@ -82,9 +65,7 @@ describe('Reservations API', () => {
   describe('GET /api/reservations', () => {
     beforeEach(async () => {
       const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101',
-        page_url: 'https://example.com/booking'
+        room_name: 'Room 101'
       };
 
       await request(app)
@@ -124,9 +105,11 @@ describe('Reservations API', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.body.index.every((r: { state: string }) => r.state === 'pending')).toBe(
-        true
-      );
+      expect(
+        response.body.index.every(
+          (r: { state: string }) => r.state === 'pending'
+        )
+      ).toBe(true);
     });
 
     test('should search reservations by booking number', async () => {
@@ -136,7 +119,9 @@ describe('Reservations API', () => {
         .expect(200);
 
       expect(
-        response.body.index.every((r: { booking_nr: string }) => r.booking_nr.includes('BK123'))
+        response.body.index.every((r: { booking_nr: string }) =>
+          r.booking_nr.includes('BK123')
+        )
       ).toBe(true);
     });
 
@@ -150,9 +135,7 @@ describe('Reservations API', () => {
 
     beforeEach(async () => {
       const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101',
-        page_url: 'https://example.com/booking'
+        room_name: 'Room 101'
       };
 
       const response = await request(app)
@@ -170,7 +153,7 @@ describe('Reservations API', () => {
         .expect(200);
 
       expect(response.body.id).toBe(reservationId);
-      expect(response.body.booking_nr).toBe('BK123456');
+      expect(response.body.booking_nr).toBeTruthy();
       expect(response.body).toHaveProperty('guests');
     });
 
@@ -198,9 +181,7 @@ describe('Reservations API', () => {
 
     beforeEach(async () => {
       const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101',
-        page_url: 'https://example.com/booking'
+        room_name: 'Room 101'
       };
 
       const response = await request(app)
@@ -272,9 +253,7 @@ describe('Reservations API', () => {
 
     beforeEach(async () => {
       const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101',
-        page_url: 'https://example.com/booking'
+        room_name: 'Room 101'
       };
 
       const response = await request(app)
@@ -317,9 +296,7 @@ describe('Reservations API', () => {
   describe('Edge Cases', () => {
     test('should handle date range filtering', async () => {
       const reservationData = {
-        booking_nr: 'BK123456',
-        room: 'Room 101',
-        page_url: 'https://example.com/booking'
+        room_name: 'Room 101'
       };
 
       await request(app)

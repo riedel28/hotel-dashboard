@@ -1,51 +1,53 @@
-'use client';
-
-import { useState } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
-import { ChevronsUpDownIcon, RefreshCwIcon } from 'lucide-react';
+import { RefreshCwIcon, SearchIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import type { Property, PropertyStage } from 'shared/types/properties';
 import { toast } from 'sonner';
-
-import { Badge, BadgeProps } from '@/components/ui/badge';
+import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut
-} from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
-
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxSeparator,
+  ComboboxTrigger,
+  ComboboxValue
+} from '@/components/ui/combobox';
 import { cn } from '@/lib/utils';
-
-export interface Property {
-  id: string;
-  name: string;
-  stage: 'demo' | 'production' | 'staging' | 'template';
-}
-
-interface StageBadgeProps extends BadgeProps {
-  stage: keyof typeof stageVariantMap;
-}
 
 const stageVariantMap = {
   demo: 'info',
   production: 'success',
-  staging: 'primary',
+  staging: 'default',
   template: 'warning'
 } as const;
 
-const getStageMessage = (stage: keyof typeof stageVariantMap) => {
+interface StageBadgeProps extends BadgeProps {
+  stage: PropertyStage;
+}
+
+interface PropertySelectorProps {
+  properties?: Property[];
+  value?: string;
+  onValueChange?: (propertyId: string) => void;
+  onReload: () => Promise<void>;
+}
+
+interface PropertyItem {
+  value: string;
+  label: string;
+  stage: PropertyStage;
+}
+
+const truncatePropertyName = (name: string, maxLength = 40): string => {
+  if (name.length <= maxLength) return name;
+  return `${name.substring(0, maxLength)}...`;
+};
+
+const getStageMessage = (stage: PropertyStage) => {
   switch (stage) {
     case 'demo':
       return <Trans>Demo</Trans>;
@@ -60,13 +62,15 @@ const getStageMessage = (stage: keyof typeof stageVariantMap) => {
   }
 };
 
-function StageBadge({ stage, ...props }: StageBadgeProps) {
+function StageBadge({ stage, className, ...props }: StageBadgeProps) {
   return (
     <Badge
-      variant={stageVariantMap[stage]}
-      appearance="outline"
+      variant={stageVariantMap[stage] ?? 'secondary'}
       size="sm"
-      className="capitalize"
+      className={cn(
+        'shrink-0 rounded-md border border-foreground/10 px-1.5 py-0.5 text-[11px] capitalize',
+        className
+      )}
       {...props}
     >
       {getStageMessage(stage)}
@@ -74,185 +78,168 @@ function StageBadge({ stage, ...props }: StageBadgeProps) {
   );
 }
 
-export const properties: Property[] = [
-  {
-    id: '9cb0e66a-9937-465d-a188-2c4c4ae2401f',
-    name: 'Development (2)',
-    stage: 'demo'
-  },
-  {
-    id: '61eb0e32-2391-4cd3-adc3-66efe09bc0b7',
-    name: 'Staging',
-    stage: 'staging'
-  },
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-1 p-1">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div
+          key={index}
+          className="bg-muted h-9 w-full rounded-md"
+          aria-hidden="true"
+        />
+      ))}
+    </div>
+  );
+}
 
-  {
-    id: 'a4e1fa51-f4ce-4e45-892c-224030a00bdd',
-    name: 'Development 13, Adyen',
-    stage: 'template'
-  },
-  {
-    id: 'cc198b13-4933-43aa-977e-dcd95fa30770',
-    name: 'Kullturboden-Hallstadt',
-    stage: 'production'
-  },
-  {
-    id: 'cc198b13-4933-43aa-977e-dcd95fa30771',
-    name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, reiciendis dolor! Tempora, animi debitis itaque nihil quidem laborum consectetur dolorem.',
-    stage: 'production'
-  },
-  {
-    id: 'f8a2b4c6-d8e0-4f2a-9b1c-3d5e7f9a1b2c',
-    name: 'Grand Hotel Vienna',
-    stage: 'production'
-  },
-  {
-    id: 'e7d6c5b4-a3f2-1e0d-9c8b-7a6f5e4d3c2b',
-    name: 'Seaside Resort Barcelona',
-    stage: 'staging'
-  },
-  {
-    id: 'b1a2c3d4-e5f6-7890-abcd-ef1234567890',
-    name: 'Mountain Lodge Switzerland',
-    stage: 'demo'
-  },
-  {
-    id: 'c2d3e4f5-a6b7-8901-cdef-234567890123',
-    name: 'Urban Boutique Hotel Berlin',
-    stage: 'template'
-  },
-  {
-    id: 'd3e4f5a6-b7c8-9012-def3-456789012345',
-    name: 'Historic Palace Hotel Prague',
-    stage: 'production'
-  }
-];
+function renderPropertyItem(item: PropertyItem) {
+  return (
+    <ComboboxItem
+      key={item.value}
+      value={item.value}
+      showIndicator={false}
+      className="group flex h-9 items-center justify-between rounded-md px-2 py-1.5"
+    >
+      <span className="truncate">{item.label}</span>
+      <StageBadge stage={item.stage} />
+    </ComboboxItem>
+  );
+}
 
-const truncatePropertyName = (name: string, maxLength: number = 40) => {
-  return name.length > maxLength ? `${name.substring(0, maxLength)}...` : name;
-};
-
-export default function PropertySelector() {
-  const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<Property>(() => properties[0]);
+function PropertySelector({
+  properties = [],
+  value: controlledValue,
+  onValueChange,
+  onReload
+}: PropertySelectorProps) {
+  const [internalValue, setInternalValue] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { t } = useLingui();
 
-  function handleReloadProperties() {
-    setLoading(true);
-    toast.info(t`Reloading properties`);
+  const selectedPropertyId = controlledValue ?? internalValue;
 
-    setTimeout(() => {
+  const propertyMap = useMemo(
+    () => new Map(properties.map((property) => [property.id, property])),
+    [properties]
+  );
+
+  const selectedProperty = useMemo(
+    () => (selectedPropertyId ? propertyMap.get(selectedPropertyId) : null),
+    [selectedPropertyId, propertyMap]
+  );
+
+  const items = useMemo<PropertyItem[]>(
+    () =>
+      properties.map((property) => ({
+        value: property.id,
+        label: property.name,
+        stage: property.stage
+      })),
+    [properties]
+  );
+
+  const handleValueChange = (propertyId: string) => {
+    if (onValueChange) {
+      onValueChange(propertyId);
+    } else {
+      setInternalValue(propertyId);
+    }
+  };
+
+  const handlePropertySelect = (nextValue: string | null) => {
+    if (!nextValue) return;
+
+    handleValueChange(nextValue);
+    const property = propertyMap.get(nextValue);
+    if (property) {
+      toast.info(t`Switched to ${truncatePropertyName(property.name)}`);
+    }
+  };
+
+  const handleReloadProperties = async () => {
+    setLoading(true);
+
+    try {
+      await onReload();
+      toast.info(t`Properties updated`);
+    } catch (error) {
+      console.error('Failed to reload properties:', error);
+      toast.error(t`Failed to reload properties`);
+    } finally {
       setLoading(false);
-      toast.info(t`Properties reloaded`);
-    }, 2000);
-  }
+    }
+  };
+
+  const renderTriggerContent = () => {
+    if (selectedProperty) {
+      return truncatePropertyName(selectedProperty.name);
+    }
+    return (
+      <span className="text-muted-foreground">
+        <Trans>Select property</Trans>
+      </span>
+    );
+  };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full max-w-[300px] justify-between px-3 text-sm text-secondary-foreground outline-offset-0 focus-visible:border-ring focus-visible:outline-[3px] focus-visible:outline-ring/20 data-[state=open]:bg-accent"
-        >
-          <span className={cn('truncate', !value && 'text-muted-foreground')}>
-            {value ? (
-              properties.find(
-                (property) =>
-                  property.name.toLowerCase() === value.name.toLowerCase()
-              )?.name
-            ) : (
-              <Trans>Select property</Trans>
-            )}
-          </span>
-          <ChevronsUpDownIcon
-            size={16}
-            strokeWidth={2}
-            className="shrink-0 text-muted-foreground/80"
-            aria-hidden="true"
-          />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0"
-        align="start"
-        side="bottom"
+    <Combobox
+      items={items}
+      value={selectedPropertyId ?? null}
+      onValueChange={handlePropertySelect}
+    >
+      <ComboboxTrigger
+        className="max-w-md truncate flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent"
+        aria-label={t`Select property`}
       >
-        <Command>
-          <CommandInput placeholder={t`Search for property`} />
-          <CommandList className="w-[400px] max-w-[400px]">
-            {!loading && (
-              <CommandEmpty>
-                <Trans>No properties found.</Trans>
-              </CommandEmpty>
-            )}
-            <CommandGroup>
-              <ScrollArea>
-                {loading ? (
-                  <div className="space-y-1">
-                    <Skeleton className="h-[34px] w-full" />
-                    <Skeleton className="h-[34px] w-full" />
-                    <Skeleton className="h-[34px] w-full" />
-                    <Skeleton className="h-[34px] w-full" />
-                  </div>
-                ) : (
-                  properties.map((property) => {
-                    const propertyName = truncatePropertyName(property.name);
-
-                    return (
-                      <CommandItem
-                        key={property.id}
-                        value={property.id}
-                        onSelect={(currentValue) => {
-                          const selectedProperty =
-                            properties.find(
-                              (property) => property.id === currentValue
-                            ) ?? properties[0];
-
-                          setValue(selectedProperty);
-                          setOpen(false);
-
-                          toast.info(t`Switched to ${propertyName}`);
-                        }}
-                        className="h-[38px] gap-1"
-                      >
-                        <span className="w-[250px] truncate">
-                          {propertyName}
-                        </span>
-
-                        <CommandShortcut className="text-[9px] font-semibold tracking-wide uppercase">
-                          <StageBadge stage={property.stage} />
-                        </CommandShortcut>
-                      </CommandItem>
-                    );
-                  })
-                )}
-              </ScrollArea>
-            </CommandGroup>
-          </CommandList>
-          <CommandSeparator />
-          <CommandGroup>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-full text-sm font-normal"
-              onClick={handleReloadProperties}
-              disabled={loading}
-            >
-              <RefreshCwIcon
-                className={cn(
-                  '-ms-2 me-2 mr-1 size-3.5 opacity-60',
-                  loading && 'animate-spin'
-                )}
-                aria-hidden="true"
-              />
-              <Trans>Reload</Trans>
-            </Button>
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+        <ComboboxValue>{renderTriggerContent()}</ComboboxValue>
+      </ComboboxTrigger>
+      <ComboboxContent className="w-sm">
+        <ComboboxInput
+          variant="popup"
+          placeholder={t`Search property`}
+          iconLeft={
+            <SearchIcon
+              className="h-4 w-4 shrink-0 opacity-50"
+              aria-hidden="true"
+            />
+          }
+          showTrigger={false}
+        />
+        {loading && (
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {t`Loading properties`}
+          </div>
+        )}
+        {loading ? (
+          <LoadingSkeleton />
+        ) : (
+          <>
+            <ComboboxEmpty className="py-8 text-center text-sm text-muted-foreground">
+              <Trans>No properties found.</Trans>
+            </ComboboxEmpty>
+            <ComboboxList className="mb-0 space-y-1">
+              {(item) => renderPropertyItem(item)}
+            </ComboboxList>
+          </>
+        )}
+        <ComboboxSeparator className="my-0" />
+        <div className="p-1">
+          <Button
+            variant="ghost"
+            className="w-full h-8 text-sm font-normal text-muted-foreground"
+            aria-label={t`Reload properties`}
+            onClick={handleReloadProperties}
+            disabled={loading}
+          >
+            <RefreshCwIcon
+              className={cn('-ms-2 me-2 size-3.5', loading && 'animate-spin')}
+            />
+            <Trans>Reload</Trans>
+          </Button>
+        </div>
+      </ComboboxContent>
+    </Combobox>
   );
 }
+
+export default PropertySelector;

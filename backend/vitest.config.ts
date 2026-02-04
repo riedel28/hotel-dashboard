@@ -8,12 +8,12 @@ export default defineConfig({
     clearMocks: true,
     restoreMocks: true,
     // Ensure tests run sequentially to avoid database conflicts
-    pool: 'threads',
-    poolOptions: {
-      threads: {
-        singleThread: true
-      }
-    }
-  },
-  plugins: []
+    // In Vitest v4, use maxWorkers: 1 instead of poolOptions.forks.singleFork
+    pool: 'forks',
+    maxWorkers: 1,
+    // Run test files sequentially
+    fileParallelism: false,
+    // Increase timeout for database operations
+    testTimeout: 30000
+  }
 });

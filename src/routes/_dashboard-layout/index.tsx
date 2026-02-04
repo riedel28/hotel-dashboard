@@ -1,15 +1,14 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import {
   BedDoubleIcon,
   ListTodoIcon,
   ReceiptTextIcon,
-  ShoppingCartIcon
+  UsersIcon
 } from 'lucide-react';
 
 import { useAuth } from '../../auth';
 import { Card, CardDescription, CardTitle } from '../../components/ui/card';
-import ViewAwareContent from './-components/view-aware-content';
 
 export const Route = createFileRoute('/_dashboard-layout/')({
   component: StartPage
@@ -40,10 +39,10 @@ function StartPage() {
       href: '/payments'
     },
     {
-      title: t`Orders`,
-      description: t`Manage orders, track shipments, view order history, and process returns efficiently`,
-      icon: ShoppingCartIcon,
-      href: '/orders'
+      title: t`Users`,
+      description: t`Manage users, view user details, and manage user roles`,
+      icon: UsersIcon,
+      href: '/users'
     }
   ];
 
@@ -52,16 +51,13 @@ function StartPage() {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight">
+        <h1 className="text-xl md:text-2xl font-bold">
           <Trans>Welcome back, {userName}!</Trans>
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-sm md:text-lg text-muted-foreground">
           <Trans>Manage your hotel operations efficiently</Trans>
         </p>
       </div>
-
-      {/* View Switching Demo */}
-      <ViewAwareContent />
 
       {/* Quick Actions Grid */}
       <div className="grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
@@ -76,16 +72,16 @@ function StartPage() {
               <Link
                 to={action.href}
                 search={action.search}
-                className="block p-6"
+                className="block md:p-6 p-4"
               >
-                <div className="mb-2">
-                  <div className="mb-3 w-fit rounded-lg bg-muted p-3">
-                    <IconComponent className="size-5 text-muted-foreground" />
+                <div className="mb-2 space-y-2">
+                  <div className="w-fit rounded-lg bg-muted md:p-3 p-2">
+                    <IconComponent className="md:size-5 size-4 text-primary" />
                   </div>
-                  <CardTitle className="mb-1 text-lg font-semibold">
+                  <CardTitle className="md:text-lg text-base font-semibold">
                     {action.title}
                   </CardTitle>
-                  <CardDescription className="mb-2text-sm leading-relaxed text-muted-foreground">
+                  <CardDescription className="md:text-sm text-xs leading-relaxed text-muted-foreground text-balance">
                     {action.description}
                   </CardDescription>
                 </div>

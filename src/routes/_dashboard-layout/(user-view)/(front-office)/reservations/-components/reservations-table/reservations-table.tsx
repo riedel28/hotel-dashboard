@@ -1,16 +1,15 @@
-import { useMemo, useState } from 'react';
-
-import type { Reservation } from '@/api/reservations';
 import { useLingui } from '@lingui/react/macro';
 import {
-  ColumnDef,
-  PaginationState,
-  SortingState,
+  type ColumnDef,
   getCoreRowModel,
   getSortedRowModel,
+  type PaginationState,
+  type SortingState,
   useReactTable
 } from '@tanstack/react-table';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import type { Reservation } from '@/api/reservations';
 
 import { Button } from '@/components/ui/button';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
@@ -21,9 +20,9 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { BalanceCell } from './-components/cells/balance-cell';
-import { BookingNrCell } from './-components/cells/booking-nr-cell';
 import { DateCell } from './-components/cells/date-cell';
 import { GuestsCell } from './-components/cells/guests-cell';
+import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { StatusCell } from './-components/cells/status-cell';
 import { ReservationDetails } from './-components/reservation-details';
 import { RowActions } from './row-actions';
@@ -81,9 +80,9 @@ export default function ReservationsTable({
           return row.getCanExpand() ? (
             <Button
               {...{
-                className: 'size-6 text-muted-foreground',
+                className: 'size-7 text-muted-foreground',
                 onClick: row.getToggleExpandedHandler(),
-                mode: 'icon',
+                size: 'icon',
                 variant: 'ghost'
               }}
               aria-expanded={row.getIsExpanded()}
@@ -108,6 +107,7 @@ export default function ReservationsTable({
       {
         accessorKey: 'state',
         id: 'state',
+
         header: ({ column }) => (
           <DataGridColumnHeader
             title={t`Status`}
@@ -123,7 +123,7 @@ export default function ReservationsTable({
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Status`
         },
-        size: 100,
+        size: 90,
         enableSorting: true,
         enableHiding: true,
         enableResizing: false
@@ -139,8 +139,8 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          const bookingNr = row.getValue('booking_nr') as string;
-          return <BookingNrCell bookingNr={bookingNr} />;
+          const reservationNr = row.getValue('booking_nr') as string;
+          return <ReservationNrCell reservationNr={reservationNr} />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-12" />,
@@ -167,7 +167,7 @@ export default function ReservationsTable({
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Room`
         },
-        size: 100,
+        size: 140,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -196,7 +196,7 @@ export default function ReservationsTable({
           headerTitle: t`Guests`
         },
         size: 180,
-        enableSorting: true,
+        enableSorting: false,
         enableHiding: true,
         enableResizing: true
       },
@@ -211,13 +211,13 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return <DateCell isoDate={row.original.booking_from} />;
+          return <DateCell isoDate={row.original.booking_from.toISOString()} />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Arrival`
         },
-        size: 120,
+        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -233,13 +233,13 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return <DateCell isoDate={row.original.booking_to} />;
+          return <DateCell isoDate={row.original.booking_to.toISOString()} />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Departure`
         },
-        size: 120,
+        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -319,7 +319,8 @@ export default function ReservationsTable({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true, // Enable manual pagination for server-side
-    manualSorting: true // Enable manual sorting for server-side
+    manualSorting: true, // Enable manual sorting for server-side
+    enableSortingRemoval: false
   });
 
   return (

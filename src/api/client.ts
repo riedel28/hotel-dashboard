@@ -1,6 +1,13 @@
 import axios, { AxiosError, isAxiosError } from 'axios';
 import z from 'zod';
 
+type UnauthorizedHandler = (() => void) | null;
+let unauthorizedHandler: UnauthorizedHandler = null;
+
+function setUnauthorizedHandler(handler: UnauthorizedHandler) {
+  unauthorizedHandler = handler;
+}
+
 // Axios client configured with inline timeout and headers.
 // baseURL is sourced from environment (VITE_API_BASE_URL).
 const client = axios.create({
@@ -11,10 +18,30 @@ const client = axios.create({
   }
 });
 
+client.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('tanstack.auth.token');
+    if (token) {
+      config.headers = config.headers ?? {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+
+  return config;
+});
+
 // Pass through responses and errors unchanged
 client.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  (error) => {
+    if (isAxiosError(error)) {
+      const status = error.response?.status;
+      if (status === 401 || status === 403) {
+        unauthorizedHandler?.();
+      }
+    }
+    return Promise.reject(error);
+  }
 );
 
 function handleApiError(err: unknown, context: string): never {
@@ -29,4 +56,4 @@ function handleApiError(err: unknown, context: string): never {
   throw err instanceof Error ? err : new Error(String(err));
 }
 
-export { client, handleApiError };
+export { client, handleApiError, setUnauthorizedHandler };

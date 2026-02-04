@@ -16,7 +16,7 @@ export async function authenticateToken(
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
-      res.status(401).json({ error: 'Access token required' });
+      return res.status(401).json({ error: 'Access token required' });
     }
 
     const payload = await verifyToken(token);

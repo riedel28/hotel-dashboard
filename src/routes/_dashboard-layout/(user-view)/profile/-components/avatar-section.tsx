@@ -1,7 +1,6 @@
-import { useRef, useState } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Camera, Trash2 } from 'lucide-react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,6 +12,13 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 
 interface AvatarSectionProps {
   currentAvatar?: string | null;
@@ -24,9 +30,18 @@ export function AvatarSection({
   userInitials = 'U'
 }: AvatarSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewUrlRef = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [avatar, setAvatar] = useState<string | null>(currentAvatar || null);
   const { t } = useLingui();
+  const fileInputId = useId();
+
+  const cleanupPreview = () => {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = null;
+    }
+  };
 
   const handleFileSelect = async (file: File) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -48,6 +63,8 @@ export function AvatarSection({
     try {
       // Create preview URL
       const previewUrl = URL.createObjectURL(file);
+      cleanupPreview();
+      previewUrlRef.current = previewUrl;
       setAvatar(previewUrl);
 
       // TODO: Implement API call to upload avatar
@@ -56,9 +73,13 @@ export function AvatarSection({
       toast.success(t`Avatar updated successfully`);
     } catch {
       toast.error(t`Error uploading avatar`);
+      cleanupPreview();
       setAvatar(currentAvatar || null);
     } finally {
       setIsLoading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -73,6 +94,7 @@ export function AvatarSection({
     setIsLoading(true);
 
     try {
+      cleanupPreview();
       // TODO: Implement API call to remove avatar
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
@@ -82,12 +104,21 @@ export function AvatarSection({
       toast.error(t`Error removing avatar`);
     } finally {
       setIsLoading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
+
+  useEffect(() => {
+    return () => {
+      cleanupPreview();
+    };
+  });
 
   return (
     <Card>
@@ -100,34 +131,38 @@ export function AvatarSection({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-20 w-20 border-2 border-border">
-              <AvatarImage src={avatar || undefined} alt="Profile picture" />
+        <FieldSet className="gap-4">
+          <Field orientation="horizontal" className="items-start gap-4">
+            <Avatar className="size-20 border border-border">
+              <AvatarImage src={avatar || undefined} alt={t`Profile picture`} />
               <AvatarFallback className="text-lg font-semibold">
                 {userInitials}
               </AvatarFallback>
             </Avatar>
+            <FieldContent className="gap-3">
+              <FieldLabel htmlFor={fileInputId} className="sr-only">
+                <Trans>Profile picture upload</Trans>
+              </FieldLabel>
+              <div className="flex flex-col gap-2">
+                <Button
+                  type="button"
+                  onClick={handleUploadClick}
+                  disabled={isLoading}
+                  variant="outline"
+                  size="sm"
+                  className="w-fit"
+                >
+                  <Camera className="mr-2 h-4 w-4" />
+                  {avatar ? (
+                    <Trans>Change Image</Trans>
+                  ) : (
+                    <Trans>Upload Image</Trans>
+                  )}
+                </Button>
 
-            <div className="flex flex-col gap-2">
-              <Button
-                onClick={handleUploadClick}
-                disabled={isLoading}
-                variant="outline"
-                size="sm"
-                className="w-fit"
-              >
-                <Camera className="mr-2 h-4 w-4" />
-                {avatar ? (
-                  <Trans>Change Image</Trans>
-                ) : (
-                  <Trans>Upload Image</Trans>
-                )}
-              </Button>
-
-              {avatar && (
-                <div className="relative">
+                {avatar && (
                   <Button
+                    type="button"
                     onClick={handleRemoveAvatar}
                     disabled={isLoading}
                     variant="ghost"
@@ -137,23 +172,23 @@ export function AvatarSection({
                     <Trash2 className="mr-2 h-4 w-4" />
                     <Trans>Remove Image</Trans>
                   </Button>
-                </div>
-              )}
-            </div>
-          </div>
+                )}
+              </div>
+              <FieldDescription className="text-xs">
+                <Trans>Supported formats: JPG, PNG, GIF (max 5MB)</Trans>
+              </FieldDescription>
+            </FieldContent>
+          </Field>
+        </FieldSet>
 
-          <p className="text-xs text-muted-foreground">
-            <Trans>Supported formats: JPG, PNG, GIF (max 5MB)</Trans>
-          </p>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/jpg,image/png,image/gif"
-            onChange={handleFileInputChange}
-            className="hidden"
-          />
-        </div>
+        <input
+          id={fileInputId}
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/gif"
+          onChange={handleFileInputChange}
+          className="hidden"
+        />
       </CardContent>
     </Card>
   );

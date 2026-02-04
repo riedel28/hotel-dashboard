@@ -1,18 +1,16 @@
+import { SearchIcon } from 'lucide-react';
 import { useCallback, useState } from 'react';
-
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput
+} from '@/components/ui/input-group';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
-import { type VariantProps } from 'class-variance-authority';
-import { Search } from 'lucide-react';
-
-import { Input, InputWrapper, inputVariants } from '@/components/ui/input';
 
 import { cn } from '@/lib/utils';
 
 interface SearchInputProps
-  extends Omit<
-    React.ComponentProps<'input'> & VariantProps<typeof inputVariants>,
-    'onChange' | 'value' | 'type'
-  > {
+  extends Omit<React.ComponentProps<'input'>, 'onChange' | 'value' | 'type'> {
   value?: string;
   wrapperClassName?: string;
   onChange?: (value: string) => void;
@@ -26,7 +24,6 @@ export function SearchInput({
   onChange,
   className = '',
   disabled = false,
-  variant,
   debounceMs,
   wrapperClassName = '',
   ...inputProps
@@ -58,18 +55,19 @@ export function SearchInput({
   };
 
   return (
-    <InputWrapper className={cn(wrapperClassName)}>
-      <Search />
-      <Input
+    <InputGroup className={cn(wrapperClassName)}>
+      <InputGroupAddon align="inline-start">
+        <SearchIcon />
+      </InputGroupAddon>
+      <InputGroupInput
         type="search"
         value={inputValue}
         onChange={handleInputChange}
         disabled={disabled}
-        variant={variant}
-        className={cn('pl-8', className)}
+        className={className}
         placeholder={placeholder}
         {...inputProps}
       />
-    </InputWrapper>
+    </InputGroup>
   );
 }

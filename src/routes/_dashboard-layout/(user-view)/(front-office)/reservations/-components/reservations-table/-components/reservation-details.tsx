@@ -1,8 +1,7 @@
-import type { ReactNode } from 'react';
-
-import type { CheckinMethod, Reservation } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import dayjs from 'dayjs';
+import type { ReactNode } from 'react';
+import type { CheckinMethod, Reservation } from '@/api/reservations';
 
 import { Code } from '@/components/ui/code';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
@@ -43,9 +42,9 @@ export function ReservationDetails({ reservation }: ReservationDetailsProps) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
-              <Trans>Reservation ID</Trans>
+              <Trans>Reservation Number</Trans>
             </span>
-            <span className="text-sm">{reservation.id}</span>
+            <span className="text-sm">{reservation.booking_nr}</span>
           </div>
 
           <div className="flex items-center justify-between">

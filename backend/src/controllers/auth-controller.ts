@@ -28,7 +28,10 @@ async function register(req: Request, res: Response) {
         email: users.email,
         first_name: users.first_name,
         last_name: users.last_name,
-        created_at: users.created_at
+        selected_property_id: users.selected_property_id,
+        created_at: users.created_at,
+        updated_at: users.updated_at,
+        is_admin: users.is_admin
       });
 
     // Generate JWT Token
@@ -36,7 +39,8 @@ async function register(req: Request, res: Response) {
       id: String(newUser.id),
       email: newUser.email,
       first_name: newUser.first_name || '',
-      last_name: newUser.last_name || ''
+      last_name: newUser.last_name || '',
+      is_admin: newUser.is_admin
     });
 
     res.status(201).json({
@@ -51,7 +55,7 @@ async function register(req: Request, res: Response) {
 
 async function login(req: Request, res: Response) {
   try {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
 
     // Find user
     const [user] = await db.select().from(users).where(eq(users.email, email));
@@ -71,15 +75,22 @@ async function login(req: Request, res: Response) {
     }
 
     // Generate JWT
-    const token = await generateToken({
-      id: String(user.id),
-      email: user.email,
-      first_name: user.first_name || '',
-      last_name: user.last_name || ''
-    });
+    const token = await generateToken(
+      {
+        id: String(user.id),
+        email: user.email,
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        is_admin: user.is_admin
+      },
+      { rememberMe: Boolean(rememberMe) }
+    );
+
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = user;
 
     res.status(200).json({
-      user,
+      user: userWithoutPassword,
       token
     });
   } catch (error) {

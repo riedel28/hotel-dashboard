@@ -1,24 +1,51 @@
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
-
+import { useAuth } from '@/auth';
 import { useView } from '@/contexts/view-context';
 import { useRouteViewDetection } from '@/hooks/use-route-view-detection';
-import { useNavigate } from '@tanstack/react-router';
 
 export function AutoViewSwitcher() {
   const { currentView, setCurrentView } = useView();
   const { targetView, shouldSwitchView, currentPath } = useRouteViewDetection();
-
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
+  // Enforce view restrictions based on user admin status
   useEffect(() => {
-    if (shouldSwitchView && targetView && targetView !== currentView) {
-      // Only switch if we're not already in the correct view
-      setCurrentView(targetView);
+    if (!isAuthenticated || !user) {
+      return;
+    }
 
-      // Redirect to start page since current page might not be accessible in new view
+    // Force non-admin users out of admin view (always enforce)
+    if (!user.is_admin && currentView === 'admin') {
+      setCurrentView('user');
       if (currentPath !== '/') {
         navigate({ to: '/' });
       }
+    }
+  }, [
+    isAuthenticated,
+    user?.is_admin,
+    currentView,
+    setCurrentView,
+    currentPath,
+    navigate
+  ]);
+
+  // Route-based view switching (blocks admin view for non-admin users)
+  useEffect(() => {
+    if (!shouldSwitchView || !targetView || targetView === currentView) {
+      return;
+    }
+
+    // Block switching to admin view for non-admin users
+    if (targetView === 'admin' && !user?.is_admin) {
+      return;
+    }
+
+    setCurrentView(targetView);
+    if (currentPath !== '/') {
+      navigate({ to: '/' });
     }
   }, [
     targetView,
@@ -26,8 +53,9 @@ export function AutoViewSwitcher() {
     currentView,
     setCurrentView,
     navigate,
-    currentPath
+    currentPath,
+    user?.is_admin
   ]);
 
-  return null; // This component doesn't render anything
+  return null;
 }
