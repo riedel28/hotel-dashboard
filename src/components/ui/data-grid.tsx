@@ -1,24 +1,27 @@
 'use client';
 
-import { ReactNode, createContext, useContext } from 'react';
-
 import {
-  ColumnFiltersState,
-  RowData,
-  SortingState,
-  Table
+  type ColumnFiltersState,
+  type RowData,
+  type SortingState,
+  type Table
 } from '@tanstack/react-table';
+import { createContext, type ReactNode, useContext } from 'react';
 
 import { cn } from '@/lib/utils';
 
 declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface ColumnMeta<TData extends RowData, TValue> {
     headerTitle?: string;
     headerClassName?: string;
     cellClassName?: string;
     skeleton?: ReactNode;
     expandedContent?: (row: TData) => ReactNode;
+    /**
+     * Used to keep TanStack's `TValue` generic parameter "in use" for TS/IDE
+     * diagnostics. You generally shouldn't set this.
+     */
+    __valueType?: TValue;
   }
 }
 
@@ -92,17 +95,18 @@ export interface DataGridProps<TData extends object> {
   };
 }
 
+type DataGridContextRow = Record<string, unknown>;
+
 const DataGridContext = createContext<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  DataGridContextProps<any> | undefined
+  DataGridContextProps<DataGridContextRow> | undefined
 >(undefined);
 
-function useDataGrid() {
+function useDataGrid<TData extends object = DataGridContextRow>() {
   const context = useContext(DataGridContext);
   if (!context) {
     throw new Error('useDataGrid must be used within a DataGridProvider');
   }
-  return context;
+  return context as unknown as DataGridContextProps<TData>;
 }
 
 function DataGridProvider<TData extends object>({
@@ -113,8 +117,8 @@ function DataGridProvider<TData extends object>({
   return (
     <DataGridContext.Provider
       value={{
-        props,
-        table,
+        props: props as unknown as DataGridProps<DataGridContextRow>,
+        table: table as unknown as Table<DataGridContextRow>,
         recordCount: props.recordCount,
         isLoading: props.isLoading || false
       }}
@@ -199,7 +203,7 @@ function DataGridContainer({
       data-slot="data-grid"
       className={cn(
         'grid w-full',
-        border && 'border-border rounded-lg border',
+        border && 'rounded-lg border border-border',
         className
       )}
     >

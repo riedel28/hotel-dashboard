@@ -18,6 +18,6 @@ export function useDebouncedCallback<T extends (...args: string[]) => void>(
         callback(...args);
       }, delay);
     }) as T,
-    [callback, delay]
+    []
   );
 }

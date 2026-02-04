@@ -12,7 +12,7 @@ export function CategoriesEmptyState({
 }: CategoriesEmptyStateProps) {
   return (
     <div className="flex min-h-[140px] flex-col items-center justify-center gap-3 py-4">
-      <div className="text-muted-foreground text-center text-sm text-pretty">
+      <div className="text-center text-sm text-pretty text-muted-foreground">
         <Trans>No categories yet. Add a category to get started.</Trans>
       </div>
       <Button variant="secondary" className="mt-1" onClick={onAddCategory}>

@@ -28,12 +28,12 @@
  *   onBack={() => navigate(-1)}
  * />
  */
-import * as React from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { useNavigate, useRouter } from '@tanstack/react-router';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { ArrowLeft, Home, Search } from 'lucide-react';
+import * as React from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -139,13 +139,13 @@ function NotFound({
       )}
 
       {title && (
-        <h3 className="text-card-foreground mb-2 text-xl font-semibold">
+        <h3 className="mb-2 text-xl font-semibold text-card-foreground">
           {title || <Trans>Page not found</Trans>}
         </h3>
       )}
 
       {message && (
-        <p className="text-card-foreground mb-8 text-base leading-relaxed">
+        <p className="mb-8 text-base leading-relaxed text-card-foreground">
           {message || (
             <Trans>Sorry, we couldn't find the page you're looking for.</Trans>
           )}

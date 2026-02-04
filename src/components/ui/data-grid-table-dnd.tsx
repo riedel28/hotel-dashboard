@@ -1,31 +1,30 @@
-import { CSSProperties, Fragment, useId } from 'react';
-
 import {
+  closestCenter,
   DndContext,
   type DragEndEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  closestCenter,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import {
-  SortableContext,
   horizontalListSortingStrategy,
+  SortableContext,
   useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Cell,
-  Header,
-  HeaderGroup,
-  Row,
-  flexRender
+  type Cell,
+  flexRender,
+  type Header,
+  type HeaderGroup,
+  type Row
 } from '@tanstack/react-table';
 import { GripVertical } from 'lucide-react';
+import { type CSSProperties, Fragment, useId } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -83,9 +82,8 @@ function DataGridTableDndHeader<TData>({
     >
       <div className="flex items-center justify-start gap-0.5">
         <Button
-          mode="icon"
           size="sm"
-          variant="dim"
+          variant="ghost"
           className="-ms-2 size-6"
           {...attributes}
           {...listeners}
@@ -125,12 +123,12 @@ function DataGridTableDndCell<TData>({ cell }: { cell: Cell<TData, unknown> }) {
   );
 }
 
-function DataGridTableDnd<TData>({
+function DataGridTableDnd<TData extends object>({
   handleDragEnd
 }: {
   handleDragEnd: (event: DragEndEvent) => void;
 }) {
-  const { table, isLoading, props } = useDataGrid();
+  const { table, isLoading, props } = useDataGrid<TData>();
   const pagination = table.getState().pagination;
 
   const sensors = useSensors(
@@ -196,11 +194,12 @@ function DataGridTableDnd<TData>({
                 </DataGridTableBodyRowSkeleton>
               ))
             ) : table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row: Row<TData>, index) => {
+              table.getRowModel().rows.map((row, index) => {
+                const typedRow = row as Row<TData>;
                 return (
-                  <Fragment key={row.id}>
-                    <DataGridTableBodyRow row={row} key={index}>
-                      {row
+                  <Fragment key={typedRow.id}>
+                    <DataGridTableBodyRow row={typedRow} key={index}>
+                      {typedRow
                         .getVisibleCells()
                         .map((cell: Cell<TData, unknown>) => {
                           return (
@@ -214,8 +213,8 @@ function DataGridTableDnd<TData>({
                           );
                         })}
                     </DataGridTableBodyRow>
-                    {row.getIsExpanded() && (
-                      <DataGridTableBodyRowExpandded row={row} />
+                    {typedRow.getIsExpanded() && (
+                      <DataGridTableBodyRowExpandded row={typedRow} />
                     )}
                   </Fragment>
                 );

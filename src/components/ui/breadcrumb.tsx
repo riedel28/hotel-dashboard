@@ -1,8 +1,7 @@
-import * as React from 'react';
-
 import { Trans } from '@lingui/react/macro';
-import { Slot } from '@radix-ui/react-slot';
+import { Link, type LinkProps } from '@tanstack/react-router';
 import { MoreHorizontal } from 'lucide-react';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -15,7 +14,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        'text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5',
+        'flex flex-wrap items-center gap-1.5 text-sm wrap-break-word text-muted-foreground sm:gap-2.5',
         className
       )}
       {...props}
@@ -34,18 +33,13 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
 }
 
 function BreadcrumbLink({
-  asChild,
   className,
   ...props
-}: React.ComponentProps<'a'> & {
-  asChild?: boolean;
-}) {
-  const Comp = asChild ? Slot : 'a';
-
+}: LinkProps<'a'> & { className?: string }) {
   return (
-    <Comp
+    <Link
       data-slot="breadcrumb-link"
-      className={cn('hover:text-foreground transition-colors', className)}
+      className={cn('transition-colors hover:text-foreground', className)}
       {...props}
     />
   );
@@ -58,7 +52,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn('text-foreground font-normal', className)}
+      className={cn('font-normal text-foreground', className)}
       {...props}
     />
   );
@@ -77,7 +71,7 @@ function BreadcrumbSeparator({
       className={cn('[&>svg]:size-3.5', className)}
       {...props}
     >
-      {children ?? <span className="text-foreground/30 text-sm">/</span>}
+      {children ?? <span className="text-sm text-foreground/30">/</span>}
     </li>
   );
 }

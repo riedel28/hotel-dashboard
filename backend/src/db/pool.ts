@@ -1,18 +1,23 @@
-import { Pool, type QueryResultRow } from 'pg';
+import { remember } from '@epic-web/remember';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
-const databaseUrl = process.env.DATABASE_URL;
+import { env, isProd } from '../../env.ts';
+import * as schema from './schema.ts';
 
-if (!databaseUrl) {
-  throw new Error('DATABASE_URL is required');
+const createPool = () => {
+  return new Pool({
+    connectionString: env.DATABASE_URL
+  });
+};
+
+let client;
+
+if (isProd()) {
+  client = createPool();
+} else {
+  client = remember('dbPool', () => createPool());
 }
 
-export const pool = new Pool({
-  connectionString: databaseUrl
-});
-
-export async function query<T extends QueryResultRow = QueryResultRow>(
-  text: string,
-  params?: (string | number | boolean | null)[]
-): Promise<{ rows: T[] }> {
-  return pool.query<T>(text, params);
-}
+export const db = drizzle({ client, schema });
+export default db;

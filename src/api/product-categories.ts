@@ -1,4 +1,4 @@
-import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
+import { client } from '@/api/client';
 
 export type ProductCategory = {
   id: number;
@@ -38,69 +38,53 @@ export function transformFlatCategoriesToTree(
 
   return roots;
 }
+type ProductCategoryRaw = {
+  id: string | number;
+  title: string;
+  parent_id: string | number | null;
+};
+
 async function fetchProductCategories(): Promise<ProductCategory[]> {
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  const response = await fetch(
-    buildApiUrl(getEndpointUrl('productCategories'))
+  const { data } = await client.get<ProductCategoryRaw[]>(
+    '/product-categories'
   );
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-
-  const data = await response.json();
 
   // Ensure id and parent_id are numbers since JSON server returns them as strings
-  return data.map(
-    (category: {
-      id: string | number;
-      title: string;
-      parent_id: string | number | null;
-    }) => ({
-      ...category,
-      id: Number(category.id),
-      parent_id: category.parent_id ? Number(category.parent_id) : null
-    })
-  );
+  return data.map((category) => ({
+    ...category,
+    id: Number(category.id),
+    parent_id: category.parent_id ? Number(category.parent_id) : null
+  }));
 }
 
 async function fetchProductCategoryById(id: number): Promise<ProductCategory> {
   await new Promise((resolve) => setTimeout(resolve, 300));
-  const response = await fetch(buildResourceUrl('productCategories', id));
-  if (response.status === 404) {
-    throw new Error('Category not found');
-  }
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  const data = await response.json();
+  const { data } = await client.get<ProductCategoryRaw>(
+    `/product-categories/${id}`
+  );
 
   // Ensure id is a number since JSON server returns it as a string
   return {
     ...data,
-    id: Number(data.id)
+    id: Number(data.id),
+    parent_id: data.parent_id ? Number(data.parent_id) : null
   };
 }
 
 async function createProductCategory(
   payload: Omit<ProductCategory, 'id'>
 ): Promise<ProductCategory> {
-  const response = await fetch(
-    buildApiUrl(getEndpointUrl('productCategories')),
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }
+  const { data } = await client.post<ProductCategoryRaw>(
+    '/product-categories',
+    payload
   );
-  if (!response.ok) {
-    throw new Error('Failed to create category');
-  }
-  const data = await response.json();
   // Ensure id is a number since JSON server returns it as a string
   return {
     ...data,
-    id: Number(data.id)
+    id: Number(data.id),
+    parent_id: data.parent_id ? Number(data.parent_id) : null
   };
 }
 
@@ -108,29 +92,20 @@ async function updateProductCategory(
   id: number,
   payload: Partial<Omit<ProductCategory, 'id'>>
 ): Promise<ProductCategory> {
-  const response = await fetch(buildResourceUrl('productCategories', id), {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  if (!response.ok) {
-    throw new Error('Failed to update category');
-  }
-  const data = await response.json();
+  const { data } = await client.patch<ProductCategoryRaw>(
+    `/product-categories/${id}`,
+    payload
+  );
   // Ensure id is a number since JSON server returns it as a string
   return {
     ...data,
-    id: Number(data.id)
+    id: Number(data.id),
+    parent_id: data.parent_id ? Number(data.parent_id) : null
   };
 }
 
 async function deleteProductCategory(id: number): Promise<void> {
-  const response = await fetch(buildResourceUrl('productCategories', id), {
-    method: 'DELETE'
-  });
-  if (!response.ok) {
-    throw new Error('Failed to delete category');
-  }
+  await client.delete(`/product-categories/${id}`);
 }
 
 export {

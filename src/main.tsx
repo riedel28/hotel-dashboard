@@ -1,27 +1,36 @@
-import { StrictMode } from 'react';
-import React from 'react';
-
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { AuthProvider, useAuth } from './auth';
 import { Toaster } from './components/ui/sonner';
 import './globals.css';
+import { setUnauthorizedHandler } from './api/client';
 import { loadCatalog } from './i18n';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
 // Create a new router instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      staleTime: 1000 * 60 * 5 // 5 minutes
+    }
+  }
+});
+
 const router = createRouter({
   routeTree,
   context: {
     // auth will initially be undefined
     // We'll be passing down the auth state from within a React component
-    auth: undefined!
+    auth: undefined!,
+    queryClient
   }
 });
 
@@ -35,7 +44,32 @@ declare module '@tanstack/react-router' {
 // Render the app
 function InnerApp() {
   const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
+  const logout = auth.logout;
+
+  React.useEffect(() => {
+    const handler = () => {
+      void logout()
+        .catch((error) => {
+          console.error('Auto logout failed', error);
+        })
+        .finally(() => {
+          void router.navigate({
+            to: '/auth/login',
+            search: {
+              redirect: router.state.location.href
+            }
+          });
+        });
+    };
+
+    setUnauthorizedHandler(handler);
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [logout]);
+
+  return <RouterProvider router={router} context={{ auth, queryClient }} />;
 }
 
 function App() {
@@ -53,6 +87,7 @@ function App() {
       <AuthProvider>
         <InnerApp />
       </AuthProvider>
+      <Toaster richColors />
     </I18nProvider>
   );
 }
@@ -60,13 +95,6 @@ function App() {
 const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false
-      }
-    }
-  });
 
   root.render(
     <StrictMode>
@@ -76,7 +104,6 @@ if (!rootElement.innerHTML) {
           initialIsOpen={false}
           buttonPosition="bottom-left"
         />
-        <Toaster richColors />
       </QueryClientProvider>
     </StrictMode>
   );

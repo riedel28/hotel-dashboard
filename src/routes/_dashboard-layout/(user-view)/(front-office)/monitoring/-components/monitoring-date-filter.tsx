@@ -1,0 +1,211 @@
+'use client';
+
+import { Trans } from '@lingui/react/macro';
+import dayjs from 'dayjs';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { useState } from 'react';
+import { type DateRange } from 'react-day-picker';
+
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
+
+import { cn } from '@/lib/utils';
+
+interface MonitoringDateFilterProps {
+  from?: Date;
+  to?: Date;
+  className?: string;
+  onDateChange?: (dateRange: { from?: Date; to?: Date } | undefined) => void;
+}
+
+export function MonitoringDateFilter({
+  from,
+  to,
+  className = '',
+  onDateChange
+}: MonitoringDateFilterProps) {
+  const today = new Date();
+
+  const presets = [
+    { label: 'Today', range: { from: today, to: today } },
+    {
+      label: 'Yesterday',
+      range: {
+        from: dayjs().subtract(1, 'day').toDate(),
+        to: dayjs().subtract(1, 'day').toDate()
+      }
+    },
+    {
+      label: 'Last 7 days',
+      range: { from: dayjs().subtract(6, 'day').toDate(), to: today }
+    },
+    {
+      label: 'Last 30 days',
+      range: { from: dayjs().subtract(29, 'day').toDate(), to: today }
+    },
+    {
+      label: 'Month to date',
+      range: { from: dayjs().startOf('month').toDate(), to: today }
+    },
+    {
+      label: 'Last month',
+      range: {
+        from: dayjs().subtract(1, 'month').startOf('month').toDate(),
+        to: dayjs().subtract(1, 'month').endOf('month').toDate()
+      }
+    },
+    {
+      label: 'Year to date',
+      range: { from: dayjs().startOf('year').toDate(), to: today }
+    },
+    {
+      label: 'Last year',
+      range: {
+        from: dayjs().subtract(1, 'year').startOf('year').toDate(),
+        to: dayjs().subtract(1, 'year').endOf('year').toDate()
+      }
+    }
+  ];
+
+  const defaultDate: DateRange = {
+    from: undefined,
+    to: undefined
+  };
+
+  const initialDate: DateRange | undefined =
+    from || to
+      ? {
+          from: from || undefined,
+          to: to || undefined
+        }
+      : defaultDate;
+
+  const [date, setDate] = useState<DateRange | undefined>(initialDate);
+  const [month, setMonth] = useState(today);
+  const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  const currentDateFromUrl: DateRange | undefined =
+    from || to
+      ? {
+          from: from || undefined,
+          to: to || undefined
+        }
+      : defaultDate;
+
+  const displayDate =
+    date?.from?.getTime() === currentDateFromUrl?.from?.getTime() &&
+    date?.to?.getTime() === currentDateFromUrl?.to?.getTime()
+      ? date
+      : currentDateFromUrl;
+
+  const handleApply = () => {
+    if (date) {
+      setDate(date);
+      onDateChange?.(date);
+    }
+    setIsPopoverOpen(false);
+  };
+
+  const handleReset = () => {
+    setDate(defaultDate);
+    onDateChange?.(defaultDate);
+    setIsPopoverOpen(false);
+  };
+
+  const handleSelect = (selected: DateRange | undefined) => {
+    const newDate = {
+      from: selected?.from || undefined,
+      to: selected?.to || undefined
+    };
+    setDate(newDate);
+    setSelectedPreset(null);
+
+    if (newDate.from && newDate.to) {
+      onDateChange?.(newDate);
+    }
+  };
+
+  const handlePresetSelect = (preset: (typeof presets)[0]) => {
+    setDate(preset.range);
+    setMonth(preset.range.from || today);
+    setSelectedPreset(preset.label);
+    onDateChange?.(preset.range);
+  };
+
+  return (
+    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+      <PopoverTrigger
+        className={cn(
+          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
+          className
+        )}
+      >
+        <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
+
+        {displayDate?.from ? (
+          displayDate.to ? (
+            <>
+              {dayjs(displayDate.from).format('DD.MM.YYYY')}
+              {' - '}
+              {dayjs(displayDate.to).format('DD.MM.YYYY')}
+            </>
+          ) : (
+            dayjs(displayDate.from).format('DD.MM.YYYY')
+          )
+        ) : (
+          <span className="text-muted-foreground">
+            <Trans>Pick a date range</Trans>
+          </span>
+        )}
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <div className="flex max-sm:flex-col">
+          <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
+            <div className="h-full border-border py-2 sm:border-e">
+              <div className="flex flex-col gap-0.5 px-2">
+                {presets.map((preset, index) => (
+                  <Button
+                    key={index}
+                    type="button"
+                    variant="ghost"
+                    className={cn(
+                      'h-8 w-full justify-start font-normal text-xs',
+                      selectedPreset === preset.label && 'bg-accent'
+                    )}
+                    onClick={() => handlePresetSelect(preset)}
+                  >
+                    {preset.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <Calendar
+            autoFocus
+            mode="range"
+            month={month}
+            onMonthChange={setMonth}
+            showOutsideDays={false}
+            selected={displayDate}
+            onSelect={handleSelect}
+            numberOfMonths={2}
+          />
+        </div>
+        <div className="flex items-center justify-end gap-1.5 border-t border-border p-3">
+          <Button variant="outline" onClick={handleReset} size="sm">
+            <Trans>Reset</Trans>
+          </Button>
+          <Button onClick={handleApply} size="sm">
+            <Trans>Apply</Trans>
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}

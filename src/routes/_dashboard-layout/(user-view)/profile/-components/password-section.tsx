@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -14,14 +14,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+import { Field, FieldError, FieldLabel, FieldSet } from '@/components/ui/field';
 import { PasswordInput } from '@/components/ui/password-input';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
 
@@ -76,69 +69,86 @@ export function PasswordSection() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FieldSet className="gap-4">
+            <Controller
               control={form.control}
               name="currentPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
                     <Trans>Current Password</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <PasswordInput {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  </FieldLabel>
+                  <PasswordInput
+                    {...field}
+                    id={field.name}
+                    autoComplete="current-password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
 
-            <FormField
+            <Controller
               control={form.control}
               name="newPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
                     <Trans>New Password</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="space-y-2">
-                      <PasswordInput {...field} />
-                      <PasswordStrengthMeter password={field.value} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  </FieldLabel>
+                  <div className="space-y-2">
+                    <PasswordInput
+                      {...field}
+                      id={field.name}
+                      autoComplete="new-password"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.isDirty && (
+                      <PasswordStrengthMeter password={field.value ?? ''} />
+                    )}
+                  </div>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
 
-            <FormField
+            <Controller
               control={form.control}
               name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
                     <Trans>Confirm New Password</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <PasswordInput {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  </FieldLabel>
+                  <PasswordInput
+                    {...field}
+                    id={field.name}
+                    autoComplete="new-password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
+          </FieldSet>
 
-            <div className="flex justify-end">
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                <Trans>Save Changes</Trans>
-              </Button>
-            </div>
-          </form>
-        </Form>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <Trans>Save Changes</Trans>
+            </Button>
+          </div>
+        </form>
       </CardContent>
     </Card>
   );

@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -e
+
+# Add bun to PATH if it exists
+if [ -d "$HOME/.bun/bin" ]; then
+  export PATH="$HOME/.bun/bin:$PATH"
+fi
+
+echo "husky: running lint"
+bun run --silent lint
+
+echo "husky: running type-check:all"
+bun run --silent type-check:all
+
+

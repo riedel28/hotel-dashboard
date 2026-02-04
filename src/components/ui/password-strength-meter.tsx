@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { CheckIcon, XIcon } from 'lucide-react';
+import { useMemo } from 'react';
 
 interface PasswordStrengthMeterProps {
   password: string;
@@ -12,25 +11,40 @@ export function PasswordStrengthMeter({
 }: PasswordStrengthMeterProps) {
   const { t } = useLingui();
 
-  const checkStrength = (pass: string) => {
-    const requirements = [
-      { regex: /.{8,}/, text: 'profile.password.requirement.minLength' },
-      { regex: /[0-9]/, text: 'profile.password.requirement.number' },
-      { regex: /[a-z]/, text: 'profile.password.requirement.lowercase' },
-      { regex: /[A-Z]/, text: 'profile.password.requirement.uppercase' },
+  const requirements = useMemo(
+    () => [
+      {
+        regex: /.{8,}/,
+        text: t`At least 8 characters`
+      },
+      {
+        regex: /[0-9]/,
+        text: t`Contains a number`
+      },
+      {
+        regex: /[a-z]/,
+        text: t`Contains a lowercase letter`
+      },
+      {
+        regex: /[A-Z]/,
+        text: t`Contains an uppercase letter`
+      },
       {
         regex: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
-        text: 'profile.password.requirement.specialChar'
+        text: t`Contains a special character`
       }
-    ];
+    ],
+    [t]
+  );
 
-    return requirements.map((req) => ({
-      met: req.regex.test(pass),
-      text: req.text
-    }));
-  };
-
-  const strength = checkStrength(password);
+  const strength = useMemo(
+    () =>
+      requirements.map((req) => ({
+        met: req.regex.test(password),
+        text: req.text
+      })),
+    [password, requirements]
+  );
 
   const strengthScore = useMemo(() => {
     return strength.filter((req) => req.met).length;
@@ -56,7 +70,7 @@ export function PasswordStrengthMeter({
     <div>
       {/* Password strength indicator */}
       <div
-        className="bg-border mt-3 mb-4 h-1 w-full overflow-hidden rounded-full"
+        className="mt-3 mb-4 h-1 w-full overflow-hidden rounded-full bg-border"
         role="progressbar"
         aria-valuenow={strengthScore}
         aria-valuemin={0}
@@ -70,13 +84,15 @@ export function PasswordStrengthMeter({
       </div>
 
       {/* Password strength description */}
-      <p className="text-foreground mb-2 text-sm font-medium">
-        {getStrengthText(strengthScore)}
-        <Trans>Enter a password. Must contain:</Trans>
+      <p className="mb-2 text-sm font-medium text-foreground">
+        {getStrengthText(strengthScore)}{' '}
       </p>
 
       {/* Password requirements list */}
-      <ul className="space-y-1.5" aria-label={t`Password strength`}>
+      <ul
+        className="space-y-1.5"
+        aria-label={t`Password strength requirements`}
+      >
         {strength.map((req, index) => (
           <li key={index} className="flex items-center gap-2">
             {req.met ? (
@@ -97,7 +113,7 @@ export function PasswordStrengthMeter({
                 req.met ? 'text-emerald-600' : 'text-muted-foreground'
               }`}
             >
-              {req.text}
+              {req.text}{' '}
               <span className="sr-only">
                 {req.met ? (
                   <Trans> - Requirement met</Trans>

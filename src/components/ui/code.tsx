@@ -1,11 +1,9 @@
-import * as React from 'react';
-
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { Slot } from '@radix-ui/react-slot';
-import { type VariantProps, cva } from 'class-variance-authority';
-import { Check, Copy } from 'lucide-react';
-
+import { cva, type VariantProps } from 'class-variance-authority';
+import { CheckIcon, CopyIcon } from 'lucide-react';
+import * as React from 'react';
 import { Button } from '@/components/ui/button';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
 import { cn } from '@/lib/utils';
 
@@ -67,16 +65,15 @@ function Code({
       </Comp>
       {showCopyButton && textToCopy && (
         <Button
-          mode="icon"
           size="sm"
           variant="ghost"
-          className="hover:bg-background h-4 w-4 p-0 opacity-90 hover:opacity-100"
+          className="size-4 hover:bg-background"
           onClick={() => copy(textToCopy)}
         >
           {copied ? (
-            <Check className="h-3 w-3" />
+            <CheckIcon className="size-4 text-badge-success-foreground" />
           ) : (
-            <Copy className="h-3 w-3" />
+            <CopyIcon className="size-4" />
           )}
         </Button>
       )}

@@ -1,20 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-
 import { Trans } from '@lingui/react/macro';
-import {
-  endOfMonth,
-  endOfYear,
-  startOfMonth,
-  startOfYear,
-  subDays,
-  subMonths,
-  subYears
-} from 'date-fns';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { DateRange } from 'react-day-picker';
+import { useState } from 'react';
+import { type DateRange } from 'react-day-picker';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -46,24 +36,39 @@ function ReservationDateFilter({
     { label: 'Today', range: { from: today, to: today } },
     {
       label: 'Yesterday',
-      range: { from: subDays(today, 1), to: subDays(today, 1) }
+      range: {
+        from: dayjs().subtract(1, 'day').toDate(),
+        to: dayjs().subtract(1, 'day').toDate()
+      }
     },
-    { label: 'Last 7 days', range: { from: subDays(today, 6), to: today } },
-    { label: 'Last 30 days', range: { from: subDays(today, 29), to: today } },
-    { label: 'Month to date', range: { from: startOfMonth(today), to: today } },
+    {
+      label: 'Last 7 days',
+      range: { from: dayjs().subtract(6, 'day').toDate(), to: today }
+    },
+    {
+      label: 'Last 30 days',
+      range: { from: dayjs().subtract(29, 'day').toDate(), to: today }
+    },
+    {
+      label: 'Month to date',
+      range: { from: dayjs().startOf('month').toDate(), to: today }
+    },
     {
       label: 'Last month',
       range: {
-        from: startOfMonth(subMonths(today, 1)),
-        to: endOfMonth(subMonths(today, 1))
+        from: dayjs().subtract(1, 'month').startOf('month').toDate(),
+        to: dayjs().subtract(1, 'month').endOf('month').toDate()
       }
     },
-    { label: 'Year to date', range: { from: startOfYear(today), to: today } },
+    {
+      label: 'Year to date',
+      range: { from: dayjs().startOf('year').toDate(), to: today }
+    },
     {
       label: 'Last year',
       range: {
-        from: startOfYear(subYears(today, 1)),
-        to: endOfYear(subYears(today, 1))
+        from: dayjs().subtract(1, 'year').startOf('year').toDate(),
+        to: dayjs().subtract(1, 'year').endOf('year').toDate()
       }
     }
   ];
@@ -139,44 +144,42 @@ function ReservationDateFilter({
 
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          mode="input"
-          placeholder={!displayDate?.from && !displayDate?.to}
-          className={cn('shadow-xs', className)}
-        >
-          <CalendarIcon />
-          {displayDate?.from ? (
-            displayDate.to ? (
-              <>
-                {dayjs(displayDate.from).format('DD.MM.YYYY')}
-                {' - '}
-                {dayjs(displayDate.to).format('DD.MM.YYYY')}
-              </>
-            ) : (
-              dayjs(displayDate.to).format('DD.MM.YYYY')
-            )
+      <PopoverTrigger
+        className={cn(
+          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
+          className
+        )}
+      >
+        <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
+
+        {displayDate?.from ? (
+          displayDate.to ? (
+            <>
+              {dayjs(displayDate.from).format('DD.MM.YYYY')}
+              {' - '}
+              {dayjs(displayDate.to).format('DD.MM.YYYY')}
+            </>
           ) : (
-            <span>
-              <Trans>Pick a date range</Trans>
-            </span>
-          )}
-        </Button>
+            dayjs(displayDate.from).format('DD.MM.YYYY')
+          )
+        ) : (
+          <span className="text-muted-foreground">
+            <Trans>Pick a date range</Trans>
+          </span>
+        )}
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="center">
+      <PopoverContent className="w-auto p-0" align="start">
         <div className="flex max-sm:flex-col">
-          <div className="border-border relative max-sm:order-1 max-sm:border-t sm:w-36">
-            <div className="border-border h-full py-2 sm:border-e">
-              <div className="flex flex-col gap-[2px] px-2">
+          <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
+            <div className="h-full border-border py-2 sm:border-e">
+              <div className="flex flex-col gap-0.5 px-2">
                 {presets.map((preset, index) => (
                   <Button
                     key={index}
                     type="button"
                     variant="ghost"
                     className={cn(
-                      'h-8 w-full justify-start',
+                      'h-8 w-full justify-start font-normal',
                       selectedPreset === preset.label && 'bg-accent'
                     )}
                     onClick={() => handlePresetSelect(preset)}
@@ -198,7 +201,7 @@ function ReservationDateFilter({
             numberOfMonths={2}
           />
         </div>
-        <div className="border-border flex items-center justify-end gap-1.5 border-t p-3">
+        <div className="flex items-center justify-end gap-1.5 border-t border-border p-3">
           <Button variant="outline" onClick={handleReset}>
             <Trans>Reset</Trans>
           </Button>

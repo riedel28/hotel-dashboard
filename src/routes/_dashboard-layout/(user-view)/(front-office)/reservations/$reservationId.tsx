@@ -1,6 +1,3 @@
-import { Suspense } from 'react';
-
-import { fetchReservationById } from '@/api/reservations';
 import { Trans } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
@@ -8,7 +5,9 @@ import {
 } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { reservationByIdQueryOptions } from '@/api/reservations';
 
 import {
   Breadcrumb,
@@ -29,8 +28,6 @@ import { FormSkeleton } from '@/components/ui/form-skeleton';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
 
-// fetchReservationById moved to @/api/reservations
-
 function ReservationPage() {
   return (
     <div className="space-y-6">
@@ -38,13 +35,13 @@ function ReservationPage() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">
+              <BreadcrumbLink to="/">
                 <Trans>Home</Trans>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/reservations">
+              <BreadcrumbLink to="/reservations">
                 <Trans>Reservations</Trans>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -73,7 +70,9 @@ function ReservationPage() {
                       <ErrorDisplayTitle>
                         <Trans>Something went wrong</Trans>
                       </ErrorDisplayTitle>
-                      <ErrorDisplayMessage>{error.message}</ErrorDisplayMessage>
+                      <ErrorDisplayMessage>
+                        {error instanceof Error ? error.message : String(error)}
+                      </ErrorDisplayMessage>
                       <ErrorDisplayActions>
                         <Button
                           variant="destructive"
@@ -99,16 +98,26 @@ function ReservationPage() {
 
 function ReservationForm() {
   const { reservationId } = Route.useParams();
+  const reservationQuery = useSuspenseQuery(
+    reservationByIdQueryOptions(reservationId)
+  );
 
-  const reservationQuery = useSuspenseQuery({
-    queryKey: ['reservations', reservationId],
-    queryFn: () => fetchReservationById(reservationId)
-  });
+  const data = reservationQuery.data;
+  const reservationData = {
+    booking_nr: data.booking_nr,
+    guests: data.guests,
+    adults: data.adults ?? 1,
+    youth: data.youth ?? 0,
+    children: data.children ?? 0,
+    infants: data.infants ?? 0,
+    purpose: data.purpose ?? 'private',
+    room: data.room ?? data.room_name
+  };
 
   return (
     <EditReservationForm
       reservationId={reservationId}
-      reservationData={reservationQuery.data}
+      reservationData={reservationData}
     />
   );
 }
@@ -116,5 +125,7 @@ function ReservationForm() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
 )({
+  loader: ({ context: { queryClient }, params: { reservationId } }) =>
+    queryClient.ensureQueryData(reservationByIdQueryOptions(reservationId)),
   component: ReservationPage
 });

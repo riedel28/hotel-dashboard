@@ -1,13 +1,12 @@
-import { useState } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { PlusCircle } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type { Guest } from 'shared/types/reservations';
 import { z } from 'zod';
-
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -16,16 +15,14 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-
-import type { Guest } from './edit-reservation-form';
+import { cn } from '@/lib/utils';
 
 interface AddGuestModalProps {
   onAddGuest: (guest: Guest) => void;
@@ -51,10 +48,13 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
 
   const onSubmit = (data: AddGuestFormData) => {
     const newGuest: Guest = {
-      id: Date.now().toString(), // Simple ID generation for demo
+      id: Date.now(),
+      reservation_id: 0,
       first_name: data.firstName,
       last_name: data.lastName,
-      nationality_code: 'DE'
+      nationality_code: 'DE',
+      created_at: new Date(),
+      updated_at: null
     };
 
     onAddGuest(newGuest);
@@ -71,11 +71,11 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button type="button" variant="secondary" className="w-full">
-          <PlusCircle className="mr-2 h-4 w-4" />
-          <Trans>New Guest</Trans>
-        </Button>
+      <DialogTrigger
+        className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}
+      >
+        <PlusCircle className="mr-2 h-4 w-4" />
+        <Trans>New Guest</Trans>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -83,60 +83,72 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
             <Trans>Add New Guest</Trans>
           </DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              e.stopPropagation();
-              form.handleSubmit(onSubmit)(e);
-            }}
-            className="space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>First Name</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder={t`Enter first name`} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <form
+          onSubmit={(e) => {
+            e.stopPropagation();
+            form.handleSubmit(onSubmit)(e);
+          }}
+          className="space-y-4"
+        >
+          <FieldSet className="gap-4">
+            <FieldGroup className="gap-4">
+              <Controller
+                control={form.control}
+                name="firstName"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>First Name</Trans>
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      placeholder={t`Enter first name`}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>Last Name</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder={t`Enter last name`} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <Controller
+                control={form.control}
+                name="lastName"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Last Name</Trans>
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      placeholder={t`Enter last name`}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
 
-            <div className="flex justify-end gap-2 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
-              >
-                <Trans>Cancel</Trans>
-              </Button>
-              <Button type="submit">
-                <Trans>Add Guest</Trans>
-              </Button>
-            </div>
-          </form>
-        </Form>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
+              <Trans>Cancel</Trans>
+            </Button>
+            <Button type="submit">
+              <Trans>Add Guest</Trans>
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

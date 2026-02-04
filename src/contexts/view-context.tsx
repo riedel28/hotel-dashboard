@@ -1,9 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-
 import { useLingui } from '@lingui/react/macro';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-type ViewType = 'user' | 'admin';
+export type ViewType = 'user' | 'admin';
 
 interface ViewContextType {
   currentView: ViewType;

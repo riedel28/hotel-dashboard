@@ -49,27 +49,28 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## Code Quality
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This project uses [Biome](https://biomejs.dev) for linting and formatting, providing a fast, unified toolchain that replaces ESLint and Prettier.
 
-- Configure the top-level `parserOptions` property like this:
+### Available Scripts
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname
-  }
-};
-```
+- `bun run lint` - Check for linting issues
+- `bun run check` - Check if files are formatted correctly
+- `bun run format` - Format all files and fix linting issues
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Configuration
+
+Biome configuration is in `biome.json`. The configuration includes:
+- TypeScript/React linting rules
+- Code formatting (spaces, single quotes, semicolons)
+- Import organization
+- Tailwind CSS support
+
+### Known Limitations
+
+- **Tailwind CSS Class Sorting**: Biome doesn't support automatic Tailwind class sorting. Classes will need to be sorted manually if desired.
+- **Import Sorting**: Biome's import sorting may differ from Prettier's `importOrder` plugin. The sorting groups imports by "distance from the user" rather than custom groups.
 
 ## Internationalization (i18n)
 
@@ -92,10 +93,10 @@ This project uses [Lingui](https://lingui.dev) for internationalization.
    - Strings/validators/toasts: `import { t } from '@lingui/core/macro'` → `t\`Email is required\``
    - In loops/arrays: use `msg` + `useLingui()._` if you need descriptors, or just `t` for strings
 2. Extract new/changed messages:
-   - `npm run lingui:extract`
+   - `bun run lingui:extract`
 3. Fill translations in `src/locales/de/messages.po` (and other locales as needed)
 4. Compile catalogs:
-   - `npm run lingui:compile`
+   - `bun run lingui:compile`
 
 ## Runtime loading
 

@@ -1,114 +1,138 @@
-import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
-import { Reservation } from '@/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table';
-import { t } from '@lingui/core/macro';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
+import { client, handleApiError } from '@/api/client';
 
-type ReservationsResponse = {
-  index: Reservation[];
-  page: number;
-  per_page: number;
-  total: number;
-  pageCount: number;
-};
-
-// Details shape expected by the edit reservation form
-export type ReservationDetails = {
-  booking_nr: string;
-  guests: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    nationality_code: 'DE' | 'US' | 'AT' | 'CH';
-  }[];
-  adults: number;
-  youth: number;
-  children: number;
-  infants: number;
-  purpose: 'private' | 'business';
-  room: string;
-};
+import {
+  type CheckinMethod,
+  type CreateReservationData,
+  createReservationSchema,
+  type FetchReservationsParams,
+  type FetchReservationsResponse,
+  fetchReservationsParamsSchema,
+  fetchReservationsResponseSchema,
+  type Guest,
+  guestSchema,
+  type Reservation,
+  type ReservationStatus,
+  reservationSchema,
+  reservationStatusSchema,
+  type UpdateReservationData
+} from '../../shared/types/reservations';
 
 function reservationsQueryOptions({
   page,
-  perPage,
+  per_page,
   status,
-  q
-}: {
-  page: number;
-  perPage: number;
-  status?: string;
-  q?: string;
-}) {
+  q,
+  from,
+  to,
+  sort_by,
+  sort_order
+}: FetchReservationsParams) {
   return queryOptions({
-    queryKey: ['reservations', page, perPage, status, q],
-    queryFn: () => fetchReservations({ page, perPage, status, q }),
+    queryKey: [
+      'reservations',
+      page,
+      per_page,
+      status,
+      q,
+      from,
+      to,
+      sort_by,
+      sort_order
+    ],
+    queryFn: () =>
+      fetchReservations({
+        page,
+        per_page,
+        status,
+        q,
+        from,
+        to,
+        sort_by,
+        sort_order
+      }),
     placeholderData: keepPreviousData
   });
 }
 
-async function fetchReservations({
-  page,
-  perPage,
-  status,
-  q
-}: {
-  page: number;
-  perPage: number;
-  status?: string;
-  q?: string;
-}): Promise<ReservationsResponse> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const params: Record<string, string | number> = {
-    page: page,
-    per_page: perPage
-  };
-
-  if (status && status !== 'all') {
-    params.status = status;
-  }
-
-  if (q) {
-    params.q = q;
-  }
-
-  const response = await fetch(
-    buildApiUrl(getEndpointUrl('reservations'), params)
-  );
-  if (!response.ok) {
-    throw new Error(t`Network response was not ok`);
-  }
-
-  const data = await response.json();
-
-  return data;
+function reservationByIdQueryOptions(id: string) {
+  return queryOptions({
+    queryKey: ['reservations', id],
+    queryFn: () => fetchReservationById(id)
+  });
 }
 
-async function fetchReservationById(id: string): Promise<ReservationDetails> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const response = await fetch(buildResourceUrl('reservations', id));
-
-  if (response.status === 404) {
-    throw new Error(t`Reservation not found`);
+async function fetchReservations(
+  params: FetchReservationsParams
+): Promise<FetchReservationsResponse> {
+  try {
+    const validatedParams = fetchReservationsParamsSchema.parse(params);
+    const response = await client.get('/reservations', {
+      params: validatedParams
+    });
+    return fetchReservationsResponseSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchReservations');
   }
-
-  if (!response.ok) {
-    throw new Error(t`Network response was not ok`);
-  }
-
-  const raw = await response.json();
-  const details: ReservationDetails = {
-    booking_nr: raw?.booking_nr ?? '',
-    guests: Array.isArray(raw?.guests) ? raw.guests : [],
-    adults: typeof raw?.adults === 'number' ? raw.adults : 0,
-    youth: typeof raw?.youth === 'number' ? raw.youth : 0,
-    children: typeof raw?.children === 'number' ? raw.children : 0,
-    infants: typeof raw?.infants === 'number' ? raw.infants : 0,
-    purpose: raw?.purpose === 'business' ? 'business' : 'private',
-    room: raw?.room ?? raw?.room_name ?? ''
-  };
-  return details;
 }
 
-export { fetchReservations, reservationsQueryOptions, fetchReservationById };
+async function fetchReservationById(id: string): Promise<Reservation> {
+  try {
+    const response = await client.get(`/reservations/${id}`);
+    return reservationSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchReservationById');
+  }
+}
+
+async function updateReservationById(
+  id: string,
+  updates: UpdateReservationData
+): Promise<Reservation> {
+  try {
+    const response = await client.patch(`/reservations/${id}`, updates);
+    return reservationSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'updateReservationById');
+  }
+}
+
+async function createReservation(
+  data: CreateReservationData
+): Promise<Reservation> {
+  try {
+    const response = await client.post('/reservations', data);
+    return reservationSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'createReservation');
+  }
+}
+
+async function deleteReservationById(id: string): Promise<void> {
+  try {
+    await client.delete(`/reservations/${id}`);
+  } catch (err) {
+    handleApiError(err, 'deleteReservationById');
+  }
+}
+
+export {
+  fetchReservations,
+  fetchReservationById,
+  updateReservationById,
+  createReservation,
+  deleteReservationById,
+  fetchReservationsParamsSchema,
+  fetchReservationsResponseSchema,
+  createReservationSchema,
+  guestSchema,
+  reservationSchema,
+  reservationStatusSchema,
+  reservationsQueryOptions,
+  reservationByIdQueryOptions,
+  type Reservation,
+  type Guest,
+  type CheckinMethod,
+  type ReservationStatus,
+  type CreateReservationData
+};

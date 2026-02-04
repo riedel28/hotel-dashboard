@@ -1,7 +1,6 @@
-import { ReactNode } from 'react';
-
 import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { type ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -34,7 +33,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
   const { t } = useLingui();
 
   const defaultProps: Partial<DataGridPaginationProps> = {
-    sizes: [5, 10, 25, 50, 100],
+    sizes: [10, 25, 50, 100],
     sizesLabel: t`Show`,
     sizesDescription: t`Per page`,
     sizesSkeleton: <Skeleton className="h-8 w-44" />,
@@ -94,7 +93,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
         <Button
           key={i}
           size="sm"
-          mode="icon"
           variant="ghost"
           className={cn(btnBaseClasses, 'text-muted-foreground', {
             'bg-accent text-accent-foreground': pageIndex === i
@@ -118,7 +116,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
       return (
         <Button
           size="sm"
-          mode="icon"
           className={btnBaseClasses}
           variant="ghost"
           onClick={() => updatePagination(currentGroupStart - 1)}
@@ -138,7 +135,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
           className={btnBaseClasses}
           variant="ghost"
           size="sm"
-          mode="icon"
           onClick={() => updatePagination(currentGroupEnd)}
         >
           <Trans>...</Trans>
@@ -161,7 +157,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mergedProps?.infoSkeleton
         ) : (
           <>
-            <div className="text-muted-foreground order-2 text-sm text-nowrap sm:order-1">
+            <div className="order-2 text-sm text-nowrap text-muted-foreground sm:order-1">
               {mergedProps?.info?.startsWith('pagination.') ? (
                 <Trans>
                   {from} - {to} of {recordCount}
@@ -174,7 +170,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
               <div className="order-1 flex items-center space-x-1 sm:order-2">
                 <Button
                   size="sm"
-                  mode="icon"
                   variant="ghost"
                   className={btnArrowClasses}
                   onClick={() => {
@@ -198,7 +193,6 @@ function DataGridPagination(props: DataGridPaginationProps) {
 
                 <Button
                   size="sm"
-                  mode="icon"
                   variant="ghost"
                   className={btnArrowClasses}
                   onClick={() => {
@@ -223,19 +217,18 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mergedProps?.sizesSkeleton
         ) : (
           <>
-            <div className="text-muted-foreground text-sm">
+            <div className="text-sm text-muted-foreground">
               <Trans>Rows per page</Trans>
             </div>
             <Select
               value={`${pageSize}`}
-              indicatorPosition="right"
               onValueChange={(value) => {
                 const newPageSize = Number(value);
                 updatePagination(0, newPageSize); // Reset to first page when changing page size
               }}
             >
-              <SelectTrigger className="w-fit" size="sm">
-                <SelectValue placeholder={`${pageSize}`} />
+              <SelectTrigger className="w-fit min-w-[70px]" size="sm">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent side="top" className="min-w-[50px]">
                 {mergedProps?.sizes?.map((size: number) => (

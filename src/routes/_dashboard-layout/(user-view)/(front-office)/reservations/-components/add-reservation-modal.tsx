@@ -1,13 +1,13 @@
-import React from 'react';
-
-import { buildApiUrl, getEndpointUrl } from '@/config/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LinkIcon, Loader2, PlusCircle } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { createReservation } from '@/api/reservations';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,14 +19,12 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input, InputWrapper } from '@/components/ui/input';
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 import {
   Select,
   SelectContent,
@@ -36,60 +34,24 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-type FormValues = {
-  booking_nr: string;
-  room: string;
-  page_url: string;
-};
+const addReservationSchema = z.object({
+  room_name: z.string().min(1, t`Room selection is required`)
+});
 
-async function createReservation(data: FormValues) {
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  const response = await fetch(buildApiUrl(getEndpointUrl('reservations')), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      id: Math.floor(Math.random() * 1000),
-      state: 'pending',
-      guest_email: 'jd@example.com',
-      primary_guest_name: 'John Doe',
-      booking_id: Math.floor(Math.random() * 1000),
-      completed_at: new Date().toISOString(),
-      last_opened_at: new Date().toISOString(),
-      received_at: new Date().toISOString(),
-      booking_nr: data.booking_nr,
-      room_name: data.room,
-      page_url: data.page_url,
-      guests: [],
-      balance: Math.floor(Math.random() * 1000)
-    })
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create reservation');
-  }
-  return response.json();
+type AddReservationFormData = z.infer<typeof addReservationSchema>;
+
+async function createReservationAction(data: AddReservationFormData) {
+  return createReservation(data);
 }
 
 export function AddReservationModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
-  const { t } = useLingui();
 
-  const addReservationSchema = z.object({
-    booking_nr: z
-      .string()
-      .min(1, t({ message: 'Reservation number is required' })),
-    room: z.string().min(1, t({ message: 'Room selection is required' })),
-    page_url: z.url(t({ message: 'Please enter a valid URL' }))
-  });
-
-  const form = useForm<FormValues>({
+  const form = useForm<AddReservationFormData>({
     resolver: zodResolver(addReservationSchema),
     defaultValues: {
-      booking_nr: '',
-      room: '',
-      page_url: ''
+      room_name: ''
     }
   });
 
@@ -101,129 +63,105 @@ export function AddReservationModal() {
   };
 
   const createReservationMutation = useMutation({
-    mutationFn: createReservation,
+    mutationFn: createReservationAction,
     onSuccess: () => {
-      console.log('Mutation succeeded, about to invalidate queries');
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
-      console.log('Queries invalidated, about to close modal');
       handleOpenChange(false);
-      console.log('Modal closed, showing toast');
-      toast.success('Reservation created successfully');
-      console.log('Success flow completed');
+      toast.success(t`Reservation created successfully`);
     },
-    onError: (error) => {
-      console.error('Mutation failed:', error);
-      toast.error('Failed to create reservation: ' + error.message);
+    onError: () => {
+      toast.error(t`Failed to create reservation`);
     }
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: AddReservationFormData) => {
     createReservationMutation.mutate(data);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          <Trans>Add Reservation</Trans>
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button>
+            <PlusCircleIcon className="mr-2 h-4 w-4" />
+            <Trans>Add Reservation</Trans>
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
             <Trans>Create New Reservation</Trans>
           </DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="booking_nr"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>Reservation Nr.</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t`Enter reservation number`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="room"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>Room</Trans>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t`Select a room`} />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FieldSet className="gap-6">
+            <FieldGroup className="gap-4">
+              <Controller
+                control={form.control}
+                name="room_name"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Room</Trans>
+                    </FieldLabel>
+                    <Select
+                      value={field.value || ''}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                      >
+                        <SelectValue>
+                          {(value) =>
+                            value ? (
+                              <span>{value}</span>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {t`Select a room`}
+                              </span>
+                            )
+                          }
+                        </SelectValue>
                       </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectGroup>
-                        {[101, 102, 103, 104, 105].map((room) => (
-                          <SelectItem key={room} value={room.toString()}>
-                            <Trans>Room {room}</Trans>
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="page_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans>Page URL</Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <InputWrapper>
-                      <LinkIcon />
-                      <Input {...field} placeholder={t`Enter page URL`} />
-                    </InputWrapper>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleOpenChange(false)}
-              >
-                <Trans>Cancel</Trans>
-              </Button>
-              <Button
-                type="submit"
-                disabled={createReservationMutation.isPending}
-              >
-                {createReservationMutation.isPending && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <SelectContent>
+                        <SelectGroup>
+                          {[101, 102, 103, 104, 105].map((room) => (
+                            <SelectItem key={room} value={room.toString()}>
+                              <Trans>Room {room}</Trans>
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-                <Trans>Create</Trans>
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              />
+            </FieldGroup>
+          </FieldSet>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleOpenChange(false)}
+            >
+              <Trans>Cancel</Trans>
+            </Button>
+            <Button
+              type="submit"
+              disabled={createReservationMutation.isPending}
+            >
+              {createReservationMutation.isPending && (
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <Trans>Create</Trans>
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

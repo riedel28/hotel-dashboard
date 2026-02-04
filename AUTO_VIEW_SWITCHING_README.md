@@ -80,13 +80,11 @@ When auto-switching occurs, users see a toast notification:
 ### **Core Components**
 
 1. **Route Matcher** (`src/utils/route-matcher.ts`)
-
    - Contains regex patterns for all routes
    - Handles nested routes with `(\/.*)?` pattern
    - Returns the appropriate view for any given pathname
 
 2. **Route Detection Hook** (`src/hooks/use-route-view-detection.ts`)
-
    - Uses TanStack Router's `useLocation` hook
    - Detects current pathname and determines target view
    - Returns detection results

@@ -1,22 +1,21 @@
-import * as React from 'react';
-
-import {
-  type NestedProductCategory,
-  type ProductCategory,
-  createProductCategory,
-  deleteProductCategory,
-  fetchProductCategories,
-  transformFlatCategoriesToTree,
-  updateProductCategory
-} from '@/api/product-categories';
-import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
 import type { ItemInstance } from '@headless-tree/core';
+import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { XIcon } from 'lucide-react';
+import * as React from 'react';
 import { toast } from 'sonner';
+import {
+  createProductCategory,
+  deleteProductCategory,
+  fetchProductCategories,
+  type NestedProductCategory,
+  type ProductCategory,
+  transformFlatCategoriesToTree,
+  updateProductCategory
+} from '@/api/product-categories';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
