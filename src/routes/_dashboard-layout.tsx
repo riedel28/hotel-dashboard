@@ -395,12 +395,10 @@ function DashboardLayout() {
       <SidebarProvider>
         <AutoViewSwitcher />
         <DashboardSidebar />
-        <SidebarInset className="flex h-full flex-col">
+        <SidebarInset className="flex h-full min-w-0 flex-col">
           <Header />
-          <main className="flex-1 overflow-auto">
-            <section className="px-6 py-4 pb-8">
-              <Outlet />
-            </section>
+          <main className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8">
+            <Outlet />
           </main>
         </SidebarInset>
       </SidebarProvider>
