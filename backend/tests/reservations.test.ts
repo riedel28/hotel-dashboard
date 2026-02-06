@@ -5,6 +5,7 @@ import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
 
 describe('Reservations API', () => {
   let authToken: string;
+  let adminToken: string;
 
   beforeEach(async () => {
     // Clean up first to ensure a clean slate
@@ -14,6 +15,12 @@ describe('Reservations API', () => {
       password: 'Password123!'
     });
     authToken = token;
+
+    const { token: aToken } = await createTestUser({
+      is_admin: true,
+      email: `admin-${Date.now()}@example.com`
+    });
+    adminToken = aToken;
   });
 
   afterEach(async () => {
@@ -267,7 +274,7 @@ describe('Reservations API', () => {
     test('should delete reservation successfully', async () => {
       const response = await request(app)
         .delete(`/api/reservations/${reservationId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
       expect(response.body.id).toBe(reservationId);
@@ -275,14 +282,14 @@ describe('Reservations API', () => {
       // Verify reservation is actually deleted
       await request(app)
         .get(`/api/reservations/${reservationId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(404);
     });
 
     test('should return 404 for non-existent reservation', async () => {
       await request(app)
         .delete('/api/reservations/99999')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(404);
     });
 

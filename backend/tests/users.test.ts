@@ -11,6 +11,7 @@ import {
 
 describe('Users API', () => {
   let authToken: string;
+  let adminToken: string;
   let testUserId: number;
 
   beforeEach(async () => {
@@ -21,6 +22,12 @@ describe('Users API', () => {
     });
     authToken = token;
     testUserId = user.id;
+
+    const { token: aToken } = await createTestUser({
+      is_admin: true,
+      email: `admin-${Date.now()}@example.com`
+    });
+    adminToken = aToken;
   });
 
   afterEach(async () => {
@@ -227,7 +234,7 @@ describe('Users API', () => {
 
       const response = await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(200);
 
@@ -247,7 +254,7 @@ describe('Users API', () => {
 
       const response = await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(200);
 
@@ -261,7 +268,7 @@ describe('Users API', () => {
 
       const response = await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(200);
 
@@ -324,7 +331,7 @@ describe('Users API', () => {
 
       const response = await request(app)
         .delete(`/api/users/${userToDelete.id}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
       expect(response.body.id).toBe(userToDelete.id);
@@ -332,7 +339,7 @@ describe('Users API', () => {
       // Verify user is actually deleted
       await request(app)
         .get(`/api/users/${userToDelete.id}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(404);
     });
 
@@ -345,20 +352,20 @@ describe('Users API', () => {
 
       await request(app)
         .delete(`/api/users/${userToDelete.id}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(200);
 
       // User should be deleted
       await request(app)
         .get(`/api/users/${userToDelete.id}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(404);
     });
 
     test('should return 404 for non-existent user', async () => {
       await request(app)
         .delete('/api/users/99999')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(404);
     });
 

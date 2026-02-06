@@ -15,6 +15,7 @@ import {
   updateReservation
 } from '../controllers/reservation-controller';
 import { authenticateToken } from '../middleware/auth';
+import { requireAdmin } from '../middleware/authorization';
 import {
   validateBody,
   validateParams,
@@ -47,9 +48,10 @@ router.patch(
   updateReservation
 );
 
-// Delete reservation
+// Delete reservation (admin only)
 router.delete(
   '/:id',
+  requireAdmin,
   validateParams(reservationIdParamsSchema),
   deleteReservation
 );
