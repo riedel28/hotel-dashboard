@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 
+import env from '../env';
 import { errorHandler, notFound } from './middleware/error';
 import authRouter from './routes/auth';
 import monitoringRouter from './routes/monitoring';
@@ -13,7 +14,7 @@ import usersRouter from './routes/users';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
