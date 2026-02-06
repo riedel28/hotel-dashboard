@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { z } from 'zod';
 
 import { login, register } from '../controllers/auth-controller';
+import { authenticateToken } from '../middleware/auth';
+import { requireAdmin } from '../middleware/authorization';
 import { validateBody } from '../middleware/validation';
 
 const router = Router();
@@ -22,7 +24,13 @@ const loginSchema = z.object({
   rememberMe: z.boolean().optional()
 });
 
-router.post('/register', validateBody(registerSchema), register);
+router.post(
+  '/register',
+  authenticateToken,
+  requireAdmin,
+  validateBody(registerSchema),
+  register
+);
 router.post('/login', validateBody(loginSchema), login);
 
 export { registerSchema, loginSchema };
