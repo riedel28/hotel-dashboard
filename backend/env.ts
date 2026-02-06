@@ -1,25 +1,15 @@
-import { env as loadEnv } from 'custom-env';
 import { z } from 'zod';
 
-process.env.APP_STAGE = process.env.APP_STAGE || 'dev';
+// Bun automatically loads .env files based on NODE_ENV:
+//   .env → .env.{development,production,test} → .env.local
 
-const isProduction = process.env.APP_STAGE === 'production';
-const isDevelopment = process.env.APP_STAGE === 'dev';
-const isTest = process.env.APP_STAGE === 'test';
-
-// Load .env file
-if (isDevelopment) {
-  loadEnv();
-} else if (isTest) {
-  loadEnv('test');
-}
+const isProduction = process.env.NODE_ENV === 'production';
 
 const envSchema = z.object({
   // Node environment
   NODE_ENV: z
     .enum(['development', 'production', 'test'])
     .default('development'),
-  APP_STAGE: z.enum(['dev', 'production', 'test']).default('dev'),
 
   // Server
   PORT: z.coerce.number().positive().default(5001),
