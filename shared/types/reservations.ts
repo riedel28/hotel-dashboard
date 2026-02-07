@@ -77,7 +77,7 @@ export const fetchReservationsParamsSchema = z.object({
     })
     .default(10)
     .optional(),
-  q: z.string().optional(),
+  q: z.string().max(200).optional(),
   status: reservationStatusSchema.default('all').optional(),
   from: z.iso.date().optional(),
   to: z.iso.date().optional(),

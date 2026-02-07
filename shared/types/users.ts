@@ -40,7 +40,7 @@ export const fetchUsersParamsSchema = z.object({
     })
     .default(10)
     .optional(),
-  q: z.string().optional(),
+  q: z.string().max(200).optional(),
   sort_by: sortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.default('desc').optional()
 });

@@ -10,12 +10,24 @@ const router = Router();
 
 const registerSchema = z.object({
   email: z.email('Invalid email format'),
-  first_name: z.string().min(1, 'First name is required'),
+  first_name: z
+    .string()
+    .min(1, 'First name is required')
+    .max(50, 'First name is too long'),
   last_name: z
     .string()
     .min(1, 'Last name is required')
     .max(50, 'Last name is too long'),
-  password: z.string().min(8, 'Passwords must be a least 8 characters')
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/\d/, 'Password must contain at least one number')
+    .regex(
+      /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+      'Password must contain at least one special character'
+    )
 });
 
 const loginSchema = z.object({

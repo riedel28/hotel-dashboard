@@ -7,7 +7,8 @@ import * as schema from './schema.ts';
 
 const createPool = () => {
   return new Pool({
-    connectionString: env.DATABASE_URL
+    connectionString: env.DATABASE_URL,
+    ...(isProd() && { ssl: { rejectUnauthorized: true } })
   });
 };
 

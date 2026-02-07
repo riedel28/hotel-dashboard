@@ -35,7 +35,9 @@ app.use(generalLimiter);
 app.use(cookieParser());
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
-app.use(morgan('dev'));
+if (env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
 
 app.get('/api/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
