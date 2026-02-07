@@ -1,4 +1,4 @@
-import { ilike } from 'drizzle-orm';
+import { count, ilike } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
@@ -26,11 +26,11 @@ async function getProperties(req: Request, res: Response) {
       .offset(offset);
 
     // Get total count for pagination
-    const allProperties = await db
-      .select({ id: propertiesTable.id })
+    const [{ total }] = await db
+      .select({ total: count() })
       .from(propertiesTable)
       .where(searchCondition);
-    const totalCount = allProperties.length;
+    const totalCount = total;
 
     // Transform database records to match API schema (id as string)
     const transformedProperties = properties.map((property) => ({
