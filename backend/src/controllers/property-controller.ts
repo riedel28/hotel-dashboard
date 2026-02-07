@@ -3,13 +3,14 @@ import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { properties as propertiesTable } from '../db/schema';
+import { escapeLikePattern } from '../utils/sql';
 
 async function getProperties(req: Request, res: Response) {
   try {
     const { page, per_page, q } = req.query;
 
     const searchCondition = q
-      ? ilike(propertiesTable.name, `%${q}%`)
+      ? ilike(propertiesTable.name, `%${escapeLikePattern(q as string)}%`)
       : undefined;
 
     const pageNum = Number(page) || 1;
