@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 
-import { login, register } from '../controllers/auth-controller';
+import { login, logout, register } from '../controllers/auth-controller';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/authorization';
 import { validateBody } from '../middleware/validation';
@@ -32,6 +32,7 @@ router.post(
   register
 );
 router.post('/login', validateBody(loginSchema), login);
+router.post('/logout', logout);
 
 export { registerSchema, loginSchema };
 

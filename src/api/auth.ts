@@ -25,6 +25,14 @@ async function register(user: RegisterData) {
   }
 }
 
+async function logout() {
+  try {
+    await client.post('/auth/logout');
+  } catch (err) {
+    handleApiError(err, 'logout');
+  }
+}
+
 async function updateSelectedProperty(
   propertyId: string | null
 ): Promise<User> {
@@ -38,4 +46,4 @@ async function updateSelectedProperty(
   }
 }
 
-export { login, register, updateSelectedProperty };
+export { login, logout, register, updateSelectedProperty };

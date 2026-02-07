@@ -13,21 +13,10 @@ function setUnauthorizedHandler(handler: UnauthorizedHandler) {
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }
-});
-
-client.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('tanstack.auth.token');
-    if (token) {
-      config.headers = config.headers ?? {};
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  }
-
-  return config;
 });
 
 // Pass through responses and errors unchanged

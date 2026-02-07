@@ -38,15 +38,13 @@ describe('Auth API', () => {
         .expect(201);
 
       expect(response.body).toHaveProperty('user');
-      expect(response.body).toHaveProperty('token');
       expect(response.body.user.email).toBe(userData.email);
       expect(response.body.user.first_name).toBe(userData.first_name);
       expect(response.body.user.last_name).toBe(userData.last_name);
       expect(response.body.user).not.toHaveProperty('password');
     });
 
-    // TODO: Enable when httpOnly cookie auth is implemented
-    test.skip('should return token in httpOnly cookie instead of response body', async () => {
+    test('should return token in httpOnly cookie instead of response body', async () => {
       const { token: adminToken } = await createTestUser({ is_admin: true });
 
       const uniqueEmail = `test-${Date.now()}@example.com`;
@@ -187,12 +185,10 @@ describe('Auth API', () => {
         .expect(200);
 
       expect(response.body).toHaveProperty('user');
-      expect(response.body).toHaveProperty('token');
       expect(response.body.user.email).toBe(user.email);
     });
 
-    // TODO: Enable when httpOnly cookie auth is implemented
-    test.skip('should return token in httpOnly cookie instead of response body', async () => {
+    test('should return token in httpOnly cookie instead of response body', async () => {
       const { user, rawPassword } = await createTestUser({
         password: 'Password123!'
       });
@@ -323,6 +319,25 @@ describe('Auth API', () => {
         .expect(200);
 
       expect(response.body.user).not.toHaveProperty('password');
+    });
+  });
+
+  describe('POST /auth/logout', () => {
+    test('should clear auth cookie and return 200', async () => {
+      const response = await request(app).post('/api/auth/logout').expect(200);
+
+      expect(response.body).toHaveProperty(
+        'message',
+        'Logged out successfully'
+      );
+      const cookies = response.headers['set-cookie'];
+      expect(cookies).toBeDefined();
+      const authCookie = Array.isArray(cookies)
+        ? cookies.find((c: string) => c.startsWith('auth_token='))
+        : cookies;
+      expect(authCookie).toBeDefined();
+      // clearCookie sets the value to empty and expires in the past
+      expect(authCookie).toContain('auth_token=');
     });
   });
 

@@ -20,7 +20,9 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.45.0",
     "drizzle-zod": "^0.8.3",

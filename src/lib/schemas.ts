@@ -30,8 +30,7 @@ export const userSchema = z.object({
 });
 
 export const authResponseSchema = z.object({
-  user: userSchema,
-  token: z.string()
+  user: userSchema
 });
 
 export type LoginData = z.infer<typeof loginSchema>;

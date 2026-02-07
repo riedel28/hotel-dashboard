@@ -1,13 +1,27 @@
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 
 import env from '../../env';
 import { db } from '../db/pool';
 import { users } from '../db/schema';
+import type { AuthenticatedRequest } from '../middleware/auth';
 import { generateToken } from '../utils/jwt';
 
-async function register(req: Request, res: Response) {
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+function setAuthCookie(res: Response, token: string, rememberMe = false) {
+  res.cookie('auth_token', token, {
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: rememberMe ? THIRTY_DAYS_MS : ONE_DAY_MS
+  });
+}
+
+async function register(req: AuthenticatedRequest, res: Response) {
   try {
     const { email, password, first_name, last_name } = req.body;
 
@@ -43,17 +57,16 @@ async function register(req: Request, res: Response) {
       is_admin: newUser.is_admin
     });
 
-    res.status(201).json({
-      user: newUser,
-      token
-    });
+    setAuthCookie(res, token);
+
+    res.status(201).json({ user: newUser });
   } catch (error) {
     console.error('Registration error:', error);
     res.status(500).json({ error: 'Failed to create user' });
   }
 }
 
-async function login(req: Request, res: Response) {
+async function login(req: AuthenticatedRequest, res: Response) {
   try {
     const { email, password, rememberMe } = req.body;
 
@@ -114,14 +127,18 @@ async function login(req: Request, res: Response) {
       { rememberMe: Boolean(rememberMe) }
     );
 
-    res.status(200).json({
-      user,
-      token
-    });
+    setAuthCookie(res, token, Boolean(rememberMe));
+
+    res.status(200).json({ user });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Failed to login' });
   }
 }
 
-export { register, login };
+async function logout(_req: AuthenticatedRequest, res: Response) {
+  res.clearCookie('auth_token', { path: '/' });
+  res.status(200).json({ message: 'Logged out successfully' });
+}
+
+export { register, login, logout };
