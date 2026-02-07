@@ -27,8 +27,13 @@ const AuthContext = React.createContext<AuthContext | null>(null);
 const userKey = 'tanstack.auth.user';
 
 function getStoredUser(): User | null {
-  const stored = localStorage.getItem(userKey);
-  return stored ? JSON.parse(stored) : null;
+  try {
+    const stored = localStorage.getItem(userKey);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    localStorage.removeItem(userKey);
+    return null;
+  }
 }
 
 function setStoredUser(user: User) {
