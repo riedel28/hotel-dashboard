@@ -9,7 +9,6 @@ type ProductRaw = {
 };
 
 async function fetchProducts(): Promise<Product[]> {
-  await new Promise((resolve) => setTimeout(resolve, 300));
   const { data } = await client.get<ProductRaw[]>('/products');
 
   // Ensure id and category_id are numbers since JSON server returns them as strings
@@ -21,7 +20,6 @@ async function fetchProducts(): Promise<Product[]> {
 }
 
 async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
-  await new Promise((resolve) => setTimeout(resolve, 300));
   const { data } = await client.get<ProductRaw[]>('/products', {
     params: { category_id: categoryId }
   });
@@ -35,7 +33,6 @@ async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
 }
 
 async function fetchProductById(id: number): Promise<Product> {
-  await new Promise((resolve) => setTimeout(resolve, 200));
   const { data } = await client.get<ProductRaw>(`/products/${id}`);
 
   // Ensure id and category_id are numbers since JSON server returns them as strings

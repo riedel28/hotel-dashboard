@@ -4,7 +4,16 @@ import {
   QueryErrorResetBoundary
 } from '@tanstack/react-query';
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import React from 'react';
+
+const TanStackRouterDevtools = import.meta.env.PROD
+  ? () => null
+  : React.lazy(() =>
+      import('@tanstack/react-router-devtools').then((res) => ({
+        default: res.TanStackRouterDevtools
+      }))
+    );
+
 import { RefreshCwIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
