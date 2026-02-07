@@ -43,10 +43,9 @@ export function PasswordSection() {
     }
   });
 
-  const onSubmit = async (data: PasswordFormData) => {
+  const onSubmit = async (_data: PasswordFormData) => {
     try {
       // TODO: Implement API call to change password
-      console.log('Password change data:', data);
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       toast.success(t`Password changed successfully`);

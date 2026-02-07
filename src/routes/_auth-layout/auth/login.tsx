@@ -31,7 +31,14 @@ const fallback = '/' as const;
 
 export const Route = createFileRoute('/_auth-layout/auth/login')({
   validateSearch: z.object({
-    redirect: z.string().optional().catch('')
+    redirect: z
+      .string()
+      .optional()
+      .catch('')
+      .transform((val) => {
+        if (!val || !val.startsWith('/') || val.startsWith('//')) return '';
+        return val;
+      })
   }),
   beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
@@ -54,8 +61,8 @@ function LoginPage() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: 'john@example.com',
-      password: 'very_cool_password',
+      email: '',
+      password: '',
       rememberMe: false
     }
   });

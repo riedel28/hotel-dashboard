@@ -30,7 +30,14 @@ const fallback = '/' as const;
 
 export const Route = createFileRoute('/_auth-layout/auth/sign-up')({
   validateSearch: z.object({
-    redirect: z.string().optional().catch('')
+    redirect: z
+      .string()
+      .optional()
+      .catch('')
+      .transform((val) => {
+        if (!val || !val.startsWith('/') || val.startsWith('//')) return '';
+        return val;
+      })
   }),
   beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
