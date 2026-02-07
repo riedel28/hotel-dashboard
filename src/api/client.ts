@@ -46,8 +46,10 @@ client.interceptors.response.use(
 
 function handleApiError(err: unknown, context: string): never {
   if (isAxiosError(err)) {
-    const ae = err as AxiosError<{ message?: string }>;
-    throw new Error(ae.response?.data?.message ?? ae.message);
+    const ae = err as AxiosError<{ error?: string; message?: string }>;
+    throw new Error(
+      ae.response?.data?.error ?? ae.response?.data?.message ?? ae.message
+    );
   }
   if (err instanceof z.ZodError) {
     console.error(`Validation error (${context}):`, err.issues);
