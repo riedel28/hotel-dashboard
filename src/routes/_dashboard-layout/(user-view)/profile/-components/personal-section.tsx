@@ -23,15 +23,15 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-const personalFormSchema = z.object({
-  firstName: z.string().min(1, t`First name is required`),
-  lastName: z.string().min(1, t`Last name is required`),
-  email: z.email(t`Invalid email address`)
-});
-
-type PersonalFormData = z.infer<typeof personalFormSchema>;
-
 export function PersonalSection() {
+  const personalFormSchema = z.object({
+    firstName: z.string().min(1, t`First name is required`),
+    lastName: z.string().min(1, t`Last name is required`),
+    email: z.email(t`Invalid email address`)
+  });
+
+  type PersonalFormData = z.infer<typeof personalFormSchema>;
+
   const form = useForm<PersonalFormData>({
     resolver: zodResolver(personalFormSchema),
     defaultValues: {
@@ -41,16 +41,9 @@ export function PersonalSection() {
     }
   });
 
-  const onSubmit = async (data: PersonalFormData) => {
-    try {
-      // TODO: Implement API call to update personal information
-      console.log('Updating profile with data:', data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      toast.success(t`Profile updated successfully`);
-    } catch {
-      toast.error(t`Error updating profile`);
-    }
+  const onSubmit = async (_data: PersonalFormData) => {
+    // TODO: Implement API call to update personal information
+    toast.warning(t`Profile update is not yet implemented`);
   };
 
   return (

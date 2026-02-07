@@ -31,13 +31,13 @@ interface RolesSectionProps {
   initialRoles?: number[];
 }
 
-const rolesFormSchema = z.object({
-  roles: z.array(z.number()).min(1, t`Please select at least one role`)
-});
-
-type RolesFormData = z.infer<typeof rolesFormSchema>;
-
 export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
+  const rolesFormSchema = z.object({
+    roles: z.array(z.number()).min(1, t`Please select at least one role`)
+  });
+
+  type RolesFormData = z.infer<typeof rolesFormSchema>;
+
   const form = useForm<RolesFormData>({
     resolver: zodResolver(rolesFormSchema),
     defaultValues: {
@@ -45,16 +45,9 @@ export function RolesSection({ initialRoles = [] }: RolesSectionProps) {
     }
   });
 
-  const onSubmit = async (data: RolesFormData) => {
-    try {
-      // TODO: Implement API call to update user roles
-      console.log('Updating roles with data:', data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      toast.success(t`Roles updated successfully`);
-    } catch {
-      toast.error(t`Error updating roles`);
-    }
+  const onSubmit = async (_data: RolesFormData) => {
+    // TODO: Implement API call to update user roles
+    toast.warning(t`Roles update is not yet implemented`);
   };
 
   return (
@@ -111,7 +104,7 @@ function RolesList({
   control,
   name
 }: {
-  control: Control<RolesFormData>;
+  control: Control<{ roles: number[] }>;
   name: 'roles';
 }) {
   const { data: roles } = useSuspenseQuery(rolesQueryOptions());
@@ -137,7 +130,9 @@ function RolesList({
                   onCheckedChange={(checked) => {
                     const nextRoles = checked
                       ? [...(field.value ?? []), role.id]
-                      : (field.value ?? []).filter((r) => r !== role.id);
+                      : (field.value ?? []).filter(
+                          (r: number) => r !== role.id
+                        );
                     field.onChange(nextRoles);
                   }}
                 />
