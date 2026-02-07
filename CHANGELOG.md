@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/riedel28/tanstack-dashboard/compare/v1.6.0...v1.6.1) (2026-02-07)
+
+
+### Bug Fixes
+
+* **routes:** standardize route paths by adding trailing slashes for consistency ([332300f](https://github.com/riedel28/tanstack-dashboard/commit/332300f6dfb1f0032f9904e721006bbf631298c8))
+
 # [1.6.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.5.0...v1.6.0) (2026-02-04)
 
 
