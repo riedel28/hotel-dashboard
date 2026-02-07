@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
+import env from '../../env';
 import { db } from '../db/pool';
 import { users } from '../db/schema';
 import { generateToken } from '../utils/jwt';
@@ -11,8 +12,7 @@ async function register(req: Request, res: Response) {
     const { email, password, first_name, last_name } = req.body;
 
     // Hash password
-    const saltRounds = parseInt(process.env.BCRYPT_ROUNDS || '12');
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, env.BCRYPT_ROUNDS);
 
     // Create user
     const [newUser] = await db
@@ -57,18 +57,46 @@ async function login(req: Request, res: Response) {
   try {
     const { email, password, rememberMe } = req.body;
 
-    // Find user
-    const [user] = await db.select().from(users).where(eq(users.email, email));
+    // Find user — fetch only the password for comparison
+    const [userPassword] = await db
+      .select({ id: users.id, password: users.password })
+      .from(users)
+      .where(eq(users.email, email));
 
-    if (!user) {
+    if (!userPassword) {
       return res.status(401).json({
         error: 'Invalid credentials'
       });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(
+      password,
+      userPassword.password
+    );
 
     if (!isValidPassword) {
+      return res.status(401).json({
+        error: 'Invalid credentials'
+      });
+    }
+
+    // Fetch user data without password for JWT and response
+    const [user] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        country_code: users.country_code,
+        is_admin: users.is_admin,
+        selected_property_id: users.selected_property_id,
+        created_at: users.created_at,
+        updated_at: users.updated_at
+      })
+      .from(users)
+      .where(eq(users.id, userPassword.id));
+
+    if (!user) {
       return res.status(401).json({
         error: 'Invalid credentials'
       });
@@ -86,11 +114,8 @@ async function login(req: Request, res: Response) {
       { rememberMe: Boolean(rememberMe) }
     );
 
-    // Return user without password
-    const { password: _, ...userWithoutPassword } = user;
-
     res.status(200).json({
-      user: userWithoutPassword,
+      user,
       token
     });
   } catch (error) {

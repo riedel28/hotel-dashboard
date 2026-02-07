@@ -2,9 +2,11 @@ import bcrypt from 'bcrypt';
 import { and, asc, count, desc, eq, ilike, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
+import env from '../../env';
 import { db } from '../db/pool';
 import { properties, roles, userRoles, users } from '../db/schema';
 import type { AuthenticatedRequest } from '../middleware/auth';
+import { escapeLikePattern } from '../utils/sql';
 
 async function getUsers(req: Request, res: Response) {
   try {
@@ -13,11 +15,12 @@ async function getUsers(req: Request, res: Response) {
     const conditions = [];
 
     if (q) {
+      const escaped = escapeLikePattern(q as string);
       conditions.push(
         or(
-          ilike(users.first_name, `%${q}%`),
-          ilike(users.last_name, `%${q}%`),
-          ilike(users.email, `%${q}%`)
+          ilike(users.first_name, `%${escaped}%`),
+          ilike(users.last_name, `%${escaped}%`),
+          ilike(users.email, `%${escaped}%`)
         )
       );
     }
@@ -64,6 +67,7 @@ async function getUsers(req: Request, res: Response) {
       sortDirection === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
 
     const usersData = await db.query.users.findMany({
+      columns: { password: false },
       where: searchCondition,
       with: {
         userRoles: {
@@ -124,8 +128,7 @@ async function createUser(req: Request, res: Response) {
   try {
     const userWithRoles = await db.transaction(async (tx) => {
       // Hash password
-      const saltRounds = parseInt(process.env.BCRYPT_ROUNDS || '12');
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      const hashedPassword = await bcrypt.hash(password, env.BCRYPT_ROUNDS);
 
       // Create user
       const [newUser] = await tx
@@ -138,7 +141,16 @@ async function createUser(req: Request, res: Response) {
           country_code: country_code || null,
           is_admin: is_admin || false
         })
-        .returning();
+        .returning({
+          id: users.id,
+          email: users.email,
+          first_name: users.first_name,
+          last_name: users.last_name,
+          country_code: users.country_code,
+          is_admin: users.is_admin,
+          created_at: users.created_at,
+          updated_at: users.updated_at
+        });
 
       if (!newUser) {
         return null;
@@ -155,6 +167,7 @@ async function createUser(req: Request, res: Response) {
 
       // Fetch the created user with roles
       return tx.query.users.findFirst({
+        columns: { password: false },
         where: eq(users.id, newUser.id),
         with: {
           userRoles: {
@@ -195,6 +208,7 @@ async function getUserById(req: Request, res: Response) {
 
   try {
     const user = await db.query.users.findFirst({
+      columns: { password: false },
       where: eq(users.id, Number(id)),
       with: {
         userRoles: {
@@ -244,7 +258,16 @@ async function updateUser(req: Request, res: Response) {
           .update(users)
           .set({ ...userUpdates, updated_at: new Date() })
           .where(eq(users.id, userId))
-          .returning();
+          .returning({
+            id: users.id,
+            email: users.email,
+            first_name: users.first_name,
+            last_name: users.last_name,
+            country_code: users.country_code,
+            is_admin: users.is_admin,
+            created_at: users.created_at,
+            updated_at: users.updated_at
+          });
 
         if (!updatedUser) {
           return null;
@@ -268,6 +291,7 @@ async function updateUser(req: Request, res: Response) {
 
       // Fetch the updated user with roles
       return tx.query.users.findFirst({
+        columns: { password: false },
         where: eq(users.id, userId),
         with: {
           userRoles: {
@@ -309,6 +333,7 @@ async function deleteUser(req: Request, res: Response) {
   try {
     // First fetch the user to return it after deletion
     const user = await db.query.users.findFirst({
+      columns: { password: false },
       where: eq(users.id, Number(id)),
       with: {
         userRoles: {
@@ -374,15 +399,23 @@ async function updateSelectedProperty(req: Request, res: Response) {
         updated_at: new Date()
       })
       .where(eq(users.id, Number(userId)))
-      .returning();
+      .returning({
+        id: users.id,
+        email: users.email,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        country_code: users.country_code,
+        is_admin: users.is_admin,
+        selected_property_id: users.selected_property_id,
+        created_at: users.created_at,
+        updated_at: users.updated_at
+      });
 
     if (!updatedUser) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Return the updated user without password
-    const { password: _, ...userWithoutPassword } = updatedUser;
-    res.status(200).json(userWithoutPassword);
+    res.status(200).json(updatedUser);
   } catch (error) {
     console.error('Failed to update selected property:', error);
     const errorMessage =

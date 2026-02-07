@@ -111,9 +111,7 @@ describe('Auth API', () => {
         .expect(403);
 
       expect(response.body).toHaveProperty('error');
-      expect(response.body.error).toBe(
-        'Admin access required'
-      );
+      expect(response.body.error).toBe('Admin access required');
     });
 
     test('should return 400 for invalid email', async () => {
