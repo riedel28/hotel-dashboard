@@ -7,7 +7,7 @@ import {
   createTestProperty,
   createTestRole,
   createTestUser
-} from './helpers/dbHelpers';
+} from './helpers/db-helpers';
 
 describe('Users API', () => {
   let authToken: string;

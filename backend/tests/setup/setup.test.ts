@@ -1,4 +1,4 @@
-import { cleanupDatabase, createTestUser } from '../helpers/dbHelpers';
+import { cleanupDatabase, createTestUser } from '../helpers/db-helpers';
 
 describe('Test Setup Verification', () => {
   beforeEach(async () => {

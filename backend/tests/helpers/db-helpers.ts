@@ -1,5 +1,6 @@
 import { db } from '../../src/db/pool.ts';
 import {
+  emailVerificationTokens,
   guests,
   monitoringLogs,
   properties,
@@ -36,7 +37,8 @@ export async function createTestUser(
     .insert(users)
     .values({
       ...defaultData,
-      password: hashedPassword
+      password: hashedPassword,
+      email_verified: true
     })
     .returning();
 
@@ -83,6 +85,8 @@ export async function createTestRoom(
     room_number: string;
     room_type: string;
     status: 'available' | 'occupied' | 'maintenance' | 'out_of_order';
+    created_at: Date;
+    updated_at: Date;
   }> = {}
 ) {
   const defaultData = {
@@ -108,7 +112,8 @@ export async function assignRoleToUser(userId: number, roleId: number) {
 
 export async function cleanupDatabase() {
   // Clean up in the right order due to foreign key constraints
-  // user_roles -> guests -> reservations -> rooms -> properties -> roles -> users
+  // email_verification_tokens -> user_roles -> guests -> reservations -> rooms -> properties -> roles -> users
+  await db.delete(emailVerificationTokens);
   await db.delete(userRoles);
   await db.delete(guests);
   await db.delete(monitoringLogs);

@@ -1,7 +1,7 @@
 import request from 'supertest';
 
 import app from '../src/app';
-import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
+import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
 
 describe('Reservations API', () => {
   let authToken: string;

@@ -7,7 +7,7 @@ import {
   cleanupDatabase,
   createTestProperty,
   createTestUser
-} from './helpers/dbHelpers';
+} from './helpers/db-helpers';
 
 describe('Auth API', () => {
   // Clean up before and after each test to ensure isolation
