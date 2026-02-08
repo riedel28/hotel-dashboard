@@ -63,7 +63,8 @@ async function seed() {
         password: hashedPassword,
         first_name: 'John',
         last_name: 'Doe',
-        email_verified: true
+        email_verified: true,
+        is_admin: true
       })
       .returning();
 
