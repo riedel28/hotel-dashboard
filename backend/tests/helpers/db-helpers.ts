@@ -79,15 +79,14 @@ export async function createTestProperty(
 }
 
 export async function createTestRoom(
-  roomData: Partial<{
+  roomData: { property_id: string } & Partial<{
     name: string;
-    property_id: string;
     room_number: string;
     room_type: string;
     status: 'available' | 'occupied' | 'maintenance' | 'out_of_order';
     created_at: Date;
     updated_at: Date;
-  }> = {}
+  }>
 ) {
   const defaultData = {
     name: `Test Room ${Date.now()}`,
