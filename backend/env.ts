@@ -47,6 +47,20 @@ const envSchema = z.object({
     })
     .default([]),
 
+  // SMTP / Email
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().positive().default(587),
+  SMTP_SECURE: z
+    .string()
+    .transform((val) => val === 'true')
+    .default('false'),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_FROM: z.string().optional(),
+
+  // App URL (for email links)
+  APP_URL: z.string().default('http://localhost:5173'),
+
   // Logging
   LOG_LEVEL: z
     .enum(['error', 'warn', 'info', 'debug', 'trace'])

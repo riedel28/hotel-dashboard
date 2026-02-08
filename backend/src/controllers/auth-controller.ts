@@ -28,14 +28,15 @@ async function register(req: AuthenticatedRequest, res: Response) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, env.BCRYPT_ROUNDS);
 
-    // Create user
+    // Create user (admin-created users are pre-verified)
     const [newUser] = await db
       .insert(users)
       .values({
         email,
         password: hashedPassword,
         first_name,
-        last_name
+        last_name,
+        email_verified: true
       })
       .returning({
         id: users.id,
@@ -70,26 +71,44 @@ async function login(req: AuthenticatedRequest, res: Response) {
   try {
     const { email, password, rememberMe } = req.body;
 
-    // Find user — fetch only the password for comparison
-    const [userPassword] = await db
-      .select({ id: users.id, password: users.password })
+    // Find user — fetch password and verification status
+    const [userRecord] = await db
+      .select({
+        id: users.id,
+        password: users.password,
+        email_verified: users.email_verified
+      })
       .from(users)
       .where(eq(users.email, email));
 
-    if (!userPassword) {
+    if (!userRecord) {
       return res.status(401).json({
         error: 'Invalid credentials'
       });
     }
 
-    const isValidPassword = await bcrypt.compare(
-      password,
-      userPassword.password
-    );
+    // Invited user who hasn't set password yet — still do bcrypt.compare
+    // against a dummy hash to prevent timing-based user enumeration
+    if (!userRecord.password) {
+      await bcrypt.compare(password, '$2b$10$dummyhashfortimingequalityx.');
+      return res.status(401).json({
+        error: 'Invalid credentials'
+      });
+    }
+
+    const isValidPassword = await bcrypt.compare(password, userRecord.password);
 
     if (!isValidPassword) {
       return res.status(401).json({
         error: 'Invalid credentials'
+      });
+    }
+
+    // Block unverified users
+    if (!userRecord.email_verified) {
+      return res.status(403).json({
+        error: 'Please verify your email address before logging in',
+        code: 'EMAIL_NOT_VERIFIED'
       });
     }
 
@@ -107,7 +126,7 @@ async function login(req: AuthenticatedRequest, res: Response) {
         updated_at: users.updated_at
       })
       .from(users)
-      .where(eq(users.id, userPassword.id));
+      .where(eq(users.id, userRecord.id));
 
     if (!user) {
       return res.status(401).json({

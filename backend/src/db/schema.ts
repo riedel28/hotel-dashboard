@@ -13,6 +13,7 @@ import {
   uuid
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 
 export const reservations = pgTable(
   'reservations',
@@ -111,7 +112,8 @@ export const users = pgTable(
       .primaryKey()
       .generatedAlwaysAsIdentity(),
     email: text('email').notNull().unique(),
-    password: text('password').notNull(),
+    password: text('password'),
+    email_verified: boolean('email_verified').default(false).notNull(),
     first_name: text('first_name'),
     last_name: text('last_name'),
     country_code: text('country_code'),
@@ -286,14 +288,54 @@ export const userRoles = pgTable(
   ]
 );
 
+// Email verification tokens table
+export const emailVerificationTokens = pgTable(
+  'email_verification_tokens',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    user_id: bigint('user_id', { mode: 'number' })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    token: text('token').notNull().unique(),
+    type: text('type').notNull().$type<'verification' | 'invitation'>(),
+    expires_at: timestamp('expires_at', { withTimezone: true }).notNull(),
+    used_at: timestamp('used_at', { withTimezone: true }),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('email_verification_tokens_user_id_idx').on(table.user_id),
+    index('email_verification_tokens_token_idx').on(table.token),
+    check(
+      'email_verification_tokens_type_check',
+      sql`${table.type} IN ('verification', 'invitation')`
+    )
+  ]
+);
+
 // Users relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   userRoles: many(userRoles),
+  emailVerificationTokens: many(emailVerificationTokens),
   selectedProperty: one(properties, {
     fields: [users.selected_property_id],
     references: [properties.id]
   })
 }));
+
+// Email verification tokens relations
+export const emailVerificationTokensRelations = relations(
+  emailVerificationTokens,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [emailVerificationTokens.user_id],
+      references: [users.id]
+    })
+  })
+);
 
 // Roles relations
 export const rolesRelations = relations(roles, ({ many }) => ({
@@ -336,3 +378,20 @@ export type NewRole = typeof roles.$inferInsert;
 
 export type UserRole = typeof userRoles.$inferSelect;
 export type NewUserRole = typeof userRoles.$inferInsert;
+
+export const insertEmailVerificationTokenSchema = createInsertSchema(
+  emailVerificationTokens
+);
+export const selectEmailVerificationTokenSchema = createSelectSchema(
+  emailVerificationTokens
+);
+
+export const emailVerificationTokenTypeSchema = z.enum([
+  'verification',
+  'invitation'
+]);
+
+export type EmailVerificationToken =
+  typeof emailVerificationTokens.$inferSelect;
+export type NewEmailVerificationToken =
+  typeof emailVerificationTokens.$inferInsert;

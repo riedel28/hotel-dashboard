@@ -4,6 +4,7 @@ import {
   createUserSchema,
   fetchUserByIdSchema,
   fetchUsersParamsSchema,
+  inviteUserSchema,
   updateSelectedPropertySchema,
   updateUserSchema,
   userIdParamsSchema
@@ -13,6 +14,8 @@ import {
   deleteUser,
   getUserById,
   getUsers,
+  inviteUser,
+  resendInvitation,
   updateSelectedProperty,
   updateUser
 } from '../controllers/user-controller';
@@ -28,6 +31,22 @@ const router = Router();
 
 // Apply authentication to all routes
 router.use(authenticateToken);
+
+// Invite user (admin only)
+router.post(
+  '/invite',
+  requireAdmin,
+  validateBody(inviteUserSchema),
+  inviteUser
+);
+
+// Resend invitation (admin only)
+router.post(
+  '/invite/:id/resend',
+  requireAdmin,
+  validateParams(userIdParamsSchema),
+  resendInvitation
+);
 
 // Create user (admin only)
 router.post('/', requireAdmin, validateBody(createUserSchema), createUser);

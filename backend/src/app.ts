@@ -14,6 +14,7 @@ import reservationsRouter from './routes/reservations';
 import rolesRouter from './routes/roles';
 import roomsRouter from './routes/rooms';
 import usersRouter from './routes/users';
+import verificationRouter from './routes/verification';
 
 const app = express();
 
@@ -50,6 +51,7 @@ const authLimiter = rateLimit({
   standardHeaders: 'draft-8',
   legacyHeaders: false
 });
+app.use('/api/auth', authLimiter, verificationRouter);
 app.use('/api/auth', authLimiter, authRouter);
 app.use('/api/monitoring', monitoringRouter);
 app.use('/api/properties', propertiesRouter);

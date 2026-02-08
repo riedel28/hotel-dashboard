@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 
+import { strongPasswordSchema } from '../../../shared/types/users';
 import { login, logout, register } from '../controllers/auth-controller';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/authorization';
@@ -18,16 +19,7 @@ const registerSchema = z.object({
     .string()
     .min(1, 'Last name is required')
     .max(50, 'Last name is too long'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/\d/, 'Password must contain at least one number')
-    .regex(
-      /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
-      'Password must contain at least one special character'
-    )
+  password: strongPasswordSchema
 });
 
 const loginSchema = z.object({
