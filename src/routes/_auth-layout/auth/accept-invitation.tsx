@@ -1,19 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import {
   CheckIcon,
   Loader2Icon,
   MessageCircleIcon,
-  RefreshCwIcon
+  XCircleIcon
 } from 'lucide-react';
-import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { resendVerification, signUp } from '@/api/auth';
+import { acceptInvitation } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -24,121 +23,110 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
+import { strongPasswordSchema } from '@/lib/schemas';
 
-import { registerSchema } from '@/lib/schemas';
+const acceptInvitationSchema = z
+  .object({
+    first_name: z.string().min(1, 'First name is required').max(50),
+    last_name: z.string().min(1, 'Last name is required').max(50),
+    password: strongPasswordSchema,
+    confirm_password: z.string().min(1, 'Please confirm your password')
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: 'Passwords do not match',
+    path: ['confirm_password']
+  });
 
-const fallback = '/' as const;
+type AcceptInvitationFormValues = z.infer<typeof acceptInvitationSchema>;
 
-export const Route = createFileRoute('/_auth-layout/auth/sign-up')({
+export const Route = createFileRoute('/_auth-layout/auth/accept-invitation')({
   validateSearch: z.object({
-    redirect: z
-      .string()
-      .optional()
-      .catch('')
-      .transform((val) => {
-        if (!val || !val.startsWith('/') || val.startsWith('//')) return '';
-        return val;
-      })
+    token: z.string().optional()
   }),
-  beforeLoad: ({ context, search }) => {
-    if (context.auth.isAuthenticated) {
-      throw redirect({ to: search.redirect || fallback });
-    }
-  },
-  component: SignUpPage
+  component: AcceptInvitationPage
 });
 
-type SignUpFormValues = z.infer<typeof registerSchema>;
-
-interface SuccessViewProps {
-  email: string;
-}
-
-function SuccessView({ email }: SuccessViewProps) {
+function AcceptInvitationPage() {
+  const { token } = Route.useSearch();
   const { t } = useLingui();
 
-  const resendMutation = useMutation({
-    mutationFn: () => resendVerification(email),
-    onSuccess: () => {
-      toast.success(t`Verification email resent successfully`);
-    },
-    onError: () => {
-      toast.error(t`Failed to resend verification email`);
-    }
-  });
-
-  return (
-    <div className="w-full max-w-lg space-y-8">
-      <div className="space-y-4 text-center">
-        <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
-          <CheckIcon className="size-7" />
-        </div>
-        <h1 className="text-2xl font-bold">
-          <Trans>Check your email</Trans>
-        </h1>
-        <p className="text-muted-foreground text-balance">
-          <Trans>
-            We&apos;ve sent a verification email to{' '}
-            <span className="font-medium">{email}</span>. Click the link in the
-            email to verify your account.
-          </Trans>
-        </p>
-      </div>
-
-      <div className="flex flex-col items-center gap-4">
-        <Button
-          variant="secondary"
-          onClick={() => resendMutation.mutate()}
-          disabled={resendMutation.isPending}
-        >
-          {resendMutation.isPending ? (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <RefreshCwIcon className="mr-2 h-4 w-4" />
-          )}
-          <Trans>Resend verification email</Trans>
-        </Button>
-        <Link
-          to="/auth/login"
-          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
-        >
-          <Trans>Back to login</Trans>
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-function SignUpPage() {
-  const { t } = useLingui();
-  const [successEmail, setSuccessEmail] = React.useState<string | null>(null);
-
-  const form = useForm<SignUpFormValues>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<AcceptInvitationFormValues>({
+    resolver: zodResolver(acceptInvitationSchema),
     defaultValues: {
-      email: '',
       first_name: '',
       last_name: '',
-      password: ''
+      password: '',
+      confirm_password: ''
     }
   });
 
-  const signUpMutation = useMutation({
-    mutationFn: signUp,
-    onSuccess: () => {
-      setSuccessEmail(form.getValues('email'));
-    },
+  const acceptMutation = useMutation({
+    mutationFn: (data: AcceptInvitationFormValues) =>
+      acceptInvitation({
+        token: token || '',
+        password: data.password,
+        first_name: data.first_name,
+        last_name: data.last_name
+      }),
     onError: () => {
-      toast.error(t`Failed to create account. Please try again.`);
+      toast.error(t`Failed to activate account. The link may have expired.`);
     }
   });
 
-  function handleSubmit(data: SignUpFormValues) {
-    signUpMutation.mutate(data);
+  if (!token) {
+    return (
+      <div className="w-full max-w-lg space-y-8">
+        <div className="space-y-4 text-center">
+          <div className="inline-block rounded-full bg-red-200 p-2 text-red-800">
+            <XCircleIcon className="size-7" />
+          </div>
+          <h1 className="text-2xl font-bold">
+            <Trans>Invalid link</Trans>
+          </h1>
+          <p className="text-muted-foreground">
+            <Trans>This invitation link is invalid.</Trans>
+          </p>
+        </div>
+        <div className="text-center">
+          <Link
+            to="/auth/login"
+            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+          >
+            <Trans>Back to login</Trans>
+          </Link>
+        </div>
+      </div>
+    );
   }
 
-  if (successEmail) {
-    return <SuccessView email={successEmail} />;
+  if (acceptMutation.isSuccess) {
+    return (
+      <div className="w-full max-w-lg space-y-8">
+        <div className="space-y-4 text-center">
+          <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
+            <CheckIcon className="size-7" />
+          </div>
+          <h1 className="text-2xl font-bold">
+            <Trans>Account activated!</Trans>
+          </h1>
+          <p className="text-muted-foreground">
+            <Trans>
+              Your account has been activated. You can now log in with your
+              password.
+            </Trans>
+          </p>
+        </div>
+        <div className="text-center">
+          <Button
+            render={
+              <Link to="/auth/login">
+                <Trans>Go to login</Trans>
+              </Link>
+            }
+          />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -149,15 +137,15 @@ function SignUpPage() {
         </div>
 
         <h1 className="text-2xl font-bold">
-          <Trans>Sign Up</Trans>
+          <Trans>Accept Invitation</Trans>
         </h1>
         <p className="text-muted-foreground">
-          <Trans>Create an account to access the dashboard</Trans>
+          <Trans>Set your password to activate your account</Trans>
         </p>
       </div>
 
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit((data) => acceptMutation.mutate(data))}
         className="max-w-sm mx-auto space-y-6"
       >
         <FieldSet className="gap-6">
@@ -210,29 +198,6 @@ function SignUpPage() {
 
             <Controller
               control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="gap-2">
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Email</Trans>
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    type="email"
-                    placeholder={t`Enter your email`}
-                    autoComplete="email"
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              control={form.control}
               name="password"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="gap-2">
@@ -252,6 +217,28 @@ function SignUpPage() {
                 </Field>
               )}
             />
+
+            <Controller
+              control={form.control}
+              name="confirm_password"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Confirm Password</Trans>
+                  </FieldLabel>
+                  <PasswordInput
+                    {...field}
+                    id={field.name}
+                    placeholder={t`Confirm your password`}
+                    autoComplete="new-password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
           </FieldGroup>
         </FieldSet>
 
@@ -259,28 +246,25 @@ function SignUpPage() {
           type="submit"
           size="lg"
           className="w-full"
-          disabled={signUpMutation.isPending}
+          disabled={acceptMutation.isPending}
         >
-          {signUpMutation.isPending && (
+          {acceptMutation.isPending && (
             <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
           )}
-          <Trans>Sign Up</Trans>
+          <Trans>Activate Account</Trans>
         </Button>
       </form>
 
-      <div className="flex items-center justify-center">
-        <p className="text-sm text-muted-foreground -mt-2">
-          <Trans>Already have an account?</Trans>{' '}
-          <Button
-            variant="link"
-            size="sm"
-            render={
-              <Link to="/auth/login">
-                <Trans>Login</Trans>
-              </Link>
-            }
-          />
-        </p>
+      <div className="text-center -mt-2">
+        <Button
+          variant="link"
+          size="sm"
+          render={
+            <Link to="/auth/login">
+              <Trans>Back to login</Trans>
+            </Link>
+          }
+        />
       </div>
     </div>
   );

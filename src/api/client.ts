@@ -33,11 +33,25 @@ client.interceptors.response.use(
   }
 );
 
+class ApiError extends Error {
+  code?: string;
+  constructor(message: string, code?: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.code = code;
+  }
+}
+
 function handleApiError(err: unknown, context: string): never {
   if (isAxiosError(err)) {
-    const ae = err as AxiosError<{ error?: string; message?: string }>;
-    throw new Error(
-      ae.response?.data?.error ?? ae.response?.data?.message ?? ae.message
+    const ae = err as AxiosError<{
+      error?: string;
+      message?: string;
+      code?: string;
+    }>;
+    throw new ApiError(
+      ae.response?.data?.error ?? ae.response?.data?.message ?? ae.message,
+      ae.response?.data?.code
     );
   }
   if (err instanceof z.ZodError) {
@@ -47,4 +61,4 @@ function handleApiError(err: unknown, context: string): never {
   throw err instanceof Error ? err : new Error(String(err));
 }
 
-export { client, handleApiError, setUnauthorizedHandler };
+export { ApiError, client, handleApiError, setUnauthorizedHandler };

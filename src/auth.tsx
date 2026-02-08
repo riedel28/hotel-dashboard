@@ -3,20 +3,13 @@ import * as React from 'react';
 import {
   login as apiLogin,
   logout as apiLogout,
-  register as apiRegister,
   updateSelectedProperty as apiUpdateSelectedProperty
 } from './api/auth';
-import type {
-  AuthResponse,
-  LoginData,
-  RegisterData,
-  User
-} from './lib/schemas';
+import type { AuthResponse, LoginData, User } from './lib/schemas';
 
 export interface AuthContext {
   isAuthenticated: boolean;
   login: (credentials: LoginData) => Promise<AuthResponse>;
-  register: (data: RegisterData) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   updateSelectedProperty: (propertyId: string | null) => Promise<User>;
   user: User | null;
@@ -67,16 +60,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     throw new Error('Login failed');
   }, []);
 
-  const register = React.useCallback(async (data: RegisterData) => {
-    const response = await apiRegister(data);
-    if (response) {
-      setStoredUser(response.user);
-      setUser(response.user);
-      return response;
-    }
-    throw new Error('Registration failed');
-  }, []);
-
   const updateSelectedProperty = React.useCallback(
     async (propertyId: string | null) => {
       const updatedUser = await apiUpdateSelectedProperty(propertyId);
@@ -96,7 +79,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         isAuthenticated,
         login,
-        register,
         logout,
         updateSelectedProperty,
         user

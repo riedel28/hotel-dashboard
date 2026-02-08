@@ -1,14 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
+import { Loader2Icon, SendIcon } from 'lucide-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { rolesQueryOptions } from '@/api/roles';
-import { createUser } from '@/api/users';
+import { inviteUser } from '@/api/users';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -30,44 +29,35 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 
-const addUserSchema = z.object({
-  email: z.string().email(t`Invalid email address`),
-  password: z.string().min(8, t`Password must be at least 8 characters`),
-  first_name: z.string().min(1, t`First name is required`).optional(),
-  last_name: z.string().min(1, t`Last name is required`).optional(),
-  country_code: z.string().length(2).nullable().optional(),
-  is_admin: z.boolean().optional(),
-  role_ids: z.array(z.number().int().positive()).optional()
-});
-
-type AddUserFormData = z.infer<typeof addUserSchema>;
-
-async function createUserAction(data: AddUserFormData) {
-  return createUser(data);
+function createInviteUserFormSchema(t: ReturnType<typeof useLingui>['t']) {
+  return z.object({
+    email: z.string().email(t`Invalid email address`),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
+    is_admin: z.boolean().optional(),
+    role_ids: z.array(z.number().int().positive()).optional()
+  });
 }
 
-export function AddUserModal() {
+type InviteUserFormData = z.infer<
+  ReturnType<typeof createInviteUserFormSchema>
+>;
+
+export function InviteUserModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
   const { data: roles } = useQuery(rolesQueryOptions());
+  const { t } = useLingui();
+  const inviteUserFormSchema = createInviteUserFormSchema(t);
 
-  const form = useForm<AddUserFormData>({
-    resolver: zodResolver(addUserSchema),
+  const form = useForm<InviteUserFormData>({
+    resolver: zodResolver(inviteUserFormSchema),
     defaultValues: {
       email: '',
-      password: '',
       first_name: '',
       last_name: '',
-      country_code: null,
       is_admin: false,
       role_ids: []
     }
@@ -80,30 +70,30 @@ export function AddUserModal() {
     }
   };
 
-  const createUserMutation = useMutation({
-    mutationFn: createUserAction,
+  const inviteUserMutation = useMutation({
+    mutationFn: (data: InviteUserFormData) => {
+      const submitData = {
+        ...data,
+        first_name: data.first_name || undefined,
+        last_name: data.last_name || undefined,
+        is_admin: data.is_admin || false,
+        role_ids:
+          data.role_ids && data.role_ids.length > 0 ? data.role_ids : undefined
+      };
+      return inviteUser(submitData);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       handleOpenChange(false);
-      toast.success(t`User created successfully`);
+      toast.success(t`Invitation sent successfully`);
     },
     onError: () => {
-      toast.error(t`Failed to create user`);
+      toast.error(t`Failed to send invitation`);
     }
   });
 
-  const onSubmit = (data: AddUserFormData) => {
-    // Clean up empty strings and convert to proper format
-    const submitData = {
-      ...data,
-      first_name: data.first_name || undefined,
-      last_name: data.last_name || undefined,
-      country_code: data.country_code || undefined,
-      is_admin: data.is_admin || false,
-      role_ids:
-        data.role_ids && data.role_ids.length > 0 ? data.role_ids : undefined
-    };
-    createUserMutation.mutate(submitData);
+  const onSubmit = (data: InviteUserFormData) => {
+    inviteUserMutation.mutate(data);
   };
 
   return (
@@ -111,15 +101,15 @@ export function AddUserModal() {
       <DialogTrigger
         render={
           <Button>
-            <PlusCircleIcon className="mr-2 h-4 w-4" />
-            <Trans>Add User</Trans>
+            <SendIcon className="mr-2 h-4 w-4" />
+            <Trans>Invite User</Trans>
           </Button>
         }
       />
       <DialogContent className="max-w-xl! max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            <Trans>Create New User</Trans>
+            <Trans>Invite User</Trans>
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -139,28 +129,6 @@ export function AddUserModal() {
                       {...field}
                       aria-invalid={fieldState.invalid}
                       placeholder={t`user@example.com`}
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                control={form.control}
-                name="password"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="gap-2">
-                    <FieldLabel htmlFor={field.name}>
-                      <Trans>Password</Trans>
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      type="password"
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                      placeholder={t`Minimum 8 characters`}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -214,67 +182,6 @@ export function AddUserModal() {
                   )}
                 />
               </div>
-
-              <Controller
-                control={form.control}
-                name="country_code"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="gap-2">
-                    <FieldLabel htmlFor={field.name}>
-                      <Trans>Country</Trans>
-                    </FieldLabel>
-                    <Select
-                      value={field.value || ''}
-                      onValueChange={(value) =>
-                        field.onChange(value === '' ? null : value)
-                      }
-                    >
-                      <SelectTrigger
-                        id={field.name}
-                        aria-invalid={fieldState.invalid}
-                      >
-                        <SelectValue>
-                          {(value) => {
-                            const countryMap: Record<string, string> = {
-                              DE: t`Germany`,
-                              US: t`United States`,
-                              AT: t`Austria`,
-                              CH: t`Switzerland`
-                            };
-                            return value ? (
-                              <span>{countryMap[value] || value}</span>
-                            ) : (
-                              <span className="text-muted-foreground">
-                                {t`Select country`}
-                              </span>
-                            );
-                          }}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="">
-                          <Trans>None</Trans>
-                        </SelectItem>
-                        <SelectItem value="DE">
-                          <Trans>Germany</Trans>
-                        </SelectItem>
-                        <SelectItem value="US">
-                          <Trans>United States</Trans>
-                        </SelectItem>
-                        <SelectItem value="AT">
-                          <Trans>Austria</Trans>
-                        </SelectItem>
-                        <SelectItem value="CH">
-                          <Trans>Switzerland</Trans>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
 
               <Controller
                 control={form.control}
@@ -380,11 +287,12 @@ export function AddUserModal() {
             >
               <Trans>Cancel</Trans>
             </Button>
-            <Button type="submit" disabled={createUserMutation.isPending}>
-              {createUserMutation.isPending && (
+            <Button type="submit" disabled={inviteUserMutation.isPending}>
+              {inviteUserMutation.isPending && (
                 <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
               )}
-              <Trans>Create</Trans>
+              <SendIcon className="mr-2 h-4 w-4" />
+              <Trans>Send Invitation</Trans>
             </Button>
           </DialogFooter>
         </form>

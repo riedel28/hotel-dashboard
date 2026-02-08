@@ -46,4 +46,65 @@ async function updateSelectedProperty(
   }
 }
 
-export { login, logout, register, updateSelectedProperty };
+interface SignUpData {
+  email: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+}
+
+async function signUp(data: SignUpData): Promise<{ message: string }> {
+  try {
+    const response = await client.post('/auth/sign-up', data);
+    return response.data;
+  } catch (err) {
+    handleApiError(err, 'signUp');
+  }
+}
+
+async function verifyEmail(token: string): Promise<{ message: string }> {
+  try {
+    const response = await client.post('/auth/verify-email', { token });
+    return response.data;
+  } catch (err) {
+    handleApiError(err, 'verifyEmail');
+  }
+}
+
+async function resendVerification(email: string): Promise<{ message: string }> {
+  try {
+    const response = await client.post('/auth/resend-verification', { email });
+    return response.data;
+  } catch (err) {
+    handleApiError(err, 'resendVerification');
+  }
+}
+
+interface AcceptInvitationData {
+  token: string;
+  password: string;
+  first_name?: string;
+  last_name?: string;
+}
+
+async function acceptInvitation(
+  data: AcceptInvitationData
+): Promise<{ message: string }> {
+  try {
+    const response = await client.post('/auth/accept-invitation', data);
+    return response.data;
+  } catch (err) {
+    handleApiError(err, 'acceptInvitation');
+  }
+}
+
+export {
+  acceptInvitation,
+  login,
+  logout,
+  register,
+  resendVerification,
+  signUp,
+  updateSelectedProperty,
+  verifyEmail
+};

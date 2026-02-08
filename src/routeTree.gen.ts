@@ -26,9 +26,11 @@ import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './rou
 import { Route as DashboardLayoutuserViewAboutRouteImport } from './routes/_dashboard-layout/(user-view)/about'
 import { Route as DashboardLayoutadminViewPropertiesRouteImport } from './routes/_dashboard-layout/(admin-view)/properties'
 import { Route as DashboardLayoutadminViewCustomersRouteImport } from './routes/_dashboard-layout/(admin-view)/customers'
+import { Route as AuthLayoutAuthVerifyEmailRouteImport } from './routes/_auth-layout/auth/verify-email'
 import { Route as AuthLayoutAuthSignUpRouteImport } from './routes/_auth-layout/auth/sign-up'
 import { Route as AuthLayoutAuthLoginRouteImport } from './routes/_auth-layout/auth/login'
 import { Route as AuthLayoutAuthForgotPasswordRouteImport } from './routes/_auth-layout/auth/forgot-password'
+import { Route as AuthLayoutAuthAcceptInvitationRouteImport } from './routes/_auth-layout/auth/accept-invitation'
 import { Route as DashboardLayoutuserViewUsersIndexRouteImport } from './routes/_dashboard-layout/(user-view)/users/index'
 import { Route as DashboardLayoutuserViewRoomsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/index'
 import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
@@ -138,6 +140,12 @@ const DashboardLayoutadminViewCustomersRoute =
     path: '/customers',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
+const AuthLayoutAuthVerifyEmailRoute =
+  AuthLayoutAuthVerifyEmailRouteImport.update({
+    id: '/auth/verify-email',
+    path: '/auth/verify-email',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
 const AuthLayoutAuthSignUpRoute = AuthLayoutAuthSignUpRouteImport.update({
   id: '/auth/sign-up',
   path: '/auth/sign-up',
@@ -152,6 +160,12 @@ const AuthLayoutAuthForgotPasswordRoute =
   AuthLayoutAuthForgotPasswordRouteImport.update({
     id: '/auth/forgot-password',
     path: '/auth/forgot-password',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
+const AuthLayoutAuthAcceptInvitationRoute =
+  AuthLayoutAuthAcceptInvitationRouteImport.update({
+    id: '/auth/accept-invitation',
+    path: '/auth/accept-invitation',
     getParentRoute: () => AuthLayoutRoute,
   } as any)
 const DashboardLayoutuserViewUsersIndexRoute =
@@ -225,9 +239,11 @@ const DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof DashboardLayoutIndexRoute
+  '/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
+  '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/customers': typeof DashboardLayoutadminViewCustomersRoute
   '/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
@@ -256,9 +272,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof DashboardLayoutIndexRoute
+  '/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
+  '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/customers': typeof DashboardLayoutadminViewCustomersRoute
   '/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
@@ -290,9 +308,11 @@ export interface FileRoutesById {
   '/_auth-layout': typeof AuthLayoutRouteWithChildren
   '/_dashboard-layout': typeof DashboardLayoutRouteWithChildren
   '/_dashboard-layout/': typeof DashboardLayoutIndexRoute
+  '/_auth-layout/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/_auth-layout/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/_auth-layout/auth/login': typeof AuthLayoutAuthLoginRoute
   '/_auth-layout/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
+  '/_auth-layout/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/_dashboard-layout/(admin-view)/customers': typeof DashboardLayoutadminViewCustomersRoute
   '/_dashboard-layout/(admin-view)/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/_dashboard-layout/(user-view)/about': typeof DashboardLayoutuserViewAboutRoute
@@ -323,9 +343,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth/accept-invitation'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/sign-up'
+    | '/auth/verify-email'
     | '/customers'
     | '/properties'
     | '/about'
@@ -354,9 +376,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth/accept-invitation'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/sign-up'
+    | '/auth/verify-email'
     | '/customers'
     | '/properties'
     | '/about'
@@ -387,9 +411,11 @@ export interface FileRouteTypes {
     | '/_auth-layout'
     | '/_dashboard-layout'
     | '/_dashboard-layout/'
+    | '/_auth-layout/auth/accept-invitation'
     | '/_auth-layout/auth/forgot-password'
     | '/_auth-layout/auth/login'
     | '/_auth-layout/auth/sign-up'
+    | '/_auth-layout/auth/verify-email'
     | '/_dashboard-layout/(admin-view)/customers'
     | '/_dashboard-layout/(admin-view)/properties'
     | '/_dashboard-layout/(user-view)/about'
@@ -543,6 +569,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutadminViewCustomersRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
+    '/_auth-layout/auth/verify-email': {
+      id: '/_auth-layout/auth/verify-email'
+      path: '/auth/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthLayoutAuthVerifyEmailRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
     '/_auth-layout/auth/sign-up': {
       id: '/_auth-layout/auth/sign-up'
       path: '/auth/sign-up'
@@ -562,6 +595,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/forgot-password'
       fullPath: '/auth/forgot-password'
       preLoaderRoute: typeof AuthLayoutAuthForgotPasswordRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth-layout/auth/accept-invitation': {
+      id: '/_auth-layout/auth/accept-invitation'
+      path: '/auth/accept-invitation'
+      fullPath: '/auth/accept-invitation'
+      preLoaderRoute: typeof AuthLayoutAuthAcceptInvitationRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
     '/_dashboard-layout/(user-view)/users/': {
@@ -645,15 +685,19 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthLayoutRouteChildren {
+  AuthLayoutAuthAcceptInvitationRoute: typeof AuthLayoutAuthAcceptInvitationRoute
   AuthLayoutAuthForgotPasswordRoute: typeof AuthLayoutAuthForgotPasswordRoute
   AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
   AuthLayoutAuthSignUpRoute: typeof AuthLayoutAuthSignUpRoute
+  AuthLayoutAuthVerifyEmailRoute: typeof AuthLayoutAuthVerifyEmailRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutAuthAcceptInvitationRoute: AuthLayoutAuthAcceptInvitationRoute,
   AuthLayoutAuthForgotPasswordRoute: AuthLayoutAuthForgotPasswordRoute,
   AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
   AuthLayoutAuthSignUpRoute: AuthLayoutAuthSignUpRoute,
+  AuthLayoutAuthVerifyEmailRoute: AuthLayoutAuthVerifyEmailRoute,
 }
 
 const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(

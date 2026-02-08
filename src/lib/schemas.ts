@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { strongPasswordSchema } from '../../shared/types/users';
+
 // Auth schemas
 export const loginSchema = z.object({
   email: z.email('Invalid email format'),
@@ -14,8 +16,10 @@ export const registerSchema = z.object({
     .string()
     .min(1, 'Last name is required')
     .max(50, 'Last name is too long'),
-  password: z.string().min(8, 'Password must be at least 8 characters')
+  password: strongPasswordSchema
 });
+
+export { strongPasswordSchema };
 
 // User schemas
 export const userSchema = z.object({
