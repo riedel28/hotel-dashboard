@@ -128,8 +128,10 @@ function SignUpPage() {
     onSuccess: () => {
       setSuccessEmail(form.getValues('email'));
     },
-    onError: () => {
-      toast.error(t`Failed to create account. Please try again.`);
+    onError: (error) => {
+      toast.error(
+        error.message || t`Failed to create account. Please try again.`
+      );
     }
   });
 
