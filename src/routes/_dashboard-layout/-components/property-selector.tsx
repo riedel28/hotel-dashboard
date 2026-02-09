@@ -188,10 +188,12 @@ function PropertySelector({
       onValueChange={handlePropertySelect}
     >
       <ComboboxTrigger
-        className="max-w-md truncate flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent"
+        className="min-w-0 max-w-xs flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent sm:max-w-sm md:max-w-lg"
         aria-label={t`Select property`}
       >
-        <ComboboxValue>{renderTriggerContent()}</ComboboxValue>
+        <ComboboxValue>
+          <span className="truncate text-sm">{renderTriggerContent()}</span>
+        </ComboboxValue>
       </ComboboxTrigger>
       <ComboboxContent className="w-sm">
         <ComboboxInput

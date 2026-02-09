@@ -1,25 +1,15 @@
-import { env as loadEnv } from 'custom-env';
 import { z } from 'zod';
 
-process.env.APP_STAGE = process.env.APP_STAGE || 'dev';
+// Bun automatically loads .env files based on NODE_ENV:
+//   .env → .env.{development,production,test} → .env.local
 
-const isProduction = process.env.APP_STAGE === 'production';
-const isDevelopment = process.env.APP_STAGE === 'dev';
-const isTest = process.env.APP_STAGE === 'test';
-
-// Load .env file
-if (isDevelopment) {
-  loadEnv();
-} else if (isTest) {
-  loadEnv('test');
-}
+const isProduction = process.env.NODE_ENV === 'production';
 
 const envSchema = z.object({
   // Node environment
   NODE_ENV: z
     .enum(['development', 'production', 'test'])
     .default('development'),
-  APP_STAGE: z.enum(['dev', 'production', 'test']).default('dev'),
 
   // Server
   PORT: z.coerce.number().positive().default(5001),
@@ -39,6 +29,12 @@ const envSchema = z.object({
   // Security
   BCRYPT_ROUNDS: z.coerce.number().min(10).max(20).default(12),
 
+  // Rate Limiting
+  RATE_LIMIT_WINDOW_MS: z.coerce.number().positive().default(900000),
+  RATE_LIMIT_MAX_REQUESTS: z.coerce.number().positive().default(100),
+  AUTH_RATE_LIMIT_WINDOW_MS: z.coerce.number().positive().default(900000),
+  AUTH_RATE_LIMIT_MAX_REQUESTS: z.coerce.number().positive().default(20),
+
   // CORS
   CORS_ORIGIN: z
     .string()
@@ -50,6 +46,20 @@ const envSchema = z.object({
       return val;
     })
     .default([]),
+
+  // SMTP / Email
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().positive().default(587),
+  SMTP_SECURE: z
+    .string()
+    .transform((val) => val === 'true')
+    .default('false'),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_FROM: z.string().optional(),
+
+  // App URL (for email links)
+  APP_URL: z.string().default('http://localhost:5173'),
 
   // Logging
   LOG_LEVEL: z

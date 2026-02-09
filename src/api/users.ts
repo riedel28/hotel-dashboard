@@ -8,6 +8,7 @@ import {
   type FetchUsersResponse,
   fetchUsersParamsSchema,
   fetchUsersResponseSchema,
+  type InviteUserData,
   type Role,
   roleSchema,
   type UpdateUserData,
@@ -89,10 +90,30 @@ async function createUser(data: CreateUserData): Promise<User> {
   }
 }
 
+async function inviteUser(data: InviteUserData): Promise<User> {
+  try {
+    const response = await client.post('/users/invite', data);
+    return userSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'inviteUser');
+  }
+}
+
+async function resendInvitation(userId: number): Promise<{ message: string }> {
+  try {
+    const response = await client.post(`/users/invite/${userId}/resend`);
+    return response.data;
+  } catch (err) {
+    handleApiError(err, 'resendInvitation');
+  }
+}
+
 export {
   fetchUsers,
   fetchUserById,
   createUser,
+  inviteUser,
+  resendInvitation,
   updateUserById,
   deleteUserById,
   fetchUsersParamsSchema,
@@ -105,5 +126,6 @@ export {
   type FetchUsersParams,
   type FetchUsersResponse,
   type CreateUserData,
+  type InviteUserData,
   type UpdateUserData
 };

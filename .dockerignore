@@ -1,0 +1,10 @@
+node_modules
+src
+dist
+public
+.git
+.husky
+*.md
+.env*
+backend/node_modules
+backend/tests

@@ -7,7 +7,7 @@ import {
   cleanupDatabase,
   createTestProperty,
   createTestUser
-} from './helpers/dbHelpers';
+} from './helpers/db-helpers';
 
 describe('Auth API', () => {
   // Clean up before and after each test to ensure isolation
@@ -20,7 +20,58 @@ describe('Auth API', () => {
   });
 
   describe('POST /auth/register', () => {
-    test('should register a new user successfully', async () => {
+    test('should register a new user successfully when called by admin', async () => {
+      const { token: adminToken } = await createTestUser({ is_admin: true });
+
+      const uniqueEmail = `test-${Date.now()}@example.com`;
+      const userData = {
+        email: uniqueEmail,
+        password: 'Password123!',
+        first_name: 'John',
+        last_name: 'Doe'
+      };
+
+      const response = await request(app)
+        .post('/api/auth/register')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(userData)
+        .expect(201);
+
+      expect(response.body).toHaveProperty('user');
+      expect(response.body.user.email).toBe(userData.email);
+      expect(response.body.user.first_name).toBe(userData.first_name);
+      expect(response.body.user.last_name).toBe(userData.last_name);
+      expect(response.body.user).not.toHaveProperty('password');
+    });
+
+    test('should return token in httpOnly cookie instead of response body', async () => {
+      const { token: adminToken } = await createTestUser({ is_admin: true });
+
+      const uniqueEmail = `test-${Date.now()}@example.com`;
+      const userData = {
+        email: uniqueEmail,
+        password: 'Password123!',
+        first_name: 'John',
+        last_name: 'Doe'
+      };
+
+      const response = await request(app)
+        .post('/api/auth/register')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(userData)
+        .expect(201);
+
+      expect(response.body).not.toHaveProperty('token');
+      const cookies = response.headers['set-cookie'];
+      expect(cookies).toBeDefined();
+      const authCookie = Array.isArray(cookies)
+        ? cookies.find((c: string) => c.startsWith('auth_token='))
+        : cookies;
+      expect(authCookie).toBeDefined();
+      expect(authCookie).toContain('HttpOnly');
+    });
+
+    test('should return 401 without authentication', async () => {
       const uniqueEmail = `test-${Date.now()}@example.com`;
       const userData = {
         email: uniqueEmail,
@@ -32,18 +83,38 @@ describe('Auth API', () => {
       const response = await request(app)
         .post('/api/auth/register')
         .send(userData)
-        .expect(201);
+        .expect(401);
 
-      expect(response.body).toHaveProperty('user');
-      expect(response.body).toHaveProperty('token');
-      expect(response.body.user.email).toBe(userData.email);
-      expect(response.body.user.first_name).toBe(userData.first_name);
-      expect(response.body.user.last_name).toBe(userData.last_name);
-      expect(response.body.user).not.toHaveProperty('password');
-      expect(typeof response.body.token).toBe('string');
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toBe('Access token required');
+    });
+
+    test('should return 403 for non-admin users', async () => {
+      const { token: nonAdminToken } = await createTestUser({
+        is_admin: false
+      });
+
+      const uniqueEmail = `test-${Date.now()}@example.com`;
+      const userData = {
+        email: uniqueEmail,
+        password: 'Password123!',
+        first_name: 'John',
+        last_name: 'Doe'
+      };
+
+      const response = await request(app)
+        .post('/api/auth/register')
+        .set('Authorization', `Bearer ${nonAdminToken}`)
+        .send(userData)
+        .expect(403);
+
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toBe('Admin access required');
     });
 
     test('should return 400 for invalid email', async () => {
+      const { token: adminToken } = await createTestUser({ is_admin: true });
+
       const userData = {
         email: 'invalid-email',
         password: 'Password123!',
@@ -53,6 +124,7 @@ describe('Auth API', () => {
 
       const response = await request(app)
         .post('/api/auth/register')
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(userData)
         .expect(400);
 
@@ -60,6 +132,8 @@ describe('Auth API', () => {
     });
 
     test('should return 400 for short password', async () => {
+      const { token: adminToken } = await createTestUser({ is_admin: true });
+
       const uniqueEmail = `test-${Date.now()}@example.com`;
       const userData = {
         email: uniqueEmail,
@@ -70,6 +144,7 @@ describe('Auth API', () => {
 
       const response = await request(app)
         .post('/api/auth/register')
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(userData)
         .expect(400);
 
@@ -77,6 +152,8 @@ describe('Auth API', () => {
     });
 
     test('should return 400 for missing required fields', async () => {
+      const { token: adminToken } = await createTestUser({ is_admin: true });
+
       const uniqueEmail = `test-${Date.now()}@example.com`;
       const userData = {
         email: uniqueEmail,
@@ -85,6 +162,7 @@ describe('Auth API', () => {
 
       const response = await request(app)
         .post('/api/auth/register')
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(userData)
         .expect(400);
 
@@ -107,9 +185,30 @@ describe('Auth API', () => {
         .expect(200);
 
       expect(response.body).toHaveProperty('user');
-      expect(response.body).toHaveProperty('token');
       expect(response.body.user.email).toBe(user.email);
-      expect(typeof response.body.token).toBe('string');
+    });
+
+    test('should return token in httpOnly cookie instead of response body', async () => {
+      const { user, rawPassword } = await createTestUser({
+        password: 'Password123!'
+      });
+
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: user.email,
+          password: rawPassword
+        })
+        .expect(200);
+
+      expect(response.body).not.toHaveProperty('token');
+      const cookies = response.headers['set-cookie'];
+      expect(cookies).toBeDefined();
+      const authCookie = Array.isArray(cookies)
+        ? cookies.find((c: string) => c.startsWith('auth_token='))
+        : cookies;
+      expect(authCookie).toBeDefined();
+      expect(authCookie).toContain('HttpOnly');
     });
 
     test('should return 401 for invalid email', async () => {
@@ -223,8 +322,29 @@ describe('Auth API', () => {
     });
   });
 
+  describe('POST /auth/logout', () => {
+    test('should clear auth cookie and return 200', async () => {
+      const response = await request(app).post('/api/auth/logout').expect(200);
+
+      expect(response.body).toHaveProperty(
+        'message',
+        'Logged out successfully'
+      );
+      const cookies = response.headers['set-cookie'];
+      expect(cookies).toBeDefined();
+      const authCookie = Array.isArray(cookies)
+        ? cookies.find((c: string) => c.startsWith('auth_token='))
+        : cookies;
+      expect(authCookie).toBeDefined();
+      // clearCookie sets the value to empty and expires in the past
+      expect(authCookie).toContain('auth_token=');
+    });
+  });
+
   describe('POST /auth/register - selected_property_id', () => {
     test('should include selected_property_id (null) in register response', async () => {
+      const { token: adminToken } = await createTestUser({ is_admin: true });
+
       const uniqueEmail = `test-${Date.now()}@example.com`;
       const userData = {
         email: uniqueEmail,
@@ -235,6 +355,7 @@ describe('Auth API', () => {
 
       const response = await request(app)
         .post('/api/auth/register')
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(userData)
         .expect(201);
 

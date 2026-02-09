@@ -1,12 +1,18 @@
-'use client';
-
+import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
+import { useMutation } from '@tanstack/react-query';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
-import { MoreHorizontalIcon, PenSquareIcon, TrashIcon } from 'lucide-react';
+import {
+  MailIcon,
+  MoreHorizontalIcon,
+  PenSquareIcon,
+  TrashIcon
+} from 'lucide-react';
 import * as React from 'react';
+import { toast } from 'sonner';
 
-import type { User } from '@/api/users';
+import { resendInvitation, type User } from '@/api/users';
 import { buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -27,6 +33,16 @@ interface RowActionsProps {
 export function RowActions({ row }: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
+  const resendMutation = useMutation({
+    mutationFn: () => resendInvitation(row.original.id),
+    onSuccess: () => {
+      toast.success(t`Invitation resent successfully`);
+    },
+    onError: () => {
+      toast.error(t`Failed to resend invitation`);
+    }
+  });
+
   return (
     <>
       <DropdownMenu>
@@ -41,7 +57,7 @@ export function RowActions({ row }: RowActionsProps) {
             <Trans>Open menu</Trans>
           </span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-[200px]">
           <DropdownMenuItem
             render={(props) => (
               <RouterLink
@@ -58,6 +74,18 @@ export function RowActions({ row }: RowActionsProps) {
               </RouterLink>
             )}
           />
+          {!row.original.email_verified && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => resendMutation.mutate()}
+                disabled={resendMutation.isPending}
+              >
+                <MailIcon className="mr-2 h-4 w-4" />
+                <Trans>Resend invitation</Trans>
+              </DropdownMenuItem>
+            </>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"

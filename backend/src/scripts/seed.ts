@@ -1,5 +1,6 @@
 import { db } from '../db/pool';
 import {
+  emailVerificationTokens,
   guests,
   monitoringLogs,
   properties,
@@ -18,6 +19,7 @@ async function seed() {
     // Clear existing data (order matters due to foreign keys!)
     console.log('Clearing existing data...');
     await db.delete(guests);
+    await db.delete(emailVerificationTokens);
     await db.delete(userRoles);
     await db.delete(monitoringLogs);
     await db.delete(reservations);
@@ -36,7 +38,8 @@ async function seed() {
         email: 'cool_new_user@example.com',
         password: hashedPassword,
         first_name: 'Very',
-        last_name: 'Cool'
+        last_name: 'Cool',
+        email_verified: true
       })
       .returning();
 
@@ -59,7 +62,9 @@ async function seed() {
         email: 'john@example.com',
         password: hashedPassword,
         first_name: 'John',
-        last_name: 'Doe'
+        last_name: 'Doe',
+        email_verified: true,
+        is_admin: true
       })
       .returning();
 

@@ -4,6 +4,7 @@ import {
   createUserSchema,
   fetchUserByIdSchema,
   fetchUsersParamsSchema,
+  inviteUserSchema,
   updateSelectedPropertySchema,
   updateUserSchema,
   userIdParamsSchema
@@ -13,10 +14,13 @@ import {
   deleteUser,
   getUserById,
   getUsers,
+  inviteUser,
+  resendInvitation,
   updateSelectedProperty,
   updateUser
 } from '../controllers/user-controller';
 import { authenticateToken } from '../middleware/auth';
+import { requireAdmin, stripAdminFields } from '../middleware/authorization';
 import {
   validateBody,
   validateParams,
@@ -28,8 +32,24 @@ const router = Router();
 // Apply authentication to all routes
 router.use(authenticateToken);
 
-// Create user
-router.post('/', validateBody(createUserSchema), createUser);
+// Invite user (admin only)
+router.post(
+  '/invite',
+  requireAdmin,
+  validateBody(inviteUserSchema),
+  inviteUser
+);
+
+// Resend invitation (admin only)
+router.post(
+  '/invite/:id/resend',
+  requireAdmin,
+  validateParams(userIdParamsSchema),
+  resendInvitation
+);
+
+// Create user (admin only)
+router.post('/', requireAdmin, validateBody(createUserSchema), createUser);
 
 // Get users (paginated)
 router.get('/', validateQuery(fetchUsersParamsSchema), getUsers);
@@ -44,15 +64,21 @@ router.patch(
 // Get user by id
 router.get('/:id', validateParams(fetchUserByIdSchema), getUserById);
 
-// Update user
+// Update user (strip admin fields for non-admins to prevent privilege escalation)
 router.patch(
   '/:id',
+  stripAdminFields,
   validateParams(userIdParamsSchema),
   validateBody(updateUserSchema),
   updateUser
 );
 
-// Delete user
-router.delete('/:id', validateParams(userIdParamsSchema), deleteUser);
+// Delete user (admin only)
+router.delete(
+  '/:id',
+  requireAdmin,
+  validateParams(userIdParamsSchema),
+  deleteUser
+);
 
 export default router;

@@ -7,12 +7,19 @@ import {
   redirect,
   useRouter
 } from '@tanstack/react-router';
-import { Loader2, MessageCircleIcon } from 'lucide-react';
+import {
+  AlertTriangleIcon,
+  Loader2Icon,
+  MessageCircleIcon,
+  RefreshCwIcon
+} from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { resendVerification } from '@/api/auth';
+import { ApiError } from '@/api/client';
 import { useAuth } from '@/auth';
-
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -31,7 +38,14 @@ const fallback = '/' as const;
 
 export const Route = createFileRoute('/_auth-layout/auth/login')({
   validateSearch: z.object({
-    redirect: z.string().optional().catch('')
+    redirect: z
+      .string()
+      .optional()
+      .catch('')
+      .transform((val) => {
+        if (!val || !val.startsWith('/') || val.startsWith('//')) return '';
+        return val;
+      })
   }),
   beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
@@ -48,14 +62,13 @@ function LoginPage() {
   const router = useRouter();
   const navigate = Route.useNavigate();
   const { t } = useLingui();
-
   const search = Route.useSearch();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: 'john@example.com',
-      password: 'very_cool_password',
+      email: '',
+      password: '',
       rememberMe: false
     }
   });
@@ -67,12 +80,26 @@ function LoginPage() {
       await navigate({ to: search.redirect || '' });
       toast.success(t`Successfully logged in!`);
     },
-    onError: () => {
-      toast.error(t`Failed to login. Please try again.`);
+    onError: (error) => {
+      if (error instanceof ApiError && error.code === 'EMAIL_NOT_VERIFIED') {
+        form.setError('root.emailNotVerified', { message: 'emailNotVerified' });
+      } else {
+        toast.error(t`Failed to login. Please try again.`);
+      }
     }
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
+  const resendMutation = useMutation({
+    mutationFn: () => resendVerification(form.getValues('email')),
+    onSuccess: () => {
+      toast.success(t`Verification email resent successfully`);
+    },
+    onError: () => {
+      toast.error(t`Failed to resend verification email`);
+    }
+  });
+
+  const onSubmit = (data: LoginFormValues) => {
     loginMutation.mutate(data);
   };
 
@@ -99,6 +126,34 @@ function LoginPage() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="max-w-sm mx-auto space-y-6"
       >
+        {form.formState.errors.root?.emailNotVerified && (
+          <Alert variant="warning">
+            <AlertTriangleIcon />
+            <AlertTitle>
+              <Trans>Email not verified</Trans>
+            </AlertTitle>
+            <AlertDescription>
+              <p>
+                <Trans>
+                  Please verify your email address before logging in.
+                </Trans>
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => resendMutation.mutate()}
+                disabled={resendMutation.isPending}
+              >
+                {resendMutation.isPending ? (
+                  <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                ) : (
+                  <RefreshCwIcon className="mr-2 h-3 w-3" />
+                )}
+                <Trans>Resend verification email</Trans>
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
         <FieldSet className="gap-6">
           <FieldGroup className="gap-4">
             <Controller
@@ -186,7 +241,7 @@ function LoginPage() {
           disabled={loginMutation.isPending}
         >
           {loginMutation.isPending && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
           )}
           <Trans>Login</Trans>
         </Button>

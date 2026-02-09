@@ -4,23 +4,15 @@ import { TextAlignJustifyIcon } from 'lucide-react';
 import * as React from 'react';
 import { propertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbSeparator
-} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import { MobileMenu } from '@/routes/_dashboard-layout/-components/mobile-menu';
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
-import ViewSelector from '@/routes/_dashboard-layout/-components/view-selector';
 
 export default function Header() {
   const { properties } = DashboardLayoutRoute.useLoaderData();
   const { user, updateSelectedProperty } = useAuth();
-  const isAdmin = user?.is_admin === true;
   const queryClient = useQueryClient();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -57,31 +49,15 @@ export default function Header() {
             >
               <TextAlignJustifyIcon className="size-4" />
             </Button>
-            {/* Breadcrumb */}
-            <Breadcrumb>
-              <BreadcrumbList>
-                {isAdmin && (
-                  <>
-                    <BreadcrumbItem>
-                      <ViewSelector />
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                  </>
-                )}
-                <BreadcrumbItem>
-                  <PropertySelector
-                    properties={properties.index}
-                    value={user?.selected_property_id ?? undefined}
-                    onValueChange={handlePropertyChange}
-                    onReload={handleReloadProperties}
-                  />
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <PropertySelector
+              properties={properties.index}
+              value={user?.selected_property_id ?? undefined}
+              onValueChange={handlePropertyChange}
+              onReload={handleReloadProperties}
+            />
           </div>
           {/* Right side */}
           <div className="flex items-center gap-4">
-            {/* User menu */}
             <UserMenu />
           </div>
         </div>

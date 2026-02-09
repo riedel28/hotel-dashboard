@@ -1,5 +1,16 @@
 import { z } from 'zod';
 
+export const strongPasswordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters')
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+  .regex(/\d/, 'Password must contain at least one number')
+  .regex(
+    /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+    'Password must contain at least one special character'
+  );
+
 export const roleSchema = z.object({
   id: z.number(),
   name: z.string()
@@ -13,6 +24,7 @@ export const userSchema = z.object({
   country_code: z.string().length(2).nullable(),
   selected_property_id: z.string().uuid().nullable().optional(),
   is_admin: z.boolean(),
+  email_verified: z.boolean(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   roles: z.array(roleSchema)
@@ -40,7 +52,7 @@ export const fetchUsersParamsSchema = z.object({
     })
     .default(10)
     .optional(),
-  q: z.string().optional(),
+  q: z.string().max(200).optional(),
   sort_by: sortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.default('desc').optional()
 });
@@ -78,6 +90,14 @@ export const updateUserSchema = z.object({
   role_ids: z.array(z.number().int().positive()).optional()
 });
 
+export const inviteUserSchema = z.object({
+  email: z.string().email(),
+  first_name: z.string().min(1).optional(),
+  last_name: z.string().min(1).optional(),
+  is_admin: z.boolean().optional(),
+  role_ids: z.array(z.number().int().positive()).optional()
+});
+
 export const updateSelectedPropertySchema = z.object({
   selected_property_id: z.string().uuid().nullable().optional()
 });
@@ -89,6 +109,7 @@ export type FetchUsersParams = z.infer<typeof fetchUsersParamsSchema>;
 export type FetchUsersResponse = z.infer<typeof fetchUsersResponseSchema>;
 export type CreateUserData = z.infer<typeof createUserSchema>;
 export type UpdateUserData = z.infer<typeof updateUserSchema>;
+export type InviteUserData = z.infer<typeof inviteUserSchema>;
 export type UpdateSelectedPropertyData = z.infer<
   typeof updateSelectedPropertySchema
 >;

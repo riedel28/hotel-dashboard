@@ -45,6 +45,7 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar';
 import { useView } from '@/contexts/view-context';
+import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
 
 interface SidebarLinkProps extends LinkProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -385,6 +386,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               </SidebarGroup>
             </SidebarMenu>
           </SidebarHeader>
+          <SidebarViewToggle />
           {currentView === 'admin' ? <AdminMenuContent /> : <UserMenuContent />}
         </div>
       </SheetContent>

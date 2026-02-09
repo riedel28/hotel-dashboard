@@ -17,7 +17,6 @@ import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RowActions } from './row-actions';
 
@@ -107,8 +106,17 @@ export default function UsersTable({
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-px min-w-0 flex-1">
-                <div className="font-medium text-foreground truncate">
+                <div className="font-medium text-foreground truncate flex items-center gap-2">
                   {fullName || <Trans>No name</Trans>}
+                  {!row.original.email_verified && (
+                    <Badge
+                      variant="outline"
+                      size="xs"
+                      className="border-amber-400 bg-amber-50 text-amber-700 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-400"
+                    >
+                      <Trans>Pending</Trans>
+                    </Badge>
+                  )}
                 </div>
               </div>
             </div>
@@ -292,10 +300,7 @@ export default function UsersTable({
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer>
-          <ScrollArea>
-            <DataGridTable />
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+          <DataGridTable />
         </DataGridContainer>
         <DataGridPagination />
       </div>

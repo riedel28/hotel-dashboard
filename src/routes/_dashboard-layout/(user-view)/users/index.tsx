@@ -22,7 +22,7 @@ import {
 import { SearchInput } from '@/components/ui/search-input';
 import { cn } from '@/lib/utils';
 
-import { AddUserModal } from './-components/add-user-modal';
+import { InviteUserModal } from './-components/invite-user-modal';
 import UsersTable from './-components/users-table';
 
 function UsersPage() {
@@ -207,7 +207,7 @@ function UsersPage() {
         <h1 className="text-2xl font-bold">
           <Trans>Users</Trans>
         </h1>
-        <AddUserModal />
+        <InviteUserModal />
       </div>
 
       <div className="space-y-2.5">
@@ -231,10 +231,6 @@ function UsersPage() {
               </Button>
             )}
           </div>
-          <p className="text-sm text-muted-foreground">
-            You have <span className="font-medium">3</span> of{' '}
-            <span className="font-medium">12</span> invitations available
-          </p>
         </div>
 
         {q && (

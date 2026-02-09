@@ -6,7 +6,7 @@ import {
   properties as propertiesTable,
   rooms as roomsTable
 } from '../src/db/schema';
-import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
+import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
 
 describe('Rooms API', () => {
   let authToken: string;

@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../src/app';
 import { db } from '../src/db/pool';
 import { properties as propertiesTable } from '../src/db/schema';
-import { cleanupDatabase, createTestUser } from './helpers/dbHelpers';
+import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
 
 describe('Properties API', () => {
   let authToken: string;

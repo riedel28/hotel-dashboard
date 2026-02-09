@@ -12,8 +12,14 @@ export async function authenticateToken(
   next: NextFunction
 ) {
   try {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    // Primary: read from httpOnly cookie
+    let token = req.cookies?.auth_token;
+
+    // Fallback: Authorization header (for tests using createTestUser helper)
+    if (!token) {
+      const authHeader = req.headers['authorization'];
+      token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    }
 
     if (!token) {
       return res.status(401).json({ error: 'Access token required' });

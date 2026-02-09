@@ -1,15 +1,16 @@
-import { ilike } from 'drizzle-orm';
+import { count, ilike } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { properties as propertiesTable } from '../db/schema';
+import { escapeLikePattern } from '../utils/sql';
 
 async function getProperties(req: Request, res: Response) {
   try {
     const { page, per_page, q } = req.query;
 
     const searchCondition = q
-      ? ilike(propertiesTable.name, `%${q}%`)
+      ? ilike(propertiesTable.name, `%${escapeLikePattern(q as string)}%`)
       : undefined;
 
     const pageNum = Number(page) || 1;
@@ -25,11 +26,11 @@ async function getProperties(req: Request, res: Response) {
       .offset(offset);
 
     // Get total count for pagination
-    const allProperties = await db
-      .select({ id: propertiesTable.id })
+    const [{ total }] = await db
+      .select({ total: count() })
       .from(propertiesTable)
       .where(searchCondition);
-    const totalCount = allProperties.length;
+    const totalCount = total;
 
     // Transform database records to match API schema (id as string)
     const transformedProperties = properties.map((property) => ({

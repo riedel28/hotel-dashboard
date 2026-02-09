@@ -6,10 +6,7 @@ import {
   guests as guestsTable,
   reservations as reservationsTable
 } from '../db/schema';
-
-function escapeLikePattern(value: string): string {
-  return value.replace(/[%_\\]/g, '\\$&');
-}
+import { escapeLikePattern } from '../utils/sql';
 
 async function getReservations(req: Request, res: Response) {
   try {

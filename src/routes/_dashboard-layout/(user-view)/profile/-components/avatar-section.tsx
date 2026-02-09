@@ -32,7 +32,7 @@ export function AvatarSection({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewUrlRef = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(currentAvatar || null);
+  const [avatar, _setAvatar] = useState<string | null>(currentAvatar || null);
   const { t } = useLingui();
   const fileInputId = useId();
 
@@ -61,20 +61,8 @@ export function AvatarSection({
     setIsLoading(true);
 
     try {
-      // Create preview URL
-      const previewUrl = URL.createObjectURL(file);
-      cleanupPreview();
-      previewUrlRef.current = previewUrl;
-      setAvatar(previewUrl);
-
       // TODO: Implement API call to upload avatar
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      toast.success(t`Avatar updated successfully`);
-    } catch {
-      toast.error(t`Error uploading avatar`);
-      cleanupPreview();
-      setAvatar(currentAvatar || null);
+      toast.warning(t`Avatar upload is not yet implemented`);
     } finally {
       setIsLoading(false);
       if (fileInputRef.current) {
@@ -94,14 +82,8 @@ export function AvatarSection({
     setIsLoading(true);
 
     try {
-      cleanupPreview();
       // TODO: Implement API call to remove avatar
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      setAvatar(null);
-      toast.success(t`Avatar removed successfully`);
-    } catch {
-      toast.error(t`Error removing avatar`);
+      toast.warning(t`Avatar removal is not yet implemented`);
     } finally {
       setIsLoading(false);
       if (fileInputRef.current) {

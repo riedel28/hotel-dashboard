@@ -27,9 +27,18 @@ dist-ssr
 
 # Environment variables
 .env
-.env.test
+.env.*
 backend/.env
-backend/.env.test
+backend/.env.*
+
+# Secrets & certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Coverage
+coverage/
 
 # TypeScript build info files
 *.tsbuildinfo

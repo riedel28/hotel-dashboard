@@ -45,8 +45,6 @@ type ProductCategoryRaw = {
 };
 
 async function fetchProductCategories(): Promise<ProductCategory[]> {
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
   const { data } = await client.get<ProductCategoryRaw[]>(
     '/product-categories'
   );
@@ -60,7 +58,6 @@ async function fetchProductCategories(): Promise<ProductCategory[]> {
 }
 
 async function fetchProductCategoryById(id: number): Promise<ProductCategory> {
-  await new Promise((resolve) => setTimeout(resolve, 300));
   const { data } = await client.get<ProductCategoryRaw>(
     `/product-categories/${id}`
   );

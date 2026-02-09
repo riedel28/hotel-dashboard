@@ -1,18 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import {
-  createFileRoute,
-  Link,
-  redirect,
-  useRouter
-} from '@tanstack/react-router';
-import { Loader2Icon, MessageCircleIcon } from 'lucide-react';
+  CheckIcon,
+  Loader2Icon,
+  MessageCircleIcon,
+  RefreshCwIcon
+} from 'lucide-react';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useAuth } from '@/auth';
 
+import { resendVerification, signUp } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -30,7 +31,14 @@ const fallback = '/' as const;
 
 export const Route = createFileRoute('/_auth-layout/auth/sign-up')({
   validateSearch: z.object({
-    redirect: z.string().optional().catch('')
+    redirect: z
+      .string()
+      .optional()
+      .catch('')
+      .transform((val) => {
+        if (!val || !val.startsWith('/') || val.startsWith('//')) return '';
+        return val;
+      })
   }),
   beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
@@ -42,13 +50,68 @@ export const Route = createFileRoute('/_auth-layout/auth/sign-up')({
 
 type SignUpFormValues = z.infer<typeof registerSchema>;
 
-function SignUpPage() {
-  const auth = useAuth();
-  const router = useRouter();
-  const navigate = Route.useNavigate();
+interface SuccessViewProps {
+  email: string;
+}
+
+function SuccessView({ email }: SuccessViewProps) {
   const { t } = useLingui();
 
-  const search = Route.useSearch();
+  const resendMutation = useMutation({
+    mutationFn: () => resendVerification(email),
+    onSuccess: () => {
+      toast.success(t`Verification email resent successfully`);
+    },
+    onError: () => {
+      toast.error(t`Failed to resend verification email`);
+    }
+  });
+
+  return (
+    <div className="w-full max-w-lg space-y-8">
+      <div className="space-y-4 text-center">
+        <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
+          <CheckIcon className="size-7" />
+        </div>
+        <h1 className="text-2xl font-bold">
+          <Trans>Check your email</Trans>
+        </h1>
+        <p className="text-muted-foreground text-balance">
+          <Trans>
+            We&apos;ve sent a verification email to{' '}
+            <span className="font-medium">{email}</span>. Click the link in the
+            email to verify your account.
+          </Trans>
+        </p>
+      </div>
+
+      <div className="flex flex-col items-center gap-4">
+        <Button
+          variant="secondary"
+          onClick={() => resendMutation.mutate()}
+          disabled={resendMutation.isPending}
+        >
+          {resendMutation.isPending ? (
+            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCwIcon className="mr-2 h-4 w-4" />
+          )}
+          <Trans>Resend verification email</Trans>
+        </Button>
+        <Link
+          to="/auth/login"
+          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+        >
+          <Trans>Back to login</Trans>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function SignUpPage() {
+  const { t } = useLingui();
+  const [successEmail, setSuccessEmail] = React.useState<string | null>(null);
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(registerSchema),
@@ -60,20 +123,24 @@ function SignUpPage() {
     }
   });
 
-  const registerMutation = useMutation({
-    mutationFn: auth.register,
-    onSuccess: async () => {
-      await router.invalidate();
-      await navigate({ to: search.redirect || fallback });
-      toast.success(t`Successfully registered!`);
+  const signUpMutation = useMutation({
+    mutationFn: signUp,
+    onSuccess: () => {
+      setSuccessEmail(form.getValues('email'));
     },
-    onError: () => {
-      toast.error(t`Failed to register. Please try again.`);
+    onError: (error) => {
+      toast.error(
+        error.message || t`Failed to create account. Please try again.`
+      );
     }
   });
 
   function handleSubmit(data: SignUpFormValues) {
-    registerMutation.mutate(data);
+    signUpMutation.mutate(data);
+  }
+
+  if (successEmail) {
+    return <SuccessView email={successEmail} />;
   }
 
   return (
@@ -87,11 +154,7 @@ function SignUpPage() {
           <Trans>Sign Up</Trans>
         </h1>
         <p className="text-muted-foreground">
-          {search.redirect ? (
-            <Trans>Please create an account to access this page</Trans>
-          ) : (
-            <Trans>Create an account to access the dashboard</Trans>
-          )}
+          <Trans>Create an account to access the dashboard</Trans>
         </p>
       </div>
 
@@ -198,9 +261,9 @@ function SignUpPage() {
           type="submit"
           size="lg"
           className="w-full"
-          disabled={registerMutation.isPending}
+          disabled={signUpMutation.isPending}
         >
-          {registerMutation.isPending && (
+          {signUpMutation.isPending && (
             <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
           )}
           <Trans>Sign Up</Trans>

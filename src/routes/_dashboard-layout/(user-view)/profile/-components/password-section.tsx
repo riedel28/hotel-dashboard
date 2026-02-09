@@ -18,22 +18,22 @@ import { Field, FieldError, FieldLabel, FieldSet } from '@/components/ui/field';
 import { PasswordInput } from '@/components/ui/password-input';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
 
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(1, t`Current password is required`),
-    newPassword: z
-      .string()
-      .min(8, t`Password must be at least 8 characters long`),
-    confirmPassword: z.string().min(1, t`Please confirm your password`)
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: t`Passwords don't match`,
-    path: ['confirmPassword']
-  });
-
-type PasswordFormData = z.infer<typeof passwordSchema>;
-
 export function PasswordSection() {
+  const passwordSchema = z
+    .object({
+      currentPassword: z.string().min(1, t`Current password is required`),
+      newPassword: z
+        .string()
+        .min(8, t`Password must be at least 8 characters long`),
+      confirmPassword: z.string().min(1, t`Please confirm your password`)
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t`Passwords don't match`,
+      path: ['confirmPassword']
+    });
+
+  type PasswordFormData = z.infer<typeof passwordSchema>;
+
   const form = useForm<PasswordFormData>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -43,19 +43,9 @@ export function PasswordSection() {
     }
   });
 
-  const onSubmit = async (data: PasswordFormData) => {
-    try {
-      // TODO: Implement API call to change password
-      console.log('Password change data:', data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      toast.success(t`Password changed successfully`);
-
-      // Reset form
-      form.reset();
-    } catch {
-      toast.error(t`Error changing password`);
-    }
+  const onSubmit = async (_data: PasswordFormData) => {
+    // TODO: Implement API call to change password
+    toast.warning(t`Password change is not yet implemented`);
   };
 
   return (

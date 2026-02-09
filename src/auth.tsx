@@ -2,47 +2,30 @@ import * as React from 'react';
 
 import {
   login as apiLogin,
-  register as apiRegister,
+  logout as apiLogout,
   updateSelectedProperty as apiUpdateSelectedProperty
 } from './api/auth';
-import type {
-  AuthResponse,
-  LoginData,
-  RegisterData,
-  User
-} from './lib/schemas';
+import type { AuthResponse, LoginData, User } from './lib/schemas';
 
 export interface AuthContext {
   isAuthenticated: boolean;
   login: (credentials: LoginData) => Promise<AuthResponse>;
-  register: (data: RegisterData) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   updateSelectedProperty: (propertyId: string | null) => Promise<User>;
   user: User | null;
-  token: string | null;
 }
 
 const AuthContext = React.createContext<AuthContext | null>(null);
 
 const userKey = 'tanstack.auth.user';
-const tokenKey = 'tanstack.auth.token';
 
 function getStoredUser(): User | null {
-  const stored = localStorage.getItem(userKey);
-  return stored ? JSON.parse(stored) : null;
-}
-
-function getStoredToken(): string | null {
-  return localStorage.getItem(tokenKey);
-}
-
-function setStoredAuth(user: User | null, token: string | null) {
-  if (user && token) {
-    localStorage.setItem(userKey, JSON.stringify(user));
-    localStorage.setItem(tokenKey, token);
-  } else {
+  try {
+    const stored = localStorage.getItem(userKey);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
     localStorage.removeItem(userKey);
-    localStorage.removeItem(tokenKey);
+    return null;
   }
 }
 
@@ -50,37 +33,31 @@ function setStoredUser(user: User) {
   localStorage.setItem(userKey, JSON.stringify(user));
 }
 
+function clearStoredUser() {
+  localStorage.removeItem(userKey);
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(getStoredUser());
-  const [token, setToken] = React.useState<string | null>(getStoredToken());
-  const isAuthenticated = Boolean(user && token);
+  const isAuthenticated = Boolean(user);
 
   const logout = React.useCallback(async () => {
-    setStoredAuth(null, null);
-    setUser(null);
-    setToken(null);
+    try {
+      await apiLogout();
+    } finally {
+      clearStoredUser();
+      setUser(null);
+    }
   }, []);
 
   const login = React.useCallback(async (credentials: LoginData) => {
     const response = await apiLogin(credentials);
     if (response) {
-      setStoredAuth(response.user, response.token);
+      setStoredUser(response.user);
       setUser(response.user);
-      setToken(response.token);
       return response;
     }
     throw new Error('Login failed');
-  }, []);
-
-  const register = React.useCallback(async (data: RegisterData) => {
-    const response = await apiRegister(data);
-    if (response) {
-      setStoredAuth(response.user, response.token);
-      setUser(response.user);
-      setToken(response.token);
-      return response;
-    }
-    throw new Error('Registration failed');
   }, []);
 
   const updateSelectedProperty = React.useCallback(
@@ -95,7 +72,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     setUser(getStoredUser());
-    setToken(getStoredToken());
   }, []);
 
   return (
@@ -103,11 +79,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         isAuthenticated,
         login,
-        register,
         logout,
         updateSelectedProperty,
-        user,
-        token
+        user
       }}
     >
       {children}

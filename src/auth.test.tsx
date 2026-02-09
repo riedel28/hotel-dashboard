@@ -4,12 +4,12 @@ import { AuthProvider, useAuth } from './auth';
 
 // Mock the API functions
 const mockedLogin = vi.fn();
-const mockedRegister = vi.fn();
 const mockedUpdateSelectedProperty = vi.fn();
 
 vi.mock('./api/auth', () => ({
   login: (...args: unknown[]) => mockedLogin(...args),
-  register: (...args: unknown[]) => mockedRegister(...args),
+  logout: () => Promise.resolve(),
+  register: () => Promise.resolve(),
   updateSelectedProperty: (...args: unknown[]) =>
     mockedUpdateSelectedProperty(...args)
 }));
@@ -44,7 +44,6 @@ describe('AuthContext', () => {
 
       // Set initial user in localStorage
       localStorage.setItem('tanstack.auth.user', JSON.stringify(mockUser));
-      localStorage.setItem('tanstack.auth.token', 'test-token');
 
       mockedUpdateSelectedProperty.mockResolvedValueOnce(mockUpdatedUser);
 
@@ -95,7 +94,6 @@ describe('AuthContext', () => {
 
       // Set initial user in localStorage
       localStorage.setItem('tanstack.auth.user', JSON.stringify(mockUser));
-      localStorage.setItem('tanstack.auth.token', 'test-token');
 
       mockedUpdateSelectedProperty.mockResolvedValueOnce(mockUpdatedUser);
 
@@ -134,7 +132,6 @@ describe('AuthContext', () => {
       };
 
       localStorage.setItem('tanstack.auth.user', JSON.stringify(mockUser));
-      localStorage.setItem('tanstack.auth.token', 'test-token');
 
       mockedUpdateSelectedProperty.mockResolvedValueOnce(mockUpdatedUser);
 
@@ -168,8 +165,7 @@ describe('AuthContext', () => {
           created_at: '2024-01-01T00:00:00.000Z',
           updated_at: '2024-01-01T00:00:00.000Z',
           is_admin: false
-        },
-        token: 'jwt-token'
+        }
       };
 
       mockedLogin.mockResolvedValueOnce(mockLoginResponse);
@@ -186,42 +182,6 @@ describe('AuthContext', () => {
       });
 
       expect(result.current.user?.selected_property_id).toBe('property-789');
-      expect(result.current.isAuthenticated).toBe(true);
-    });
-  });
-
-  describe('register with selected_property_id', () => {
-    test('should have null selected_property_id after registration', async () => {
-      const mockRegisterResponse = {
-        user: {
-          id: 1,
-          email: 'newuser@example.com',
-          first_name: 'New',
-          last_name: 'User',
-          selected_property_id: null,
-          created_at: '2024-01-01T00:00:00.000Z',
-          updated_at: '2024-01-01T00:00:00.000Z',
-          is_admin: false
-        },
-        token: 'jwt-token'
-      };
-
-      mockedRegister.mockResolvedValueOnce(mockRegisterResponse);
-
-      const { result } = renderHook(() => useAuth(), {
-        wrapper: AuthProvider
-      });
-
-      await act(async () => {
-        await result.current.register({
-          email: 'newuser@example.com',
-          password: 'password123',
-          first_name: 'New',
-          last_name: 'User'
-        });
-      });
-
-      expect(result.current.user?.selected_property_id).toBeNull();
       expect(result.current.isAuthenticated).toBe(true);
     });
   });

@@ -148,7 +148,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
     <div
       data-slot="data-grid-pagination"
       className={cn(
-        'flex grow flex-col flex-wrap items-center justify-between gap-2.5 py-2.5 sm:flex-row sm:py-0',
+        'flex grow flex-wrap items-start md:items-center justify-between gap-2.5 md:py-2.5 sm:flex-row sm:py-0',
         mergedProps?.className
       )}
     >
@@ -157,7 +157,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mergedProps?.infoSkeleton
         ) : (
           <>
-            <div className="order-2 text-sm text-nowrap text-muted-foreground sm:order-1">
+            <div className="order-2 text-sm text-nowrap text-muted-foreground ml-0 md:ml-2.5 sm:order-1">
               {mergedProps?.info?.startsWith('pagination.') ? (
                 <Trans>
                   {from} - {to} of {recordCount}
@@ -217,7 +217,7 @@ function DataGridPagination(props: DataGridPaginationProps) {
           mergedProps?.sizesSkeleton
         ) : (
           <>
-            <div className="text-sm text-muted-foreground">
+            <div className="hidden md:block text-sm text-muted-foreground">
               <Trans>Rows per page</Trans>
             </div>
             <Select
@@ -227,7 +227,10 @@ function DataGridPagination(props: DataGridPaginationProps) {
                 updatePagination(0, newPageSize); // Reset to first page when changing page size
               }}
             >
-              <SelectTrigger className="w-fit min-w-[70px]" size="sm">
+              <SelectTrigger
+                className="w-fit min-w-[70px] mr-0 md:mr-2.5"
+                size="sm"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent side="top" className="min-w-[50px]">

@@ -45,7 +45,7 @@ export const errorHandler = (
 
   res.status(status).json({
     error: message,
-    ...(env.APP_STAGE === 'dev' && {
+    ...(env.NODE_ENV === 'development' && {
       stack: err.stack,
       details: err.message
     })

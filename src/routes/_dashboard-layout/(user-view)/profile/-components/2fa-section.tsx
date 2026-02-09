@@ -50,41 +50,23 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
   const switchId = useId();
 
   const handleToggleChange = async (
-    checked: boolean,
+    _checked: boolean,
     previousValue: boolean
   ) => {
     setIsLoading(true);
 
-    try {
-      // TODO: Implement API call to enable/disable 2FA
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      toast.success(
-        checked
-          ? t`Two-factor authentication is enabled`
-          : t`Two-factor authentication is disabled`
-      );
-    } catch {
-      form.setValue('enabled', previousValue, { shouldDirty: false });
-      toast.error(t`Error updating two-factor authentication`);
-    } finally {
-      setIsLoading(false);
-    }
+    // TODO: Implement API call to enable/disable 2FA
+    form.setValue('enabled', previousValue, { shouldDirty: false });
+    toast.warning(t`Two-factor authentication is not yet implemented`);
+    setIsLoading(false);
   };
 
   const handleSetup = async () => {
     setIsLoading(true);
 
-    try {
-      // TODO: Implement 2FA setup flow
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      toast.success(t`Two-factor authentication setup initiated`);
-    } catch {
-      toast.error(t`Error setting up two-factor authentication`);
-    } finally {
-      setIsLoading(false);
-    }
+    // TODO: Implement 2FA setup flow
+    toast.warning(t`Two-factor authentication setup is not yet implemented`);
+    setIsLoading(false);
   };
 
   return (

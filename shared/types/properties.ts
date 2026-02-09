@@ -24,7 +24,7 @@ export const fetchPropertiesParamsSchema = z.object({
     })
     .default(10)
     .optional(),
-  q: z.string().optional()
+  q: z.string().max(200).optional()
 });
 
 export const fetchPropertiesResponseSchema = z.object({

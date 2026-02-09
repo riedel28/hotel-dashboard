@@ -14,6 +14,7 @@ import {
   updateRoom
 } from '../controllers/room-controller';
 import { authenticateToken } from '../middleware/auth';
+import { requireAdmin } from '../middleware/authorization';
 import {
   validateBody,
   validateParams,
@@ -25,8 +26,8 @@ const router = Router();
 // Apply authentication to all routes
 router.use(authenticateToken);
 
-// Create room
-router.post('/', validateBody(createRoomSchema), createRoom);
+// Create room (admin only)
+router.post('/', requireAdmin, validateBody(createRoomSchema), createRoom);
 
 // Get rooms
 router.get('/', validateQuery(fetchRoomsParamsSchema), getRooms);
@@ -34,15 +35,21 @@ router.get('/', validateQuery(fetchRoomsParamsSchema), getRooms);
 // Get room by id
 router.get('/:id', validateParams(roomIdParamsSchema), getRoomById);
 
-// Update room
+// Update room (admin only)
 router.patch(
   '/:id',
+  requireAdmin,
   validateParams(roomIdParamsSchema),
   validateBody(updateRoomSchema),
   updateRoom
 );
 
-// Delete room
-router.delete('/:id', validateParams(roomIdParamsSchema), deleteRoom);
+// Delete room (admin only)
+router.delete(
+  '/:id',
+  requireAdmin,
+  validateParams(roomIdParamsSchema),
+  deleteRoom
+);
 
 export default router;

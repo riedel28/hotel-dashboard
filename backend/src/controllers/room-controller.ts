@@ -3,10 +3,7 @@ import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { rooms as roomsTable } from '../db/schema';
-
-function escapeLikePattern(value: string): string {
-  return value.replace(/[%_\\]/g, '\\$&');
-}
+import { escapeLikePattern } from '../utils/sql';
 
 async function getRooms(req: Request, res: Response) {
   try {
