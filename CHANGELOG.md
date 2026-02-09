@@ -1,3 +1,32 @@
+# [1.7.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.6.1...v1.7.0) (2026-02-09)
+
+
+### Bug Fixes
+
+* **backend:** use SQL count() instead of fetching all rows for pagination ([f4fdcb9](https://github.com/riedel28/tanstack-dashboard/commit/f4fdcb900d5ad6b082c2bacb90b6e2aee4a0e30a))
+* format vercel.json for Biome ([a62508a](https://github.com/riedel28/tanstack-dashboard/commit/a62508a9e907d815fc26671de4dace8373bff6b4))
+* **frontend:** improve error handling in sign-up process ([76c3f0c](https://github.com/riedel28/tanstack-dashboard/commit/76c3f0c55f3ccd4dbe9ad58142e38b02cfa88971))
+* **frontend:** read correct error key in API error handler ([a510fc8](https://github.com/riedel28/tanstack-dashboard/commit/a510fc80128ffff814bd853107f205dc58830ac2))
+* **frontend:** tree-shake devtools, fix stale hook, remove dead code ([1d065de](https://github.com/riedel28/tanstack-dashboard/commit/1d065de5a2241eb37ee749196a2ea65e2a039f7c))
+* **profile:** replace fake success toasts and fix module-scope t macro ([97b84f9](https://github.com/riedel28/tanstack-dashboard/commit/97b84f9e0eba2c3f5838b34509c2ff7747aa138b))
+* resolve TypeScript error and update Biome schema version ([ef0cdd0](https://github.com/riedel28/tanstack-dashboard/commit/ef0cdd00e81722fac4bc3ea6a52403dd6e8b6e1c))
+* **security:** add admin route guards and harden auth state ([fcf4dd2](https://github.com/riedel28/tanstack-dashboard/commit/fcf4dd2bb03b4e4b29c7a26ae5efba5bf1db5c2c))
+* **security:** deduplicate and fix LIKE pattern escaping ([3ec41b6](https://github.com/riedel28/tanstack-dashboard/commit/3ec41b6d693cc863d04bd73051bccf8d8f4a5096))
+* **security:** harden backend validation and runtime config ([4eb29a6](https://github.com/riedel28/tanstack-dashboard/commit/4eb29a6d241e18100a67d52043ce357061e6def3))
+* **security:** prevent password hash exposure and use validated bcrypt rounds ([d02652a](https://github.com/riedel28/tanstack-dashboard/commit/d02652abe3f8b0bc5b002c2e3afaab7b05ae396c))
+* **security:** remove hardcoded credentials, fix open redirect, remove password logging ([4b0369d](https://github.com/riedel28/tanstack-dashboard/commit/4b0369d7af0b92bb65142bd0b8b295a2ce0d7268))
+* **security:** require admin auth for user registration ([bf2ae91](https://github.com/riedel28/tanstack-dashboard/commit/bf2ae912a1c4c0eb502ff20ea98599f2df242180))
+* **security:** restrict CORS to configured origins ([fa58192](https://github.com/riedel28/tanstack-dashboard/commit/fa581928f6dba4f1a9c6769d0163018327519984))
+
+
+### Features
+
+* **auth:** migrate JWT auth to httpOnly cookies and add logout endpoint ([ad68c28](https://github.com/riedel28/tanstack-dashboard/commit/ad68c2865b7d27a9ed077f2f65ae1b9229a9661c))
+* **backend:** add email verification and user invitation system ([d2f81e5](https://github.com/riedel28/tanstack-dashboard/commit/d2f81e548f1fbcf743f4692c9a3cff8fc00facfd))
+* **frontend:** add email verification and invitation flows ([4d3baa9](https://github.com/riedel28/tanstack-dashboard/commit/4d3baa9e4966a763ec57f0443d494e5d7a1c7a7b))
+* **security:** add authorization middleware and protect routes ([087c00a](https://github.com/riedel28/tanstack-dashboard/commit/087c00aaa0c554df16ed860d0aac0081c66b69a3))
+* **security:** add helmet, rate limiting, and request body size limit ([ef23120](https://github.com/riedel28/tanstack-dashboard/commit/ef23120b929dbdb695010a6826fe4b3710ea9270))
+
 ## [1.6.1](https://github.com/riedel28/tanstack-dashboard/compare/v1.6.0...v1.6.1) (2026-02-07)
 
 
