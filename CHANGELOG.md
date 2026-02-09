@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.7.1...v1.8.0) (2026-02-09)
+
+
+### Features
+
+* **admin-layout:** enhance admin routing and remove deprecated view context ([2524129](https://github.com/riedel28/tanstack-dashboard/commit/25241292d1e547e0796bce407ab9d90916797c61))
+
 ## [1.7.1](https://github.com/riedel28/tanstack-dashboard/compare/v1.7.0...v1.7.1) (2026-02-09)
 
 
