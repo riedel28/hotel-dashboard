@@ -11,12 +11,18 @@ import { generateToken } from '../utils/jwt';
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
+const isProduction = env.NODE_ENV === 'production';
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? ('none' as const) : ('lax' as const),
+  path: '/'
+};
+
 function setAuthCookie(res: Response, token: string, rememberMe = false) {
   res.cookie('auth_token', token, {
-    httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
+    ...cookieOptions,
     maxAge: rememberMe ? THIRTY_DAYS_MS : ONE_DAY_MS
   });
 }
@@ -156,7 +162,7 @@ async function login(req: AuthenticatedRequest, res: Response) {
 }
 
 async function logout(_req: AuthenticatedRequest, res: Response) {
-  res.clearCookie('auth_token', { path: '/' });
+  res.clearCookie('auth_token', cookieOptions);
   res.status(200).json({ message: 'Logged out successfully' });
 }
 
