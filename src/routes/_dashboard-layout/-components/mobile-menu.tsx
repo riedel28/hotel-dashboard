@@ -44,7 +44,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from '@/components/ui/sidebar';
-import { useView } from '@/contexts/view-context';
+import { useCurrentView } from '@/hooks/use-current-view';
 import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
 
 interface SidebarLinkProps extends LinkProps {
@@ -105,7 +105,7 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
-  const { currentView } = useView();
+  const currentView = useCurrentView();
 
   const handleNavigate = () => {
     onOpenChange(false);
@@ -117,13 +117,17 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon} onNavigate={handleNavigate}>
+            <SidebarLink
+              to="/admin"
+              icon={HomeIcon}
+              onNavigate={handleNavigate}
+            >
               <Trans>Start</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
-              to="/properties"
+              to="/admin/properties"
               icon={BuildingIcon}
               onNavigate={handleNavigate}
             >
@@ -132,7 +136,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
-              to="/customers"
+              to="/admin/customers"
               icon={UsersIcon}
               onNavigate={handleNavigate}
             >

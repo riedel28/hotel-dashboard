@@ -12,6 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardLayoutRouteImport } from './routes/_dashboard-layout'
 import { Route as AuthLayoutRouteImport } from './routes/_auth-layout'
 import { Route as DashboardLayoutIndexRouteImport } from './routes/_dashboard-layout/index'
+import { Route as DashboardLayoutAdminRouteImport } from './routes/_dashboard-layout/admin'
+import { Route as DashboardLayoutAdminIndexRouteImport } from './routes/_dashboard-layout/admin/index'
+import { Route as DashboardLayoutAdminPropertiesRouteImport } from './routes/_dashboard-layout/admin/properties'
+import { Route as DashboardLayoutAdminCustomersRouteImport } from './routes/_dashboard-layout/admin/customers'
 import { Route as DashboardLayoutuserViewTvRouteImport } from './routes/_dashboard-layout/(user-view)/tv'
 import { Route as DashboardLayoutuserViewProfileRouteImport } from './routes/_dashboard-layout/(user-view)/profile'
 import { Route as DashboardLayoutuserViewPmsProviderRouteImport } from './routes/_dashboard-layout/(user-view)/pms-provider'
@@ -24,8 +28,6 @@ import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes
 import { Route as DashboardLayoutuserViewAnalyticsRouteImport } from './routes/_dashboard-layout/(user-view)/analytics'
 import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './routes/_dashboard-layout/(user-view)/access-provider'
 import { Route as DashboardLayoutuserViewAboutRouteImport } from './routes/_dashboard-layout/(user-view)/about'
-import { Route as DashboardLayoutadminViewPropertiesRouteImport } from './routes/_dashboard-layout/(admin-view)/properties'
-import { Route as DashboardLayoutadminViewCustomersRouteImport } from './routes/_dashboard-layout/(admin-view)/customers'
 import { Route as AuthLayoutAuthVerifyEmailRouteImport } from './routes/_auth-layout/auth/verify-email'
 import { Route as AuthLayoutAuthSignUpRouteImport } from './routes/_auth-layout/auth/sign-up'
 import { Route as AuthLayoutAuthLoginRouteImport } from './routes/_auth-layout/auth/login'
@@ -56,6 +58,29 @@ const DashboardLayoutIndexRoute = DashboardLayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
+const DashboardLayoutAdminRoute = DashboardLayoutAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutAdminIndexRoute =
+  DashboardLayoutAdminIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardLayoutAdminRoute,
+  } as any)
+const DashboardLayoutAdminPropertiesRoute =
+  DashboardLayoutAdminPropertiesRouteImport.update({
+    id: '/properties',
+    path: '/properties',
+    getParentRoute: () => DashboardLayoutAdminRoute,
+  } as any)
+const DashboardLayoutAdminCustomersRoute =
+  DashboardLayoutAdminCustomersRouteImport.update({
+    id: '/customers',
+    path: '/customers',
+    getParentRoute: () => DashboardLayoutAdminRoute,
+  } as any)
 const DashboardLayoutuserViewTvRoute =
   DashboardLayoutuserViewTvRouteImport.update({
     id: '/(user-view)/tv',
@@ -126,18 +151,6 @@ const DashboardLayoutuserViewAboutRoute =
   DashboardLayoutuserViewAboutRouteImport.update({
     id: '/(user-view)/about',
     path: '/about',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutadminViewPropertiesRoute =
-  DashboardLayoutadminViewPropertiesRouteImport.update({
-    id: '/(admin-view)/properties',
-    path: '/properties',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutadminViewCustomersRoute =
-  DashboardLayoutadminViewCustomersRouteImport.update({
-    id: '/(admin-view)/customers',
-    path: '/customers',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const AuthLayoutAuthVerifyEmailRoute =
@@ -239,13 +252,12 @@ const DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof DashboardLayoutIndexRoute
+  '/admin': typeof DashboardLayoutAdminRouteWithChildren
   '/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
-  '/customers': typeof DashboardLayoutadminViewCustomersRoute
-  '/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
   '/access-provider': typeof DashboardLayoutuserViewAccessProviderRoute
   '/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
@@ -258,6 +270,9 @@ export interface FileRoutesByFullPath {
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/profile': typeof DashboardLayoutuserViewProfileRoute
   '/tv': typeof DashboardLayoutuserViewTvRoute
+  '/admin/customers': typeof DashboardLayoutAdminCustomersRoute
+  '/admin/properties': typeof DashboardLayoutAdminPropertiesRoute
+  '/admin/': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
@@ -277,8 +292,6 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
-  '/customers': typeof DashboardLayoutadminViewCustomersRoute
-  '/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
   '/access-provider': typeof DashboardLayoutuserViewAccessProviderRoute
   '/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
@@ -291,6 +304,9 @@ export interface FileRoutesByTo {
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/profile': typeof DashboardLayoutuserViewProfileRoute
   '/tv': typeof DashboardLayoutuserViewTvRoute
+  '/admin/customers': typeof DashboardLayoutAdminCustomersRoute
+  '/admin/properties': typeof DashboardLayoutAdminPropertiesRoute
+  '/admin': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
@@ -307,14 +323,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth-layout': typeof AuthLayoutRouteWithChildren
   '/_dashboard-layout': typeof DashboardLayoutRouteWithChildren
+  '/_dashboard-layout/admin': typeof DashboardLayoutAdminRouteWithChildren
   '/_dashboard-layout/': typeof DashboardLayoutIndexRoute
   '/_auth-layout/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/_auth-layout/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/_auth-layout/auth/login': typeof AuthLayoutAuthLoginRoute
   '/_auth-layout/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/_auth-layout/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
-  '/_dashboard-layout/(admin-view)/customers': typeof DashboardLayoutadminViewCustomersRoute
-  '/_dashboard-layout/(admin-view)/properties': typeof DashboardLayoutadminViewPropertiesRoute
   '/_dashboard-layout/(user-view)/about': typeof DashboardLayoutuserViewAboutRoute
   '/_dashboard-layout/(user-view)/access-provider': typeof DashboardLayoutuserViewAccessProviderRoute
   '/_dashboard-layout/(user-view)/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
@@ -327,6 +342,9 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/_dashboard-layout/(user-view)/profile': typeof DashboardLayoutuserViewProfileRoute
   '/_dashboard-layout/(user-view)/tv': typeof DashboardLayoutuserViewTvRoute
+  '/_dashboard-layout/admin/customers': typeof DashboardLayoutAdminCustomersRoute
+  '/_dashboard-layout/admin/properties': typeof DashboardLayoutAdminPropertiesRoute
+  '/_dashboard-layout/admin/': typeof DashboardLayoutAdminIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/_dashboard-layout/(user-view)/(front-office)/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/_dashboard-layout/(user-view)/(front-office)/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
@@ -343,13 +361,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/auth/accept-invitation'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/sign-up'
     | '/auth/verify-email'
-    | '/customers'
-    | '/properties'
     | '/about'
     | '/access-provider'
     | '/analytics'
@@ -362,6 +379,9 @@ export interface FileRouteTypes {
     | '/pms-provider'
     | '/profile'
     | '/tv'
+    | '/admin/customers'
+    | '/admin/properties'
+    | '/admin/'
     | '/orders'
     | '/payments'
     | '/registration-forms'
@@ -381,8 +401,6 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/sign-up'
     | '/auth/verify-email'
-    | '/customers'
-    | '/properties'
     | '/about'
     | '/access-provider'
     | '/analytics'
@@ -395,6 +413,9 @@ export interface FileRouteTypes {
     | '/pms-provider'
     | '/profile'
     | '/tv'
+    | '/admin/customers'
+    | '/admin/properties'
+    | '/admin'
     | '/orders'
     | '/payments'
     | '/registration-forms'
@@ -410,14 +431,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth-layout'
     | '/_dashboard-layout'
+    | '/_dashboard-layout/admin'
     | '/_dashboard-layout/'
     | '/_auth-layout/auth/accept-invitation'
     | '/_auth-layout/auth/forgot-password'
     | '/_auth-layout/auth/login'
     | '/_auth-layout/auth/sign-up'
     | '/_auth-layout/auth/verify-email'
-    | '/_dashboard-layout/(admin-view)/customers'
-    | '/_dashboard-layout/(admin-view)/properties'
     | '/_dashboard-layout/(user-view)/about'
     | '/_dashboard-layout/(user-view)/access-provider'
     | '/_dashboard-layout/(user-view)/analytics'
@@ -430,6 +450,9 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/pms-provider'
     | '/_dashboard-layout/(user-view)/profile'
     | '/_dashboard-layout/(user-view)/tv'
+    | '/_dashboard-layout/admin/customers'
+    | '/_dashboard-layout/admin/properties'
+    | '/_dashboard-layout/admin/'
     | '/_dashboard-layout/(user-view)/(front-office)/orders'
     | '/_dashboard-layout/(user-view)/(front-office)/payments'
     | '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
@@ -470,6 +493,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof DashboardLayoutIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/admin': {
+      id: '/_dashboard-layout/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof DashboardLayoutAdminRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/admin/': {
+      id: '/_dashboard-layout/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof DashboardLayoutAdminIndexRouteImport
+      parentRoute: typeof DashboardLayoutAdminRoute
+    }
+    '/_dashboard-layout/admin/properties': {
+      id: '/_dashboard-layout/admin/properties'
+      path: '/properties'
+      fullPath: '/admin/properties'
+      preLoaderRoute: typeof DashboardLayoutAdminPropertiesRouteImport
+      parentRoute: typeof DashboardLayoutAdminRoute
+    }
+    '/_dashboard-layout/admin/customers': {
+      id: '/_dashboard-layout/admin/customers'
+      path: '/customers'
+      fullPath: '/admin/customers'
+      preLoaderRoute: typeof DashboardLayoutAdminCustomersRouteImport
+      parentRoute: typeof DashboardLayoutAdminRoute
     }
     '/_dashboard-layout/(user-view)/tv': {
       id: '/_dashboard-layout/(user-view)/tv'
@@ -553,20 +604,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof DashboardLayoutuserViewAboutRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(admin-view)/properties': {
-      id: '/_dashboard-layout/(admin-view)/properties'
-      path: '/properties'
-      fullPath: '/properties'
-      preLoaderRoute: typeof DashboardLayoutadminViewPropertiesRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(admin-view)/customers': {
-      id: '/_dashboard-layout/(admin-view)/customers'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof DashboardLayoutadminViewCustomersRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_auth-layout/auth/verify-email': {
@@ -704,10 +741,24 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
   AuthLayoutRouteChildren,
 )
 
+interface DashboardLayoutAdminRouteChildren {
+  DashboardLayoutAdminCustomersRoute: typeof DashboardLayoutAdminCustomersRoute
+  DashboardLayoutAdminPropertiesRoute: typeof DashboardLayoutAdminPropertiesRoute
+  DashboardLayoutAdminIndexRoute: typeof DashboardLayoutAdminIndexRoute
+}
+
+const DashboardLayoutAdminRouteChildren: DashboardLayoutAdminRouteChildren = {
+  DashboardLayoutAdminCustomersRoute: DashboardLayoutAdminCustomersRoute,
+  DashboardLayoutAdminPropertiesRoute: DashboardLayoutAdminPropertiesRoute,
+  DashboardLayoutAdminIndexRoute: DashboardLayoutAdminIndexRoute,
+}
+
+const DashboardLayoutAdminRouteWithChildren =
+  DashboardLayoutAdminRoute._addFileChildren(DashboardLayoutAdminRouteChildren)
+
 interface DashboardLayoutRouteChildren {
+  DashboardLayoutAdminRoute: typeof DashboardLayoutAdminRouteWithChildren
   DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
-  DashboardLayoutadminViewCustomersRoute: typeof DashboardLayoutadminViewCustomersRoute
-  DashboardLayoutadminViewPropertiesRoute: typeof DashboardLayoutadminViewPropertiesRoute
   DashboardLayoutuserViewAboutRoute: typeof DashboardLayoutuserViewAboutRoute
   DashboardLayoutuserViewAccessProviderRoute: typeof DashboardLayoutuserViewAccessProviderRoute
   DashboardLayoutuserViewAnalyticsRoute: typeof DashboardLayoutuserViewAnalyticsRoute
@@ -734,11 +785,8 @@ interface DashboardLayoutRouteChildren {
 }
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardLayoutAdminRoute: DashboardLayoutAdminRouteWithChildren,
   DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
-  DashboardLayoutadminViewCustomersRoute:
-    DashboardLayoutadminViewCustomersRoute,
-  DashboardLayoutadminViewPropertiesRoute:
-    DashboardLayoutadminViewPropertiesRoute,
   DashboardLayoutuserViewAboutRoute: DashboardLayoutuserViewAboutRoute,
   DashboardLayoutuserViewAccessProviderRoute:
     DashboardLayoutuserViewAccessProviderRoute,

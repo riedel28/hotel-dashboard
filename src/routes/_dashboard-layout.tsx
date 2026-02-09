@@ -46,8 +46,7 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
-import { useView, ViewProvider } from '@/contexts/view-context';
-import { AutoViewSwitcher } from '@/routes/_dashboard-layout/-components/auto-view-switcher';
+import { useCurrentView } from '@/hooks/use-current-view';
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
 
@@ -133,13 +132,13 @@ function AdminSidebarContent() {
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon} tooltip={t`Start`}>
+            <SidebarLink to="/admin" icon={HomeIcon} tooltip={t`Start`}>
               <Trans>Start</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
-              to="/properties"
+              to="/admin/properties"
               icon={BuildingIcon}
               tooltip={t`Properties`}
             >
@@ -148,7 +147,7 @@ function AdminSidebarContent() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
-              to="/customers"
+              to="/admin/customers"
               icon={UsersIcon}
               tooltip={t`Customers`}
             >
@@ -373,7 +372,7 @@ function UserSidebarContent() {
 
 // Main sidebar component
 function DashboardSidebar() {
-  const { currentView } = useView();
+  const currentView = useCurrentView();
 
   return (
     <Sidebar collapsible="icon">
@@ -391,18 +390,15 @@ function DashboardSidebar() {
 // Main layout component
 function DashboardLayout() {
   return (
-    <ViewProvider>
-      <SidebarProvider>
-        <AutoViewSwitcher />
-        <DashboardSidebar />
-        <SidebarInset className="flex h-full min-w-0 flex-col">
-          <Header />
-          <main className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8">
-            <Outlet />
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
-    </ViewProvider>
+    <SidebarProvider>
+      <DashboardSidebar />
+      <SidebarInset className="flex h-full min-w-0 flex-col">
+        <Header />
+        <main className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8">
+          <Outlet />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 
