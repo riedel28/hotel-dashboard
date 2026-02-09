@@ -20,6 +20,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@epic-web/remember": "^1.1.0",
     "@types/cookie-parser": "^1.4.10",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
