@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/riedel28/tanstack-dashboard/compare/v1.7.0...v1.7.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* **backend:** add @epic-web/remember to backend dependencies ([fc0707e](https://github.com/riedel28/tanstack-dashboard/commit/fc0707e3615f0587763b31237e43c1b6273788e1))
+
 # [1.7.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.6.1...v1.7.0) (2026-02-09)
 
 
