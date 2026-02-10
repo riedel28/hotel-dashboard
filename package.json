@@ -1,7 +1,7 @@
 {
   "name": "tanstack-dashboard",
   "private": true,
-  "version": "1.9.0",
+  "version": "1.10.0",
   "type": "module",
   "scripts": {
     "build": "bun run type-check && bun --bun vite build",

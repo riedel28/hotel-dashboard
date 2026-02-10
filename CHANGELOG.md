@@ -1,3 +1,19 @@
+# [1.10.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.9.0...v1.10.0) (2026-02-10)
+
+
+### Bug Fixes
+
+* **auth:** remove empty redirect param from login URL ([7b90e0d](https://github.com/riedel28/tanstack-dashboard/commit/7b90e0d55765ff5dcc912e9a2e7bc94cfd5769b9))
+* **server:** enable trust proxy in production for rate limiter ([e7bdf14](https://github.com/riedel28/tanstack-dashboard/commit/e7bdf143e9984f193a55d02109bdf8a46a348f2a))
+
+
+### Features
+
+* **auth:** add forgot-password and reset-password endpoints ([e4fedc4](https://github.com/riedel28/tanstack-dashboard/commit/e4fedc414ce8286cb69c1c87f54b56e1b996b337))
+* **auth:** wire up forgot-password page and add reset-password page ([684867f](https://github.com/riedel28/tanstack-dashboard/commit/684867f71d0884b9025598cd05d232e06cbf59fe))
+* **db:** add 'reset' token type to email verification tokens ([99af6ad](https://github.com/riedel28/tanstack-dashboard/commit/99af6ad9b19123fcec0fde79eefd6ac5b12af953))
+* **email:** add password reset email template and fix button colors ([c9fd873](https://github.com/riedel28/tanstack-dashboard/commit/c9fd873bcee046217567b6a6cc1203b1ac1e234c)), closes [#18181](https://github.com/riedel28/tanstack-dashboard/issues/18181) [#1e3a8](https://github.com/riedel28/tanstack-dashboard/issues/1e3a8)
+
 # [1.9.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.8.0...v1.9.0) (2026-02-10)
 
 
