@@ -299,7 +299,9 @@ export const emailVerificationTokens = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     token: text('token').notNull().unique(),
-    type: text('type').notNull().$type<'verification' | 'invitation'>(),
+    type: text('type')
+      .notNull()
+      .$type<'verification' | 'invitation' | 'reset'>(),
     expires_at: timestamp('expires_at', { withTimezone: true }).notNull(),
     used_at: timestamp('used_at', { withTimezone: true }),
     created_at: timestamp('created_at', { withTimezone: true })
@@ -311,7 +313,7 @@ export const emailVerificationTokens = pgTable(
     index('email_verification_tokens_token_idx').on(table.token),
     check(
       'email_verification_tokens_type_check',
-      sql`${table.type} IN ('verification', 'invitation')`
+      sql`${table.type} IN ('verification', 'invitation', 'reset')`
     )
   ]
 );
@@ -388,7 +390,8 @@ export const selectEmailVerificationTokenSchema = createSelectSchema(
 
 export const emailVerificationTokenTypeSchema = z.enum([
   'verification',
-  'invitation'
+  'invitation',
+  'reset'
 ]);
 
 export type EmailVerificationToken =
