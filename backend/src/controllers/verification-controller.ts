@@ -75,6 +75,35 @@ async function verifyEmail(req: Request, res: Response) {
       );
 
     if (!tokenRecord) {
+      // Check if this token was already used and the user is verified (idempotent)
+      const [usedToken] = await db
+        .select({ user_id: emailVerificationTokens.user_id })
+        .from(emailVerificationTokens)
+        .where(
+          and(
+            eq(emailVerificationTokens.token, token),
+            eq(emailVerificationTokens.type, 'verification')
+          )
+        );
+
+      if (usedToken) {
+        const verifiedUser = await db.query.users.findFirst({
+          columns: { email_verified: true },
+          where: and(
+            eq(users.id, usedToken.user_id),
+            eq(users.email_verified, true)
+          )
+        });
+
+        if (verifiedUser) {
+          return res
+            .status(200)
+            .json({
+              message: 'Email verified successfully. You can now log in.'
+            });
+        }
+      }
+
       return res
         .status(400)
         .json({ error: 'Invalid or expired verification link' });

@@ -1,12 +1,10 @@
 import { Trans } from '@lingui/react/macro';
-import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { CheckIcon, Loader2Icon, XCircleIcon } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 import { verifyEmail } from '@/api/auth';
-import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/_auth-layout/auth/verify-email')({
   validateSearch: z.object({
@@ -17,19 +15,27 @@ export const Route = createFileRoute('/_auth-layout/auth/verify-email')({
 
 function VerifyEmailPage() {
   const { token } = Route.useSearch();
+  const [status, setStatus] = useState<
+    'idle' | 'pending' | 'success' | 'error'
+  >('idle');
 
-  const verifyMutation = useMutation({
-    mutationFn: () => verifyEmail(token || '')
-  });
-
-  const didVerify = useRef(false);
   useEffect(() => {
-    if (token && !didVerify.current) {
-      didVerify.current = true;
-      verifyMutation.mutate();
-    }
-    // Run only once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!token) return;
+
+    let cancelled = false;
+    setStatus('pending');
+
+    verifyEmail(token)
+      .then(() => {
+        if (!cancelled) setStatus('success');
+      })
+      .catch(() => {
+        if (!cancelled) setStatus('error');
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [token]);
 
   if (!token) {
@@ -58,7 +64,7 @@ function VerifyEmailPage() {
     );
   }
 
-  if (verifyMutation.isPending) {
+  if (status === 'idle' || status === 'pending') {
     return (
       <div className="w-full max-w-lg space-y-8">
         <div className="space-y-4 text-center">
@@ -71,7 +77,7 @@ function VerifyEmailPage() {
     );
   }
 
-  if (verifyMutation.isError) {
+  if (status === 'error') {
     return (
       <div className="w-full max-w-lg space-y-8">
         <div className="space-y-4 text-center">
@@ -109,20 +115,19 @@ function VerifyEmailPage() {
         <h1 className="text-2xl font-bold">
           <Trans>Email verified!</Trans>
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-balance">
           <Trans>
             Your email has been verified successfully. You can now log in.
           </Trans>
         </p>
       </div>
       <div className="text-center">
-        <Button
-          render={
-            <Link to="/auth/login">
-              <Trans>Go to login</Trans>
-            </Link>
-          }
-        />
+        <Link
+          to="/auth/login"
+          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+        >
+          <Trans>Go to login</Trans>
+        </Link>
       </div>
     </div>
   );
