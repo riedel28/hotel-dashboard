@@ -83,6 +83,24 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 - Feature-specific components co-located with routes
 - Component folders use `-components/` naming convention
 
+### Email Verification & Token System
+
+- `emailVerificationTokens` table handles three token types: `'verification'`, `'invitation'`, `'reset'`
+- Token flow pattern: generate token → store in DB with expiry → send email with link → validate on use → mark `used_at` in transaction
+- Always return generic 200 responses for email-based endpoints (forgot-password, resend-verification) to prevent email enumeration
+- Invalidate old unused tokens (set `used_at`) before creating new ones for the same user/type
+- Password reset tokens expire in 1 hour; verification/invitation tokens expire in 24h/7d
+- Email templates live in `backend/src/utils/email.ts` — use `emailLayout()` wrapper for consistent styling
+- Controllers in `backend/src/controllers/verification-controller.ts`, routes in `backend/src/routes/verification.ts`
+
+### Auth Pages Pattern
+
+- Auth pages live under `src/routes/_auth-layout/auth/`
+- Token-based pages (accept-invitation, reset-password, verify-email) read `token` from search params via `validateSearch`
+- Three-state pattern: no token → error view, form → input view, mutation success → success view
+- Use `useMutation` from TanStack Query for form submissions, not `react-hook-form`'s `isSubmitting`
+- Success/error views use consistent icon+heading+description+link layout
+
 ### Environment Configuration
 
 #### Frontend
@@ -91,9 +109,22 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 
 #### Backend
 
-- `DATABASE_URL` - PostgreSQL connection string
+- `DATABASE_URL` - PostgreSQL connection string (Neon serverless — may have cold-start delays)
 - `CORS_ORIGIN` - Allowed frontend origin (default: <http://localhost:5173>)
-- Port defaults to 3001
+- Port defaults to 5001 (not 3001)
+- SMTP configured via `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
+- `APP_URL` - Used for email links (e.g. verification, reset password)
+- Mailtrap sandbox (`sandbox.smtp.mailtrap.io`) for dev; switch to `live.smtp.mailtrap.io` with a verified domain for real delivery
+
+### Database
+
+- Hosted on **Neon** (serverless PostgreSQL) — connections may fail on cold start, retries resolve it
+- Schema managed with **Drizzle ORM**; `db:push` applies changes directly, `db:generate` creates migration files (interactive, may not work in CI)
+- Check constraints must be updated manually via SQL if `db:push` doesn't detect the change:
+  ```sql
+  ALTER TABLE table_name DROP CONSTRAINT IF EXISTS constraint_name;
+  ALTER TABLE table_name ADD CONSTRAINT constraint_name CHECK (...);
+  ```
 
 ## Development Guidelines
 
