@@ -96,11 +96,9 @@ async function verifyEmail(req: Request, res: Response) {
         });
 
         if (verifiedUser) {
-          return res
-            .status(200)
-            .json({
-              message: 'Email verified successfully. You can now log in.'
-            });
+          return res.status(200).json({
+            message: 'Email verified successfully. You can now log in.'
+          });
         }
       }
 
