@@ -286,8 +286,8 @@ msgstr ""
 #: src/routes/_auth-layout/auth/forgot-password.tsx:54
 #: src/routes/_auth-layout/auth/forgot-password.tsx:156
 #: src/routes/_auth-layout/auth/sign-up.tsx:105
-#: src/routes/_auth-layout/auth/verify-email.tsx:54
-#: src/routes/_auth-layout/auth/verify-email.tsx:96
+#: src/routes/_auth-layout/auth/verify-email.tsx:60
+#: src/routes/_auth-layout/auth/verify-email.tsx:102
 msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
 
@@ -686,7 +686,7 @@ msgstr ""
 #~ msgid "Email sent successfully"
 #~ msgstr "E-Mail erfolgreich gesendet"
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:110
+#: src/routes/_auth-layout/auth/verify-email.tsx:116
 msgid "Email verified!"
 msgstr ""
 
@@ -977,7 +977,7 @@ msgid "Go to Dashboard"
 msgstr "Zum Dashboard"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:123
-#: src/routes/_auth-layout/auth/verify-email.tsx:122
+#: src/routes/_auth-layout/auth/verify-email.tsx:129
 msgid "Go to login"
 msgstr ""
 
@@ -1164,7 +1164,7 @@ msgid "Invalid email address"
 msgstr "Ungültige E-Mail-Adresse"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:84
-#: src/routes/_auth-layout/auth/verify-email.tsx:43
+#: src/routes/_auth-layout/auth/verify-email.tsx:49
 msgid "Invalid link"
 msgstr ""
 
@@ -2285,11 +2285,11 @@ msgstr "Beim Laden der Produktkategorien ist ein Fehler aufgetreten. Bitte versu
 msgid "This invitation link is invalid."
 msgstr ""
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:85
+#: src/routes/_auth-layout/auth/verify-email.tsx:91
 msgid "This verification link is invalid or has expired. Please request a new one."
 msgstr ""
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:46
+#: src/routes/_auth-layout/auth/verify-email.tsx:52
 msgid "This verification link is invalid."
 msgstr ""
 
@@ -2457,11 +2457,11 @@ msgstr "v{version}"
 msgid "Verification email resent successfully"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:82
+#: src/routes/_auth-layout/auth/verify-email.tsx:88
 msgid "Verification failed"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:67
+#: src/routes/_auth-layout/auth/verify-email.tsx:73
 msgid "Verifying your email..."
 msgstr ""
 
@@ -2538,7 +2538,7 @@ msgstr ""
 msgid "Your account is protected with an extra verification step"
 msgstr "Ihr Konto ist mit einem zusätzlichen Verifizierungsschritt geschützt"
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:113
+#: src/routes/_auth-layout/auth/verify-email.tsx:119
 msgid "Your email has been verified successfully. You can now log in."
 msgstr ""
 
