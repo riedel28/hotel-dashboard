@@ -283,8 +283,10 @@ msgstr ""
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:95
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:264
-#: src/routes/_auth-layout/auth/forgot-password.tsx:54
-#: src/routes/_auth-layout/auth/forgot-password.tsx:156
+#: src/routes/_auth-layout/auth/forgot-password.tsx:56
+#: src/routes/_auth-layout/auth/forgot-password.tsx:155
+#: src/routes/_auth-layout/auth/reset-password.tsx:85
+#: src/routes/_auth-layout/auth/reset-password.tsx:208
 #: src/routes/_auth-layout/auth/sign-up.tsx:105
 #: src/routes/_auth-layout/auth/verify-email.tsx:60
 #: src/routes/_auth-layout/auth/verify-email.tsx:102
@@ -451,7 +453,12 @@ msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:227
+#: src/routes/_auth-layout/auth/reset-password.tsx:171
 msgid "Confirm Password"
+msgstr ""
+
+#: src/routes/_auth-layout/auth/reset-password.tsx:176
+msgid "Confirm your new password"
 msgstr ""
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:232
@@ -607,7 +614,7 @@ msgstr "Zeigt die mobile Seitenleiste an."
 msgid "Doe"
 msgstr "Doe"
 
-#: src/routes/_auth-layout/auth/login.tsx:252
+#: src/routes/_auth-layout/auth/login.tsx:253
 msgid "Don't have an account?"
 msgstr "Haben Sie noch kein Konto?"
 
@@ -663,8 +670,8 @@ msgstr "Zimmer bearbeiten"
 msgid "Edit user"
 msgstr "Benutzer bearbeiten"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:118
-#: src/routes/_auth-layout/auth/login.tsx:165
+#: src/routes/_auth-layout/auth/forgot-password.tsx:117
+#: src/routes/_auth-layout/auth/login.tsx:166
 #: src/routes/_auth-layout/auth/sign-up.tsx:219
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:210
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:121
@@ -678,7 +685,7 @@ msgstr "E-Mail"
 #~ msgid "Email is required"
 #~ msgstr "E-Mail ist erforderlich"
 
-#: src/routes/_auth-layout/auth/login.tsx:133
+#: src/routes/_auth-layout/auth/login.tsx:134
 msgid "Email not verified"
 msgstr ""
 
@@ -743,18 +750,18 @@ msgstr "Zimmernummer eingeben"
 msgid "Enter room type (e.g., Standard, Suite)"
 msgstr "Zimmertyp eingeben (z.B. Standard, Suite)"
 
-#: src/routes/_auth-layout/auth/login.tsx:120
+#: src/routes/_auth-layout/auth/login.tsx:121
 msgid "Enter your credentials to access the dashboard"
 msgstr "Geben Sie Ihre Anmeldedaten ein, um auf das Dashboard zuzugreifen"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:124
-#: src/routes/_auth-layout/auth/login.tsx:171
+#: src/routes/_auth-layout/auth/forgot-password.tsx:123
+#: src/routes/_auth-layout/auth/login.tsx:172
 #: src/routes/_auth-layout/auth/sign-up.tsx:225
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:127
 msgid "Enter your email"
 msgstr "E-Mail-Adresse eingeben"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:99
+#: src/routes/_auth-layout/auth/forgot-password.tsx:98
 msgid "Enter your email address and we'll send you a link to reset your password."
 msgstr "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts."
 
@@ -768,8 +775,16 @@ msgstr "Geben Sie Ihren Vornamen ein"
 msgid "Enter your last name"
 msgstr "Geben Sie Ihren Nachnamen ein"
 
+#: src/routes/_auth-layout/auth/reset-password.tsx:154
+msgid "Enter your new password"
+msgstr ""
+
+#: src/routes/_auth-layout/auth/reset-password.tsx:133
+msgid "Enter your new password below"
+msgstr ""
+
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:210
-#: src/routes/_auth-layout/auth/login.tsx:193
+#: src/routes/_auth-layout/auth/login.tsx:194
 #: src/routes/_auth-layout/auth/sign-up.tsx:247
 msgid "Enter your password"
 msgstr "Passwort eingeben"
@@ -859,7 +874,7 @@ msgstr "Kategorien konnten nicht geladen werden"
 msgid "Failed to load products"
 msgstr "Produkte konnten nicht geladen werden"
 
-#: src/routes/_auth-layout/auth/login.tsx:87
+#: src/routes/_auth-layout/auth/login.tsx:88
 msgid "Failed to login. Please try again."
 msgstr "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
 
@@ -879,9 +894,13 @@ msgstr "Properties konnten nicht neu geladen werden"
 msgid "Failed to resend invitation"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/login.tsx:98
+#: src/routes/_auth-layout/auth/login.tsx:99
 #: src/routes/_auth-layout/auth/sign-up.tsx:66
 msgid "Failed to resend verification email"
+msgstr ""
+
+#: src/routes/_auth-layout/auth/reset-password.tsx:62
+msgid "Failed to reset password. The link may have expired."
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:151
@@ -892,7 +911,7 @@ msgstr ""
 msgid "Failed to send invitation"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:78
+#: src/routes/_auth-layout/auth/forgot-password.tsx:79
 msgid "Failed to send password reset email. Please try again."
 msgstr "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
 
@@ -943,11 +962,11 @@ msgstr "Vorname"
 msgid "First name is required"
 msgstr "Vorname ist erforderlich"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:96
+#: src/routes/_auth-layout/auth/forgot-password.tsx:95
 msgid "Forgot Password"
 msgstr "Passwort vergessen?"
 
-#: src/routes/_auth-layout/auth/login.tsx:233
+#: src/routes/_auth-layout/auth/login.tsx:234
 msgid "Forgot password?"
 msgstr "Passwort vergessen?"
 
@@ -977,6 +996,7 @@ msgid "Go to Dashboard"
 msgstr "Zum Dashboard"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:123
+#: src/routes/_auth-layout/auth/reset-password.tsx:113
 #: src/routes/_auth-layout/auth/verify-email.tsx:129
 msgid "Go to login"
 msgstr ""
@@ -1164,6 +1184,7 @@ msgid "Invalid email address"
 msgstr "Ungültige E-Mail-Adresse"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:84
+#: src/routes/_auth-layout/auth/reset-password.tsx:74
 #: src/routes/_auth-layout/auth/verify-email.tsx:49
 msgid "Invalid link"
 msgstr ""
@@ -1242,8 +1263,8 @@ msgstr "Lädt..."
 msgid "Log out"
 msgstr "Abmelden"
 
-#: src/routes/_auth-layout/auth/login.tsx:114
-#: src/routes/_auth-layout/auth/login.tsx:246
+#: src/routes/_auth-layout/auth/login.tsx:115
+#: src/routes/_auth-layout/auth/login.tsx:247
 #: src/routes/_auth-layout/auth/sign-up.tsx:281
 msgid "Login"
 msgstr "Anmelden"
@@ -1351,6 +1372,7 @@ msgstr "Nationalität"
 msgid "New Guest"
 msgstr "Neuer Gast"
 
+#: src/routes/_auth-layout/auth/reset-password.tsx:149
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:91
 msgid "New Password"
 msgstr "Neues Passwort"
@@ -1448,7 +1470,7 @@ msgstr "Seite nicht gefunden"
 #~ msgstr "Seiten-URL"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:205
-#: src/routes/_auth-layout/auth/login.tsx:188
+#: src/routes/_auth-layout/auth/login.tsx:189
 #: src/routes/_auth-layout/auth/sign-up.tsx:242
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:85
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:55
@@ -1478,6 +1500,10 @@ msgstr "Passwort muss mindestens 8 Zeichen lang sein"
 #: src/routes/_auth-layout/auth/forgot-password.tsx:76
 msgid "Password reset email sent successfully!"
 msgstr "E-Mail zum Zurücksetzen des Passworts erfolgreich gesendet!"
+
+#: src/routes/_auth-layout/auth/reset-password.tsx:100
+msgid "Password reset!"
+msgstr ""
 
 #: src/components/ui/password-strength-meter.tsx:78
 msgid "Password strength"
@@ -1573,7 +1599,7 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein"
 #~ msgid "Please enter an email address."
 #~ msgstr "Bitte geben Sie eine E-Mail-Adresse ein."
 
-#: src/routes/_auth-layout/auth/login.tsx:118
+#: src/routes/_auth-layout/auth/login.tsx:119
 msgid "Please login to access this page"
 msgstr "Bitte melden Sie sich an, um auf diese Seite zuzugreifen"
 
@@ -1589,7 +1615,7 @@ msgstr "Bitte wählen Sie eine gültige Bilddatei (JPG, PNG, GIF)"
 msgid "Please select at least one role"
 msgstr "Bitte wählen Sie mindestens eine Rolle aus"
 
-#: src/routes/_auth-layout/auth/login.tsx:137
+#: src/routes/_auth-layout/auth/login.tsx:138
 msgid "Please verify your email address before logging in."
 msgstr ""
 
@@ -1737,7 +1763,7 @@ msgstr "Properties aktualisieren"
 #~ msgid "Reloading properties"
 #~ msgstr "Objekte werden neu geladen"
 
-#: src/routes/_auth-layout/auth/login.tsx:223
+#: src/routes/_auth-layout/auth/login.tsx:224
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
@@ -1753,7 +1779,7 @@ msgstr "Bild entfernen"
 msgid "Resend invitation"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/login.tsx:152
+#: src/routes/_auth-layout/auth/login.tsx:153
 #: src/routes/_auth-layout/auth/sign-up.tsx:99
 msgid "Resend verification email"
 msgstr ""
@@ -1817,13 +1843,18 @@ msgstr "Reservierungen"
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:38
+#: src/routes/_auth-layout/auth/forgot-password.tsx:40
 msgid "Reset link sent"
 msgstr "Reset-Link gesendet"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:73
 #~ msgid "Reset Link Sent"
 #~ msgstr "Reset-Link gesendet"
+
+#: src/routes/_auth-layout/auth/reset-password.tsx:130
+#: src/routes/_auth-layout/auth/reset-password.tsx:198
+msgid "Reset Password"
+msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:120
 #~ msgid "Role"
@@ -2055,7 +2086,7 @@ msgstr ""
 #~ msgid "Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
 #~ msgstr "Senden Sie dem Gast eine Nachricht per E-Mail, SMS oder WhatsApp, um den Check-in-Prozess abzuschließen"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:146
+#: src/routes/_auth-layout/auth/forgot-password.tsx:145
 msgid "Send reset link"
 msgstr "Reset-Link senden"
 
@@ -2109,7 +2140,7 @@ msgstr "Ergebnisse für: <0>\"{searchQuery}\"</0>"
 msgid "Sidebar"
 msgstr "Seitenleiste"
 
-#: src/routes/_auth-layout/auth/login.tsx:258
+#: src/routes/_auth-layout/auth/login.tsx:259
 msgid "Sign up"
 msgstr "Registrieren"
 
@@ -2181,7 +2212,7 @@ msgstr "Starkes Passwort"
 msgid "Success"
 msgstr "Erfolg"
 
-#: src/routes/_auth-layout/auth/login.tsx:81
+#: src/routes/_auth-layout/auth/login.tsx:82
 msgid "Successfully logged in!"
 msgstr "Erfolgreich angemeldet!"
 
@@ -2283,6 +2314,10 @@ msgstr "Beim Laden der Produktkategorien ist ein Fehler aufgetreten. Bitte versu
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:87
 msgid "This invitation link is invalid."
+msgstr ""
+
+#: src/routes/_auth-layout/auth/reset-password.tsx:77
+msgid "This password reset link is invalid."
 msgstr ""
 
 #: src/routes/_auth-layout/auth/verify-email.tsx:91
@@ -2452,7 +2487,7 @@ msgstr "Benutzer"
 msgid "v{version}"
 msgstr "v{version}"
 
-#: src/routes/_auth-layout/auth/login.tsx:95
+#: src/routes/_auth-layout/auth/login.tsx:96
 #: src/routes/_auth-layout/auth/sign-up.tsx:63
 msgid "Verification email resent successfully"
 msgstr ""
@@ -2473,7 +2508,7 @@ msgstr ""
 #~ msgid "Warning"
 #~ msgstr "Warnung"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:41
+#: src/routes/_auth-layout/auth/forgot-password.tsx:43
 msgid "We've sent a password reset email to <0>{email}</0>. Follow the instructions to finish resetting your password."
 msgstr "Wir haben eine E-Mail zum Zurücksetzen des Passworts an <0>{email}</0> gesendet. Befolgen Sie die Anweisungen, um das Zurücksetzen Ihres Passworts abzuschließen."
 
@@ -2540,6 +2575,10 @@ msgstr "Ihr Konto ist mit einem zusätzlichen Verifizierungsschritt geschützt"
 
 #: src/routes/_auth-layout/auth/verify-email.tsx:119
 msgid "Your email has been verified successfully. You can now log in."
+msgstr ""
+
+#: src/routes/_auth-layout/auth/reset-password.tsx:103
+msgid "Your password has been reset successfully. You can now log in with your new password."
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:288
