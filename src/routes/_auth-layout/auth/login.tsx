@@ -41,9 +41,10 @@ export const Route = createFileRoute('/_auth-layout/auth/login')({
     redirect: z
       .string()
       .optional()
-      .catch('')
+      .catch(undefined)
       .transform((val) => {
-        if (!val || !val.startsWith('/') || val.startsWith('//')) return '';
+        if (!val || !val.startsWith('/') || val.startsWith('//'))
+          return undefined;
         return val;
       })
   }),
