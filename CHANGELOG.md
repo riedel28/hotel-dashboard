@@ -1,3 +1,15 @@
+# [1.9.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.8.0...v1.9.0) (2026-02-10)
+
+
+### Bug Fixes
+
+* **auth:** format verification controller for biome check ([e931216](https://github.com/riedel28/tanstack-dashboard/commit/e931216008cfc36cb2c882479682e568cb218866))
+
+
+### Features
+
+* **auth:** set up SMTP email delivery and fix verify-email flow ([9f72828](https://github.com/riedel28/tanstack-dashboard/commit/9f72828c127a783c1854a80a31c5ab19dffe50d6))
+
 # [1.8.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.7.1...v1.8.0) (2026-02-09)
 
 
