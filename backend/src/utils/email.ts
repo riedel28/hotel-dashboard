@@ -86,7 +86,7 @@ async function sendVerificationEmail(email: string, token: string) {
       <h2 style="margin:0 0 8px; font-size:22px; font-weight:600; color:#18181b;">Welcome!</h2>
       <p style="margin:0 0 24px; color:#52525b; font-size:15px; line-height:1.6;">Please verify your email address by clicking the button below:</p>
       <table cellpadding="0" cellspacing="0"><tr><td>
-        <a href="${verifyUrl}" style="display:inline-block; padding:10px 24px; background-color:#18181b; color:#ffffff; text-decoration:none; border-radius:6px; font-size:14px; font-weight:500;">Verify Email Address</a>
+        <a href="${verifyUrl}" style="display:inline-block; padding:10px 24px; background-color:#1e3a8a; color:#ffffff; text-decoration:none; border-radius:6px; font-size:14px; font-weight:500;">Verify Email Address</a>
       </td></tr></table>
       <p style="margin:24px 0 0; color:#71717a; font-size:13px; line-height:1.5;">This link will expire in 24 hours.</p>
       <p style="margin:8px 0 0; color:#71717a; font-size:13px; line-height:1.5;">If you did not create an account, you can safely ignore this email.</p>
@@ -118,7 +118,7 @@ async function sendInvitationEmail(
       <h2 style="margin:0 0 8px; font-size:22px; font-weight:600; color:#18181b;">You've been invited${inviterText}!</h2>
       <p style="margin:0 0 24px; color:#52525b; font-size:15px; line-height:1.6;">You've been invited to join the dashboard. Click the button below to set your password and activate your account:</p>
       <table cellpadding="0" cellspacing="0"><tr><td>
-        <a href="${acceptUrl}" style="display:inline-block; padding:10px 24px; background-color:#18181b; color:#ffffff; text-decoration:none; border-radius:6px; font-size:14px; font-weight:500;">Accept Invitation</a>
+        <a href="${acceptUrl}" style="display:inline-block; padding:10px 24px; background-color:#1e3a8a; color:#ffffff; text-decoration:none; border-radius:6px; font-size:14px; font-weight:500;">Accept Invitation</a>
       </td></tr></table>
       <p style="margin:24px 0 0; color:#71717a; font-size:13px; line-height:1.5;">This link will expire in 7 days.</p>
       <p style="margin:8px 0 0; color:#71717a; font-size:13px; line-height:1.5;">If you were not expecting this invitation, you can safely ignore this email.</p>
@@ -126,4 +126,27 @@ async function sendInvitationEmail(
   });
 }
 
-export { sendEmail, sendVerificationEmail, sendInvitationEmail };
+async function sendPasswordResetEmail(email: string, token: string) {
+  const resetUrl = `${env.APP_URL}/auth/reset-password?token=${token}`;
+
+  await sendEmail({
+    to: email,
+    subject: 'Reset your password',
+    html: emailLayout(`
+      <h2 style="margin:0 0 8px; font-size:22px; font-weight:600; color:#18181b;">Reset your password</h2>
+      <p style="margin:0 0 24px; color:#52525b; font-size:15px; line-height:1.6;">Click the button below to reset your password:</p>
+      <table cellpadding="0" cellspacing="0"><tr><td>
+        <a href="${resetUrl}" style="display:inline-block; padding:10px 24px; background-color:#1e3a8a; color:#ffffff; text-decoration:none; border-radius:6px; font-size:14px; font-weight:500;">Reset Password</a>
+      </td></tr></table>
+      <p style="margin:24px 0 0; color:#71717a; font-size:13px; line-height:1.5;">This link will expire in 1 hour.</p>
+      <p style="margin:8px 0 0; color:#71717a; font-size:13px; line-height:1.5;">If you did not request a password reset, you can safely ignore this email.</p>
+    `)
+  });
+}
+
+export {
+  sendEmail,
+  sendVerificationEmail,
+  sendInvitationEmail,
+  sendPasswordResetEmail
+};
