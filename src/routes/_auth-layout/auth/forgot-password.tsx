@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
+import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { CheckIcon, Loader2Icon, MessageCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type z from 'zod';
+import { forgotPassword } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -40,8 +42,12 @@ function SuccessView({ email }: SuccessViewProps) {
         <p className="text-muted-foreground text-balance">
           <Trans>
             We&apos;ve sent a password reset email to{' '}
-            <span className="font-medium">{email}</span>. Follow the
-            instructions to finish resetting your password.
+            <span className="font-medium text-foreground">{email}</span>.
+          </Trans>
+        </p>
+        <p className="text-muted-foreground text-balance">
+          <Trans>
+            Follow the instructions to finish resetting your password.
           </Trans>
         </p>
       </div>
@@ -68,20 +74,17 @@ function ForgotPasswordPage() {
     }
   });
 
-  async function handleSubmit(_data: ForgotPasswordData) {
-    try {
-      // TODO: Implement API call to send password reset email to _data.email
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
+  const forgotMutation = useMutation({
+    mutationFn: (data: ForgotPasswordData) => forgotPassword(data.email),
+    onSuccess: () => {
       toast.success(t`Password reset email sent successfully!`);
-    } catch {
+    },
+    onError: () => {
       toast.error(t`Failed to send password reset email. Please try again.`);
     }
-  }
+  });
 
-  const { isSubmitting, isSubmitSuccessful } = form.formState;
-
-  if (isSubmitSuccessful) {
+  if (forgotMutation.isSuccess) {
     return <SuccessView email={form.getValues('email')} />;
   }
 
@@ -104,7 +107,7 @@ function ForgotPasswordPage() {
       </div>
 
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit((data) => forgotMutation.mutate(data))}
         className="max-w-sm mx-auto space-y-6"
       >
         <FieldSet>
@@ -124,7 +127,7 @@ function ForgotPasswordPage() {
                     placeholder={t`Enter your email`}
                     autoComplete="email"
                     aria-invalid={fieldState.invalid}
-                    disabled={isSubmitting}
+                    disabled={forgotMutation.isPending}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -138,9 +141,9 @@ function ForgotPasswordPage() {
           type="submit"
           size="lg"
           className="w-full"
-          disabled={isSubmitting}
+          disabled={forgotMutation.isPending}
         >
-          {isSubmitting && (
+          {forgotMutation.isPending && (
             <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
           )}
           <Trans>Send reset link</Trans>

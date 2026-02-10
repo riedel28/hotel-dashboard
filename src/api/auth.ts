@@ -98,12 +98,38 @@ async function acceptInvitation(
   }
 }
 
+async function forgotPassword(email: string): Promise<{ message: string }> {
+  try {
+    const response = await client.post('/auth/forgot-password', { email });
+    return response.data;
+  } catch (err) {
+    handleApiError(err, 'forgotPassword');
+  }
+}
+
+async function resetPassword(
+  token: string,
+  password: string
+): Promise<{ message: string }> {
+  try {
+    const response = await client.post('/auth/reset-password', {
+      token,
+      password
+    });
+    return response.data;
+  } catch (err) {
+    handleApiError(err, 'resetPassword');
+  }
+}
+
 export {
   acceptInvitation,
+  forgotPassword,
   login,
   logout,
   register,
   resendVerification,
+  resetPassword,
   signUp,
   updateSelectedProperty,
   verifyEmail

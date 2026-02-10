@@ -3,11 +3,16 @@ import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { emailVerificationTokens, users } from '../db/schema';
-import { sendInvitationEmail, sendVerificationEmail } from '../utils/email';
+import {
+  sendInvitationEmail,
+  sendPasswordResetEmail,
+  sendVerificationEmail
+} from '../utils/email';
 import { hashPassword } from '../utils/password';
 import { generateVerificationToken } from '../utils/token';
 
 const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+const ONE_HOUR_MS = 60 * 60 * 1000;
 
 async function signUp(req: Request, res: Response) {
   const { email, password, first_name, last_name } = req.body;
@@ -242,4 +247,102 @@ async function acceptInvitation(req: Request, res: Response) {
   }
 }
 
-export { signUp, verifyEmail, resendVerification, acceptInvitation };
+async function forgotPassword(req: Request, res: Response) {
+  const { email } = req.body;
+
+  const genericResponse = {
+    message:
+      'If an account with that email exists, a password reset email has been sent.'
+  };
+
+  try {
+    const user = await db.query.users.findFirst({
+      columns: { id: true, email_verified: true },
+      where: eq(users.email, email)
+    });
+
+    if (!user || !user.email_verified) {
+      return res.status(200).json(genericResponse);
+    }
+
+    // Invalidate existing unused reset tokens
+    await db
+      .update(emailVerificationTokens)
+      .set({ used_at: new Date() })
+      .where(
+        and(
+          eq(emailVerificationTokens.user_id, user.id),
+          eq(emailVerificationTokens.type, 'reset'),
+          isNull(emailVerificationTokens.used_at)
+        )
+      );
+
+    // Generate new reset token (1h expiry)
+    const token = generateVerificationToken();
+    await db.insert(emailVerificationTokens).values({
+      user_id: user.id,
+      token,
+      type: 'reset',
+      expires_at: new Date(Date.now() + ONE_HOUR_MS)
+    });
+
+    await sendPasswordResetEmail(email, token);
+
+    res.status(200).json(genericResponse);
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ error: 'Failed to process password reset request' });
+  }
+}
+
+async function resetPassword(req: Request, res: Response) {
+  const { token, password } = req.body;
+
+  try {
+    const [tokenRecord] = await db
+      .select()
+      .from(emailVerificationTokens)
+      .where(
+        and(
+          eq(emailVerificationTokens.token, token),
+          eq(emailVerificationTokens.type, 'reset'),
+          isNull(emailVerificationTokens.used_at),
+          gt(emailVerificationTokens.expires_at, new Date())
+        )
+      );
+
+    if (!tokenRecord) {
+      return res.status(400).json({ error: 'Invalid or expired reset link' });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    await db.transaction(async (tx) => {
+      await tx
+        .update(users)
+        .set({ password: hashedPassword, updated_at: new Date() })
+        .where(eq(users.id, tokenRecord.user_id));
+
+      await tx
+        .update(emailVerificationTokens)
+        .set({ used_at: new Date() })
+        .where(eq(emailVerificationTokens.id, tokenRecord.id));
+    });
+
+    res
+      .status(200)
+      .json({ message: 'Password reset successfully. You can now log in.' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ error: 'Failed to reset password' });
+  }
+}
+
+export {
+  signUp,
+  verifyEmail,
+  resendVerification,
+  acceptInvitation,
+  forgotPassword,
+  resetPassword
+};

@@ -4,7 +4,9 @@ import { z } from 'zod';
 import { strongPasswordSchema } from '../../../shared/types/users';
 import {
   acceptInvitation,
+  forgotPassword,
   resendVerification,
+  resetPassword,
   signUp,
   verifyEmail
 } from '../controllers/verification-controller';
@@ -42,5 +44,25 @@ router.post(
   resendVerification
 );
 router.post('/accept-invitation', validateBody(acceptSchema), acceptInvitation);
+
+const forgotPasswordSchema = z.object({
+  email: z.email('Invalid email format')
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, 'Token is required'),
+  password: strongPasswordSchema
+});
+
+router.post(
+  '/forgot-password',
+  validateBody(forgotPasswordSchema),
+  forgotPassword
+);
+router.post(
+  '/reset-password',
+  validateBody(resetPasswordSchema),
+  resetPassword
+);
 
 export default router;
