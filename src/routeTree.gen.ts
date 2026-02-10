@@ -30,6 +30,7 @@ import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './rou
 import { Route as DashboardLayoutuserViewAboutRouteImport } from './routes/_dashboard-layout/(user-view)/about'
 import { Route as AuthLayoutAuthVerifyEmailRouteImport } from './routes/_auth-layout/auth/verify-email'
 import { Route as AuthLayoutAuthSignUpRouteImport } from './routes/_auth-layout/auth/sign-up'
+import { Route as AuthLayoutAuthResetPasswordRouteImport } from './routes/_auth-layout/auth/reset-password'
 import { Route as AuthLayoutAuthLoginRouteImport } from './routes/_auth-layout/auth/login'
 import { Route as AuthLayoutAuthForgotPasswordRouteImport } from './routes/_auth-layout/auth/forgot-password'
 import { Route as AuthLayoutAuthAcceptInvitationRouteImport } from './routes/_auth-layout/auth/accept-invitation'
@@ -164,6 +165,12 @@ const AuthLayoutAuthSignUpRoute = AuthLayoutAuthSignUpRouteImport.update({
   path: '/auth/sign-up',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
+const AuthLayoutAuthResetPasswordRoute =
+  AuthLayoutAuthResetPasswordRouteImport.update({
+    id: '/auth/reset-password',
+    path: '/auth/reset-password',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
 const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
@@ -256,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/auth/reset-password': typeof AuthLayoutAuthResetPasswordRoute
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
@@ -290,6 +298,7 @@ export interface FileRoutesByTo {
   '/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/auth/reset-password': typeof AuthLayoutAuthResetPasswordRoute
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
@@ -328,6 +337,7 @@ export interface FileRoutesById {
   '/_auth-layout/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/_auth-layout/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/_auth-layout/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/_auth-layout/auth/reset-password': typeof AuthLayoutAuthResetPasswordRoute
   '/_auth-layout/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/_auth-layout/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/_dashboard-layout/(user-view)/about': typeof DashboardLayoutuserViewAboutRoute
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
     | '/auth/accept-invitation'
     | '/auth/forgot-password'
     | '/auth/login'
+    | '/auth/reset-password'
     | '/auth/sign-up'
     | '/auth/verify-email'
     | '/about'
@@ -399,6 +410,7 @@ export interface FileRouteTypes {
     | '/auth/accept-invitation'
     | '/auth/forgot-password'
     | '/auth/login'
+    | '/auth/reset-password'
     | '/auth/sign-up'
     | '/auth/verify-email'
     | '/about'
@@ -436,6 +448,7 @@ export interface FileRouteTypes {
     | '/_auth-layout/auth/accept-invitation'
     | '/_auth-layout/auth/forgot-password'
     | '/_auth-layout/auth/login'
+    | '/_auth-layout/auth/reset-password'
     | '/_auth-layout/auth/sign-up'
     | '/_auth-layout/auth/verify-email'
     | '/_dashboard-layout/(user-view)/about'
@@ -620,6 +633,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutAuthSignUpRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
+    '/_auth-layout/auth/reset-password': {
+      id: '/_auth-layout/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthLayoutAuthResetPasswordRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
     '/_auth-layout/auth/login': {
       id: '/_auth-layout/auth/login'
       path: '/auth/login'
@@ -725,6 +745,7 @@ interface AuthLayoutRouteChildren {
   AuthLayoutAuthAcceptInvitationRoute: typeof AuthLayoutAuthAcceptInvitationRoute
   AuthLayoutAuthForgotPasswordRoute: typeof AuthLayoutAuthForgotPasswordRoute
   AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
+  AuthLayoutAuthResetPasswordRoute: typeof AuthLayoutAuthResetPasswordRoute
   AuthLayoutAuthSignUpRoute: typeof AuthLayoutAuthSignUpRoute
   AuthLayoutAuthVerifyEmailRoute: typeof AuthLayoutAuthVerifyEmailRoute
 }
@@ -733,6 +754,7 @@ const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutAuthAcceptInvitationRoute: AuthLayoutAuthAcceptInvitationRoute,
   AuthLayoutAuthForgotPasswordRoute: AuthLayoutAuthForgotPasswordRoute,
   AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
+  AuthLayoutAuthResetPasswordRoute: AuthLayoutAuthResetPasswordRoute,
   AuthLayoutAuthSignUpRoute: AuthLayoutAuthSignUpRoute,
   AuthLayoutAuthVerifyEmailRoute: AuthLayoutAuthVerifyEmailRoute,
 }
