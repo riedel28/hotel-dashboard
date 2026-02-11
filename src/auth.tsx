@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { flushSync } from 'react-dom';
 
 import {
   login as apiLogin,
@@ -55,9 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const response = await apiLogin(credentials);
     if (response) {
       setStoredUser(response.user);
-      flushSync(() => {
-        setUser(response.user);
-      });
+      setUser(response.user);
       return response;
     }
     throw new Error('Login failed');
