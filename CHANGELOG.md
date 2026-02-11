@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/riedel28/tanstack-dashboard/compare/v1.11.0...v1.11.1) (2026-02-11)
+
+
+### Bug Fixes
+
+* **auth:** ensure user state updates synchronously during login ([9612af6](https://github.com/riedel28/tanstack-dashboard/commit/9612af6e2ac9aab7b36fa1679071fd8f3570838d))
+
 # [1.11.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.10.0...v1.11.0) (2026-02-11)
 
 
