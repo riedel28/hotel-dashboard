@@ -1,3 +1,17 @@
+# [1.11.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.10.0...v1.11.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* **sidebar:** fix active state for Start link and remove customers item ([df90384](https://github.com/riedel28/tanstack-dashboard/commit/df90384f02bc3f48306bb6811014aff8b0a6ac95))
+
+
+### Features
+
+* **db:** update property schema and migrations ([1a278de](https://github.com/riedel28/tanstack-dashboard/commit/1a278de3ea46b970851814daedfe198db433baed))
+* **properties:** add create property modal ([f0e5163](https://github.com/riedel28/tanstack-dashboard/commit/f0e5163905590f67ac30313bb627b6cebda2cf65))
+* **properties:** add CRUD, filters, and sorting for properties page ([3f88e73](https://github.com/riedel28/tanstack-dashboard/commit/3f88e733cb8841ba20368385ef19c1f86779a63c))
+
 # [1.10.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.9.0...v1.10.0) (2026-02-10)
 
 
