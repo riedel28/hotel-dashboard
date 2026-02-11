@@ -141,6 +141,7 @@ export const properties = pgTable(
   {
     id: uuid('id').primaryKey().defaultRandom(),
     name: text('name').notNull(),
+    country_code: text('country_code').notNull().default('DE'),
     stage: text('stage')
       .notNull()
       .$type<'demo' | 'production' | 'staging' | 'template'>(),

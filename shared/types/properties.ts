@@ -10,8 +10,17 @@ export const propertyStageSchema = z.enum([
 export const propertySchema = z.object({
   id: z.uuid(),
   name: z.string().min(1),
+  country_code: z.string().min(2).max(2).toUpperCase(),
   stage: propertyStageSchema
 });
+
+export const propertySortableColumnsSchema = z.enum([
+  'name',
+  'country_code',
+  'stage'
+]);
+
+export const sortOrderSchema = z.enum(['asc', 'desc']);
 
 export const fetchPropertiesParamsSchema = z.object({
   page: z.coerce.number().int().positive().default(1).optional(),
@@ -24,7 +33,13 @@ export const fetchPropertiesParamsSchema = z.object({
     })
     .default(10)
     .optional(),
-  q: z.string().max(200).optional()
+  q: z.string().max(200).optional(),
+  stage: z
+    .enum(['demo', 'production', 'staging', 'template', 'all'])
+    .optional(),
+  country_code: z.enum(['AT', 'CH', 'CZ', 'DE', 'ES', 'US', 'all']).optional(),
+  sort_by: propertySortableColumnsSchema.optional(),
+  sort_order: sortOrderSchema.optional()
 });
 
 export const fetchPropertiesResponseSchema = z.object({
@@ -35,10 +50,24 @@ export const fetchPropertiesResponseSchema = z.object({
   page_count: z.number().int().nonnegative()
 });
 
+export const createPropertySchema = z.object({
+  name: z.string().min(1),
+  country_code: z.string().min(2).max(2).toUpperCase(),
+  stage: propertyStageSchema
+});
+
+export const updatePropertySchema = propertySchema.omit({ id: true }).partial();
+
+export const propertyIdParamsSchema = z.object({
+  id: z.uuid()
+});
+
 // Type exports
 export type PropertyStage = z.infer<typeof propertyStageSchema>;
 export type Property = z.infer<typeof propertySchema>;
+export type CreatePropertyData = z.infer<typeof createPropertySchema>;
 export type FetchPropertiesParams = z.infer<typeof fetchPropertiesParamsSchema>;
 export type FetchPropertiesResponse = z.infer<
   typeof fetchPropertiesResponseSchema
 >;
+export type UpdatePropertyData = z.infer<typeof updatePropertySchema>;
