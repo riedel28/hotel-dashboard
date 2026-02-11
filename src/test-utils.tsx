@@ -31,9 +31,11 @@ export { customRender as render };
 export const createMockProperty = (
   id: string,
   name: string,
-  stage: PropertyStage
+  stage: PropertyStage,
+  country_code = 'DE'
 ): Property => ({
   id,
   name,
+  country_code,
   stage
 });
