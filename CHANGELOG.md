@@ -1,3 +1,15 @@
+## [1.11.2](https://github.com/riedel28/tanstack-dashboard/compare/v1.11.1...v1.11.2) (2026-02-11)
+
+
+### Bug Fixes
+
+* **auth:** proxy API through Vercel to fix Safari login ([a9f1e6c](https://github.com/riedel28/tanstack-dashboard/commit/a9f1e6c5fac21adaa4c268d249320ff3649de1f2))
+
+
+### Reverts
+
+* **auth:** remove flushSync — was misdiagnosed fix ([736f908](https://github.com/riedel28/tanstack-dashboard/commit/736f908f0256b3c23b0434a9eee35e464a84f5a6))
+
 ## [1.11.1](https://github.com/riedel28/tanstack-dashboard/compare/v1.11.0...v1.11.1) (2026-02-11)
 
 
