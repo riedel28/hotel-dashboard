@@ -132,7 +132,12 @@ function AdminSidebarContent() {
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/admin" icon={HomeIcon} tooltip={t`Start`}>
+            <SidebarLink
+              to="/admin"
+              icon={HomeIcon}
+              tooltip={t`Start`}
+              activeOptions={{ exact: true }}
+            >
               <Trans>Start</Trans>
             </SidebarLink>
           </SidebarMenuItem>
@@ -143,15 +148,6 @@ function AdminSidebarContent() {
               tooltip={t`Properties`}
             >
               <Trans>Properties</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/admin/customers"
-              icon={UsersIcon}
-              tooltip={t`Customers`}
-            >
-              <Trans>Customers</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -169,7 +165,12 @@ function UserSidebarContent() {
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon} tooltip={t`Start`}>
+            <SidebarLink
+              to="/"
+              icon={HomeIcon}
+              tooltip={t`Start`}
+              activeOptions={{ exact: true }}
+            >
               <Trans>Start</Trans>
             </SidebarLink>
           </SidebarMenuItem>
