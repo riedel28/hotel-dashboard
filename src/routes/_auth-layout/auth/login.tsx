@@ -78,7 +78,7 @@ function LoginPage() {
     mutationFn: auth.login,
     onSuccess: async () => {
       await router.invalidate();
-      await navigate({ to: search.redirect || '' });
+      await navigate({ to: search.redirect || fallback });
       toast.success(t`Successfully logged in!`);
     },
     onError: (error) => {
