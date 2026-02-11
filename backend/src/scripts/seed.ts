@@ -212,51 +212,61 @@ async function seed() {
       {
         id: 'cc198b13-4933-43aa-977e-dcd95fa30770',
         name: 'Kullturboden-Hallstadt',
+        country_code: 'AT',
         stage: 'production'
       },
       {
         id: 'cc198b13-4933-43aa-977e-dcd95fa30771',
         name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, reiciendis dolor! Tempora, animi debitis itaque nihil quidem laborum consectetur dolorem.',
+        country_code: 'DE',
         stage: 'production'
       },
       {
         id: '3d5552bd-389e-477d-9e9c-5016ac02632b',
         name: 'Historic Palace Hotel Prague',
+        country_code: 'CZ',
         stage: 'production'
       },
       {
         id: '9971ceb1-708e-4bd1-a35c-f164d4ce75c2',
         name: 'Mountain Lodge Switzerland',
+        country_code: 'CH',
         stage: 'demo'
       },
       {
         id: '2fa9cbfe-c150-4edb-9feb-325e32e80da8',
         name: 'Seaside Resort Barcelona',
+        country_code: 'ES',
         stage: 'staging'
       },
       {
         id: '85e7ebb9-3ae6-4aaf-9ab0-f3b08defa220',
         name: 'Development (2)',
+        country_code: 'DE',
         stage: 'demo'
       },
       {
         id: '30c9c7cd-8946-4079-8449-bf8ca69a226a',
         name: 'Development 13, Adyen',
+        country_code: 'DE',
         stage: 'template'
       },
       {
         id: '8f4eb429-a9df-434a-977b-eb6c1f2a72e1',
         name: 'Grand Hotel Vienna',
+        country_code: 'AT',
         stage: 'production'
       },
       {
         id: '800fec46-58b6-4878-9c79-3adfeaac714e',
         name: 'Staging',
+        country_code: 'DE',
         stage: 'staging'
       },
       {
         id: 'dc77fb2b-1d87-42f3-8b0b-9e1cf4b8f4a7',
         name: 'Urban Boutique Hotel Berlin',
+        country_code: 'DE',
         stage: 'template'
       }
     ]);
