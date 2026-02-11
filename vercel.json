@@ -2,5 +2,11 @@
   "buildCommand": "bun run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://tanstack-dashboard.onrender.com/api/:path*"
+    },
+    { "source": "/((?!assets/).*)", "destination": "/index.html" }
+  ]
 }
