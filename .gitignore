@@ -42,5 +42,11 @@ backend/.env.*
 # Coverage
 coverage/
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # TypeScript build info files
 *.tsbuildinfo
