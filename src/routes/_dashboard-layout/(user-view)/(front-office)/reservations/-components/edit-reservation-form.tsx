@@ -1,7 +1,7 @@
 import { DevTool } from '@hookform/devtools';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Edit2Icon,
   Loader2Icon,
@@ -15,6 +15,7 @@ import type { Guest, ReservationFormData } from 'shared/types/reservations';
 import { toast } from 'sonner';
 
 import { updateReservationById } from '@/api/reservations';
+import { roomsQueryOptions } from '@/api/rooms';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -94,27 +95,10 @@ export function EditReservationForm({
     form.setValue('guests', [...currentGuests, newGuest]);
   };
 
-  // Mock room data - replace with actual data from your API
-  const roomOptions = [
-    {
-      id: '401',
-      name: 'Standard Room',
-      description: 'Comfortable standard room',
-      price: 120
-    },
-    {
-      id: '402',
-      name: 'Deluxe Room',
-      description: 'Spacious deluxe room with premium amenities',
-      price: 180
-    },
-    {
-      id: '403',
-      name: 'Suite',
-      description: 'Luxury suite with separate living area',
-      price: 250
-    }
-  ] as const;
+  const { data: roomsData } = useQuery(
+    roomsQueryOptions({ per_page: 100 })
+  );
+  const rooms = roomsData?.index ?? [];
 
   const onSubmit = (data: ReservationFormData) => {
     updateReservationMutation.mutate(data);
@@ -430,27 +414,34 @@ export function EditReservationForm({
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue>
-                            {roomOptions.find((room) => room.id === field.value)
-                              ?.name ?? t`Select a room...`}
+                            {rooms.find(
+                              (room) => String(room.id) === field.value
+                            )?.name ?? t`Select a room...`}
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          {roomOptions.map((room) => (
-                            <SelectItem
-                              key={room.id}
-                              value={room.id}
-                              className="flex w-full items-center justify-between rounded-md bg-card p-3 transition-colors hover:bg-accent"
-                            >
-                              <div className="flex-1">
-                                <div className="font-medium text-foreground">
-                                  {room.name}
-                                </div>
-                                <div className="text-sm text-muted-foreground">
-                                  {room.description}
-                                </div>
-                              </div>
-                            </SelectItem>
-                          ))}
+                          {rooms.length === 0 ? (
+                            <div className="py-6 text-center text-sm text-muted-foreground">
+                              <Trans>No rooms available</Trans>
+                            </div>
+                          ) : (
+                            rooms.map((room) => (
+                              <SelectItem
+                                key={room.id}
+                                value={String(room.id)}
+                              >
+                                {room.name}
+                                {room.room_number && (
+                                  <span className="text-muted-foreground">
+                                    {` (${room.room_number}`}
+                                    {room.room_type &&
+                                      ` · ${room.room_type}`}
+                                    {')'}
+                                  </span>
+                                )}
+                              </SelectItem>
+                            ))
+                          )}
                         </SelectContent>
                       </Select>
                       {fieldState.invalid && (

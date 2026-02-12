@@ -4,7 +4,8 @@ import type { Request, Response } from 'express';
 import { db } from '../db/pool';
 import {
   guests as guestsTable,
-  reservations as reservationsTable
+  reservations as reservationsTable,
+  rooms as roomsTable
 } from '../db/schema';
 import { escapeLikePattern } from '../utils/sql';
 
@@ -224,13 +225,27 @@ async function updateReservation(req: Request, res: Response) {
         room
       } = body;
 
+      // If room ID was provided, look up the actual room name
+      let resolvedRoomName = room_name;
+      if (room !== undefined) {
+        const roomId = Number(room);
+        if (!Number.isNaN(roomId)) {
+          const foundRoom = await tx.query.rooms.findFirst({
+            where: eq(roomsTable.id, roomId)
+          });
+          if (foundRoom) {
+            resolvedRoomName = foundRoom.name;
+          }
+        }
+      }
+
       const reservationUpdates = Object.fromEntries(
         Object.entries({
           state,
           booking_nr,
           guest_email,
           booking_id,
-          room_name: room !== undefined ? room : room_name,
+          room_name: resolvedRoomName,
           booking_from,
           booking_to,
           check_in_via,
