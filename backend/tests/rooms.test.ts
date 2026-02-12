@@ -413,4 +413,346 @@ describe('Rooms API', () => {
       }
     });
   });
+
+  describe('POST /api/rooms', () => {
+    let adminToken: string;
+
+    beforeEach(async () => {
+      const { token } = await createTestUser({
+        password: 'Password123!',
+        is_admin: true
+      });
+      adminToken = token;
+    });
+
+    test('should create a room with valid data', async () => {
+      const newRoom = {
+        name: 'New Test Room',
+        property_id: propertyId,
+        room_number: '999',
+        room_type: 'Deluxe',
+        status: 'available'
+      };
+
+      const response = await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(newRoom)
+        .expect(201);
+
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.name).toBe('New Test Room');
+      expect(response.body.property_id).toBe(propertyId);
+      expect(response.body.room_number).toBe('999');
+      expect(response.body.room_type).toBe('Deluxe');
+      expect(response.body.status).toBe('available');
+      expect(response.body).toHaveProperty('created_at');
+      expect(response.body).toHaveProperty('updated_at');
+    });
+
+    test('should create a room with only required fields', async () => {
+      const newRoom = {
+        name: 'Minimal Room',
+        property_id: propertyId
+      };
+
+      const response = await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(newRoom)
+        .expect(201);
+
+      expect(response.body.name).toBe('Minimal Room');
+      expect(response.body.property_id).toBe(propertyId);
+      expect(response.body.room_number).toBeNull();
+      expect(response.body.room_type).toBeNull();
+      expect(response.body.status).toBe('available');
+    });
+
+    test('should return the created room in the rooms list', async () => {
+      const newRoom = {
+        name: 'Findable Room',
+        property_id: propertyId,
+        room_number: '777'
+      };
+
+      await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(newRoom)
+        .expect(201);
+
+      const listResponse = await request(app)
+        .get('/api/rooms?q=Findable')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(listResponse.body.total).toBe(1);
+      expect(listResponse.body.index[0].name).toBe('Findable Room');
+    });
+
+    test('should return 400 when property_id is missing', async () => {
+      const response = await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ name: 'No Property Room' })
+        .expect(400);
+
+      expect(response.body).toHaveProperty('error');
+    });
+
+    test('should return 400 when property_id is empty string', async () => {
+      const response = await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ name: 'Bad Property Room', property_id: '' })
+        .expect(400);
+
+      expect(response.body).toHaveProperty('error');
+    });
+
+    test('should return 400 when name is missing', async () => {
+      const response = await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ property_id: propertyId })
+        .expect(400);
+
+      expect(response.body).toHaveProperty('error');
+    });
+
+    test('should return 403 for non-admin users', async () => {
+      await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          name: 'Unauthorized Room',
+          property_id: propertyId
+        })
+        .expect(403);
+    });
+
+    test('should return 401 without authentication', async () => {
+      await request(app)
+        .post('/api/rooms')
+        .send({
+          name: 'Unauthenticated Room',
+          property_id: propertyId
+        })
+        .expect(401);
+    });
+  });
+
+  describe('GET /api/rooms/:id', () => {
+    let roomId: number;
+
+    beforeEach(async () => {
+      const response = await request(app)
+        .get('/api/rooms')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      roomId = response.body.index[0].id;
+    });
+
+    test('should return a single room by ID', async () => {
+      const response = await request(app)
+        .get(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.id).toBe(roomId);
+      expect(response.body).toHaveProperty('name');
+      expect(response.body).toHaveProperty('property_id');
+      expect(response.body).toHaveProperty('room_number');
+      expect(response.body).toHaveProperty('room_type');
+      expect(response.body).toHaveProperty('status');
+      expect(response.body).toHaveProperty('created_at');
+      expect(response.body).toHaveProperty('updated_at');
+    });
+
+    test('should return 404 for non-existent room', async () => {
+      await request(app)
+        .get('/api/rooms/99999')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(404);
+    });
+
+    test('should return 401 without authentication', async () => {
+      await request(app).get(`/api/rooms/${roomId}`).expect(401);
+    });
+
+    test('should return 400 for invalid ID parameter', async () => {
+      await request(app)
+        .get('/api/rooms/invalid-id')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(400);
+    });
+  });
+
+  describe('PATCH /api/rooms/:id', () => {
+    let adminToken: string;
+    let roomId: number;
+
+    beforeEach(async () => {
+      const { token } = await createTestUser({
+        password: 'Password123!',
+        is_admin: true
+      });
+      adminToken = token;
+
+      const createResponse = await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          name: 'Room To Update',
+          property_id: propertyId,
+          room_number: '500',
+          room_type: 'Standard',
+          status: 'available'
+        })
+        .expect(201);
+
+      roomId = createResponse.body.id;
+    });
+
+    test('should update room name successfully', async () => {
+      const response = await request(app)
+        .patch(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ name: 'Updated Room Name' })
+        .expect(200);
+
+      expect(response.body.id).toBe(roomId);
+      expect(response.body.name).toBe('Updated Room Name');
+      expect(response.body.room_number).toBe('500');
+      expect(response.body.updated_at).toBeTruthy();
+    });
+
+    test('should update room status', async () => {
+      const response = await request(app)
+        .patch(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ status: 'maintenance' })
+        .expect(200);
+
+      expect(response.body.id).toBe(roomId);
+      expect(response.body.status).toBe('maintenance');
+    });
+
+    test('should update multiple fields at once', async () => {
+      const response = await request(app)
+        .patch(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          name: 'Fully Updated Room',
+          room_number: '600',
+          room_type: 'Suite',
+          status: 'occupied'
+        })
+        .expect(200);
+
+      expect(response.body.name).toBe('Fully Updated Room');
+      expect(response.body.room_number).toBe('600');
+      expect(response.body.room_type).toBe('Suite');
+      expect(response.body.status).toBe('occupied');
+    });
+
+    test('should return 404 for non-existent room', async () => {
+      await request(app)
+        .patch('/api/rooms/99999')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ name: 'Ghost Room' })
+        .expect(404);
+    });
+
+    test('should return 401 without authentication', async () => {
+      await request(app)
+        .patch(`/api/rooms/${roomId}`)
+        .send({ name: 'No Auth' })
+        .expect(401);
+    });
+
+    test('should return 403 for non-admin users', async () => {
+      await request(app)
+        .patch(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ name: 'Non Admin Update' })
+        .expect(403);
+    });
+
+    test('should return 400 for invalid status value', async () => {
+      await request(app)
+        .patch(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ status: 'invalid_status' })
+        .expect(400);
+    });
+  });
+
+  describe('DELETE /api/rooms/:id', () => {
+    let adminToken: string;
+    let roomId: number;
+
+    beforeEach(async () => {
+      const { token } = await createTestUser({
+        password: 'Password123!',
+        is_admin: true
+      });
+      adminToken = token;
+
+      const createResponse = await request(app)
+        .post('/api/rooms')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          name: 'Room To Delete',
+          property_id: propertyId,
+          room_number: '900',
+          room_type: 'Standard',
+          status: 'available'
+        })
+        .expect(201);
+
+      roomId = createResponse.body.id;
+    });
+
+    test('should delete room successfully', async () => {
+      const response = await request(app)
+        .delete(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    test('should verify room is gone after deletion', async () => {
+      await request(app)
+        .delete(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      await request(app)
+        .get(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(404);
+    });
+
+    test('should return 404 for non-existent room', async () => {
+      await request(app)
+        .delete('/api/rooms/99999')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(404);
+    });
+
+    test('should return 401 without authentication', async () => {
+      await request(app).delete(`/api/rooms/${roomId}`).expect(401);
+    });
+
+    test('should return 403 for non-admin users', async () => {
+      await request(app)
+        .delete(`/api/rooms/${roomId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(403);
+    });
+  });
 });
