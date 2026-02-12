@@ -5,6 +5,7 @@ import {
   fetchReservationByIdSchema,
   fetchReservationsParamsSchema,
   reservationIdParamsSchema,
+  searchGuestsParamsSchema,
   updateReservationSchema
 } from '../../../shared/types/reservations';
 import {
@@ -12,6 +13,7 @@ import {
   deleteReservation,
   getReservationById,
   getReservations,
+  searchGuests,
   updateReservation
 } from '../controllers/reservation-controller';
 import { authenticateToken } from '../middleware/auth';
@@ -32,6 +34,13 @@ router.post('/', validateBody(createReservationSchema), createReservation);
 
 // Get reservations
 router.get('/', validateQuery(fetchReservationsParamsSchema), getReservations);
+
+// Search guests across reservations
+router.get(
+  '/guests/search',
+  validateQuery(searchGuestsParamsSchema),
+  searchGuests
+);
 
 // Get reservation by id
 router.get(

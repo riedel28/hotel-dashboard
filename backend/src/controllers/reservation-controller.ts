@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, gte, ilike, lte } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gte, ilike, lte, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
@@ -367,10 +367,47 @@ async function deleteReservation(req: Request, res: Response) {
   }
 }
 
+async function searchGuests(req: Request, res: Response) {
+  const { q } = req.query;
+
+  try {
+    const escaped = escapeLikePattern(q as string);
+    const results = await db
+      .selectDistinctOn(
+        [
+          guestsTable.first_name,
+          guestsTable.last_name,
+          guestsTable.email,
+          guestsTable.nationality_code
+        ],
+        {
+          first_name: guestsTable.first_name,
+          last_name: guestsTable.last_name,
+          email: guestsTable.email,
+          nationality_code: guestsTable.nationality_code
+        }
+      )
+      .from(guestsTable)
+      .where(
+        or(
+          ilike(guestsTable.first_name, `%${escaped}%`),
+          ilike(guestsTable.last_name, `%${escaped}%`)
+        )
+      )
+      .limit(10);
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to search guests' });
+  }
+}
+
 export {
   getReservations,
   getReservationById,
   createReservation,
   updateReservation,
-  deleteReservation
+  deleteReservation,
+  searchGuests
 };
