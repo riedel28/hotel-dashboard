@@ -64,8 +64,8 @@ msgstr "About"
 msgid "Accept Invitation"
 msgstr "Accept Invitation"
 
-#: src/routes/_dashboard-layout.tsx:302
-#: src/routes/_dashboard-layout.tsx:304
+#: src/routes/_dashboard-layout.tsx:303
+#: src/routes/_dashboard-layout.tsx:305
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:274
 msgid "Access Provider"
 msgstr "Access Provider"
@@ -107,11 +107,11 @@ msgstr "Add product"
 msgid "Add Property"
 msgstr "Add Property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:92
 msgid "Add Reservation"
 msgstr "Add Reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:91
 msgid "Add Room"
 msgstr "Add Room"
 
@@ -151,7 +151,7 @@ msgstr "Admin User"
 #~ msgid "Administrators"
 #~ msgstr "Administrators"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:266
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:251
 msgid "Adults"
 msgstr "Adults"
 
@@ -272,7 +272,7 @@ msgstr "Authy"
 #~ msgid "Authy ↗"
 #~ msgstr "Authy ↗"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:197
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:181
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:47
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:29
@@ -329,7 +329,7 @@ msgstr "Balance"
 msgid "Booking #"
 msgstr "Booking #"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:132
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:114
 msgid "Booking Information"
 msgstr "Booking Information"
 
@@ -337,13 +337,13 @@ msgstr "Booking Information"
 #~ msgid "Booking number is required"
 #~ msgstr "Booking number is required"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:395
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:380
 msgid "Business"
 msgstr "Business"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:145
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:293
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:147
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:75
@@ -353,7 +353,7 @@ msgstr "Business"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-product-modal.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:224
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:226
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:288
@@ -424,13 +424,13 @@ msgstr "Check-in via"
 msgid "Check-out via"
 msgstr "Check-out via"
 
-#: src/routes/_dashboard-layout.tsx:347
-#: src/routes/_dashboard-layout.tsx:349
+#: src/routes/_dashboard-layout.tsx:348
+#: src/routes/_dashboard-layout.tsx:350
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:319
 msgid "Checkin Page"
 msgstr "Checkin Page"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:310
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:295
 msgid "Children"
 msgstr "Children"
 
@@ -459,8 +459,8 @@ msgstr "CN"
 msgid "Columns"
 msgstr "Columns"
 
-#: src/routes/_dashboard-layout.tsx:338
-#: src/routes/_dashboard-layout.tsx:340
+#: src/routes/_dashboard-layout.tsx:339
+#: src/routes/_dashboard-layout.tsx:341
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:310
 msgid "Company data"
 msgstr "Company data"
@@ -502,7 +502,7 @@ msgstr "Contains a special character"
 msgid "Contains an uppercase letter"
 msgstr "Contains an uppercase letter"
 
-#: src/routes/_dashboard-layout.tsx:236
+#: src/routes/_dashboard-layout.tsx:237
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:237
 msgid "Content Manager"
 msgstr "Content Manager"
@@ -525,8 +525,8 @@ msgstr "Country"
 #~ msgid "Country code"
 #~ msgstr "Country code"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:161
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:230
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:171
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:232
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:239
 msgid "Create"
 msgstr "Create"
@@ -544,11 +544,11 @@ msgstr "Create and manage registration forms, track submissions, and customize c
 msgid "Create New Property"
 msgstr "Create New Property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:99
 msgid "Create New Reservation"
 msgstr "Create New Reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:96
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:98
 msgid "Create New Room"
 msgstr "Create New Room"
 
@@ -568,8 +568,6 @@ msgstr "Current password is required"
 #~ msgid "Current View: {currentView}"
 #~ msgstr "Current View: {currentView}"
 
-#: src/routes/_dashboard-layout.tsx:152
-#: src/routes/_dashboard-layout.tsx:154
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:143
 #: src/routes/_dashboard-layout/admin/index.tsx:24
 msgid "Customers"
@@ -639,8 +637,8 @@ msgstr "Departure Date"
 msgid "Desc"
 msgstr "Desc"
 
-#: src/routes/_dashboard-layout.tsx:363
 #: src/routes/_dashboard-layout.tsx:364
+#: src/routes/_dashboard-layout.tsx:365
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:346
 msgid "Devices"
 msgstr "Devices"
@@ -683,7 +681,7 @@ msgstr "Edit"
 msgid "Edit category"
 msgstr "Edit category"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:221
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:206
 msgid "Edit guest"
 msgstr "Edit guest"
 
@@ -790,17 +788,17 @@ msgstr "Enter property name"
 #~ msgid "Enter reservation number"
 #~ msgstr "Enter reservation number"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:116
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:97
 msgid "Enter room name"
 msgstr "Enter room name"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:119
 msgid "Enter room number"
 msgstr "Enter room number"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:158
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:160
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:141
 msgid "Enter room type (e.g., Standard, Suite)"
 msgstr "Enter room type (e.g., Standard, Suite)"
@@ -899,8 +897,8 @@ msgstr "Error deleting user"
 msgid "Event"
 msgstr "Event"
 
-#: src/routes/_dashboard-layout.tsx:249
-#: src/routes/_dashboard-layout.tsx:263
+#: src/routes/_dashboard-layout.tsx:250
+#: src/routes/_dashboard-layout.tsx:264
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:162
 msgid "Events"
 msgstr "Events"
@@ -917,11 +915,11 @@ msgstr "Failed to create account. Please try again."
 msgid "Failed to create property"
 msgstr "Failed to create property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:73
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:78
 msgid "Failed to create reservation"
 msgstr "Failed to create reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:77
 msgid "Failed to create room"
 msgstr "Failed to create room"
 
@@ -990,7 +988,7 @@ msgstr "Failed to update guest. Please try again."
 msgid "Failed to update property. Please try again."
 msgstr "Failed to update property. Please try again."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:81
 msgid "Failed to update reservation. Please try again."
 msgstr "Failed to update reservation. Please try again."
 
@@ -1041,7 +1039,7 @@ msgstr "Forgot Password"
 msgid "Forgot password?"
 msgstr "Forgot password?"
 
-#: src/routes/_dashboard-layout.tsx:191
+#: src/routes/_dashboard-layout.tsx:192
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:192
 msgid "Front Office"
 msgstr "Front Office"
@@ -1116,7 +1114,7 @@ msgstr "Guest updated successfully"
 #~ msgid "guest@example.com"
 #~ msgstr "guest@example.com"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:167
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:149
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:180
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:195
 msgid "Guests"
@@ -1235,7 +1233,7 @@ msgstr "Home"
 #~ msgid "Housekeeping Manager"
 #~ msgstr "Housekeeping Manager"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:332
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:317
 msgid "Infants"
 msgstr "Infants"
 
@@ -1247,7 +1245,7 @@ msgstr "Infants"
 #~ msgid "Info"
 #~ msgstr "Info"
 
-#: src/routes/_dashboard-layout.tsx:295
+#: src/routes/_dashboard-layout.tsx:296
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:265
 msgid "Integrations"
 msgstr "Integrations"
@@ -1343,7 +1341,7 @@ msgstr "Log out"
 msgid "Login"
 msgstr "Login"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:205
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:33
@@ -1391,14 +1389,14 @@ msgstr "Microsoft Authenticator"
 #~ msgid "Minimum 8 characters"
 #~ msgstr "Minimum 8 characters"
 
-#: src/routes/_dashboard-layout.tsx:243
-#: src/routes/_dashboard-layout.tsx:257
+#: src/routes/_dashboard-layout.tsx:244
+#: src/routes/_dashboard-layout.tsx:258
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:156
 msgid "Mobile App"
 msgstr "Mobile App"
 
-#: src/routes/_dashboard-layout.tsx:180
-#: src/routes/_dashboard-layout.tsx:182
+#: src/routes/_dashboard-layout.tsx:181
+#: src/routes/_dashboard-layout.tsx:183
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:183
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:240
 msgid "Monitoring"
@@ -1471,9 +1469,13 @@ msgstr "No categories yet. Add a category to get started."
 msgid "No data available"
 msgstr "No data available"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:182
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:167
 msgid "No guests added yet"
 msgstr "No guests added yet"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-search-combobox.tsx:121
+msgid "No guests found"
+msgstr "No guests found"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:110
 msgid "No name"
@@ -1496,22 +1498,27 @@ msgstr "No results found."
 msgid "No roles available"
 msgstr "No roles available"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:426
+msgid "No rooms available"
+msgstr "No rooms available"
+
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:213
 msgid "None"
 msgstr "None"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:254
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:239
 msgid "Number of People"
 msgstr "Number of People"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:202
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:184
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:31
 msgid "Occupied"
 msgstr "Occupied"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:190
 msgid "Open guest menu"
 msgstr "Open guest menu"
 
@@ -1526,13 +1533,13 @@ msgstr "Open menu"
 #~ msgid "Opening"
 #~ msgstr "Opening"
 
-#: src/routes/_dashboard-layout.tsx:225
-#: src/routes/_dashboard-layout.tsx:227
+#: src/routes/_dashboard-layout.tsx:226
+#: src/routes/_dashboard-layout.tsx:228
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:228
 msgid "Orders"
 msgstr "Orders"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:208
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:190
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:71
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:35
@@ -1596,15 +1603,15 @@ msgstr "Password strength requirements"
 msgid "Passwords don't match"
 msgstr "Passwords don't match"
 
-#: src/routes/_dashboard-layout.tsx:320
-#: src/routes/_dashboard-layout.tsx:322
+#: src/routes/_dashboard-layout.tsx:321
+#: src/routes/_dashboard-layout.tsx:323
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:292
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:32
 msgid "Payment Provider"
 msgstr "Payment Provider"
 
-#: src/routes/_dashboard-layout.tsx:216
-#: src/routes/_dashboard-layout.tsx:218
+#: src/routes/_dashboard-layout.tsx:217
+#: src/routes/_dashboard-layout.tsx:219
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:219
 #: src/routes/_dashboard-layout/index.tsx:36
 msgid "Payments"
@@ -1698,8 +1705,8 @@ msgstr "Please select at least one role"
 msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
-#: src/routes/_dashboard-layout.tsx:311
-#: src/routes/_dashboard-layout.tsx:313
+#: src/routes/_dashboard-layout.tsx:312
+#: src/routes/_dashboard-layout.tsx:314
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:283
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:32
 msgid "PMS Provider"
@@ -1717,7 +1724,7 @@ msgstr "Previous slide"
 msgid "Primary Guest"
 msgstr "Primary Guest"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:383
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:368
 msgid "Private"
 msgstr "Private"
 
@@ -1739,8 +1746,8 @@ msgstr "Product categories"
 msgid "Production"
 msgstr "Production"
 
-#: src/routes/_dashboard-layout.tsx:247
-#: src/routes/_dashboard-layout.tsx:261
+#: src/routes/_dashboard-layout.tsx:248
+#: src/routes/_dashboard-layout.tsx:262
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:160
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:69
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:93
@@ -1781,8 +1788,8 @@ msgstr "Profile update is not yet implemented"
 #~ msgid "Profile updated successfully"
 #~ msgstr "Profile updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:143
-#: src/routes/_dashboard-layout.tsx:145
+#: src/routes/_dashboard-layout.tsx:148
+#: src/routes/_dashboard-layout.tsx:150
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:134
 #: src/routes/_dashboard-layout/admin/index.tsx:18
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
@@ -1811,7 +1818,7 @@ msgstr "Property Details"
 msgid "Property updated successfully"
 msgstr "Property updated successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:355
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:340
 msgid "Purpose of Stay"
 msgstr "Purpose of Stay"
 
@@ -1842,8 +1849,8 @@ msgstr "Received At"
 msgid "Refresh"
 msgstr "Refresh"
 
-#: src/routes/_dashboard-layout.tsx:207
-#: src/routes/_dashboard-layout.tsx:209
+#: src/routes/_dashboard-layout.tsx:208
+#: src/routes/_dashboard-layout.tsx:210
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:210
 msgid "Registration forms"
 msgstr "Registration forms"
@@ -1868,7 +1875,7 @@ msgstr "Reload properties"
 msgid "Remember me"
 msgstr "Remember me"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:229
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:214
 msgid "Remove"
 msgstr "Remove"
 
@@ -1889,7 +1896,7 @@ msgstr "Resend verification email"
 #~ msgid "Reservation"
 #~ msgstr "Reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:75
 msgid "Reservation created successfully"
 msgstr "Reservation created successfully"
 
@@ -1905,7 +1912,7 @@ msgstr "Reservation details"
 #~ msgid "Reservation ID"
 #~ msgstr "Reservation ID"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:144
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:126
 msgid "Reservation No."
 msgstr "Reservation No."
 
@@ -1925,12 +1932,12 @@ msgstr "Reservation Number"
 #~ msgid "Reservation number is required"
 #~ msgstr "Reservation number is required"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:77
 msgid "Reservation updated successfully"
 msgstr "Reservation updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:198
-#: src/routes/_dashboard-layout.tsx:200
+#: src/routes/_dashboard-layout.tsx:199
+#: src/routes/_dashboard-layout.tsx:201
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:201
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:45
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:59
@@ -1976,8 +1983,8 @@ msgstr "Roles update is not yet implemented"
 #~ msgid "Roles updated successfully"
 #~ msgstr "Roles updated successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:106
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:413
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:111
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:398
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:59
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:159
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:167
@@ -1985,10 +1992,10 @@ msgid "Room"
 msgstr "Room"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:132
-msgid "Room {room}"
-msgstr "Room {room}"
+#~ msgid "Room {room}"
+#~ msgstr "Room {room}"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:72
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:74
 msgid "Room created successfully"
 msgstr "Room created successfully"
 
@@ -1996,12 +2003,12 @@ msgstr "Room created successfully"
 msgid "Room Details"
 msgstr "Room Details"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:92
 msgid "Room Name"
 msgstr "Room Name"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:93
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:104
@@ -2012,7 +2019,7 @@ msgstr "Room Number"
 msgid "Room selection is required"
 msgstr "Room selection is required"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:151
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:153
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:135
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:116
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:127
@@ -2023,8 +2030,8 @@ msgstr "Room Type"
 msgid "Room updated successfully"
 msgstr "Room updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:358
 #: src/routes/_dashboard-layout.tsx:359
+#: src/routes/_dashboard-layout.tsx:360
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:337
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:45
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:53
@@ -2055,7 +2062,7 @@ msgstr "Save"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:299
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:150
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:471
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:459
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:145
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:209
@@ -2076,7 +2083,11 @@ msgstr "Save Roles"
 msgid "Search"
 msgstr "Search"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:171
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-search-combobox.tsx:109
+msgid "Search for a guest"
+msgstr "Search for a guest"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-search-combobox.tsx:110
 msgid "Search for a guest..."
 msgstr "Search for a guest..."
 
@@ -2112,11 +2123,11 @@ msgstr "Search users"
 msgid "Select a category to view products"
 msgstr "Select a category to view products"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:122
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:127
 msgid "Select a room"
 msgstr "Select a room"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:434
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:420
 msgid "Select a room..."
 msgstr "Select a room..."
 
@@ -2146,11 +2157,11 @@ msgstr "Select one or more roles to assign"
 msgid "Select property"
 msgstr "Select property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:367
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:352
 msgid "Select purpose"
 msgstr "Select purpose"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:425
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:410
 msgid "Select room"
 msgstr "Select room"
 
@@ -2164,7 +2175,7 @@ msgstr "Select stage"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:268
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:31
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:189
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:173
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:28
 msgid "Select status"
@@ -2213,7 +2224,7 @@ msgstr "Set up 2FA"
 msgid "Set your password to activate your account"
 msgstr "Set your password to activate your account"
 
-#: src/routes/_dashboard-layout.tsx:331
+#: src/routes/_dashboard-layout.tsx:332
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:301
 msgid "Settings"
 msgstr "Settings"
@@ -2300,10 +2311,10 @@ msgstr "Stage"
 msgid "Staging"
 msgstr "Staging"
 
-#: src/routes/_dashboard-layout.tsx:135
-#: src/routes/_dashboard-layout.tsx:136
-#: src/routes/_dashboard-layout.tsx:172
-#: src/routes/_dashboard-layout.tsx:173
+#: src/routes/_dashboard-layout.tsx:138
+#: src/routes/_dashboard-layout.tsx:141
+#: src/routes/_dashboard-layout.tsx:171
+#: src/routes/_dashboard-layout.tsx:174
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:125
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:174
 msgid "Start"
@@ -2322,7 +2333,7 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:82
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:112
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:123
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:173
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:139
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:150
@@ -2492,8 +2503,8 @@ msgstr "Try Again"
 msgid "Turn on two-factor authentication for better account security"
 msgstr "Turn on two-factor authentication for better account security"
 
-#: src/routes/_dashboard-layout.tsx:245
-#: src/routes/_dashboard-layout.tsx:259
+#: src/routes/_dashboard-layout.tsx:246
+#: src/routes/_dashboard-layout.tsx:260
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:158
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:16
 msgid "TV App"
@@ -2606,8 +2617,8 @@ msgstr "User updated successfully"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: src/routes/_dashboard-layout.tsx:353
 #: src/routes/_dashboard-layout.tsx:354
+#: src/routes/_dashboard-layout.tsx:355
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:328
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:45
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:200
@@ -2718,7 +2729,7 @@ msgstr "Your email has been verified successfully. You can now log in."
 msgid "Your password has been reset successfully. You can now log in with your new password."
 msgstr "Your password has been reset successfully. You can now log in with your new password."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:288
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:273
 msgid "Youth"
 msgstr "Youth"
 

@@ -27,9 +27,7 @@ test.describe('Rooms', () => {
     await selectProperty(page);
     await page.getByRole('link', { name: 'Rooms' }).click();
     await expect(page).toHaveURL(/\/rooms/);
-    await expect(
-      page.getByRole('heading', { name: 'Rooms' })
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Rooms' })).toBeVisible();
   });
 
   async function createRoom(page: Page, roomName: string) {
