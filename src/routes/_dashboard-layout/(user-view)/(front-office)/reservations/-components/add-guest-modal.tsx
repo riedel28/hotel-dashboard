@@ -30,7 +30,8 @@ interface AddGuestModalProps {
 
 const addGuestSchema = z.object({
   firstName: z.string().min(1, t`First name is required`),
-  lastName: z.string().min(1, t`Last name is required`)
+  lastName: z.string().min(1, t`Last name is required`),
+  email: z.string().min(1, t`Email is required`).email(t`Invalid email address`)
 });
 
 type AddGuestFormData = z.infer<typeof addGuestSchema>;
@@ -42,7 +43,8 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
     resolver: zodResolver(addGuestSchema),
     defaultValues: {
       firstName: '',
-      lastName: ''
+      lastName: '',
+      email: ''
     }
   });
 
@@ -52,6 +54,7 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
       reservation_id: 0,
       first_name: data.firstName,
       last_name: data.lastName,
+      email: data.email,
       nationality_code: 'DE',
       created_at: new Date(),
       updated_at: null
@@ -125,6 +128,28 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
                       {...field}
                       id={field.name}
                       placeholder={t`Enter last name`}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
+                name="email"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Email</Trans>
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      type="email"
+                      placeholder={t`Enter email`}
                       aria-invalid={fieldState.invalid}
                     />
                     {fieldState.invalid && (

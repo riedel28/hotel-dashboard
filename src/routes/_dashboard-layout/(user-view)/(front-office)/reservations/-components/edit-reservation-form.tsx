@@ -90,6 +90,15 @@ export function EditReservationForm({
     );
   };
 
+  const handleEditGuest = (updatedGuest: Guest) => {
+    const currentGuests = form.getValues('guests');
+    form.setValue(
+      'guests',
+      currentGuests.map((g) => (g.id === updatedGuest.id ? updatedGuest : g))
+    );
+    setEditingGuest(null);
+  };
+
   const handleAddGuest = (newGuest: Guest) => {
     const currentGuests = form.getValues('guests');
     form.setValue('guests', [...currentGuests, newGuest]);
@@ -464,11 +473,11 @@ export function EditReservationForm({
         <EditGuestForm
           key={editingGuest.id}
           guest={editingGuest}
-          reservationId={reservationId}
           open={true}
           onOpenChange={(open) => {
             if (!open) setEditingGuest(null);
           }}
+          onSave={handleEditGuest}
         />
       )}
 

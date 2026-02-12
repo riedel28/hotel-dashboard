@@ -1,17 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import type { Guest } from 'shared/types/reservations';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
-import {
-  fetchReservationById,
-  updateReservationById
-} from '@/api/reservations';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -38,9 +31,9 @@ import {
 
 interface EditGuestFormProps {
   guest: Guest;
-  reservationId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSave: (updatedGuest: Guest) => void;
 }
 
 const editGuestSchema = z.object({
@@ -67,22 +60,10 @@ function getGuestFormDefaults(guest: Guest): EditGuestFormData {
 
 export function EditGuestForm({
   guest,
-  reservationId,
   open,
-  onOpenChange
+  onOpenChange,
+  onSave
 }: EditGuestFormProps) {
-  const queryClient = useQueryClient();
-
-  // Fetch current reservation to get all guests
-  const { data: reservation, isLoading: isLoadingReservation } = useQuery({
-    queryKey: ['reservation', reservationId],
-    queryFn: () => fetchReservationById(reservationId),
-    enabled: open && !!reservationId
-  });
-
-  // Use both defaultValues and values to ensure form updates when guest prop changes
-  // defaultValues: initial values when form is first rendered
-  // values: controlled values that update when guest prop changes
   const formDefaults = getGuestFormDefaults(guest);
   const form = useForm<EditGuestFormData>({
     resolver: zodResolver(editGuestSchema),
@@ -90,61 +71,24 @@ export function EditGuestForm({
     values: formDefaults
   });
 
-  const updateGuestMutation = useMutation({
-    mutationFn: async (data: EditGuestFormData) => {
-      if (!reservation) {
-        throw new Error('Reservation not found');
-      }
-
-      // Update the specific guest in the guests array
-      const updatedGuests = reservation.guests.map((g) =>
-        g.id === guest.id
-          ? {
-              ...g,
-              first_name: data.firstName,
-              last_name: data.lastName,
-              email: data.email || null,
-              nationality_code: data.nationality_code,
-              updated_at: new Date()
-            }
-          : g
-      );
-
-      // Update reservation with modified guests array
-      return updateReservationById(reservationId, {
-        guests: updatedGuests
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reservations'] });
-      queryClient.invalidateQueries({
-        queryKey: ['reservation', reservationId]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['reservations', reservationId]
-      });
-      toast.success(t`Guest updated successfully`);
-      onOpenChange(false);
-    },
-    onError: (error) => {
-      console.error('Failed to update guest:', error);
-      toast.error(t`Failed to update guest. Please try again.`);
-    }
-  });
-
   const handleOpenChange = (newOpen: boolean) => {
     onOpenChange(newOpen);
     if (!newOpen) {
-      // Reset form to original values when closing
       form.reset(getGuestFormDefaults(guest));
     }
   };
 
   const onSubmit = (data: EditGuestFormData) => {
-    updateGuestMutation.mutate(data);
+    onSave({
+      ...guest,
+      first_name: data.firstName,
+      last_name: data.lastName,
+      email: data.email || null,
+      nationality_code: data.nationality_code,
+      updated_at: new Date()
+    });
+    onOpenChange(false);
   };
-
-  const isLoading = isLoadingReservation || updateGuestMutation.isPending;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -170,7 +114,6 @@ export function EditGuestForm({
                       id={field.name}
                       placeholder={t`Enter first name`}
                       aria-invalid={fieldState.invalid}
-                      disabled={isLoading}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -192,7 +135,6 @@ export function EditGuestForm({
                       id={field.name}
                       placeholder={t`Enter last name`}
                       aria-invalid={fieldState.invalid}
-                      disabled={isLoading}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -215,7 +157,6 @@ export function EditGuestForm({
                       type="email"
                       placeholder={t`Enter email address`}
                       aria-invalid={fieldState.invalid}
-                      disabled={isLoading}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -235,7 +176,6 @@ export function EditGuestForm({
                     <Select
                       value={field.value}
                       onValueChange={field.onChange}
-                      disabled={isLoading}
                     >
                       <SelectTrigger
                         id={field.name}
@@ -288,14 +228,10 @@ export function EditGuestForm({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={isLoading}
             >
               <Trans>Cancel</Trans>
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading && (
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-              )}
+            <Button type="submit">
               <Trans>Save Changes</Trans>
             </Button>
           </DialogFooter>
