@@ -10,7 +10,9 @@ import {
   fetchReservationsParamsSchema,
   fetchReservationsResponseSchema,
   type Guest,
+  type GuestSearchResult,
   guestSchema,
+  guestSearchResultSchema,
   type Reservation,
   type ReservationStatus,
   reservationSchema,
@@ -116,22 +118,47 @@ async function deleteReservationById(id: string): Promise<void> {
   }
 }
 
+async function searchGuests(q: string): Promise<GuestSearchResult[]> {
+  try {
+    const response = await client.get('/reservations/guests/search', {
+      params: { q }
+    });
+    return guestSearchResultSchema.array().parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'searchGuests');
+  }
+}
+
+function guestSearchQueryOptions(q: string) {
+  return queryOptions({
+    queryKey: ['guests', 'search', q],
+    queryFn: () => searchGuests(q),
+    enabled: q.length >= 1,
+    placeholderData: keepPreviousData,
+    staleTime: 30_000
+  });
+}
+
 export {
   fetchReservations,
   fetchReservationById,
   updateReservationById,
   createReservation,
   deleteReservationById,
+  searchGuests,
   fetchReservationsParamsSchema,
   fetchReservationsResponseSchema,
   createReservationSchema,
   guestSchema,
+  guestSearchResultSchema,
   reservationSchema,
   reservationStatusSchema,
   reservationsQueryOptions,
   reservationByIdQueryOptions,
+  guestSearchQueryOptions,
   type Reservation,
   type Guest,
+  type GuestSearchResult,
   type CheckinMethod,
   type ReservationStatus,
   type CreateReservationData

@@ -36,7 +36,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NumberInput } from '@/components/ui/number-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { SearchInput } from '@/components/ui/search-input';
 import {
   Select,
   SelectContent,
@@ -48,6 +47,7 @@ import { cn } from '@/lib/utils';
 
 import { AddGuestModal } from './add-guest-modal';
 import { EditGuestForm } from './edit-guest-form';
+import { GuestSearchCombobox } from './guest-search-combobox';
 
 interface EditReservationFormProps {
   reservationId: string;
@@ -95,9 +95,7 @@ export function EditReservationForm({
     form.setValue('guests', [...currentGuests, newGuest]);
   };
 
-  const { data: roomsData } = useQuery(
-    roomsQueryOptions({ per_page: 100 })
-  );
+  const { data: roomsData } = useQuery(roomsQueryOptions({ per_page: 100 }));
   const rooms = roomsData?.index ?? [];
 
   const onSubmit = (data: ReservationFormData) => {
@@ -152,7 +150,10 @@ export function EditReservationForm({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <SearchInput placeholder={t`Search for a guest...`} />
+            <GuestSearchCombobox
+              currentGuests={form.watch('guests')}
+              onSelectGuest={handleAddGuest}
+            />
             <FieldSet className="gap-4">
               <FieldGroup className="gap-4">
                 <Controller
@@ -426,16 +427,12 @@ export function EditReservationForm({
                             </div>
                           ) : (
                             rooms.map((room) => (
-                              <SelectItem
-                                key={room.id}
-                                value={String(room.id)}
-                              >
+                              <SelectItem key={room.id} value={String(room.id)}>
                                 {room.name}
                                 {room.room_number && (
                                   <span className="text-muted-foreground">
                                     {` (${room.room_number}`}
-                                    {room.room_type &&
-                                      ` · ${room.room_type}`}
+                                    {room.room_type && ` · ${room.room_type}`}
                                     {')'}
                                   </span>
                                 )}
