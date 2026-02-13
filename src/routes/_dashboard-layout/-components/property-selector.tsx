@@ -146,7 +146,7 @@ function PropertySelector({
       onValueChange={handlePropertySelect}
     >
       <ComboboxTrigger
-        className="min-w-0 max-w-xs flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent sm:max-w-sm md:max-w-lg"
+        className="min-w-0 max-w-full flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent"
         aria-label={t`Select property`}
       >
         <ComboboxValue>
