@@ -27,8 +27,8 @@ const badgeVariants = cva(
           'bg-badge-warning text-badge-warning-foreground [a]:hover:bg-badge-warning/80'
       },
       size: {
-        xs: 'text-xs px-1.5 py-0.5 [&>svg]:size-2',
-        sm: 'text-xs px-2 py-1 [&>svg]:size-3',
+        xs: 'text-[11px] px-1.25 py-0.25 [&>svg]:size-2',
+        sm: 'text-[12px] px-1.5 py-0.25 [&>svg]:size-3',
         md: 'text-sm px-4 py-1.5 [&>svg]:size-3',
         lg: 'text-base px-5 py-2 [&>svg]:size-4'
       }

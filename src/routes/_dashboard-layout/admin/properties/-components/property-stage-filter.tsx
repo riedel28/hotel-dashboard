@@ -14,10 +14,10 @@ interface PropertyStageFilterProps {
 }
 
 const stages = [
-  { value: 'production', color: 'bg-green-500' },
-  { value: 'staging', color: 'bg-yellow-500' },
-  { value: 'demo', color: 'bg-blue-500' },
-  { value: 'template', color: 'bg-gray-400' }
+  { value: 'production', color: 'bg-emerald-500' },
+  { value: 'staging', color: 'bg-sky-500' },
+  { value: 'demo', color: 'bg-indigo-500' },
+  { value: 'template', color: 'bg-amber-400' }
 ] as const;
 
 export function PropertyStageFilter({
@@ -64,7 +64,7 @@ export function PropertyStageFilter({
         </SelectItem>
         <SelectItem value="production">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-green-500" />
+            <span className="size-1.5 rounded-full bg-emerald-500" />
             <span>
               <Trans>Production</Trans>
             </span>
@@ -72,7 +72,7 @@ export function PropertyStageFilter({
         </SelectItem>
         <SelectItem value="staging">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-yellow-500" />
+            <span className="size-1.5 rounded-full bg-sky-500" />
             <span>
               <Trans>Staging</Trans>
             </span>
@@ -80,7 +80,7 @@ export function PropertyStageFilter({
         </SelectItem>
         <SelectItem value="demo">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-blue-500" />
+            <span className="size-1.5 rounded-full bg-indigo-500" />
             <span>
               <Trans>Demo</Trans>
             </span>
@@ -88,7 +88,7 @@ export function PropertyStageFilter({
         </SelectItem>
         <SelectItem value="template">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-gray-400" />
+            <span className="size-1.5 rounded-full bg-amber-400" />
             <span>
               <Trans>Template</Trans>
             </span>

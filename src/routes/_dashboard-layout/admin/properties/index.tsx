@@ -1,4 +1,3 @@
-import { t } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
@@ -28,7 +27,7 @@ import type { Property } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 import { propertiesQueryOptions } from '@/api/properties';
 
-import { Badge, type BadgeProps } from '@/components/ui/badge';
+import { StageBadge } from '@/components/stage-badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -77,36 +76,6 @@ function getCountryName(countryCode: string): string {
     US: 'United States'
   };
   return countryMap[countryCode] || countryCode;
-}
-
-function getStageVariant(stage: Property['stage']): BadgeProps['variant'] {
-  switch (stage) {
-    case 'production':
-      return 'success';
-    case 'staging':
-      return 'warning';
-    case 'demo':
-      return 'info';
-    case 'template':
-      return 'secondary';
-    default:
-      return 'secondary';
-  }
-}
-
-function getStageLabel(stage: Property['stage']): string {
-  switch (stage) {
-    case 'production':
-      return t`Production`;
-    case 'staging':
-      return t`Staging`;
-    case 'demo':
-      return t`Demo`;
-    case 'template':
-      return t`Template`;
-    default:
-      return stage;
-  }
 }
 
 function RowActions({ row }: { row: { original: Property } }) {
@@ -271,11 +240,7 @@ function PropertiesTable({
         ),
         cell: ({ row }) => {
           const stage = row.getValue('stage') as Property['stage'];
-          return (
-            <Badge size="sm" variant={getStageVariant(stage)}>
-              {getStageLabel(stage)}
-            </Badge>
-          );
+          return <StageBadge stage={stage} size="sm" />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-20" />,

@@ -17,6 +17,11 @@ import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RowActions } from './row-actions';
 
@@ -110,9 +115,9 @@ export default function UsersTable({
                   {fullName || <Trans>No name</Trans>}
                   {!row.original.email_verified && (
                     <Badge
-                      variant="outline"
                       size="xs"
-                      className="border-amber-400 bg-amber-50 text-amber-700 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-400"
+                      variant="warning"
+                      className="shrink-0 rounded-md border border-foreground/10 capitalize"
                     >
                       <Trans>Pending</Trans>
                     </Badge>
@@ -216,13 +221,44 @@ export default function UsersTable({
           if (roles.length === 0) {
             return null;
           }
+          const firstRole = roles[0]!;
+          const rest = roles.slice(1);
           return (
-            <div className="flex flex-wrap gap-1">
-              {roles.map((role) => (
-                <Badge key={role.id} variant="secondary" size="xs">
-                  {role.name}
-                </Badge>
-              ))}
+            <div className="flex items-center gap-1.5">
+              <Badge
+                size="xs"
+                variant="secondary"
+                className="shrink-0 rounded-md text-foreground/80 border border-foreground/10 capitalize"
+              >
+                {firstRole.name}
+              </Badge>
+              {rest.length > 0 && (
+                <Popover>
+                  <PopoverTrigger className="rounded-md bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted/80">
+                    +{rest.length}
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="start"
+                    className="w-auto min-w-48 p-3"
+                  >
+                    <p className="mb-2 text-xs font-medium text-muted-foreground">
+                      {t`${roles.length} roles total`}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {roles.map((role) => (
+                        <Badge
+                          key={role.id}
+                          size="xs"
+                          variant="secondary"
+                          className="shrink-0 rounded-md text-foreground/80 border border-foreground/10 capitalize"
+                        >
+                          {role.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )}
             </div>
           );
         },
