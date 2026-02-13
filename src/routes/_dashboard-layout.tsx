@@ -9,25 +9,25 @@ import {
   redirect
 } from '@tanstack/react-router';
 import {
-  ArrowUpRightIcon,
+  // ArrowUpRightIcon,
   BedDoubleIcon,
-  BedSingleIcon,
+  // BedSingleIcon,
   BuildingIcon,
-  CalendarIcon,
-  CreditCardIcon,
-  FileSpreadsheetIcon,
-  Grid2X2Icon,
+  // CalendarIcon,
+  // CreditCardIcon,
+  // FileSpreadsheetIcon,
+  // Grid2X2Icon,
   HomeIcon,
-  ListTodoIcon,
-  LockIcon,
+  // ListTodoIcon,
+  // LockIcon,
   MessageCircleIcon,
-  ReceiptTextIcon,
-  ShoppingBagIcon,
-  ShoppingCartIcon,
-  SmartphoneIcon,
+  // ReceiptTextIcon,
+  // ShoppingBagIcon,
+  // ShoppingCartIcon,
+  // SmartphoneIcon,
   SquareActivityIcon,
-  TabletIcon,
-  TvIcon,
+  // TabletIcon,
+  // TvIcon,
   UsersIcon
 } from 'lucide-react';
 import * as React from 'react';
@@ -40,7 +40,7 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuBadge,
+  // SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
@@ -79,28 +79,28 @@ function SidebarLink({
 }
 
 // Sample data for content manager items
-const contentManagerItems = [
-  {
-    name: 'Mobile CMS',
-    url: '/mobile-cms',
-    icon: SmartphoneIcon
-  },
-  {
-    name: 'TV',
-    url: '/tv',
-    icon: TvIcon
-  },
-  {
-    name: 'Products',
-    url: '/products',
-    icon: ShoppingBagIcon
-  },
-  {
-    name: 'Events',
-    url: '/events',
-    icon: CalendarIcon
-  }
-];
+// const contentManagerItems = [
+//   {
+//     name: 'Mobile CMS',
+//     url: '/mobile-cms',
+//     icon: SmartphoneIcon
+//   },
+//   {
+//     name: 'TV',
+//     url: '/tv',
+//     icon: TvIcon
+//   },
+//   {
+//     name: 'Products',
+//     url: '/products',
+//     icon: ShoppingBagIcon
+//   },
+//   {
+//     name: 'Events',
+//     url: '/events',
+//     icon: CalendarIcon
+//   }
+// ];
 
 // Sidebar header component
 function SidebarHeaderComponent() {
