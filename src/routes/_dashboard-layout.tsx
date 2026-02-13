@@ -202,6 +202,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
+            <SidebarLink to="/users" icon={UsersIcon} tooltip={t`Users`}>
+              <Trans>Users</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          {/* <SidebarMenuItem>
             <SidebarLink
               to="/registration-forms"
               icon={ListTodoIcon}
@@ -227,12 +232,12 @@ function UserSidebarContent() {
             >
               <Trans>Orders</Trans>
             </SidebarLink>
-          </SidebarMenuItem>
+          </SidebarMenuItem> */}
         </SidebarMenu>
       </SidebarGroup>
 
       {/* Content Manager Section */}
-      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Content Manager</Trans>
         </SidebarGroupLabel>
@@ -288,10 +293,10 @@ function UserSidebarContent() {
             );
           })}
         </SidebarMenu>
-      </SidebarGroup>
+      </SidebarGroup> */}
 
       {/* Integrations Section */}
-      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Integrations</Trans>
         </SidebarGroupLabel>
@@ -324,10 +329,10 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroup>
+      </SidebarGroup> */}
 
       {/* Settings Section */}
-      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Settings</Trans>
         </SidebarGroupLabel>
@@ -366,7 +371,7 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroup>
+      </SidebarGroup> */}
     </SidebarContent>
   );
 }
