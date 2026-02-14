@@ -1,3 +1,4 @@
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -22,6 +23,9 @@ const app = express();
 if (env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
+
+// Compress responses
+app.use(compression());
 
 // Security headers
 app.use(helmet());
