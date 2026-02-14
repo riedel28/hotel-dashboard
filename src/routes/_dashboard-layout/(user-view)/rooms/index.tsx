@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
   useQueryClient,
@@ -27,6 +27,7 @@ import {
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { AddRoomModal } from './-components/add-room-modal';
@@ -38,6 +39,9 @@ import { RoomsFilters } from './-components/rooms-filters';
 import RoomsTable from './-components/rooms-table/rooms-table';
 
 function RoomsPage() {
+  const { t } = useLingui();
+  useDocumentTitle(t`Rooms`);
+
   return (
     <div className="space-y-1">
       <Breadcrumb>

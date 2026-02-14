@@ -4,6 +4,7 @@ import { BuildingIcon, UsersIcon } from 'lucide-react';
 
 import { useAuth } from '@/auth';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 
 export const Route = createFileRoute('/_dashboard-layout/admin/')({
   component: AdminStartPage
@@ -11,6 +12,7 @@ export const Route = createFileRoute('/_dashboard-layout/admin/')({
 
 function AdminStartPage() {
   const { t } = useLingui();
+  useDocumentTitle(t`Admin Dashboard`);
   const auth = useAuth();
 
   const quickActions = [

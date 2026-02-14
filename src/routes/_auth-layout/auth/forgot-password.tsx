@@ -16,6 +16,7 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { loginSchema } from '@/lib/schemas';
 
 const forgotPasswordSchema = loginSchema.pick({ email: true });
@@ -66,6 +67,7 @@ function SuccessView({ email }: SuccessViewProps) {
 
 function ForgotPasswordPage() {
   const { t } = useLingui();
+  useDocumentTitle(t`Forgot Password`);
 
   const form = useForm<ForgotPasswordData>({
     resolver: zodResolver(forgotPasswordSchema),

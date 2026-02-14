@@ -6,7 +6,7 @@ import {
   ReceiptTextIcon,
   UsersIcon
 } from 'lucide-react';
-
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { useAuth } from '../../auth';
 import { Card, CardDescription, CardTitle } from '../../components/ui/card';
 
@@ -16,6 +16,7 @@ export const Route = createFileRoute('/_dashboard-layout/')({
 
 function StartPage() {
   const { t } = useLingui();
+  useDocumentTitle(t`Dashboard`);
   const auth = useAuth();
 
   const quickActions = [

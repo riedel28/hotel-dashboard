@@ -25,6 +25,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { registerSchema } from '@/lib/schemas';
 
 const fallback = '/' as const;
@@ -111,6 +112,7 @@ function SuccessView({ email }: SuccessViewProps) {
 
 function SignUpPage() {
   const { t } = useLingui();
+  useDocumentTitle(t`Sign Up`);
   const [successEmail, setSuccessEmail] = React.useState<string | null>(null);
 
   const form = useForm<SignUpFormValues>({

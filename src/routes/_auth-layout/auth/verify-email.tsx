@@ -1,10 +1,11 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { CheckIcon, Loader2Icon, XCircleIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 import { verifyEmail } from '@/api/auth';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 
 export const Route = createFileRoute('/_auth-layout/auth/verify-email')({
   validateSearch: z.object({
@@ -14,6 +15,8 @@ export const Route = createFileRoute('/_auth-layout/auth/verify-email')({
 });
 
 function VerifyEmailPage() {
+  const { t } = useLingui();
+  useDocumentTitle(t`Verify Email`);
   const { token } = Route.useSearch();
   const [status, setStatus] = useState<
     'idle' | 'pending' | 'success' | 'error'

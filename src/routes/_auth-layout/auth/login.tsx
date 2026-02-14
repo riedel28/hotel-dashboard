@@ -32,6 +32,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { loginSchema } from '@/lib/schemas';
 
 const fallback = '/' as const;
@@ -63,6 +64,7 @@ function LoginPage() {
   const router = useRouter();
   const navigate = Route.useNavigate();
   const { t } = useLingui();
+  useDocumentTitle(t`Login`);
   const search = Route.useSearch();
 
   const form = useForm<LoginFormValues>({

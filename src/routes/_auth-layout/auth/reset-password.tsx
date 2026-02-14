@@ -22,6 +22,7 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { PasswordInput } from '@/components/ui/password-input';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { strongPasswordSchema } from '@/lib/schemas';
 
 const resetPasswordSchema = z
@@ -46,6 +47,7 @@ export const Route = createFileRoute('/_auth-layout/auth/reset-password')({
 function ResetPasswordPage() {
   const { token } = Route.useSearch();
   const { t } = useLingui();
+  useDocumentTitle(t`Reset Password`);
 
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),

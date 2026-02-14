@@ -20,6 +20,7 @@ import {
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
 import { SearchInput } from '@/components/ui/search-input';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { InviteUserModal } from './-components/invite-user-modal';
@@ -30,6 +31,7 @@ function UsersPage() {
   const navigate = Route.useNavigate();
 
   const { t } = useLingui();
+  useDocumentTitle(t`Users`);
 
   const usersQuery = useQuery(
     usersQueryOptions({

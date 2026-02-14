@@ -55,6 +55,7 @@ import {
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { AddPropertyModal } from './-components/add-property-modal';
@@ -497,6 +498,9 @@ function PropertiesContent() {
 }
 
 function PropertiesPage() {
+  const { t } = useLingui();
+  useDocumentTitle(t`Properties`);
+
   return (
     <div className="space-y-1">
       <Breadcrumb>

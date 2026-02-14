@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
 import { Camera, Lock, Shield, User, Users } from 'lucide-react';
 
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { getUserInitials } from '@/lib/utils';
 import { TwoFactorSection } from './profile/-components/2fa-section';
 import { AvatarSection } from './profile/-components/avatar-section';
@@ -24,6 +25,9 @@ export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
 });
 
 function RouteComponent() {
+  const { t } = useLingui();
+  useDocumentTitle(t`Profile`);
+
   // TODO: Fetch user data from API
   const userData = {
     firstName: 'John',

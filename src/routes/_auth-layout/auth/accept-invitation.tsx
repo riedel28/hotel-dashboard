@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { strongPasswordSchema } from '@/lib/schemas';
 
 const acceptInvitationSchema = z
@@ -49,6 +50,7 @@ export const Route = createFileRoute('/_auth-layout/auth/accept-invitation')({
 function AcceptInvitationPage() {
   const { token } = Route.useSearch();
   const { t } = useLingui();
+  useDocumentTitle(t`Accept Invitation`);
 
   const form = useForm<AcceptInvitationFormValues>({
     resolver: zodResolver(acceptInvitationSchema),

@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
   useQueryClient,
@@ -31,6 +31,7 @@ import {
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
@@ -44,6 +45,9 @@ import { ReservationDateFilter } from '../reservations/-components/reservations-
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
 
 function ReservationsPage() {
+  const { t } = useLingui();
+  useDocumentTitle(t`Reservations`);
+
   return (
     <div className="space-y-1">
       <Breadcrumb>
