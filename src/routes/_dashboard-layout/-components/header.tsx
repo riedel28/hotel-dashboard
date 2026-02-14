@@ -57,7 +57,7 @@ export default function Header() {
             />
           </div>
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <UserMenu />
           </div>
         </div>

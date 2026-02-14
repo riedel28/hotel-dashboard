@@ -1,9 +1,17 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
-import { GlobeIcon, LogOutIcon, UserCircleIcon } from 'lucide-react';
+import {
+  GlobeIcon,
+  LogOutIcon,
+  MonitorIcon,
+  MoonIcon,
+  SunIcon,
+  UserCircleIcon
+} from 'lucide-react';
 import { useState } from 'react';
 import Flag from 'react-flagkit';
 import { useAuth } from '@/auth';
+import { useTheme } from '@/components/theme-provider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
@@ -121,6 +129,67 @@ function LanguageSubmenu({
   );
 }
 
+const themeLabels = {
+  light: 'Light',
+  dark: 'Dark',
+  system: 'System'
+} as const;
+
+const themeIcons = {
+  light: SunIcon,
+  dark: MoonIcon,
+  system: MonitorIcon
+} as const;
+
+type Theme = 'light' | 'dark' | 'system';
+
+interface ThemeSubmenuProps {
+  currentTheme: Theme;
+  onThemeChange: (theme: Theme) => void;
+}
+
+function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
+  const ThemeIcon = themeIcons[currentTheme];
+
+  return (
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger hasChevron={false}>
+        <div className="flex w-full items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <ThemeIcon className="h-4 w-4 text-muted-foreground" />
+            <Trans>Theme</Trans>
+          </div>
+          <Badge
+            variant="outline"
+            className="flex h-6 min-w-6 items-center text-xs gap-2 px-2.5 rounded-sm"
+          >
+            <Trans>{themeLabels[currentTheme]}</Trans>
+          </Badge>
+        </div>
+      </DropdownMenuSubTrigger>
+      <DropdownMenuSubContent className="w-[180px]">
+        <DropdownMenuRadioGroup
+          value={currentTheme}
+          onValueChange={(value) => onThemeChange(value as Theme)}
+        >
+          <DropdownMenuRadioItem value="light">
+            <SunIcon className="text-muted-foreground" />
+            <Trans>Light</Trans>
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="dark">
+            <MoonIcon className="text-muted-foreground" />
+            <Trans>Dark</Trans>
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="system">
+            <MonitorIcon className="text-muted-foreground" />
+            <Trans>System</Trans>
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  );
+}
+
 interface LogoutMenuItemProps {
   version: string;
   onLogout: () => void;
@@ -142,6 +211,7 @@ export default function UserMenu() {
   const auth = useAuth();
   const { i18n, t } = useLingui();
   const locale = i18n.locale;
+  const { theme, setTheme } = useTheme();
 
   const navigate = DashboardLayoutRoute.useNavigate();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
@@ -201,6 +271,7 @@ export default function UserMenu() {
               currentLanguage={currentLanguage}
               onLocaleChange={handleChangeLocale}
             />
+            <ThemeSubmenu currentTheme={theme} onThemeChange={setTheme} />
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <LogoutMenuItem version={version} onLogout={handleLogout} />
