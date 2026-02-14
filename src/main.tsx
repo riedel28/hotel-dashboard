@@ -7,6 +7,7 @@ import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { AuthProvider, useAuth } from './auth';
+import { ThemeProvider } from './components/theme-provider';
 import { Toaster } from './components/ui/sonner';
 import './globals.css';
 import { setUnauthorizedHandler } from './api/client';
@@ -84,10 +85,12 @@ function App() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
-      <Toaster richColors />
+      <ThemeProvider defaultTheme="system" storageKey="tanstack.theme">
+        <AuthProvider>
+          <InnerApp />
+        </AuthProvider>
+        <Toaster richColors />
+      </ThemeProvider>
     </I18nProvider>
   );
 }
