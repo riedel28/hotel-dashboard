@@ -20,13 +20,13 @@ export function StatusCell({ status }: StatusCellProps) {
         )}
         role="status"
       >
-        <span className="relative flex size-2">
+        <span className="relative flex size-1.5">
           {!isSuccess && (
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-badge-destructive-foreground/60 duration-[1.5s]" />
           )}
           <span
             className={cn(
-              'relative inline-flex size-2 rounded-full',
+              'relative inline-flex size-1.5 rounded-full',
               isSuccess
                 ? 'bg-badge-success-foreground'
                 : 'bg-badge-destructive-foreground'
