@@ -40,10 +40,23 @@ export default defineConfig({
     exclude: ['crypto']
   },
   build: {
-    cssCodeSplit: false,
     rollupOptions: {
       output: {
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('recharts') || id.includes('d3-'))
+              return 'vendor-recharts';
+            if (id.includes('@fontsource')) return 'vendor-fonts';
+            if (id.includes('react-day-picker') || id.includes('dayjs'))
+              return 'vendor-date';
+            if (id.includes('react-hook-form') || id.includes('@hookform'))
+              return 'vendor-forms';
+            if (id.includes('@dnd-kit')) return 'vendor-dnd-kit';
+            if (id.includes('@tanstack/react-table'))
+              return 'vendor-tanstack-table';
+          }
+        }
       }
     }
   }

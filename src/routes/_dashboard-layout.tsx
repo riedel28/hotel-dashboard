@@ -9,25 +9,25 @@ import {
   redirect
 } from '@tanstack/react-router';
 import {
-  ArrowUpRightIcon,
+  // ArrowUpRightIcon,
   BedDoubleIcon,
-  BedSingleIcon,
+  // BedSingleIcon,
   BuildingIcon,
-  CalendarIcon,
-  CreditCardIcon,
-  FileSpreadsheetIcon,
-  Grid2X2Icon,
+  // CalendarIcon,
+  // CreditCardIcon,
+  // FileSpreadsheetIcon,
+  // Grid2X2Icon,
   HomeIcon,
-  ListTodoIcon,
-  LockIcon,
+  // ListTodoIcon,
+  // LockIcon,
   MessageCircleIcon,
-  ReceiptTextIcon,
-  ShoppingBagIcon,
-  ShoppingCartIcon,
-  SmartphoneIcon,
+  // ReceiptTextIcon,
+  // ShoppingBagIcon,
+  // ShoppingCartIcon,
+  // SmartphoneIcon,
   SquareActivityIcon,
-  TabletIcon,
-  TvIcon,
+  // TabletIcon,
+  // TvIcon,
   UsersIcon
 } from 'lucide-react';
 import * as React from 'react';
@@ -40,7 +40,7 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuBadge,
+  // SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
@@ -67,7 +67,7 @@ function SidebarLink({
       tooltip={tooltip}
       render={
         <Link
-          activeProps={{ className: '!bg-primary/5' }}
+          activeProps={{ className: '!bg-sidebar-accent' }}
           {...(linkProps as LinkProps)}
         >
           <Icon />
@@ -79,28 +79,28 @@ function SidebarLink({
 }
 
 // Sample data for content manager items
-const contentManagerItems = [
-  {
-    name: 'Mobile CMS',
-    url: '/mobile-cms',
-    icon: SmartphoneIcon
-  },
-  {
-    name: 'TV',
-    url: '/tv',
-    icon: TvIcon
-  },
-  {
-    name: 'Products',
-    url: '/products',
-    icon: ShoppingBagIcon
-  },
-  {
-    name: 'Events',
-    url: '/events',
-    icon: CalendarIcon
-  }
-];
+// const contentManagerItems = [
+//   {
+//     name: 'Mobile CMS',
+//     url: '/mobile-cms',
+//     icon: SmartphoneIcon
+//   },
+//   {
+//     name: 'TV',
+//     url: '/tv',
+//     icon: TvIcon
+//   },
+//   {
+//     name: 'Products',
+//     url: '/products',
+//     icon: ShoppingBagIcon
+//   },
+//   {
+//     name: 'Events',
+//     url: '/events',
+//     icon: CalendarIcon
+//   }
+// ];
 
 // Sidebar header component
 function SidebarHeaderComponent() {
@@ -202,6 +202,11 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
+            <SidebarLink to="/users" icon={UsersIcon} tooltip={t`Users`}>
+              <Trans>Users</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          {/* <SidebarMenuItem>
             <SidebarLink
               to="/registration-forms"
               icon={ListTodoIcon}
@@ -227,12 +232,12 @@ function UserSidebarContent() {
             >
               <Trans>Orders</Trans>
             </SidebarLink>
-          </SidebarMenuItem>
+          </SidebarMenuItem> */}
         </SidebarMenu>
       </SidebarGroup>
 
       {/* Content Manager Section */}
-      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Content Manager</Trans>
         </SidebarGroupLabel>
@@ -288,10 +293,10 @@ function UserSidebarContent() {
             );
           })}
         </SidebarMenu>
-      </SidebarGroup>
+      </SidebarGroup> */}
 
       {/* Integrations Section */}
-      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Integrations</Trans>
         </SidebarGroupLabel>
@@ -324,10 +329,10 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroup>
+      </SidebarGroup> */}
 
       {/* Settings Section */}
-      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Settings</Trans>
         </SidebarGroupLabel>
@@ -366,7 +371,7 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroup>
+      </SidebarGroup> */}
     </SidebarContent>
   );
 }
@@ -374,16 +379,19 @@ function UserSidebarContent() {
 // Main sidebar component
 function DashboardSidebar() {
   const currentView = useCurrentView();
+  const { t } = useLingui();
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeaderComponent />
       <SidebarViewToggle />
-      {currentView === 'admin' ? (
-        <AdminSidebarContent />
-      ) : (
-        <UserSidebarContent />
-      )}
+      <nav aria-label={t`Main navigation`}>
+        {currentView === 'admin' ? (
+          <AdminSidebarContent />
+        ) : (
+          <UserSidebarContent />
+        )}
+      </nav>
     </Sidebar>
   );
 }
@@ -392,10 +400,20 @@ function DashboardSidebar() {
 function DashboardLayout() {
   return (
     <SidebarProvider>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-background focus:px-4 focus:py-2 focus:rounded-md focus:ring-2 focus:ring-primary focus:text-foreground"
+      >
+        <Trans>Skip to main content</Trans>
+      </a>
       <DashboardSidebar />
       <SidebarInset className="flex h-full min-w-0 flex-col">
         <Header />
-        <main className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8 focus:outline-none"
+        >
           <Outlet />
         </main>
       </SidebarInset>

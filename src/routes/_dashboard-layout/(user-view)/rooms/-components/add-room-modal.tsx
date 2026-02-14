@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { createRoom, createRoomSchema } from '@/api/rooms';
+import { useAuth } from '@/auth';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -45,6 +46,7 @@ async function createRoomAction(data: AddRoomFormData) {
 export function AddRoomModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const form = useForm<AddRoomFormData>({
     resolver: zodResolver(addRoomSchema),
@@ -53,7 +55,7 @@ export function AddRoomModal() {
       room_number: '',
       room_type: '',
       status: 'available',
-      property_id: ''
+      property_id: user?.selected_property_id ?? ''
     }
   });
 

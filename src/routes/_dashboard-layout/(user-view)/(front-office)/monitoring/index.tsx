@@ -32,6 +32,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { MonitoringDateFilter } from './-components/monitoring-date-filter';
@@ -42,6 +43,7 @@ function MonitoringPage() {
     Route.useSearch();
   const navigate = Route.useNavigate();
   const { t } = useLingui();
+  useDocumentTitle(t`Monitoring`);
 
   const monitoringQuery = useQuery(
     monitoringQueryOptions({

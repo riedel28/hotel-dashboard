@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   QueryErrorResetBoundary,
   useSuspenseQuery
@@ -25,10 +25,14 @@ import {
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { EditUserForm } from './-components/edit-user-form';
 
 function EditUserPage() {
+  const { t } = useLingui();
+  useDocumentTitle(t`User Details`);
+
   return (
     <div className="space-y-6">
       <div className="space-y-1">

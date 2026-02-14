@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /reservations/
+Disallow: /monitoring/
+Disallow: /rooms/
+Disallow: /users/
+Disallow: /products/
+Disallow: /profile
+Disallow: /orders
+Disallow: /payments
+Disallow: /registration-forms
+Allow: /auth/
+
+# Auth pages are public, dashboard routes are behind authentication

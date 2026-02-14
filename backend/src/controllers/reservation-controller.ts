@@ -1,10 +1,11 @@
-import { and, asc, count, desc, eq, gte, ilike, lte } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gte, ilike, lte, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import {
   guests as guestsTable,
-  reservations as reservationsTable
+  reservations as reservationsTable,
+  rooms as roomsTable
 } from '../db/schema';
 import { escapeLikePattern } from '../utils/sql';
 
@@ -224,13 +225,27 @@ async function updateReservation(req: Request, res: Response) {
         room
       } = body;
 
+      // If room ID was provided, look up the actual room name
+      let resolvedRoomName = room_name;
+      if (room !== undefined) {
+        const roomId = Number(room);
+        if (!Number.isNaN(roomId)) {
+          const foundRoom = await tx.query.rooms.findFirst({
+            where: eq(roomsTable.id, roomId)
+          });
+          if (foundRoom) {
+            resolvedRoomName = foundRoom.name;
+          }
+        }
+      }
+
       const reservationUpdates = Object.fromEntries(
         Object.entries({
           state,
           booking_nr,
           guest_email,
           booking_id,
-          room_name: room !== undefined ? room : room_name,
+          room_name: resolvedRoomName,
           booking_from,
           booking_to,
           check_in_via,
@@ -352,10 +367,47 @@ async function deleteReservation(req: Request, res: Response) {
   }
 }
 
+async function searchGuests(req: Request, res: Response) {
+  const { q } = req.query;
+
+  try {
+    const escaped = escapeLikePattern(q as string);
+    const results = await db
+      .selectDistinctOn(
+        [
+          guestsTable.first_name,
+          guestsTable.last_name,
+          guestsTable.email,
+          guestsTable.nationality_code
+        ],
+        {
+          first_name: guestsTable.first_name,
+          last_name: guestsTable.last_name,
+          email: guestsTable.email,
+          nationality_code: guestsTable.nationality_code
+        }
+      )
+      .from(guestsTable)
+      .where(
+        or(
+          ilike(guestsTable.first_name, `%${escaped}%`),
+          ilike(guestsTable.last_name, `%${escaped}%`)
+        )
+      )
+      .limit(10);
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to search guests' });
+  }
+}
+
 export {
   getReservations,
   getReservationById,
   createReservation,
   updateReservation,
-  deleteReservation
+  deleteReservation,
+  searchGuests
 };

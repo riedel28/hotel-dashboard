@@ -20,7 +20,7 @@ import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { useAuth } from '@/auth';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Field,
@@ -32,6 +32,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { loginSchema } from '@/lib/schemas';
 
 const fallback = '/' as const;
@@ -63,6 +64,7 @@ function LoginPage() {
   const router = useRouter();
   const navigate = Route.useNavigate();
   const { t } = useLingui();
+  useDocumentTitle(t`Login`);
   const search = Route.useSearch();
 
   const form = useForm<LoginFormValues>({
@@ -108,7 +110,7 @@ function LoginPage() {
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
-          <MessageCircleIcon className="size-10" />
+          <MessageCircleIcon className="size-10" aria-hidden="true" />
         </div>
 
         <h1 className="text-2xl font-bold">
@@ -171,10 +173,17 @@ function LoginPage() {
                     type="email"
                     placeholder={t`Enter your email`}
                     autoComplete="email"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -193,10 +202,17 @@ function LoginPage() {
                     id={field.name}
                     placeholder={t`Enter your password`}
                     autoComplete="current-password"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -219,6 +235,7 @@ function LoginPage() {
                   onCheckedChange={(checked) =>
                     field.onChange(checked === true)
                   }
+                  aria-label={t`Remember me`}
                 />
                 <FieldLabel htmlFor={field.name} className="text-sm">
                   <Trans>Remember me</Trans>
@@ -229,7 +246,7 @@ function LoginPage() {
 
           <Link
             to="/auth/forgot-password"
-            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+            className={buttonVariants({ variant: 'link' })}
           >
             <Trans>Forgot password?</Trans>
           </Link>
@@ -240,9 +257,13 @@ function LoginPage() {
           size="lg"
           className="w-full"
           disabled={loginMutation.isPending}
+          aria-busy={loginMutation.isPending}
         >
           {loginMutation.isPending && (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2Icon
+              className="mr-2 h-4 w-4 animate-spin"
+              aria-hidden="true"
+            />
           )}
           <Trans>Login</Trans>
         </Button>

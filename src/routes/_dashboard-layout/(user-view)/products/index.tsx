@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 
@@ -11,6 +11,8 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 
+import { useDocumentTitle } from '@/hooks/use-document-title';
+
 import { ProductCategoriesTree } from './-components/product-categories-tree';
 import { ProductsList } from './-components/products-list';
 
@@ -19,6 +21,9 @@ const productsSearchSchema = z.object({
 });
 
 function ProductsPage() {
+  const { t } = useLingui();
+  useDocumentTitle(t`Products`);
+
   return (
     <div className="space-y-1">
       <Breadcrumb>

@@ -1,7 +1,12 @@
 import request from 'supertest';
 
 import app from '../src/app';
-import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
+import {
+  cleanupDatabase,
+  createTestProperty,
+  createTestRoom,
+  createTestUser
+} from './helpers/db-helpers';
 
 describe('Reservations API', () => {
   let authToken: string;
@@ -240,6 +245,23 @@ describe('Reservations API', () => {
         .patch(`/api/reservations/${reservationId}`)
         .send(updateData)
         .expect(401);
+    });
+
+    test('should update room_name when room is changed to a valid room ID', async () => {
+      const property = await createTestProperty();
+      const room = await createTestRoom({
+        property_id: property.id,
+        name: 'Penthouse Suite'
+      });
+
+      const response = await request(app)
+        .patch(`/api/reservations/${reservationId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ room: String(room.id) })
+        .expect(200);
+
+      expect(response.body.room).toBe(String(room.id));
+      expect(response.body.room_name).toBe('Penthouse Suite');
     });
 
     test('should validate state values', async () => {

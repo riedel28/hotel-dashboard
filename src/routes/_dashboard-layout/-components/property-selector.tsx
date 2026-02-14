@@ -3,7 +3,6 @@ import { RefreshCwIcon, SearchIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Property, PropertyStage } from 'shared/types/properties';
 import { toast } from 'sonner';
-import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Combobox,
@@ -16,18 +15,8 @@ import {
   ComboboxTrigger,
   ComboboxValue
 } from '@/components/ui/combobox';
+import { StageBadge } from '@/components/ui/stage-badge';
 import { cn } from '@/lib/utils';
-
-const stageVariantMap = {
-  demo: 'info',
-  production: 'success',
-  staging: 'default',
-  template: 'warning'
-} as const;
-
-interface StageBadgeProps extends BadgeProps {
-  stage: PropertyStage;
-}
 
 interface PropertySelectorProps {
   properties?: Property[];
@@ -46,37 +35,6 @@ const truncatePropertyName = (name: string, maxLength = 40): string => {
   if (name.length <= maxLength) return name;
   return `${name.substring(0, maxLength)}...`;
 };
-
-const getStageMessage = (stage: PropertyStage) => {
-  switch (stage) {
-    case 'demo':
-      return <Trans>Demo</Trans>;
-    case 'production':
-      return <Trans>Production</Trans>;
-    case 'staging':
-      return <Trans>Staging</Trans>;
-    case 'template':
-      return <Trans>Template</Trans>;
-    default:
-      return stage;
-  }
-};
-
-function StageBadge({ stage, className, ...props }: StageBadgeProps) {
-  return (
-    <Badge
-      variant={stageVariantMap[stage] ?? 'secondary'}
-      size="sm"
-      className={cn(
-        'shrink-0 rounded-md border border-foreground/10 px-1.5 py-0.5 text-[11px] capitalize',
-        className
-      )}
-      {...props}
-    >
-      {getStageMessage(stage)}
-    </Badge>
-  );
-}
 
 function LoadingSkeleton() {
   return (
@@ -188,7 +146,7 @@ function PropertySelector({
       onValueChange={handlePropertySelect}
     >
       <ComboboxTrigger
-        className="min-w-0 max-w-xs flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent sm:max-w-sm md:max-w-lg"
+        className="min-w-0 max-w-full flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent"
         aria-label={t`Select property`}
       >
         <ComboboxValue>

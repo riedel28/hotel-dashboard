@@ -134,6 +134,20 @@ export const reservationFormSchema = z.object({
   room: z.string().min(1)
 });
 
+// Guest search
+export const searchGuestsParamsSchema = z.object({
+  q: z.string().min(1).max(200)
+});
+
+export const guestSearchResultSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  email: z.union([z.string(), z.null()]).optional(),
+  nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+});
+
+export type GuestSearchResult = z.infer<typeof guestSearchResultSchema>;
+
 // Type exports
 export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
 export type ReservationStatus = z.infer<typeof reservationStatusSchema>;

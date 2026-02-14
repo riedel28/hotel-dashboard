@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { strongPasswordSchema } from '@/lib/schemas';
 
 const acceptInvitationSchema = z
@@ -49,6 +50,7 @@ export const Route = createFileRoute('/_auth-layout/auth/accept-invitation')({
 function AcceptInvitationPage() {
   const { token } = Route.useSearch();
   const { t } = useLingui();
+  useDocumentTitle(t`Accept Invitation`);
 
   const form = useForm<AcceptInvitationFormValues>({
     resolver: zodResolver(acceptInvitationSchema),
@@ -133,7 +135,7 @@ function AcceptInvitationPage() {
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
-          <MessageCircleIcon className="size-10" />
+          <MessageCircleIcon className="size-10" aria-hidden="true" />
         </div>
 
         <h1 className="text-2xl font-bold">
@@ -164,10 +166,17 @@ function AcceptInvitationPage() {
                     type="text"
                     placeholder={t`Enter your first name`}
                     autoComplete="given-name"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -187,10 +196,17 @@ function AcceptInvitationPage() {
                     type="text"
                     placeholder={t`Enter your last name`}
                     autoComplete="family-name"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -209,10 +225,17 @@ function AcceptInvitationPage() {
                     id={field.name}
                     placeholder={t`Enter your password`}
                     autoComplete="new-password"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -231,10 +254,17 @@ function AcceptInvitationPage() {
                     id={field.name}
                     placeholder={t`Confirm your password`}
                     autoComplete="new-password"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -247,9 +277,13 @@ function AcceptInvitationPage() {
           size="lg"
           className="w-full"
           disabled={acceptMutation.isPending}
+          aria-busy={acceptMutation.isPending}
         >
           {acceptMutation.isPending && (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2Icon
+              className="mr-2 h-4 w-4 animate-spin"
+              aria-hidden="true"
+            />
           )}
           <Trans>Activate Account</Trans>
         </Button>

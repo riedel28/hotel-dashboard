@@ -37,18 +37,18 @@ export default function Header() {
       <header className="sticky top-0 z-50 border-b bg-background/95 px-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:ps-3.5">
         <div className="flex h-14 items-center justify-between gap-4">
           {/* Left side */}
-          <div className="flex items-center gap-2">
-            {/* Mobile menu trigger */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setMobileMenuOpen(true)}
-              aria-label="Open menu"
-              className="inline-flex md:hidden"
-            >
-              <TextAlignJustifyIcon className="size-4" />
-            </Button>
+          {/* Mobile menu trigger */}
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Open menu"
+            className="inline-flex md:hidden"
+          >
+            <TextAlignJustifyIcon className="size-4" />
+          </Button>
+          <div className="min-w-0">
             <PropertySelector
               properties={properties.index}
               value={user?.selected_property_id ?? undefined}
@@ -57,7 +57,7 @@ export default function Header() {
             />
           </div>
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <UserMenu />
           </div>
         </div>

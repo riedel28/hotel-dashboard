@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { createReservation } from '@/api/reservations';
+import { roomsQueryOptions } from '@/api/rooms';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -28,7 +29,6 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue
@@ -47,6 +47,11 @@ async function createReservationAction(data: AddReservationFormData) {
 export function AddReservationModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
+
+  const { data: roomsData } = useQuery(
+    roomsQueryOptions({ per_page: 100, status: 'available' })
+  );
+  const rooms = roomsData?.index ?? [];
 
   const form = useForm<AddReservationFormData>({
     resolver: zodResolver(addReservationSchema),
@@ -126,13 +131,18 @@ export function AddReservationModal() {
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectGroup>
-                          {[101, 102, 103, 104, 105].map((room) => (
-                            <SelectItem key={room} value={room.toString()}>
-                              <Trans>Room {room}</Trans>
+                        {rooms.length === 0 ? (
+                          <div className="py-6 text-center text-sm text-muted-foreground">
+                            <Trans>No rooms available</Trans>
+                          </div>
+                        ) : (
+                          rooms.map((room) => (
+                            <SelectItem key={room.id} value={room.name}>
+                              {room.name}
+                              {room.room_number && ` (${room.room_number})`}
                             </SelectItem>
-                          ))}
-                        </SelectGroup>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                     {fieldState.invalid && (

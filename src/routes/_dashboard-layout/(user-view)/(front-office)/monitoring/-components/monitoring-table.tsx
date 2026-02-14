@@ -178,7 +178,7 @@ export function MonitoringTable({
           />
         ),
         cell: ({ row }) => (
-          <div className="font-mono text-xs text-muted-foreground bg-muted rounded-md p-2">
+          <div className="font-mono text-xs text-foreground bg-muted/50 rounded-md p-2">
             {row.original.log_message || '-'}
           </div>
         ),

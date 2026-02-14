@@ -6,7 +6,7 @@ import {
   ReceiptTextIcon,
   UsersIcon
 } from 'lucide-react';
-
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { useAuth } from '../../auth';
 import { Card, CardDescription, CardTitle } from '../../components/ui/card';
 
@@ -16,6 +16,7 @@ export const Route = createFileRoute('/_dashboard-layout/')({
 
 function StartPage() {
   const { t } = useLingui();
+  useDocumentTitle(t`Dashboard`);
   const auth = useAuth();
 
   const quickActions = [
@@ -75,8 +76,8 @@ function StartPage() {
                 className="block md:p-6 p-4"
               >
                 <div className="mb-2 space-y-2">
-                  <div className="w-fit rounded-lg bg-muted md:p-3 p-2">
-                    <IconComponent className="md:size-5 size-4 text-primary" />
+                  <div className="w-fit rounded-lg bg-muted dark:bg-primary/30 md:p-3 p-2">
+                    <IconComponent className="md:size-5 size-4 text-primary dark:text-blue-300" />
                   </div>
                   <CardTitle className="md:text-lg text-base font-semibold">
                     {action.title}

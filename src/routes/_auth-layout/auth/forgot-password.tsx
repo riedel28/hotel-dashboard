@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type z from 'zod';
 import { forgotPassword } from '@/api/auth';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Field,
   FieldError,
@@ -16,6 +16,7 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { loginSchema } from '@/lib/schemas';
 
 const forgotPasswordSchema = loginSchema.pick({ email: true });
@@ -66,6 +67,7 @@ function SuccessView({ email }: SuccessViewProps) {
 
 function ForgotPasswordPage() {
   const { t } = useLingui();
+  useDocumentTitle(t`Forgot Password`);
 
   const form = useForm<ForgotPasswordData>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -92,7 +94,7 @@ function ForgotPasswordPage() {
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
-          <MessageCircleIcon className="size-10" />
+          <MessageCircleIcon className="size-10" aria-hidden="true" />
         </div>
 
         <h1 className="text-2xl font-bold">
@@ -126,11 +128,18 @@ function ForgotPasswordPage() {
                     type="email"
                     placeholder={t`Enter your email`}
                     autoComplete="email"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                     disabled={forgotMutation.isPending}
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -142,24 +151,22 @@ function ForgotPasswordPage() {
           size="lg"
           className="w-full"
           disabled={forgotMutation.isPending}
+          aria-busy={forgotMutation.isPending}
         >
           {forgotMutation.isPending && (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2Icon
+              className="mr-2 h-4 w-4 animate-spin"
+              aria-hidden="true"
+            />
           )}
           <Trans>Send reset link</Trans>
         </Button>
       </form>
 
       <div className="text-center -mt-2">
-        <Button
-          variant="link"
-          size="sm"
-          render={
-            <Link to="/auth/login">
-              <Trans>Back to login</Trans>
-            </Link>
-          }
-        />
+        <Link to="/auth/login" className={buttonVariants({ variant: 'link' })}>
+          <Trans>Back to login</Trans>
+        </Link>
       </div>
     </div>
   );

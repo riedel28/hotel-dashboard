@@ -22,6 +22,7 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { PasswordInput } from '@/components/ui/password-input';
+import { useDocumentTitle } from '@/hooks/use-document-title';
 import { strongPasswordSchema } from '@/lib/schemas';
 
 const resetPasswordSchema = z
@@ -46,6 +47,7 @@ export const Route = createFileRoute('/_auth-layout/auth/reset-password')({
 function ResetPasswordPage() {
   const { token } = Route.useSearch();
   const { t } = useLingui();
+  useDocumentTitle(t`Reset Password`);
 
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
@@ -122,7 +124,7 @@ function ResetPasswordPage() {
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
         <div className="inline-block rounded-lg bg-primary p-2 text-white">
-          <MessageCircleIcon className="size-10" />
+          <MessageCircleIcon className="size-10" aria-hidden="true" />
         </div>
 
         <h1 className="text-2xl font-bold">
@@ -152,10 +154,17 @@ function ResetPasswordPage() {
                     id={field.name}
                     placeholder={t`Enter your new password`}
                     autoComplete="new-password"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -174,10 +183,17 @@ function ResetPasswordPage() {
                     id={field.name}
                     placeholder={t`Confirm your new password`}
                     autoComplete="new-password"
+                    aria-required="true"
                     aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? `${field.name}-error` : undefined
+                    }
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      id={`${field.name}-error`}
+                      errors={[fieldState.error]}
+                    />
                   )}
                 </Field>
               )}
@@ -190,9 +206,13 @@ function ResetPasswordPage() {
           size="lg"
           className="w-full"
           disabled={resetMutation.isPending}
+          aria-busy={resetMutation.isPending}
         >
           {resetMutation.isPending && (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2Icon
+              className="mr-2 h-4 w-4 animate-spin"
+              aria-hidden="true"
+            />
           )}
           <Trans>Reset Password</Trans>
         </Button>

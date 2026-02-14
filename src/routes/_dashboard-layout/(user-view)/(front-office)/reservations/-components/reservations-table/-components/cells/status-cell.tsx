@@ -3,6 +3,7 @@ import type { ReservationStatus } from '@/api/reservations';
 import type { BadgeProps } from '@/components/ui/badge';
 
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface StatusCellProps {
   status: ReservationStatus;
@@ -15,7 +16,7 @@ function getStatusVariant(status: ReservationStatus): BadgeProps['variant'] {
     case 'pending':
       return 'warning';
     case 'started':
-      return 'info';
+      return 'default';
     default:
       return 'secondary';
   }
@@ -36,7 +37,13 @@ function getStatusLabel(status: ReservationStatus): string {
 
 export function StatusCell({ status }: StatusCellProps) {
   return (
-    <Badge size="sm" variant={getStatusVariant(status)}>
+    <Badge
+      size="sm"
+      variant={getStatusVariant(status)}
+      className={cn(
+        'shrink-0 rounded-md border border-foreground/10 capitalize'
+      )}
+    >
       {getStatusLabel(status)}
     </Badge>
   );

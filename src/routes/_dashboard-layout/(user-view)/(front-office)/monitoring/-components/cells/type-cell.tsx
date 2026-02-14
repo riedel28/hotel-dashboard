@@ -9,11 +9,11 @@ interface TypeCellProps {
 const config = {
   pms: {
     icon: LayoutGrid,
-    variant: 'secondary' as const
+    variant: 'info' as const
   },
   payment: {
     icon: CreditCard,
-    variant: 'info' as const
+    variant: 'default' as const
   },
   'door lock': {
     icon: Lock,
@@ -25,7 +25,11 @@ export function TypeCell({ type }: TypeCellProps) {
   const { icon: Icon, variant } = config[type];
 
   return (
-    <Badge variant={variant} size="sm" className="gap-1.5 capitalize">
+    <Badge
+      size="sm"
+      variant={variant}
+      className="shrink-0 rounded-md flex items-center gap-1.5 border border-foreground/10 capitalize"
+    >
       <Icon className="size-3" />
       {type}
     </Badge>
