@@ -26,6 +26,12 @@ msgstr " - Anforderung nicht erfüllt"
 msgid "..."
 msgstr "..."
 
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:142
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:162
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:183
+msgid "(opens in new tab)"
+msgstr ""
+
 #: src/components/ui/password-strength-meter.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:121
 #~ msgid "{0}"
@@ -85,7 +91,7 @@ msgstr "Access Provider"
 msgid "Account activated!"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:256
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:288
 msgid "Activate Account"
 msgstr ""
 
@@ -183,7 +189,7 @@ msgstr ""
 msgid "All Statuses"
 msgstr "Alle Status"
 
-#: src/routes/_auth-layout/auth/sign-up.tsx:277
+#: src/routes/_auth-layout/auth/sign-up.tsx:309
 msgid "Already have an account?"
 msgstr "Haben Sie bereits ein Konto?"
 
@@ -276,7 +282,7 @@ msgstr "Mindestens 8 Zeichen"
 msgid "Austria"
 msgstr "Österreich"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:177
 msgid "Authy"
 msgstr "Authy"
 
@@ -312,14 +318,14 @@ msgid "Avatar upload is not yet implemented"
 msgstr ""
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:97
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:266
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:298
 #: src/routes/_auth-layout/auth/forgot-password.tsx:61
-#: src/routes/_auth-layout/auth/forgot-password.tsx:161
+#: src/routes/_auth-layout/auth/forgot-password.tsx:172
 #: src/routes/_auth-layout/auth/reset-password.tsx:87
-#: src/routes/_auth-layout/auth/reset-password.tsx:209
+#: src/routes/_auth-layout/auth/reset-password.tsx:227
 #: src/routes/_auth-layout/auth/sign-up.tsx:106
 #: src/routes/_auth-layout/auth/verify-email.tsx:63
-#: src/routes/_auth-layout/auth/verify-email.tsx:105
+#: src/routes/_auth-layout/auth/verify-email.tsx:112
 msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
 
@@ -481,16 +487,16 @@ msgstr "Abgeschlossen am"
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:229
-#: src/routes/_auth-layout/auth/reset-password.tsx:172
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:250
+#: src/routes/_auth-layout/auth/reset-password.tsx:179
 msgid "Confirm Password"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/reset-password.tsx:177
+#: src/routes/_auth-layout/auth/reset-password.tsx:184
 msgid "Confirm your new password"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:234
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:255
 msgid "Confirm your password"
 msgstr ""
 
@@ -665,7 +671,7 @@ msgstr "Zeigt die mobile Seitenleiste an."
 msgid "Doe"
 msgstr "Doe"
 
-#: src/routes/_auth-layout/auth/login.tsx:255
+#: src/routes/_auth-layout/auth/login.tsx:273
 msgid "Don't have an account?"
 msgstr "Haben Sie noch kein Konto?"
 
@@ -729,7 +735,7 @@ msgstr "Benutzer bearbeiten"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:123
 #: src/routes/_auth-layout/auth/login.tsx:168
-#: src/routes/_auth-layout/auth/sign-up.tsx:221
+#: src/routes/_auth-layout/auth/sign-up.tsx:235
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:146
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:152
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:121
@@ -751,7 +757,7 @@ msgstr ""
 #~ msgid "Email sent successfully"
 #~ msgstr "E-Mail erfolgreich gesendet"
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:119
+#: src/routes/_auth-layout/auth/verify-email.tsx:126
 msgid "Email verified!"
 msgstr ""
 
@@ -823,7 +829,7 @@ msgstr "Geben Sie Ihre Anmeldedaten ein, um auf das Dashboard zuzugreifen"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:129
 #: src/routes/_auth-layout/auth/login.tsx:174
-#: src/routes/_auth-layout/auth/sign-up.tsx:227
+#: src/routes/_auth-layout/auth/sign-up.tsx:241
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:127
 msgid "Enter your email"
 msgstr "E-Mail-Adresse eingeben"
@@ -837,8 +843,8 @@ msgstr "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zu
 msgid "Enter your first name"
 msgstr "Geben Sie Ihren Vornamen ein"
 
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:190
-#: src/routes/_auth-layout/auth/sign-up.tsx:204
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:197
+#: src/routes/_auth-layout/auth/sign-up.tsx:211
 msgid "Enter your last name"
 msgstr "Geben Sie Ihren Nachnamen ein"
 
@@ -850,9 +856,9 @@ msgstr ""
 msgid "Enter your new password below"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:212
-#: src/routes/_auth-layout/auth/login.tsx:196
-#: src/routes/_auth-layout/auth/sign-up.tsx:249
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:226
+#: src/routes/_auth-layout/auth/login.tsx:203
+#: src/routes/_auth-layout/auth/sign-up.tsx:270
 msgid "Enter your password"
 msgstr "Passwort eingeben"
 
@@ -1048,7 +1054,7 @@ msgstr ""
 msgid "Forgot Password"
 msgstr "Passwort vergessen?"
 
-#: src/routes/_auth-layout/auth/login.tsx:236
+#: src/routes/_auth-layout/auth/login.tsx:250
 msgid "Forgot password?"
 msgstr "Passwort vergessen?"
 
@@ -1080,7 +1086,7 @@ msgstr "Zum Dashboard"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:125
 #: src/routes/_auth-layout/auth/reset-password.tsx:116
-#: src/routes/_auth-layout/auth/verify-email.tsx:132
+#: src/routes/_auth-layout/auth/verify-email.tsx:139
 msgid "Go to login"
 msgstr ""
 
@@ -1304,8 +1310,8 @@ msgstr "Sprache"
 #~ msgid "Last name"
 #~ msgstr "Nachname"
 
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:184
-#: src/routes/_auth-layout/auth/sign-up.tsx:198
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:191
+#: src/routes/_auth-layout/auth/sign-up.tsx:205
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:125
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:124
@@ -1350,10 +1356,14 @@ msgstr "Abmelden"
 
 #: src/routes/_auth-layout/auth/login.tsx:67
 #: src/routes/_auth-layout/auth/login.tsx:117
-#: src/routes/_auth-layout/auth/login.tsx:249
-#: src/routes/_auth-layout/auth/sign-up.tsx:283
+#: src/routes/_auth-layout/auth/login.tsx:267
+#: src/routes/_auth-layout/auth/sign-up.tsx:315
 msgid "Login"
 msgstr "Anmelden"
+
+#: src/routes/_dashboard-layout.tsx:388
+msgid "Main navigation"
+msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:205
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:187
@@ -1391,7 +1401,7 @@ msgstr "Mittleres Passwort"
 msgid "Message"
 msgstr "Nachricht"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:156
 msgid "Microsoft Authenticator"
 msgstr "Microsoft Authenticator"
 
@@ -1570,9 +1580,9 @@ msgstr "Seite nicht gefunden"
 #~ msgid "Page URL"
 #~ msgstr "Seiten-URL"
 
-#: src/routes/_auth-layout/auth/accept-invitation.tsx:207
-#: src/routes/_auth-layout/auth/login.tsx:191
-#: src/routes/_auth-layout/auth/sign-up.tsx:244
+#: src/routes/_auth-layout/auth/accept-invitation.tsx:221
+#: src/routes/_auth-layout/auth/login.tsx:198
+#: src/routes/_auth-layout/auth/sign-up.tsx:265
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:89
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:55
 msgid "Password"
@@ -1879,7 +1889,7 @@ msgstr "Properties aktualisieren"
 #~ msgid "Reloading properties"
 #~ msgstr "Objekte werden neu geladen"
 
-#: src/routes/_auth-layout/auth/login.tsx:226
+#: src/routes/_auth-layout/auth/login.tsx:240
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
@@ -1974,7 +1984,7 @@ msgstr "Reset-Link gesendet"
 
 #: src/routes/_auth-layout/auth/reset-password.tsx:50
 #: src/routes/_auth-layout/auth/reset-password.tsx:131
-#: src/routes/_auth-layout/auth/reset-password.tsx:199
+#: src/routes/_auth-layout/auth/reset-password.tsx:217
 msgid "Reset Password"
 msgstr ""
 
@@ -2221,7 +2231,7 @@ msgstr ""
 #~ msgid "Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
 #~ msgstr "Senden Sie dem Gast eine Nachricht per E-Mail, SMS oder WhatsApp, um den Check-in-Prozess abzuschließen"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:151
+#: src/routes/_auth-layout/auth/forgot-password.tsx:162
 msgid "Send reset link"
 msgstr "Reset-Link senden"
 
@@ -2274,15 +2284,20 @@ msgstr "Ergebnisse für: <0>\"{searchQuery}\"</0>"
 msgid "Sidebar"
 msgstr "Seitenleiste"
 
-#: src/routes/_auth-layout/auth/login.tsx:261
+#: src/routes/_auth-layout/auth/login.tsx:279
 msgid "Sign up"
 msgstr "Registrieren"
 
 #: src/routes/_auth-layout/auth/sign-up.tsx:115
 #: src/routes/_auth-layout/auth/sign-up.tsx:156
-#: src/routes/_auth-layout/auth/sign-up.tsx:271
+#: src/routes/_auth-layout/auth/sign-up.tsx:303
 msgid "Sign Up"
 msgstr "Registrieren"
+
+#: src/routes/_auth-layout.tsx:16
+#: src/routes/_dashboard-layout.tsx:407
+msgid "Skip to main content"
+msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:183
 #~ msgid "SMS sent successfully"
@@ -2483,7 +2498,7 @@ msgstr ""
 msgid "This password reset link is invalid."
 msgstr ""
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:94
+#: src/routes/_auth-layout/auth/verify-email.tsx:101
 msgid "This verification link is invalid or has expired. Please request a new one."
 msgstr ""
 
@@ -2519,7 +2534,7 @@ msgstr "Erneut versuchen"
 msgid "Try Again"
 msgstr "Erneut versuchen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:197
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:215
 msgid "Turn on two-factor authentication for better account security"
 msgstr "Schalten Sie die Zwei-Faktor-Authentifizierung ein für bessere Kontosicherheit"
 
@@ -2552,11 +2567,11 @@ msgstr "Zwei-Faktor-Authentifizierung ist auf Ihrem Konto aktiv."
 msgid "Two-factor authentication is not yet implemented"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:188
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:206
 msgid "Two-factor authentication is turned off"
 msgstr "Zwei-Faktor-Authentifizierung ist deaktiviert"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:186
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:204
 msgid "Two-factor authentication is turned on"
 msgstr "Zwei-Faktor-Authentifizierung ist aktiviert"
 
@@ -2622,6 +2637,10 @@ msgstr ""
 #~ msgid "User features: View reservations, make payments, access basic settings"
 #~ msgstr "Benutzerfunktionen: Reservierungen anzeigen, Zahlungen tätigen, grundlegende Einstellungen zugreifen"
 
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:168
+msgid "User menu"
+msgstr ""
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:57
 msgid "User Roles"
 msgstr "Benutzerrollen"
@@ -2659,7 +2678,7 @@ msgstr "v{version}"
 msgid "Verification email resent successfully"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:91
+#: src/routes/_auth-layout/auth/verify-email.tsx:98
 msgid "Verification failed"
 msgstr ""
 
@@ -2667,7 +2686,7 @@ msgstr ""
 msgid "Verify Email"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:76
+#: src/routes/_auth-layout/auth/verify-email.tsx:83
 msgid "Verifying your email..."
 msgstr ""
 
@@ -2744,11 +2763,11 @@ msgstr "Sie werden von Ihrem Konto abgemeldet und zur Anmeldeseite weitergeleite
 msgid "Your account has been activated. You can now log in with your password."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:193
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:211
 msgid "Your account is protected with an extra verification step"
 msgstr "Ihr Konto ist mit einem zusätzlichen Verifizierungsschritt geschützt"
 
-#: src/routes/_auth-layout/auth/verify-email.tsx:122
+#: src/routes/_auth-layout/auth/verify-email.tsx:129
 msgid "Your email has been verified successfully. You can now log in."
 msgstr ""
 
