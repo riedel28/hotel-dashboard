@@ -1,3 +1,39 @@
+# [1.12.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.11.2...v1.12.0) (2026-02-14)
+
+
+### Bug Fixes
+
+* **branding:** update favicon to match sidebar logo icon ([3328718](https://github.com/riedel28/tanstack-dashboard/commit/332871827312da0a0726ee88d64f12a0e41d87d0))
+* **css:** remove duplicate rules in globals.css ([9244aa0](https://github.com/riedel28/tanstack-dashboard/commit/9244aa0c0b6f5888022cb72de6b9370ee0eff1e2))
+* **header:** prevent property selector from overflowing header width ([55a5fa6](https://github.com/riedel28/tanstack-dashboard/commit/55a5fa6d7a46487cdeaedc89ac97db8e74e09526))
+* **i18n:** update German locale files for consistency and accuracy ([cbf2491](https://github.com/riedel28/tanstack-dashboard/commit/cbf24911968b0dd38c90abdfe710254fa7f2c1c1))
+* **reservations:** prevent guest disappearing on edit and add email field to add-guest modal ([47bedc2](https://github.com/riedel28/tanstack-dashboard/commit/47bedc2c948d6e40571e2753f6b381bdc8007d5e))
+* **reservations:** use real room data in room selectors ([85c90ee](https://github.com/riedel28/tanstack-dashboard/commit/85c90eec7f70ca059a1b57c6fab8af533cf11086))
+* **responsive:** improve auth and profile page layouts across breakpoints ([3b43ead](https://github.com/riedel28/tanstack-dashboard/commit/3b43ead00ec394649a994f5bf9ee65a545690b02))
+* **rooms:** default property_id to selected property in add room modal ([97e6e53](https://github.com/riedel28/tanstack-dashboard/commit/97e6e53bb89b9a7f6b821513e7faa16225a956ea))
+* **ui:** improve dark mode styling across components ([aa41fdc](https://github.com/riedel28/tanstack-dashboard/commit/aa41fdcc62c7b201c1bafc1573b3b523d5ea13cb))
+
+
+### Features
+
+* **a11y:** introduce comprehensive accessibility compliance skill ([ab46583](https://github.com/riedel28/tanstack-dashboard/commit/ab465833dae8bdcbd6647178fa1a347bd5846011))
+* **monitoring:** redesign status indicators with pulse animation ([92d2b84](https://github.com/riedel28/tanstack-dashboard/commit/92d2b847d9754552af98ae179aa8548379c83ca2))
+* **reservations:** add guest search backend endpoint ([43ac5d2](https://github.com/riedel28/tanstack-dashboard/commit/43ac5d2a9abd6936c9e426ab446e5b3e15652a3b))
+* **reservations:** add guest search combobox to edit reservation form ([4337a3c](https://github.com/riedel28/tanstack-dashboard/commit/4337a3c40a8dc90b64410ac0d8c98f292c2f67e4))
+* **seo:** add dynamic document titles to all routes ([8e810a2](https://github.com/riedel28/tanstack-dashboard/commit/8e810a2cad90de3494ab1a59d013cfe9abae6855))
+* **seo:** add dynamic lang attribute and lazy loading for images ([5802346](https://github.com/riedel28/tanstack-dashboard/commit/5802346179ed9a0d33eb4900a06fca484099921f))
+* **theme:** add dark mode support with ThemeProvider ([5ec0821](https://github.com/riedel28/tanstack-dashboard/commit/5ec082142a8bdce4b0e428db53f0ab1b00e97af9))
+* **ui:** add autocomplete component based on @base-ui/react ([0cdbdee](https://github.com/riedel28/tanstack-dashboard/commit/0cdbdee4074e5c343ba489c24e99582dce2fc677))
+
+
+### Performance Improvements
+
+* **auth:** optimize login background image ([869c0a9](https://github.com/riedel28/tanstack-dashboard/commit/869c0a947d415fc5d56201127526709cf366dcd6))
+* **backend:** add compression middleware for API responses ([159f367](https://github.com/riedel28/tanstack-dashboard/commit/159f367a91c5cdbfe3fcaf8fbb226d2762972eef))
+* **build:** add vendor chunk splitting and enable CSS code splitting ([2a335fd](https://github.com/riedel28/tanstack-dashboard/commit/2a335fd100ce3fc61f668a62f854bb15feeccf8c))
+* preload LCP image for faster desktop paint ([e2a8282](https://github.com/riedel28/tanstack-dashboard/commit/e2a82821e2eccf3e9ccd0b30ff47e3565544ec7d))
+* **reservations:** remove @hookform/devtools from production bundle ([451d444](https://github.com/riedel28/tanstack-dashboard/commit/451d444ca729729da752a240769cb7520db56f57))
+
 ## [1.11.2](https://github.com/riedel28/tanstack-dashboard/compare/v1.11.1...v1.11.2) (2026-02-11)
 
 
