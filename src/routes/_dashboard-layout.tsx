@@ -379,16 +379,19 @@ function UserSidebarContent() {
 // Main sidebar component
 function DashboardSidebar() {
   const currentView = useCurrentView();
+  const { t } = useLingui();
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeaderComponent />
       <SidebarViewToggle />
-      {currentView === 'admin' ? (
-        <AdminSidebarContent />
-      ) : (
-        <UserSidebarContent />
-      )}
+      <nav aria-label={t`Main navigation`}>
+        {currentView === 'admin' ? (
+          <AdminSidebarContent />
+        ) : (
+          <UserSidebarContent />
+        )}
+      </nav>
     </Sidebar>
   );
 }
@@ -397,10 +400,20 @@ function DashboardSidebar() {
 function DashboardLayout() {
   return (
     <SidebarProvider>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-background focus:px-4 focus:py-2 focus:rounded-md focus:ring-2 focus:ring-primary focus:text-foreground"
+      >
+        <Trans>Skip to main content</Trans>
+      </a>
       <DashboardSidebar />
       <SidebarInset className="flex h-full min-w-0 flex-col">
         <Header />
-        <main className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8 focus:outline-none"
+        >
           <Outlet />
         </main>
       </SidebarInset>
