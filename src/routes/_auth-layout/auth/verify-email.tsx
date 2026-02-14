@@ -69,9 +69,16 @@ function VerifyEmailPage() {
 
   if (status === 'idle' || status === 'pending') {
     return (
-      <div className="w-full max-w-lg space-y-8">
+      <div
+        className="w-full max-w-lg space-y-8"
+        role="status"
+        aria-live="polite"
+      >
         <div className="space-y-4 text-center">
-          <Loader2Icon className="mx-auto size-10 animate-spin text-primary" />
+          <Loader2Icon
+            className="mx-auto size-10 animate-spin text-primary"
+            aria-hidden="true"
+          />
           <h1 className="text-2xl font-bold">
             <Trans>Verifying your email...</Trans>
           </h1>
