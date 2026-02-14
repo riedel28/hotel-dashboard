@@ -49,10 +49,7 @@ export function GuestsCell({ guests }: GuestsCellProps) {
           <PopoverTrigger className="rounded-md bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted/80">
             +{rest.length}
           </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            className="w-auto min-w-48 p-3"
-          >
+          <PopoverContent align="start" className="w-auto min-w-48 p-3">
             <p className="mb-2 text-xs font-medium text-muted-foreground">
               {t`${guests.length} guests total`}
             </p>
