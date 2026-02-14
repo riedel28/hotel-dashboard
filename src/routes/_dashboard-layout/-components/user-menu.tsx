@@ -140,7 +140,7 @@ function LogoutMenuItem({ version, onLogout }: LogoutMenuItemProps) {
 
 export default function UserMenu() {
   const auth = useAuth();
-  const { i18n } = useLingui();
+  const { i18n, t } = useLingui();
   const locale = i18n.locale;
 
   const navigate = DashboardLayoutRoute.useNavigate();
@@ -165,7 +165,7 @@ export default function UserMenu() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger aria-label={t`User menu`}>
           <Avatar size="default">
             <AvatarImage
               src="https://github.com/shadcn.png"

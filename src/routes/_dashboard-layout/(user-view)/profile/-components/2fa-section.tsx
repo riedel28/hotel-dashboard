@@ -134,7 +134,13 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 target="_blank"
               >
                 <Trans>Google Authenticator</Trans>
-                <ArrowUpRightIcon className="-ml-0.5 size-4" />
+                <ArrowUpRightIcon
+                  className="-ml-0.5 size-4"
+                  aria-hidden="true"
+                />
+                <span className="sr-only">
+                  <Trans>(opens in new tab)</Trans>
+                </span>
               </a>
             }
           />
@@ -148,7 +154,13 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 target="_blank"
               >
                 <Trans>Microsoft Authenticator</Trans>
-                <ArrowUpRightIcon className="-ml-0.5 size-4" />
+                <ArrowUpRightIcon
+                  className="-ml-0.5 size-4"
+                  aria-hidden="true"
+                />
+                <span className="sr-only">
+                  <Trans>(opens in new tab)</Trans>
+                </span>
               </a>
             }
           />
@@ -163,7 +175,13 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 target="_blank"
               >
                 <Trans>Authy</Trans>
-                <ArrowUpRightIcon className="-ml-0.5 size-4" />
+                <ArrowUpRightIcon
+                  className="-ml-0.5 size-4"
+                  aria-hidden="true"
+                />
+                <span className="sr-only">
+                  <Trans>(opens in new tab)</Trans>
+                </span>
               </a>
             }
           />
