@@ -3,7 +3,6 @@ import { RefreshCwIcon, SearchIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Property, PropertyStage } from 'shared/types/properties';
 import { toast } from 'sonner';
-import { StageBadge } from '@/components/ui/stage-badge';
 import { Button } from '@/components/ui/button';
 import {
   Combobox,
@@ -16,6 +15,7 @@ import {
   ComboboxTrigger,
   ComboboxValue
 } from '@/components/ui/combobox';
+import { StageBadge } from '@/components/ui/stage-badge';
 import { cn } from '@/lib/utils';
 
 interface PropertySelectorProps {

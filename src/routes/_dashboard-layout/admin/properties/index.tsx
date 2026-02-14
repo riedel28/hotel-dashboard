@@ -26,8 +26,6 @@ import Flag from 'react-flagkit';
 import type { Property } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 import { propertiesQueryOptions } from '@/api/properties';
-
-import { StageBadge } from '@/components/ui/stage-badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -55,6 +53,7 @@ import {
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
 import { Skeleton } from '@/components/ui/skeleton';
+import { StageBadge } from '@/components/ui/stage-badge';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
