@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { resendVerification, signUp } from '@/api/auth';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Field,
   FieldError,
@@ -99,10 +99,7 @@ function SuccessView({ email }: SuccessViewProps) {
           )}
           <Trans>Resend verification email</Trans>
         </Button>
-        <Link
-          to="/auth/login"
-          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
-        >
+        <Link to="/auth/login" className={buttonVariants({ variant: 'link' })}>
           <Trans>Back to login</Trans>
         </Link>
       </div>

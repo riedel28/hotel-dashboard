@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type z from 'zod';
 import { forgotPassword } from '@/api/auth';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Field,
   FieldError,
@@ -164,15 +164,9 @@ function ForgotPasswordPage() {
       </form>
 
       <div className="text-center -mt-2">
-        <Button
-          variant="link"
-          size="sm"
-          render={
-            <Link to="/auth/login">
-              <Trans>Back to login</Trans>
-            </Link>
-          }
-        />
+        <Link to="/auth/login" className={buttonVariants({ variant: 'link' })}>
+          <Trans>Back to login</Trans>
+        </Link>
       </div>
     </div>
   );

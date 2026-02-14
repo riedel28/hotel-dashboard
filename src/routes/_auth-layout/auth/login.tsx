@@ -20,7 +20,7 @@ import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { useAuth } from '@/auth';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Field,
@@ -246,7 +246,7 @@ function LoginPage() {
 
           <Link
             to="/auth/forgot-password"
-            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+            className={buttonVariants({ variant: 'link' })}
           >
             <Trans>Forgot password?</Trans>
           </Link>
