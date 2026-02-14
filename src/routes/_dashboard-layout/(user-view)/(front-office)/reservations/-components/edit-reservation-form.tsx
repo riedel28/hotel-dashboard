@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools';
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -479,10 +478,6 @@ export function EditReservationForm({
           }}
           onSave={handleEditGuest}
         />
-      )}
-
-      {process.env.NODE_ENV === 'development' && (
-        <DevTool control={form.control} />
       )}
     </>
   );
