@@ -199,15 +199,10 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    @apply border-border outline-ring/50;
-    @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply font-sans bg-background text-foreground;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    @apply font-sans bg-background text-foreground;
-    @apply font-sans bg-background text-foreground;
   }
 
   /* Prevent bouncing on iOS */
@@ -217,7 +212,6 @@
     -webkit-overflow-scrolling: touch;
   }
   html {
-    @apply font-sans;
     @apply font-sans;
   }
 }
