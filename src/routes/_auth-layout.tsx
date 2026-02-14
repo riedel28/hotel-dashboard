@@ -11,11 +11,11 @@ function AuthLayout() {
     <div className="flex min-h-screen bg-gray-100">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-background focus:px-4 focus:py-2 focus:rounded-md focus:ring-2 focus:ring-primary focus:text-foreground"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:bg-background focus:px-4 focus:py-2 focus:rounded-md focus:ring-2 focus:ring-primary focus:text-foreground"
       >
         <Trans>Skip to main content</Trans>
       </a>
-      <div className="hidden md:block lg:w-1/2 xl:w-2/3" aria-hidden="true">
+      <div className="hidden lg:block lg:w-1/2 xl:w-2/3" aria-hidden="true">
         <img
           src="/login-bg.avif"
           alt=""
