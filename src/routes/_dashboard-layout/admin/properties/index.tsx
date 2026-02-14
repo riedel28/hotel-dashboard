@@ -27,7 +27,7 @@ import type { Property } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 import { propertiesQueryOptions } from '@/api/properties';
 
-import { StageBadge } from '@/components/stage-badge';
+import { StageBadge } from '@/components/ui/stage-badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
