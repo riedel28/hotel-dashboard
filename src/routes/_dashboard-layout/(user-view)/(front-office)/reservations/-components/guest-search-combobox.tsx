@@ -27,7 +27,7 @@ interface GuestOption {
   first_name: string;
   last_name: string;
   email: string | null;
-  nationality_code: 'DE' | 'US' | 'AT' | 'CH';
+  nationality_code: string;
 }
 
 export function GuestSearchCombobox({

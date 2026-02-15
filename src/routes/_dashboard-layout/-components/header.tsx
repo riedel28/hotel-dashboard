@@ -16,6 +16,9 @@ export default function Header() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [optimisticPropertyId, setOptimisticPropertyId] = React.useState<
+    string | undefined
+  >();
 
   const handleReloadProperties = async () => {
     // Remove query from cache to force fresh fetch
@@ -29,7 +32,13 @@ export default function Header() {
   };
 
   const handlePropertyChange = async (propertyId: string) => {
-    await updateSelectedProperty(propertyId);
+    setOptimisticPropertyId(propertyId);
+    try {
+      await updateSelectedProperty(propertyId);
+    } catch {
+      // Revert on failure — user.selected_property_id is unchanged
+    }
+    setOptimisticPropertyId(undefined);
   };
 
   return (
@@ -51,7 +60,9 @@ export default function Header() {
           <div className="min-w-0">
             <PropertySelector
               properties={properties.index}
-              value={user?.selected_property_id ?? undefined}
+              value={
+                optimisticPropertyId ?? user?.selected_property_id ?? undefined
+              }
               onValueChange={handlePropertyChange}
               onReload={handleReloadProperties}
             />

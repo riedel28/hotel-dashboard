@@ -11,6 +11,7 @@ import { type UpdateUserData, updateUserById } from '@/api/users';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Field,
   FieldContent,
@@ -21,13 +22,6 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 
 const updateUserFormSchema = z.object({
@@ -100,7 +94,7 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-xl space-y-6">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-lg space-y-6">
       <FieldSet className="gap-6">
         <FieldGroup className="gap-6">
           <Controller
@@ -177,55 +171,13 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
             name="country_code"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} className="gap-2">
-                <FieldLabel htmlFor={field.name}>
+                <FieldLabel>
                   <Trans>Country</Trans>
                 </FieldLabel>
-                <Select
-                  value={field.value || ''}
-                  onValueChange={(value) =>
-                    field.onChange(value === '' ? null : value)
-                  }
-                >
-                  <SelectTrigger
-                    id={field.name}
-                    aria-invalid={fieldState.invalid}
-                  >
-                    <SelectValue>
-                      {(value) => {
-                        const countryMap: Record<string, string> = {
-                          DE: t`Germany`,
-                          US: t`United States`,
-                          AT: t`Austria`,
-                          CH: t`Switzerland`
-                        };
-                        return value ? (
-                          <span>{countryMap[value] || value}</span>
-                        ) : (
-                          <span className="text-muted-foreground">
-                            {t`Select country`}
-                          </span>
-                        );
-                      }}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">
-                      <Trans>None</Trans>
-                    </SelectItem>
-                    <SelectItem value="DE">
-                      <Trans>Germany</Trans>
-                    </SelectItem>
-                    <SelectItem value="US">
-                      <Trans>United States</Trans>
-                    </SelectItem>
-                    <SelectItem value="AT">
-                      <Trans>Austria</Trans>
-                    </SelectItem>
-                    <SelectItem value="CH">
-                      <Trans>Switzerland</Trans>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <CountryPicker
+                  value={field.value || undefined}
+                  onValueChange={field.onChange}
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}

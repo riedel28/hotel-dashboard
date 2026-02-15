@@ -9,11 +9,11 @@ import {
   UserCircleIcon
 } from 'lucide-react';
 import { useState } from 'react';
-import Flag from 'react-flagkit';
 import { useAuth } from '@/auth';
 import { useTheme } from '@/components/theme-provider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { CountryFlag } from '@/components/ui/country-flag';
 
 import {
   DropdownMenu,
@@ -94,10 +94,10 @@ function LanguageSubmenu({
             className="flex h-6 min-w-6 items-center text-xs gap-2 px-2.5 rounded-sm"
           >
             {currentLanguage?.label}
-            <Flag
-              country={currentLanguage?.country ?? 'GB'}
+            <CountryFlag
+              code={currentLanguage?.country ?? 'GB'}
               title={currentLanguage?.label}
-              className="size-3.5 rounded-sm"
+              className="size-3.5"
               aria-label={currentLanguage?.label}
             />
           </Badge>
@@ -114,10 +114,10 @@ function LanguageSubmenu({
               value={lang.code}
               className="overflow-hidden [&>svg]:shrink-0"
             >
-              <Flag
-                country={lang.country}
+              <CountryFlag
+                code={lang.country}
                 title={lang.label}
-                className="size-3.5 rounded-sm"
+                className="size-3.5"
                 aria-label={lang.label}
               />
               {lang.label}

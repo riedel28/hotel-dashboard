@@ -22,7 +22,6 @@ import {
 import * as React from 'react';
 import { Suspense, useMemo, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import Flag from 'react-flagkit';
 import type { Property } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 import { propertiesQueryOptions } from '@/api/properties';
@@ -35,6 +34,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { CountryFlag } from '@/components/ui/country-flag';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
@@ -55,6 +55,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { StageBadge } from '@/components/ui/stage-badge';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import { getCountryName } from '@/lib/countries';
 import { cn } from '@/lib/utils';
 
 import { AddPropertyModal } from './-components/add-property-modal';
@@ -65,18 +66,6 @@ import { PropertyCountryFilter } from './-components/property-country-filter';
 import { PropertyRefresh } from './-components/property-refresh';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
-
-function getCountryName(countryCode: string): string {
-  const countryMap: Record<string, string> = {
-    AT: 'Austria',
-    CH: 'Switzerland',
-    CZ: 'Czech Republic',
-    DE: 'Germany',
-    ES: 'Spain',
-    US: 'United States'
-  };
-  return countryMap[countryCode] || countryCode;
-}
 
 function RowActions({ row }: { row: { original: Property } }) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
@@ -163,7 +152,7 @@ function PropertiesTable({
     [pageIndex, pageSize]
   );
 
-  const { t } = useLingui();
+  const { i18n, t } = useLingui();
 
   const columns = useMemo<ColumnDef<Property>[]>(
     () => [
@@ -206,16 +195,17 @@ function PropertiesTable({
         ),
         cell: ({ row }) => {
           const countryCode = row.original.country_code;
-          const countryName = getCountryName(countryCode);
           return (
             <div className="flex items-center gap-2">
-              <Flag
-                country={countryCode}
+              <CountryFlag
+                code={countryCode}
                 title={countryCode}
-                className="size-3.5 rounded-sm"
+                className="size-4"
                 aria-label={countryCode}
               />
-              <span className="text-foreground">{countryName}</span>
+              <span className="text-foreground">
+                {getCountryName(countryCode, i18n.locale)}
+              </span>
             </div>
           );
         },
@@ -272,7 +262,7 @@ function PropertiesTable({
         enableResizing: false
       }
     ],
-    [t]
+    [i18n.locale, t]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
@@ -346,7 +336,7 @@ function PropertiesContent() {
     : [];
 
   const hasActiveFilters = Boolean(
-    q || (stage && stage !== 'all') || (country_code && country_code !== 'all')
+    q || (stage && stage !== 'all') || country_code
   );
 
   const handleSearchChange = (searchTerm: string) => {
@@ -379,10 +369,7 @@ function PropertiesContent() {
       to: '/admin/properties',
       search: (prev) => ({
         ...prev,
-        country_code:
-          !value || value === 'all'
-            ? undefined
-            : (value as 'AT' | 'CH' | 'CZ' | 'DE' | 'ES' | 'US'),
+        country_code: value || undefined,
         page: 1
       })
     });
