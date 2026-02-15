@@ -1,20 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 
-const TEST_USER = {
-  email: 'john@example.com',
-  password: 'very_cool_password'
-};
-
 const EDITABLE_USER_NAME = 'Very Cool';
-
-async function login(page: Page) {
-  await page.goto('/auth/login');
-  const form = page.locator('form');
-  await form.getByLabel('Email').fill(TEST_USER.email);
-  await form.getByLabel('Password', { exact: true }).fill(TEST_USER.password);
-  await form.getByRole('button', { name: 'Login' }).click();
-  await expect(page).toHaveURL('/');
-}
 
 async function navigateToEditUser(page: Page) {
   await page.getByRole('link', { name: 'Users', exact: true }).click();
@@ -37,7 +23,7 @@ test.describe('Edit User', () => {
   test('should navigate to edit user page and display form with current values', async ({
     page
   }) => {
-    await login(page);
+    await page.goto('/');
     await navigateToEditUser(page);
 
     const form = page.locator('form');
@@ -51,7 +37,7 @@ test.describe('Edit User', () => {
   test('should update all user fields and verify values persist', async ({
     page
   }) => {
-    await login(page);
+    await page.goto('/');
     await navigateToEditUser(page);
 
     const form = page.locator('form');

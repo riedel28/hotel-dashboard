@@ -47,6 +47,7 @@ coverage/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/playwright/.auth/
 
 # TypeScript build info files
 *.tsbuildinfo

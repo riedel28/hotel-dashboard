@@ -12,13 +12,22 @@ export default defineConfig({
     trace: 'on-first-retry'
   },
   projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json'
+      },
+      dependencies: ['setup']
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] }
+      use: {
+        ...devices['Desktop Safari'],
+        storageState: 'playwright/.auth/user.json'
+      },
+      dependencies: ['setup']
     }
   ],
   webServer: [

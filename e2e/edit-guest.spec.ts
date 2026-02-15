@@ -1,21 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 
-const TEST_USER = {
-  email: 'john@example.com',
-  password: 'very_cool_password'
-};
-
-async function login(page: Page) {
-  await page.goto('/auth/login');
-  const form = page.locator('form');
-  await form.getByLabel('Email').fill(TEST_USER.email);
-  await form.getByLabel('Password', { exact: true }).fill(TEST_USER.password);
-  await form.getByRole('button', { name: 'Login' }).click();
-  await expect(page).toHaveURL('/');
-}
-
 async function navigateToReservationEdit(page: Page, bookingNr: string) {
-  await page.getByRole('link', { name: 'Reservations' }).click();
+  await page.getByRole('link', { name: 'Reservations', exact: true }).click();
   await expect(page).toHaveURL(/\/reservations/);
   await expect(
     page.getByRole('heading', { name: 'Reservations' })
@@ -33,7 +19,7 @@ async function navigateToReservationEdit(page: Page, bookingNr: string) {
 
 test.describe('Edit Guest', () => {
   test.beforeEach(async ({ page }) => {
-    await login(page);
+    await page.goto('/');
     // RES-003 has a single guest (Mike Wilson, AT) — simplest to test
     await navigateToReservationEdit(page, 'RES-003');
   });
@@ -116,5 +102,22 @@ test.describe('Edit Guest', () => {
     );
     // Verify the country changed to France
     await expect(verifyDialog.getByText('France')).toBeVisible();
+
+    // Revert changes so the test is repeatable across browser suites
+    await verifyDialog.getByLabel('First Name').clear();
+    await verifyDialog.getByLabel('First Name').fill('Mike');
+    await verifyDialog.getByLabel('Last Name').clear();
+    await verifyDialog.getByLabel('Last Name').fill('Wilson');
+    await verifyDialog.getByLabel('Email').clear();
+    await verifyDialog.getByLabel('Email').fill('mike.wilson@example.com');
+    await verifyDialog.getByLabel('Select country').click();
+    await page.getByPlaceholder('Search country...').fill('Austria');
+    await page.getByRole('option', { name: /Austria/ }).click();
+    await verifyDialog.getByRole('button', { name: 'Save Changes' }).click();
+    await expect(verifyDialog).not.toBeVisible();
+    await page.getByRole('button', { name: 'Save Changes' }).click();
+    await expect(
+      page.getByText('Reservation updated successfully')
+    ).toBeVisible();
   });
 });

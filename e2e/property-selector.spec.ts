@@ -1,10 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
 
-const TEST_USER = {
-  email: 'john@example.com',
-  password: 'very_cool_password'
-};
-
 // Properties from the seed data
 const PROPERTIES = {
   OVERLOOK: 'The Overlook Hotel',
@@ -19,15 +14,6 @@ const PROPERTIES = {
   KELLERMANS: "Kellerman's Resort"
 };
 
-async function login(page: Page) {
-  await page.goto('/auth/login');
-  const form = page.locator('form');
-  await form.getByLabel('Email').fill(TEST_USER.email);
-  await form.getByLabel('Password', { exact: true }).fill(TEST_USER.password);
-  await form.getByRole('button', { name: 'Login' }).click();
-  await expect(page).toHaveURL('/');
-}
-
 async function openPropertySelector(page: Page) {
   await page.getByLabel('Select property').click();
 }
@@ -39,7 +25,7 @@ async function selectProperty(page: Page, propertyName: string) {
 
 test.describe('Property Selector', () => {
   test.beforeEach(async ({ page }) => {
-    await login(page);
+    await page.goto('/');
   });
 
   test('should display property selector in the header', async ({ page }) => {
@@ -117,7 +103,12 @@ test.describe('Property Selector', () => {
   test('should persist selected property after page reload', async ({
     page
   }) => {
+    const responsePromise = page.waitForResponse(
+      (resp) =>
+        resp.url().includes('/selected-property') && resp.status() === 200
+    );
     await selectProperty(page, PROPERTIES.GRAND_BUDAPEST);
+    await responsePromise;
 
     await expect(page.getByLabel('Select property')).toContainText(
       PROPERTIES.GRAND_BUDAPEST
@@ -126,7 +117,8 @@ test.describe('Property Selector', () => {
     await page.reload();
 
     await expect(page.getByLabel('Select property')).toContainText(
-      PROPERTIES.GRAND_BUDAPEST
+      PROPERTIES.GRAND_BUDAPEST,
+      { timeout: 10000 }
     );
   });
 
