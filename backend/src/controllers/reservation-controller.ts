@@ -294,12 +294,7 @@ async function updateReservation(req: Request, res: Response) {
             }
 
             const nationality =
-              (guest.nationality_code as
-                | 'DE'
-                | 'US'
-                | 'AT'
-                | 'CH'
-                | undefined) ?? 'DE';
+              (guest.nationality_code as string | undefined) ?? 'DE';
 
             return {
               reservation_id: reservationId,
@@ -314,7 +309,7 @@ async function updateReservation(req: Request, res: Response) {
           first_name: string;
           last_name: string;
           email: string | null;
-          nationality_code: 'DE' | 'US' | 'AT' | 'CH';
+          nationality_code: string;
         }>;
 
         if (sanitizedGuests.length > 0) {
