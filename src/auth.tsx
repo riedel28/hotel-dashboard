@@ -17,7 +17,7 @@ export interface AuthContext {
 
 const AuthContext = React.createContext<AuthContext | null>(null);
 
-const userKey = 'tanstack.auth.user';
+const userKey = 'backoffice.auth.user';
 
 function getStoredUser(): User | null {
   try {
