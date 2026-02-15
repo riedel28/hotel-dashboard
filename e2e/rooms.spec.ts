@@ -4,8 +4,7 @@ const TEST_PROPERTY_NAME = 'Bates Motel';
 
 async function selectProperty(page: Page) {
   const responsePromise = page.waitForResponse(
-    (resp) =>
-      resp.url().includes('/selected-property') && resp.status() === 200
+    (resp) => resp.url().includes('/selected-property') && resp.status() === 200
   );
   await page.getByLabel('Select property').click();
   await page.getByRole('option', { name: TEST_PROPERTY_NAME }).click();

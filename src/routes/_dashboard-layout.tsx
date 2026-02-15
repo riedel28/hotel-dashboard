@@ -11,7 +11,7 @@ import {
 import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
-  // BedSingleIcon,
+  BedSingleIcon,
   BuildingIcon,
   // CalendarIcon,
   // CreditCardIcon,
@@ -199,6 +199,11 @@ function UserSidebarContent() {
               tooltip={t`Reservations`}
             >
               <Trans>Reservations</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink to="/rooms" icon={BedSingleIcon} tooltip={t`Rooms`}>
+              <Trans>Rooms</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>

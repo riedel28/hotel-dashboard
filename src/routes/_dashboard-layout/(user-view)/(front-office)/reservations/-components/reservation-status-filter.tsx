@@ -13,6 +13,12 @@ interface ReservationStatusFilterProps {
   onChange: (status: string | null) => void;
 }
 
+const statuses = [
+  { value: 'pending', color: 'bg-badge-warning-foreground' },
+  { value: 'started', color: 'bg-badge-default-foreground' },
+  { value: 'done', color: 'bg-badge-success-foreground' }
+] as const;
+
 export function ReservationStatusFilter({
   value,
   onChange
@@ -23,21 +29,33 @@ export function ReservationStatusFilter({
     <Select value={value ?? 'all'} onValueChange={onChange} defaultValue="all">
       <SelectTrigger className="w-full sm:w-[150px]">
         <SelectValue>
-          {(val) =>
-            val ? (
-              <span className="capitalize">{t(val)}</span>
-            ) : (
-              <span className="text-muted-foreground">
-                <Trans>Select status</Trans>
+          {(val) => {
+            if (!val || val === 'all') {
+              return (
+                <span className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-muted-foreground" />
+                  <span>
+                    <Trans>All</Trans>
+                  </span>
+                </span>
+              );
+            }
+            const status = statuses.find((s) => s.value === val);
+            return (
+              <span className="flex items-center gap-2">
+                <span
+                  className={`size-1.5 rounded-full ${status?.color ?? 'bg-muted-foreground'}`}
+                />
+                <span className="capitalize">{t(val)}</span>
               </span>
-            )
-          }
+            );
+          }}
         </SelectValue>
       </SelectTrigger>
       <SelectContent align="start">
         <SelectItem value="all">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-gray-500"></span>
+            <span className="size-1.5 rounded-full bg-muted-foreground" />
             <span>
               <Trans>All</Trans>
             </span>
@@ -45,7 +63,7 @@ export function ReservationStatusFilter({
         </SelectItem>
         <SelectItem value="pending">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-yellow-500"></span>
+            <span className="size-1.5 rounded-full bg-badge-warning-foreground" />
             <span>
               <Trans>Pending</Trans>
             </span>
@@ -53,7 +71,7 @@ export function ReservationStatusFilter({
         </SelectItem>
         <SelectItem value="started">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-violet-500"></span>
+            <span className="size-1.5 rounded-full bg-badge-default-foreground" />
             <span>
               <Trans>Started</Trans>
             </span>
@@ -61,7 +79,7 @@ export function ReservationStatusFilter({
         </SelectItem>
         <SelectItem value="done">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-green-500"></span>
+            <span className="size-1.5 rounded-full bg-badge-success-foreground" />
             <span>
               <Trans>Done</Trans>
             </span>
