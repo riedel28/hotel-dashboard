@@ -113,7 +113,7 @@ function SidebarHeaderComponent() {
               <MessageCircleIcon className="size-4" />
             </div>
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
-              <Trans>Backoffice Manager</Trans>
+              <Trans>Hotel Dashboard</Trans>
             </span>
             <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
           </SidebarMenuItem>

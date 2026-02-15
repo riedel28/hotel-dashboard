@@ -193,7 +193,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
                     <MessageCircleIcon className="size-4" />
                   </div>
                   <span className="text-sm font-semibold whitespace-nowrap">
-                    <Trans>Backoffice Manager</Trans>
+                    <Trans>Hotel Dashboard</Trans>
                   </span>
                   <Button
                     variant="ghost"

@@ -66,7 +66,7 @@ function emailLayout(content: string) {
         <tr><td>
           ${content}
           <p style="margin-top:32px; padding-top:16px; border-top:1px solid #e4e4e7; color:#a1a1aa; font-size:13px; line-height:1.5;">
-            Backoffice Manager
+            Hotel Dashboard
           </p>
         </td></tr>
       </table>

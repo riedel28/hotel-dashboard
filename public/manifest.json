@@ -1,5 +1,5 @@
 {
-  "name": "Backoffice Manager",
+  "name": "Hotel Dashboard",
   "short_name": "Backoffice",
   "description": "Hotel management dashboard for front-office operations, reservations, and administrative functions.",
   "start_url": "/",
