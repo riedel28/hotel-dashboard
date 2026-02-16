@@ -1,7 +1,7 @@
 name: CI
 
 # This workflow runs on pull requests and pushes to master
-# It ensures code quality through type checking, linting, formatting, and building
+# It ensures code quality through type checking, linting, formatting, testing, and building
 on:
   pull_request:
     branches:
@@ -9,6 +9,10 @@ on:
   push:
     branches:
       - master
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -33,16 +37,27 @@ jobs:
         run: bun run type-check:all
 
       - name: Lint
-        run: bun run lint
+        run: bun run lint:ci
 
       - name: Format Check
         run: bun run check:ci
 
+      - name: Run frontend tests
+        run: bun run test
+
+      - name: Run backend tests
+        env:
+          NODE_ENV: test
+          DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: cd ./backend && bun run test
+
       - name: Build
-        run: bun run build
+        run: bun --bun vite build
 
   e2e:
     name: E2E Tests
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -65,7 +80,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}-${{ hashFiles('package.json') }}
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'

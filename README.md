@@ -6,7 +6,7 @@ A hotel management dashboard with dual-view architecture (User View for front-of
 |:---:|:---:|
 | ![Login](public/screenshot.png) | ![Reservations](public/screenshot-reservations.png) |
 
-<!-- [Live Demo](https://your-deployment-url.vercel.app) -->
+[Live Demo](https://backoffice-hotel-dashboard.vercel.app)
 
 ## Tech Stack
 
@@ -63,7 +63,7 @@ Create `.env` files based on your environment:
 **Frontend** (root `.env`):
 
 ```bash
-VITE_API_BASE_URL=http://localhost:5001
+VITE_API_BASE_URL=http://localhost:5001/api
 ```
 
 **Backend** (`backend/.env.development`):
@@ -159,6 +159,12 @@ The app supports **English** and **German** via [Lingui](https://lingui.dev).
 - Message catalogs live in `src/locales/{locale}/messages.po`
 - Extract with `bun run lingui:extract`, compile with `bun run lingui:compile`
 - Language switching is available in the header user menu
+
+## Deployment
+
+- **Frontend** — [Vercel](https://vercel.com) with API rewrites proxying `/api/*` to the backend
+- **Backend** — [Fly.io](https://fly.io) (Frankfurt region), configured via `fly.toml`
+- **Database** — [Neon](https://neon.tech) serverless PostgreSQL
 
 ## Code Quality
 

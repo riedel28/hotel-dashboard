@@ -1,12 +1,10 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [master]
 
 permissions:
   contents: write
@@ -17,6 +15,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,7 +40,6 @@ jobs:
         run: cd ./backend && bun install --frozen-lockfile
 
       - name: Run semantic-release
-        if: ${{ github.event_name == 'push' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production

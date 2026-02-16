@@ -66,8 +66,8 @@ test.describe('Rooms', () => {
 
     await expect(page.getByText('Room updated successfully')).toBeVisible();
 
-    // Navigate back to rooms list and verify updated name
-    await page.goto('/rooms');
+    // Navigate back to rooms list with search filter to find room regardless of pagination
+    await page.goto(`/rooms?q=${encodeURIComponent(updatedName)}`);
     await expect(page.getByRole('cell', { name: updatedName })).toBeVisible();
   });
 

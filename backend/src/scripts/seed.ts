@@ -19,9 +19,14 @@ async function seed() {
   try {
     // Clear all data and reset identity sequences
     console.log('Clearing existing data...');
-    await db.execute(
-      sql`TRUNCATE TABLE guests, email_verification_tokens, user_roles, monitoring_logs, reservations, rooms, users, properties, roles RESTART IDENTITY CASCADE`
-    );
+    await db.execute(sql`
+      DO $$ BEGIN
+        TRUNCATE TABLE guests, email_verification_tokens, user_roles, monitoring_logs, reservations, rooms, users, properties, roles RESTART IDENTITY CASCADE;
+      EXCEPTION WHEN undefined_table THEN
+        -- Tables may not exist yet (e.g. first run after schema push)
+        NULL;
+      END $$
+    `);
 
     // Step 2: Create demo users
     console.log('Creating demo users...');
