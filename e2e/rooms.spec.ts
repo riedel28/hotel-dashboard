@@ -29,19 +29,13 @@ test.describe('Rooms', () => {
     await page.getByLabel('Room Number').fill(`E2E-${Date.now()}`);
     await page.getByLabel('Room Type').fill('Suite');
 
-    const roomsRefetch = page.waitForResponse(
-      (resp) =>
-        resp.url().includes('/api/rooms') &&
-        resp.request().method() === 'GET' &&
-        resp.ok()
-    );
     await page.getByRole('button', { name: 'Create' }).click();
 
     await expect(page.getByText('Room created successfully')).toBeVisible();
-    await roomsRefetch;
-    await expect(page.getByRole('cell', { name: roomName })).toBeVisible({
-      timeout: 10_000
-    });
+
+    // Navigate with search filter to find the room regardless of pagination
+    await page.goto(`/rooms?q=${encodeURIComponent(roomName)}`);
+    await expect(page.getByRole('cell', { name: roomName })).toBeVisible();
   }
 
   test('should create a room via the Add Room modal', async ({ page }) => {
