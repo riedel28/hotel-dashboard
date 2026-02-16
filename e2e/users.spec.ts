@@ -3,8 +3,8 @@ import { expect, type Page, test } from '@playwright/test';
 const EDITABLE_USER_NAME = 'Very Cool';
 
 async function navigateToEditUser(page: Page) {
-  await page.getByRole('link', { name: 'Users', exact: true }).click();
-  await expect(page).toHaveURL(/\/users/);
+  // Use search filter to find the user regardless of pagination
+  await page.goto(`/users?q=${encodeURIComponent(EDITABLE_USER_NAME)}`);
   await expect(page.getByRole('heading', { name: 'Users' })).toBeVisible();
 
   const row = page.getByRole('row').filter({ hasText: EDITABLE_USER_NAME });
