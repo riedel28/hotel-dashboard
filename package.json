@@ -10,6 +10,7 @@
     "type-check:node": "tsc --project tsconfig.node.json --noEmit",
     "type-check:all": "bun run type-check && bun run type-check:node",
     "lint": "biome lint --write",
+    "lint:ci": "biome lint .",
     "check": "biome check --write",
     "check:ci": "biome check",
     "format": "biome format --write",
