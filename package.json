@@ -16,6 +16,7 @@
     "dev": "concurrently \"bun run client\" \"bun run server\"",
     "client": "bun --bun vite",
     "server": "cd ./backend && bun run dev",
+    "server:test": "cd ./backend && bun run dev:test",
     "lingui:extract": "lingui extract",
     "lingui:compile": "lingui compile",
     "test": "vitest run",

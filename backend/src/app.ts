@@ -14,6 +14,7 @@ import propertiesRouter from './routes/properties';
 import reservationsRouter from './routes/reservations';
 import rolesRouter from './routes/roles';
 import roomsRouter from './routes/rooms';
+import testRouter from './routes/test';
 import usersRouter from './routes/users';
 import verificationRouter from './routes/verification';
 
@@ -68,6 +69,10 @@ app.use('/api/reservations', reservationsRouter);
 app.use('/api/roles', rolesRouter);
 app.use('/api/rooms', roomsRouter);
 app.use('/api/users', usersRouter);
+
+if (env.NODE_ENV !== 'production') {
+  app.use('/api/test', testRouter);
+}
 
 // 404 handler - MUST come after all valid routes
 app.use(notFound);

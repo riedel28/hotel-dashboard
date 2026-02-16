@@ -1,23 +1,24 @@
 import { expect, type Page, test } from '@playwright/test';
 
-const EDITABLE_USER_NAME = 'Very Cool';
+const EDITABLE_USER_EMAIL = 'cool_new_user@example.com';
+const EDITABLE_USER_DISPLAY = 'Very Cool';
 
 async function navigateToEditUser(page: Page) {
   await page.getByRole('link', { name: 'Users', exact: true }).click();
   await expect(page).toHaveURL(/\/users/);
   await expect(page.getByRole('heading', { name: 'Users' })).toBeVisible();
 
-  // Type into search input to filter by name (handles pagination)
+  // Type into search input to filter by email (handles pagination)
   const responsePromise = page.waitForResponse(
     (resp) =>
       resp.url().includes('/api/users') &&
       resp.url().includes('q=') &&
       resp.status() === 200
   );
-  await page.getByRole('searchbox').fill(EDITABLE_USER_NAME);
+  await page.getByRole('searchbox').fill(EDITABLE_USER_EMAIL);
   await responsePromise;
 
-  const row = page.getByRole('row').filter({ hasText: EDITABLE_USER_NAME });
+  const row = page.getByRole('row').filter({ hasText: EDITABLE_USER_DISPLAY });
   await row.getByRole('button', { name: 'Open menu' }).click();
   await page.getByRole('menuitem', { name: 'Edit' }).click();
 
@@ -27,7 +28,7 @@ async function navigateToEditUser(page: Page) {
 }
 
 test.describe('Edit User', () => {
-  // Tests must run serially because they modify the same user
+  // Tests share a mutable user — serial prevents race conditions
   test.describe.configure({ mode: 'serial' });
 
   test('should navigate to edit user page and display form with current values', async ({
@@ -80,13 +81,5 @@ test.describe('Edit User', () => {
     await expect(reloadedForm.getByLabel('Last Name')).toHaveValue('User');
     // Verify country picker shows selected country
     await expect(page.getByLabel('Select country')).toContainText('Germany');
-
-    // Revert changes so the test is repeatable
-    await reloadedForm.getByLabel('First Name').clear();
-    await reloadedForm.getByLabel('First Name').fill('Very');
-    await reloadedForm.getByLabel('Last Name').clear();
-    await reloadedForm.getByLabel('Last Name').fill('Cool');
-    await reloadedForm.getByRole('button', { name: 'Save Changes' }).click();
-    await expect(page.getByText('User updated successfully')).toBeVisible();
   });
 });
