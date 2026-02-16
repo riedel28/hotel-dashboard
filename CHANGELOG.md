@@ -1,3 +1,28 @@
+## [1.13.1](https://github.com/riedel28/hotel-dashboard/compare/v1.13.0...v1.13.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* **ci:** add tests, fix lint, improve caching and release workflow ([4b1c57b](https://github.com/riedel28/hotel-dashboard/commit/4b1c57be8e4d28fbed03e30bbd5da961cd25103f))
+* **ci:** disable rate limiting in test environment ([477a698](https://github.com/riedel28/hotel-dashboard/commit/477a698bb541e3f63177f905789f9507ffe7a9e7))
+* **ci:** fix E2E seed failure and speed up backend test setup ([e8505b8](https://github.com/riedel28/hotel-dashboard/commit/e8505b81f263e4baaaddcf6f9a4a7a5e918712ec))
+* **ci:** remove unsupported cache params from setup-bun ([e899b85](https://github.com/riedel28/hotel-dashboard/commit/e899b8567a582faf719bec60d7ebc6e2ef9070a4))
+* **ci:** serialize E2E after test job to prevent DB conflicts ([b85f5a6](https://github.com/riedel28/hotel-dashboard/commit/b85f5a641ce37fddb5b0159ec7745b5a451e45e2))
+* **deploy:** update Vercel API rewrite to proxy through Fly.io ([9028bcf](https://github.com/riedel28/hotel-dashboard/commit/9028bcfb40025195e082dba2ab3e48c90e674c83))
+* **e2e:** increase auth setup timeout for CI cold starts ([caaa7e7](https://github.com/riedel28/hotel-dashboard/commit/caaa7e7e06251ba2d9e266624f4a8c0018565d68))
+* **e2e:** increase timeout for room table refresh after creation ([291253f](https://github.com/riedel28/hotel-dashboard/commit/291253fa0759edb8ae9825af20c8a6d03a8cd2af))
+* **e2e:** use search filter after room creation to handle pagination ([f43eae3](https://github.com/riedel28/hotel-dashboard/commit/f43eae3eee3abca5ab995e42b50e681bad4b209b))
+* **e2e:** use search filters in edit/user tests to handle pagination ([9aada99](https://github.com/riedel28/hotel-dashboard/commit/9aada99c99ec98c469518717a91801ac1a36ae28))
+* **e2e:** use search input for user filtering instead of URL params ([e9c0a6c](https://github.com/riedel28/hotel-dashboard/commit/e9c0a6ce09a677a6a871580e725466976514ba3c))
+* **e2e:** wait for rooms refetch before asserting table content ([07b4bdc](https://github.com/riedel28/hotel-dashboard/commit/07b4bdc1a3dee9f6b92f9b391d4f61689f17339e))
+* **ux:** add loading screen for cold-start backend wake-up ([fa6dea8](https://github.com/riedel28/hotel-dashboard/commit/fa6dea8da0814cb27e690dcf6b7bb3ed23bc9a71))
+* **ux:** remove initial loading spinner from root div ([ded63db](https://github.com/riedel28/hotel-dashboard/commit/ded63db8e10b946d44e30c0eefd2b1dbb67b341f))
+
+
+### Performance Improvements
+
+* **ci:** skip redundant type-check in build step ([f524ab5](https://github.com/riedel28/hotel-dashboard/commit/f524ab545f33994c65c427297735a27a38c30327))
+
 # [1.13.0](https://github.com/riedel28/hotel-dashboard/compare/v1.12.0...v1.13.0) (2026-02-16)
 
 
