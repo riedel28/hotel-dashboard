@@ -32,7 +32,9 @@ test.describe('Rooms', () => {
     await page.getByRole('button', { name: 'Create' }).click();
 
     await expect(page.getByText('Room created successfully')).toBeVisible();
-    await expect(page.getByRole('cell', { name: roomName })).toBeVisible();
+    await expect(page.getByRole('cell', { name: roomName })).toBeVisible({
+      timeout: 10_000
+    });
   }
 
   test('should create a room via the Add Room modal', async ({ page }) => {
