@@ -60,8 +60,20 @@ jobs:
       - name: Install backend dependencies
         run: cd ./backend && bun install --frozen-lockfile
 
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+
       - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: bunx playwright install --with-deps chromium webkit
+
+      - name: Install Playwright system deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: bunx playwright install-deps chromium webkit
 
       - name: Run E2E tests
         env:
@@ -69,6 +81,7 @@ jobs:
           DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           CORS_ORIGIN: http://localhost:5173
+          VITE_API_BASE_URL: http://localhost:5001/api
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
         run: bunx playwright test
