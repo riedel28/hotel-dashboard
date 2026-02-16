@@ -1,3 +1,22 @@
+# [1.13.0](https://github.com/riedel28/hotel-dashboard/compare/v1.12.0...v1.13.0) (2026-02-16)
+
+
+### Bug Fixes
+
+* **ci:** add VITE_API_BASE_URL env and cache Playwright browsers ([4252fab](https://github.com/riedel28/hotel-dashboard/commit/4252fab13e0b07a66d7341a661fabc874ffa0e62))
+* **e2e:** fix all e2e tests and move credentials to env ([38e4638](https://github.com/riedel28/hotel-dashboard/commit/38e46389c45f38b75c4ce5e24875cd2381e62681))
+
+
+### Features
+
+* **ci:** add E2E testing workflow with Playwright ([1fb7a90](https://github.com/riedel28/hotel-dashboard/commit/1fb7a908e8fb919e8eb5c65498f56064fd61baf9))
+* **countries:** add reusable country utilities and components ([e574277](https://github.com/riedel28/hotel-dashboard/commit/e574277c9a3db078d4b6945eed0c1cf411d64084))
+
+
+### Performance Improvements
+
+* **ci:** run only Chromium E2E in CI, reduce retries to 1 ([53ded22](https://github.com/riedel28/hotel-dashboard/commit/53ded220fb7479490becbda3f125366dec0e8a34))
+
 # [1.12.0](https://github.com/riedel28/tanstack-dashboard/compare/v1.11.2...v1.12.0) (2026-02-14)
 
 
