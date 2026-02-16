@@ -3,9 +3,19 @@ import { expect, type Page, test } from '@playwright/test';
 const EDITABLE_USER_NAME = 'Very Cool';
 
 async function navigateToEditUser(page: Page) {
-  // Use search filter to find the user regardless of pagination
-  await page.goto(`/users?q=${encodeURIComponent(EDITABLE_USER_NAME)}`);
+  await page.getByRole('link', { name: 'Users', exact: true }).click();
+  await expect(page).toHaveURL(/\/users/);
   await expect(page.getByRole('heading', { name: 'Users' })).toBeVisible();
+
+  // Type into search input to filter by name (handles pagination)
+  const responsePromise = page.waitForResponse(
+    (resp) =>
+      resp.url().includes('/api/users') &&
+      resp.url().includes('q=') &&
+      resp.status() === 200
+  );
+  await page.getByRole('searchbox').fill(EDITABLE_USER_NAME);
+  await responsePromise;
 
   const row = page.getByRole('row').filter({ hasText: EDITABLE_USER_NAME });
   await row.getByRole('button', { name: 'Open menu' }).click();
