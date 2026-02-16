@@ -105,7 +105,7 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 
 #### Frontend
 
-- `VITE_API_BASE_URL` - Backend API URL (default: <http://localhost:3001>)
+- `VITE_API_BASE_URL` - Backend API URL (default: <http://localhost:5001/api>)
 
 #### Backend
 
