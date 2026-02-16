@@ -32,6 +32,9 @@ test.describe('Rooms', () => {
     await page.getByRole('button', { name: 'Create' }).click();
 
     await expect(page.getByText('Room created successfully')).toBeVisible();
+
+    // Navigate with search filter to find the room regardless of pagination
+    await page.goto(`/rooms?q=${encodeURIComponent(roomName)}`);
     await expect(page.getByRole('cell', { name: roomName })).toBeVisible();
   }
 

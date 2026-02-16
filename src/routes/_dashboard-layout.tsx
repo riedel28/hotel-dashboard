@@ -19,6 +19,7 @@ import {
   // Grid2X2Icon,
   HomeIcon,
   // ListTodoIcon,
+  LoaderCircleIcon,
   // LockIcon,
   MessageCircleIcon,
   // ReceiptTextIcon,
@@ -453,5 +454,22 @@ export const Route = createFileRoute('/_dashboard-layout')({
     );
     return { properties };
   },
+  pendingComponent: DashboardPending,
   component: DashboardLayout
 });
+
+function DashboardPending() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+      <div className="flex items-center gap-2">
+        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <MessageCircleIcon className="size-4" />
+        </div>
+        <span className="text-lg font-semibold">
+          <Trans>Hotel Dashboard</Trans>
+        </span>
+      </div>
+      <LoaderCircleIcon className="size-6 animate-spin text-muted-foreground" />
+    </div>
+  );
+}
