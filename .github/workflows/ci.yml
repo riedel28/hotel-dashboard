@@ -53,7 +53,7 @@ jobs:
         run: cd ./backend && bun run test
 
       - name: Build
-        run: bun run build
+        run: bun --bun vite build
 
   e2e:
     name: E2E Tests
