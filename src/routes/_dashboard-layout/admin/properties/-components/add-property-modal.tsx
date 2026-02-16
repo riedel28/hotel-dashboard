@@ -4,7 +4,6 @@ import { Trans } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
 import React from 'react';
-import Flag from 'react-flagkit';
 import { Controller, useForm } from 'react-hook-form';
 import {
   type CreatePropertyData,
@@ -14,6 +13,7 @@ import { toast } from 'sonner';
 import { createProperty } from '@/api/properties';
 
 import { Button } from '@/components/ui/button';
+import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Dialog,
   DialogContent,
@@ -37,20 +37,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-
-const countryCodes = ['AT', 'CH', 'CZ', 'DE', 'ES', 'US'] as const;
-
-function getCountryName(code: string) {
-  const map: Record<string, () => string> = {
-    AT: () => t`Austria`,
-    CH: () => t`Switzerland`,
-    CZ: () => t`Czech Republic`,
-    DE: () => t`Germany`,
-    ES: () => t`Spain`,
-    US: () => t`United States`
-  };
-  return map[code]?.() ?? code;
-}
 
 const stageValues = ['demo', 'production', 'staging', 'template'] as const;
 
@@ -148,42 +134,10 @@ export function AddPropertyModal() {
                     <FieldLabel htmlFor={field.name}>
                       <Trans>Country</Trans>
                     </FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger
-                        id={field.name}
-                        aria-invalid={fieldState.invalid}
-                      >
-                        <SelectValue>
-                          {(value) => {
-                            if (!value) return <span>{value}</span>;
-                            return (
-                              <span className="flex items-center gap-2">
-                                <Flag
-                                  country={value}
-                                  className="size-3.5 rounded-sm"
-                                  aria-label={value}
-                                />
-                                <span>{getCountryName(value)}</span>
-                              </span>
-                            );
-                          }}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countryCodes.map((code) => (
-                          <SelectItem key={code} value={code}>
-                            <span className="flex items-center gap-2">
-                              <Flag
-                                country={code}
-                                className="size-3.5 rounded-sm"
-                                aria-label={code}
-                              />
-                              <span>{getCountryName(code)}</span>
-                            </span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <CountryPicker
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}

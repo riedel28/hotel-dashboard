@@ -310,7 +310,7 @@ function MonitoringPage() {
               />
               {(from || to || status) && (
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   onClick={handleClearFilters}
                   className="text-muted-foreground hover:text-foreground"
                 >

@@ -317,8 +317,8 @@ msgstr "Zurück zur Anmeldung"
 
 #: src/routes/_dashboard-layout.tsx:116
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:378
-msgid "Backoffice Manager"
-msgstr "Backoffice Manager"
+msgid "Hotel Dashboard"
+msgstr "Hotel Dashboard"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:115
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:251

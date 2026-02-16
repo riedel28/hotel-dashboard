@@ -1,32 +1,21 @@
 import { expect, type Page, test } from '@playwright/test';
 
-const TEST_USER = {
-  email: 'john@example.com',
-  password: 'very_cool_password'
-};
-
-const TEST_PROPERTY_NAME = 'Kullturboden-Hallstadt';
-
-async function login(page: Page) {
-  await page.goto('/auth/login');
-  const form = page.locator('form');
-  await form.getByLabel('Email').fill(TEST_USER.email);
-  await form.getByLabel('Password', { exact: true }).fill(TEST_USER.password);
-  await form.getByRole('button', { name: 'Login' }).click();
-  await expect(page).toHaveURL('/');
-}
+const TEST_PROPERTY_NAME = 'Bates Motel';
 
 async function selectProperty(page: Page) {
+  const responsePromise = page.waitForResponse(
+    (resp) => resp.url().includes('/selected-property') && resp.status() === 200
+  );
   await page.getByLabel('Select property').click();
   await page.getByRole('option', { name: TEST_PROPERTY_NAME }).click();
+  await responsePromise;
 }
 
 test.describe('Rooms', () => {
   test.beforeEach(async ({ page }) => {
-    await login(page);
+    await page.goto('/');
     await selectProperty(page);
-    await page.getByRole('link', { name: 'Rooms' }).click();
-    await expect(page).toHaveURL(/\/rooms/);
+    await page.goto('/rooms');
     await expect(page.getByRole('heading', { name: 'Rooms' })).toBeVisible();
   });
 
@@ -37,7 +26,7 @@ test.describe('Rooms', () => {
     ).toBeVisible();
 
     await page.getByLabel('Room Name').fill(roomName);
-    await page.getByLabel('Room Number').fill('E2E-101');
+    await page.getByLabel('Room Number').fill(`E2E-${Date.now()}`);
     await page.getByLabel('Room Type').fill('Suite');
 
     await page.getByRole('button', { name: 'Create' }).click();
@@ -75,7 +64,7 @@ test.describe('Rooms', () => {
     await expect(page.getByText('Room updated successfully')).toBeVisible();
 
     // Navigate back to rooms list and verify updated name
-    await page.getByRole('link', { name: 'Rooms' }).click();
+    await page.goto('/rooms');
     await expect(page.getByRole('cell', { name: updatedName })).toBeVisible();
   });
 
@@ -89,10 +78,11 @@ test.describe('Rooms', () => {
     await page.getByRole('menuitem', { name: 'Delete' }).click();
 
     // Verify confirmation dialog
+    const dialog = page.getByRole('alertdialog');
     await expect(
-      page.getByRole('heading', { name: 'Are you sure?' })
+      dialog.getByRole('heading', { name: 'Are you sure?' })
     ).toBeVisible();
-    await expect(page.getByText(roomName)).toBeVisible();
+    await expect(dialog.getByText(roomName)).toBeVisible();
 
     // Confirm deletion
     await page

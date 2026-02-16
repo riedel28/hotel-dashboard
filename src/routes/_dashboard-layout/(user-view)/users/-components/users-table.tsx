@@ -8,11 +8,11 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
-import Flag from 'react-flagkit';
 
 import type { User } from '@/api/users';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { CountryFlag } from '@/components/ui/country-flag';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
@@ -23,6 +23,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getCountryName } from '@/lib/countries';
 import { RowActions } from './row-actions';
 
 interface UsersTableProps {
@@ -52,16 +53,6 @@ function getInitials(
   return first + last || '?';
 }
 
-function getCountryName(countryCode: string): string {
-  const countryMap: Record<string, string> = {
-    DE: 'Germany',
-    US: 'United States',
-    AT: 'Austria',
-    CH: 'Switzerland'
-  };
-  return countryMap[countryCode] || countryCode;
-}
-
 export default function UsersTable({
   data,
   isLoading = false,
@@ -85,7 +76,7 @@ export default function UsersTable({
     { id: 'created_at', desc: true }
   ]);
   const sorting = sortingProp ?? internalSorting;
-  const { t } = useLingui();
+  const { i18n, t } = useLingui();
 
   const columns = useMemo<ColumnDef<User>[]>(
     () => [
@@ -183,16 +174,17 @@ export default function UsersTable({
           if (!countryCode) {
             return null;
           }
-          const countryName = getCountryName(countryCode);
           return (
             <div className="flex items-center gap-2">
-              <Flag
-                country={countryCode}
+              <CountryFlag
+                code={countryCode}
                 title={countryCode}
-                className="size-3.5 rounded-sm"
+                className="size-4"
                 aria-label={countryCode}
               />
-              <span className="text-foreground">{countryName}</span>
+              <span className="text-foreground">
+                {getCountryName(countryCode, i18n.locale)}
+              </span>
             </div>
           );
         },
@@ -291,7 +283,7 @@ export default function UsersTable({
         enableResizing: false
       }
     ],
-    [t]
+    [i18n.locale, t]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(

@@ -6,6 +6,7 @@ import type { Guest } from 'shared/types/reservations';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
+import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Dialog,
   DialogContent,
@@ -21,13 +22,6 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 
 interface EditGuestFormProps {
   guest: Guest;
@@ -43,7 +37,7 @@ const editGuestSchema = z.object({
     .email(t`Please enter a valid email address`)
     .optional()
     .or(z.literal('')),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+  nationality_code: z.string().min(1, t`Nationality is required`)
 });
 
 type EditGuestFormData = z.infer<typeof editGuestSchema>;
@@ -64,11 +58,9 @@ export function EditGuestForm({
   onOpenChange,
   onSave
 }: EditGuestFormProps) {
-  const formDefaults = getGuestFormDefaults(guest);
   const form = useForm<EditGuestFormData>({
     resolver: zodResolver(editGuestSchema),
-    defaultValues: formDefaults,
-    values: formDefaults
+    defaultValues: getGuestFormDefaults(guest)
   });
 
   const handleOpenChange = (newOpen: boolean) => {
@@ -173,44 +165,10 @@ export function EditGuestForm({
                     <FieldLabel htmlFor={field.name}>
                       <Trans>Nationality</Trans>
                     </FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger
-                        id={field.name}
-                        aria-invalid={fieldState.invalid}
-                      >
-                        <SelectValue>
-                          {(value) => {
-                            const nationalityMap: Record<string, string> = {
-                              DE: t`Germany`,
-                              US: t`United States`,
-                              AT: t`Austria`,
-                              CH: t`Switzerland`
-                            };
-                            return value ? (
-                              <span>{nationalityMap[value] || value}</span>
-                            ) : (
-                              <span className="text-muted-foreground">
-                                {t`Select nationality`}
-                              </span>
-                            );
-                          }}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="DE">
-                          <Trans>Germany</Trans>
-                        </SelectItem>
-                        <SelectItem value="US">
-                          <Trans>United States</Trans>
-                        </SelectItem>
-                        <SelectItem value="AT">
-                          <Trans>Austria</Trans>
-                        </SelectItem>
-                        <SelectItem value="CH">
-                          <Trans>Switzerland</Trans>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <CountryPicker
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}

@@ -1,4 +1,17 @@
+import countries from 'i18n-iso-countries';
+import en from 'i18n-iso-countries/langs/en.json';
 import { z } from 'zod';
+
+countries.registerLocale(en);
+
+export const countryCodeSchema = z
+  .string()
+  .min(2)
+  .max(2)
+  .toUpperCase()
+  .refine((code) => countries.isValid(code), {
+    message: 'Invalid country code'
+  });
 
 export const propertyStageSchema = z.enum([
   'demo',
@@ -10,7 +23,7 @@ export const propertyStageSchema = z.enum([
 export const propertySchema = z.object({
   id: z.uuid(),
   name: z.string().min(1),
-  country_code: z.string().min(2).max(2).toUpperCase(),
+  country_code: countryCodeSchema,
   stage: propertyStageSchema
 });
 
@@ -37,7 +50,7 @@ export const fetchPropertiesParamsSchema = z.object({
   stage: z
     .enum(['demo', 'production', 'staging', 'template', 'all'])
     .optional(),
-  country_code: z.enum(['AT', 'CH', 'CZ', 'DE', 'ES', 'US', 'all']).optional(),
+  country_code: countryCodeSchema.optional(),
   sort_by: propertySortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.optional()
 });
@@ -52,7 +65,7 @@ export const fetchPropertiesResponseSchema = z.object({
 
 export const createPropertySchema = z.object({
   name: z.string().min(1),
-  country_code: z.string().min(2).max(2).toUpperCase(),
+  country_code: countryCodeSchema,
   stage: propertyStageSchema
 });
 

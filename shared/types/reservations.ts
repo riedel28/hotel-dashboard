@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { countryCodeSchema } from './properties';
 
 export const reservationStatusSchema = z.enum([
   'pending',
@@ -21,7 +22,7 @@ export const guestSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
   email: z.union([z.string(), z.null()]).optional(),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
+  nationality_code: countryCodeSchema,
   created_at: z.coerce.date(),
   updated_at: z.coerce.date().nullable()
 });
@@ -117,7 +118,7 @@ export const guestFormSchema = z.object({
   first_name: z.string().min(1),
   last_name: z.string().min(1),
   email: z.union([z.string(), z.null()]).optional(),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH']),
+  nationality_code: countryCodeSchema,
   created_at: z.date(),
   updated_at: z.date().nullable()
 });
@@ -143,7 +144,7 @@ export const guestSearchResultSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
   email: z.union([z.string(), z.null()]).optional(),
-  nationality_code: z.enum(['DE', 'US', 'AT', 'CH'])
+  nationality_code: countryCodeSchema
 });
 
 export type GuestSearchResult = z.infer<typeof guestSearchResultSchema>;

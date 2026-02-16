@@ -1,7 +1,7 @@
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import Flag from 'react-flagkit';
 import { type Guest } from '@/api/reservations';
+import { CountryFlag } from '@/components/ui/country-flag';
 import {
   Popover,
   PopoverContent,
@@ -15,10 +15,10 @@ interface GuestsCellProps {
 function GuestName({ guest }: { guest: Guest }) {
   return (
     <div className="flex items-center gap-2 text-nowrap">
-      <Flag
-        country={guest.nationality_code}
+      <CountryFlag
+        code={guest.nationality_code}
         title={guest.nationality_code}
-        className="size-3.5 rounded-sm"
+        className="size-4"
         aria-label={guest.nationality_code}
       />
       <Trans>

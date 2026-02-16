@@ -18,7 +18,7 @@ export function RoomClearFilters({
 
   return (
     <Button
-      variant="ghost"
+      variant="secondary"
       onClick={onClear}
       className="text-muted-foreground hover:text-foreground"
     >

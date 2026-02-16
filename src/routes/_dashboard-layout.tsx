@@ -11,7 +11,7 @@ import {
 import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
-  // BedSingleIcon,
+  BedSingleIcon,
   BuildingIcon,
   // CalendarIcon,
   // CreditCardIcon,
@@ -113,7 +113,7 @@ function SidebarHeaderComponent() {
               <MessageCircleIcon className="size-4" />
             </div>
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
-              <Trans>Backoffice Manager</Trans>
+              <Trans>Hotel Dashboard</Trans>
             </span>
             <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
           </SidebarMenuItem>
@@ -199,6 +199,11 @@ function UserSidebarContent() {
               tooltip={t`Reservations`}
             >
               <Trans>Reservations</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink to="/rooms" icon={BedSingleIcon} tooltip={t`Rooms`}>
+              <Trans>Rooms</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>

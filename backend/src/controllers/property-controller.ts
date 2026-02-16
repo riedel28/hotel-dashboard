@@ -22,7 +22,7 @@ async function getProperties(req: Request, res: Response) {
       conditions.push(eq(propertiesTable.stage, stage as string));
     }
 
-    if (country_code && country_code !== 'all') {
+    if (country_code) {
       conditions.push(eq(propertiesTable.country_code, country_code as string));
     }
 

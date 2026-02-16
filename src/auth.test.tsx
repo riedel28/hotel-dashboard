@@ -43,7 +43,7 @@ describe('AuthContext', () => {
       };
 
       // Set initial user in localStorage
-      localStorage.setItem('tanstack.auth.user', JSON.stringify(mockUser));
+      localStorage.setItem('backoffice.auth.user', JSON.stringify(mockUser));
 
       mockedUpdateSelectedProperty.mockResolvedValueOnce(mockUpdatedUser);
 
@@ -69,7 +69,7 @@ describe('AuthContext', () => {
 
       // Verify localStorage was updated
       const storedUser = JSON.parse(
-        localStorage.getItem('tanstack.auth.user') || '{}'
+        localStorage.getItem('backoffice.auth.user') || '{}'
       );
       expect(storedUser.selected_property_id).toBe('property-123');
     });
@@ -93,7 +93,7 @@ describe('AuthContext', () => {
       };
 
       // Set initial user in localStorage
-      localStorage.setItem('tanstack.auth.user', JSON.stringify(mockUser));
+      localStorage.setItem('backoffice.auth.user', JSON.stringify(mockUser));
 
       mockedUpdateSelectedProperty.mockResolvedValueOnce(mockUpdatedUser);
 
@@ -131,7 +131,7 @@ describe('AuthContext', () => {
         updated_at: '2024-01-02T00:00:00.000Z'
       };
 
-      localStorage.setItem('tanstack.auth.user', JSON.stringify(mockUser));
+      localStorage.setItem('backoffice.auth.user', JSON.stringify(mockUser));
 
       mockedUpdateSelectedProperty.mockResolvedValueOnce(mockUpdatedUser);
 

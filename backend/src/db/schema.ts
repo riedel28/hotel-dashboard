@@ -87,21 +87,13 @@ export const guests = pgTable(
     first_name: text('first_name').notNull(),
     last_name: text('last_name').notNull(),
     email: text('email'),
-    nationality_code: text('nationality_code')
-      .notNull()
-      .$type<'DE' | 'US' | 'AT' | 'CH'>(),
+    nationality_code: text('nationality_code').notNull(),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
     updated_at: timestamp('updated_at', { withTimezone: true })
   },
-  (table) => [
-    index('guests_reservation_id_idx').on(table.reservation_id),
-    check(
-      'guests_nationality_code_check',
-      sql`${table.nationality_code} IN ('DE', 'US', 'AT', 'CH')`
-    )
-  ]
+  (table) => [index('guests_reservation_id_idx').on(table.reservation_id)]
 );
 
 // Users table

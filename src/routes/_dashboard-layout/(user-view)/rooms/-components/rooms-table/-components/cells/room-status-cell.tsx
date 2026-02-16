@@ -1,47 +1,41 @@
-import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import type { RoomStatus } from 'shared/types/rooms';
-import type { BadgeProps } from '@/components/ui/badge';
+import { Badge, type BadgeProps } from '@/components/ui/badge';
 
-import { Badge } from '@/components/ui/badge';
+const statusVariantMap: Record<RoomStatus, BadgeProps['variant']> = {
+  available: 'success',
+  occupied: 'info',
+  maintenance: 'warning',
+  out_of_order: 'destructive'
+};
 
-interface RoomStatusCellProps {
-  status: RoomStatus;
-}
-
-function getStatusVariant(status: RoomStatus): BadgeProps['variant'] {
+function getStatusMessage(status: RoomStatus) {
   switch (status) {
     case 'available':
-      return 'success';
+      return <Trans>Available</Trans>;
     case 'occupied':
-      return 'info';
+      return <Trans>Occupied</Trans>;
     case 'maintenance':
-      return 'warning';
+      return <Trans>Maintenance</Trans>;
     case 'out_of_order':
-      return 'destructive';
-    default:
-      return 'secondary';
-  }
-}
-
-function getStatusLabel(status: RoomStatus): string {
-  switch (status) {
-    case 'available':
-      return t`Available`;
-    case 'occupied':
-      return t`Occupied`;
-    case 'maintenance':
-      return t`Maintenance`;
-    case 'out_of_order':
-      return t`Out of Order`;
+      return <Trans>Out of Order</Trans>;
     default:
       return status;
   }
 }
 
+interface RoomStatusCellProps {
+  status: RoomStatus;
+}
+
 export function RoomStatusCell({ status }: RoomStatusCellProps) {
   return (
-    <Badge size="sm" variant={getStatusVariant(status)}>
-      {getStatusLabel(status)}
+    <Badge
+      variant={statusVariantMap[status] ?? 'secondary'}
+      size="sm"
+      className="shrink-0 rounded-md border border-foreground/10 capitalize"
+    >
+      {getStatusMessage(status)}
     </Badge>
   );
 }

@@ -1,120 +1,167 @@
-# TanStack Dashboard
+# Hotel Dashboard
 
-A modern React dashboard built with TypeScript, Vite, and TanStack Query.
+A hotel management dashboard with dual-view architecture (User View for front-office operations, Admin View for administrative functions). Built with React 19, TypeScript, and a full-stack Bun + Express backend.
 
-## API Configuration
+| Login | Reservations |
+|:---:|:---:|
+| ![Login](public/screenshot.png) | ![Reservations](public/screenshot-reservations.png) |
 
-The application uses a centralized API configuration system located in `src/config/api.ts`. This allows for easy environment-based configuration and URL management.
+<!-- [Live Demo](https://your-deployment-url.vercel.app) -->
+
+## Tech Stack
+
+### Frontend
+
+- **React 19** + TypeScript + Vite
+- **TanStack Router** — file-based, type-safe routing
+- **TanStack Query** — server state management
+- **TanStack Table** — data grids
+- **Tailwind CSS 4** + shadcn/ui + Radix UI
+- **Lingui** — i18n (English & German)
+- **Recharts** — charts and analytics
+- **React Hook Form** + Zod — form handling and validation
+
+### Backend
+
+- **Express 5** + TypeScript (runs on Bun)
+- **PostgreSQL** on Neon (serverless)
+- **Drizzle ORM** — schema, migrations, queries
+- **Zod** — runtime validation
+- **Jose** — JWT authentication
+- **Nodemailer** — transactional emails
+
+### Testing & Quality
+
+- **Vitest** — unit/integration tests (frontend & backend)
+- **Playwright** — end-to-end tests
+- **Biome** — linting and formatting
+- **Husky** + **Commitlint** — conventional commits
+- **Semantic Release** — automated versioning and changelogs
+
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh/) (runtime and package manager)
+- Node.js >= 22.19.0
+- PostgreSQL database (or a [Neon](https://neon.tech/) account)
+
+### Installation
+
+```bash
+# Install frontend dependencies
+bun install
+
+# Install backend dependencies
+cd backend && bun install
+```
 
 ### Environment Variables
 
-You can configure the API base URL using the `VITE_API_BASE_URL` environment variable:
+Create `.env` files based on your environment:
+
+**Frontend** (root `.env`):
 
 ```bash
-# Development (default)
-VITE_API_BASE_URL=http://localhost:3001
-
-# Staging
-VITE_API_BASE_URL=https://api-staging.example.com
-
-# Production
-VITE_API_BASE_URL=https://api.example.com
+VITE_API_BASE_URL=http://localhost:5001
 ```
 
-### Usage
+**Backend** (`backend/.env.development`):
 
-The API configuration provides helper functions for building URLs:
-
-```typescript
-import { buildApiUrl, buildResourceUrl, getEndpointUrl } from '@/config/api';
-
-// Build a full URL with query parameters
-const url = buildApiUrl(getEndpointUrl('reservations'), {
-  _page: 1,
-  _limit: 10
-});
-
-// Result: http://localhost:3001/reservations?_page=1&_limit=10
-
-// Build a URL for a specific resource by ID
-const resourceUrl = buildResourceUrl('reservations', 123);
-
-// Result: http://localhost:3001/reservations/123
+```bash
+DATABASE_URL=postgresql://...
+CORS_ORIGIN=http://localhost:5173
+SMTP_HOST=sandbox.smtp.mailtrap.io
+SMTP_PORT=587
+SMTP_USER=...
+SMTP_PASS=...
+SMTP_FROM=noreply@example.com
+APP_URL=http://localhost:5173
 ```
 
-## Development Setup
+### Running
 
-Currently, two official plugins are available:
+```bash
+# Full-stack development (frontend + backend)
+bun run dev
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Frontend only
+bun run client
+
+# Backend only (from ./backend)
+bun run dev
+```
+
+The frontend runs at `http://localhost:5173` and the backend at `http://localhost:5001`.
+
+## Scripts
+
+### Frontend (root)
+
+| Command | Description |
+|---|---|
+| `bun run dev` | Start full-stack dev (client + backend) |
+| `bun run client` | Start frontend only |
+| `bun run build` | Production build (includes type-check) |
+| `bun run type-check:all` | Check both main and node TS configs |
+| `bun run lint` | Biome linter with auto-fix |
+| `bun run check` | Biome check with auto-fix (lint + format) |
+| `bun run test` | Run unit tests |
+| `bun run test:e2e` | Run Playwright E2E tests |
+| `bun run lingui:extract` | Extract translatable strings |
+| `bun run lingui:compile` | Compile translation catalogs |
+
+### Backend (`./backend`)
+
+| Command | Description |
+|---|---|
+| `bun run dev` | Start in watch mode |
+| `bun run start` | Start in production mode |
+| `bun run test` | Run backend tests |
+| `bun run db:seed` | Seed database with sample data |
+| `bun run db:push` | Push schema changes to database |
+| `bun run db:studio` | Open Drizzle Studio GUI |
+
+## Project Structure
+
+```
+├── src/
+│   ├── routes/
+│   │   ├── _auth-layout/         # Auth pages (login, sign-up, etc.)
+│   │   └── _dashboard-layout/
+│   │       ├── (user-view)/      # Front-office operations
+│   │       │   ├── (front-office)/  # Reservations, payments, orders
+│   │       │   ├── rooms/        # Room management
+│   │       │   ├── products/     # Product catalog
+│   │       │   ├── users/        # User management
+│   │       │   └── ...           # Analytics, devices, CMS, etc.
+│   │       └── admin/            # Admin view (properties, customers)
+│   ├── components/ui/            # shadcn/ui components
+│   ├── hooks/                    # Shared React hooks
+│   ├── lib/                      # Utilities
+│   └── locales/                  # i18n message catalogs (en, de)
+├── backend/
+│   └── src/
+│       ├── controllers/          # Route handlers
+│       ├── db/                   # Schema, migrations, connection
+│       ├── middleware/            # Auth, validation, rate limiting
+│       ├── routes/               # Express route definitions
+│       └── utils/                # Email, helpers
+├── e2e/                          # Playwright test specs
+└── shared/                       # Shared types between frontend & backend
+```
+
+## Internationalization
+
+The app supports **English** and **German** via [Lingui](https://lingui.dev).
+
+- Use `<Trans>` for JSX text, `t` macro for strings/toasts/validation
+- Message catalogs live in `src/locales/{locale}/messages.po`
+- Extract with `bun run lingui:extract`, compile with `bun run lingui:compile`
+- Language switching is available in the header user menu
 
 ## Code Quality
 
-This project uses [Biome](https://biomejs.dev) for linting and formatting, providing a fast, unified toolchain that replaces ESLint and Prettier.
-
-### Available Scripts
-
-- `bun run lint` - Check for linting issues
-- `bun run check` - Check if files are formatted correctly
-- `bun run format` - Format all files and fix linting issues
-
-### Configuration
-
-Biome configuration is in `biome.json`. The configuration includes:
-- TypeScript/React linting rules
-- Code formatting (spaces, single quotes, semicolons)
-- Import organization
-- Tailwind CSS support
-
-### Known Limitations
-
-- **Tailwind CSS Class Sorting**: Biome doesn't support automatic Tailwind class sorting. Classes will need to be sorted manually if desired.
-- **Import Sorting**: Biome's import sorting may differ from Prettier's `importOrder` plugin. The sorting groups imports by "distance from the user" rather than custom groups.
-
-## Internationalization (i18n)
-
-This project uses [Lingui](https://lingui.dev) for internationalization.
-
-## Supported Languages
-
-- English (`en`)
-- German (`de`)
-
-## Where translations live
-
-- Message catalogs (editable) are `.po` files at `src/locales/{locale}/messages.po`.
-- Compiled catalogs are generated by the build/extract steps used at runtime.
-
-## How to add/edit translations
-
-1. Add/transpile messages in code using Lingui macros:
-   - JSX text: `import { Trans } from '@lingui/react/macro'` → `<Trans>Forgot Password</Trans>`
-   - Strings/validators/toasts: `import { t } from '@lingui/core/macro'` → `t\`Email is required\``
-   - In loops/arrays: use `msg` + `useLingui()._` if you need descriptors, or just `t` for strings
-2. Extract new/changed messages:
-   - `bun run lingui:extract`
-3. Fill translations in `src/locales/de/messages.po` (and other locales as needed)
-4. Compile catalogs:
-   - `bun run lingui:compile`
-
-## Runtime loading
-
-- Catalog loading/activation happens via `src/i18n.ts` (`loadCatalog`) and `src/main.tsx`.
-- We dynamically load `.po` catalogs for the active locale and activate via Lingui.
-
-## Usage patterns
-
-- Prefer `Trans` for UI text in components.
-- Prefer `t` for validation, toasts, and non-JSX strings.
-- Inside hooks/loops, build messages with `msg` and render with `useLingui()._` when you need descriptors.
-
-## Language switching
-
-- The language switcher UI lives in the header user menu.
-- Switching triggers catalog load + activation at runtime.
-
-## References
-
-- [Lingui docs](https://lingui.dev)
-- Macros: `@lingui/react/macro`, `@lingui/core/macro`
+- **Biome** handles linting and formatting (replaces ESLint + Prettier)
+- **Conventional commits** enforced via Husky + Commitlint
+- Always run `bun run type-check:all && bun run check` before committing

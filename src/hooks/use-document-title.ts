@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const APP_NAME = 'Backoffice Manager';
+const APP_NAME = 'Hotel Dashboard';
 
 export function useDocumentTitle(title: string) {
   useEffect(() => {

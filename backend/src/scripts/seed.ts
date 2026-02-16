@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { db } from '../db/pool';
 import {
   emailVerificationTokens,
@@ -16,17 +17,11 @@ async function seed() {
   console.log('🌱 Starting database seed...');
 
   try {
-    // Clear existing data (order matters due to foreign keys!)
+    // Clear all data and reset identity sequences
     console.log('Clearing existing data...');
-    await db.delete(guests);
-    await db.delete(emailVerificationTokens);
-    await db.delete(userRoles);
-    await db.delete(monitoringLogs);
-    await db.delete(reservations);
-    await db.delete(rooms);
-    await db.delete(users);
-    await db.delete(properties);
-    await db.delete(roles);
+    await db.execute(
+      sql`TRUNCATE TABLE guests, email_verification_tokens, user_roles, monitoring_logs, reservations, rooms, users, properties, roles RESTART IDENTITY CASCADE`
+    );
 
     // Step 2: Create demo users
     console.log('Creating demo users...');
@@ -206,68 +201,68 @@ async function seed() {
       }
     ]);
 
-    // Step 4: Create demo properties
+    // Step 4: Create demo properties (famous fictional hotels)
     console.log('Creating demo properties...');
     await db.insert(properties).values([
       {
         id: 'cc198b13-4933-43aa-977e-dcd95fa30770',
-        name: 'Kullturboden-Hallstadt',
-        country_code: 'AT',
+        name: 'The Overlook Hotel',
+        country_code: 'US',
         stage: 'production'
       },
       {
         id: 'cc198b13-4933-43aa-977e-dcd95fa30771',
-        name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, reiciendis dolor! Tempora, animi debitis itaque nihil quidem laborum consectetur dolorem.',
-        country_code: 'DE',
+        name: 'The Grand Budapest Hotel',
+        country_code: 'HU',
         stage: 'production'
       },
       {
         id: '3d5552bd-389e-477d-9e9c-5016ac02632b',
-        name: 'Historic Palace Hotel Prague',
-        country_code: 'CZ',
+        name: 'The Continental',
+        country_code: 'US',
         stage: 'production'
       },
       {
         id: '9971ceb1-708e-4bd1-a35c-f164d4ce75c2',
-        name: 'Mountain Lodge Switzerland',
-        country_code: 'CH',
-        stage: 'demo'
+        name: 'Fawlty Towers',
+        country_code: 'GB',
+        stage: 'production'
       },
       {
         id: '2fa9cbfe-c150-4edb-9feb-325e32e80da8',
-        name: 'Seaside Resort Barcelona',
-        country_code: 'ES',
-        stage: 'staging'
+        name: 'Bates Motel',
+        country_code: 'US',
+        stage: 'production'
       },
       {
         id: '85e7ebb9-3ae6-4aaf-9ab0-f3b08defa220',
-        name: 'Development (2)',
-        country_code: 'DE',
+        name: 'Hotel Transylvania',
+        country_code: 'RO',
         stage: 'demo'
       },
       {
         id: '30c9c7cd-8946-4079-8449-bf8ca69a226a',
-        name: 'Development 13, Adyen',
-        country_code: 'DE',
-        stage: 'template'
-      },
-      {
-        id: '8f4eb429-a9df-434a-977b-eb6c1f2a72e1',
-        name: 'Grand Hotel Vienna',
-        country_code: 'AT',
-        stage: 'production'
-      },
-      {
-        id: '800fec46-58b6-4878-9c79-3adfeaac714e',
-        name: 'Staging',
-        country_code: 'DE',
+        name: 'The White Lotus',
+        country_code: 'IT',
         stage: 'staging'
       },
       {
-        id: 'dc77fb2b-1d87-42f3-8b0b-9e1cf4b8f4a7',
-        name: 'Urban Boutique Hotel Berlin',
-        country_code: 'DE',
+        id: '8f4eb429-a9df-434a-977b-eb6c1f2a72e1',
+        name: "Bertram's Hotel",
+        country_code: 'GB',
+        stage: 'staging'
+      },
+      {
+        id: '800fec46-58b6-4878-9c79-3adfeaac714e',
+        name: 'The Dolphin Hotel',
+        country_code: 'US',
         stage: 'template'
+      },
+      {
+        id: 'dc77fb2b-1d87-42f3-8b0b-9e1cf4b8f4a7',
+        name: "Kellerman's Resort",
+        country_code: 'US',
+        stage: 'demo'
       }
     ]);
 
