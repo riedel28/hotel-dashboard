@@ -47,6 +47,7 @@ jobs:
 
       - name: Run backend tests
         env:
+          NODE_ENV: test
           DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: cd ./backend && bun run test
