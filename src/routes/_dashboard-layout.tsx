@@ -11,7 +11,7 @@ import {
 import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
-  BedSingleIcon,
+  DoorOpenIcon,
   BuildingIcon,
   // CalendarIcon,
   // CreditCardIcon,
@@ -203,7 +203,7 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/rooms" icon={BedSingleIcon} tooltip={t`Rooms`}>
+            <SidebarLink to="/rooms" icon={DoorOpenIcon} tooltip={t`Rooms`}>
               <Trans>Rooms</Trans>
             </SidebarLink>
           </SidebarMenuItem>
@@ -367,7 +367,7 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarLink to="/rooms" icon={BedSingleIcon} tooltip={t`Rooms`}>
+            <SidebarLink to="/rooms" icon={DoorOpenIcon} tooltip={t`Rooms`}>
               <Trans>Rooms</Trans>
             </SidebarLink>
           </SidebarMenuItem>
