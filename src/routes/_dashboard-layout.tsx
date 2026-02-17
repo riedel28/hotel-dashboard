@@ -11,8 +11,8 @@ import {
 import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
-  DoorOpenIcon,
   BuildingIcon,
+  DoorOpenIcon,
   // CalendarIcon,
   // CreditCardIcon,
   // FileSpreadsheetIcon,
