@@ -1,3 +1,16 @@
+# [1.14.0](https://github.com/riedel28/hotel-dashboard/compare/v1.13.1...v1.14.0) (2026-02-17)
+
+
+### Bug Fixes
+
+* **i18n:** add missing German translations and update rooms sidebar icon ([5a7e2e7](https://github.com/riedel28/hotel-dashboard/commit/5a7e2e7c9dd7e665a1a07236edfe021afe6a39dd))
+* **lint:** sort import order in dashboard layout ([58a1cf1](https://github.com/riedel28/hotel-dashboard/commit/58a1cf1e334d45f60b800dc2f87601ad6e406b2c))
+
+
+### Features
+
+* **dashboard:** update index cards to reservations, rooms, users, and monitoring ([e1d923b](https://github.com/riedel28/hotel-dashboard/commit/e1d923b0132d1ffb685866112d242d75dc19b56a))
+
 ## [1.13.1](https://github.com/riedel28/hotel-dashboard/compare/v1.13.0...v1.13.1) (2026-02-16)
 
 
