@@ -1,9 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import {
+  ActivityIcon,
   BedDoubleIcon,
-  ListTodoIcon,
-  ReceiptTextIcon,
+  DoorOpenIcon,
   UsersIcon
 } from 'lucide-react';
 import { useDocumentTitle } from '@/hooks/use-document-title';
@@ -22,28 +22,28 @@ function StartPage() {
   const quickActions = [
     {
       title: t`Reservations`,
-      description: t`Create and manage registration forms, track submissions, and customize check-in processes`,
+      description: t`View and manage guest reservations, check-ins, and booking details`,
       icon: BedDoubleIcon,
       href: '/reservations',
       search: { page: 1, per_page: 10 }
     },
     {
-      title: t`Registration Forms`,
-      description: t`Create and manage registration forms, track submissions, and customize check-in processes`,
-      icon: ListTodoIcon,
-      href: '/registration-forms'
-    },
-    {
-      title: t`Payments`,
-      description: t`Process payments, view transaction history, manage billing, and handle refunds`,
-      icon: ReceiptTextIcon,
-      href: '/payments'
+      title: t`Rooms`,
+      description: t`Manage room inventory, availability, and room type configurations`,
+      icon: DoorOpenIcon,
+      href: '/rooms'
     },
     {
       title: t`Users`,
-      description: t`Manage users, view user details, and manage user roles`,
+      description: t`Manage users, view user details, and assign roles`,
       icon: UsersIcon,
       href: '/users'
+    },
+    {
+      title: t`Monitoring`,
+      description: t`Monitor daily operations, track occupancy, and oversee front-office activity`,
+      icon: ActivityIcon,
+      href: '/monitoring'
     }
   ];
 
