@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/riedel28/hotel-dashboard/compare/v1.14.0...v1.14.1) (2026-02-23)
+
+
+### Bug Fixes
+
+* **theme:** update theme-color to match primary brand color ([917f0d8](https://github.com/riedel28/hotel-dashboard/commit/917f0d8c987d4317085efb0854407479402fffda))
+
 # [1.14.0](https://github.com/riedel28/hotel-dashboard/compare/v1.13.1...v1.14.0) (2026-02-17)
 
 
