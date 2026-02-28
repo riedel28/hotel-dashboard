@@ -1,3 +1,10 @@
+## [1.14.2](https://github.com/riedel28/hotel-dashboard/compare/v1.14.1...v1.14.2) (2026-02-28)
+
+
+### Bug Fixes
+
+* **deploy:** migrate API proxy from Fly.io to Render ([8efc286](https://github.com/riedel28/hotel-dashboard/commit/8efc286d6d1c483cde39e6f6e4b1ea9cf512084b))
+
 ## [1.14.1](https://github.com/riedel28/hotel-dashboard/compare/v1.14.0...v1.14.1) (2026-02-23)
 
 
