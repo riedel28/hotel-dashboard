@@ -3,22 +3,9 @@ import request from 'supertest';
 import app from '../src/app';
 import { db } from '../src/db/pool';
 import { users } from '../src/db/schema';
-import {
-  cleanupDatabase,
-  createTestProperty,
-  createTestUser
-} from './helpers/db-helpers';
+import { createTestProperty, createTestUser } from './helpers/db-helpers';
 
 describe('Auth API', () => {
-  // Clean up before and after each test to ensure isolation
-  beforeEach(async () => {
-    await cleanupDatabase();
-  });
-
-  afterEach(async () => {
-    await cleanupDatabase();
-  });
-
   describe('POST /auth/register', () => {
     test('should register a new user successfully when called by admin', async () => {
       const { token: adminToken } = await createTestUser({ is_admin: true });

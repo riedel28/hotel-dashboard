@@ -78,9 +78,9 @@ async function deletePropertyById(id: string): Promise<void> {
 
 export {
   createProperty,
+  deletePropertyById,
   fetchProperties,
   fetchPropertyById,
-  updatePropertyById,
-  deletePropertyById,
-  propertyByIdQueryOptions
+  propertyByIdQueryOptions,
+  updatePropertyById
 };

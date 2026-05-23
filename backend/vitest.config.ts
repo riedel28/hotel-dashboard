@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     globals: true,
     globalSetup: ['./tests/setup/globalSetup.ts'],
+    setupFiles: ['./tests/setup/test-setup.ts'],
     // Automatically clean up after each test to ensure isolation
     clearMocks: true,
     restoreMocks: true,

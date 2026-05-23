@@ -399,10 +399,10 @@ async function searchGuests(req: Request, res: Response) {
 }
 
 export {
-  getReservations,
-  getReservationById,
   createReservation,
-  updateReservation,
   deleteReservation,
-  searchGuests
+  getReservationById,
+  getReservations,
+  searchGuests,
+  updateReservation
 };

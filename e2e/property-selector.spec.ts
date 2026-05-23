@@ -1,5 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 
+import { resetDatabase } from './helpers/reset-db';
+
 // Properties from the seed data
 const PROPERTIES = {
   OVERLOOK: 'The Overlook Hotel',
@@ -24,6 +26,12 @@ async function selectProperty(page: Page, propertyName: string) {
 }
 
 test.describe('Property Selector', () => {
+  test.describe.configure({ mode: 'serial' });
+
+  test.beforeAll(async () => {
+    await resetDatabase();
+  });
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });

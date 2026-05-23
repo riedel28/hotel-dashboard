@@ -1,17 +1,16 @@
 import request from 'supertest';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import app from '../src/app';
 
 import { db } from '../src/db/pool';
 import { roles } from '../src/db/schema';
-import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
+import { createTestUser } from './helpers/db-helpers';
 
 describe('Roles API', () => {
   let authToken: string;
 
-  beforeAll(async () => {
-    await cleanupDatabase();
+  beforeEach(async () => {
     const { token } = await createTestUser();
     authToken = token;
 
@@ -37,7 +36,7 @@ describe('Roles API', () => {
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeGreaterThan(0);
 
-      const roles = response.body;
+      const roleList = response.body;
       const expectedRoles = [
         'Administrators',
         'Roomservice Manager',
@@ -47,9 +46,10 @@ describe('Roles API', () => {
         'Tester'
       ];
 
-      // Check if all expected roles are present
       for (const roleName of expectedRoles) {
-        const role = roles.find((r: any) => r.name === roleName);
+        const role = roleList.find(
+          (r: { name: string }) => r.name === roleName
+        );
         expect(role).toBeDefined();
         expect(role.id).toBeTypeOf('number');
       }

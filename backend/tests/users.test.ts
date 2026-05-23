@@ -3,7 +3,6 @@ import request from 'supertest';
 import app from '../src/app';
 import {
   assignRoleToUser,
-  cleanupDatabase,
   createTestProperty,
   createTestRole,
   createTestUser
@@ -15,8 +14,6 @@ describe('Users API', () => {
   let testUserId: number;
 
   beforeEach(async () => {
-    await cleanupDatabase();
-
     const { token, user } = await createTestUser({
       password: 'Password123!'
     });
@@ -28,10 +25,6 @@ describe('Users API', () => {
       email: `admin-${Date.now()}@example.com`
     });
     adminToken = aToken;
-  });
-
-  afterEach(async () => {
-    await cleanupDatabase();
   });
 
   describe('GET /api/users', () => {

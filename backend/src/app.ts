@@ -40,7 +40,9 @@ if (env.NODE_ENV !== 'test') {
     windowMs: env.RATE_LIMIT_WINDOW_MS,
     max: env.RATE_LIMIT_MAX_REQUESTS,
     standardHeaders: 'draft-8',
-    legacyHeaders: false
+    legacyHeaders: false,
+    skip: (req) =>
+      req.path === '/api/health' || req.path.startsWith('/api/test')
   });
   app.use(generalLimiter);
 }

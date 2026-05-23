@@ -64,6 +64,6 @@ async function fetchMonitoringLogs(
 
 export {
   fetchMonitoringLogs,
-  monitoringQueryOptions,
-  fetchMonitoringLogsParamsSchema
+  fetchMonitoringLogsParamsSchema,
+  monitoringQueryOptions
 };

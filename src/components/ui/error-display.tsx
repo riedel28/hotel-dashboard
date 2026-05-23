@@ -300,14 +300,14 @@ function ErrorDisplayError({ children, ...props }: ErrorDisplayErrorProps) {
 
 export {
   ErrorDisplay,
+  ErrorDisplayActions,
+  ErrorDisplayDetails,
+  // convenience wrappers
+  ErrorDisplayError,
   // subcomponents
   ErrorDisplayIcon,
-  ErrorDisplayStatus,
-  ErrorDisplayTitle,
   ErrorDisplayMessage,
-  ErrorDisplayDetails,
-  ErrorDisplayActions,
   ErrorDisplayRetryButton,
-  // convenience wrappers
-  ErrorDisplayError
+  ErrorDisplayStatus,
+  ErrorDisplayTitle
 };

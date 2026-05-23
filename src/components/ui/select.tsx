@@ -202,12 +202,12 @@ export {
   Select,
   SelectContent,
   SelectGroup,
+  SelectIcon,
   SelectItem,
   SelectLabel,
   SelectScrollDownButton,
   SelectScrollUpButton,
   SelectSeparator,
   SelectTrigger,
-  SelectValue,
-  SelectIcon
+  SelectValue
 };

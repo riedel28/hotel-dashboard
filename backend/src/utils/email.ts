@@ -146,7 +146,7 @@ async function sendPasswordResetEmail(email: string, token: string) {
 
 export {
   sendEmail,
-  sendVerificationEmail,
   sendInvitationEmail,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendVerificationEmail
 };

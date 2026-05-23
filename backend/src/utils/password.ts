@@ -45,4 +45,4 @@ function validatePasswordStrength(password: string): {
   };
 }
 
-export { hashPassword, comparePassword, validatePasswordStrength };
+export { comparePassword, hashPassword, validatePasswordStrength };

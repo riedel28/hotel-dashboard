@@ -1,32 +1,22 @@
-import { sql } from 'drizzle-orm';
 import { db } from '../db/pool';
 import {
-  emailVerificationTokens,
   guests,
   monitoringLogs,
   properties,
   reservations,
   roles,
   rooms,
-  userRoles,
   users
 } from '../db/schema';
+import { truncateAllTables } from '../db/truncate-all';
 import { hashPassword } from '../utils/password';
 
 async function seed() {
   console.log('🌱 Starting database seed...');
 
   try {
-    // Clear all data and reset identity sequences
     console.log('Clearing existing data...');
-    await db.execute(sql`
-      DO $$ BEGIN
-        TRUNCATE TABLE guests, email_verification_tokens, user_roles, monitoring_logs, reservations, rooms, users, properties, roles RESTART IDENTITY CASCADE;
-      EXCEPTION WHEN undefined_table THEN
-        -- Tables may not exist yet (e.g. first run after schema push)
-        NULL;
-      END $$
-    `);
+    await truncateAllTables();
 
     // Step 2: Create demo users
     console.log('Creating demo users...');

@@ -73,10 +73,10 @@ async function deleteProduct(id: number): Promise<void> {
 }
 
 export {
+  createProduct,
+  deleteProduct,
+  fetchProductById,
   fetchProducts,
   fetchProductsByCategory,
-  fetchProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct
+  updateProduct
 };

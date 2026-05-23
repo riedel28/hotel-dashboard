@@ -3,16 +3,12 @@ import request from 'supertest';
 import app from '../src/app';
 import { db } from '../src/db/pool';
 import { properties as propertiesTable } from '../src/db/schema';
-import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
+import { createTestUser } from './helpers/db-helpers';
 
 describe('Properties API', () => {
   let authToken: string;
 
   beforeEach(async () => {
-    // Clean up first to ensure a clean slate (order matters for foreign keys)
-    await cleanupDatabase();
-
-    // Create test user
     const { token } = await createTestUser({
       password: 'Password123!'
     });
@@ -31,10 +27,6 @@ describe('Properties API', () => {
       { name: 'Historic Palace Hotel Prague', stage: 'production' },
       { name: 'Lorem ipsum dolor sit amet', stage: 'production' }
     ]);
-  });
-
-  afterEach(async () => {
-    await cleanupDatabase();
   });
 
   describe('GET /api/properties', () => {

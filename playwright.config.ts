@@ -43,7 +43,10 @@ export default defineConfig({
       command: 'bun run server:test',
       url: 'http://localhost:5001/api/health',
       reuseExistingServer: !isCI,
-      timeout: 30_000
+      timeout: 30_000,
+      env: {
+        NODE_ENV: 'test'
+      }
     },
     {
       command: 'bun run client',

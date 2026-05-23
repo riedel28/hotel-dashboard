@@ -166,4 +166,4 @@ async function logout(_req: AuthenticatedRequest, res: Response) {
   res.status(200).json({ message: 'Logged out successfully' });
 }
 
-export { register, login, logout };
+export { login, logout, register };

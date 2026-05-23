@@ -6,7 +6,7 @@ import {
   properties as propertiesTable,
   rooms as roomsTable
 } from '../src/db/schema';
-import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
+import { createTestUser } from './helpers/db-helpers';
 
 describe('Rooms API', () => {
   let authToken: string;
@@ -14,10 +14,6 @@ describe('Rooms API', () => {
   let propertyId2: string;
 
   beforeEach(async () => {
-    // Clean up first to ensure a clean slate (order matters for foreign keys)
-    await cleanupDatabase();
-
-    // Create test user
     const { token } = await createTestUser({
       password: 'Password123!'
     });
@@ -115,10 +111,6 @@ describe('Rooms API', () => {
         status: 'occupied'
       }
     ]);
-  });
-
-  afterEach(async () => {
-    await cleanupDatabase();
   });
 
   describe('GET /api/rooms', () => {

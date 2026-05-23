@@ -1,6 +1,7 @@
 import { and, asc, count, desc, eq, ilike } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
+import type { PropertyStage } from '../../../shared/types/properties';
 import { db } from '../db/pool';
 import { properties as propertiesTable } from '../db/schema';
 import { escapeLikePattern } from '../utils/sql';
@@ -19,7 +20,7 @@ async function getProperties(req: Request, res: Response) {
     }
 
     if (stage && stage !== 'all') {
-      conditions.push(eq(propertiesTable.stage, stage as string));
+      conditions.push(eq(propertiesTable.stage, stage as PropertyStage));
     }
 
     if (country_code) {
@@ -195,9 +196,9 @@ async function createProperty(req: Request, res: Response) {
 }
 
 export {
+  createProperty,
+  deleteProperty,
   getProperties,
   getPropertyById,
-  createProperty,
-  updateProperty,
-  deleteProperty
+  updateProperty
 };

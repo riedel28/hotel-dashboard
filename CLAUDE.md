@@ -12,9 +12,9 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 
 - `bun run dev` - Start full-stack development (client + backend concurrently)
 - `bun run client` - Start frontend only with Vite
-- `bun run build` - Build for production (includes type-check)
-- `bun run type-check` - Run TypeScript type checking
-- `bun run type-check:all` - Check both main and node TypeScript configs
+- `bun run build` - Build for production (includes typecheck)
+- `bun run typecheck` - Run TypeScript type checking
+- `bun run typecheck:all` - Check both main and node TypeScript configs
 - `bun run lint` - Run Biome linter with auto-fix
 - `bun run check` - Run Biome check with auto-fix (lint + format)
 - `bun run format` - Format code with Biome
@@ -160,5 +160,5 @@ Use conventional commit format: `type(scope): description`
 
 Always run before committing:
 
-- `bun run type-check:all` - Verify TypeScript compilation
+- `bun run typecheck:all` - Verify TypeScript compilation
 - `bun run check` - Ensure code quality and formatting

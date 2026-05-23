@@ -34,7 +34,7 @@ jobs:
         run: cd ./backend && bun install --frozen-lockfile
 
       - name: Type check
-        run: bun run type-check:all
+        run: bun run typecheck:all
 
       - name: Lint
         run: bun run lint:ci
@@ -50,6 +50,7 @@ jobs:
           NODE_ENV: test
           DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ALLOW_TEST_DB_DESTROY: true
         run: cd ./backend && bun run test
 
       - name: Build
@@ -93,6 +94,7 @@ jobs:
       - name: Run E2E tests
         env:
           CI: true
+          NODE_ENV: test
           DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           CORS_ORIGIN: http://localhost:5173

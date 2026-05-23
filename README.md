@@ -58,18 +58,22 @@ cd backend && bun install
 
 ### Environment Variables
 
-Create `.env` files based on your environment:
+Create `.env` files based on your environment. Use **separate databases** for development and testing — backend integration tests drop and recreate the schema on each run.
 
 **Frontend** (root `.env`):
 
 ```bash
 VITE_API_BASE_URL=http://localhost:5001/api
+E2E_USER_EMAIL=john@example.com
+E2E_USER_PASSWORD=very_cool_password
 ```
 
-**Backend** (`backend/.env.development`):
+**Backend — development** (`backend/.env.development`):
 
 ```bash
-DATABASE_URL=postgresql://...
+NODE_ENV=development
+DATABASE_URL=postgresql://.../hotel_dev?sslmode=require
+JWT_SECRET=your_super_secret_jwt_key_at_least_32_chars
 CORS_ORIGIN=http://localhost:5173
 SMTP_HOST=sandbox.smtp.mailtrap.io
 SMTP_PORT=587
@@ -78,6 +82,20 @@ SMTP_PASS=...
 SMTP_FROM=noreply@example.com
 APP_URL=http://localhost:5173
 ```
+
+**Backend — test** (`backend/.env.test`):
+
+Used by backend integration tests (`bun run test`) and the E2E backend server (`bun run server:test`). Point `DATABASE_URL` at a dedicated test database (Neon branch recommended). The name should suggest a non-production database (e.g. contain `test` or `e2e`).
+
+```bash
+NODE_ENV=test
+DATABASE_URL=postgresql://.../hotel_test?sslmode=require
+JWT_SECRET=your_super_secret_jwt_key_at_least_32_chars
+CORS_ORIGIN=http://localhost:5173
+APP_URL=http://localhost:5173
+```
+
+> **Safety:** Backend tests refuse to drop schema unless `NODE_ENV=test` and the database name looks non-production, or `ALLOW_TEST_DB_DESTROY=true` is set (used in CI).
 
 ### Running
 
@@ -102,12 +120,12 @@ The frontend runs at `http://localhost:5173` and the backend at `http://localhos
 |---|---|
 | `bun run dev` | Start full-stack dev (client + backend) |
 | `bun run client` | Start frontend only |
-| `bun run build` | Production build (includes type-check) |
-| `bun run type-check:all` | Check both main and node TS configs |
+| `bun run build` | Production build (includes typecheck) |
+| `bun run typecheck:all` | Check both main and node TS configs |
 | `bun run lint` | Biome linter with auto-fix |
 | `bun run check` | Biome check with auto-fix (lint + format) |
-| `bun run test` | Run unit tests |
-| `bun run test:e2e` | Run Playwright E2E tests |
+| `bun run test` | Run frontend unit tests (no database) |
+| `bun run test:e2e` | Run Playwright E2E tests (requires `backend/.env.test`) |
 | `bun run lingui:extract` | Extract translatable strings |
 | `bun run lingui:compile` | Compile translation catalogs |
 
@@ -117,7 +135,7 @@ The frontend runs at `http://localhost:5173` and the backend at `http://localhos
 |---|---|
 | `bun run dev` | Start in watch mode |
 | `bun run start` | Start in production mode |
-| `bun run test` | Run backend tests |
+| `bun run test` | Run backend integration tests (uses `.env.test`, isolated DB) |
 | `bun run db:seed` | Seed database with sample data |
 | `bun run db:push` | Push schema changes to database |
 | `bun run db:studio` | Open Drizzle Studio GUI |
@@ -170,4 +188,4 @@ The app supports **English** and **German** via [Lingui](https://lingui.dev).
 
 - **Biome** handles linting and formatting (replaces ESLint + Prettier)
 - **Conventional commits** enforced via Husky + Commitlint
-- Always run `bun run type-check:all && bun run check` before committing
+- Always run `bun run typecheck:all && bun run check` before committing

@@ -614,12 +614,12 @@ async function resendInvitation(req: Request, res: Response) {
 }
 
 export {
-  getUsers,
-  getUserById,
   createUser,
-  updateUser,
   deleteUser,
-  updateSelectedProperty,
+  getUserById,
+  getUsers,
   inviteUser,
-  resendInvitation
+  resendInvitation,
+  updateSelectedProperty,
+  updateUser
 };

@@ -216,13 +216,13 @@ function AutocompleteCollection({
 
 export {
   Autocomplete,
-  AutocompleteInput,
-  AutocompleteTrigger,
-  AutocompletePopup,
-  AutocompleteItem,
-  AutocompleteEmpty,
-  AutocompleteList,
   AutocompleteClear,
+  AutocompleteCollection,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
   AutocompleteStatus,
-  AutocompleteCollection
+  AutocompleteTrigger
 };
