@@ -38,6 +38,6 @@ router.post(
 router.post('/login', validateBody(loginSchema), login);
 router.post('/logout', logout);
 
-export { registerSchema, loginSchema };
+export { loginSchema, registerSchema };
 
 export default router;

@@ -339,10 +339,10 @@ async function resetPassword(req: Request, res: Response) {
 }
 
 export {
-  signUp,
-  verifyEmail,
-  resendVerification,
   acceptInvitation,
   forgotPassword,
-  resetPassword
+  resendVerification,
+  resetPassword,
+  signUp,
+  verifyEmail
 };

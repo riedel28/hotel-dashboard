@@ -259,4 +259,4 @@ async function deleteRoom(req: Request, res: Response) {
   }
 }
 
-export { getRooms, createRoom, getRoomById, updateRoom, deleteRoom };
+export { createRoom, deleteRoom, getRoomById, getRooms, updateRoom };

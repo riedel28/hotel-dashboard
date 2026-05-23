@@ -109,23 +109,23 @@ async function resendInvitation(userId: number): Promise<{ message: string }> {
 }
 
 export {
-  fetchUsers,
-  fetchUserById,
+  type CreateUserData,
   createUser,
-  inviteUser,
-  resendInvitation,
-  updateUserById,
   deleteUserById,
-  fetchUsersParamsSchema,
-  fetchUsersResponseSchema,
-  roleSchema,
-  userSchema,
-  usersQueryOptions,
-  type User,
-  type Role,
   type FetchUsersParams,
   type FetchUsersResponse,
-  type CreateUserData,
+  fetchUserById,
+  fetchUsers,
+  fetchUsersParamsSchema,
+  fetchUsersResponseSchema,
   type InviteUserData,
-  type UpdateUserData
+  inviteUser,
+  type Role,
+  resendInvitation,
+  roleSchema,
+  type UpdateUserData,
+  type User,
+  updateUserById,
+  userSchema,
+  usersQueryOptions
 };

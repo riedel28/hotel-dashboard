@@ -52,7 +52,7 @@ function validateParams(schema: ZodObject<any>) {
 function validateQuery(schema: ZodObject<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      schema.parse(req.query);
+      req.query = schema.parse(req.query);
       next();
     } catch (error) {
       if (error instanceof ZodError) {

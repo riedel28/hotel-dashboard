@@ -106,9 +106,9 @@ async function deleteProductCategory(id: number): Promise<void> {
 }
 
 export {
+  createProductCategory,
+  deleteProductCategory,
   fetchProductCategories,
   fetchProductCategoryById,
-  createProductCategory,
-  updateProductCategory,
-  deleteProductCategory
+  updateProductCategory
 };

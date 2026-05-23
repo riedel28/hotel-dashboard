@@ -92,14 +92,14 @@ async function deleteRoomById(id: string): Promise<void> {
 }
 
 export {
-  fetchRooms,
   createRoom,
-  fetchRoomById,
-  updateRoomById,
-  deleteRoomById,
-  roomByIdQueryOptions,
-  fetchRoomsParamsSchema,
   createRoomSchema,
-  updateRoomSchema,
-  type Room
+  deleteRoomById,
+  fetchRoomById,
+  fetchRooms,
+  fetchRoomsParamsSchema,
+  type Room,
+  roomByIdQueryOptions,
+  updateRoomById,
+  updateRoomSchema
 };
