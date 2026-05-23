@@ -1,0 +1,30 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreIssues": {
+    "src/routeTree.gen.ts": ["exports", "types", "nsExports", "nsTypes"]
+  },
+  "ignoreDependencies": [
+    "@fontsource-variable/inter",
+    "@lingui/macro",
+    "tailwindcss",
+    "tailwindcss-animate",
+    "tw-animate-css"
+  ],
+  "workspaces": {
+    ".": {
+      "project": ["src/**/*.{ts,tsx}", "shared/**/*.{ts,tsx}"],
+      "ignoreFiles": ["src/locales/**/messages.js"],
+      "paths": {
+        "@/*": ["src/*"],
+        "shared/*": ["shared/*"]
+      }
+    },
+    "backend": {
+      "project": ["src/**/*.ts", "tests/**/*.ts"],
+      "drizzle": false,
+      "paths": {
+        "shared/*": ["../shared/*"]
+      }
+    }
+  }
+}
