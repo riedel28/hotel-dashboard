@@ -102,8 +102,8 @@ The frontend runs at `http://localhost:5173` and the backend at `http://localhos
 |---|---|
 | `bun run dev` | Start full-stack dev (client + backend) |
 | `bun run client` | Start frontend only |
-| `bun run build` | Production build (includes type-check) |
-| `bun run type-check:all` | Check both main and node TS configs |
+| `bun run build` | Production build (includes typecheck) |
+| `bun run typecheck:all` | Check both main and node TS configs |
 | `bun run lint` | Biome linter with auto-fix |
 | `bun run check` | Biome check with auto-fix (lint + format) |
 | `bun run test` | Run unit tests |
@@ -170,4 +170,4 @@ The app supports **English** and **German** via [Lingui](https://lingui.dev).
 
 - **Biome** handles linting and formatting (replaces ESLint + Prettier)
 - **Conventional commits** enforced via Husky + Commitlint
-- Always run `bun run type-check:all && bun run check` before committing
+- Always run `bun run typecheck:all && bun run check` before committing

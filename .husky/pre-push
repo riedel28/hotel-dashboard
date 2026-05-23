@@ -9,7 +9,7 @@ fi
 echo "husky: running lint"
 bun run --silent lint
 
-echo "husky: running type-check:all"
-bun run --silent type-check:all
+echo "husky: running typecheck:all"
+bun run --silent typecheck:all
 
 

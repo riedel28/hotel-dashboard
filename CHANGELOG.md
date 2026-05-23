@@ -34,7 +34,7 @@
 
 ### Performance Improvements
 
-* **ci:** skip redundant type-check in build step ([f524ab5](https://github.com/riedel28/hotel-dashboard/commit/f524ab545f33994c65c427297735a27a38c30327))
+* **ci:** skip redundant typecheck in build step ([f524ab5](https://github.com/riedel28/hotel-dashboard/commit/f524ab545f33994c65c427297735a27a38c30327))
 
 # [1.13.0](https://github.com/riedel28/hotel-dashboard/compare/v1.12.0...v1.13.0) (2026-02-16)
 

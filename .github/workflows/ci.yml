@@ -34,7 +34,7 @@ jobs:
         run: cd ./backend && bun install --frozen-lockfile
 
       - name: Type check
-        run: bun run type-check:all
+        run: bun run typecheck:all
 
       - name: Lint
         run: bun run lint:ci
