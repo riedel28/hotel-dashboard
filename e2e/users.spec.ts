@@ -79,8 +79,16 @@ test.describe('Edit User', () => {
     await expect(page.getByText('User updated successfully')).toBeVisible();
 
     // Reload the page to verify persistence
+    const userResponsePromise = page.waitForResponse(
+      (resp) =>
+        resp.url().includes('/api/users/') &&
+        resp.request().method() === 'GET' &&
+        resp.status() === 200
+    );
     await page.reload();
-    await expect(page.locator('form')).toBeVisible({ timeout: 10000 });
+    await userResponsePromise;
+    await expect(page.getByRole('heading', { name: 'Edit user' })).toBeVisible();
+    await expect(page.locator('form')).toBeVisible();
 
     const reloadedForm = page.locator('form');
     await expect(reloadedForm.getByLabel('First Name')).toHaveValue('Updated');
