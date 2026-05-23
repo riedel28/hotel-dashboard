@@ -1,5 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 
+import { resetDatabase } from './helpers/reset-db';
+
 const TEST_PROPERTY_NAME = 'Bates Motel';
 
 async function selectProperty(page: Page) {
@@ -12,6 +14,10 @@ async function selectProperty(page: Page) {
 }
 
 test.describe('Rooms', () => {
+  test.beforeAll(async () => {
+    await resetDatabase();
+  });
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await selectProperty(page);

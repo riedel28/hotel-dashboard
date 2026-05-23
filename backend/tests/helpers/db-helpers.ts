@@ -1,15 +1,12 @@
 import { db } from '../../src/db/pool.ts';
 import {
-  emailVerificationTokens,
-  guests,
-  monitoringLogs,
   properties,
-  reservations,
   roles,
   rooms,
   userRoles,
   users
 } from '../../src/db/schema.ts';
+import { truncateAllTables } from '../../src/db/truncate-all.ts';
 import { generateToken } from '../../src/utils/jwt.ts';
 import { hashPassword } from '../../src/utils/password.ts';
 
@@ -110,15 +107,5 @@ export async function assignRoleToUser(userId: number, roleId: number) {
 }
 
 export async function cleanupDatabase() {
-  // Clean up in the right order due to foreign key constraints
-  // email_verification_tokens -> user_roles -> guests -> reservations -> rooms -> properties -> roles -> users
-  await db.delete(emailVerificationTokens);
-  await db.delete(userRoles);
-  await db.delete(guests);
-  await db.delete(monitoringLogs);
-  await db.delete(reservations);
-  await db.delete(rooms);
-  await db.delete(properties);
-  await db.delete(roles);
-  await db.delete(users);
+  await truncateAllTables();
 }

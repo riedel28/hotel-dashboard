@@ -2,7 +2,6 @@ import request from 'supertest';
 
 import app from '../src/app';
 import {
-  cleanupDatabase,
   createTestProperty,
   createTestRoom,
   createTestUser
@@ -13,9 +12,6 @@ describe('Reservations API', () => {
   let adminToken: string;
 
   beforeEach(async () => {
-    // Clean up first to ensure a clean slate
-    await cleanupDatabase();
-
     const { token } = await createTestUser({
       password: 'Password123!'
     });
@@ -26,10 +22,6 @@ describe('Reservations API', () => {
       email: `admin-${Date.now()}@example.com`
     });
     adminToken = aToken;
-  });
-
-  afterEach(async () => {
-    await cleanupDatabase();
   });
 
   describe('POST /api/reservations', () => {

@@ -52,7 +52,17 @@ function validateParams(schema: ZodObject<any>) {
 function validateQuery(schema: ZodObject<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.query = schema.parse(req.query);
+      const validatedData = schema.parse(req.query);
+
+      // Express 5 exposes req.query as a read-only getter that returns a fresh
+      // object on each access — replace it with the coerced Zod output.
+      Object.defineProperty(req, 'query', {
+        value: validatedData,
+        writable: true,
+        configurable: true,
+        enumerable: true
+      });
+
       next();
     } catch (error) {
       if (error instanceof ZodError) {

@@ -2,6 +2,7 @@ import { execSync } from 'child_process';
 import { sql } from 'drizzle-orm';
 
 import { db } from '../../src/db/pool.ts';
+import { assertSafeTestDatabase } from '../helpers/assert-test-database.ts';
 
 async function dropAllTables() {
   const result = await db.execute(sql`
@@ -15,13 +16,13 @@ async function dropAllTables() {
 }
 
 export default async function setup() {
+  assertSafeTestDatabase();
+
   console.log('🗄️  Setting up test database...');
 
   try {
-    // Drop all tables dynamically to ensure clean state
     await dropAllTables();
 
-    // Use drizzle-kit CLI to push schema to database
     console.log('🚀 Pushing schema using drizzle-kit...');
     execSync(
       `bunx drizzle-kit push --url="${process.env.DATABASE_URL}" --schema="./src/db/schema.ts" --dialect="postgresql"`,

@@ -16,7 +16,7 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['./src/test-setup.ts'],
-    // Exclude backend tests - they have their own config and require APP_STAGE=test
+    // Exclude backend tests - they have their own config and require NODE_ENV=test
     exclude: ['**/node_modules/**', '**/backend/**', '**/e2e/**']
   },
   resolve: {

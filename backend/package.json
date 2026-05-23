@@ -19,9 +19,9 @@
     "db:seed": "bun --env-file=.env.development src/scripts/seed.ts",
     "db:seed:prod": "bun --env-file=.env.production src/scripts/seed.ts",
     "db:studio": "bun --env-file=.env.development drizzle-kit studio",
-    "test": "bun --env-file=.env.development vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test": "bun --env-file=.env.test vitest run",
+    "test:watch": "bun --env-file=.env.test vitest",
+    "test:coverage": "bun --env-file=.env.test vitest run --coverage"
   },
   "dependencies": {
     "@epic-web/remember": "^1.1.0",

@@ -2,13 +2,12 @@ import request from 'supertest';
 import app from '../src/app';
 import { db } from '../src/db/pool';
 import { monitoringLogs } from '../src/db/schema';
-import { cleanupDatabase, createTestUser } from './helpers/db-helpers';
+import { createTestUser } from './helpers/db-helpers';
 
 describe('Monitoring API', () => {
   let authToken: string;
 
   beforeEach(async () => {
-    await cleanupDatabase();
     const { token } = await createTestUser({
       password: 'Password123!'
     });
@@ -44,10 +43,6 @@ describe('Monitoring API', () => {
         log_message: 'Success message 3'
       }
     ]);
-  });
-
-  afterEach(async () => {
-    await cleanupDatabase();
   });
 
   describe('GET /api/monitoring', () => {

@@ -1,5 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 
+import { resetDatabase } from './helpers/reset-db';
+
 async function navigateToReservationEdit(page: Page, bookingNr: string) {
   await page.getByRole('link', { name: 'Reservations', exact: true }).click();
   await expect(page).toHaveURL(/\/reservations/);
@@ -18,6 +20,12 @@ async function navigateToReservationEdit(page: Page, bookingNr: string) {
 }
 
 test.describe('Edit Guest', () => {
+  test.describe.configure({ mode: 'serial' });
+
+  test.beforeAll(async () => {
+    await resetDatabase();
+  });
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     // RES-003 has a single guest (Mike Wilson, AT) — simplest to test

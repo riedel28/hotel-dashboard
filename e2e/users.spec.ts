@@ -1,5 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 
+import { resetDatabase } from './helpers/reset-db';
+
 const EDITABLE_USER_EMAIL = 'cool_new_user@example.com';
 const EDITABLE_USER_DISPLAY = 'Very Cool';
 
@@ -30,6 +32,10 @@ async function navigateToEditUser(page: Page) {
 test.describe('Edit User', () => {
   // Tests share a mutable user — serial prevents race conditions
   test.describe.configure({ mode: 'serial' });
+
+  test.beforeAll(async () => {
+    await resetDatabase();
+  });
 
   test('should navigate to edit user page and display form with current values', async ({
     page
