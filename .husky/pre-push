@@ -13,3 +13,5 @@ echo "husky: running typecheck:all"
 bun run --silent typecheck:all
 
 
+echo "husky:formatting code"
+bun run --silent format
