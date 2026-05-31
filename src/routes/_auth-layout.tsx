@@ -8,29 +8,31 @@ export const Route = createFileRoute('/_auth-layout')({
 
 function AuthLayout() {
   return (
-    <div className="flex min-h-screen bg-muted">
+    <div className="grid min-h-screen bg-background text-foreground lg:grid-cols-[2fr_1fr]">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:bg-background focus:px-4 focus:py-2 focus:rounded-md focus:ring-2 focus:ring-primary focus:text-foreground"
       >
         <Trans>Skip to main content</Trans>
       </a>
-      <div className="hidden lg:block lg:w-1/2 xl:w-2/3" aria-hidden="true">
+      <section className="relative min-h-72 overflow-hidden lg:min-h-screen">
         <img
           src="/login-bg.avif"
-          alt=""
+          alt="Login background"
           fetchPriority="high"
           className="w-full h-full object-cover"
+          sizes="(min-width: 1024px) 67vw, 100vw"
         />
-      </div>
+      </section>
       <main
         id="main-content"
         tabIndex={-1}
-        className="relative flex w-full flex-col items-center justify-center bg-background p-8 lg:w-1/2 xl:w-1/3 focus:outline-none"
+        className="flex min-h-[calc(100vh-18rem)] flex-col px-5 py-4 sm:px-8 lg:min-h-screen bg-card relative"
       >
-        <div className="absolute right-4 top-4">
+        <div className="absolute right-4 top-4 ">
           <LanguageSwitcher />
         </div>
+
         <Outlet />
       </main>
     </div>

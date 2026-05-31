@@ -425,7 +425,6 @@ msgstr "Kinder"
 #~ msgid "Children count cannot be negative"
 #~ msgstr "Kinderanzahl darf nicht negativ sein"
 
-#: src/components/ui/data-grid-column-filter.tsx:147
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:318
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
@@ -640,8 +639,8 @@ msgid "Doe"
 msgstr "Doe"
 
 #: src/routes/_auth-layout/auth/login.tsx:274
-msgid "Don't have an account?"
-msgstr "Haben Sie noch kein Konto?"
+#~ msgid "Don't have an account?"
+#~ msgstr "Haben Sie noch kein Konto?"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:84
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/status-cell.tsx:28
@@ -649,8 +648,8 @@ msgid "Done"
 msgstr "Erledigt"
 
 #: src/components/ui/data-grid-table-dnd.tsx:90
-msgid "Drag to reorder"
-msgstr "Zum Neuordnen ziehen"
+#~ msgid "Drag to reorder"
+#~ msgstr "Zum Neuordnen ziehen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:71
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:55
@@ -701,7 +700,7 @@ msgid "Edit user"
 msgstr "Benutzer bearbeiten"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:123
-#: src/routes/_auth-layout/auth/login.tsx:168
+#: src/routes/_auth-layout/auth/login.tsx:161
 #: src/routes/_auth-layout/auth/sign-up.tsx:232
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:146
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:144
@@ -716,7 +715,7 @@ msgstr "E-Mail"
 msgid "Email is required"
 msgstr "E-Mail ist erforderlich"
 
-#: src/routes/_auth-layout/auth/login.tsx:136
+#: src/routes/_auth-layout/auth/login.tsx:130
 msgid "Email not verified"
 msgstr "E-Mail nicht verifiziert"
 
@@ -787,11 +786,11 @@ msgid "Enter room type (e.g., Standard, Suite)"
 msgstr "Zimmertyp eingeben (z.B. Standard, Suite)"
 
 #: src/routes/_auth-layout/auth/login.tsx:123
-msgid "Enter your credentials to access the dashboard"
-msgstr "Geben Sie Ihre Anmeldedaten ein, um auf das Dashboard zuzugreifen"
+#~ msgid "Enter your credentials to access the dashboard"
+#~ msgstr "Geben Sie Ihre Anmeldedaten ein, um auf das Dashboard zuzugreifen"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:129
-#: src/routes/_auth-layout/auth/login.tsx:174
+#: src/routes/_auth-layout/auth/login.tsx:167
 #: src/routes/_auth-layout/auth/sign-up.tsx:238
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:127
 msgid "Enter your email"
@@ -800,6 +799,10 @@ msgstr "E-Mail-Adresse eingeben"
 #: src/routes/_auth-layout/auth/forgot-password.tsx:104
 msgid "Enter your email address and we'll send you a link to reset your password."
 msgstr "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts."
+
+#: src/routes/_auth-layout/auth/login.tsx:115
+msgid "Enter your email and password to access the dashboard"
+msgstr "E-Mail und Passwort zum Einloggen eingeben"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:167
 #: src/routes/_auth-layout/auth/sign-up.tsx:178
@@ -820,7 +823,7 @@ msgid "Enter your new password below"
 msgstr "Geben Sie unten Ihr neues Passwort ein"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:226
-#: src/routes/_auth-layout/auth/login.tsx:203
+#: src/routes/_auth-layout/auth/login.tsx:196
 #: src/routes/_auth-layout/auth/sign-up.tsx:267
 msgid "Enter your password"
 msgstr "Passwort eingeben"
@@ -907,7 +910,7 @@ msgstr "Kategorien konnten nicht geladen werden"
 msgid "Failed to load products"
 msgstr "Produkte konnten nicht geladen werden"
 
-#: src/routes/_auth-layout/auth/login.tsx:90
+#: src/routes/_auth-layout/auth/login.tsx:84
 msgid "Failed to login. Please try again."
 msgstr "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
 
@@ -925,7 +928,7 @@ msgstr "Properties konnten nicht neu geladen werden"
 msgid "Failed to resend invitation"
 msgstr "Einladung konnte nicht erneut gesendet werden"
 
-#: src/routes/_auth-layout/auth/login.tsx:101
+#: src/routes/_auth-layout/auth/login.tsx:95
 #: src/routes/_auth-layout/auth/sign-up.tsx:67
 msgid "Failed to resend verification email"
 msgstr "Bestätigungs-E-Mail konnte nicht erneut gesendet werden"
@@ -1002,7 +1005,7 @@ msgstr "Folgen Sie den Anweisungen, um das Zurücksetzen Ihres Passworts abzusch
 msgid "Forgot Password"
 msgstr "Passwort vergessen?"
 
-#: src/routes/_auth-layout/auth/login.tsx:251
+#: src/routes/_auth-layout/auth/login.tsx:245
 msgid "Forgot password?"
 msgstr "Passwort vergessen?"
 
@@ -1294,12 +1297,16 @@ msgstr "Lädt..."
 msgid "Log out"
 msgstr "Abmelden"
 
-#: src/routes/_auth-layout/auth/login.tsx:67
-#: src/routes/_auth-layout/auth/login.tsx:117
-#: src/routes/_auth-layout/auth/login.tsx:268
+#: src/routes/_auth-layout/auth/login.tsx:61
+#: src/routes/_auth-layout/auth/login.tsx:112
+#: src/routes/_auth-layout/auth/login.tsx:261
 #: src/routes/_auth-layout/auth/sign-up.tsx:312
 msgid "Login"
 msgstr "Anmelden"
+
+#: src/routes/_auth-layout/auth/login.tsx:112
+#~ msgid "Login into account"
+#~ msgstr "Anmelden"
 
 #: src/routes/_dashboard-layout.tsx:394
 msgid "Main navigation"
@@ -1432,8 +1439,8 @@ msgid "Next"
 msgstr "Weiter"
 
 #: src/components/ui/carousel.tsx:234
-msgid "Next slide"
-msgstr "Nächste Folie"
+#~ msgid "Next slide"
+#~ msgstr "Nächste Folie"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:16
 msgid "No categories yet. Add a category to get started."
@@ -1472,8 +1479,8 @@ msgid "No properties found."
 msgstr "Keine Objekte gefunden."
 
 #: src/components/ui/data-grid-column-filter.tsx:91
-msgid "No results found."
-msgstr "Keine Ergebnisse gefunden."
+#~ msgid "No results found."
+#~ msgstr "Keine Ergebnisse gefunden."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:271
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:271
@@ -1538,7 +1545,7 @@ msgstr "Seite nicht gefunden"
 #~ msgstr "Seiten-URL"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:221
-#: src/routes/_auth-layout/auth/login.tsx:198
+#: src/routes/_auth-layout/auth/login.tsx:191
 #: src/routes/_auth-layout/auth/sign-up.tsx:262
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:89
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:55
@@ -1652,8 +1659,8 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein"
 #~ msgstr "Bitte geben Sie eine E-Mail-Adresse ein."
 
 #: src/routes/_auth-layout/auth/login.tsx:121
-msgid "Please login to access this page"
-msgstr "Bitte melden Sie sich an, um auf diese Seite zuzugreifen"
+#~ msgid "Please login to access this page"
+#~ msgstr "Bitte melden Sie sich an, um auf diese Seite zuzugreifen"
 
 #~ msgid "Please select a country code."
 #~ msgstr "Bitte wählen Sie eine Ländervorwahl."
@@ -1666,7 +1673,7 @@ msgstr "Bitte wählen Sie eine gültige Bilddatei (JPG, PNG, GIF)"
 msgid "Please select at least one role"
 msgstr "Bitte wählen Sie mindestens eine Rolle aus"
 
-#: src/routes/_auth-layout/auth/login.tsx:140
+#: src/routes/_auth-layout/auth/login.tsx:134
 msgid "Please verify your email address before logging in."
 msgstr "Bitte verifizieren Sie Ihre E-Mail-Adresse, bevor Sie sich anmelden."
 
@@ -1679,8 +1686,8 @@ msgid "Previous"
 msgstr "Zurück"
 
 #: src/components/ui/carousel.tsx:202
-msgid "Previous slide"
-msgstr "Vorherige Folie"
+#~ msgid "Previous slide"
+#~ msgstr "Vorherige Folie"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:66
 msgid "Primary Guest"
@@ -1827,8 +1834,8 @@ msgstr "Properties aktualisieren"
 #~ msgid "Reloading properties"
 #~ msgstr "Objekte werden neu geladen"
 
-#: src/routes/_auth-layout/auth/login.tsx:238
-#: src/routes/_auth-layout/auth/login.tsx:241
+#: src/routes/_auth-layout/auth/login.tsx:229
+#: src/routes/_auth-layout/auth/login.tsx:235
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
@@ -1844,7 +1851,7 @@ msgstr "Bild entfernen"
 msgid "Resend invitation"
 msgstr "Einladung erneut senden"
 
-#: src/routes/_auth-layout/auth/login.tsx:155
+#: src/routes/_auth-layout/auth/login.tsx:149
 #: src/routes/_auth-layout/auth/sign-up.tsx:100
 msgid "Resend verification email"
 msgstr "Bestätigungs-E-Mail erneut senden"
@@ -2137,8 +2144,8 @@ msgstr "Status auswählen"
 #~ msgstr "Ansicht auswählen"
 
 #: src/components/ui/data-grid-column-filter.tsx:64
-msgid "selected"
-msgstr "ausgewählt"
+#~ msgid "selected"
+#~ msgstr "ausgewählt"
 
 #~ msgid "Send"
 #~ msgstr "Senden"
@@ -2203,8 +2210,8 @@ msgid "Sidebar"
 msgstr "Seitenleiste"
 
 #: src/routes/_auth-layout/auth/login.tsx:280
-msgid "Sign up"
-msgstr "Registrieren"
+#~ msgid "Sign up"
+#~ msgstr "Registrieren"
 
 #: src/routes/_auth-layout/auth/sign-up.tsx:112
 #: src/routes/_auth-layout/auth/sign-up.tsx:153
@@ -2293,7 +2300,7 @@ msgstr "Starkes Passwort"
 msgid "Success"
 msgstr "Erfolg"
 
-#: src/routes/_auth-layout/auth/login.tsx:84
+#: src/routes/_auth-layout/auth/login.tsx:78
 msgid "Successfully logged in!"
 msgstr "Erfolgreich angemeldet!"
 
@@ -2571,7 +2578,7 @@ msgstr "Benutzer"
 msgid "v{version}"
 msgstr "v{version}"
 
-#: src/routes/_auth-layout/auth/login.tsx:98
+#: src/routes/_auth-layout/auth/login.tsx:92
 #: src/routes/_auth-layout/auth/sign-up.tsx:64
 msgid "Verification email resent successfully"
 msgstr "Bestätigungs-E-Mail erfolgreich erneut gesendet"

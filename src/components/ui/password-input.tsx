@@ -15,7 +15,7 @@ function PasswordInput(props: React.ComponentProps<typeof InputGroupInput>) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const { t } = useLingui();
 
-  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+  const toggleVisibility = () => setIsVisible(prevState => !prevState);
 
   return (
     <InputGroup>
@@ -28,7 +28,6 @@ function PasswordInput(props: React.ComponentProps<typeof InputGroupInput>) {
           aria-label={isVisible ? t`Hide password` : t`Show password`}
           aria-pressed={isVisible}
           aria-controls={props.id || 'password'}
-          className="hover:bg-transparent"
         >
           {isVisible ? (
             <EyeOffIcon size={16} strokeWidth={2} aria-hidden="true" />
