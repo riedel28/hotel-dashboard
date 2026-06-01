@@ -40,7 +40,7 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="size-8"
+            className="size-8 text-muted-foreground"
             aria-label={t`Change language`}
             {...props}
           >

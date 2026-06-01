@@ -7,14 +7,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type z from 'zod';
 import { forgotPassword } from '@/api/auth';
-import { Button, buttonVariants } from '@/components/ui/button';
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet
-} from '@/components/ui/field';
+import { Button } from '@/components/ui/button';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { loginSchema } from '@/lib/schemas';
@@ -32,31 +26,33 @@ interface SuccessViewProps {
 
 function SuccessView({ email }: SuccessViewProps) {
   return (
-    <div className="w-full max-w-lg space-y-8">
-      <div className="space-y-4 text-center">
-        <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
-          <CheckIcon className="size-7" />
+    <div className="flex flex-1 items-center justify-center py-10">
+      <div className="flex w-full max-w-sm flex-col gap-5">
+        <div className="flex flex-col items-center gap-4 mb-3">
+          <div className="flex size-10 items-center justify-center rounded-full bg-emerald-100 dark:bg-green-900 dark:text-green-200/90 text-sm font-bold text-emerald-600">
+            <CheckIcon aria-hidden="true" />
+          </div>
+          <div className="space-y-1.5">
+            <h1 className="text-2xl font-semibold text-center">
+              <Trans>Reset link sent</Trans>
+            </h1>
+            <p className="text-sm text-muted-foreground text-pretty text-center">
+              <Trans>
+                We&apos;ve sent password reset instructions to {email}
+              </Trans>
+            </p>
+            <p className="text-sm text-muted-foreground text-pretty text-center">
+              <Trans>
+                Please check your inbox and follow the instructions to reset
+                your password.
+              </Trans>
+            </p>
+          </div>
         </div>
-        <h1 className="text-2xl font-bold">
-          <Trans>Reset link sent</Trans>
-        </h1>
-        <p className="text-muted-foreground text-balance">
-          <Trans>
-            We&apos;ve sent a password reset email to{' '}
-            <span className="font-medium text-foreground">{email}</span>.
-          </Trans>
-        </p>
-        <p className="text-muted-foreground text-balance">
-          <Trans>
-            Follow the instructions to finish resetting your password.
-          </Trans>
-        </p>
-      </div>
 
-      <div className="text-center">
         <Link
           to="/auth/login"
-          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+          className="text-center text-sm font-normal text-cyan-800 dark:text-cyan-200/90 underline-offset-4 hover:underline"
         >
           <Trans>Back to login</Trans>
         </Link>
@@ -90,81 +86,85 @@ function ForgotPasswordPage() {
     return <SuccessView email={form.getValues('email')} />;
   }
 
+  const onSubmit = (data: ForgotPasswordData) => {
+    forgotMutation.mutate(data);
+  };
+
   return (
-    <div className="w-full max-w-lg space-y-8">
-      <div className="space-y-2 text-center">
-        <div className="inline-block rounded-lg bg-primary p-2 text-white">
-          <MessageCircleIcon className="size-10" aria-hidden="true" />
+    <div className="flex flex-1 items-center justify-center py-10">
+      <div className="flex w-full max-w-sm flex-col gap-5">
+        <div className="flex flex-col items-start gap-4 mb-3">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-cyan-950 dark:text-cyan-200/90 text-sm font-bold text-primary">
+            <MessageCircleIcon aria-hidden="true" />
+          </div>
+          <div className="space-y-1.5">
+            <h1 className="text-2xl font-semibold">
+              <Trans>Forgot Password</Trans>
+            </h1>
+            <p className="text-sm text-muted-foreground text-balance">
+              <Trans>
+                Enter your email address and we&apos;ll send you a link to reset
+                your password.
+              </Trans>
+            </p>
+          </div>
         </div>
 
-        <h1 className="text-2xl font-bold">
-          <Trans>Forgot Password</Trans>
-        </h1>
-        <p className="text-muted-foreground text-balance">
-          <Trans>
-            Enter your email address and we&apos;ll send you a link to reset
-            your password.
-          </Trans>
-        </p>
-      </div>
-
-      <form
-        onSubmit={form.handleSubmit((data) => forgotMutation.mutate(data))}
-        className="max-w-sm mx-auto space-y-6"
-      >
-        <FieldSet>
-          <FieldGroup className="gap-4">
-            <Controller
-              control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="gap-2">
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Email</Trans>
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    type="email"
-                    placeholder={t`Enter your email`}
-                    autoComplete="email"
-                    aria-required="true"
-                    aria-invalid={fieldState.invalid}
-                    aria-describedby={
-                      fieldState.invalid ? `${field.name}-error` : undefined
-                    }
-                    disabled={forgotMutation.isPending}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError
-                      id={`${field.name}-error`}
-                      errors={[fieldState.error]}
-                    />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
-        </FieldSet>
-        <Button
-          type="submit"
-          size="lg"
-          className="w-full"
-          disabled={forgotMutation.isPending}
-          aria-busy={forgotMutation.isPending}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex w-full max-w-sm flex-col gap-5"
         >
-          {forgotMutation.isPending && (
-            <Loader2Icon
-              className="mr-2 h-4 w-4 animate-spin"
-              aria-hidden="true"
-            />
-          )}
-          <Trans>Send reset link</Trans>
-        </Button>
-      </form>
+          <Controller
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="gap-2">
+                <FieldLabel htmlFor={field.name}>
+                  <Trans>Email</Trans>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  type="email"
+                  placeholder={t`Enter your email`}
+                  autoComplete="email"
+                  aria-required="true"
+                  aria-invalid={fieldState.invalid}
+                  aria-describedby={
+                    fieldState.invalid ? `${field.name}-error` : undefined
+                  }
+                  disabled={forgotMutation.isPending}
+                />
+                {fieldState.invalid && (
+                  <FieldError
+                    id={`${field.name}-error`}
+                    errors={[fieldState.error]}
+                  />
+                )}
+              </Field>
+            )}
+          />
 
-      <div className="text-center -mt-2">
-        <Link to="/auth/login" className={buttonVariants({ variant: 'link' })}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={forgotMutation.isPending}
+            aria-busy={forgotMutation.isPending}
+          >
+            {forgotMutation.isPending && (
+              <Loader2Icon
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+            <Trans>Send reset link</Trans>
+          </Button>
+        </form>
+
+        <Link
+          to="/auth/login"
+          className="text-center text-sm font-normal text-cyan-800 dark:text-cyan-200/90 underline-offset-4 hover:underline"
+        >
           <Trans>Back to login</Trans>
         </Link>
       </div>

@@ -15,7 +15,7 @@ function PasswordInput(props: React.ComponentProps<typeof InputGroupInput>) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const { t } = useLingui();
 
-  const toggleVisibility = () => setIsVisible(prevState => !prevState);
+  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
   return (
     <InputGroup>
