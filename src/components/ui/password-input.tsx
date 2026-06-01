@@ -2,7 +2,7 @@
 
 import { useLingui } from '@lingui/react/macro';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import { useState } from 'react';
+import * as React from 'react';
 
 import {
   InputGroup,
@@ -11,15 +11,24 @@ import {
   InputGroupInput
 } from '@/components/ui/input-group';
 
-function PasswordInput(props: React.ComponentProps<typeof InputGroupInput>) {
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+function PasswordInput({
+  id,
+  ...props
+}: React.ComponentProps<typeof InputGroupInput>) {
+  const generatedId = React.useId();
+  const inputId = id ?? generatedId;
+  const [isVisible, setIsVisible] = React.useState(false);
   const { t } = useLingui();
 
-  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+  const toggleVisibility = () => setIsVisible(visible => !visible);
 
   return (
     <InputGroup>
-      <InputGroupInput {...props} type={isVisible ? 'text' : 'password'} />
+      <InputGroupInput
+        {...props}
+        id={inputId}
+        type={isVisible ? 'text' : 'password'}
+      />
       <InputGroupAddon align="inline-end">
         <InputGroupButton
           type="button"
@@ -27,7 +36,8 @@ function PasswordInput(props: React.ComponentProps<typeof InputGroupInput>) {
           onClick={toggleVisibility}
           aria-label={isVisible ? t`Hide password` : t`Show password`}
           aria-pressed={isVisible}
-          aria-controls={props.id || 'password'}
+          aria-controls={inputId}
+          className="hover:bg-transparent"
         >
           {isVisible ? (
             <EyeOffIcon size={16} strokeWidth={2} aria-hidden="true" />
