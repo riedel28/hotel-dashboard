@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { CheckIcon, Loader2Icon, MessageCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -10,6 +10,7 @@ import { forgotPassword } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Link } from '@/components/ui/link';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { loginSchema } from '@/lib/schemas';
 
@@ -50,10 +51,7 @@ function SuccessView({ email }: SuccessViewProps) {
           </div>
         </div>
 
-        <Link
-          to="/auth/login"
-          className="text-center text-sm font-normal text-cyan-800 dark:text-cyan-200/90 underline-offset-4 hover:underline"
-        >
+        <Link to="/auth/login" className="text-center">
           <Trans>Back to login</Trans>
         </Link>
       </div>
@@ -161,10 +159,7 @@ function ForgotPasswordPage() {
           </Button>
         </form>
 
-        <Link
-          to="/auth/login"
-          className="text-center text-sm font-normal text-cyan-800 dark:text-cyan-200/90 underline-offset-4 hover:underline"
-        >
+        <Link to="/auth/login" className="text-center">
           <Trans>Back to login</Trans>
         </Link>
       </div>

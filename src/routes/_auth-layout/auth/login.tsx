@@ -1,12 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
-import {
-  createFileRoute,
-  Link,
-  redirect,
-  useRouter
-} from '@tanstack/react-router';
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 import {
   AlertTriangleIcon,
   Loader2Icon,
@@ -24,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
 
 import { useDocumentTitle } from '@/hooks/use-document-title';
@@ -37,7 +33,7 @@ export const Route = createFileRoute('/_auth-layout/auth/login')({
       .string()
       .optional()
       .catch(undefined)
-      .transform(val => {
+      .transform((val) => {
         if (!val || !val.startsWith('/') || val.startsWith('//'))
           return undefined;
         return val;
@@ -77,7 +73,7 @@ function LoginPage() {
       await navigate({ to: search.redirect || fallback });
       toast.success(t`Successfully logged in!`);
     },
-    onError: error => {
+    onError: (error) => {
       if (error instanceof ApiError && error.code === 'EMAIL_NOT_VERIFIED') {
         form.setError('root.emailNotVerified', { message: 'emailNotVerified' });
       } else {
@@ -223,7 +219,7 @@ function LoginPage() {
                   <Checkbox
                     id={field.name}
                     checked={field.value}
-                    onCheckedChange={checked =>
+                    onCheckedChange={(checked) =>
                       field.onChange(checked === true)
                     }
                     aria-label={t`Remember me`}
@@ -238,10 +234,7 @@ function LoginPage() {
               )}
             />
 
-            <Link
-              to="/auth/forgot-password"
-              className="text-sm font-normal text-cyan-800 dark:text-cyan-200/90 underline-offset-4 hover:underline"
-            >
+            <Link to="/auth/forgot-password">
               <Trans>Forgot password?</Trans>
             </Link>
           </div>
@@ -263,13 +256,7 @@ function LoginPage() {
         </form>
 
         <p className="text-sm text-muted-foreground text-center">
-          Don't have an account?{' '}
-          <Link
-            to="/auth/sign-up"
-            className="text-sm font-normal text-cyan-800 dark:text-cyan-200/90 underline-offset-4 hover:underline"
-          >
-            Sign up
-          </Link>
+          Don't have an account? <Link to="/auth/sign-up">Sign up</Link>
         </p>
       </div>
     </div>
