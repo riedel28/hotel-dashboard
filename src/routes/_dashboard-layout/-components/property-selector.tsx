@@ -42,7 +42,7 @@ function LoadingSkeleton() {
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}
-          className="bg-muted h-8 w-full rounded-md"
+          className="bg-muted h-9 w-full rounded-md"
           aria-hidden="true"
         />
       ))}
@@ -56,7 +56,7 @@ function renderPropertyItem(item: PropertyItem) {
       key={item.value}
       value={item.value}
       showIndicator={false}
-      className="group flex h-8 items-center justify-between rounded-md px-1.5 py-1"
+      className="group flex h-9 items-center justify-between rounded-md px-2 py-1.5"
     >
       <span className="truncate">{item.label}</span>
       <StageBadge stage={item.stage} />
@@ -153,7 +153,7 @@ function PropertySelector({
           <span className="truncate text-sm">{renderTriggerContent()}</span>
         </ComboboxValue>
       </ComboboxTrigger>
-      <ComboboxContent className="w-85">
+      <ComboboxContent className="w-90">
         <ComboboxInput
           variant="popup"
           placeholder={t`Search property`}
@@ -183,7 +183,7 @@ function PropertySelector({
           </>
         )}
         <ComboboxSeparator className="my-0" />
-        <div className="p-0.5">
+        <div className="p-1">
           <Button
             variant="ghost"
             className="w-full h-8 text-sm font-normal text-muted-foreground"

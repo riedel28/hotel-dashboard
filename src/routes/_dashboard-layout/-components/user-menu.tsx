@@ -54,7 +54,7 @@ interface UserInfoLabelProps {
 function UserInfoLabel({ firstName, lastName, email }: UserInfoLabelProps) {
   return (
     <DropdownMenuLabel className="p-0 font-normal">
-      <div className="flex items-center gap-2 px-1.5 py-0.5 text-left text-sm">
+      <div className="flex items-center gap-2 px-2 py-1 text-left text-sm">
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-medium text-foreground">
             {firstName} {lastName}
@@ -103,7 +103,7 @@ function LanguageSubmenu({
           </Badge>
         </div>
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent className="w-32">
+      <DropdownMenuSubContent className="w-34">
         <DropdownMenuRadioGroup
           value={currentLocale}
           onValueChange={onLocaleChange}
@@ -168,7 +168,7 @@ function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
           </Badge>
         </div>
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent className="w-32">
+      <DropdownMenuSubContent className="w-34">
         <DropdownMenuRadioGroup
           value={currentTheme}
           onValueChange={value => onThemeChange(value as Theme)}
@@ -248,7 +248,7 @@ export default function UserMenu() {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="min-w-48 rounded-lg"
+          className="min-w-50 rounded-lg"
           side="bottom"
           align="end"
           sideOffset={4}
