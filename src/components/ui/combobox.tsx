@@ -26,11 +26,11 @@ function ComboboxTrigger({
   return (
     <ComboboxPrimitive.Trigger
       data-slot="combobox-trigger"
-      className={cn("[&_svg:not([class*='size-'])]:size-4", className)}
+      className={cn("[&_svg:not([class*='size-'])]:size-3.5", className)}
       {...props}
     >
       {children}
-      <ChevronsUpDownIcon className="text-muted-foreground size-4 shrink-0 pointer-events-none" />
+      <ChevronsUpDownIcon className="text-muted-foreground size-3.5 shrink-0 pointer-events-none" />
     </ComboboxPrimitive.Trigger>
   );
 }
@@ -68,7 +68,7 @@ function ComboboxInput({
       <div
         data-slot="combobox-input"
         className={cn(
-          'flex items-center border-b border-border px-3',
+          'flex items-center border-b border-border px-2.5 h-9.5',
           className
         )}
       >
@@ -174,7 +174,7 @@ function ComboboxItem({
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
       className={cn(
-        "data-highlighted:bg-accent data-highlighted:text-accent-foreground gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm [&_svg:not([class*='size-'])]:size-4 relative flex w-full cursor-default items-center outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "data-highlighted:bg-accent data-highlighted:text-accent-foreground gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm [&_svg:not([class*='size-'])]:size-3.5 relative flex w-full cursor-default items-center outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
       {...props}

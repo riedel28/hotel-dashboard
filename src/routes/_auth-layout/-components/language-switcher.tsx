@@ -49,7 +49,7 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
         )}
       />
 
-      <DropdownMenuContent align={align} className="w-30">
+      <DropdownMenuContent align={align} className="w-32">
         <DropdownMenuRadioGroup
           value={locale}
           onValueChange={handleChangeLocale}

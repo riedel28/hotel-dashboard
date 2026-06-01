@@ -110,7 +110,7 @@ function SidebarHeaderComponent() {
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-            <div className="inline-block rounded-md bg-primary p-1 text-white transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
+            <div className="flex items-center size-6.5 justify-center rounded-md bg-primary/10 dark:bg-cyan-950 dark:text-cyan-200/90 text-sm font-bold text-primary transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
               <MessageCircleIcon className="size-4" />
             </div>
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">

@@ -54,7 +54,7 @@ interface UserInfoLabelProps {
 function UserInfoLabel({ firstName, lastName, email }: UserInfoLabelProps) {
   return (
     <DropdownMenuLabel className="p-0 font-normal">
-      <div className="flex items-center gap-2 px-1.5 py-1.5 text-left text-sm">
+      <div className="flex items-center gap-2 px-1.5 py-0.5 text-left text-sm">
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-medium text-foreground">
             {firstName} {lastName}
@@ -86,12 +86,12 @@ function LanguageSubmenu({
       <DropdownMenuSubTrigger hasChevron={false}>
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <GlobeIcon className="h-4 w-4 text-muted-foreground" />
+            <GlobeIcon className="text-muted-foreground" />
             <Trans>Language</Trans>
           </div>
           <Badge
             variant="outline"
-            className="flex h-6 min-w-6 items-center text-xs gap-2 px-2.5 rounded-sm"
+            className="flex h-5 min-w-5 items-center text-[11px] gap-2 px-1.5 rounded-sm"
           >
             {currentLanguage?.label}
             <CountryFlag
@@ -103,23 +103,24 @@ function LanguageSubmenu({
           </Badge>
         </div>
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent className="w-[180px]">
+      <DropdownMenuSubContent className="w-32">
         <DropdownMenuRadioGroup
           value={currentLocale}
           onValueChange={onLocaleChange}
         >
-          {languages.map((lang) => (
+          {languages.map(lang => (
             <DropdownMenuRadioItem
               key={lang.code}
               value={lang.code}
-              className="overflow-hidden [&>svg]:shrink-0"
+              className="overflow-hidden [&>svg]:shrink-0 px-1.5 py-1"
             >
               <CountryFlag
                 code={lang.country}
                 title={lang.label}
-                className="size-3.5"
+                className="size-4"
                 aria-label={lang.label}
               />
+
               {lang.label}
             </DropdownMenuRadioItem>
           ))}
@@ -156,21 +157,21 @@ function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
       <DropdownMenuSubTrigger hasChevron={false}>
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <ThemeIcon className="h-4 w-4 text-muted-foreground" />
+            <ThemeIcon className="text-muted-foreground" />
             <Trans>Theme</Trans>
           </div>
           <Badge
             variant="outline"
-            className="flex h-6 min-w-6 items-center text-xs gap-2 px-2.5 rounded-sm"
+            className="flex h-5 min-w-5 items-center text-[11px] gap-2 px-1.5 rounded-sm"
           >
             <Trans>{themeLabels[currentTheme]}</Trans>
           </Badge>
         </div>
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent className="w-[180px]">
+      <DropdownMenuSubContent className="w-32">
         <DropdownMenuRadioGroup
           value={currentTheme}
-          onValueChange={(value) => onThemeChange(value as Theme)}
+          onValueChange={value => onThemeChange(value as Theme)}
         >
           <DropdownMenuRadioItem value="light">
             <SunIcon className="text-muted-foreground" />
@@ -216,7 +217,7 @@ export default function UserMenu() {
   const navigate = DashboardLayoutRoute.useNavigate();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
-  const currentLanguage = languages.find((l) => l.code === locale);
+  const currentLanguage = languages.find(l => l.code === locale);
   const version = getPackageVersion();
 
   const handleChangeLocale = (value: string) => {
@@ -247,7 +248,7 @@ export default function UserMenu() {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="min-w-56 rounded-lg"
+          className="min-w-48 rounded-lg"
           side="bottom"
           align="end"
           sideOffset={4}

@@ -89,7 +89,7 @@ function SidebarProvider({
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
+    return isMobile ? setOpenMobile(open => !open) : setOpen(open => !open);
   }, [isMobile, setOpen, setOpenMobile]);
 
   // Adds a keyboard shortcut to toggle the sidebar.
@@ -264,7 +264,7 @@ function SidebarTrigger({
       variant="ghost"
       size="icon-sm"
       className={cn(className)}
-      onClick={(event) => {
+      onClick={event => {
         onClick?.(event);
         toggleSidebar();
       }}
@@ -333,7 +333,7 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
-      className={cn('gap-2 p-2 flex flex-col', className)}
+      className={cn('gap-2 p-0 flex flex-col', className)}
       {...props}
     />
   );
