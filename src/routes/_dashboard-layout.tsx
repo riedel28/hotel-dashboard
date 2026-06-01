@@ -68,7 +68,10 @@ function SidebarLink({
       tooltip={tooltip}
       render={
         <Link
-          activeProps={{ className: '!bg-sidebar-accent' }}
+          activeProps={{
+            className:
+              'bg-primary/10 text-cyan-800 dark:bg-primary/20 dark:text-cyan-200/90'
+          }}
           {...(linkProps as LinkProps)}
         >
           <Icon />
