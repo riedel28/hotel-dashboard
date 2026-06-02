@@ -58,7 +58,7 @@ function RouteComponent() {
       </Breadcrumb>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Profile</Trans>
         </h1>
       </div>

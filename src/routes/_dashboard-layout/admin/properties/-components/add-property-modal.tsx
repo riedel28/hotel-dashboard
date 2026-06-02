@@ -91,7 +91,7 @@ export function AddPropertyModal() {
       <DialogTrigger
         render={
           <Button>
-            <PlusCircleIcon className="mr-2 h-4 w-4" />
+            <PlusCircleIcon className="size-3.5" />
             <Trans>Add Property</Trans>
           </Button>
         }
@@ -159,11 +159,11 @@ export function AddPropertyModal() {
                         aria-invalid={fieldState.invalid}
                       >
                         <SelectValue>
-                          {(value) => <span>{getStageLabel(value)}</span>}
+                          {value => <span>{getStageLabel(value)}</span>}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        {stageValues.map((stage) => (
+                        {stageValues.map(stage => (
                           <SelectItem key={stage} value={stage}>
                             {getStageLabel(stage)}
                           </SelectItem>

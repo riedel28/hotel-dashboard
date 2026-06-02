@@ -30,10 +30,10 @@ export function PropertyStageFilter({
     <Select value={value ?? 'all'} onValueChange={onChange} defaultValue="all">
       <SelectTrigger className="w-full sm:w-[160px]">
         <SelectValue>
-          {(val) => {
+          {val => {
             if (!val || val === 'all') {
               return (
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2.5">
                   <span className="size-1.5 rounded-full bg-gray-500" />
                   <span>
                     <Trans>All</Trans>
@@ -41,9 +41,9 @@ export function PropertyStageFilter({
                 </span>
               );
             }
-            const stage = stages.find((s) => s.value === val);
+            const stage = stages.find(s => s.value === val);
             return (
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2.5">
                 <span
                   className={`size-1.5 rounded-full ${stage?.color ?? 'bg-gray-500'}`}
                 />
@@ -55,7 +55,7 @@ export function PropertyStageFilter({
       </SelectTrigger>
       <SelectContent align="start">
         <SelectItem value="all">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <span className="size-1.5 rounded-full bg-gray-500" />
             <span>
               <Trans>All</Trans>
@@ -63,7 +63,7 @@ export function PropertyStageFilter({
           </span>
         </SelectItem>
         <SelectItem value="production">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <span className="size-1.5 rounded-full bg-emerald-500" />
             <span>
               <Trans>Production</Trans>
@@ -71,7 +71,7 @@ export function PropertyStageFilter({
           </span>
         </SelectItem>
         <SelectItem value="staging">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <span className="size-1.5 rounded-full bg-sky-500" />
             <span>
               <Trans>Staging</Trans>
@@ -79,7 +79,7 @@ export function PropertyStageFilter({
           </span>
         </SelectItem>
         <SelectItem value="demo">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <span className="size-1.5 rounded-full bg-indigo-500" />
             <span>
               <Trans>Demo</Trans>
@@ -87,7 +87,7 @@ export function PropertyStageFilter({
           </span>
         </SelectItem>
         <SelectItem value="template">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <span className="size-1.5 rounded-full bg-amber-400" />
             <span>
               <Trans>Template</Trans>

@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro';
 import { useRouter } from '@tanstack/react-router';
-import { Loader2, LogOut } from 'lucide-react';
+import { Loader2Icon, LogOutIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/auth';
 
@@ -67,8 +67,10 @@ export function LogoutDialog({
             disabled={isLoggingOut}
             onClick={handleLogout}
           >
-            {isLoggingOut && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <LogOut className="mr-2 h-4 w-4" />
+            {isLoggingOut && (
+              <Loader2Icon className="mr-1 size-4 animate-spin" />
+            )}
+            <LogOutIcon className="mr-1 size-4" />
             <Trans>Log out</Trans>
           </Button>
         </AlertDialogFooter>

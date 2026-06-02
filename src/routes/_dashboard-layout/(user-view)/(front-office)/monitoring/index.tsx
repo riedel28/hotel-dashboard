@@ -65,7 +65,7 @@ function MonitoringPage() {
   const handleStatusChange = (newStatus: string | null) => {
     if (!newStatus) return;
     navigate({
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: 1,
         status:
@@ -78,7 +78,7 @@ function MonitoringPage() {
     dateRange: { from?: Date; to?: Date } | undefined
   ) => {
     navigate({
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: 1,
         from: dateRange?.from
@@ -103,7 +103,7 @@ function MonitoringPage() {
         : updaterOrValue;
 
     navigate({
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
@@ -126,7 +126,7 @@ function MonitoringPage() {
     const firstSort = sorting[0];
     if (firstSort) {
       navigate({
-        search: (prev) => ({
+        search: prev => ({
           ...prev,
           page: 1,
           sort_by: firstSort.id as
@@ -140,7 +140,7 @@ function MonitoringPage() {
       });
     } else {
       navigate({
-        search: (prev) => ({
+        search: prev => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -246,7 +246,7 @@ function MonitoringPage() {
       </Breadcrumb>
 
       <div className="mb-6 flex justify-between">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Monitoring Logs</Trans>
         </h1>
       </div>
@@ -262,7 +262,7 @@ function MonitoringPage() {
               >
                 <SelectTrigger className="w-full sm:w-[150px]">
                   <SelectValue>
-                    {(value) =>
+                    {value =>
                       value ? (
                         <span className="capitalize">{t(value)}</span>
                       ) : (
@@ -354,6 +354,6 @@ function MonitoringPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
 )({
-  validateSearch: (search) => fetchMonitoringLogsParamsSchema.parse(search),
+  validateSearch: search => fetchMonitoringLogsParamsSchema.parse(search),
   component: MonitoringPage
 });

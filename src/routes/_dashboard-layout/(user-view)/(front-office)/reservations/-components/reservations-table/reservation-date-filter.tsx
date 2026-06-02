@@ -146,7 +146,7 @@ function ReservationDateFilter({
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <PopoverTrigger
         className={cn(
-          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
+          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal hover:text-accent-foreground dark:bg-input/30 dark:border-input whitespace-nowrap',
           className
         )}
       >
@@ -171,8 +171,8 @@ function ReservationDateFilter({
       <PopoverContent className="w-auto p-0" align="start">
         <div className="flex max-sm:flex-col">
           <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
-            <div className="h-full border-border py-2 sm:border-e">
-              <div className="flex flex-col gap-0.5 px-2">
+            <div className="h-full border-border py-1.5 sm:border-e">
+              <div className="flex flex-col gap-0.5 px-1.5">
                 {presets.map((preset, index) => (
                   <Button
                     key={index}
@@ -201,7 +201,7 @@ function ReservationDateFilter({
             numberOfMonths={2}
           />
         </div>
-        <div className="flex items-center justify-end gap-1.5 border-t border-border p-3">
+        <div className="flex items-center justify-end gap-2 border-t border-border p-3">
           <Button variant="outline" onClick={handleReset}>
             <Trans>Reset</Trans>
           </Button>

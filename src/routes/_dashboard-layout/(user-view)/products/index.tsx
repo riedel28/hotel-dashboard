@@ -43,7 +43,7 @@ function ProductsPage() {
       </Breadcrumb>
 
       <div className="mb-6 flex justify-between">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Products</Trans>
         </h1>
       </div>

@@ -89,6 +89,7 @@ function LanguageSubmenu({
             <GlobeIcon className="text-muted-foreground" />
             <Trans>Language</Trans>
           </div>
+
           <Badge
             variant="outline"
             className="flex h-5 min-w-5 items-center text-[11px] gap-2 px-1.5 rounded-sm"
@@ -199,7 +200,7 @@ interface LogoutMenuItemProps {
 function LogoutMenuItem({ version, onLogout }: LogoutMenuItemProps) {
   return (
     <DropdownMenuItem className="group" onClick={onLogout}>
-      <LogOutIcon className="text-muted-foreground" />
+      <LogOutIcon className="text-muted-foreground mr-0.5" />
       <Trans>Log out</Trans>
       <span className="ml-auto text-xs text-muted-foreground!">
         <Trans>v{version}</Trans>
@@ -263,7 +264,7 @@ export default function UserMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem render={<Link to="/profile" />}>
-              <UserCircleIcon className="text-muted-foreground" />
+              <UserCircleIcon className="text-muted-foreground mr-0.5" />
               <Trans>Profile</Trans>
             </DropdownMenuItem>
             <LanguageSubmenu

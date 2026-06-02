@@ -57,7 +57,7 @@ function RoomPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Edit room</Trans>
         </h1>
       </div>

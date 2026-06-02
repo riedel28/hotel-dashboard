@@ -19,8 +19,8 @@ import { cn } from '@/lib/utils';
 const headerCellSpacingVariants = cva('', {
   variants: {
     size: {
-      dense: 'px-2.5 h-8',
-      default: 'px-4'
+      dense: 'px-1.5 h-9',
+      default: 'px-2 h-10'
     }
   },
   defaultVariants: {
@@ -31,8 +31,8 @@ const headerCellSpacingVariants = cva('', {
 const bodyCellSpacingVariants = cva('', {
   variants: {
     size: {
-      dense: 'px-2.5 py-2',
-      default: 'px-4 py-3'
+      dense: 'px-2 py-1.5',
+      default: 'px-3 py-2'
     }
   },
   defaultVariants: {
@@ -333,7 +333,7 @@ function DataGridTableBodyRowExpandded<TData extends object>({
       <td colSpan={row.getVisibleCells().length}>
         {table
           .getAllColumns()
-          .find((column) => column.columnDef.meta?.expandedContent)
+          .find(column => column.columnDef.meta?.expandedContent)
           ?.columnDef.meta?.expandedContent?.(row.original as TData)}
       </td>
     </tr>
@@ -455,13 +455,13 @@ function DataGridTableRowSelect<TData>({ row }: { row: Row<TData> }) {
     <>
       <div
         className={cn(
-          'absolute start-0 top-0 bottom-0 hidden w-[2px] bg-primary',
+          'absolute inset-s-0 top-0 bottom-0 hidden w-0.5 bg-primary',
           row.getIsSelected() && 'block'
         )}
       ></div>
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onCheckedChange={value => row.toggleSelected(!!value)}
         aria-label={t`Select row`}
         className="align-[inherit]"
       />
@@ -480,7 +480,7 @@ function DataGridTableRowSelectAll() {
         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
       }
       disabled={isLoading || recordCount === 0}
-      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
       aria-label={t`Select all`}
       className="align-[inherit]"
     />

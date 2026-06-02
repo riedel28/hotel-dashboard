@@ -108,7 +108,7 @@ export default function UsersTable({
                     <Badge
                       size="xs"
                       variant="warning"
-                      className="shrink-0 rounded-md border border-foreground/10 capitalize"
+                      className="shrink-0 rounded-md border border-foreground/10 capitalize bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400"
                     >
                       <Trans>Pending</Trans>
                     </Badge>
@@ -144,7 +144,7 @@ export default function UsersTable({
             column={column}
           />
         ),
-        cell: (info) => (
+        cell: info => (
           <span className="truncate block max-w-full">
             {info.getValue() as string}
           </span>
@@ -234,7 +234,7 @@ export default function UsersTable({
                       {t`${roles.length} roles total`}
                     </p>
                     <div className="flex flex-wrap gap-1">
-                      {roles.map((role) => (
+                      {roles.map(role => (
                         <Badge
                           key={role.id}
                           size="xs"
@@ -287,7 +287,7 @@ export default function UsersTable({
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
-    columns.map((column) => column.id as string)
+    columns.map(column => column.id as string)
   );
 
   const table = useReactTable({

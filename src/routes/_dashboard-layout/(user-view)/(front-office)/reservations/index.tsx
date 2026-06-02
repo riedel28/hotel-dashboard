@@ -67,7 +67,7 @@ function ReservationsPage() {
       </Breadcrumb>
 
       <div className="mb-6 flex justify-between">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Reservations</Trans>
         </h1>
         <AddReservationModal />
@@ -162,7 +162,7 @@ function ReservationsContent() {
     if (!newStatus) return;
     navigate({
       to: '/reservations',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: 1,
         status: newStatus as 'pending' | 'started' | 'done' | 'all'
@@ -175,7 +175,7 @@ function ReservationsContent() {
   ) => {
     navigate({
       to: '/reservations',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: 1,
         from: dateRange?.from
@@ -189,7 +189,7 @@ function ReservationsContent() {
   const handleSearchChange = (searchTerm: string) => {
     navigate({
       to: '/reservations',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: 1,
         q: searchTerm || undefined
@@ -212,7 +212,7 @@ function ReservationsContent() {
 
     navigate({
       to: '/reservations',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: pagination.pageIndex + 1, // Convert to 0-based for URL
         per_page: pagination.pageSize
@@ -237,7 +237,7 @@ function ReservationsContent() {
     if (firstSort) {
       navigate({
         to: '/reservations',
-        search: (prev) => ({
+        search: prev => ({
           ...prev,
           page: 1, // Reset to first page when sorting changes
           sort_by: firstSort.id as
@@ -255,7 +255,7 @@ function ReservationsContent() {
       // Clear sorting - use default
       navigate({
         to: '/reservations',
-        search: (prev) => ({
+        search: prev => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -339,7 +339,7 @@ function ReservationsContent() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/reservations/'
 )({
-  validateSearch: (search) => fetchReservationsParamsSchema.parse(search),
+  validateSearch: search => fetchReservationsParamsSchema.parse(search),
   loaderDeps: ({ search }) => search,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(reservationsQueryOptions(deps));

@@ -50,10 +50,10 @@ function StartPage() {
 
   return (
     <div>
-      <h1 className="text-xl md:text-2xl font-semibold">
+      <h1 className="text-xl font-semibold">
         <Trans>Welcome back, {userName}!</Trans>
       </h1>
-      <p className="text-sm md:text-lg text-muted-foreground">
+      <p className="text-sm md:text-base text-muted-foreground">
         <Trans>Manage your hotel operations efficiently</Trans>
       </p>
 

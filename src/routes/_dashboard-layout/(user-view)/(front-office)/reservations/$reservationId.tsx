@@ -57,7 +57,7 @@ function ReservationPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Edit reservation</Trans>
         </h1>
       </div>

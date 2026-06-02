@@ -33,10 +33,10 @@ function AdminStartPage() {
 
   return (
     <div>
-      <h1 className="text-xl md:text-2xl font-semibold">
+      <h1 className="text-xl font-semibold">
         <Trans>Admin Dashboard</Trans>
       </h1>
-      <p className="text-sm md:text-lg text-muted-foreground">
+      <p className="text-sm md:text-base text-muted-foreground">
         <Trans>Welcome back, {userName}!</Trans>
       </p>
 

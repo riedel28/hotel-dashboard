@@ -21,7 +21,7 @@ export function PropertyRefresh({
       className="w-full sm:w-auto sm:ml-auto"
     >
       <RefreshCwIcon
-        className={cn('mr-2 h-4 w-4', isRefreshing && 'animate-spin')}
+        className={cn('size-3.5', isRefreshing && 'animate-spin')}
       />
       <Trans>Refresh</Trans>
     </Button>

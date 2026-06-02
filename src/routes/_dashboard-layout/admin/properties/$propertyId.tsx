@@ -63,7 +63,7 @@ function PropertyPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Edit Property</Trans>
         </h1>
       </div>

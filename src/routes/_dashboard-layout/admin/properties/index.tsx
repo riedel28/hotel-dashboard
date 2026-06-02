@@ -84,9 +84,9 @@ function RowActions({ row }: { row: { original: Property } }) {
             <Trans>Open menu</Trans>
           </span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[180px]">
+        <DropdownMenuContent align="end" className="w-35">
           <DropdownMenuItem
-            render={(props) => (
+            render={props => (
               <RouterLink
                 {...props}
                 to="/admin/properties/$propertyId"
@@ -166,7 +166,7 @@ function PropertiesTable({
             column={column}
           />
         ),
-        cell: (info) => {
+        cell: info => {
           const name = info.getValue() as string;
           return (
             <span className="font-medium line-clamp-1" title={name}>
@@ -266,7 +266,7 @@ function PropertiesTable({
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
-    columns.map((column) => column.id as string)
+    columns.map(column => column.id as string)
   );
 
   const [, setInternalSorting] = useState<SortingState>([]);
@@ -342,7 +342,7 @@ function PropertiesContent() {
   const handleSearchChange = (searchTerm: string) => {
     navigate({
       to: '/admin/properties',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         q: searchTerm || undefined,
         page: 1
@@ -353,7 +353,7 @@ function PropertiesContent() {
   const handleStageChange = (value: string | null) => {
     navigate({
       to: '/admin/properties',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         stage:
           !value || value === 'all'
@@ -367,7 +367,7 @@ function PropertiesContent() {
   const handleCountryChange = (value: string | null) => {
     navigate({
       to: '/admin/properties',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         country_code: value || undefined,
         page: 1
@@ -401,7 +401,7 @@ function PropertiesContent() {
     if (firstSort) {
       navigate({
         to: '/admin/properties',
-        search: (prev) => ({
+        search: prev => ({
           ...prev,
           page: 1,
           sort_by: firstSort.id as 'name' | 'country_code' | 'stage',
@@ -411,7 +411,7 @@ function PropertiesContent() {
     } else {
       navigate({
         to: '/admin/properties',
-        search: (prev) => ({
+        search: prev => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -436,7 +436,7 @@ function PropertiesContent() {
 
     navigate({
       to: '/admin/properties',
-      search: (prev) => ({
+      search: prev => ({
         ...prev,
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
@@ -512,7 +512,7 @@ function PropertiesPage() {
       </Breadcrumb>
 
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Properties</Trans>
         </h1>
         <AddPropertyModal />
@@ -570,7 +570,7 @@ function PropertiesPage() {
 }
 
 export const Route = createFileRoute('/_dashboard-layout/admin/properties/')({
-  validateSearch: (search) => fetchPropertiesParamsSchema.parse(search),
+  validateSearch: search => fetchPropertiesParamsSchema.parse(search),
   loaderDeps: ({ search }) => search,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(propertiesQueryOptions(deps));

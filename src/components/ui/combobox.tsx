@@ -1,7 +1,7 @@
 'use client';
 
 import { Combobox as ComboboxPrimitive } from '@base-ui/react';
-import { CheckIcon, ChevronsUpDownIcon, XIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,11 +26,11 @@ function ComboboxTrigger({
   return (
     <ComboboxPrimitive.Trigger
       data-slot="combobox-trigger"
-      className={cn("[&_svg:not([class*='size-'])]:size-3.5", className)}
+      className={cn("[&_svg:not([class*='size-'])]:size-4", className)}
       {...props}
     >
       {children}
-      <ChevronsUpDownIcon className="text-muted-foreground size-3.5 shrink-0 pointer-events-none" />
+      <ChevronDownIcon className="text-muted-foreground size-4 shrink-0 pointer-events-none" />
     </ComboboxPrimitive.Trigger>
   );
 }

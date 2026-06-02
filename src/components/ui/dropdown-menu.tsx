@@ -88,7 +88,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "focus:bg-accent focus:text-accent-foreground hover:bg-destructive/10 hover:text-destructive hover:[&_svg]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground gap-1.5 rounded-sm px-1.5 py-1 text-sm [&_svg:not([class*='size-'])]:size-3.5 group/dropdown-menu-item relative flex cursor-default items-center focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-inset:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/80 data-[variant=destructive]:hover:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive/80 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:dark:hover:bg-destructive/30 data-[variant=destructive]:dark:focus:bg-destructive/30 data-[variant=destructive]:focus-visible:outline-destructive/40 data-[variant=destructive]:hover:[&_svg]:text-destructive-foreground data-[variant=destructive]:focus:[&_svg]:text-destructive-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground gap-1.5 rounded-sm px-1.5 py-1 text-sm [&_svg:not([class*='size-'])]:size-3.5 group/dropdown-menu-item relative flex cursor-default items-center focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-inset:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
       {...props}
@@ -236,7 +236,7 @@ function DropdownMenuShortcut({
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        'text-muted-foreground group-focus/dropdown-menu-item:text-accent-foreground group-data-[variant=destructive]/dropdown-menu-item:group-hover/dropdown-menu-item:text-destructive ml-auto text-xs tracking-widest',
+        'text-muted-foreground group-focus/dropdown-menu-item:text-accent-foreground group-data-[variant=destructive]/dropdown-menu-item:group-hover/dropdown-menu-item:text-destructive-foreground group-data-[variant=destructive]/dropdown-menu-item:group-focus/dropdown-menu-item:text-destructive-foreground ml-auto text-xs tracking-widest',
         className
       )}
       {...props}

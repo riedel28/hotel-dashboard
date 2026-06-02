@@ -57,9 +57,9 @@ export function RowActions({ row }: RowActionsProps) {
             <Trans>Open menu</Trans>
           </span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[200px]">
+        <DropdownMenuContent align="end" className="w-[150px]">
           <DropdownMenuItem
-            render={(props) => (
+            render={props => (
               <RouterLink
                 {...props}
                 to="/users/$userId"
@@ -69,7 +69,7 @@ export function RowActions({ row }: RowActionsProps) {
                 search={{}}
                 replace
               >
-                <PenSquareIcon className="mr-2 h-4 w-4" />
+                <PenSquareIcon className="mr-1 size-4" />
                 <Trans>Edit</Trans>
               </RouterLink>
             )}
@@ -81,7 +81,7 @@ export function RowActions({ row }: RowActionsProps) {
                 onClick={() => resendMutation.mutate()}
                 disabled={resendMutation.isPending}
               >
-                <MailIcon className="mr-2 h-4 w-4" />
+                <MailIcon className="mr-1 size-4" />
                 <Trans>Resend invitation</Trans>
               </DropdownMenuItem>
             </>
@@ -91,7 +91,7 @@ export function RowActions({ row }: RowActionsProps) {
             variant="destructive"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <TrashIcon className="mr-2 h-4 w-4" />
+            <TrashIcon className="mr-1 size-4" />
             <Trans>Delete</Trans>
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
