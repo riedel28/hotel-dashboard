@@ -1,33 +1,36 @@
-import { CreditCard, LayoutGrid, Lock } from 'lucide-react';
+import { CreditCard, LayoutGrid, Lock, type LucideIcon } from 'lucide-react';
 import { type MonitoringType } from 'shared/types/monitoring';
-import { Badge } from '@/components/ui/badge';
+import { Badge, type BadgeColorProps } from '@/components/ui/badge';
 
 interface TypeCellProps {
   type: MonitoringType;
 }
 
-const config = {
+const config: Record<
+  MonitoringType,
+  { icon: LucideIcon; color: BadgeColorProps }
+> = {
   pms: {
     icon: LayoutGrid,
-    variant: 'info' as const
+    color: 'indigo' as const
   },
   payment: {
     icon: CreditCard,
-    variant: 'default' as const
+    color: 'sky' as const
   },
   'door lock': {
     icon: Lock,
-    variant: 'warning' as const
+    color: 'fuchsia' as const
   }
 };
 
 export function TypeCell({ type }: TypeCellProps) {
-  const { icon: Icon, variant } = config[type];
+  const { icon: Icon, color } = config[type];
 
   return (
     <Badge
       size="sm"
-      variant={variant}
+      color={color}
       className="shrink-0 rounded-md flex items-center gap-1.5 border border-foreground/10 capitalize"
     >
       <Icon className="size-3" />
