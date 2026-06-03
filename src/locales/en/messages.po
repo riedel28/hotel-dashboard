@@ -33,7 +33,7 @@ msgid "(opens in new tab)"
 msgstr "(opens in new tab)"
 
 #. placeholder {0}: themeLabels[currentTheme]
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:166
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:168
 msgid "{0}"
 msgstr "{0}"
 
@@ -147,8 +147,8 @@ msgstr "Add subcategory"
 msgid "Admin"
 msgstr "Admin"
 
-#: src/routes/_dashboard-layout/admin/index.tsx:15
-#: src/routes/_dashboard-layout/admin/index.tsx:39
+#: src/routes/_dashboard-layout/admin/index.tsx:14
+#: src/routes/_dashboard-layout/admin/index.tsx:37
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
 
@@ -190,7 +190,7 @@ msgstr "All countries"
 msgid "All Statuses"
 msgstr "All Statuses"
 
-#: src/routes/_auth-layout/auth/sign-up.tsx:306
+#: src/routes/_auth-layout/auth/sign-up.tsx:300
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -298,7 +298,7 @@ msgstr "Authy"
 msgid "Available"
 msgstr "Available"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:77
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -320,11 +320,11 @@ msgstr "Avatar upload is not yet implemented"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:97
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:298
-#: src/routes/_auth-layout/auth/forgot-password.tsx:61
-#: src/routes/_auth-layout/auth/forgot-password.tsx:168
+#: src/routes/_auth-layout/auth/forgot-password.tsx:55
+#: src/routes/_auth-layout/auth/forgot-password.tsx:163
 #: src/routes/_auth-layout/auth/reset-password.tsx:87
 #: src/routes/_auth-layout/auth/reset-password.tsx:227
-#: src/routes/_auth-layout/auth/sign-up.tsx:103
+#: src/routes/_auth-layout/auth/sign-up.tsx:100
 #: src/routes/_auth-layout/auth/verify-email.tsx:63
 #: src/routes/_auth-layout/auth/verify-email.tsx:112
 msgid "Back to login"
@@ -394,7 +394,7 @@ msgstr "Category name"
 msgid "Change Image"
 msgstr "Change Image"
 
-#: src/routes/_auth-layout/-components/language-switcher.tsx:48
+#: src/routes/_auth-layout/-components/language-switcher.tsx:44
 msgid "Change language"
 msgstr "Change language"
 
@@ -402,7 +402,7 @@ msgstr "Change language"
 msgid "Change your password to keep your account secure"
 msgstr "Change your password to keep your account secure"
 
-#: src/routes/_auth-layout/auth/sign-up.tsx:78
+#: src/routes/_auth-layout/auth/sign-up.tsx:75
 msgid "Check your email"
 msgstr "Check your email"
 
@@ -462,7 +462,7 @@ msgstr "Clear filters"
 msgid "Close"
 msgstr "Close"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:245
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:247
 msgid "CN"
 msgstr "CN"
 
@@ -539,7 +539,7 @@ msgstr "Country"
 msgid "Create"
 msgstr "Create"
 
-#: src/routes/_auth-layout/auth/sign-up.tsx:156
+#: src/routes/_auth-layout/auth/sign-up.tsx:155
 msgid "Create an account to access the dashboard"
 msgstr "Create an account to access the dashboard"
 
@@ -576,9 +576,9 @@ msgstr "Current password is required"
 #~ msgid "Current View: {currentView}"
 #~ msgstr "Current View: {currentView}"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:105
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:108
 #: src/routes/_dashboard-layout/admin/customers.tsx:11
-#: src/routes/_dashboard-layout/admin/index.tsx:26
+#: src/routes/_dashboard-layout/admin/index.tsx:25
 msgid "Customers"
 msgstr "Customers"
 
@@ -586,11 +586,11 @@ msgstr "Customers"
 #~ msgid "Czech Republic"
 #~ msgstr "Czech Republic"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:181
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:183
 msgid "Dark"
 msgstr "Dark"
 
-#: src/routes/_dashboard-layout/index.tsx:19
+#: src/routes/_dashboard-layout/index.tsx:18
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -633,7 +633,6 @@ msgstr "Delete product?"
 msgid "Delete property?"
 msgstr "Delete property?"
 
-#: src/components/ui/stage-badge.tsx:16
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:45
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:156
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:85
@@ -661,7 +660,7 @@ msgstr "Desc"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:184
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:187
 msgid "Displays the mobile sidebar."
 msgstr "Displays the mobile sidebar."
 
@@ -732,9 +731,9 @@ msgstr "Edit room"
 msgid "Edit user"
 msgstr "Edit user"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:123
-#: src/routes/_auth-layout/auth/login.tsx:161
-#: src/routes/_auth-layout/auth/sign-up.tsx:232
+#: src/routes/_auth-layout/auth/forgot-password.tsx:121
+#: src/routes/_auth-layout/auth/login.tsx:157
+#: src/routes/_auth-layout/auth/sign-up.tsx:230
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:146
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:144
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:121
@@ -748,7 +747,7 @@ msgstr "Email"
 msgid "Email is required"
 msgstr "Email is required"
 
-#: src/routes/_auth-layout/auth/login.tsx:130
+#: src/routes/_auth-layout/auth/login.tsx:126
 msgid "Email not verified"
 msgstr "Email not verified"
 
@@ -826,28 +825,28 @@ msgstr "Enter room type (e.g., Standard, Suite)"
 #~ msgid "Enter your credentials to access the dashboard"
 #~ msgstr "Enter your credentials to access the dashboard"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:129
-#: src/routes/_auth-layout/auth/login.tsx:167
-#: src/routes/_auth-layout/auth/sign-up.tsx:238
+#: src/routes/_auth-layout/auth/forgot-password.tsx:127
+#: src/routes/_auth-layout/auth/login.tsx:163
+#: src/routes/_auth-layout/auth/sign-up.tsx:236
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:127
 msgid "Enter your email"
 msgstr "Enter your email"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:104
+#: src/routes/_auth-layout/auth/forgot-password.tsx:103
 msgid "Enter your email address and we'll send you a link to reset your password."
 msgstr "Enter your email address and we'll send you a link to reset your password."
 
-#: src/routes/_auth-layout/auth/login.tsx:115
+#: src/routes/_auth-layout/auth/login.tsx:111
 msgid "Enter your email and password to access the dashboard"
 msgstr "Enter your email and password to access the dashboard"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:167
-#: src/routes/_auth-layout/auth/sign-up.tsx:178
+#: src/routes/_auth-layout/auth/sign-up.tsx:176
 msgid "Enter your first name"
 msgstr "Enter your first name"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:197
-#: src/routes/_auth-layout/auth/sign-up.tsx:208
+#: src/routes/_auth-layout/auth/sign-up.tsx:206
 msgid "Enter your last name"
 msgstr "Enter your last name"
 
@@ -860,12 +859,12 @@ msgid "Enter your new password below"
 msgstr "Enter your new password below"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:226
-#: src/routes/_auth-layout/auth/login.tsx:196
-#: src/routes/_auth-layout/auth/sign-up.tsx:267
+#: src/routes/_auth-layout/auth/login.tsx:192
+#: src/routes/_auth-layout/auth/sign-up.tsx:265
 msgid "Enter your password"
 msgstr "Enter your password"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:22
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:297
 msgid "Error"
 msgstr "Error"
@@ -927,7 +926,7 @@ msgstr "Event"
 msgid "Failed to activate account. The link may have expired."
 msgstr "Failed to activate account. The link may have expired."
 
-#: src/routes/_auth-layout/auth/sign-up.tsx:132
+#: src/routes/_auth-layout/auth/sign-up.tsx:130
 msgid "Failed to create account. Please try again."
 msgstr "Failed to create account. Please try again."
 
@@ -955,7 +954,7 @@ msgstr "Failed to load categories"
 msgid "Failed to load products"
 msgstr "Failed to load products"
 
-#: src/routes/_auth-layout/auth/login.tsx:84
+#: src/routes/_auth-layout/auth/login.tsx:80
 msgid "Failed to login. Please try again."
 msgstr "Failed to login. Please try again."
 
@@ -975,8 +974,8 @@ msgstr "Failed to reload properties"
 msgid "Failed to resend invitation"
 msgstr "Failed to resend invitation"
 
-#: src/routes/_auth-layout/auth/login.tsx:95
-#: src/routes/_auth-layout/auth/sign-up.tsx:67
+#: src/routes/_auth-layout/auth/login.tsx:91
+#: src/routes/_auth-layout/auth/sign-up.tsx:63
 msgid "Failed to resend verification email"
 msgstr "Failed to resend verification email"
 
@@ -992,7 +991,7 @@ msgstr "Failed to reset password. The link may have expired."
 msgid "Failed to send invitation"
 msgstr "Failed to send invitation"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:85
+#: src/routes/_auth-layout/auth/forgot-password.tsx:79
 msgid "Failed to send password reset email. Please try again."
 msgstr "Failed to send password reset email. Please try again."
 
@@ -1029,7 +1028,7 @@ msgstr "File size must be less than 5MB"
 #~ msgstr "First name"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:161
-#: src/routes/_auth-layout/auth/sign-up.tsx:172
+#: src/routes/_auth-layout/auth/sign-up.tsx:170
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:102
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:103
@@ -1048,20 +1047,20 @@ msgid "First name is required"
 msgstr "First name is required"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:50
-msgid "Follow the instructions to finish resetting your password."
-msgstr "Follow the instructions to finish resetting your password."
+#~ msgid "Follow the instructions to finish resetting your password."
+#~ msgstr "Follow the instructions to finish resetting your password."
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:70
-#: src/routes/_auth-layout/auth/forgot-password.tsx:101
+#: src/routes/_auth-layout/auth/forgot-password.tsx:64
+#: src/routes/_auth-layout/auth/forgot-password.tsx:100
 msgid "Forgot Password"
 msgstr "Forgot Password"
 
-#: src/routes/_auth-layout/auth/login.tsx:245
+#: src/routes/_auth-layout/auth/login.tsx:238
 msgid "Forgot password?"
 msgstr "Forgot password?"
 
-#: src/routes/_dashboard-layout.tsx:193
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:138
+#: src/routes/_dashboard-layout.tsx:196
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:141
 msgid "Front Office"
 msgstr "Front Office"
 
@@ -1225,7 +1224,7 @@ msgstr "Hello /orders!"
 msgid "Hello from About!"
 msgstr "Hello from About!"
 
-#: src/components/ui/password-input.tsx:28
+#: src/components/ui/password-input.tsx:37
 msgid "Hide password"
 msgstr "Hide password"
 
@@ -1236,7 +1235,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:33
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:96
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:51
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:43
@@ -1246,9 +1245,9 @@ msgstr "Hide password"
 msgid "Home"
 msgstr "Home"
 
-#: src/routes/_dashboard-layout.tsx:117
-#: src/routes/_dashboard-layout.tsx:469
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:196
+#: src/routes/_dashboard-layout.tsx:120
+#: src/routes/_dashboard-layout.tsx:472
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:199
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
@@ -1319,7 +1318,7 @@ msgstr "Language"
 #~ msgstr "Last name"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:191
-#: src/routes/_auth-layout/auth/sign-up.tsx:202
+#: src/routes/_auth-layout/auth/sign-up.tsx:200
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:125
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:124
@@ -1345,7 +1344,7 @@ msgstr "Last name is required"
 #~ msgid "Last sent: {lastSent}"
 #~ msgstr "Last sent: {lastSent}"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:177
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:179
 msgid "Light"
 msgstr "Light"
 
@@ -1361,15 +1360,15 @@ msgstr "Loading..."
 #~ msgid "Location"
 #~ msgstr "Location"
 
-#: src/routes/_dashboard-layout/-components/logout-dialog.tsx:72
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:202
+#: src/routes/_dashboard-layout/-components/logout-dialog.tsx:74
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:204
 msgid "Log out"
 msgstr "Log out"
 
-#: src/routes/_auth-layout/auth/login.tsx:61
-#: src/routes/_auth-layout/auth/login.tsx:112
-#: src/routes/_auth-layout/auth/login.tsx:261
-#: src/routes/_auth-layout/auth/sign-up.tsx:312
+#: src/routes/_auth-layout/auth/login.tsx:57
+#: src/routes/_auth-layout/auth/login.tsx:108
+#: src/routes/_auth-layout/auth/login.tsx:254
+#: src/routes/_auth-layout/auth/sign-up.tsx:302
 msgid "Login"
 msgstr "Login"
 
@@ -1377,7 +1376,7 @@ msgstr "Login"
 #~ msgid "Login into account"
 #~ msgstr "Login into account"
 
-#: src/routes/_dashboard-layout.tsx:394
+#: src/routes/_dashboard-layout.tsx:397
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -1388,7 +1387,7 @@ msgstr "Main navigation"
 msgid "Maintenance"
 msgstr "Maintenance"
 
-#: src/routes/_dashboard-layout/admin/index.tsx:21
+#: src/routes/_dashboard-layout/admin/index.tsx:20
 msgid "Manage hotel properties, view details, and configure settings"
 msgstr "Manage hotel properties, view details, and configure settings"
 
@@ -1396,11 +1395,11 @@ msgstr "Manage hotel properties, view details, and configure settings"
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Manage orders, track shipments, view order history, and process returns efficiently"
 
-#: src/routes/_dashboard-layout/index.tsx:32
+#: src/routes/_dashboard-layout/index.tsx:31
 msgid "Manage room inventory, availability, and room type configurations"
 msgstr "Manage room inventory, availability, and room type configurations"
 
-#: src/routes/_dashboard-layout/index.tsx:38
+#: src/routes/_dashboard-layout/index.tsx:37
 msgid "Manage users, view user details, and assign roles"
 msgstr "Manage users, view user details, and assign roles"
 
@@ -1408,7 +1407,7 @@ msgstr "Manage users, view user details, and assign roles"
 #~ msgid "Manage users, view user details, and manage user roles"
 #~ msgstr "Manage users, view user details, and manage user roles"
 
-#: src/routes/_dashboard-layout/index.tsx:59
+#: src/routes/_dashboard-layout/index.tsx:57
 msgid "Manage your hotel operations efficiently"
 msgstr "Manage your hotel operations efficiently"
 
@@ -1441,16 +1440,16 @@ msgstr "Microsoft Authenticator"
 #~ msgid "Mobile App"
 #~ msgstr "Mobile App"
 
-#: src/routes/_dashboard-layout/index.tsx:44
+#: src/routes/_dashboard-layout/index.tsx:43
 msgid "Monitor daily operations, track occupancy, and oversee front-office activity"
 msgstr "Monitor daily operations, track occupancy, and oversee front-office activity"
 
-#: src/routes/_dashboard-layout.tsx:182
-#: src/routes/_dashboard-layout.tsx:184
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:129
+#: src/routes/_dashboard-layout.tsx:185
+#: src/routes/_dashboard-layout.tsx:187
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:132
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:46
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:242
-#: src/routes/_dashboard-layout/index.tsx:43
+#: src/routes/_dashboard-layout/index.tsx:42
 msgid "Monitoring"
 msgstr "Monitoring"
 
@@ -1521,7 +1520,7 @@ msgstr "Next"
 msgid "No categories yet. Add a category to get started."
 msgstr "No categories yet. Add a category to get started."
 
-#: src/components/ui/country-picker.tsx:116
+#: src/components/ui/country-picker.tsx:117
 msgid "No country found."
 msgstr "No country found."
 
@@ -1550,8 +1549,12 @@ msgid "No products in this category. Add products to this category by clicking t
 msgstr "No products in this category. Add products to this category by clicking the button below."
 
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:178
-msgid "No properties found."
-msgstr "No properties found."
+msgid "No properties found"
+msgstr "No properties found"
+
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:178
+#~ msgid "No properties found."
+#~ msgstr "No properties found."
 
 #: src/components/ui/data-grid-column-filter.tsx:91
 #~ msgid "No results found."
@@ -1583,8 +1586,8 @@ msgid "Occupied"
 msgstr "Occupied"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:36
-msgid "OK"
-msgstr "OK"
+#~ msgid "OK"
+#~ msgstr "OK"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:198
 msgid "Open guest menu"
@@ -1622,9 +1625,9 @@ msgstr "Page not found"
 #~ msgstr "Page URL"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:221
-#: src/routes/_auth-layout/auth/login.tsx:191
-#: src/routes/_auth-layout/auth/sign-up.tsx:262
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:89
+#: src/routes/_auth-layout/auth/login.tsx:187
+#: src/routes/_auth-layout/auth/sign-up.tsx:260
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:55
 msgid "Password"
 msgstr "Password"
@@ -1649,7 +1652,7 @@ msgstr "Password change is not yet implemented"
 msgid "Password must be at least 8 characters long"
 msgstr "Password must be at least 8 characters long"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:82
+#: src/routes/_auth-layout/auth/forgot-password.tsx:76
 msgid "Password reset email sent successfully!"
 msgstr "Password reset email sent successfully!"
 
@@ -1688,7 +1691,7 @@ msgstr "Pending"
 msgid "Per page"
 msgstr "Per page"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:62
 msgid "Personal"
 msgstr "Personal"
 
@@ -1713,6 +1716,10 @@ msgstr "Pin to left"
 #: src/components/ui/data-grid-column-header.tsx:258
 msgid "Pin to right"
 msgstr "Pin to right"
+
+#: src/routes/_auth-layout/auth/forgot-password.tsx:46
+msgid "Please check your inbox and follow the instructions to reset your password."
+msgstr "Please check your inbox and follow the instructions to reset your password."
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:28
 msgid "Please confirm your password"
@@ -1762,7 +1769,7 @@ msgstr "Please select a valid image file (JPG, PNG, GIF)"
 msgid "Please select at least one role"
 msgstr "Please select at least one role"
 
-#: src/routes/_auth-layout/auth/login.tsx:134
+#: src/routes/_auth-layout/auth/login.tsx:130
 msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
@@ -1796,7 +1803,6 @@ msgstr "Private"
 msgid "Product categories"
 msgstr "Product categories"
 
-#: src/components/ui/stage-badge.tsx:18
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:46
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:150
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:69
@@ -1817,10 +1823,10 @@ msgstr "Products"
 #~ msgid "Products in {categoryTitle}"
 #~ msgstr "Products in {categoryTitle}"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:266
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:29
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:62
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:268
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:44
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:110
 msgid "Profile"
 msgstr "Profile"
 
@@ -1844,10 +1850,10 @@ msgstr "Profile update is not yet implemented"
 #~ msgid "Profile updated successfully"
 #~ msgstr "Profile updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:149
-#: src/routes/_dashboard-layout.tsx:151
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:96
-#: src/routes/_dashboard-layout/admin/index.tsx:20
+#: src/routes/_dashboard-layout.tsx:152
+#: src/routes/_dashboard-layout.tsx:154
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:99
+#: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:55
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:488
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:508
@@ -1888,6 +1894,10 @@ msgstr "Push to device"
 msgid "Pushed to device"
 msgstr "Pushed to device"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:22
+msgid "Ready"
+msgstr "Ready"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:124
 msgid "Received At"
 msgstr "Received At"
@@ -1927,8 +1937,8 @@ msgstr "Reload properties"
 #~ msgid "Reloading properties"
 #~ msgstr "Reloading properties"
 
-#: src/routes/_auth-layout/auth/login.tsx:229
-#: src/routes/_auth-layout/auth/login.tsx:235
+#: src/routes/_auth-layout/auth/login.tsx:225
+#: src/routes/_auth-layout/auth/login.tsx:231
 msgid "Remember me"
 msgstr "Remember me"
 
@@ -1944,8 +1954,8 @@ msgstr "Remove Image"
 msgid "Resend invitation"
 msgstr "Resend invitation"
 
-#: src/routes/_auth-layout/auth/login.tsx:149
-#: src/routes/_auth-layout/auth/sign-up.tsx:100
+#: src/routes/_auth-layout/auth/login.tsx:145
+#: src/routes/_auth-layout/auth/sign-up.tsx:97
 msgid "Resend verification email"
 msgstr "Resend verification email"
 
@@ -1997,14 +2007,14 @@ msgstr "Reservation Number"
 msgid "Reservation updated successfully"
 msgstr "Reservation updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:200
-#: src/routes/_dashboard-layout.tsx:202
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:147
+#: src/routes/_dashboard-layout.tsx:203
+#: src/routes/_dashboard-layout.tsx:205
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:150
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:71
-#: src/routes/_dashboard-layout/index.tsx:24
+#: src/routes/_dashboard-layout/index.tsx:23
 msgid "Reservations"
 msgstr "Reservations"
 
@@ -2013,7 +2023,7 @@ msgstr "Reservations"
 msgid "Reset"
 msgstr "Reset"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:41
+#: src/routes/_auth-layout/auth/forgot-password.tsx:38
 msgid "Reset link sent"
 msgstr "Reset link sent"
 
@@ -2031,7 +2041,7 @@ msgstr "Reset Password"
 #~ msgid "Role"
 #~ msgstr "Role"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:231
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:231
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:206
@@ -2094,14 +2104,14 @@ msgstr "Room Type"
 msgid "Room updated successfully"
 msgstr "Room updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:206
-#: src/routes/_dashboard-layout.tsx:207
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:156
+#: src/routes/_dashboard-layout.tsx:209
+#: src/routes/_dashboard-layout.tsx:210
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:159
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:57
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:65
-#: src/routes/_dashboard-layout/index.tsx:31
+#: src/routes/_dashboard-layout/index.tsx:30
 msgid "Rooms"
 msgstr "Rooms"
 
@@ -2149,7 +2159,7 @@ msgstr "Save Roles"
 msgid "Search"
 msgstr "Search"
 
-#: src/components/ui/country-picker.tsx:106
+#: src/components/ui/country-picker.tsx:107
 msgid "Search country..."
 msgstr "Search country..."
 
@@ -2206,7 +2216,7 @@ msgid "Select all"
 msgstr "Select all"
 
 #: src/components/ui/country-picker.tsx:84
-#: src/components/ui/country-picker.tsx:98
+#: src/components/ui/country-picker.tsx:99
 msgid "Select country"
 msgstr "Select country"
 
@@ -2276,7 +2286,7 @@ msgstr "Send Invitation"
 #~ msgid "Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
 #~ msgstr "Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:162
+#: src/routes/_auth-layout/auth/forgot-password.tsx:158
 msgid "Send reset link"
 msgstr "Send reset link"
 
@@ -2313,7 +2323,7 @@ msgstr "Show"
 msgid "Show details"
 msgstr "Show details"
 
-#: src/components/ui/password-input.tsx:28
+#: src/components/ui/password-input.tsx:37
 msgid "Show password"
 msgstr "Show password"
 
@@ -2325,7 +2335,7 @@ msgstr "Show results for: <0>\"{q}\"</0>"
 msgid "Show results for: <0>\"{searchQuery}\"</0>"
 msgstr "Show results for: <0>\"{searchQuery}\"</0>"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:181
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:184
 msgid "Sidebar"
 msgstr "Sidebar"
 
@@ -2333,14 +2343,14 @@ msgstr "Sidebar"
 #~ msgid "Sign up"
 #~ msgstr "Sign up"
 
-#: src/routes/_auth-layout/auth/sign-up.tsx:112
-#: src/routes/_auth-layout/auth/sign-up.tsx:153
-#: src/routes/_auth-layout/auth/sign-up.tsx:300
+#: src/routes/_auth-layout/auth/sign-up.tsx:110
+#: src/routes/_auth-layout/auth/sign-up.tsx:152
+#: src/routes/_auth-layout/auth/sign-up.tsx:295
 msgid "Sign Up"
 msgstr "Sign Up"
 
 #: src/routes/_auth-layout.tsx:16
-#: src/routes/_dashboard-layout.tsx:413
+#: src/routes/_dashboard-layout.tsx:416
 msgid "Skip to main content"
 msgstr "Skip to main content"
 
@@ -2377,19 +2387,18 @@ msgstr "Sorry, we couldn't find the page you're looking for."
 msgid "Stage"
 msgstr "Stage"
 
-#: src/components/ui/stage-badge.tsx:20
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:47
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:153
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:77
 msgid "Staging"
 msgstr "Staging"
 
-#: src/routes/_dashboard-layout.tsx:139
 #: src/routes/_dashboard-layout.tsx:142
-#: src/routes/_dashboard-layout.tsx:172
+#: src/routes/_dashboard-layout.tsx:145
 #: src/routes/_dashboard-layout.tsx:175
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:87
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:120
+#: src/routes/_dashboard-layout.tsx:178
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:90
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:123
 msgid "Start"
 msgstr "Start"
 
@@ -2421,7 +2430,7 @@ msgstr "Strong password"
 msgid "Success"
 msgstr "Success"
 
-#: src/routes/_auth-layout/auth/login.tsx:78
+#: src/routes/_auth-layout/auth/login.tsx:74
 msgid "Successfully logged in!"
 msgstr "Successfully logged in!"
 
@@ -2466,11 +2475,10 @@ msgstr "Switched to {0}"
 #~ msgid "Switzerland"
 #~ msgstr "Switzerland"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:185
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:187
 msgid "System"
 msgstr "System"
 
-#: src/components/ui/stage-badge.tsx:22
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:159
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:93
@@ -2525,7 +2533,7 @@ msgstr "The user {userName} has been deleted"
 msgid "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 msgstr "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:160
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:162
 msgid "Theme"
 msgstr "Theme"
 
@@ -2589,7 +2597,7 @@ msgstr "Turn on two-factor authentication for better account security"
 msgid "TV App"
 msgstr "TV App"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:82
 msgid "Two Factor"
 msgstr "Two Factor"
 
@@ -2683,7 +2691,7 @@ msgstr "User Details"
 #~ msgid "User features: View reservations, make payments, access basic settings"
 #~ msgstr "User features: View reservations, make payments, access basic settings"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:238
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:240
 msgid "User menu"
 msgstr "User menu"
 
@@ -2704,23 +2712,23 @@ msgstr "User updated successfully"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: src/routes/_dashboard-layout.tsx:211
-#: src/routes/_dashboard-layout.tsx:212
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:165
+#: src/routes/_dashboard-layout.tsx:214
+#: src/routes/_dashboard-layout.tsx:215
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:168
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:202
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:210
-#: src/routes/_dashboard-layout/index.tsx:37
+#: src/routes/_dashboard-layout/index.tsx:36
 msgid "Users"
 msgstr "Users"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:204
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:206
 msgid "v{version}"
 msgstr "v{version}"
 
-#: src/routes/_auth-layout/auth/login.tsx:92
-#: src/routes/_auth-layout/auth/sign-up.tsx:64
+#: src/routes/_auth-layout/auth/login.tsx:88
+#: src/routes/_auth-layout/auth/sign-up.tsx:60
 msgid "Verification email resent successfully"
 msgstr "Verification email resent successfully"
 
@@ -2736,11 +2744,11 @@ msgstr "Verify Email"
 msgid "Verifying your email..."
 msgstr "Verifying your email..."
 
-#: src/routes/_dashboard-layout/admin/index.tsx:27
+#: src/routes/_dashboard-layout/admin/index.tsx:26
 msgid "View and manage customer accounts, profiles, and history"
 msgstr "View and manage customer accounts, profiles, and history"
 
-#: src/routes/_dashboard-layout/index.tsx:25
+#: src/routes/_dashboard-layout/index.tsx:24
 msgid "View and manage guest reservations, check-ins, and booking details"
 msgstr "View and manage guest reservations, check-ins, and booking details"
 
@@ -2749,8 +2757,8 @@ msgstr "View and manage guest reservations, check-ins, and booking details"
 #~ msgstr "Warning"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:44
-msgid "We've sent a password reset email to <0>{email}</0>."
-msgstr "We've sent a password reset email to <0>{email}</0>."
+#~ msgid "We've sent a password reset email to <0>{email}</0>."
+#~ msgstr "We've sent a password reset email to <0>{email}</0>."
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:43
 #~ msgid "We've sent a password reset email to <0>{email}</0>. Follow the instructions to finish resetting your password."
@@ -2760,9 +2768,13 @@ msgstr "We've sent a password reset email to <0>{email}</0>."
 #~ msgid "We've sent a password reset email to <0>{submittedEmail}</0>. Follow the instructions to finish resetting your password."
 #~ msgstr "We've sent a password reset email to <0>{submittedEmail}</0>. Follow the instructions to finish resetting your password."
 
-#: src/routes/_auth-layout/auth/sign-up.tsx:81
+#: src/routes/_auth-layout/auth/sign-up.tsx:78
 msgid "We've sent a verification email to <0>{email}</0>. Click the link in the email to verify your account."
 msgstr "We've sent a verification email to <0>{email}</0>. Click the link in the email to verify your account."
+
+#: src/routes/_auth-layout/auth/forgot-password.tsx:41
+msgid "We've sent password reset instructions to {email}"
+msgstr "We've sent password reset instructions to {email}"
 
 #: src/components/ui/password-strength-meter.tsx:63
 msgid "Weak password"
@@ -2776,8 +2788,8 @@ msgstr "Web App"
 #~ msgid "Welcome back, {0}!"
 #~ msgstr "Welcome back, {0}!"
 
-#: src/routes/_dashboard-layout/admin/index.tsx:42
-#: src/routes/_dashboard-layout/index.tsx:56
+#: src/routes/_dashboard-layout/admin/index.tsx:40
+#: src/routes/_dashboard-layout/index.tsx:54
 msgid "Welcome back, {userName}!"
 msgstr "Welcome back, {userName}!"
 
