@@ -91,7 +91,7 @@ export function AddPropertyModal() {
       <DialogTrigger
         render={
           <Button>
-            <PlusCircleIcon className="size-3.5" />
+            <PlusCircleIcon className="mr-1 size-3.5" />
             <Trans>Add Property</Trans>
           </Button>
         }
@@ -102,7 +102,7 @@ export function AddPropertyModal() {
             <Trans>Create New Property</Trans>
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FieldSet className="gap-6">
             <FieldGroup className="gap-4">
               <Controller
@@ -159,11 +159,11 @@ export function AddPropertyModal() {
                         aria-invalid={fieldState.invalid}
                       >
                         <SelectValue>
-                          {value => <span>{getStageLabel(value)}</span>}
+                          {(value) => <span>{getStageLabel(value)}</span>}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        {stageValues.map(stage => (
+                        {stageValues.map((stage) => (
                           <SelectItem key={stage} value={stage}>
                             {getStageLabel(stage)}
                           </SelectItem>
