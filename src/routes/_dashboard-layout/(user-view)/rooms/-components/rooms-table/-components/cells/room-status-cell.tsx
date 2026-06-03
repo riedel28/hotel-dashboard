@@ -2,11 +2,11 @@ import { Trans } from '@lingui/react/macro';
 import type { RoomStatus } from 'shared/types/rooms';
 import { Badge, type BadgeProps } from '@/components/ui/badge';
 
-const statusVariantMap: Record<RoomStatus, BadgeProps['variant']> = {
-  available: 'success',
-  occupied: 'info',
-  maintenance: 'warning',
-  out_of_order: 'destructive'
+const statusVariantMap: Record<RoomStatus, BadgeProps['color']> = {
+  available: 'emerald',
+  occupied: 'yellow',
+  maintenance: 'sky',
+  out_of_order: 'red'
 };
 
 function getStatusMessage(status: RoomStatus) {
@@ -31,9 +31,9 @@ interface RoomStatusCellProps {
 export function RoomStatusCell({ status }: RoomStatusCellProps) {
   return (
     <Badge
-      variant={statusVariantMap[status] ?? 'secondary'}
+      variant="outline"
+      color={statusVariantMap[status] ?? 'gray'}
       size="sm"
-      className="shrink-0 rounded-md border border-foreground/10 capitalize"
     >
       {getStatusMessage(status)}
     </Badge>

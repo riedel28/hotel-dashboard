@@ -159,7 +159,7 @@ function ErrorDisplayIcon({
 
 type ErrorDisplayStatusProps = {
   value?: string | number;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>;
 
 function ErrorDisplayStatus({
   className,

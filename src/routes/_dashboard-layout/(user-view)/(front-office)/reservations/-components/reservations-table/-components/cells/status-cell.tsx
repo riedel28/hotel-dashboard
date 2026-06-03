@@ -9,16 +9,16 @@ interface StatusCellProps {
   status: ReservationStatus;
 }
 
-function getStatusVariant(status: ReservationStatus): BadgeProps['variant'] {
+function getStatusVariant(status: ReservationStatus): BadgeProps['color'] {
   switch (status) {
     case 'done':
-      return 'success';
+      return 'emerald';
     case 'pending':
-      return 'warning';
+      return 'yellow';
     case 'started':
-      return 'default';
+      return 'sky';
     default:
-      return 'secondary';
+      return 'gray';
   }
 }
 
@@ -37,13 +37,7 @@ function getStatusLabel(status: ReservationStatus): string {
 
 export function StatusCell({ status }: StatusCellProps) {
   return (
-    <Badge
-      size="sm"
-      variant={getStatusVariant(status)}
-      className={cn(
-        'shrink-0 rounded-md border border-foreground/10 capitalize'
-      )}
-    >
+    <Badge size="sm" variant="outline" color={getStatusVariant(status)}>
       {getStatusLabel(status)}
     </Badge>
   );
