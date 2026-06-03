@@ -96,7 +96,7 @@ export default function ReservationsTable({
         size: 12,
         meta: {
           skeleton: <Skeleton className="h-6 w-6 rounded" />,
-          expandedContent: (row) => (
+          expandedContent: row => (
             <div id={`reservation-details-${row.id}`}>
               <ReservationDetails reservation={row} />
             </div>
@@ -161,7 +161,7 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: (info) => <span>{info.getValue() as string}</span>,
+        cell: info => <span>{info.getValue() as string}</span>,
         meta: {
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Room`
@@ -247,11 +247,13 @@ export default function ReservationsTable({
         accessorKey: 'balance',
         id: 'balance',
         header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Balance`}
-            visibility={true}
-            column={column}
-          />
+          <div className="flex justify-end">
+            <DataGridColumnHeader
+              title={t`Balance`}
+              visibility={true}
+              column={column}
+            />
+          </div>
         ),
         cell: ({ row }) => {
           return <BalanceCell value={row.original.balance} currency="EUR" />;
@@ -298,7 +300,7 @@ export default function ReservationsTable({
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
-    columns.map((column) => column.id as string)
+    columns.map(column => column.id as string)
   );
 
   const table = useReactTable({
@@ -306,7 +308,7 @@ export default function ReservationsTable({
     data: data || [],
     pageCount: pageCount, // Calculate from backend values
     getRowId: (row: Reservation) => row.id.toString(),
-    getRowCanExpand: (row) => Boolean(row.original.id),
+    getRowCanExpand: row => Boolean(row.original.id),
     state: {
       pagination,
       sorting,

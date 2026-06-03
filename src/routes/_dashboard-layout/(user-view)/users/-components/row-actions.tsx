@@ -57,7 +57,7 @@ export function RowActions({ row }: RowActionsProps) {
             <Trans>Open menu</Trans>
           </span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[150px]">
+        <DropdownMenuContent align="end" className="min-w-[130px] w-auto">
           <DropdownMenuItem
             render={props => (
               <RouterLink

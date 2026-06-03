@@ -23,10 +23,10 @@ const getCheckinMethodName = (value: CheckinMethod) =>
 
 export function ReservationDetails({ reservation }: ReservationDetailsProps) {
   return (
-    <div className="space-y-4 px-6 py-4">
+    <div className="space-y-3 px-4 py-2.5 bg-card">
       <div className="space-y-2">
         <div className="flex items-center gap-3">
-          <h2 className="text-lg font-medium">
+          <h2 className="text-base font-medium">
             <Trans>Reservation details</Trans>
           </h2>
           <div className="flex items-center gap-1">
@@ -37,7 +37,7 @@ export function ReservationDetails({ reservation }: ReservationDetailsProps) {
         </div>
       </div>
 
-      <div className="grid max-w-6xl grid-cols-3 justify-items-stretch gap-x-12 gap-y-3">
+      <div className="grid max-w-6xl grid-cols-3 justify-items-stretch gap-x-12 bg-muted/50  dark:bg-muted rounded-xl gap-y-3 p-4">
         {/* Column 1 */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">

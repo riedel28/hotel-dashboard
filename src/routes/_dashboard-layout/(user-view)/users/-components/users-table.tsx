@@ -96,7 +96,7 @@ export default function UsersTable({
             .join(' ');
           return (
             <div className="flex items-center gap-3">
-              <Avatar className="size-8">
+              <Avatar size="sm">
                 <AvatarFallback>
                   {getInitials(row.original.first_name, row.original.last_name)}
                 </AvatarFallback>
@@ -105,11 +105,7 @@ export default function UsersTable({
                 <div className="font-medium text-foreground truncate flex items-center gap-2">
                   {fullName || <Trans>No name</Trans>}
                   {!row.original.email_verified && (
-                    <Badge
-                      size="xs"
-                      variant="warning"
-                      className="shrink-0 rounded-md border border-foreground/10 capitalize bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400"
-                    >
+                    <Badge size="xs" variant="outline" color="yellow">
                       <Trans>Pending</Trans>
                     </Badge>
                   )}

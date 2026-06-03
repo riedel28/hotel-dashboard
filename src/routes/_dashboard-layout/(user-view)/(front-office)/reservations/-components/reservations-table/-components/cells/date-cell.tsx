@@ -6,5 +6,9 @@ interface DateCellProps {
 }
 
 export function DateCell({ isoDate, format = 'DD.MM.YYYY' }: DateCellProps) {
-  return <span>{dayjs(isoDate).format(format)}</span>;
+  return (
+    <span className="text-sm text-muted-foreground">
+      {dayjs(isoDate).format(format)}
+    </span>
+  );
 }

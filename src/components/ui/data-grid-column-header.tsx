@@ -112,7 +112,7 @@ function DataGridColumnHeader<TData, TValue>({
       <Button
         variant="ghost"
         className={cn(
-          '-ms-2 h-7 rounded-md px-2 text-[13px] font-medium text-muted-foreground hover:bg-secondary hover:text-muted-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
+          '-ms-2 h-7 rounded-lg px-2 text-[13px] font-medium text-muted-foreground hover:bg-secondary hover:text-muted-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
           className
         )}
         disabled={isLoading || recordCount === 0}
@@ -142,7 +142,7 @@ function DataGridColumnHeader<TData, TValue>({
           ) : column.getIsSorted() === 'asc' ? (
             <ChevronUpIcon className="mt-px size-3.5" />
           ) : (
-            <ChevronsUpDown className="mt-px size-3.5" />
+            <ChevronsUpDown className="mt-px size-3" />
           ))}
       </Button>
     );

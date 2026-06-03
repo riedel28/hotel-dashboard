@@ -32,7 +32,7 @@ const bodyCellSpacingVariants = cva('', {
   variants: {
     size: {
       dense: 'px-2 py-1.5',
-      default: 'px-3 py-2'
+      default: 'px-3 py-2.5'
     }
   },
   defaultVariants: {
