@@ -21,6 +21,7 @@ import { Route as DashboardLayoutuserViewPmsProviderRouteImport } from './routes
 import { Route as DashboardLayoutuserViewPaymentProviderRouteImport } from './routes/_dashboard-layout/(user-view)/payment-provider'
 import { Route as DashboardLayoutuserViewMobileCmsRouteImport } from './routes/_dashboard-layout/(user-view)/mobile-cms'
 import { Route as DashboardLayoutuserViewEventsRouteImport } from './routes/_dashboard-layout/(user-view)/events'
+import { Route as DashboardLayoutuserViewDoorLocksRouteImport } from './routes/_dashboard-layout/(user-view)/door-locks'
 import { Route as DashboardLayoutuserViewDevicesRouteImport } from './routes/_dashboard-layout/(user-view)/devices'
 import { Route as DashboardLayoutuserViewCompanyRouteImport } from './routes/_dashboard-layout/(user-view)/company'
 import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes/_dashboard-layout/(user-view)/checkin-page'
@@ -111,6 +112,12 @@ const DashboardLayoutuserViewEventsRoute =
   DashboardLayoutuserViewEventsRouteImport.update({
     id: '/(user-view)/events',
     path: '/events',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewDoorLocksRoute =
+  DashboardLayoutuserViewDoorLocksRouteImport.update({
+    id: '/(user-view)/door-locks',
+    path: '/door-locks',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewDevicesRoute =
@@ -279,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
   '/devices': typeof DashboardLayoutuserViewDevicesRoute
+  '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/events': typeof DashboardLayoutuserViewEventsRoute
   '/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
@@ -315,6 +323,7 @@ export interface FileRoutesByTo {
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
   '/devices': typeof DashboardLayoutuserViewDevicesRoute
+  '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/events': typeof DashboardLayoutuserViewEventsRoute
   '/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
@@ -355,6 +364,7 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/_dashboard-layout/(user-view)/company': typeof DashboardLayoutuserViewCompanyRoute
   '/_dashboard-layout/(user-view)/devices': typeof DashboardLayoutuserViewDevicesRoute
+  '/_dashboard-layout/(user-view)/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/_dashboard-layout/(user-view)/events': typeof DashboardLayoutuserViewEventsRoute
   '/_dashboard-layout/(user-view)/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
   '/_dashboard-layout/(user-view)/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
@@ -394,6 +404,7 @@ export interface FileRouteTypes {
     | '/checkin-page'
     | '/company'
     | '/devices'
+    | '/door-locks'
     | '/events'
     | '/mobile-cms'
     | '/payment-provider'
@@ -430,6 +441,7 @@ export interface FileRouteTypes {
     | '/checkin-page'
     | '/company'
     | '/devices'
+    | '/door-locks'
     | '/events'
     | '/mobile-cms'
     | '/payment-provider'
@@ -469,6 +481,7 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/checkin-page'
     | '/_dashboard-layout/(user-view)/company'
     | '/_dashboard-layout/(user-view)/devices'
+    | '/_dashboard-layout/(user-view)/door-locks'
     | '/_dashboard-layout/(user-view)/events'
     | '/_dashboard-layout/(user-view)/mobile-cms'
     | '/_dashboard-layout/(user-view)/payment-provider'
@@ -581,6 +594,13 @@ declare module '@tanstack/react-router' {
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof DashboardLayoutuserViewEventsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/door-locks': {
+      id: '/_dashboard-layout/(user-view)/door-locks'
+      path: '/door-locks'
+      fullPath: '/door-locks'
+      preLoaderRoute: typeof DashboardLayoutuserViewDoorLocksRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/devices': {
@@ -811,6 +831,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewCheckinPageRoute: typeof DashboardLayoutuserViewCheckinPageRoute
   DashboardLayoutuserViewCompanyRoute: typeof DashboardLayoutuserViewCompanyRoute
   DashboardLayoutuserViewDevicesRoute: typeof DashboardLayoutuserViewDevicesRoute
+  DashboardLayoutuserViewDoorLocksRoute: typeof DashboardLayoutuserViewDoorLocksRoute
   DashboardLayoutuserViewEventsRoute: typeof DashboardLayoutuserViewEventsRoute
   DashboardLayoutuserViewMobileCmsRoute: typeof DashboardLayoutuserViewMobileCmsRoute
   DashboardLayoutuserViewPaymentProviderRoute: typeof DashboardLayoutuserViewPaymentProviderRoute
@@ -841,6 +862,7 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewCheckinPageRoute,
   DashboardLayoutuserViewCompanyRoute: DashboardLayoutuserViewCompanyRoute,
   DashboardLayoutuserViewDevicesRoute: DashboardLayoutuserViewDevicesRoute,
+  DashboardLayoutuserViewDoorLocksRoute: DashboardLayoutuserViewDoorLocksRoute,
   DashboardLayoutuserViewEventsRoute: DashboardLayoutuserViewEventsRoute,
   DashboardLayoutuserViewMobileCmsRoute: DashboardLayoutuserViewMobileCmsRoute,
   DashboardLayoutuserViewPaymentProviderRoute:
