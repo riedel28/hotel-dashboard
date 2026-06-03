@@ -50,17 +50,17 @@ export function CountryPicker({
   );
 
   const items: CountryPickerItem[] = useMemo(
-    () => countries.map(c => ({ value: c.code, label: c.name })),
+    () => countries.map((c) => ({ value: c.code, label: c.name })),
     [countries]
   );
 
   const selectedItem = useMemo(
-    () => items.find(item => item.value === value) ?? null,
+    () => items.find((item) => item.value === value) ?? null,
     [items, value]
   );
 
   const selectedCountry = useMemo(
-    () => countries.find(c => c.code === value),
+    () => countries.find((c) => c.code === value),
     [countries, value]
   );
 
@@ -68,7 +68,7 @@ export function CountryPicker({
     <Combobox
       items={items}
       value={selectedItem}
-      onValueChange={val =>
+      onValueChange={(val) =>
         onValueChange(
           val && typeof val === 'object' && 'value' in val ? val.value : null
         )
@@ -78,7 +78,7 @@ export function CountryPicker({
     >
       <ComboboxTrigger
         className={cn(
-          'border-input ring-offset-background flex w-full items-center justify-between overflow-hidden rounded-md border px-3 py-2 text-sm',
+          'border-input h-9 bg-input/30 ring-offset-background flex w-full items-center justify-between overflow-hidden rounded-lg border px-3 py-2 text-sm',
           className
         )}
         aria-label={placeholder ?? t`Select country`}
@@ -117,7 +117,7 @@ export function CountryPicker({
           {t`No country found.`}
         </ComboboxEmpty>
         <ComboboxList>
-          {item => (
+          {(item) => (
             <ComboboxItem key={item.value} value={item}>
               <CountryFlag
                 code={item.value}
