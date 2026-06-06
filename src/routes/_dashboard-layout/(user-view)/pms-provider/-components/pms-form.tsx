@@ -62,7 +62,12 @@ export function PmsForm() {
             <img
               src="/casablanca-logo.png"
               alt="Casablanca"
-              className="max-h-8 max-w-full object-contain"
+              className="max-h-8 max-w-full object-contain dark:hidden"
+            />
+            <img
+              src="/casablanca-logo-inverse.png"
+              alt="Casablanca"
+              className="hidden max-h-8 max-w-full object-contain dark:block"
             />
           </div>
         </div>
