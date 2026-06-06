@@ -14,13 +14,12 @@ import {
   BuildingIcon,
   DoorOpenIcon,
   // CalendarIcon,
-  // CreditCardIcon,
   // FileSpreadsheetIcon,
   // Grid2X2Icon,
   HomeIcon,
+  LayoutGridIcon,
   // ListTodoIcon,
   LoaderCircleIcon,
-  // LockIcon,
   MessageCircleIcon,
   // ReceiptTextIcon,
   // ShoppingBagIcon,
@@ -70,7 +69,7 @@ function SidebarLink({
         <Link
           activeProps={{
             className:
-              'bg-primary/10 text-cyan-800 dark:bg-primary/20 dark:text-cyan-200/90'
+              'bg-primary/10 text-cyan-800 hover:bg-primary/10! hover:text-cyan-800! dark:bg-primary/20! dark:text-cyan-200/90!'
           }}
           {...(linkProps as LinkProps)}
         >
@@ -305,40 +304,22 @@ function UserSidebarContent() {
       </SidebarGroup> */}
 
       {/* Integrations Section */}
-      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarGroup>
         <SidebarGroupLabel>
           <Trans>Integrations</Trans>
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarLink
-              to="/access-provider"
-              icon={LockIcon}
-              tooltip={t`Access Provider`}
-            >
-              <Trans>Access Provider</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
               to="/pms-provider"
-              icon={Grid2X2Icon}
-              tooltip={t`PMS Provider`}
+              icon={LayoutGridIcon}
+              tooltip={t`PMS`}
             >
-              <Trans>PMS Provider</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/payment-provider"
-              icon={CreditCardIcon}
-              tooltip={t`Payment Provider`}
-            >
-              <Trans>Payment Provider</Trans>
+              <Trans>PMS</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroup> */}
+      </SidebarGroup>
 
       {/* Settings Section */}
       {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">

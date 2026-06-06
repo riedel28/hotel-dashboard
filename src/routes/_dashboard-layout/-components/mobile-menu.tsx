@@ -6,6 +6,7 @@ import {
   BedDoubleIcon,
   BedSingleIcon,
   BuildingIcon,
+  CableIcon,
   HomeIcon,
   MessageCircleIcon,
   SquareActivityIcon,
@@ -106,6 +107,23 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               onNavigate={handleNavigate}
             >
               <Trans>Customers</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      <SidebarGroup>
+        <SidebarGroupLabel>
+          <Trans>Integrations</Trans>
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/pms-provider"
+              icon={CableIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>PMS</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
