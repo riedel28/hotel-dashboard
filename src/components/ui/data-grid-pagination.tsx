@@ -256,7 +256,7 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
               >
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent side="top" className="min-w-[50px]">
+              <SelectContent className="min-w-[50px]">
                 {mergedProps?.sizes?.map((size: number) => (
                   <SelectItem key={size} value={`${size}`}>
                     {size}

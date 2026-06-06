@@ -3,19 +3,17 @@
 import { Trans } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
-import { MoreHorizontalIcon, PenSquareIcon, Trash2Icon } from 'lucide-react';
+import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 import type { Room } from '@/api/rooms';
 
-import { buttonVariants } from '@/components/ui/button';
+import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 
 import { DeleteDialog } from './delete-dialog';
 
@@ -29,17 +27,7 @@ export function RowActions({ row }: RowActionsProps) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(
-            buttonVariants({ variant: 'ghost' }),
-            'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
-          )}
-        >
-          <MoreHorizontalIcon className="h-4 w-4" />
-          <span className="sr-only">
-            <Trans>Open menu</Trans>
-          </span>
-        </DropdownMenuTrigger>
+        <DataGridRowActions />
         <DropdownMenuContent align="end" className="w-[180px]">
           <DropdownMenuItem
             render={(props) => (

@@ -12,6 +12,7 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
   fetchReservationsParamsSchema,
+  type ReservationState,
   reservationsQueryOptions
 } from '@/api/reservations';
 
@@ -24,6 +25,8 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { DataGridCheckboxFilter } from '@/components/ui/data-grid-checkbox-filter';
+import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
   ErrorDisplayActions,
   ErrorDisplayError,
@@ -36,13 +39,20 @@ import { cn } from '@/lib/utils';
 
 import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
 import { ReservationClearFilters } from '../reservations/-components/reservation-clear-filters';
-import { ReservationRefresh } from '../reservations/-components/reservation-refresh';
 import { ReservationSearch } from '../reservations/-components/reservation-search';
 import { ReservationSearchResults } from '../reservations/-components/reservation-search-results';
-import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
 import { ReservationsFilters } from '../reservations/-components/reservations-filters';
 import { ReservationDateFilter } from '../reservations/-components/reservations-table/reservation-date-filter';
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
+
+const reservationStatusOptions = [
+  { value: 'pending', color: 'bg-badge-warning-foreground' },
+  { value: 'started', color: 'bg-badge-default-foreground' },
+  { value: 'done', color: 'bg-badge-success-foreground' }
+] as const satisfies ReadonlyArray<{
+  value: ReservationState;
+  color: string;
+}>;
 
 function ReservationsPage() {
   const { t } = useLingui();
@@ -158,14 +168,13 @@ function ReservationsContent() {
     });
   };
 
-  const handleStatusChange = (newStatus: string | null) => {
-    if (!newStatus) return;
+  const handleStatusChange = (newStatus: ReservationState[]) => {
     navigate({
       to: '/reservations',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
-        status: newStatus as 'pending' | 'started' | 'done' | 'all'
+        status: newStatus.length > 0 ? newStatus : 'all'
       })
     });
   };
@@ -175,7 +184,7 @@ function ReservationsContent() {
   ) => {
     navigate({
       to: '/reservations',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
         from: dateRange?.from
@@ -189,7 +198,7 @@ function ReservationsContent() {
   const handleSearchChange = (searchTerm: string) => {
     navigate({
       to: '/reservations',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
         q: searchTerm || undefined
@@ -212,7 +221,7 @@ function ReservationsContent() {
 
     navigate({
       to: '/reservations',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: pagination.pageIndex + 1, // Convert to 0-based for URL
         per_page: pagination.pageSize
@@ -237,7 +246,7 @@ function ReservationsContent() {
     if (firstSort) {
       navigate({
         to: '/reservations',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1, // Reset to first page when sorting changes
           sort_by: firstSort.id as
@@ -255,7 +264,7 @@ function ReservationsContent() {
       // Clear sorting - use default
       navigate({
         to: '/reservations',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -286,28 +295,60 @@ function ReservationsContent() {
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
     : [{ id: 'received_at', desc: true }];
 
-  const hasActiveFilters = Boolean(
-    q || from || to || (status && status !== 'all')
-  );
+  const hasActiveStatusFilters = Array.isArray(status)
+    ? status.length > 0
+    : Boolean(status && status !== 'all');
+  const hasActiveFilters = Boolean(q || from || to || hasActiveStatusFilters);
+  const selectedStatuses: ReservationState[] = Array.isArray(status)
+    ? status
+    : status && status !== 'all'
+      ? [status]
+      : [];
+  const statusFilterOptions = reservationStatusOptions.map((option) => ({
+    value: option.value,
+    label:
+      option.value === 'pending' ? (
+        <Trans>Pending</Trans>
+      ) : option.value === 'started' ? (
+        <Trans>Started</Trans>
+      ) : (
+        <Trans>Done</Trans>
+      ),
+    icon: (
+      <span
+        className={`size-1.5 rounded-full ${option.color}`}
+        aria-hidden="true"
+      />
+    )
+  }));
 
   return (
     <div className="space-y-2.5">
       <ReservationsFilters>
         <ReservationSearch value={q} onChange={handleSearchChange} />
-        <ReservationStatusFilter value={status} onChange={handleStatusChange} />
+        <DataGridCheckboxFilter
+          label={<Trans>Status</Trans>}
+          placeholder={<Trans>Select status</Trans>}
+          value={selectedStatuses}
+          onValueChange={handleStatusChange}
+          options={statusFilterOptions}
+          showFooter
+          className="lg:w-[180px]"
+        />
         <ReservationDateFilter
           from={from ? new Date(from) : undefined}
           to={to ? new Date(to) : undefined}
           onDateChange={handleDateChange}
-          className="w-full sm:w-[208px]"
+          className="w-full lg:w-[208px]"
         />
         <ReservationClearFilters
           hasActiveFilters={hasActiveFilters}
           onClear={handleClearFilters}
         />
-        <ReservationRefresh
+        <DataGridRefreshButton
           isRefreshing={reservationsQuery.isFetching}
           onRefresh={handleRefresh}
+          className="sm:ml-0 sm:w-full lg:ml-auto lg:w-auto"
         />
       </ReservationsFilters>
 
@@ -339,7 +380,7 @@ function ReservationsContent() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/reservations/'
 )({
-  validateSearch: search => fetchReservationsParamsSchema.parse(search),
+  validateSearch: (search) => fetchReservationsParamsSchema.parse(search),
   loaderDeps: ({ search }) => search,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(reservationsQueryOptions(deps));

@@ -116,11 +116,10 @@ export default function UsersTable({
         },
         meta: {
           skeleton: (
-            <div className="flex h-[41px] items-center gap-3">
-              <Skeleton className="size-8 rounded-full" />
-              <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <Skeleton className="size-6 rounded-full" />
+              <div className="min-w-0 flex-1">
                 <Skeleton className="h-5 w-24" />
-                <Skeleton className="h-4 w-32" />
               </div>
             </div>
           )
@@ -140,7 +139,7 @@ export default function UsersTable({
             column={column}
           />
         ),
-        cell: info => (
+        cell: (info) => (
           <span className="truncate block max-w-full">
             {info.getValue() as string}
           </span>
@@ -149,7 +148,7 @@ export default function UsersTable({
         meta: {
           headerClassName: '',
           cellClassName: 'text-left',
-          skeleton: <Skeleton className="h-7 w-40" />
+          skeleton: <Skeleton className="h-5 w-40" />
         },
         enableSorting: true,
         enableHiding: true,
@@ -188,7 +187,7 @@ export default function UsersTable({
         meta: {
           headerClassName: '',
           cellClassName: 'text-start',
-          skeleton: <Skeleton className="h-7 w-24" />
+          skeleton: <Skeleton className="h-5 w-24" />
         },
         enableSorting: true,
         enableHiding: true,
@@ -230,7 +229,7 @@ export default function UsersTable({
                       {t`${roles.length} roles total`}
                     </p>
                     <div className="flex flex-wrap gap-1">
-                      {roles.map(role => (
+                      {roles.map((role) => (
                         <Badge
                           key={role.id}
                           size="xs"
@@ -248,7 +247,7 @@ export default function UsersTable({
           );
         },
         meta: {
-          skeleton: <Skeleton className="h-7 w-20" />
+          skeleton: <Skeleton className="h-5 w-20" />
         },
         size: 150,
         enableSorting: false,
@@ -269,7 +268,7 @@ export default function UsersTable({
         meta: {
           skeleton: (
             <div className="flex items-center justify-center">
-              <Skeleton className="h-6 w-6" />
+              <Skeleton className="size-7" />
             </div>
           )
         },
@@ -283,7 +282,7 @@ export default function UsersTable({
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
-    columns.map(column => column.id as string)
+    columns.map((column) => column.id as string)
   );
 
   const table = useReactTable({

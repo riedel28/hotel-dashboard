@@ -333,7 +333,7 @@ function DataGridTableBodyRowExpandded<TData extends object>({
       <td colSpan={row.getVisibleCells().length}>
         {table
           .getAllColumns()
-          .find(column => column.columnDef.meta?.expandedContent)
+          .find((column) => column.columnDef.meta?.expandedContent)
           ?.columnDef.meta?.expandedContent?.(row.original as TData)}
       </td>
     </tr>
@@ -461,7 +461,7 @@ function DataGridTableRowSelect<TData>({ row }: { row: Row<TData> }) {
       ></div>
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label={t`Select row`}
         className="align-[inherit]"
       />
@@ -480,7 +480,7 @@ function DataGridTableRowSelectAll() {
         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
       }
       disabled={isLoading || recordCount === 0}
-      onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
       aria-label={t`Select all`}
       className="align-[inherit]"
     />
@@ -490,6 +490,7 @@ function DataGridTableRowSelectAll() {
 function DataGridTable<TData extends object>() {
   const { table, isLoading, props } = useDataGrid<TData>();
   const pagination = table.getState().pagination;
+  const skeletonRowCount = props.skeletonRowCount ?? pagination?.pageSize;
 
   return (
     <DataGridTableBase>
@@ -527,10 +528,8 @@ function DataGridTable<TData extends object>() {
       )}
 
       <DataGridTableBody>
-        {props.loadingMode === 'skeleton' &&
-        isLoading &&
-        pagination?.pageSize ? (
-          Array.from({ length: pagination.pageSize }).map((_, rowIndex) => (
+        {props.loadingMode === 'skeleton' && isLoading && skeletonRowCount ? (
+          Array.from({ length: skeletonRowCount }).map((_, rowIndex) => (
             <DataGridTableBodyRowSkeleton key={rowIndex}>
               {table.getVisibleFlatColumns().map((column, colIndex) => {
                 return (

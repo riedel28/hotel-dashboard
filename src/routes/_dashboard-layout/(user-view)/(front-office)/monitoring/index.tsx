@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { RefreshCw, XIcon } from 'lucide-react';
+import { XIcon } from 'lucide-react';
 import {
   fetchMonitoringLogsParamsSchema,
   monitoringQueryOptions
@@ -18,6 +18,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
   ErrorDisplayActions,
   ErrorDisplayError,
@@ -65,7 +66,7 @@ function MonitoringPage() {
   const handleStatusChange = (newStatus: string | null) => {
     if (!newStatus) return;
     navigate({
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
         status:
@@ -78,7 +79,7 @@ function MonitoringPage() {
     dateRange: { from?: Date; to?: Date } | undefined
   ) => {
     navigate({
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
         from: dateRange?.from
@@ -103,7 +104,7 @@ function MonitoringPage() {
         : updaterOrValue;
 
     navigate({
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
@@ -126,7 +127,7 @@ function MonitoringPage() {
     const firstSort = sorting[0];
     if (firstSort) {
       navigate({
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: firstSort.id as
@@ -140,7 +141,7 @@ function MonitoringPage() {
       });
     } else {
       navigate({
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -199,10 +200,12 @@ function MonitoringPage() {
               )}
             </ErrorDisplayMessage>
             <ErrorDisplayActions>
-              <Button variant="destructive" onClick={handleRefresh}>
-                <RefreshCw className="mr-2 h-4 w-4" />
-                <Trans>Refresh</Trans>
-              </Button>
+              <DataGridRefreshButton
+                variant="destructive"
+                isRefreshing={monitoringQuery.isFetching}
+                onRefresh={handleRefresh}
+                className="w-auto sm:ml-0"
+              />
             </ErrorDisplayActions>
           </ErrorDisplayError>
         </div>
@@ -262,7 +265,7 @@ function MonitoringPage() {
               >
                 <SelectTrigger className="w-full sm:w-[150px]">
                   <SelectValue>
-                    {value =>
+                    {(value) =>
                       value ? (
                         <span className="capitalize">{t(value)}</span>
                       ) : (
@@ -320,20 +323,11 @@ function MonitoringPage() {
               )}
             </div>
           </div>
-          <Button
-            variant="outline"
-            onClick={handleRefresh}
-            disabled={monitoringQuery.isFetching}
-            className="w-full sm:w-auto"
-          >
-            <RefreshCw
-              className={cn(
-                'mr-2 h-4 w-4',
-                monitoringQuery.isFetching && 'animate-spin'
-              )}
-            />
-            <Trans>Refresh</Trans>
-          </Button>
+          <DataGridRefreshButton
+            isRefreshing={monitoringQuery.isFetching}
+            onRefresh={handleRefresh}
+            className="sm:ml-0"
+          />
         </div>
 
         <div
@@ -354,6 +348,6 @@ function MonitoringPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
 )({
-  validateSearch: search => fetchMonitoringLogsParamsSchema.parse(search),
+  validateSearch: (search) => fetchMonitoringLogsParamsSchema.parse(search),
   component: MonitoringPage
 });

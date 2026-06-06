@@ -13,12 +13,7 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table';
-import {
-  MoreHorizontalIcon,
-  PenSquareIcon,
-  RefreshCwIcon,
-  Trash2Icon
-} from 'lucide-react';
+import { PenSquareIcon, RefreshCwIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 import { Suspense, useMemo, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -33,18 +28,19 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
+import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
+import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
 import {
   ErrorDisplayActions,
@@ -63,7 +59,6 @@ import { DeletePropertyDialog } from './-components/delete-property-dialog';
 import { PropertiesFilters } from './-components/properties-filters';
 import { PropertyClearFilters } from './-components/property-clear-filters';
 import { PropertyCountryFilter } from './-components/property-country-filter';
-import { PropertyRefresh } from './-components/property-refresh';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
 
@@ -73,20 +68,10 @@ function RowActions({ row }: { row: { original: Property } }) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(
-            buttonVariants({ variant: 'ghost' }),
-            'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
-          )}
-        >
-          <MoreHorizontalIcon className="h-4 w-4" />
-          <span className="sr-only">
-            <Trans>Open menu</Trans>
-          </span>
-        </DropdownMenuTrigger>
+        <DataGridRowActions />
         <DropdownMenuContent align="end" className="w-35">
           <DropdownMenuItem
-            render={props => (
+            render={(props) => (
               <RouterLink
                 {...props}
                 to="/admin/properties/$propertyId"
@@ -166,10 +151,10 @@ function PropertiesTable({
             column={column}
           />
         ),
-        cell: info => {
+        cell: (info) => {
           const name = info.getValue() as string;
           return (
-            <span className="font-medium line-clamp-1" title={name}>
+            <span className="line-clamp-1" title={name}>
               {name}
             </span>
           );
@@ -266,7 +251,7 @@ function PropertiesTable({
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
-    columns.map(column => column.id as string)
+    columns.map((column) => column.id as string)
   );
 
   const [, setInternalSorting] = useState<SortingState>([]);
@@ -342,7 +327,7 @@ function PropertiesContent() {
   const handleSearchChange = (searchTerm: string) => {
     navigate({
       to: '/admin/properties',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         q: searchTerm || undefined,
         page: 1
@@ -353,7 +338,7 @@ function PropertiesContent() {
   const handleStageChange = (value: string | null) => {
     navigate({
       to: '/admin/properties',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         stage:
           !value || value === 'all'
@@ -367,7 +352,7 @@ function PropertiesContent() {
   const handleCountryChange = (value: string | null) => {
     navigate({
       to: '/admin/properties',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         country_code: value || undefined,
         page: 1
@@ -401,7 +386,7 @@ function PropertiesContent() {
     if (firstSort) {
       navigate({
         to: '/admin/properties',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: firstSort.id as 'name' | 'country_code' | 'stage',
@@ -411,7 +396,7 @@ function PropertiesContent() {
     } else {
       navigate({
         to: '/admin/properties',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -436,7 +421,7 @@ function PropertiesContent() {
 
     navigate({
       to: '/admin/properties',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
@@ -464,7 +449,7 @@ function PropertiesContent() {
           hasActiveFilters={hasActiveFilters}
           onClear={handleClearFilters}
         />
-        <PropertyRefresh
+        <DataGridRefreshButton
           isRefreshing={propertiesQuery.isFetching}
           onRefresh={handleRefresh}
         />
@@ -570,7 +555,7 @@ function PropertiesPage() {
 }
 
 export const Route = createFileRoute('/_dashboard-layout/admin/properties/')({
-  validateSearch: search => fetchPropertiesParamsSchema.parse(search),
+  validateSearch: (search) => fetchPropertiesParamsSchema.parse(search),
   loaderDeps: ({ search }) => search,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(propertiesQueryOptions(deps));

@@ -23,7 +23,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuSub,
@@ -34,10 +33,8 @@ import {
 
 import { cn } from '@/lib/utils';
 
-interface DataGridColumnHeaderProps<
-  TData,
-  TValue
-> extends HTMLAttributes<HTMLDivElement> {
+interface DataGridColumnHeaderProps<TData, TValue>
+  extends HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title?: string;
   icon?: ReactNode;
@@ -116,7 +113,7 @@ function DataGridColumnHeader<TData, TValue>({
           className
         )}
         disabled={isLoading || recordCount === 0}
-        onClick={e => {
+        onClick={(e) => {
           triggerOnClick?.(e);
           const isSorted = column.getIsSorted();
           if (isSorted === 'asc') {
@@ -171,10 +168,10 @@ function DataGridColumnHeader<TData, TValue>({
         <DropdownMenu>
           <DropdownMenuTrigger
             nativeButton
-            render={props => headerButton(props)}
+            render={(props) => headerButton(props)}
           />
           <DropdownMenuContent className="w-40" align="start">
-            {filter && <DropdownMenuLabel>{filter}</DropdownMenuLabel>}
+            {filter}
 
             {filter &&
               (column.getCanSort() || column.getCanPin() || visibility) && (
@@ -309,17 +306,17 @@ function DataGridColumnHeader<TData, TValue>({
                     {table
                       .getAllColumns()
                       .filter(
-                        col =>
+                        (col) =>
                           typeof col.accessorFn !== 'undefined' &&
                           col.getCanHide()
                       )
-                      .map(col => {
+                      .map((col) => {
                         return (
                           <DropdownMenuCheckboxItem
                             key={col.id}
                             checked={col.getIsVisible()}
-                            onSelect={event => event.preventDefault()}
-                            onCheckedChange={value =>
+                            onSelect={(event) => event.preventDefault()}
+                            onCheckedChange={(value) =>
                               col.toggleVisibility(!!value)
                             }
                             className="capitalize"

@@ -3,7 +3,6 @@ import type { ReservationStatus } from '@/api/reservations';
 import type { BadgeProps } from '@/components/ui/badge';
 
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 
 interface StatusCellProps {
   status: ReservationStatus;

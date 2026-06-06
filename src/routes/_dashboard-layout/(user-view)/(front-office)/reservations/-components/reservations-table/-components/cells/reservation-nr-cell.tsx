@@ -4,8 +4,8 @@ interface ReservationNrCellProps {
 
 export function ReservationNrCell({ reservationNr }: ReservationNrCellProps) {
   const displayText =
-    reservationNr.length > 10
-      ? `${reservationNr.substring(0, 10)}...`
+    reservationNr.length > 20
+      ? `${reservationNr.substring(0, 20)}...`
       : reservationNr;
 
   return (

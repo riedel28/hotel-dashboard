@@ -30,7 +30,7 @@ export function PropertyStageFilter({
     <Select value={value ?? 'all'} onValueChange={onChange} defaultValue="all">
       <SelectTrigger className="w-full sm:w-[160px]">
         <SelectValue>
-          {val => {
+          {(val) => {
             if (!val || val === 'all') {
               return (
                 <span className="flex items-center gap-2.5">
@@ -41,7 +41,7 @@ export function PropertyStageFilter({
                 </span>
               );
             }
-            const stage = stages.find(s => s.value === val);
+            const stage = stages.find((s) => s.value === val);
             return (
               <span className="flex items-center gap-2.5">
                 <span

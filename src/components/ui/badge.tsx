@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const badgeVariants = cva(
-  'text-sm gap-1 rounded-lg border tracking-wide border-transparent px-4 py-1.5 font-medium transition-all has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-colors overflow-hidden group/badge inline-flex items-center justify-center w-fit whitespace-nowrap shrink-0',
+  'text-sm gap-1 rounded-lg border tracking-normal border-transparent px-4 py-1.5 font-medium transition-all has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-colors overflow-hidden group/badge inline-flex items-center justify-center w-fit whitespace-nowrap shrink-0',
   {
     variants: {
       variant: {
@@ -23,7 +23,7 @@ const badgeVariants = cva(
         info: 'bg-badge-info text-badge-info-foreground [a]:hover:bg-badge-info/80'
       },
       color: {
-        gray: 'border-gray-200/70 bg-gray-50 text-gray-800 [a]:hover:bg-gray-100 dark:border-gray-800/30 dark:bg-gray-800/20 dark:text-gray-300 dark:[a]:hover:bg-gray-800/30',
+        gray: 'border-gray-200/70 bg-gray-50 text-gray-800 [a]:hover:bg-gray-100 dark:border-gray-700/30 dark:bg-gray-600/20 dark:text-gray-300 dark:[a]:hover:bg-gray-800/30',
         red: 'border-red-200/70 bg-red-50 text-red-800 [a]:hover:bg-red-100 dark:border-red-800/30 dark:bg-red-800/20 dark:text-red-300 dark:[a]:hover:bg-red-800/30',
         yellow:
           'border-yellow-200/70 bg-yellow-50 text-yellow-800 [a]:hover:bg-yellow-100 dark:border-yellow-800/30 dark:bg-yellow-800/20 dark:text-yellow-300 dark:[a]:hover:bg-yellow-800/30',
@@ -85,4 +85,4 @@ function Badge({
   });
 }
 
-export { Badge, type BadgeProps, type BadgeColorProps, badgeVariants };
+export { Badge, type BadgeColorProps, type BadgeProps, badgeVariants };

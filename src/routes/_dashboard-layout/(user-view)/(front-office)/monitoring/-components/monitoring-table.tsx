@@ -78,7 +78,7 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <StatusCell status={row.original.status} />,
         meta: {
-          skeleton: <Skeleton className="h-6 w-16" />,
+          skeleton: <Skeleton className="h-5 w-16" />,
           headerTitle: t`Status`
         },
         maxSize: 90,
@@ -98,7 +98,7 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <span>{row.original.event}</span>,
         meta: {
-          skeleton: <Skeleton className="h-6 w-32" />,
+          skeleton: <Skeleton className="h-5 w-32" />,
           headerTitle: t`Event`
         },
         enableSorting: true,
@@ -117,7 +117,7 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <TypeCell type={row.original.type} />,
         meta: {
-          skeleton: <Skeleton className="h-6 w-20" />,
+          skeleton: <Skeleton className="h-5 w-20" />,
           headerTitle: t`Type`
         },
         size: 120,
@@ -137,7 +137,7 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <span>{row.original.booking_nr || '-'}</span>,
         meta: {
-          skeleton: <Skeleton className="h-6 w-24" />,
+          skeleton: <Skeleton className="h-5 w-24" />,
           headerTitle: t`Booking #`
         },
         size: 130,
@@ -158,7 +158,7 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <DateCell date={row.original.logged_at} />,
         meta: {
-          skeleton: <Skeleton className="h-6 w-24" />,
+          skeleton: <Skeleton className="h-5 w-24" />,
           headerTitle: t`Date`
         },
         maxSize: 150,
@@ -186,7 +186,7 @@ export function MonitoringTable({
           </code>
         ),
         meta: {
-          skeleton: <Skeleton className="h-6 w-full" />,
+          skeleton: <Skeleton className="h-5 w-full rounded-md" />,
           headerTitle: t`Message`
         },
         minSize: 300,
@@ -199,7 +199,7 @@ export function MonitoringTable({
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
-    columns.map(column => column.id as string)
+    columns.map((column) => column.id as string)
   );
 
   const table = useReactTable({
@@ -235,6 +235,7 @@ export function MonitoringTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
+      skeletonRowCount={5}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer>

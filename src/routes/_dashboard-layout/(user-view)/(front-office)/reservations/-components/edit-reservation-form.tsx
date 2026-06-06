@@ -1,13 +1,7 @@
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  Edit2Icon,
-  Loader2Icon,
-  MoreHorizontalIcon,
-  Trash2Icon,
-  UserIcon
-} from 'lucide-react';
+import { Edit2Icon, Loader2Icon, Trash2Icon, UserIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import type { Guest, ReservationFormData } from 'shared/types/reservations';
@@ -15,14 +9,14 @@ import { toast } from 'sonner';
 
 import { updateReservationById } from '@/api/reservations';
 import { roomsQueryOptions } from '@/api/rooms';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
 import {
   Field,
@@ -42,7 +36,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 
 import { AddGuestModal } from './add-guest-modal';
 import { EditGuestForm } from './edit-guest-form';
@@ -187,17 +180,9 @@ export function EditReservationForm({
                                 </span>
                               </div>
                               <DropdownMenu>
-                                <DropdownMenuTrigger
-                                  className={cn(
-                                    buttonVariants({ variant: 'ghost' }),
-                                    'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
-                                  )}
-                                >
-                                  <MoreHorizontalIcon className="h-4 w-4" />
-                                  <span className="sr-only">
-                                    <Trans>Open guest menu</Trans>
-                                  </span>
-                                </DropdownMenuTrigger>
+                                <DataGridRowActions
+                                  label={<Trans>Open guest menu</Trans>}
+                                />
                                 <DropdownMenuContent
                                   align="end"
                                   className="w-[180px]"

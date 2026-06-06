@@ -160,18 +160,25 @@ function DropdownMenuCheckboxItem({
     <MenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
-        "focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground gap-2 rounded-sm py-1 pr-8 pl-2 text-sm [&_svg:not([class*='size-'])]:size-4 relative flex cursor-default items-center focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground gap-1.5 rounded-sm py-1.5 pr-2 pl-8 text-sm [&_svg:not([class*='size-'])]:size-4 relative flex cursor-default items-center focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-checked:[&_[data-slot=dropdown-menu-checkbox-item-indicator]]:border-primary data-checked:[&_[data-slot=dropdown-menu-checkbox-item-indicator]]:bg-primary [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
       checked={checked}
       {...props}
     >
       <span
-        className="pointer-events-none absolute right-2 flex items-center justify-center"
+        className="pointer-events-none bg-background dark:bg-input/30 absolute left-2 flex size-4 items-center justify-center rounded-[4px] border border-input"
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon />
+          <CheckIcon
+            className="size-3.5"
+            strokeWidth={2.5}
+            style={{
+              color: 'var(--primary-foreground)',
+              stroke: 'var(--primary-foreground)'
+            }}
+          />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}

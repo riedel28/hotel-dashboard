@@ -149,7 +149,7 @@ function RoomsContent() {
     if (!newStatus) return;
     navigate({
       to: '/rooms',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
         status:
@@ -167,7 +167,7 @@ function RoomsContent() {
   const handleSearchChange = (searchTerm: string) => {
     navigate({
       to: '/rooms',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
         q: searchTerm || undefined
@@ -190,7 +190,7 @@ function RoomsContent() {
 
     navigate({
       to: '/rooms',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
@@ -215,7 +215,7 @@ function RoomsContent() {
     if (firstSort) {
       navigate({
         to: '/rooms',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1, // Reset to first page when sorting changes
           sort_by: firstSort.id as
@@ -230,7 +230,7 @@ function RoomsContent() {
       // Clear sorting - use default
       navigate({
         to: '/rooms',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -301,7 +301,7 @@ function RoomsContent() {
 }
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/rooms/')({
-  validateSearch: search => fetchRoomsParamsSchema.parse(search),
+  validateSearch: (search) => fetchRoomsParamsSchema.parse(search),
   loaderDeps: ({ search }) => search,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(roomsQueryOptions(deps));

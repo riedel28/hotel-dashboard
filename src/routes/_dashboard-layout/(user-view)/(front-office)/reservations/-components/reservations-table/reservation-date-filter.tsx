@@ -14,6 +14,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 interface ReservationDateFilterProps {
@@ -30,6 +31,7 @@ function ReservationDateFilter({
   onDateChange
 }: ReservationDateFilterProps) {
   const today = new Date();
+  const isMobile = useIsMobile();
 
   // Define preset ranges
   const presets = [
@@ -168,7 +170,10 @@ function ReservationDateFilter({
           </span>
         )}
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent
+        className="w-[calc(100vw-1rem)] p-0 sm:w-auto"
+        align="start"
+      >
         <div className="flex max-sm:flex-col">
           <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
             <div className="h-full border-border py-1.5 sm:border-e">
@@ -198,10 +203,10 @@ function ReservationDateFilter({
             showOutsideDays={false}
             selected={displayDate}
             onSelect={handleSelect}
-            numberOfMonths={2}
+            numberOfMonths={isMobile ? 1 : 2}
           />
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-border p-3">
+        <div className="flex items-center justify-end gap-2 border-t border-border p-2">
           <Button variant="outline" onClick={handleReset}>
             <Trans>Reset</Trans>
           </Button>
