@@ -54,7 +54,7 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
           value={locale}
           onValueChange={handleChangeLocale}
         >
-          {languages.map(lang => (
+          {languages.map((lang) => (
             <DropdownMenuRadioItem
               key={lang.code}
               value={lang.code}

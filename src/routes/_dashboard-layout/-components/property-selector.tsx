@@ -77,7 +77,7 @@ function PropertySelector({
   const selectedPropertyId = controlledValue ?? internalValue;
 
   const propertyMap = useMemo(
-    () => new Map(properties.map(property => [property.id, property])),
+    () => new Map(properties.map((property) => [property.id, property])),
     [properties]
   );
 
@@ -88,7 +88,7 @@ function PropertySelector({
 
   const items = useMemo<PropertyItem[]>(
     () =>
-      properties.map(property => ({
+      properties.map((property) => ({
         value: property.id,
         label: property.name,
         stage: property.stage
@@ -178,7 +178,7 @@ function PropertySelector({
               <Trans>No properties found</Trans>
             </ComboboxEmpty>
             <ComboboxList className="mb-0 space-y-1 p-1">
-              {item => renderPropertyItem(item)}
+              {(item) => renderPropertyItem(item)}
             </ComboboxList>
           </>
         )}
