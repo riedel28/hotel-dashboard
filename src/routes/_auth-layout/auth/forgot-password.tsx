@@ -30,19 +30,20 @@ function SuccessView({ email }: SuccessViewProps) {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="flex flex-col items-center gap-4 mb-3">
-          <div className="flex size-10 items-center justify-center rounded-full bg-emerald-100 dark:bg-green-900 dark:text-green-200/90 text-sm font-bold text-emerald-600">
+          <div className="flex size-10 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900 dark:text-emerald-200/90 text-sm font-bold text-emerald-600">
             <CheckIcon aria-hidden="true" />
           </div>
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold text-center">
               <Trans>Reset link sent</Trans>
             </h1>
-            <p className="text-sm text-muted-foreground text-pretty text-center">
+            <p className="text-sm text-pretty text-center leading-normal">
               <Trans>
-                We&apos;ve sent password reset instructions to {email}
+                We&apos;ve sent password reset instructions to{' '}
+                <span className="font-medium">{email}</span>
               </Trans>
             </p>
-            <p className="text-sm text-muted-foreground text-pretty text-center">
+            <p className="text-sm text-pretty text-center leading-normal">
               <Trans>
                 Please check your inbox and follow the instructions to reset
                 your password.
