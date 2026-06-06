@@ -20,7 +20,7 @@ function PasswordInput({
   const [isVisible, setIsVisible] = React.useState(false);
   const { t } = useLingui();
 
-  const toggleVisibility = () => setIsVisible(visible => !visible);
+  const toggleVisibility = () => setIsVisible((visible) => !visible);
 
   return (
     <InputGroup>

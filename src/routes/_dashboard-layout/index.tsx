@@ -59,7 +59,7 @@ function StartPage() {
 
       {/* Quick Actions Grid */}
       <div className="mt-5 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
-        {quickActions.map(action => {
+        {quickActions.map((action) => {
           const IconComponent = action.icon;
 
           return (

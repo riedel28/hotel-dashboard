@@ -46,7 +46,7 @@ function UsersPage() {
   const handleSearchChange = (searchTerm: string) => {
     navigate({
       to: '/users',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: 1,
         q: searchTerm || undefined
@@ -69,7 +69,7 @@ function UsersPage() {
 
     navigate({
       to: '/users',
-      search: prev => ({
+      search: (prev) => ({
         ...prev,
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
@@ -93,7 +93,7 @@ function UsersPage() {
     if (firstSort) {
       navigate({
         to: '/users',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: firstSort.id as
@@ -108,7 +108,7 @@ function UsersPage() {
     } else {
       navigate({
         to: '/users',
-        search: prev => ({
+        search: (prev) => ({
           ...prev,
           page: 1,
           sort_by: undefined,
@@ -260,6 +260,6 @@ function UsersPage() {
 }
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/users/')({
-  validateSearch: search => fetchUsersParamsSchema.parse(search),
+  validateSearch: (search) => fetchUsersParamsSchema.parse(search),
   component: UsersPage
 });

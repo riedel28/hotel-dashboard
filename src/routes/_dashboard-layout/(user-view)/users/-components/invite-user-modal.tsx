@@ -267,9 +267,11 @@ export function InviteUserModal() {
                         })}
                       </div>
                     ) : (
-                      <p className="text-sm text-muted-foreground">
-                        <Trans>No roles available</Trans>
-                      </p>
+                      <div className="flex items-center gap-2 justify-center rounded-lg p-4 border bg-muted">
+                        <span className="text-sm text-muted-foreground">
+                          <Trans>No roles available</Trans>
+                        </span>
+                      </div>
                     )}
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -291,7 +293,6 @@ export function InviteUserModal() {
               {inviteUserMutation.isPending && (
                 <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
               )}
-              <SendIcon className="mr-2 h-4 w-4" />
               <Trans>Send Invitation</Trans>
             </Button>
           </DialogFooter>
