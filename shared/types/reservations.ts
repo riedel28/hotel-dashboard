@@ -8,6 +8,29 @@ export const reservationStatusSchema = z.enum([
   'all'
 ]);
 
+export const reservationStateSchema = z.enum(['pending', 'started', 'done']);
+
+const reservationStatusFilterSchema = z.preprocess(
+  (value) => {
+    if (Array.isArray(value)) {
+      return value
+        .flatMap((item) => String(item).split(','))
+        .filter((item) => item.length > 0);
+    }
+
+    if (typeof value === 'string' && value.includes(',')) {
+      return value.split(',').filter((item) => item.length > 0);
+    }
+
+    return value;
+  },
+  z.union([
+    z.literal('all'),
+    reservationStateSchema,
+    z.array(reservationStateSchema)
+  ])
+);
+
 export const checkinMethodSchema = z.enum([
   'android',
   'ios',
@@ -79,7 +102,7 @@ export const fetchReservationsParamsSchema = z.object({
     .default(10)
     .optional(),
   q: z.string().max(200).optional(),
-  status: reservationStatusSchema.default('all').optional(),
+  status: reservationStatusFilterSchema.default('all').optional(),
   from: z.iso.date().optional(),
   to: z.iso.date().optional(),
   sort_by: sortableColumnsSchema.optional(),
@@ -151,6 +174,7 @@ export type GuestSearchResult = z.infer<typeof guestSearchResultSchema>;
 
 // Type exports
 export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
+export type ReservationState = z.infer<typeof reservationStateSchema>;
 export type ReservationStatus = z.infer<typeof reservationStatusSchema>;
 export type Reservation = z.infer<typeof reservationSchema>;
 export type Guest = z.infer<typeof guestSchema>;

@@ -1,4 +1,15 @@
-import { and, asc, count, desc, eq, gte, ilike, lte, or } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  lte,
+  or
+} from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
@@ -9,17 +20,34 @@ import {
 } from '../db/schema';
 import { escapeLikePattern } from '../utils/sql';
 
+const reservationStates = ['pending', 'started', 'done'] as const;
+
+type ReservationState = (typeof reservationStates)[number];
+
+function normalizeStatusFilter(status: unknown): ReservationState[] {
+  const statusValues = Array.isArray(status)
+    ? status.flatMap((item) => String(item).split(','))
+    : typeof status === 'string'
+      ? status.split(',')
+      : [];
+
+  return statusValues.filter((item): item is ReservationState =>
+    reservationStates.includes(item as ReservationState)
+  );
+}
+
 async function getReservations(req: Request, res: Response) {
   try {
     const { page, per_page, status, q, from, to, sort_by, sort_order } =
       req.query;
 
     const conditions = [];
+    const statusValues = normalizeStatusFilter(status);
 
-    if (status && status !== 'all') {
-      conditions.push(
-        eq(reservationsTable.state, status as 'pending' | 'started' | 'done')
-      );
+    if (statusValues.length === 1) {
+      conditions.push(eq(reservationsTable.state, statusValues[0]));
+    } else if (statusValues.length > 1) {
+      conditions.push(inArray(reservationsTable.state, statusValues));
     }
 
     if (q) {

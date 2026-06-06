@@ -14,8 +14,10 @@ import {
   guestSchema,
   guestSearchResultSchema,
   type Reservation,
+  type ReservationState,
   type ReservationStatus,
   reservationSchema,
+  reservationStateSchema,
   reservationStatusSchema,
   type UpdateReservationData
 } from '../../shared/types/reservations';
@@ -70,7 +72,12 @@ async function fetchReservations(
   try {
     const validatedParams = fetchReservationsParamsSchema.parse(params);
     const response = await client.get('/reservations', {
-      params: validatedParams
+      params: {
+        ...validatedParams,
+        status: Array.isArray(validatedParams.status)
+          ? validatedParams.status.join(',')
+          : validatedParams.status
+      }
     });
     return fetchReservationsResponseSchema.parse(response.data);
   } catch (err) {
@@ -145,6 +152,7 @@ export {
   createReservation,
   createReservationSchema,
   deleteReservationById,
+  type FetchReservationsParams,
   fetchReservationById,
   fetchReservations,
   fetchReservationsParamsSchema,
@@ -155,9 +163,11 @@ export {
   guestSearchQueryOptions,
   guestSearchResultSchema,
   type Reservation,
+  type ReservationState,
   type ReservationStatus,
   reservationByIdQueryOptions,
   reservationSchema,
+  reservationStateSchema,
   reservationStatusSchema,
   reservationsQueryOptions,
   searchGuests,
