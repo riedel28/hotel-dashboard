@@ -133,7 +133,7 @@ function DataGridCheckboxFilter<TValue extends string>({
           </Button>
         )}
       />
-      <DropdownMenuContent align="start" className="w-auto min-w-56">
+      <DropdownMenuContent align="start" className="w-auto">
         {options.map(option => {
           return (
             <DropdownMenuCheckboxItem
@@ -161,7 +161,7 @@ function DataGridCheckboxFilter<TValue extends string>({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="justify-center h-7.5 flex-1 font-normal text-muted-foreground hover:text-foreground transition-colors"
+                className="justify-center h-7 px-4 flex-1 font-normal text-muted-foreground hover:text-foreground transition-colors"
                 onClick={event => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -175,7 +175,7 @@ function DataGridCheckboxFilter<TValue extends string>({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="justify-center h-7.5 flex-1 font-normal text-muted-foreground hover:text-foreground transition-colors"
+                className="justify-center h-7 px-4 flex-1 font-normal text-muted-foreground hover:text-foreground transition-colors"
                 onClick={event => {
                   event.preventDefault();
                   event.stopPropagation();
