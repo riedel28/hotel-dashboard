@@ -39,7 +39,7 @@ const badgeVariants = cva(
           'border-fuchsia-200/70 bg-fuchsia-50 text-fuchsia-800 [a]:hover:bg-fuchsia-100 dark:border-fuchsia-800/30 dark:bg-fuchsia-800/20 dark:text-fuchsia-300 dark:[a]:hover:bg-fuchsia-800/30'
       },
       size: {
-        xs: 'text-[11px] px-1.25 py-0.25 [&>svg]:size-2',
+        xs: 'text-[11px] px-1.25 py-0.25 [&>svg]:size-2 rounded-md',
         sm: 'text-[12px] px-1.5 py-0.25 [&>svg]:size-3',
         md: 'text-sm px-4 py-1.5 [&>svg]:size-3',
         lg: 'text-base px-5 py-2 [&>svg]:size-4'
