@@ -36,7 +36,8 @@ const badgeVariants = cva(
           'border-orange-200/70 bg-orange-50 text-orange-800 [a]:hover:bg-orange-100 dark:border-orange-800/30 dark:bg-orange-800/20 dark:text-orange-300 dark:[a]:hover:bg-orange-800/30',
         teal: 'border-teal-200/70 bg-teal-50 text-teal-800 [a]:hover:bg-teal-100 dark:border-teal-800/30 dark:bg-teal-800/20 dark:text-teal-300 dark:[a]:hover:bg-teal-800/30',
         fuchsia:
-          'border-fuchsia-200/70 bg-fuchsia-50 text-fuchsia-800 [a]:hover:bg-fuchsia-100 dark:border-fuchsia-800/30 dark:bg-fuchsia-800/20 dark:text-fuchsia-300 dark:[a]:hover:bg-fuchsia-800/30'
+          'border-fuchsia-200/70 bg-fuchsia-50 text-fuchsia-800 [a]:hover:bg-fuchsia-100 dark:border-fuchsia-800/30 dark:bg-fuchsia-800/20 dark:text-fuchsia-300 dark:[a]:hover:bg-fuchsia-800/30',
+        pink: 'border-pink-200/70 bg-pink-50 text-pink-800 [a]:hover:bg-pink-100 dark:border-pink-800/30 dark:bg-pink-800/20 dark:text-pink-300 dark:[a]:hover:bg-pink-800/30'
       },
       size: {
         xs: 'text-[11px] px-1.25 py-0.25 [&>svg]:size-2 rounded-md',

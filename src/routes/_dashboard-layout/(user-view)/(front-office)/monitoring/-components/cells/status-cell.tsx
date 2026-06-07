@@ -14,7 +14,7 @@ export function StatusCell({ status }: StatusCellProps) {
     <Badge
       size="sm"
       variant="outline"
-      color={isSuccess ? 'emerald' : 'red'}
+      color={isSuccess ? 'emerald' : 'pink'}
       className="rounded-md"
     >
       <span className="size-1.25 rounded-full bg-current/80 mr-0.5"></span>
