@@ -108,7 +108,7 @@ function DataGridCheckboxFilter<TValue extends string>({
           <Button
             variant="ghost"
             className={cn(
-              'hover:bg-background data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground dark:data-popup-open:bg-accent dark:data-popup-open:hover:bg-accent dark:data-popup-open:hover:text-foreground',
+              'hover:bg-background data-popup-open:bg-background inline-flex h-9 min-w-fit items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground',
               className
             )}
             {...props}
