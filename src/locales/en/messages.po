@@ -48,7 +48,7 @@ msgid "{0} roles total"
 msgstr "{0} roles total"
 
 #. placeholder {0}: selectedOptions.length
-#: src/components/ui/data-grid-checkbox-filter.tsx:99
+#: src/components/ui/data-grid-checkbox-filter.tsx:97
 msgid "{0} selected"
 msgstr "{0} selected"
 
@@ -190,14 +190,14 @@ msgid "All countries"
 msgstr "All countries"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:284
-msgid "All Statuses"
-msgstr "All Statuses"
+#~ msgid "All Statuses"
+#~ msgstr "All Statuses"
 
 #: src/routes/_auth-layout/auth/sign-up.tsx:300
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:199
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:203
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
@@ -221,7 +221,7 @@ msgstr "An error occurred while fetching users"
 msgid "An unexpected error occurred"
 msgstr "An unexpected error occurred"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:15
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:103
 msgid "Android App"
 msgstr "Android App"
 
@@ -257,7 +257,7 @@ msgstr "Are you sure?"
 msgid "Arrival"
 msgstr "Arrival"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:141
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:204
 msgid "Arrival Date"
 msgstr "Arrival Date"
 
@@ -323,8 +323,8 @@ msgstr "Avatar upload is not yet implemented"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:97
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:298
-#: src/routes/_auth-layout/auth/forgot-password.tsx:55
-#: src/routes/_auth-layout/auth/forgot-password.tsx:163
+#: src/routes/_auth-layout/auth/forgot-password.tsx:56
+#: src/routes/_auth-layout/auth/forgot-password.tsx:164
 #: src/routes/_auth-layout/auth/reset-password.tsx:87
 #: src/routes/_auth-layout/auth/reset-password.tsx:227
 #: src/routes/_auth-layout/auth/sign-up.tsx:100
@@ -333,11 +333,15 @@ msgstr "Avatar upload is not yet implemented"
 msgid "Back to login"
 msgstr "Back to login"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:180
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:234
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:230
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:245
 msgid "Balance"
 msgstr "Balance"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:143
+msgid "Booking"
+msgstr "Booking"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:133
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:141
@@ -437,11 +441,11 @@ msgstr "Check your email"
 #~ msgid "Check-in URL"
 #~ msgstr "Check-in URL"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:159
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:220
 msgid "Check-in via"
 msgstr "Check-in via"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:226
 msgid "Check-out via"
 msgstr "Check-out via"
 
@@ -457,11 +461,11 @@ msgstr "Children"
 #~ msgid "Children count cannot be negative"
 #~ msgstr "Children count cannot be negative"
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:174
+#: src/components/ui/data-grid-checkbox-filter.tsx:169
 msgid "Clear all"
 msgstr "Clear all"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:321
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:289
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:232
@@ -485,7 +489,7 @@ msgstr "Columns"
 #~ msgid "Company data"
 #~ msgstr "Company data"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:252
 msgid "Completed At"
 msgstr "Completed At"
 
@@ -525,6 +529,14 @@ msgstr "Contains an uppercase letter"
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:237
 #~ msgid "Content Manager"
 #~ msgstr "Content Manager"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:135
+msgid "Copied reservation number"
+msgstr "Copied reservation number"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:134
+msgid "Copy reservation number"
+msgstr "Copy reservation number"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:606
 #~ msgid "Copy to clipboard"
@@ -655,7 +667,7 @@ msgstr "Demo"
 msgid "Departure"
 msgstr "Departure"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:212
 msgid "Departure Date"
 msgstr "Departure Date"
 
@@ -742,7 +754,7 @@ msgstr "Edit room"
 msgid "Edit user"
 msgstr "Edit user"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:121
+#: src/routes/_auth-layout/auth/forgot-password.tsx:122
 #: src/routes/_auth-layout/auth/login.tsx:157
 #: src/routes/_auth-layout/auth/sign-up.tsx:230
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:146
@@ -836,14 +848,14 @@ msgstr "Enter room type (e.g., Standard, Suite)"
 #~ msgid "Enter your credentials to access the dashboard"
 #~ msgstr "Enter your credentials to access the dashboard"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:127
+#: src/routes/_auth-layout/auth/forgot-password.tsx:128
 #: src/routes/_auth-layout/auth/login.tsx:163
 #: src/routes/_auth-layout/auth/sign-up.tsx:236
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:127
 msgid "Enter your email"
 msgstr "Enter your email"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:103
+#: src/routes/_auth-layout/auth/forgot-password.tsx:104
 msgid "Enter your email address and we'll send you a link to reset your password."
 msgstr "Enter your email address and we'll send you a link to reset your password."
 
@@ -876,7 +888,6 @@ msgid "Enter your password"
 msgstr "Enter your password"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:300
 msgid "Error"
 msgstr "Error"
 
@@ -1002,7 +1013,7 @@ msgstr "Failed to reset password. The link may have expired."
 msgid "Failed to send invitation"
 msgstr "Failed to send invitation"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:79
+#: src/routes/_auth-layout/auth/forgot-password.tsx:80
 msgid "Failed to send password reset email. Please try again."
 msgstr "Failed to send password reset email. Please try again."
 
@@ -1030,7 +1041,7 @@ msgstr "Failed to update room. Please try again."
 msgid "Failed to update user"
 msgstr "Failed to update user"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:188
 msgid "Fellow travelers"
 msgstr "Fellow travelers"
 
@@ -1065,8 +1076,8 @@ msgstr "First name is required"
 #~ msgid "Follow the instructions to finish resetting your password."
 #~ msgstr "Follow the instructions to finish resetting your password."
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:64
-#: src/routes/_auth-layout/auth/forgot-password.tsx:100
+#: src/routes/_auth-layout/auth/forgot-password.tsx:65
+#: src/routes/_auth-layout/auth/forgot-password.tsx:101
 msgid "Forgot Password"
 msgstr "Forgot Password"
 
@@ -1133,7 +1144,7 @@ msgstr "Google Authenticator"
 msgid "Grant administrator privileges to this user"
 msgstr "Grant administrator privileges to this user"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:150
 msgid "Guest Email"
 msgstr "Guest Email"
 
@@ -1150,6 +1161,7 @@ msgstr "Guest Email"
 #~ msgstr "guest@example.com"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:175
 msgid "Guests"
 msgstr "Guests"
 
@@ -1241,7 +1253,7 @@ msgstr "Hello from About!"
 msgid "Hide password"
 msgstr "Hide password"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:239
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:243
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
@@ -1264,7 +1276,7 @@ msgstr "Home"
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:80
 msgid "Hotel ID"
 msgstr "Hotel ID"
 
@@ -1319,7 +1331,7 @@ msgstr "Invitation sent successfully"
 msgid "Invite User"
 msgstr "Invite User"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:16
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:105
 msgid "iOS App"
 msgstr "iOS App"
 
@@ -1459,7 +1471,7 @@ msgstr "Microsoft Authenticator"
 #~ msgid "Mobile App"
 #~ msgstr "Mobile App"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:141
 msgid "Mock code"
 msgstr "Mock code"
 
@@ -1470,13 +1482,13 @@ msgstr "Monitor daily operations, track occupancy, and oversee front-office acti
 #: src/routes/_dashboard-layout.tsx:184
 #: src/routes/_dashboard-layout.tsx:186
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:150
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:47
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:245
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:249
 #: src/routes/_dashboard-layout/index.tsx:42
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:253
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:257
 msgid "Monitoring Logs"
 msgstr "Monitoring Logs"
 
@@ -1551,7 +1563,7 @@ msgstr "No country found."
 msgid "No data available"
 msgstr "No data available"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:192
 msgid "No fellow travelers"
 msgstr "No fellow travelers"
 
@@ -1571,7 +1583,7 @@ msgstr "No guests found"
 msgid "No name"
 msgstr "No name"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:182
 msgid "No primary guest"
 msgstr "No primary guest"
 
@@ -1604,6 +1616,18 @@ msgstr "No rooms available"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:213
 #~ msgid "None"
 #~ msgstr "None"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:169
+msgid "Not assigned"
+msgstr "Not assigned"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:261
+msgid "Not completed"
+msgstr "Not completed"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:157
+msgid "Not provided"
+msgstr "Not provided"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:232
 msgid "Number of People"
@@ -1680,7 +1704,7 @@ msgstr "Password change is not yet implemented"
 msgid "Password must be at least 8 characters long"
 msgstr "Password must be at least 8 characters long"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:76
+#: src/routes/_auth-layout/auth/forgot-password.tsx:77
 msgid "Password reset email sent successfully!"
 msgstr "Password reset email sent successfully!"
 
@@ -1699,6 +1723,10 @@ msgstr "Password strength requirements"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:31
 msgid "Passwords don't match"
 msgstr "Passwords don't match"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:233
+msgid "Payment"
+msgstr "Payment"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:32
 msgid "Payment Provider"
@@ -1745,7 +1773,7 @@ msgstr "Pin to left"
 msgid "Pin to right"
 msgstr "Pin to right"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:46
+#: src/routes/_auth-layout/auth/forgot-password.tsx:47
 msgid "Please check your inbox and follow the instructions to reset your password."
 msgstr "Please check your inbox and follow the instructions to reset your password."
 
@@ -1822,7 +1850,7 @@ msgstr "Previous"
 #~ msgid "Previous slide"
 #~ msgstr "Previous slide"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:83
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:176
 msgid "Primary Guest"
 msgstr "Primary Guest"
 
@@ -1935,11 +1963,11 @@ msgstr "Pushed to device"
 msgid "Ready"
 msgstr "Ready"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:189
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:244
 msgid "Received At"
 msgstr "Received At"
 
-#: src/components/ui/data-grid-refresh-button.tsx:33
+#: src/components/ui/data-grid-refresh-button.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:86
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:121
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-refresh.tsx:24
@@ -2005,7 +2033,7 @@ msgstr "Reservation created successfully"
 #~ msgid "Reservation deleted"
 #~ msgstr "Reservation deleted"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:125
 msgid "Reservation details"
 msgstr "Reservation details"
 
@@ -2029,9 +2057,9 @@ msgstr "Reservation No."
 #~ msgid "Reservation Nr."
 #~ msgstr "Reservation Nr."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:144
 msgid "Reservation Number"
-msgstr "Reservation Number"
+msgstr "Reservation #"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:44
 #~ msgid "Reservation number is required"
@@ -2052,6 +2080,7 @@ msgstr "Reservation updated successfully"
 msgid "Reservations"
 msgstr "Reservations"
 
+#: src/components/ui/data-grid-radio-filter.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-date-filter.tsx:202
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:211
 msgid "Reset"
@@ -2092,7 +2121,7 @@ msgstr "Roles update is not yet implemented"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:111
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:391
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:159
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:167
 msgid "Room"
@@ -2245,7 +2274,7 @@ msgstr "Select a room"
 msgid "Select a room..."
 msgstr "Select a room..."
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:188
+#: src/components/ui/data-grid-checkbox-filter.tsx:183
 #: src/components/ui/data-grid-table.tsx:484
 msgid "Select all"
 msgstr "Select all"
@@ -2289,8 +2318,9 @@ msgstr "Select row"
 msgid "Select stage"
 msgstr "Select stage"
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:80
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:273
+#: src/components/ui/data-grid-checkbox-filter.tsx:78
+#: src/components/ui/data-grid-radio-filter.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:331
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:173
@@ -2315,7 +2345,7 @@ msgstr "Select status"
 msgid "Send Invitation"
 msgstr "Send Invitation"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:119
 msgid "Send invoice via PMS"
 msgstr "Send invoice via PMS"
 
@@ -2327,7 +2357,7 @@ msgstr "Send invoice via PMS"
 #~ msgid "Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
 #~ msgstr "Send message to the guest via email, SMS or WhatsApp to complete the check-in process"
 
-#: src/routes/_auth-layout/auth/forgot-password.tsx:158
+#: src/routes/_auth-layout/auth/forgot-password.tsx:159
 msgid "Send reset link"
 msgstr "Send reset link"
 
@@ -2400,7 +2430,7 @@ msgstr "Skip to main content"
 #~ msgstr "SMS sent successfully"
 
 #: src/routes/__root.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:195
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:106
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:75
@@ -2448,12 +2478,13 @@ msgstr "Start"
 msgid "Started"
 msgstr "Started"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:18
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:109
 msgid "Station"
 msgstr "Station"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:266
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:114
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:125
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:330
@@ -2464,13 +2495,17 @@ msgstr "Station"
 msgid "Status"
 msgstr "Status"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:203
+msgid "Stay"
+msgstr "Stay"
+
 #: src/components/ui/password-strength-meter.tsx:66
 msgid "Strong password"
 msgstr "Strong password"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:292
-msgid "Success"
-msgstr "Success"
+#~ msgid "Success"
+#~ msgstr "Success"
 
 #: src/routes/_auth-layout/auth/login.tsx:74
 msgid "Successfully logged in!"
@@ -2535,7 +2570,7 @@ msgstr "Template"
 #~ msgid "The booking number can be found in your Property Management System (PMS)"
 #~ msgstr "The booking number can be found in your Property Management System (PMS)"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:121
 msgid "The invoice will be sent directly to the PMS"
 msgstr "The invoice will be sent directly to the PMS"
 
@@ -2627,7 +2662,7 @@ msgstr "Toggle details"
 #~ msgid "Toggle theme"
 #~ msgstr "Toggle theme"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:98
 msgid "Token"
 msgstr "Token"
 
@@ -2643,7 +2678,7 @@ msgstr "Try Again"
 msgid "Turn on two-factor authentication for better account security"
 msgstr "Turn on two-factor authentication for better account security"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:17
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:107
 msgid "TV App"
 msgstr "TV App"
 
@@ -2712,7 +2747,7 @@ msgstr "Type"
 msgid "Unpin {title} column"
 msgstr "Unpin {title} column"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:183
 msgid "Update config"
 msgstr "Update config"
 
@@ -2827,14 +2862,18 @@ msgid "We've sent a verification email to <0>{email}</0>. Click the link in the 
 msgstr "We've sent a verification email to <0>{email}</0>. Click the link in the email to verify your account."
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:41
-msgid "We've sent password reset instructions to {email}"
-msgstr "We've sent password reset instructions to {email}"
+#~ msgid "We've sent password reset instructions to {email}"
+#~ msgstr "We've sent password reset instructions to {email}"
+
+#: src/routes/_auth-layout/auth/forgot-password.tsx:41
+msgid "We've sent password reset instructions to <0>{email}</0>"
+msgstr "We've sent password reset instructions to <0>{email}</0>"
 
 #: src/components/ui/password-strength-meter.tsx:63
 msgid "Weak password"
 msgstr "Weak password"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:19
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:111
 msgid "Web App"
 msgstr "Web App"
 

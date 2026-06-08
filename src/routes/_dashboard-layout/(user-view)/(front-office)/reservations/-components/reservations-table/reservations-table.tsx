@@ -18,7 +18,7 @@ import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
-
+import { formatDate } from '@/utils/date';
 import { BalanceCell } from './-components/cells/balance-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { StatusCell } from './-components/cells/status-cell';
@@ -26,7 +26,7 @@ import { ReservationDetails } from './-components/reservation-details';
 import { RowActions } from './row-actions';
 
 const formatReservationDate = (date: Date | string) =>
-  dayjs(date).format('DD.MM.YYYY');
+  dayjs(date).format('DD.MM.YYYY HH:mm');
 
 interface ReservationsTableProps {
   data: Reservation[];
@@ -124,7 +124,7 @@ export default function ReservationsTable({
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Status`
         },
-        maxSize: 80,
+        maxSize: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: false
@@ -184,7 +184,7 @@ export default function ReservationsTable({
         cell: ({ row }) => {
           return (
             <span className="text-[13px]">
-              {formatReservationDate(row.original.booking_from)}
+              {formatDate(row.original.booking_from, { preset: 'dateTime' })}
             </span>
           );
         },
