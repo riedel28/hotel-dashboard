@@ -244,8 +244,8 @@ export default function UserMenu() {
     setLogoutDialogOpen(true);
   };
 
-  const handleLogoutSuccess = () => {
-    navigate({ to: '/auth/login' });
+  const handleLogoutSuccess = async () => {
+    await navigate({ to: '/auth/login', replace: true });
   };
 
   return (
@@ -253,6 +253,7 @@ export default function UserMenu() {
       <DropdownMenu>
         <DropdownMenuTrigger
           aria-label={t`User menu`}
+          nativeButton={false}
           render={
             <Avatar size="default">
               <AvatarFallback>{avatarFallback}</AvatarFallback>

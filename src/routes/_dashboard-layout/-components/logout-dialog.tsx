@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro';
-import { useRouter } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon, LogOutIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/auth';
@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button';
 interface LogoutDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onLogoutSuccess?: () => void;
+  onLogoutSuccess?: () => Promise<void> | void;
 }
 
 export function LogoutDialog({
@@ -27,15 +27,15 @@ export function LogoutDialog({
   onLogoutSuccess
 }: LogoutDialogProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const auth = useAuth();
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
       await auth.logout();
-      await router.invalidate();
-      onLogoutSuccess?.();
+      await onLogoutSuccess?.();
+      queryClient.clear();
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
