@@ -58,6 +58,11 @@ msgstr "{0} selected"
 msgid "{0}, {1}"
 msgstr "{0}, {1}"
 
+#. placeholder {0}: steps.length
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:296
+msgid "{failedCount} of {0} tests failed"
+msgstr "{failedCount} of {0} tests failed"
+
 #: src/components/ui/data-grid-pagination.tsx:69
 msgid "{from} - {to} of {count}"
 msgstr "{from} - {to} of {count}"
@@ -74,10 +79,22 @@ msgstr "{from} - {to} of {recordCount}"
 #~ msgid "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 #~ msgstr "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:365
+#~ msgid "03.06.2026"
+#~ msgstr "03.06.2026"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:386
+#~ msgid "08.06.2026"
+#~ msgstr "08.06.2026"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:446
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:546
 #~ msgid "123 456 789"
 #~ msgstr "123 456 789"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:114
+msgid "401 Unauthorized — check username and password."
+msgstr "401 Unauthorized — check username and password."
 
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:30
 msgid "About"
@@ -95,6 +112,10 @@ msgstr "Accept Invitation"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:112
 msgid "Account activated!"
 msgstr "Account activated!"
+
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:114
+msgid "Account settings"
+msgstr "Account settings"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:288
 msgid "Activate Account"
@@ -146,7 +167,7 @@ msgstr "Add subcategory"
 #~ msgid "Add User"
 #~ msgstr "Add User"
 
-#: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:33
+#: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:35
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:49
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:487
 msgid "Admin"
@@ -189,15 +210,30 @@ msgstr "All"
 msgid "All countries"
 msgstr "All countries"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:289
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:294
+msgid "All statuses"
+msgstr "All statuses"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:284
 #~ msgid "All Statuses"
 #~ msgstr "All Statuses"
+
+#. placeholder {0}: steps.length
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:292
+msgid "All tests passed ({passedCount}/{0})"
+msgstr "All tests passed ({passedCount}/{0})"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:299
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:304
+msgid "All types"
+msgstr "All types"
 
 #: src/routes/_auth-layout/auth/sign-up.tsx:300
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:227
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
@@ -286,6 +322,11 @@ msgstr "At least 8 characters"
 #~ msgid "Austria"
 #~ msgstr "Austria"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:101
+msgid "Authentication"
+msgstr "Authentication"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:177
 msgid "Authy"
 msgstr "Authy"
@@ -301,7 +342,7 @@ msgstr "Authy"
 msgid "Available"
 msgstr "Available"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:181
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -368,6 +409,7 @@ msgstr "Business"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:147
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:311
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:97
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-product-modal.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
@@ -383,7 +425,7 @@ msgstr "Business"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:43
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:52
 msgid "Casablanca"
 msgstr "Casablanca"
 
@@ -453,6 +495,10 @@ msgstr "Check-out via"
 #~ msgid "Checkin Page"
 #~ msgstr "Checkin Page"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:201
+msgid "Checks the connection to SALTO ProAccess Space using the current form values."
+msgstr "Checks the connection to SALTO ProAccess Space using the current form values."
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:288
 msgid "Children"
 msgstr "Children"
@@ -461,11 +507,15 @@ msgstr "Children"
 #~ msgid "Children count cannot be negative"
 #~ msgstr "Children count cannot be negative"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:145
+#~ msgid "Choose how this property connects to its door locks"
+#~ msgstr "Choose how this property connects to its door locks"
+
 #: src/components/ui/data-grid-checkbox-filter.tsx:169
 msgid "Clear all"
 msgstr "Clear all"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:289
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:320
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:232
@@ -474,6 +524,7 @@ msgid "Clear filters"
 msgstr "Clear filters"
 
 #: src/components/ui/sheet.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:320
 msgid "Close"
 msgstr "Close"
 
@@ -493,6 +544,11 @@ msgstr "Columns"
 msgid "Completed At"
 msgstr "Completed At"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:42
+msgid "Config updated"
+msgstr "Config updated"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:117
 msgid "Confirm New Password"
 msgstr "Confirm New Password"
@@ -509,6 +565,19 @@ msgstr "Confirm your new password"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:255
 msgid "Confirm your password"
 msgstr "Confirm your password"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:60
+msgid "Connected"
+msgstr "Connected"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:176
+#~ msgid "Connection method"
+#~ msgstr "Connection method"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:110
+msgid "Connection timed out after 5000 ms — host unreachable."
+msgstr "Connection timed out after 5000 ms — host unreachable."
 
 #: src/components/ui/password-strength-meter.tsx:26
 msgid "Contains a lowercase letter"
@@ -599,7 +668,7 @@ msgstr "Current password is required"
 #~ msgid "Current View: {currentView}"
 #~ msgstr "Current View: {currentView}"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:109
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:110
 #: src/routes/_dashboard-layout/admin/customers.tsx:11
 #: src/routes/_dashboard-layout/admin/index.tsx:25
 msgid "Customers"
@@ -683,7 +752,7 @@ msgstr "Desc"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:205
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:215
 msgid "Displays the mobile sidebar."
 msgstr "Displays the mobile sidebar."
 
@@ -700,6 +769,15 @@ msgstr "Doe"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:315
 msgid "Done"
 msgstr "Done"
+
+#: src/routes/_dashboard-layout.tsx:326
+#: src/routes/_dashboard-layout.tsx:328
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:23
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:41
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:49
+msgid "Door Locks"
+msgstr "Door Locks"
 
 #: src/components/ui/data-grid-table-dnd.tsx:90
 #~ msgid "Drag to reorder"
@@ -793,6 +871,10 @@ msgstr "Enter a password"
 #: src/components/ui/password-strength-meter.tsx:89
 #~ msgid "Enter a password. Must contain:"
 #~ msgstr "Enter a password. Must contain:"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:100
+msgid "Enter a valid port number"
+msgstr "Enter a valid port number"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:152
 msgid "Enter email"
@@ -944,6 +1026,10 @@ msgstr "Event"
 #~ msgid "Events"
 #~ msgstr "Events"
 
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:198
+msgid "Extra account security"
+msgstr "Extra account security"
+
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:74
 msgid "Failed to activate account. The link may have expired."
 msgstr "Failed to activate account. The link may have expired."
@@ -1085,8 +1171,8 @@ msgstr "Forgot Password"
 msgid "Forgot password?"
 msgstr "Forgot password?"
 
-#: src/routes/_dashboard-layout.tsx:195
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:159
+#: src/routes/_dashboard-layout.tsx:196
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:169
 msgid "Front Office"
 msgstr "Front Office"
 
@@ -1253,14 +1339,15 @@ msgstr "Hello from About!"
 msgid "Hide password"
 msgstr "Hide password"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:243
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:33
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:51
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:43
@@ -1270,13 +1357,21 @@ msgstr "Hide password"
 msgid "Home"
 msgstr "Home"
 
-#: src/routes/_dashboard-layout.tsx:119
-#: src/routes/_dashboard-layout.tsx:453
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:217
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:243
+msgid "Host"
+msgstr "Host"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:83
+msgid "Host is required"
+msgstr "Host is required"
+
+#: src/routes/_dashboard-layout.tsx:120
+#: src/routes/_dashboard-layout.tsx:463
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:227
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:92
 msgid "Hotel ID"
 msgstr "Hotel ID"
 
@@ -1300,9 +1395,15 @@ msgstr "Infants"
 #~ msgid "Info"
 #~ msgstr "Info"
 
-#: src/routes/_dashboard-layout.tsx:309
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:117
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:190
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:69
+msgid "Integration Guide"
+msgstr "Integration Guide"
+
+#: src/routes/_dashboard-layout.tsx:310
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:36
 msgid "Integrations"
 msgstr "Integrations"
 
@@ -1375,6 +1476,10 @@ msgstr "Last name is required"
 #~ msgid "Last sent: {lastSent}"
 #~ msgstr "Last sent: {lastSent}"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:416
+#~ msgid "Last tested at {0}"
+#~ msgstr "Last tested at {0}"
+
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:179
 msgid "Light"
 msgstr "Light"
@@ -1407,7 +1512,7 @@ msgstr "Login"
 #~ msgid "Login into account"
 #~ msgstr "Login into account"
 
-#: src/routes/_dashboard-layout.tsx:378
+#: src/routes/_dashboard-layout.tsx:388
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -1429,6 +1534,14 @@ msgstr "Manage hotel properties, view details, and configure settings"
 #: src/routes/_dashboard-layout/index.tsx:31
 msgid "Manage room inventory, availability, and room type configurations"
 msgstr "Manage room inventory, availability, and room type configurations"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:52
+msgid "Manage this property's connection to its door lock system."
+msgstr "Manage this property's connection to its door lock system."
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:52
+msgid "Manage this property's connection to its property management system."
+msgstr "Manage this property's connection to its property management system."
 
 #: src/routes/_dashboard-layout/index.tsx:37
 msgid "Manage users, view user details, and assign roles"
@@ -1471,7 +1584,7 @@ msgstr "Microsoft Authenticator"
 #~ msgid "Mobile App"
 #~ msgstr "Mobile App"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:141
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:150
 msgid "Mock code"
 msgstr "Mock code"
 
@@ -1479,16 +1592,16 @@ msgstr "Mock code"
 msgid "Monitor daily operations, track occupancy, and oversee front-office activity"
 msgstr "Monitor daily operations, track occupancy, and oversee front-office activity"
 
-#: src/routes/_dashboard-layout.tsx:184
-#: src/routes/_dashboard-layout.tsx:186
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:150
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:249
+#: src/routes/_dashboard-layout.tsx:185
+#: src/routes/_dashboard-layout.tsx:187
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:160
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:273
 #: src/routes/_dashboard-layout/index.tsx:42
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:257
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:281
 msgid "Monitoring Logs"
 msgstr "Monitoring Logs"
 
@@ -1520,6 +1633,10 @@ msgstr "Move to Right"
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:164
 msgid "Name"
 msgstr "Name"
+
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:190
+msgid "Name and contact details"
+msgstr "Name and contact details"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:166
 msgid "Nationality"
@@ -1598,6 +1715,10 @@ msgstr "No properties found"
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:178
 #~ msgid "No properties found."
 #~ msgstr "No properties found."
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:118
+msgid "No response from the PMS interface."
+msgstr "No response from the PMS interface."
 
 #: src/components/ui/data-grid-column-filter.tsx:91
 #~ msgid "No results found."
@@ -1679,10 +1800,15 @@ msgstr "Page not found"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:221
 #: src/routes/_auth-layout/auth/login.tsx:187
 #: src/routes/_auth-layout/auth/sign-up.tsx:260
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:395
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:177
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:55
 msgid "Password"
 msgstr "Password"
+
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:192
+msgid "Password and sign-in access"
+msgstr "Password and sign-in access"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:48
 msgid "Password change is not yet implemented"
@@ -1692,9 +1818,9 @@ msgstr "Password change is not yet implemented"
 #~ msgid "Password changed successfully"
 #~ msgstr "Password changed successfully"
 
-#: src/routes/_auth-layout/auth/login.tsx:61
-#~ msgid "Password is required"
-#~ msgstr "Password is required"
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:124
+msgid "Password is required"
+msgstr "Password is required"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/add-user-modal.tsx:45
 #~ msgid "Password must be at least 8 characters"
@@ -1747,13 +1873,17 @@ msgstr "Pending"
 msgid "Per page"
 msgstr "Per page"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:175
 msgid "Personal"
 msgstr "Personal"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:54
 msgid "Personal Information"
 msgstr "Personal Information"
+
+#: src/routes/_dashboard-layout/(user-view)/profile/personal.tsx:15
+#~ msgid "Personal profile"
+#~ msgstr "Personal profile"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:441
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:541
@@ -1829,18 +1959,34 @@ msgstr "Please select at least one role"
 msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
-#: src/routes/_dashboard-layout.tsx:316
-#: src/routes/_dashboard-layout.tsx:318
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:126
+#: src/routes/_dashboard-layout.tsx:317
+#: src/routes/_dashboard-layout.tsx:319
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:127
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:23
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:43
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:51
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:41
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:49
 msgid "PMS"
 msgstr "PMS"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:88
+msgid "PMS interface handshake"
+msgstr "PMS interface handshake"
 
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:32
 #~ msgid "PMS Provider"
 #~ msgstr "PMS Provider"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:223
+msgid "PMS-Schnittstelle"
+msgstr "PMS-Schnittstelle"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:265
+msgid "Port"
+msgstr "Port"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:90
+msgid "Port is required"
+msgstr "Port is required"
 
 #: src/components/ui/pagination.tsx:85
 msgid "Previous"
@@ -1888,13 +2034,26 @@ msgstr "Products"
 #~ msgid "Products in {categoryTitle}"
 #~ msgstr "Products in {categoryTitle}"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:280
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:29
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:54
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:88
 msgid "Profile"
 msgstr "Profile"
 
+#: src/routes/_dashboard-layout/(user-view)/profile/avatar.tsx:17
+#~ msgid "Profile avatar"
+#~ msgstr "Profile avatar"
+
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:196
+msgid "Profile image"
+msgstr "Profile image"
+
+#: src/routes/_dashboard-layout/(user-view)/profile/password.tsx:15
+#~ msgid "Profile password"
+#~ msgstr "Profile password"
+
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:119
 msgid "Profile picture"
 msgstr "Profile picture"
@@ -1907,6 +2066,18 @@ msgstr "Profile Picture"
 msgid "Profile picture upload"
 msgstr "Profile picture upload"
 
+#: src/routes/_dashboard-layout/(user-view)/profile/roles.tsx:15
+#~ msgid "Profile roles"
+#~ msgstr "Profile roles"
+
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:121
+msgid "Profile sections"
+msgstr "Profile sections"
+
+#: src/routes/_dashboard-layout/(user-view)/profile/two-factor.tsx:16
+#~ msgid "Profile two-factor authentication"
+#~ msgstr "Profile two-factor authentication"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:46
 msgid "Profile update is not yet implemented"
 msgstr "Profile update is not yet implemented"
@@ -1915,9 +2086,9 @@ msgstr "Profile update is not yet implemented"
 #~ msgid "Profile updated successfully"
 #~ msgstr "Profile updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:151
-#: src/routes/_dashboard-layout.tsx:153
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:100
+#: src/routes/_dashboard-layout.tsx:152
+#: src/routes/_dashboard-layout.tsx:154
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:101
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:55
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:473
@@ -2069,9 +2240,9 @@ msgstr "Reservation #"
 msgid "Reservation updated successfully"
 msgstr "Reservation updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:202
-#: src/routes/_dashboard-layout.tsx:204
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:168
+#: src/routes/_dashboard-layout.tsx:203
+#: src/routes/_dashboard-layout.tsx:205
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:178
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:59
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:73
@@ -2104,7 +2275,11 @@ msgstr "Reset Password"
 #~ msgid "Role"
 #~ msgstr "Role"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:194
+msgid "Role assignments"
+msgstr "Role assignments"
+
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:179
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:231
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:231
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:201
@@ -2167,9 +2342,9 @@ msgstr "Room Type"
 msgid "Room updated successfully"
 msgstr "Room updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:208
 #: src/routes/_dashboard-layout.tsx:209
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:177
+#: src/routes/_dashboard-layout.tsx:210
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:57
@@ -2189,6 +2364,19 @@ msgstr "Rooms"
 #: src/components/ui/data-grid-pagination.tsx:244
 msgid "Rows per page"
 msgstr "Rows per page"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
+msgid "Run again"
+msgstr "Run again"
+
+#. placeholder {0}: steps.length
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:288
+msgid "Running tests… ({passedCount}/{0})"
+msgstr "Running tests… ({passedCount}/{0})"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:173
+msgid "SALTO"
+msgstr "SALTO"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-product-modal.tsx:101
@@ -2320,7 +2508,6 @@ msgstr "Select stage"
 
 #: src/components/ui/data-grid-checkbox-filter.tsx:78
 #: src/components/ui/data-grid-radio-filter.tsx:52
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:331
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:173
@@ -2345,7 +2532,7 @@ msgstr "Select status"
 msgid "Send Invitation"
 msgstr "Send Invitation"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:128
 msgid "Send invoice via PMS"
 msgstr "Send invoice via PMS"
 
@@ -2386,6 +2573,31 @@ msgstr "Set your password to activate your account"
 #~ msgid "Share this URL with guests for direct check-in access"
 #~ msgstr "Share this URL with guests for direct check-in access"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:96
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:102
+msgid "SHIP handshake"
+msgstr "SHIP handshake"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:116
+msgid "SHIP handshake rejected: unsupported protocol version."
+msgstr "SHIP handshake rejected: unsupported protocol version."
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:229
+msgid "SHIP-Schnittstelle"
+msgstr "SHIP-Schnittstelle"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:293
+msgid "SHIP-Type"
+msgstr "SHIP-Type"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:353
+msgid "SHIP-URL"
+msgstr "SHIP-URL"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:110
+msgid "SHIP-URL is required"
+msgstr "SHIP-URL is required"
+
 #: src/components/ui/data-grid-pagination.tsx:40
 msgid "Show"
 msgstr "Show"
@@ -2406,7 +2618,7 @@ msgstr "Show results for: <0>\"{q}\"</0>"
 msgid "Show results for: <0>\"{searchQuery}\"</0>"
 msgstr "Show results for: <0>\"{searchQuery}\"</0>"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:202
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:212
 msgid "Sidebar"
 msgstr "Sidebar"
 
@@ -2421,16 +2633,20 @@ msgid "Sign Up"
 msgstr "Sign Up"
 
 #: src/routes/_auth-layout.tsx:16
-#: src/routes/_dashboard-layout.tsx:397
+#: src/routes/_dashboard-layout.tsx:407
 msgid "Skip to main content"
 msgstr "Skip to main content"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:251
+msgid "Skipped"
+msgstr "Skipped"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:183
 #~ msgid "SMS sent successfully"
 #~ msgstr "SMS sent successfully"
 
 #: src/routes/__root.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:199
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:223
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:106
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:75
@@ -2464,12 +2680,12 @@ msgstr "Stage"
 msgid "Staging"
 msgstr "Staging"
 
-#: src/routes/_dashboard-layout.tsx:141
-#: src/routes/_dashboard-layout.tsx:144
-#: src/routes/_dashboard-layout.tsx:174
-#: src/routes/_dashboard-layout.tsx:177
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:91
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:141
+#: src/routes/_dashboard-layout.tsx:142
+#: src/routes/_dashboard-layout.tsx:145
+#: src/routes/_dashboard-layout.tsx:175
+#: src/routes/_dashboard-layout.tsx:178
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:92
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:151
 msgid "Start"
 msgstr "Start"
 
@@ -2484,7 +2700,7 @@ msgstr "Station"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:82
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:266
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:288
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:114
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:125
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:330
@@ -2498,6 +2714,10 @@ msgstr "Status"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:203
 msgid "Stay"
 msgstr "Stay"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:323
+msgid "STP is deprecated"
+msgstr "STP is deprecated"
 
 #: src/components/ui/password-strength-meter.tsx:66
 msgid "Strong password"
@@ -2556,11 +2776,30 @@ msgstr "Switched to {0}"
 msgid "System"
 msgstr "System"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:100
+msgid "TCP connection"
+msgstr "TCP connection"
+
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:159
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:93
 msgid "Template"
 msgstr "Template"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:455
+msgid "Test connection"
+msgstr "Test connection"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:198
+msgid "Test provider configuration"
+msgstr "Test provider configuration"
+
+#. placeholder {0}: i18n.date(lastTestResult.finishedAt, { timeStyle: 'short', dateStyle: 'short' })
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:440
+msgid "Tested at {0}"
+msgstr "Tested at {0}"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:38
 #~ msgid "Tester"
@@ -2570,7 +2809,7 @@ msgstr "Template"
 #~ msgid "The booking number can be found in your Property Management System (PMS)"
 #~ msgstr "The booking number can be found in your Property Management System (PMS)"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:131
 msgid "The invoice will be sent directly to the PMS"
 msgstr "The invoice will be sent directly to the PMS"
 
@@ -2622,9 +2861,21 @@ msgstr "Theme"
 msgid "There was an error loading the product categories. Please try again."
 msgstr "There was an error loading the product categories. Please try again."
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:284
+#~ msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
+#~ msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:326
+msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
+msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
+
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:89
 msgid "This invitation link is invalid."
 msgstr "This invitation link is invalid."
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:165
+msgid "This is the service code that will be used to skip payment at check-in."
+msgstr "This is the service code that will be used to skip payment at check-in."
 
 #: src/routes/_auth-layout/auth/reset-password.tsx:79
 msgid "This password reset link is invalid."
@@ -2642,6 +2893,14 @@ msgstr "This verification link is invalid."
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-product-modal.tsx:75
 msgid "Title"
 msgstr "Title"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:94
+msgid "TLS certificate"
+msgstr "TLS certificate"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:112
+msgid "TLS handshake failed: certificate is self-signed or expired."
+msgstr "TLS handshake failed: certificate is self-signed or expired."
 
 #: src/components/ui/data-grid-column-visibility.tsx:27
 msgid "Toggle Columns"
@@ -2662,7 +2921,7 @@ msgstr "Toggle details"
 #~ msgid "Toggle theme"
 #~ msgstr "Toggle theme"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:110
 msgid "Token"
 msgstr "Token"
 
@@ -2682,7 +2941,7 @@ msgstr "Turn on two-factor authentication for better account security"
 msgid "TV App"
 msgstr "TV App"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:183
 msgid "Two Factor"
 msgstr "Two Factor"
 
@@ -2728,6 +2987,7 @@ msgstr "Two-factor authentication setup is not yet implemented"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:298
 msgid "Type"
 msgstr "Type"
 
@@ -2747,7 +3007,8 @@ msgstr "Type"
 msgid "Unpin {title} column"
 msgstr "Unpin {title} column"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:459
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:181
 msgid "Update config"
 msgstr "Update config"
 
@@ -2763,7 +3024,7 @@ msgstr "Upload a profile picture to personalize your account"
 msgid "Upload Image"
 msgstr "Upload Image"
 
-#: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:26
+#: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:27
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:88
 msgid "User"
 msgstr "User"
@@ -2801,9 +3062,17 @@ msgstr "User updated successfully"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: src/routes/_dashboard-layout.tsx:213
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:375
+msgid "Username"
+msgstr "Username"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:117
+msgid "Username is required"
+msgstr "Username is required"
+
 #: src/routes/_dashboard-layout.tsx:214
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:186
+#: src/routes/_dashboard-layout.tsx:215
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:196
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:202
