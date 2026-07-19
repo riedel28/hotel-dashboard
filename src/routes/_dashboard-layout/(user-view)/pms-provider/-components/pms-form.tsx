@@ -1,19 +1,22 @@
+import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { ArrowUpRightIcon, InfoIcon } from 'lucide-react';
+import { ArrowUpRightIcon, Loader2Icon } from 'lucide-react';
 import * as React from 'react';
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Switch } from '@/components/ui/switch';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
 
 interface PmsFormState {
   hotelId: string;
@@ -29,45 +32,54 @@ export function PmsForm() {
     sendInvoiceViaPms: false,
     mockCode: ''
   });
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setIsSubmitting(false);
+    toast.success(t`Config updated`);
   };
 
   return (
     <Card className="w-full max-w-lg">
       <CardHeader>
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex flex-col gap-1">
-            <CardTitle>
-              <Trans>Casablanca</Trans>
-            </CardTitle>
-            <a
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2">
+              <CardTitle>
+                <Trans>Casablanca</Trans>
+              </CardTitle>
+              <Badge
+                size="sm"
+                color="emerald"
+                className="shrink-0 rounded-md border border-foreground/10 capitalize"
+              >
+                <span className="size-1.25 rounded-full bg-current/80 mr-0.5" />
+                <Trans>Connected</Trans>
+              </Badge>
+            </div>
+            <Link
               href="https://docs.casablanca.dev/hotel-dashboard-integration"
               target="_blank"
               rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-1 text-xs font-medium"
             >
-              <Badge
-                size="xs"
-                variant="outline"
-                color="gray"
-                className="[&>svg]:size-3 dark:bg-accent rounded-md"
-              >
-                Integration Guide
-                <ArrowUpRightIcon aria-hidden="true" />
-              </Badge>
-            </a>
+              <Trans>Integration Guide</Trans>
+              <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
+            </Link>
           </div>
-          <div className="flex h-10 w-24 shrink-0 items-center justify-end">
+          <div className="flex h-9 w-20 shrink-0 items-center justify-end">
             <img
               src="/casablanca-logo.png"
               alt="Casablanca"
-              className="max-h-8 max-w-full object-contain dark:hidden"
+              className="max-h-9 max-w-full object-contain dark:hidden"
             />
             <img
               src="/casablanca-logo-inverse.png"
               alt="Casablanca"
-              className="hidden max-h-8 max-w-full object-contain dark:block"
+              className="hidden max-h-9 max-w-full object-contain dark:block"
             />
           </div>
         </div>
@@ -110,56 +122,33 @@ export function PmsForm() {
               />
             </Field>
 
-            <Field orientation="horizontal" className="justify-between">
-              <FieldLabel
-                htmlFor="send_invoice_via_pms"
-                className="mt-2 border border-input p-2.5 dark:bg-input/30 rounded-lg flex justify-between"
-              >
-                <div className="flex flex-col gap-1">
+            <Field orientation="horizontal" className="justify-between gap-3">
+              <FieldContent>
+                <FieldLabel htmlFor="send_invoice_via_pms">
                   <Trans>Send invoice via PMS</Trans>
-                  <p className="text-sm text-muted-foreground">
-                    <Trans>The invoice will be sent directly to the PMS</Trans>
-                  </p>
-                </div>
-                <Switch
-                  id="send_invoice_via_pms"
-                  name="send_invoice_via_pms"
-                  checked={formState.sendInvoiceViaPms}
-                  onCheckedChange={(checked) =>
-                    setFormState((current) => ({
-                      ...current,
-                      sendInvoiceViaPms: checked
-                    }))
-                  }
-                />
-              </FieldLabel>
+                </FieldLabel>
+                <FieldDescription>
+                  <Trans>The invoice will be sent directly to the PMS</Trans>
+                </FieldDescription>
+              </FieldContent>
+              <Switch
+                id="send_invoice_via_pms"
+                name="send_invoice_via_pms"
+                checked={formState.sendInvoiceViaPms}
+                onCheckedChange={(checked) =>
+                  setFormState((current) => ({
+                    ...current,
+                    sendInvoiceViaPms: checked
+                  }))
+                }
+                className="self-start"
+              />
             </Field>
 
             <Field>
-              <div className="flex items-center gap-1.5">
-                <FieldLabel htmlFor="mock_code">
-                  <Trans>Mock code</Trans>
-                </FieldLabel>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger
-                      render={
-                        <button
-                          type="button"
-                          className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-lg"
-                          aria-label="mock_code info"
-                        >
-                          <InfoIcon className="size-4" aria-hidden="true" />
-                        </button>
-                      }
-                    />
-                    <TooltipContent>
-                      This is the service code that will be used to skip payment
-                      at check-in.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+              <FieldLabel htmlFor="mock_code">
+                <Trans>Mock code</Trans>
+              </FieldLabel>
               <Input
                 id="mock_code"
                 name="mock_code"
@@ -172,14 +161,23 @@ export function PmsForm() {
                   }))
                 }
               />
+              <FieldDescription>
+                <Trans>
+                  This is the service code that will be used to skip payment at
+                  check-in.
+                </Trans>
+              </FieldDescription>
             </Field>
           </FieldGroup>
 
-          <div className="flex justify-between gap-2 items-center">
+          <div className="flex justify-between gap-2 items-center mt-2">
             <p className="text-[12px] text-muted-foreground text-balance">
               Last updated at 13.04.2026, 11:18:17 by John Doe
             </p>
-            <Button type="submit">
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting && (
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              )}
               <Trans>Update config</Trans>
             </Button>
           </div>

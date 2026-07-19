@@ -33,9 +33,7 @@ function RouteComponent() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <span>
-              <Trans>Integrations</Trans>
-            </span>
+            <Trans>Integrations</Trans>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -46,15 +44,18 @@ function RouteComponent() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6">
+      <div className="mb-6 flex flex-col gap-1">
         <h1 className="text-xl font-bold">
           <Trans>PMS</Trans>
         </h1>
+        <p className="text-sm text-muted-foreground">
+          <Trans>
+            Manage this property's connection to its property management system.
+          </Trans>
+        </p>
       </div>
 
-      <div className="flex justify-center">
-        <PmsForm />
-      </div>
+      <PmsForm />
     </div>
   );
 }
