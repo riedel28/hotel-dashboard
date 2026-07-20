@@ -12,6 +12,7 @@ import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
   BuildingIcon,
+  CreditCardIcon,
   DoorOpenIcon,
   // CalendarIcon,
   // FileSpreadsheetIcon,
@@ -318,6 +319,15 @@ function UserSidebarContent() {
               <Trans>PMS</Trans>
             </SidebarLink>
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/payment-provider"
+              icon={CreditCardIcon}
+              tooltip={t`Payment Provider`}
+            >
+              <Trans>Payment Provider</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
 
@@ -389,7 +399,7 @@ function DashboardSidebar() {
 // Main layout component
 function DashboardLayout() {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-svh overflow-hidden">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-background focus:px-4 focus:py-2 focus:rounded-md focus:ring-2 focus:ring-primary focus:text-foreground"
@@ -402,7 +412,7 @@ function DashboardLayout() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8 focus:outline-none"
+          className="min-h-0 flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8 focus:outline-none"
         >
           <Outlet />
         </main>

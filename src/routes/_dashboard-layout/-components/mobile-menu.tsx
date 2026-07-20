@@ -7,6 +7,7 @@ import {
   BedSingleIcon,
   BuildingIcon,
   CableIcon,
+  CreditCardIcon,
   HomeIcon,
   MessageCircleIcon,
   SquareActivityIcon,
@@ -124,6 +125,15 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               onNavigate={handleNavigate}
             >
               <Trans>PMS</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/payment-provider"
+              icon={CreditCardIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Payment Provider</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
