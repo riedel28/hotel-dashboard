@@ -4,26 +4,44 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-function Table({ className, ...props }: React.ComponentProps<'table'>) {
+const TableContext = React.createContext<{ borderless: boolean }>({
+  borderless: false
+});
+
+function Table({
+  className,
+  borderless = false,
+  ...props
+}: React.ComponentProps<'table'> & { borderless?: boolean }) {
   return (
-    <div className="relative w-full overflow-auto rounded-lg border border-input bg-transparent dark:bg-input/30">
-      <table
-        data-slot="table"
+    <TableContext.Provider value={{ borderless }}>
+      <div
         className={cn(
-          'w-full caption-bottom border-collapse text-sm text-foreground',
-          className
+          'relative w-full overflow-auto',
+          !borderless &&
+            'rounded-lg border border-input bg-transparent dark:bg-input/30'
         )}
-        {...props}
-      />
-    </div>
+      >
+        <table
+          data-slot="table"
+          data-borderless={borderless || undefined}
+          className={cn(
+            'w-full caption-bottom border-collapse text-sm text-foreground',
+            className
+          )}
+          {...props}
+        />
+      </div>
+    </TableContext.Provider>
   );
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
+  const { borderless } = React.useContext(TableContext);
   return (
     <thead
       data-slot="table-header"
-      className={cn('bg-input/30', className)}
+      className={cn(!borderless && 'bg-input/30', className)}
       {...props}
     />
   );
