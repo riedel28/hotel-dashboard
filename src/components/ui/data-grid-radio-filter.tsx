@@ -1,13 +1,15 @@
+import { Trans } from '@lingui/react/macro';
 import { ChevronDownIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useState } from 'react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button, type ButtonProps } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
@@ -20,16 +22,15 @@ interface DataGridRadioFilterOption<TValue extends string> {
   disabled?: boolean;
 }
 
-interface DataGridRadioFilterProps<TValue extends string> extends Omit<
-  ButtonProps,
-  'children' | 'onChange' | 'value'
-> {
+interface DataGridRadioFilterProps<TValue extends string>
+  extends Omit<ButtonProps, 'children' | 'onChange' | 'value'> {
   options: DataGridRadioFilterOption<TValue>[];
-  value: TValue;
-  onValueChange: (value: TValue) => void;
+  value?: TValue;
+  onValueChange: (value: TValue | undefined) => void;
   label: ReactNode;
   placeholder?: ReactNode;
-  emptyValue?: TValue;
+  showFooter?: boolean;
+  clearLabel?: ReactNode;
 }
 
 function DataGridRadioFilter<TValue extends string>({
@@ -38,33 +39,25 @@ function DataGridRadioFilter<TValue extends string>({
   onValueChange,
   label,
   placeholder,
-  emptyValue,
+  showFooter = false,
+  clearLabel,
   className,
   ...props
 }: DataGridRadioFilterProps<TValue>) {
-  const selectedOption = options.find(option => option.value === value);
-  const hasActiveOption = Boolean(
-    selectedOption && (!emptyValue || selectedOption.value !== emptyValue)
-  );
+  const [open, setOpen] = useState(false);
+  const selectedOption = options.find((option) => option.value === value);
 
-  const triggerLabel = hasActiveOption ? (
-    <Badge
-      variant="secondary"
-      color="gray"
-      size="xs"
-      className="rounded-md px-1.5 py-0 leading-5"
-    >
-      {selectedOption?.label}
-    </Badge>
-  ) : (
-    (placeholder ?? selectedOption?.label)
+  const triggerLabel = selectedOption?.label ?? placeholder ?? (
+    <span>
+      <Trans>Select status</Trans>
+    </span>
   );
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         nativeButton
-        render={triggerProps => (
+        render={(triggerProps) => (
           <Button
             variant="ghost"
             className={cn(
@@ -75,15 +68,17 @@ function DataGridRadioFilter<TValue extends string>({
             {...triggerProps}
           >
             <span className="flex min-w-0 items-center gap-2">
-              {hasActiveOption && (
+              {selectedOption ? (
                 <span className="font-normal text-muted-foreground">
-                  {label}
+                  {label}:
                 </span>
+              ) : (
+                <span className="sr-only">{label}</span>
               )}
               <span
                 className={cn(
                   'truncate',
-                  !hasActiveOption && 'text-muted-foreground'
+                  !selectedOption && 'text-muted-foreground'
                 )}
               >
                 {triggerLabel}
@@ -93,12 +88,12 @@ function DataGridRadioFilter<TValue extends string>({
           </Button>
         )}
       />
-      <DropdownMenuContent align="start" className="w-auto">
+      <DropdownMenuContent align="start" className="w-auto min-w-[150px]">
         <DropdownMenuRadioGroup
           value={value}
-          onValueChange={nextValue => onValueChange(nextValue as TValue)}
+          onValueChange={(nextValue) => onValueChange(nextValue as TValue)}
         >
-          {options.map(option => (
+          {options.map((option) => (
             <DropdownMenuRadioItem
               key={option.value}
               value={option.value}
@@ -106,13 +101,30 @@ function DataGridRadioFilter<TValue extends string>({
               closeOnClick
               className="py-1.5"
             >
-              <span className="flex min-w-0 items-center">
-                {option.icon}
-                <span className="truncate">{option.label}</span>
-              </span>
+              {option.label}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
+        {showFooter && (
+          <>
+            <DropdownMenuSeparator />
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-7 w-full justify-center px-4 font-normal text-muted-foreground transition-colors hover:text-foreground"
+              disabled={!selectedOption}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onValueChange(undefined);
+                setOpen(false);
+              }}
+            >
+              {clearLabel ?? <Trans>Reset</Trans>}
+            </Button>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

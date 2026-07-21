@@ -22,10 +22,8 @@ interface DataGridCheckboxFilterOption<TValue extends string> {
   disabled?: boolean;
 }
 
-interface DataGridCheckboxFilterProps<TValue extends string> extends Omit<
-  ButtonProps,
-  'children' | 'onChange' | 'value'
-> {
+interface DataGridCheckboxFilterProps<TValue extends string>
+  extends Omit<ButtonProps, 'children' | 'onChange' | 'value'> {
   options: DataGridCheckboxFilterOption<TValue>[];
   value: TValue[];
   onValueChange: (value: TValue[]) => void;
@@ -51,7 +49,7 @@ function DataGridCheckboxFilter<TValue extends string>({
   ...props
 }: DataGridCheckboxFilterProps<TValue>) {
   const selectedValues = new Set(value);
-  const selectedOptions = options.filter(option =>
+  const selectedOptions = options.filter((option) =>
     selectedValues.has(option.value)
   );
 
@@ -68,8 +66,8 @@ function DataGridCheckboxFilter<TValue extends string>({
   };
 
   const selectableValues = options
-    .filter(option => !option.disabled)
-    .map(option => option.value);
+    .filter((option) => !option.disabled)
+    .map((option) => option.value);
   const hasSelectedOptions = selectedOptions.length > 0;
 
   const triggerLabel =
@@ -104,7 +102,7 @@ function DataGridCheckboxFilter<TValue extends string>({
     <DropdownMenu>
       <DropdownMenuTrigger
         nativeButton
-        render={triggerProps => (
+        render={(triggerProps) => (
           <Button
             variant="ghost"
             className={cn(
@@ -134,14 +132,14 @@ function DataGridCheckboxFilter<TValue extends string>({
         )}
       />
       <DropdownMenuContent align="start" className="w-auto">
-        {options.map(option => {
+        {options.map((option) => {
           return (
             <DropdownMenuCheckboxItem
               key={option.value}
               checked={selectedValues.has(option.value)}
               disabled={option.disabled}
-              onSelect={event => event.preventDefault()}
-              onCheckedChange={checked =>
+              onSelect={(event) => event.preventDefault()}
+              onCheckedChange={(checked) =>
                 toggleValue(option.value, Boolean(checked))
               }
               className="py-1.5"
@@ -162,7 +160,7 @@ function DataGridCheckboxFilter<TValue extends string>({
                 variant="ghost"
                 size="sm"
                 className="justify-center h-7 px-4 flex-1 font-normal text-muted-foreground hover:text-foreground transition-colors"
-                onClick={event => {
+                onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
                   onValueChange([]);
@@ -176,7 +174,7 @@ function DataGridCheckboxFilter<TValue extends string>({
                 variant="ghost"
                 size="sm"
                 className="justify-center h-7 px-4 flex-1 font-normal text-muted-foreground hover:text-foreground transition-colors"
-                onClick={event => {
+                onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
                   onValueChange(selectableValues);
