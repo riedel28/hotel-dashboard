@@ -20,6 +20,7 @@ export function SidebarViewToggle() {
         <TabsList className="w-full">
           <TabsTrigger
             value="user"
+            nativeButton={false}
             className="flex-1 h-6 text-xs"
             render={<Link to="/" />}
           >
@@ -27,6 +28,7 @@ export function SidebarViewToggle() {
           </TabsTrigger>
           <TabsTrigger
             value="admin"
+            nativeButton={false}
             className="flex-1 h-6 text-xs"
             render={<Link to="/admin" />}
           >

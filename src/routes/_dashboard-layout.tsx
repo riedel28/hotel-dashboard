@@ -12,15 +12,16 @@ import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
   BuildingIcon,
-  CreditCardIcon,
-  DoorOpenIcon,
   // CalendarIcon,
   // FileSpreadsheetIcon,
   // Grid2X2Icon,
+  CreditCardIcon,
+  DoorOpenIcon,
   HomeIcon,
   LayoutGridIcon,
   // ListTodoIcon,
   LoaderCircleIcon,
+  LockIcon,
   MessageCircleIcon,
   // ReceiptTextIcon,
   // ShoppingBagIcon,
@@ -317,6 +318,15 @@ function UserSidebarContent() {
               tooltip={t`PMS`}
             >
               <Trans>PMS</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/door-locks"
+              icon={LockIcon}
+              tooltip={t`Door Locks`}
+            >
+              <Trans>Door Locks</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>

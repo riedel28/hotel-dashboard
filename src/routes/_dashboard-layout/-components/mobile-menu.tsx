@@ -9,6 +9,7 @@ import {
   CableIcon,
   CreditCardIcon,
   HomeIcon,
+  LockIcon,
   MessageCircleIcon,
   SquareActivityIcon,
   UsersIcon,
@@ -125,6 +126,15 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               onNavigate={handleNavigate}
             >
               <Trans>PMS</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/door-locks"
+              icon={LockIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Door Locks</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
