@@ -4,20 +4,12 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ArrowUpRightIcon,
   CheckIcon,
-  EyeIcon,
-  EyeOffIcon,
-  KeyRoundIcon,
   Loader2Icon,
   UnplugIcon,
   XIcon
 } from 'lucide-react';
 import * as React from 'react';
-import {
-  Controller,
-  type ControllerFieldState,
-  type ControllerRenderProps,
-  useForm
-} from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -52,9 +44,7 @@ import { Input } from '@/components/ui/input';
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-  InputGroupText
+  InputGroupInput
 } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -110,10 +100,6 @@ const PAYMENT_METHODS: Array<{ id: MethodId; name: string }> = [
   { id: 'amex', name: 'American Express' },
   { id: 'paypal', name: 'PayPal' }
 ];
-
-// Mock persisted state — the backend never returns the raw API key, only the
-// last characters so the UI can prove a key is configured.
-const SAVED_API_KEY_SUFFIX = '8F2A';
 
 const DEFAULT_VALUES: PaymentProviderFormData = {
   environment: 'test',
@@ -259,15 +245,6 @@ export function PaymentProviderForm() {
   const handleCancel = () => {
     form.reset(DEFAULT_VALUES);
     setIsReplacingApiKey(false);
-  };
-
-  const handleCancelReplace = () => {
-    setIsReplacingApiKey(false);
-    form.setValue('apiKey', '', {
-      shouldDirty: false,
-      shouldValidate: false
-    });
-    form.clearErrors('apiKey');
   };
 
   const handleTestConnection = async () => {
