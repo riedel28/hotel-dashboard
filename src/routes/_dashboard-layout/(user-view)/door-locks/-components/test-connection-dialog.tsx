@@ -377,7 +377,7 @@ function ConnectionLine({
         phase === 'done' &&
           (allPassed
             ? 'bg-emerald-500 dark:bg-emerald-800'
-            : 'bg-rose-500/30 dark:bg-rose-900')
+            : 'bg-rose-500/70 dark:bg-rose-900')
       )}
     />
   );

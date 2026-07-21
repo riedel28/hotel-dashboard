@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -144,7 +143,7 @@ export function DoorLocksForm() {
 
   const onSubmit = async () => {
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise(resolve => setTimeout(resolve, 800));
     setIsSubmitting(false);
     toast.success(t`Config updated`);
   };
@@ -168,28 +167,26 @@ export function DoorLocksForm() {
       <CardHeader>
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center-safe gap-2">
               <CardTitle>
                 <Trans>SALTO</Trans>
               </CardTitle>
               <Badge
+                variant="outline"
                 size="sm"
-                color="emerald"
-                className="shrink-0 rounded-md border border-foreground/10 capitalize"
+                className="bg-accent text-accent-foreground text-[11px] rounded-md cursor-pointer"
+                render={
+                  <a
+                    href="https:google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
               >
-                <span className="size-1.25 rounded-full bg-current/80 mr-0.5" />
-                <Trans>Connected</Trans>
+                <Trans>Integration Guide</Trans>
+                <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
               </Badge>
             </div>
-            <Link
-              href="https://docs.saltosystems.com/hotel-dashboard-integration"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-fit items-center gap-1 text-xs font-medium"
-            >
-              <Trans>Integration Guide</Trans>
-              <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
-            </Link>
           </div>
           <div className="flex h-9 w-20 shrink-0 items-center justify-end">
             <img
@@ -214,7 +211,7 @@ export function DoorLocksForm() {
           <FieldGroup>
             <Tabs
               value={integrationMode}
-              onValueChange={(value) =>
+              onValueChange={value =>
                 setIntegrationMode(value as IntegrationMode)
               }
             >
@@ -267,7 +264,7 @@ export function DoorLocksForm() {
                         <Input
                           id={field.name}
                           {...field}
-                          type="number"
+                          type="text"
                           inputMode="numeric"
                           aria-invalid={fieldState.invalid}
                           placeholder="13445"
