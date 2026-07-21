@@ -42,7 +42,28 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "border-input data-placeholder:text-muted-foreground data-popup-open:bg-accent dark:bg-input/30 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm transition-[color,box-shadow] focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 flex w-fit items-center justify-between whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        // Base
+        'flex w-fit items-center justify-between gap-1.5 whitespace-nowrap rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 transition-[color,box-shadow]',
+        // Typography
+        'text-sm',
+        // Sizes
+        'data-[size=default]:h-9 data-[size=sm]:h-8',
+        // Placeholder
+        'data-placeholder:text-muted-foreground',
+        // Open state
+        'data-popup-open:bg-accent',
+        // Select value (child)
+        '*:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 *:data-[slot=select-value]:line-clamp-1',
+        // Icons
+        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // Focus
+        'focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary',
+        // Error / invalid
+        'aria-invalid:border-destructive aria-invalid:shadow-[inset_0_0_0_1px_var(--color-destructive)] aria-invalid:focus-visible:outline-destructive',
+        // Disabled
+        'disabled:cursor-not-allowed disabled:opacity-50',
+        // Dark mode
+        'dark:bg-input/30',
         className
       )}
       {...props}
