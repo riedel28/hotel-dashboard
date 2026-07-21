@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { XIcon } from 'lucide-react';
+import type { MonitoringStatus, MonitoringType } from 'shared/types/monitoring';
 import {
   fetchMonitoringLogsParamsSchema,
   monitoringQueryOptions
@@ -18,6 +19,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { DataGridRadioFilter } from '@/components/ui/data-grid-radio-filter';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
   ErrorDisplayActions,
@@ -25,19 +27,28 @@ import {
   ErrorDisplayMessage,
   ErrorDisplayTitle
 } from '@/components/ui/error-display';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
-
+import { StatusCell } from './-components/cells/status-cell';
+import { TypeCell } from './-components/cells/type-cell';
 import { MonitoringDateFilter } from './-components/monitoring-date-filter';
 import { MonitoringTable } from './-components/monitoring-table';
+
+const monitoringStatusOptions = [
+  { value: 'success' },
+  { value: 'error' }
+] as const satisfies ReadonlyArray<{
+  value: MonitoringStatus;
+}>;
+
+const monitoringTypeOptions = [
+  { value: 'pms' },
+  { value: 'door lock' },
+  { value: 'payment' }
+] as const satisfies ReadonlyArray<{
+  value: MonitoringType;
+}>;
 
 function MonitoringPage() {
   const { page, per_page, status, type, from, to, sort_by, sort_order } =
@@ -63,14 +74,22 @@ function MonitoringPage() {
     monitoringQuery.refetch();
   };
 
-  const handleStatusChange = (newStatus: string | null) => {
-    if (!newStatus) return;
+  const handleStatusChange = (newStatus: MonitoringStatus | undefined) => {
     navigate({
       search: (prev) => ({
         ...prev,
         page: 1,
-        status:
-          newStatus === 'all' ? undefined : (newStatus as 'success' | 'error')
+        status: newStatus
+      })
+    });
+  };
+
+  const handleTypeChange = (newType: MonitoringType | undefined) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        page: 1,
+        type: newType
       })
     });
   };
@@ -169,6 +188,15 @@ function MonitoringPage() {
   const sorting: SortingState = sort_by
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
     : [{ id: 'logged_at', desc: true }];
+  const statusFilterOptions = monitoringStatusOptions.map((option) => ({
+    value: option.value,
+    label: <StatusCell status={option.value} />
+  }));
+  const typeFilterOptions = monitoringTypeOptions.map((option) => ({
+    value: option.value,
+    label: <TypeCell type={option.value} />
+  }));
+  const hasActiveFilters = Boolean(status || type || from || to);
 
   const renderTableContent = () => {
     if (monitoringQuery.isLoading) {
@@ -255,78 +283,46 @@ function MonitoringPage() {
       </div>
 
       <div className="space-y-2.5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Select
-                value={status ?? 'all'}
-                onValueChange={handleStatusChange}
-                defaultValue="all"
-              >
-                <SelectTrigger className="w-full sm:w-[150px]">
-                  <SelectValue>
-                    {(value) =>
-                      value ? (
-                        <span className="capitalize">{t(value)}</span>
-                      ) : (
-                        <span className="text-muted-foreground">
-                          <Trans>Select status</Trans>
-                        </span>
-                      )
-                    }
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent align="start">
-                  <SelectItem value="all">
-                    <span className="flex items-center gap-2">
-                      <span className="size-1.5 rounded-full bg-gray-500"></span>
-                      <span>
-                        <Trans>All Statuses</Trans>
-                      </span>
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="success">
-                    <span className="flex items-center gap-2">
-                      <span className="size-1.5 rounded-full bg-green-500"></span>
-                      <span>
-                        <Trans>Success</Trans>
-                      </span>
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="error">
-                    <span className="flex items-center gap-2">
-                      <span className="size-1.5 rounded-full bg-red-500"></span>
-                      <span>
-                        <Trans>Error</Trans>
-                      </span>
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <MonitoringDateFilter
-                from={from ? new Date(from) : undefined}
-                to={to ? new Date(to) : undefined}
-                onDateChange={handleDateChange}
-                className="w-full sm:w-[220px]"
-              />
-              {(from || to || status) && (
-                <Button
-                  variant="secondary"
-                  onClick={handleClearFilters}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <XIcon className="mr-2 h-4 w-4" />
-                  <Trans>Clear filters</Trans>
-                </Button>
-              )}
-            </div>
-          </div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <DataGridRadioFilter
+            label={<Trans>Status</Trans>}
+            placeholder={<Trans>All statuses</Trans>}
+            value={status}
+            onValueChange={handleStatusChange}
+            options={statusFilterOptions}
+            showFooter
+            clearLabel={<Trans>All statuses</Trans>}
+            className="w-full sm:w-[170px]"
+          />
+          <DataGridRadioFilter
+            label={<Trans>Type</Trans>}
+            placeholder={<Trans>All types</Trans>}
+            value={type}
+            onValueChange={handleTypeChange}
+            options={typeFilterOptions}
+            showFooter
+            clearLabel={<Trans>All types</Trans>}
+            className="w-full sm:w-[170px]"
+          />
+          <MonitoringDateFilter
+            from={from ? new Date(from) : undefined}
+            to={to ? new Date(to) : undefined}
+            onDateChange={handleDateChange}
+            className="w-full sm:w-[220px]"
+          />
+          {hasActiveFilters && (
+            <Button
+              variant="secondary"
+              onClick={handleClearFilters}
+              className="w-full text-muted-foreground hover:text-foreground sm:w-auto"
+            >
+              <XIcon className="mr-2 h-4 w-4" />
+              <Trans>Clear filters</Trans>
+            </Button>
+          )}
           <DataGridRefreshButton
             isRefreshing={monitoringQuery.isFetching}
             onRefresh={handleRefresh}
-            className="sm:ml-0"
           />
         </div>
 
