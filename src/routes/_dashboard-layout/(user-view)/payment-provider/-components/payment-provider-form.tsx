@@ -292,12 +292,7 @@ export function PaymentProviderForm() {
               <img
                 src="/adyen-logo.svg"
                 alt="Adyen"
-                className="max-h-7 max-w-full object-contain dark:hidden"
-              />
-              <img
-                src="/adyen-logo-inverse.svg"
-                alt="Adyen"
-                className="hidden max-h-7 max-w-full object-contain dark:block"
+                className="max-h-7 max-w-full object-contain"
               />
             </div>
           </div>
