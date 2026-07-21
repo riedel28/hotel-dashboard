@@ -4,13 +4,20 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ArrowUpRightIcon,
   CheckIcon,
+  EyeIcon,
+  EyeOffIcon,
   KeyRoundIcon,
   Loader2Icon,
   UnplugIcon,
   XIcon
 } from 'lucide-react';
 import * as React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import {
+  Controller,
+  type ControllerFieldState,
+  type ControllerRenderProps,
+  useForm
+} from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -24,6 +31,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -44,11 +52,11 @@ import { Input } from '@/components/ui/input';
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupInput
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText
 } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
-import { Link } from '@/components/ui/link';
-import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -62,11 +70,17 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import {
+  PAYMENT_FORM_SECTIONS,
+  PaymentProviderTableOfContents,
+  sectionHeadingId
+} from './payment-provider-toc';
+import {
   type PaymentEnvironment,
   type PaymentTestConnectionConfig,
   PaymentTestConnectionDialog,
   type PaymentTestConnectionResult
 } from './payment-test-connection-dialog';
+import { PasswordInput } from '@/components/ui/password-input';
 
 type MethodId = 'mastercard' | 'visa' | 'amex' | 'paypal';
 
@@ -233,7 +247,7 @@ export function PaymentProviderForm() {
 
   const onSubmit = async (values: PaymentProviderFormData) => {
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise(resolve => setTimeout(resolve, 800));
     setIsSubmitting(false);
     setIsReplacingApiKey(false);
     // Reset to the just-saved values so the form is no longer dirty and any
@@ -268,579 +282,580 @@ export function PaymentProviderForm() {
   };
 
   return (
-    <Card className="relative max-w-lg overflow-visible">
-      <CardHeader>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2">
-              <CardTitle>
-                <Trans>Adyen</Trans>
-              </CardTitle>
+    <div className="flex flex-row gap-8">
+      <PaymentProviderTableOfContents sections={PAYMENT_FORM_SECTIONS} />
+
+      <Card className="relative max-w-4xl overflow-visible">
+        <CardHeader>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center-safe gap-2">
+                <CardTitle>
+                  <Trans>Adyen</Trans>
+                </CardTitle>
+
+                <Badge
+                  variant="outline"
+                  size="sm"
+                  className="bg-accent text-accent-foreground text-[11px] rounded-md cursor-pointer"
+                  render={
+                    <a
+                      href="https:google.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    />
+                  }
+                >
+                  <Trans>Integration Guide</Trans>
+                  <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
+                </Badge>
+              </div>
             </div>
-            <Link
-              href="https://docs.adyen.com/get-started-with-adyen"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-fit items-center gap-1 text-xs font-medium"
+            <div className="flex h-8 w-24 shrink-0 items-center justify-end">
+              <img
+                src="/adyen-logo.svg"
+                alt="Adyen"
+                className="max-h-7 max-w-full object-contain dark:hidden"
+              />
+              <img
+                src="/adyen-logo-inverse.svg"
+                alt="Adyen"
+                className="hidden max-h-7 max-w-full object-contain dark:block"
+              />
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent>
+          <form
+            id="payment-provider-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-8"
+          >
+            {/* ─── Section 1: Credentials ─────────────────────────────── */}
+            <section
+              id="credentials"
+              aria-labelledby={sectionHeadingId('credentials')}
+              className="grid scroll-mt-4 grid-cols-[320px_1fr] gap-4"
             >
-              <Trans>Integration Guide</Trans>
-              <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
-            </Link>
-          </div>
-          <div className="flex h-8 w-24 shrink-0 items-center justify-end">
-            <img
-              src="/adyen-logo.svg"
-              alt="Adyen"
-              className="max-h-7 max-w-full object-contain dark:hidden"
-            />
-            <img
-              src="/adyen-logo-inverse.svg"
-              alt="Adyen"
-              className="hidden max-h-7 max-w-full object-contain dark:block"
-            />
-          </div>
-        </div>
-      </CardHeader>
+              <div>
+                <SectionHeading
+                  id={sectionHeadingId('credentials')}
+                  title={<Trans>Credentials</Trans>}
+                  description={
+                    <Trans>
+                      Technical connection details for your Adyen account.
+                    </Trans>
+                  }
+                />
+              </div>
 
-      <CardContent>
-        <form
-          id="payment-provider-form"
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-8"
-        >
-          {/* ─── Section 1: Credentials ─────────────────────────────── */}
-          <section className="flex flex-col gap-5">
-            <SectionHeading
-              title={<Trans>Credentials</Trans>}
-              description={
-                <Trans>
-                  Technical connection details for your Adyen account.
-                </Trans>
-              }
-            />
-
-            <Controller
-              control={form.control}
-              name="environment"
-              render={({ field }) => (
-                <Field>
-                  <FieldLabel>
-                    <Trans>Environment</Trans>
-                  </FieldLabel>
-                  <RadioGroup
-                    value={field.value}
-                    onValueChange={(value) => {
-                      const next = value as PaymentEnvironment;
-                      if (next === 'live' && field.value === 'test') {
-                        confirmLiveRef.current = () => field.onChange('live');
-                        setConfirmLiveOpen(true);
-                        return;
-                      }
-                      field.onChange(next);
-                    }}
-                    className="grid w-full grid-cols-2 gap-2"
-                  >
-                    <Label
-                      htmlFor="environment-test"
-                      className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
-                    >
-                      <RadioGroupItem value="test" id="environment-test" />
-                      <Trans>Test</Trans>
-                    </Label>
-                    <Label
-                      htmlFor="environment-live"
-                      className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
-                    >
-                      <RadioGroupItem value="live" id="environment-live" />
-                      <Trans>Live</Trans>
-                    </Label>
-                  </RadioGroup>
-                </Field>
-              )}
-            />
-
-            <Controller
-              control={form.control}
-              name="merchantId"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Merchant ID</Trans>
-                  </FieldLabel>
-                  <Input
-                    id={field.name}
-                    {...field}
-                    aria-invalid={fieldState.invalid}
-                    autoComplete="off"
-                    spellCheck={false}
-                    placeholder="merchant-account-name"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+              <div className="flex flex-col gap-5">
+                <Controller
+                  control={form.control}
+                  name="environment"
+                  render={({ field }) => (
+                    <Field>
+                      <FieldLabel>
+                        <Trans>Environment</Trans>
+                      </FieldLabel>
+                      <RadioGroup
+                        value={field.value}
+                        onValueChange={value => {
+                          const next = value as PaymentEnvironment;
+                          if (next === 'live' && field.value === 'test') {
+                            confirmLiveRef.current = () =>
+                              field.onChange('live');
+                            setConfirmLiveOpen(true);
+                            return;
+                          }
+                          field.onChange(next);
+                        }}
+                        className="grid w-full grid-cols-2 gap-2"
+                      >
+                        <Label
+                          htmlFor="environment-test"
+                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                        >
+                          <RadioGroupItem value="test" id="environment-test" />
+                          <Trans>Test</Trans>
+                        </Label>
+                        <Label
+                          htmlFor="environment-live"
+                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                        >
+                          <RadioGroupItem value="live" id="environment-live" />
+                          <Trans>Live</Trans>
+                        </Label>
+                      </RadioGroup>
+                    </Field>
                   )}
-                </Field>
-              )}
-            />
+                />
 
-            {/* API Key: masked "configured" state with Replace flow */}
-            <Controller
-              control={form.control}
-              name="apiKey"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel
-                    htmlFor={isReplacingApiKey ? field.name : undefined}
-                  >
-                    <Trans>API Key</Trans>
-                  </FieldLabel>
-                  {isReplacingApiKey ? (
-                    <div className="flex flex-col gap-2">
-                      <PasswordInput
+                <Controller
+                  control={form.control}
+                  name="merchantId"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Merchant ID</Trans>
+                      </FieldLabel>
+                      <Input
                         id={field.name}
                         {...field}
                         aria-invalid={fieldState.invalid}
                         autoComplete="off"
-                        placeholder={t`Enter the new API key`}
+                        spellCheck={false}
+                        placeholder="merchant-account-name"
                       />
-                      <div className="flex items-center justify-between gap-3">
-                        {fieldState.invalid ? (
-                          <FieldError errors={[fieldState.error]} />
-                        ) : (
-                          <FieldDescription>
-                            <Trans>Saved only when you save changes.</Trans>
-                          </FieldDescription>
-                        )}
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleCancelReplace}
-                        >
-                          <Trans>Cancel</Trans>
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex h-9 items-center justify-between gap-3 rounded-lg border border-input bg-input/30 pl-3 pr-1.5 text-sm dark:bg-input/30">
-                      <span className="flex items-center gap-2 text-muted-foreground">
-                        <KeyRoundIcon
-                          className="size-3.5 shrink-0"
-                          aria-hidden="true"
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                {/* API Key: masked "configured" state with Replace flow */}
+                <Controller
+                  control={form.control}
+                  name="apiKey"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>API Key</Trans>
+                      </FieldLabel>
+                      <PasswordInput
+                        {...field}
+                        id={field.name}
+                        placeholder={t`Enter your API Key`}
+                        autoComplete="off"
+                        aria-required="true"
+                        aria-invalid={fieldState.invalid}
+                        aria-describedby={
+                          fieldState.invalid ? `${field.name}-error` : undefined
+                        }
+                      />
+                    </Field>
+                  )}
+                />
+
+                <Controller
+                  control={form.control}
+                  name="clientKey"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Client Key</Trans>
+                      </FieldLabel>
+                      <InputGroup>
+                        <InputGroupInput
+                          id={field.name}
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                          autoComplete="off"
+                          spellCheck={false}
                         />
-                        <Trans>Configured</Trans>
-                        <span className="tabular-nums">
-                          (ends •••• {SAVED_API_KEY_SUFFIX})
+                        <InputGroupAddon align="inline-end">
+                          <CopyButton
+                            text={field.value}
+                            size="icon-xs"
+                            aria-label={t`Copy Client Key`}
+                          />
+                        </InputGroupAddon>
+                      </InputGroup>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Controller
+                  control={form.control}
+                  name="publicKey"
+                  render={({ field }) => (
+                    <Field>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Public Key</Trans>
+                      </FieldLabel>
+                      <InputGroup>
+                        <InputGroupInput
+                          id={field.name}
+                          {...field}
+                          autoComplete="off"
+                          spellCheck={false}
+                        />
+                        <InputGroupAddon align="inline-end">
+                          <CopyButton
+                            text={field.value}
+                            size="icon-xs"
+                            aria-label={t`Copy Public Key`}
+                          />
+                        </InputGroupAddon>
+                      </InputGroup>
+                    </Field>
+                  )}
+                />
+
+                <Controller
+                  control={form.control}
+                  name="additionalConfig"
+                  render={({ field }) => (
+                    <Field>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Additional configuration</Trans>
+                        <span className="-ml-1 font-normal text-muted-foreground">
+                          (<Trans>Optional</Trans>)
                         </span>
-                      </span>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setIsReplacingApiKey(true)}
+                      </FieldLabel>
+                      <Textarea
+                        id={field.name}
+                        {...field}
+                        rows={4}
+                        spellCheck={false}
+                        className="font-mono text-xs!"
+                      />
+                      <FieldDescription>
+                        <Trans>
+                          Optional JSON or certificates passed to the Adyen SDK.
+                        </Trans>
+                      </FieldDescription>
+                    </Field>
+                  )}
+                />
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleTestConnection}
+                  >
+                    <UnplugIcon data-icon="inline-start" />
+                    <Trans>Test connection</Trans>
+                  </Button>
+                  {lastTestResult && (
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <span
+                        className={cn(
+                          'flex size-3.5 items-center justify-center rounded-full text-white',
+                          lastTestResult.passed
+                            ? 'bg-emerald-500 dark:bg-emerald-600'
+                            : 'bg-red-500 dark:bg-red-600'
+                        )}
                       >
-                        <Trans>Replace</Trans>
-                      </Button>
-                    </div>
+                        {lastTestResult.passed ? (
+                          <CheckIcon
+                            className="size-2.5"
+                            strokeWidth={3.5}
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <XIcon
+                            className="size-2.5"
+                            strokeWidth={3.5}
+                            aria-hidden="true"
+                          />
+                        )}
+                      </span>
+                      <Trans>
+                        Tested at{' '}
+                        {i18n.date(lastTestResult.finishedAt, {
+                          timeStyle: 'short'
+                        })}
+                      </Trans>
+                    </p>
                   )}
-                </Field>
-              )}
-            />
+                </div>
+              </div>
+            </section>
 
-            <Controller
-              control={form.control}
-              name="clientKey"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Client Key</Trans>
-                  </FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      id={field.name}
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                      autoComplete="off"
-                      spellCheck={false}
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <CopyButton
-                        text={field.value}
-                        size="icon-xs"
-                        aria-label={t`Copy Client Key`}
-                      />
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
+            <Separator />
 
-            <Controller
-              control={form.control}
-              name="publicKey"
-              render={({ field }) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Public Key</Trans>
-                  </FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      id={field.name}
-                      {...field}
-                      autoComplete="off"
-                      spellCheck={false}
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <CopyButton
-                        text={field.value}
-                        size="icon-xs"
-                        aria-label={t`Copy Public Key`}
-                      />
-                    </InputGroupAddon>
-                  </InputGroup>
-                </Field>
-              )}
-            />
-
-            <Controller
-              control={form.control}
-              name="additionalConfig"
-              render={({ field }) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Additional configuration</Trans>
-                  </FieldLabel>
-                  <Textarea
-                    id={field.name}
-                    {...field}
-                    rows={4}
-                    spellCheck={false}
-                    className="font-mono text-xs"
-                  />
-                  <FieldDescription>
+            {/* ─── Section 2: Payment recipient ───────────────────────── */}
+            <section
+              id="recipient"
+              aria-labelledby={sectionHeadingId('recipient')}
+              className="grid scroll-mt-4 grid-cols-[320px_1fr] gap-4"
+            >
+              <div>
+                <SectionHeading
+                  id={sectionHeadingId('recipient')}
+                  title={<Trans>Payment recipient</Trans>}
+                  description={
                     <Trans>
-                      Optional JSON or certificates passed to the Adyen SDK.
+                      The merchant address shown on payment receipts.
                     </Trans>
-                  </FieldDescription>
-                </Field>
-              )}
-            />
+                  }
+                />
+              </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleTestConnection}
-              >
-                <UnplugIcon data-icon="inline-start" />
-                <Trans>Test connection</Trans>
-              </Button>
-              {lastTestResult && (
-                <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <span
-                    className={cn(
-                      'flex size-3.5 items-center justify-center rounded-full text-white',
-                      lastTestResult.passed
-                        ? 'bg-emerald-500 dark:bg-emerald-600'
-                        : 'bg-red-500 dark:bg-red-600'
-                    )}
-                  >
-                    {lastTestResult.passed ? (
-                      <CheckIcon
-                        className="size-2.5"
-                        strokeWidth={3.5}
-                        aria-hidden="true"
+              <div className="flex flex-col gap-5">
+                <Controller
+                  control={form.control}
+                  name="addressLine1"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Address line</Trans>
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        {...field}
+                        aria-invalid={fieldState.invalid}
+                        autoComplete="address-line1"
                       />
-                    ) : (
-                      <XIcon
-                        className="size-2.5"
-                        strokeWidth={3.5}
-                        aria-hidden="true"
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Controller
+                  control={form.control}
+                  name="addressLine2"
+                  render={({ field }) => (
+                    <Field>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Address line 2</Trans>{' '}
+                        <span className="-ml-1 font-normal text-muted-foreground">
+                          (<Trans>Optional</Trans>)
+                        </span>
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        {...field}
+                        autoComplete="address-line2"
                       />
-                    )}
-                  </span>
-                  <Trans>
-                    Tested at{' '}
-                    {i18n.date(lastTestResult.finishedAt, {
-                      timeStyle: 'short'
-                    })}
-                  </Trans>
-                </p>
-              )}
-            </div>
-          </section>
-
-          <Separator />
-
-          {/* ─── Section 2: Payment recipient ───────────────────────── */}
-          <section className="flex flex-col gap-5">
-            <SectionHeading
-              title={<Trans>Payment recipient</Trans>}
-              description={
-                <Trans>The merchant address shown on payment receipts.</Trans>
-              }
-            />
-
-            <Controller
-              control={form.control}
-              name="addressLine1"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Address line</Trans>
-                  </FieldLabel>
-                  <Input
-                    id={field.name}
-                    {...field}
-                    aria-invalid={fieldState.invalid}
-                    autoComplete="address-line1"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    </Field>
                   )}
-                </Field>
-              )}
-            />
+                />
 
-            <Controller
-              control={form.control}
-              name="addressLine2"
-              render={({ field }) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Address line 2</Trans>{' '}
-                    <span className="font-normal text-muted-foreground">
-                      (<Trans>Optional</Trans>)
-                    </span>
-                  </FieldLabel>
-                  <Input
-                    id={field.name}
-                    {...field}
-                    autoComplete="address-line2"
-                  />
-                </Field>
-              )}
-            />
-
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[2fr_8fr]">
-              <Controller
-                control={form.control}
-                name="zip"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      <Trans>ZIP</Trans>
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                      autoComplete="postal-code"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[2fr_8fr]">
+                  <Controller
+                    control={form.control}
+                    name="zip"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          <Trans>ZIP</Trans>
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                          autoComplete="postal-code"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
                     )}
-                  </Field>
-                )}
-              />
-              <Controller
-                control={form.control}
-                name="city"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      <Trans>City</Trans>
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                      autoComplete="address-level2"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-            </div>
-
-            <Controller
-              control={form.control}
-              name="country"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Country</Trans>
-                  </FieldLabel>
-                  <CountryPicker
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value ?? '')}
-                    className="bg-background dark:bg-input/30"
                   />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                  <Controller
+                    control={form.control}
+                    name="city"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          <Trans>City</Trans>
+                        </FieldLabel>
+                        <Input
+                          id={field.name}
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                          autoComplete="address-level2"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                </div>
+
+                <Controller
+                  control={form.control}
+                  name="country"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        <Trans>Country</Trans>
+                      </FieldLabel>
+                      <CountryPicker
+                        value={field.value}
+                        onValueChange={value => field.onChange(value ?? '')}
+                        className="bg-background dark:bg-input/30"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
                   )}
-                </Field>
-              )}
-            />
-          </section>
+                />
+              </div>
+            </section>
 
-          <Separator />
+            <Separator />
 
-          {/* ─── Section 3: Mapping codes ───────────────────────────── */}
-          <section className="flex flex-col gap-4">
-            <SectionHeading
-              title={<Trans>Mapping codes</Trans>}
-              description={
-                <Trans>
-                  Accounting codes reported to your PMS per payment method and
-                  channel.
-                </Trans>
-              }
-            />
+            {/* ─── Section 3: Mapping codes ───────────────────────────── */}
+            <section
+              id="mapping"
+              aria-labelledby={sectionHeadingId('mapping')}
+              className="grid scroll-mt-4 grid-cols-[320px_1fr] gap-4"
+            >
+              <div>
+                <SectionHeading
+                  id={sectionHeadingId('mapping')}
+                  title={<Trans>Mapping codes</Trans>}
+                  description={
+                    <Trans>
+                      Accounting codes reported to your PMS per payment method
+                      and channel.
+                    </Trans>
+                  }
+                />
+              </div>
 
-            {/* Real table on desktop; rows collapse to stacked cards on
+              {/* Real table on desktop; rows collapse to stacked cards on
                 mobile via display overrides (single set of inputs, no dupes). */}
-            <Table borderless className="max-md:block">
-              <TableHeader className="max-md:hidden">
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="w-1/2 text-[13px]">
-                    <Trans>Payment method</Trans>
-                  </TableHead>
-                  <TableHead className="w-1/4 text-[13px]">
-                    <Trans>E-com</Trans>
-                  </TableHead>
-                  <TableHead className="w-1/4 text-[13px]">
-                    <Trans>POS</Trans>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody className="max-md:block">
-                {PAYMENT_METHODS.map(({ id, name }) => (
-                  <TableRow
-                    key={id}
-                    className="hover:bg-transparent h-12 max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4"
-                  >
-                    <TableCell className="max-md:col-span-2 max-md:p-0">
-                      <div className="flex items-center gap-2.5 md:h-8">
-                        <BrandMark brand={id} />
-                        <span className="text-sm">{name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="max-md:p-0">
-                      <MappingCell
-                        control={form.control}
-                        method={id}
-                        kind="ecom"
-                        label={<Trans>E-com</Trans>}
-                        dirty={Boolean(dirtyFields.mappings?.[id]?.ecom)}
-                      />
-                    </TableCell>
-                    <TableCell className="max-md:p-0">
-                      <MappingCell
-                        control={form.control}
-                        method={id}
-                        kind="pos"
-                        label={<Trans>POS</Trans>}
-                        dirty={Boolean(dirtyFields.mappings?.[id]?.pos)}
-                      />
-                    </TableCell>
+              <Table borderless className="max-md:block">
+                <TableHeader className="max-md:hidden">
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="w-1/2 text-[13px]">
+                      <Trans>Payment method</Trans>
+                    </TableHead>
+                    <TableHead className="w-1/4 text-[13px]">
+                      <Trans>E-com</Trans>
+                    </TableHead>
+                    <TableHead className="w-1/4 text-[13px]">
+                      <Trans>POS</Trans>
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </section>
-        </form>
-      </CardContent>
+                </TableHeader>
+                <TableBody className="max-md:block">
+                  {PAYMENT_METHODS.map(({ id, name }) => (
+                    <TableRow
+                      key={id}
+                      className="hover:bg-transparent h-12 max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4"
+                    >
+                      <TableCell className="max-md:col-span-2 max-md:p-0">
+                        <div className="flex items-center gap-2.5 md:h-8">
+                          <BrandMark brand={id} />
+                          <span className="text-sm">{name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="max-md:p-0">
+                        <MappingCell
+                          control={form.control}
+                          method={id}
+                          kind="ecom"
+                          label={<Trans>E-com</Trans>}
+                          dirty={Boolean(dirtyFields.mappings?.[id]?.ecom)}
+                        />
+                      </TableCell>
+                      <TableCell className="max-md:p-0">
+                        <MappingCell
+                          control={form.control}
+                          method={id}
+                          kind="pos"
+                          label={<Trans>POS</Trans>}
+                          dirty={Boolean(dirtyFields.mappings?.[id]?.pos)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </section>
+          </form>
+        </CardContent>
 
-      {/* Sticky action bar. The negative bottom offset matches the scroll
+        {/* Sticky action bar. The negative bottom offset matches the scroll
           container's bottom padding (main: pb-4 / md:pb-8) so the bar sits
           flush against the very bottom of the viewport, not above the padding. */}
-      <CardFooter className="sticky -bottom-4 z-10 -mb-6 rounded-b-xl border-t border-border/60 bg-card/80 py-4! backdrop-blur md:-bottom-8">
-        <div className="flex w-full flex-wrap items-center justify-end gap-3">
-          <span
-            className={cn(
-              'mr-auto flex items-center gap-2 text-xs text-muted-foreground transition-opacity',
-              isDirty ? 'opacity-100' : 'opacity-0'
-            )}
-          >
-            <span className="size-1.5 rounded-full bg-amber-500" />
-            <Trans>Unsaved changes</Trans>
-          </span>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleCancel}
-            disabled={!isDirty || isSubmitting}
-          >
-            <Trans>Cancel</Trans>
-          </Button>
-          <Button
-            type="submit"
-            form="payment-provider-form"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2Icon className="animate-spin" />}
-            <Trans>Update config</Trans>
-          </Button>
-        </div>
-      </CardFooter>
+        <CardFooter className="sticky -bottom-4 z-10 -mb-6 rounded-b-xl border-t border-border/60 bg-card/80 py-4! backdrop-blur md:-bottom-8">
+          <div className="flex w-full flex-wrap items-center justify-end gap-3">
+            <span className="truncate text-xs text-muted-foreground self-center mr-auto">
+              Last updated 20.07.2026, 21:49 · John Doe
+            </span>
 
-      <AlertDialog open={confirmLiveOpen} onOpenChange={setConfirmLiveOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              <Trans>Switch to the Live environment?</Trans>
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              <Trans>
-                Live mode processes real payments with real cards. Make sure
-                your credentials are production credentials before switching.
-              </Trans>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>
-              <Trans>Cancel</Trans>
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                confirmLiveRef.current?.();
-                confirmLiveRef.current = null;
-                setConfirmLiveOpen(false);
-              }}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+              disabled={!isDirty || isSubmitting}
             >
-              <Trans>Switch to Live</Trans>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+              <Trans>Cancel</Trans>
+            </Button>
+            <Button
+              type="submit"
+              form="payment-provider-form"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Loader2Icon className="animate-spin" />}
+              <Trans>Update config</Trans>
+            </Button>
+          </div>
+        </CardFooter>
 
-      {testConfig && (
-        <PaymentTestConnectionDialog
-          open={testDialogOpen}
-          onOpenChange={setTestDialogOpen}
-          config={testConfig}
-          onFinished={setLastTestResult}
-        />
-      )}
-    </Card>
+        <AlertDialog open={confirmLiveOpen} onOpenChange={setConfirmLiveOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                <Trans>Switch to the Live environment?</Trans>
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                <Trans>
+                  Live mode processes real payments with real cards. Make sure
+                  your credentials are production credentials before switching.
+                </Trans>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>
+                <Trans>Cancel</Trans>
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  confirmLiveRef.current?.();
+                  confirmLiveRef.current = null;
+                  setConfirmLiveOpen(false);
+                }}
+              >
+                <Trans>Switch to Live</Trans>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {testConfig && (
+          <PaymentTestConnectionDialog
+            open={testDialogOpen}
+            onOpenChange={setTestDialogOpen}
+            config={testConfig}
+            onFinished={setLastTestResult}
+          />
+        )}
+      </Card>
+    </div>
   );
 }
 
 function SectionHeading({
+  id,
   title,
   description
 }: {
+  id?: string;
   title: React.ReactNode;
   description: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <h2 className="text-base font-semibold">{title}</h2>
+      <h2 id={id} className="text-[15px] font-medium">
+        {title}
+      </h2>
       <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
