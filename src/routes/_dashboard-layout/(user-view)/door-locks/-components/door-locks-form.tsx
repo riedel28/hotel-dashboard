@@ -143,7 +143,7 @@ export function DoorLocksForm() {
 
   const onSubmit = async () => {
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800));
     setIsSubmitting(false);
     toast.success(t`Config updated`);
   };
@@ -211,7 +211,7 @@ export function DoorLocksForm() {
           <FieldGroup>
             <Tabs
               value={integrationMode}
-              onValueChange={value =>
+              onValueChange={(value) =>
                 setIntegrationMode(value as IntegrationMode)
               }
             >

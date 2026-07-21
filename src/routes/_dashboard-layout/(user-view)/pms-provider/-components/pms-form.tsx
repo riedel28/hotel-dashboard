@@ -36,7 +36,7 @@ export function PmsForm() {
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800));
     setIsSubmitting(false);
     toast.success(t`Config updated`);
   };
@@ -94,8 +94,8 @@ export function PmsForm() {
                 name="hotel_id"
                 type="text"
                 value={formState.hotelId}
-                onChange={event =>
-                  setFormState(current => ({
+                onChange={(event) =>
+                  setFormState((current) => ({
                     ...current,
                     hotelId: event.target.value
                   }))
@@ -111,8 +111,8 @@ export function PmsForm() {
                 id="token"
                 name="token"
                 value={formState.token}
-                onChange={event =>
-                  setFormState(current => ({
+                onChange={(event) =>
+                  setFormState((current) => ({
                     ...current,
                     token: event.target.value
                   }))
@@ -133,8 +133,8 @@ export function PmsForm() {
                 id="send_invoice_via_pms"
                 name="send_invoice_via_pms"
                 checked={formState.sendInvoiceViaPms}
-                onCheckedChange={checked =>
-                  setFormState(current => ({
+                onCheckedChange={(checked) =>
+                  setFormState((current) => ({
                     ...current,
                     sendInvoiceViaPms: checked
                   }))
@@ -152,8 +152,8 @@ export function PmsForm() {
                 name="mock_code"
                 type="text"
                 value={formState.mockCode}
-                onChange={event =>
-                  setFormState(current => ({
+                onChange={(event) =>
+                  setFormState((current) => ({
                     ...current,
                     mockCode: event.target.value
                   }))

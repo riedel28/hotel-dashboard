@@ -233,7 +233,7 @@ export function PaymentProviderForm() {
 
   const onSubmit = async (values: PaymentProviderFormData) => {
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800));
     setIsSubmitting(false);
     setIsReplacingApiKey(false);
     // Reset to the just-saved values so the form is no longer dirty and any
@@ -338,7 +338,7 @@ export function PaymentProviderForm() {
                       </FieldLabel>
                       <RadioGroup
                         value={field.value}
-                        onValueChange={value => {
+                        onValueChange={(value) => {
                           const next = value as PaymentEnvironment;
                           if (next === 'live' && field.value === 'test') {
                             confirmLiveRef.current = () =>
@@ -661,7 +661,7 @@ export function PaymentProviderForm() {
                       </FieldLabel>
                       <CountryPicker
                         value={field.value}
-                        onValueChange={value => field.onChange(value ?? '')}
+                        onValueChange={(value) => field.onChange(value ?? '')}
                         className="bg-background dark:bg-input/30"
                       />
                       {fieldState.invalid && (
