@@ -148,6 +148,11 @@ import { UserIcon, LockIcon, ShieldIcon } from 'lucide-react'
 - Do not call translation macros at module scope (locale may not be activated yet)
 - Extract strings with `bun run lingui:extract`, compile with `bun run lingui:compile`
 
+### Local Dev Server
+
+- Do NOT kill or stop the user's local dev server (`bun run dev`, `bun run client`, Vite, etc.), even after testing with Chrome DevTools or Playwright. Assume the user is running their own server and leave it running.
+- When testing in a browser, reuse the already-running server (default `http://localhost:5173`). Only start your own if none is running — and if you started it yourself, you may stop that instance, but never the user's.
+
 ### Git Commits
 
 Use conventional commit format: `type(scope): description`
