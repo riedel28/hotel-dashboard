@@ -64,7 +64,6 @@ function sleep(ms: number) {
 export function PaymentTestConnectionDialog({
   open,
   onOpenChange,
-  config,
   onFinished
 }: PaymentTestConnectionDialogProps) {
   const { t, i18n } = useLingui();
