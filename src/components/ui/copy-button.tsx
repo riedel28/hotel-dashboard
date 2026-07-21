@@ -28,13 +28,13 @@ function CopyButton({
       type={type}
       variant={variant}
       onClick={() => copy(text)}
-      className="group"
+      className="group hover:bg-transparent!"
       {...props}
     >
       <Icon
         aria-hidden="true"
         className={cn(
-          'text-muted-foreground group-hover:text-foreground',
+          'size-3.5 text-muted-foreground group-hover:text-foreground',
           copied &&
             'text-emerald-600 group-hover:text-emerald-600 dark:text-emerald-300'
         )}

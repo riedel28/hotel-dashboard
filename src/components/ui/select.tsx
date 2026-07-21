@@ -59,7 +59,7 @@ function SelectTrigger({
         // Focus
         'focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary',
         // Error / invalid
-        'aria-invalid:border-destructive aria-invalid:shadow-[inset_0_0_0_1px_var(--color-destructive)] aria-invalid:focus-visible:outline-destructive',
+        'aria-invalid:border-destructive aria-invalid:focus-visible:outline-destructive',
         // Disabled
         'disabled:cursor-not-allowed disabled:opacity-50',
         // Dark mode

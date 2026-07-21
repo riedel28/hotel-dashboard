@@ -47,6 +47,7 @@ import {
   InputGroupInput
 } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
+import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -70,7 +71,6 @@ import {
   PaymentTestConnectionDialog,
   type PaymentTestConnectionResult
 } from './payment-test-connection-dialog';
-import { PasswordInput } from '@/components/ui/password-input';
 
 type MethodId = 'mastercard' | 'visa' | 'amex' | 'paypal';
 
