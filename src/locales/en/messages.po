@@ -60,7 +60,7 @@ msgstr "{0}, {1}"
 
 #. placeholder {0}: steps.length
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:296
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:291
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:281
 msgid "{failedCount} of {0} tests failed"
 msgstr "{failedCount} of {0} tests failed"
 
@@ -97,7 +97,7 @@ msgstr "{from} - {to} of {recordCount}"
 msgid "401 Unauthorized — check username and password."
 msgstr "401 Unauthorized — check username and password."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:97
 msgid "401 Unauthorized — the API key was rejected."
 msgstr "401 Unauthorized — the API key was rejected."
 
@@ -119,10 +119,10 @@ msgid "Account activated!"
 msgstr "Account activated!"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:114
-msgid "Account settings"
-msgstr "Account settings"
+#~ msgid "Account settings"
+#~ msgstr "Account settings"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:717
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:684
 msgid "Accounting codes reported to your PMS per payment method and channel."
 msgstr "Accounting codes reported to your PMS per payment method and channel."
 
@@ -130,6 +130,7 @@ msgstr "Accounting codes reported to your PMS per payment method and channel."
 msgid "Activate Account"
 msgstr "Activate Account"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:470
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-product-modal.tsx:101
 msgid "Add"
@@ -142,6 +143,12 @@ msgstr "Add an extra layer of security to keep your account safe"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:20
 msgid "Add category"
 msgstr "Add category"
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:249
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:293
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:385
+msgid "Add entry"
+msgstr "Add entry"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:173
 msgid "Add Guest"
@@ -176,19 +183,19 @@ msgstr "Add subcategory"
 #~ msgid "Add User"
 #~ msgstr "Add User"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:511
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:478
 msgid "Additional configuration"
 msgstr "Additional configuration"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:604
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:571
 msgid "Address line"
 msgstr "Address line"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:625
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:592
 msgid "Address line 2"
 msgstr "Address line 2"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:185
 msgid "Address line is required"
 msgstr "Address line is required"
 
@@ -224,7 +231,7 @@ msgstr "Admin User"
 msgid "Adults"
 msgstr "Adults"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:293
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:271
 msgid "Adyen"
 msgstr "Adyen"
 
@@ -254,7 +261,7 @@ msgstr "All statuses"
 
 #. placeholder {0}: steps.length
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:292
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:287
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:277
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
@@ -295,7 +302,7 @@ msgstr "An unexpected error occurred"
 msgid "Android App"
 msgstr "Android App"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:426
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:397
 msgid "API Key"
 msgstr "API Key"
 
@@ -360,7 +367,7 @@ msgstr "At least 8 characters"
 #~ msgid "Austria"
 #~ msgstr "Austria"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:85
 msgid "Authenticate credentials"
 msgstr "Authenticate credentials"
 
@@ -384,7 +391,7 @@ msgstr "Authy"
 msgid "Available"
 msgstr "Available"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:107
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -446,16 +453,16 @@ msgid "Business"
 msgstr "Business"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:467
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:170
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:147
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:311
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:794
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:822
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:939
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:306
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:761
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:789
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:296
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:97
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-product-modal.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
@@ -471,7 +478,7 @@ msgstr "Business"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:51
 msgid "Casablanca"
 msgstr "Casablanca"
 
@@ -501,7 +508,7 @@ msgstr "Change language"
 msgid "Change your password to keep your account secure"
 msgstr "Change your password to keep your account secure"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:982
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:872
 msgid "Changed"
 msgstr "Changed"
 
@@ -545,7 +552,7 @@ msgstr "Check-out via"
 #~ msgid "Checkin Page"
 #~ msgstr "Checkin Page"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:188
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:186
 msgid "Checks the connection to Adyen using the current form values."
 msgstr "Checks the connection to Adyen using the current form values."
 
@@ -565,11 +572,11 @@ msgstr "Children"
 #~ msgid "Choose how this property connects to its door locks"
 #~ msgstr "Choose how this property connects to its door locks"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:666
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:633
 msgid "City"
 msgstr "City"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:212
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:199
 msgid "City is required"
 msgstr "City is required"
 
@@ -585,17 +592,17 @@ msgstr "Clear all"
 msgid "Clear filters"
 msgstr "Clear filters"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:453
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:420
 msgid "Client Key"
 msgstr "Client Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:191
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:178
 msgid "Client Key is required"
 msgstr "Client Key is required"
 
 #: src/components/ui/sheet.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:320
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:315
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:305
 msgid "Close"
 msgstr "Close"
 
@@ -616,14 +623,14 @@ msgid "Completed At"
 msgstr "Completed At"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:148
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:255
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:242
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:41
 msgid "Config updated"
 msgstr "Config updated"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:896
-msgid "Configured"
-msgstr "Configured"
+#~ msgid "Configured"
+#~ msgstr "Configured"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:117
 msgid "Confirm New Password"
@@ -671,19 +678,21 @@ msgstr "Contains a special character"
 msgid "Contains an uppercase letter"
 msgstr "Contains an uppercase letter"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:237
-#~ msgid "Content Manager"
-#~ msgstr "Content Manager"
+#: src/routes/_dashboard-layout.tsx:253
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:216
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:230
+msgid "Content Manager"
+msgstr "Content Manager"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:135
 msgid "Copied reservation number"
 msgstr "Copied reservation number"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:467
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:434
 msgid "Copy Client Key"
 msgstr "Copy Client Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:497
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:464
 msgid "Copy Public Key"
 msgstr "Copy Public Key"
 
@@ -695,11 +704,11 @@ msgstr "Copy reservation number"
 #~ msgid "Copy to clipboard"
 #~ msgstr "Copy to clipboard"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:95
 msgid "Could not reach the Adyen API — request timed out after 5000 ms."
 msgstr "Could not reach the Adyen API — request timed out after 5000 ms."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:688
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:655
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:162
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:135
@@ -714,7 +723,7 @@ msgstr "Country"
 #~ msgid "Country code"
 #~ msgstr "Country code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:219
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:206
 msgid "Country is required"
 msgstr "Country is required"
 
@@ -749,7 +758,7 @@ msgstr "Create New Room"
 #~ msgid "Create New User"
 #~ msgstr "Create New User"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:343
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:316
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-toc.tsx:18
 msgid "Credentials"
 msgstr "Credentials"
@@ -766,7 +775,7 @@ msgstr "Current password is required"
 #~ msgid "Current View: {currentView}"
 #~ msgstr "Current View: {currentView}"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:111
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:112
 #: src/routes/_dashboard-layout/admin/customers.tsx:11
 #: src/routes/_dashboard-layout/admin/index.tsx:25
 msgid "Customers"
@@ -842,11 +851,15 @@ msgstr "Departure Date"
 msgid "Desc"
 msgstr "Desc"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:444
+msgid "Description"
+msgstr "Description"
+
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:346
 #~ msgid "Devices"
 #~ msgstr "Devices"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:230
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:217
 msgid "Digits only (max 12)"
 msgstr "Digits only (max 12)"
 
@@ -854,7 +867,7 @@ msgstr "Digits only (max 12)"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:225
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:244
 msgid "Displays the mobile sidebar."
 msgstr "Displays the mobile sidebar."
 
@@ -872,9 +885,9 @@ msgstr "Doe"
 msgid "Done"
 msgstr "Done"
 
-#: src/routes/_dashboard-layout.tsx:327
-#: src/routes/_dashboard-layout.tsx:329
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:137
+#: src/routes/_dashboard-layout.tsx:345
+#: src/routes/_dashboard-layout.tsx:347
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:23
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:49
@@ -885,8 +898,8 @@ msgstr "Door Locks"
 #~ msgid "Drag to reorder"
 #~ msgstr "Drag to reorder"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:734
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:758
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:701
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:725
 msgid "E-com"
 msgstr "E-com"
 
@@ -1033,10 +1046,13 @@ msgstr "Enter room number"
 msgid "Enter room type (e.g., Standard, Suite)"
 msgstr "Enter room type (e.g., Standard, Suite)"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:184
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:921
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:171
 msgid "Enter the new API key"
 msgstr "Enter the new API key"
+
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:402
+msgid "Enter your API Key"
+msgstr "Enter your API Key"
 
 #: src/routes/_auth-layout/auth/login.tsx:123
 #~ msgid "Enter your credentials to access the dashboard"
@@ -1081,11 +1097,21 @@ msgstr "Enter your new password below"
 msgid "Enter your password"
 msgstr "Enter your password"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:359
+#. placeholder {0}: entry.title
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:86
+msgid "Entry <0>{0}</0> was added"
+msgstr "Entry <0>{0}</0> was added"
+
+#. placeholder {0}: entry.title
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:106
+msgid "Entry <0>{0}</0> was updated"
+msgstr "Entry <0>{0}</0> was updated"
+
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:332
 msgid "Environment"
 msgstr "Environment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:99
 msgid "Environment mismatch — these credentials belong to a different environment."
 msgstr "Environment mismatch — these credentials belong to a different environment."
 
@@ -1147,8 +1173,8 @@ msgstr "Event"
 #~ msgstr "Events"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:198
-msgid "Extra account security"
-msgstr "Extra account security"
+#~ msgid "Extra account security"
+#~ msgstr "Extra account security"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:74
 msgid "Failed to activate account. The link may have expired."
@@ -1251,7 +1277,7 @@ msgstr "Failed to update user"
 msgid "Fellow travelers"
 msgstr "Fellow travelers"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:87
 msgid "Fetch merchant account"
 msgstr "Fetch merchant account"
 
@@ -1295,8 +1321,8 @@ msgstr "Forgot Password"
 msgid "Forgot password?"
 msgstr "Forgot password?"
 
-#: src/routes/_dashboard-layout.tsx:197
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:179
+#: src/routes/_dashboard-layout.tsx:198
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:180
 msgid "Front Office"
 msgstr "Front Office"
 
@@ -1353,6 +1379,15 @@ msgstr "Google Authenticator"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:203
 msgid "Grant administrator privileges to this user"
 msgstr "Grant administrator privileges to this user"
+
+#: src/routes/_dashboard-layout.tsx:260
+#: src/routes/_dashboard-layout.tsx:262
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:225
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:73
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:236
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:244
+msgid "Guest ABC"
+msgstr "Guest ABC"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:150
 msgid "Guest Email"
@@ -1460,13 +1495,14 @@ msgid "Hello from About!"
 msgstr "Hello from About!"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:927
-msgid "Hide API key"
-msgstr "Hide API key"
+#~ msgid "Hide API key"
+#~ msgstr "Hide API key"
 
 #: src/components/ui/password-input.tsx:37
 msgid "Hide password"
 msgstr "Hide password"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:224
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:67
@@ -1475,7 +1511,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:33
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:51
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:43
@@ -1493,13 +1529,13 @@ msgstr "Host"
 msgid "Host is required"
 msgstr "Host is required"
 
-#: src/routes/_dashboard-layout.tsx:121
-#: src/routes/_dashboard-layout.tsx:473
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:237
+#: src/routes/_dashboard-layout.tsx:122
+#: src/routes/_dashboard-layout.tsx:491
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:256
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:90
 msgid "Hotel ID"
 msgstr "Hotel ID"
 
@@ -1524,13 +1560,13 @@ msgstr "Infants"
 #~ msgstr "Info"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:186
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:308
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:286
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:66
 msgid "Integration Guide"
 msgstr "Integration Guide"
 
-#: src/routes/_dashboard-layout.tsx:311
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:119
+#: src/routes/_dashboard-layout.tsx:329
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:120
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:36
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:36
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:36
@@ -1610,15 +1646,19 @@ msgstr "Last name is required"
 #~ msgid "Last tested at {0}"
 #~ msgstr "Last tested at {0}"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:397
+msgid "Letter"
+msgstr "Letter"
+
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:179
 msgid "Light"
 msgstr "Light"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:387
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:360
 msgid "Live"
 msgstr "Live"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:814
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:781
 msgid "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 msgstr "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 
@@ -1650,7 +1690,7 @@ msgstr "Login"
 #~ msgid "Login into account"
 #~ msgstr "Login into account"
 
-#: src/routes/_dashboard-layout.tsx:398
+#: src/routes/_dashboard-layout.tsx:416
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -1705,7 +1745,7 @@ msgstr "Manage your hotel operations efficiently"
 msgid "Manage your user roles and permissions"
 msgstr "Manage your user roles and permissions"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:715
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:682
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-toc.tsx:20
 msgid "Mapping codes"
 msgstr "Mapping codes"
@@ -1714,15 +1754,15 @@ msgstr "Mapping codes"
 msgid "Medium password"
 msgstr "Medium password"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:101
 msgid "Merchant account not found — check the Merchant ID."
 msgstr "Merchant account not found — check the Merchant ID."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:400
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:373
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:164
 msgid "Merchant ID is required"
 msgstr "Merchant ID is required"
 
@@ -1747,7 +1787,7 @@ msgstr "Microsoft Authenticator"
 #~ msgid "Mobile App"
 #~ msgstr "Mobile App"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:148
 msgid "Mock code"
 msgstr "Mock code"
 
@@ -1755,9 +1795,9 @@ msgstr "Mock code"
 msgid "Monitor daily operations, track occupancy, and oversee front-office activity"
 msgstr "Monitor daily operations, track occupancy, and oversee front-office activity"
 
-#: src/routes/_dashboard-layout.tsx:186
-#: src/routes/_dashboard-layout.tsx:188
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:170
+#: src/routes/_dashboard-layout.tsx:187
+#: src/routes/_dashboard-layout.tsx:189
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:171
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:273
 #: src/routes/_dashboard-layout/index.tsx:42
@@ -1798,8 +1838,8 @@ msgid "Name"
 msgstr "Name"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:190
-msgid "Name and contact details"
-msgstr "Name and contact details"
+#~ msgid "Name and contact details"
+#~ msgstr "Name and contact details"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:166
 msgid "Nationality"
@@ -1879,7 +1919,7 @@ msgstr "No properties found"
 #~ msgid "No properties found."
 #~ msgstr "No properties found."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:103
 msgid "No response from Adyen."
 msgstr "No response from Adyen."
 
@@ -1932,7 +1972,7 @@ msgstr "Occupied"
 #~ msgid "OK"
 #~ msgstr "OK"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-toc.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-toc.tsx:117
 msgid "On this page"
 msgstr "On this page"
 
@@ -1948,12 +1988,12 @@ msgstr "Open menu"
 #~ msgid "Opening"
 #~ msgstr "Opening"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:513
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:627
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:480
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:594
 msgid "Optional"
 msgstr "Optional"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:524
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:491
 msgid "Optional JSON or certificates passed to the Adyen SDK."
 msgstr "Optional JSON or certificates passed to the Adyen SDK."
 
@@ -1961,7 +2001,7 @@ msgstr "Optional JSON or certificates passed to the Adyen SDK."
 #~ msgid "Orders"
 #~ msgstr "Orders"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:196
 msgid "Our server"
 msgstr "Our server"
 
@@ -1985,14 +2025,14 @@ msgstr "Page not found"
 #: src/routes/_auth-layout/auth/login.tsx:187
 #: src/routes/_auth-layout/auth/sign-up.tsx:260
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:392
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:89
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:55
 msgid "Password"
 msgstr "Password"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:192
-msgid "Password and sign-in access"
-msgstr "Password and sign-in access"
+#~ msgid "Password and sign-in access"
+#~ msgstr "Password and sign-in access"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:48
 msgid "Password change is not yet implemented"
@@ -2038,20 +2078,20 @@ msgstr "Passwords don't match"
 msgid "Payment"
 msgstr "Payment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:731
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:698
 msgid "Payment method"
 msgstr "Payment method"
 
-#: src/routes/_dashboard-layout.tsx:336
-#: src/routes/_dashboard-layout.tsx:338
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:146
+#: src/routes/_dashboard-layout.tsx:354
+#: src/routes/_dashboard-layout.tsx:356
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:147
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:23
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:49
 msgid "Payment Provider"
 msgstr "Payment Provider"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:588
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:555
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-toc.tsx:19
 msgid "Payment recipient"
 msgstr "Payment recipient"
@@ -2071,7 +2111,7 @@ msgstr "Pending"
 msgid "Per page"
 msgstr "Per page"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:175
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:80
 msgid "Personal"
 msgstr "Personal"
 
@@ -2157,9 +2197,9 @@ msgstr "Please select at least one role"
 msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
-#: src/routes/_dashboard-layout.tsx:318
-#: src/routes/_dashboard-layout.tsx:320
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:128
+#: src/routes/_dashboard-layout.tsx:336
+#: src/routes/_dashboard-layout.tsx:338
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:129
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:23
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:49
@@ -2186,8 +2226,8 @@ msgstr "Port"
 msgid "Port is required"
 msgstr "Port is required"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:737
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:767
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:704
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:734
 msgid "POS"
 msgstr "POS"
 
@@ -2238,9 +2278,9 @@ msgstr "Products"
 #~ msgstr "Products in {categoryTitle}"
 
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:281
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:29
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:54
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:62
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:82
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:88
 msgid "Profile"
 msgstr "Profile"
 
@@ -2249,14 +2289,13 @@ msgstr "Profile"
 #~ msgstr "Profile avatar"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:196
-msgid "Profile image"
-msgstr "Profile image"
+#~ msgid "Profile image"
+#~ msgstr "Profile image"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/password.tsx:15
 #~ msgid "Profile password"
 #~ msgstr "Profile password"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:119
 msgid "Profile picture"
 msgstr "Profile picture"
@@ -2274,8 +2313,8 @@ msgstr "Profile picture upload"
 #~ msgstr "Profile roles"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:121
-msgid "Profile sections"
-msgstr "Profile sections"
+#~ msgid "Profile sections"
+#~ msgstr "Profile sections"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/two-factor.tsx:16
 #~ msgid "Profile two-factor authentication"
@@ -2289,9 +2328,9 @@ msgstr "Profile update is not yet implemented"
 #~ msgid "Profile updated successfully"
 #~ msgstr "Profile updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:153
-#: src/routes/_dashboard-layout.tsx:155
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:102
+#: src/routes/_dashboard-layout.tsx:154
+#: src/routes/_dashboard-layout.tsx:156
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:103
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:55
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:473
@@ -2321,7 +2360,7 @@ msgstr "Property Details"
 msgid "Property updated successfully"
 msgstr "Property updated successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:484
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:451
 msgid "Public Key"
 msgstr "Public Key"
 
@@ -2337,7 +2376,7 @@ msgstr "Push to device"
 msgid "Pushed to device"
 msgstr "Pushed to device"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:84
 msgid "Reach Adyen API"
 msgstr "Reach Adyen API"
 
@@ -2395,8 +2434,8 @@ msgid "Remove Image"
 msgstr "Remove Image"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:903
-msgid "Replace"
-msgstr "Replace"
+#~ msgid "Replace"
+#~ msgstr "Replace"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:68
 msgid "Resend invitation"
@@ -2455,9 +2494,9 @@ msgstr "Reservation #"
 msgid "Reservation updated successfully"
 msgstr "Reservation updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:204
-#: src/routes/_dashboard-layout.tsx:206
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:188
+#: src/routes/_dashboard-layout.tsx:205
+#: src/routes/_dashboard-layout.tsx:207
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:189
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:59
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:73
@@ -2491,10 +2530,10 @@ msgstr "Reset Password"
 #~ msgstr "Role"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:194
-msgid "Role assignments"
-msgstr "Role assignments"
+#~ msgid "Role assignments"
+#~ msgstr "Role assignments"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:231
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:231
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:201
@@ -2557,9 +2596,9 @@ msgstr "Room Type"
 msgid "Room updated successfully"
 msgstr "Room updated successfully"
 
-#: src/routes/_dashboard-layout.tsx:210
 #: src/routes/_dashboard-layout.tsx:211
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:197
+#: src/routes/_dashboard-layout.tsx:212
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:198
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:57
@@ -2581,13 +2620,13 @@ msgid "Rows per page"
 msgstr "Rows per page"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:312
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:302
 msgid "Run again"
 msgstr "Run again"
 
 #. placeholder {0}: steps.length
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:288
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:273
 msgid "Running tests… ({passedCount}/{0})"
 msgstr "Running tests… ({passedCount}/{0})"
 
@@ -2620,8 +2659,8 @@ msgid "Save Roles"
 msgstr "Save Roles"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:440
-msgid "Saved only when you save changes."
-msgstr "Saved only when you save changes."
+#~ msgid "Saved only when you save changes."
+#~ msgstr "Saved only when you save changes."
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-tree-editor.tsx:364
 #~ msgid "Saving..."
@@ -2753,7 +2792,7 @@ msgstr "Select status"
 msgid "Send Invitation"
 msgstr "Send Invitation"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:126
 msgid "Send invoice via PMS"
 msgstr "Send invoice via PMS"
 
@@ -2824,8 +2863,8 @@ msgid "Show"
 msgstr "Show"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:927
-msgid "Show API key"
-msgstr "Show API key"
+#~ msgid "Show API key"
+#~ msgstr "Show API key"
 
 #: src/components/ui/error-display.tsx:230
 msgid "Show details"
@@ -2843,7 +2882,7 @@ msgstr "Show results for: <0>\"{q}\"</0>"
 msgid "Show results for: <0>\"{searchQuery}\"</0>"
 msgstr "Show results for: <0>\"{searchQuery}\"</0>"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:222
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:241
 msgid "Sidebar"
 msgstr "Sidebar"
 
@@ -2858,12 +2897,12 @@ msgid "Sign Up"
 msgstr "Sign Up"
 
 #: src/routes/_auth-layout.tsx:16
-#: src/routes/_dashboard-layout.tsx:417
+#: src/routes/_dashboard-layout.tsx:435
 msgid "Skip to main content"
 msgstr "Skip to main content"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:251
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:246
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:236
 msgid "Skipped"
 msgstr "Skipped"
 
@@ -2906,12 +2945,12 @@ msgstr "Stage"
 msgid "Staging"
 msgstr "Staging"
 
-#: src/routes/_dashboard-layout.tsx:143
-#: src/routes/_dashboard-layout.tsx:146
-#: src/routes/_dashboard-layout.tsx:176
-#: src/routes/_dashboard-layout.tsx:179
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:93
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:161
+#: src/routes/_dashboard-layout.tsx:144
+#: src/routes/_dashboard-layout.tsx:147
+#: src/routes/_dashboard-layout.tsx:177
+#: src/routes/_dashboard-layout.tsx:180
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:94
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:162
 msgid "Start"
 msgstr "Start"
 
@@ -2965,11 +3004,11 @@ msgstr "Successfully logged in!"
 msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 msgstr "Supported formats: JPG, PNG, GIF (max 5MB)"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:831
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:798
 msgid "Switch to Live"
 msgstr "Switch to Live"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:811
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:778
 msgid "Switch to the Live environment?"
 msgstr "Switch to the Live environment?"
 
@@ -3016,7 +3055,7 @@ msgstr "System"
 msgid "TCP connection"
 msgstr "TCP connection"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:345
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:318
 msgid "Technical connection details for your Adyen account."
 msgstr "Technical connection details for your Adyen account."
 
@@ -3026,24 +3065,24 @@ msgstr "Technical connection details for your Adyen account."
 msgid "Template"
 msgstr "Template"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:380
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:353
 msgid "Test"
 msgstr "Test"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:452
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:539
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:506
 msgid "Test connection"
 msgstr "Test connection"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:198
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:185
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:183
 msgid "Test provider configuration"
 msgstr "Test provider configuration"
 
 #. placeholder {0}: i18n.date(lastTestResult.finishedAt, { timeStyle: 'short' })
 #. placeholder {0}: i18n.date(lastTestResult.finishedAt, { timeStyle: 'short' })
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:437
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:565
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:532
 msgid "Tested at {0}"
 msgstr "Tested at {0}"
 
@@ -3055,11 +3094,11 @@ msgstr "Tested at {0}"
 #~ msgid "The booking number can be found in your Property Management System (PMS)"
 #~ msgstr "The booking number can be found in your Property Management System (PMS)"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:130
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:129
 msgid "The invoice will be sent directly to the PMS"
 msgstr "The invoice will be sent directly to the PMS"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:590
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:557
 msgid "The merchant address shown on payment receipts."
 msgstr "The merchant address shown on payment receipts."
 
@@ -3123,7 +3162,7 @@ msgstr "This connection method is outdated and will stop being supported in a fu
 msgid "This invitation link is invalid."
 msgstr "This invitation link is invalid."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:163
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr "This is the service code that will be used to skip payment at check-in."
 
@@ -3139,6 +3178,7 @@ msgstr "This verification link is invalid or has expired. Please request a new o
 msgid "This verification link is invalid."
 msgstr "This verification link is invalid."
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:424
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-product-modal.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-product-modal.tsx:75
 msgid "Title"
@@ -3171,7 +3211,7 @@ msgstr "Toggle details"
 #~ msgid "Toggle theme"
 #~ msgstr "Toggle theme"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:109
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:108
 msgid "Token"
 msgstr "Token"
 
@@ -3191,7 +3231,7 @@ msgstr "Turn on two-factor authentication for better account security"
 msgid "TV App"
 msgstr "TV App"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:116
 msgid "Two Factor"
 msgstr "Two Factor"
 
@@ -3262,8 +3302,8 @@ msgstr "Unpin {title} column"
 #~ msgstr "Unsaved changes"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:456
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:802
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:769
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:176
 msgid "Update config"
 msgstr "Update config"
 
@@ -3325,9 +3365,9 @@ msgstr "Username"
 msgid "Username is required"
 msgstr "Username is required"
 
-#: src/routes/_dashboard-layout.tsx:215
 #: src/routes/_dashboard-layout.tsx:216
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:206
+#: src/routes/_dashboard-layout.tsx:217
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:207
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:202
@@ -3353,7 +3393,7 @@ msgstr "Verification failed"
 msgid "Verify Email"
 msgstr "Verify Email"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-test-connection-dialog.tsx:86
 msgid "Verify environment"
 msgstr "Verify environment"
 
@@ -3466,7 +3506,7 @@ msgstr "Youth"
 #~ msgid "Youth count cannot be negative"
 #~ msgstr "Youth count cannot be negative"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:646
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:613
 msgid "ZIP"
 msgstr "ZIP"
 
@@ -3474,6 +3514,6 @@ msgstr "ZIP"
 #~ msgid "ZIP / Postal code"
 #~ msgstr "ZIP / Postal code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:192
 msgid "ZIP / Postal code is required"
 msgstr "ZIP / Postal code is required"

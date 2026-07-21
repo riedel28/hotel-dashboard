@@ -5,6 +5,7 @@ import { Link, type LinkProps } from '@tanstack/react-router';
 import {
   BedDoubleIcon,
   BedSingleIcon,
+  BookAIcon,
   BuildingIcon,
   CableIcon,
   CreditCardIcon,
@@ -204,6 +205,24 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               onNavigate={handleNavigate}
             >
               <Trans>Users</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      {/* Content Manager Section */}
+      <SidebarGroup>
+        <SidebarGroupLabel>
+          <Trans>Content Manager</Trans>
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/guest-abc"
+              icon={BookAIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Guest ABC</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -46,6 +46,7 @@ import { Route as DashboardLayoutuserViewfrontOfficePaymentsRouteImport } from '
 import { Route as DashboardLayoutuserViewfrontOfficeOrdersRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/orders'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/index'
 import { Route as DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index'
+import { Route as DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsReservationIdRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
 
 const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
@@ -262,6 +263,12 @@ const DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute =
     path: '/monitoring/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
+const DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute =
+  DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport.update({
+    id: '/(user-view)/(content-manager)/guest-abc/',
+    path: '/guest-abc/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 const DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute =
   DashboardLayoutuserViewfrontOfficeReservationsReservationIdRouteImport.update(
     {
@@ -306,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/users/': typeof DashboardLayoutuserViewUsersIndexRoute
   '/admin/properties/': typeof DashboardLayoutAdminPropertiesIndexRoute
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
+  '/guest-abc/': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   '/monitoring/': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   '/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -343,6 +351,7 @@ export interface FileRoutesByTo {
   '/users': typeof DashboardLayoutuserViewUsersIndexRoute
   '/admin/properties': typeof DashboardLayoutAdminPropertiesIndexRoute
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
+  '/guest-abc': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   '/monitoring': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   '/reservations': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -384,6 +393,7 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/users/': typeof DashboardLayoutuserViewUsersIndexRoute
   '/_dashboard-layout/admin/properties/': typeof DashboardLayoutAdminPropertiesIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
+  '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -424,6 +434,7 @@ export interface FileRouteTypes {
     | '/users/'
     | '/admin/properties/'
     | '/reservations/$reservationId'
+    | '/guest-abc/'
     | '/monitoring/'
     | '/reservations/'
   fileRoutesByTo: FileRoutesByTo
@@ -461,6 +472,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/admin/properties'
     | '/reservations/$reservationId'
+    | '/guest-abc'
     | '/monitoring'
     | '/reservations'
   id:
@@ -501,6 +513,7 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/users/'
     | '/_dashboard-layout/admin/properties/'
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
+    | '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
     | '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/'
   fileRoutesById: FileRoutesById
@@ -771,6 +784,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
+    '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/': {
+      id: '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
+      path: '/guest-abc'
+      fullPath: '/guest-abc/'
+      preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
     '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId': {
       id: '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
       path: '/reservations/$reservationId'
@@ -847,6 +867,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewRoomsIndexRoute: typeof DashboardLayoutuserViewRoomsIndexRoute
   DashboardLayoutuserViewUsersIndexRoute: typeof DashboardLayoutuserViewUsersIndexRoute
   DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
+  DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute: typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute: typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   DashboardLayoutuserViewfrontOfficeReservationsIndexRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -889,6 +910,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewUsersIndexRoute,
   DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute:
     DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute,
+  DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute:
+    DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute,
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute:
     DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute,
   DashboardLayoutuserViewfrontOfficeReservationsIndexRoute:

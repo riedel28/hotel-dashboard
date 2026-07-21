@@ -11,6 +11,7 @@ import {
 import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
+  BookAIcon,
   BuildingIcon,
   // CalendarIcon,
   // FileSpreadsheetIcon,
@@ -247,6 +248,23 @@ function UserSidebarContent() {
       </SidebarGroup>
 
       {/* Content Manager Section */}
+      <SidebarGroup>
+        <SidebarGroupLabel>
+          <Trans>Content Manager</Trans>
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/guest-abc"
+              icon={BookAIcon}
+              tooltip={t`Guest ABC`}
+            >
+              <Trans>Guest ABC</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
       {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Content Manager</Trans>
