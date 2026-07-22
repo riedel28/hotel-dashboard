@@ -79,7 +79,7 @@ function GuestABCPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex items-center justify-between gap-4">
+      <div className="mb-6 flex min-h-9 items-center justify-between gap-4">
         <h1 className="text-xl font-bold">
           <Trans>Guest ABC</Trans>
         </h1>
