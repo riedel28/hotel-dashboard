@@ -35,6 +35,10 @@ export default function Header() {
     setOptimisticPropertyId(propertyId);
     try {
       await updateSelectedProperty(propertyId);
+      // Property scope is derived server-side per request, so cached data
+      // (e.g. Guest ABC entries) belongs to the previous property. Invalidate
+      // all queries so property-scoped data refetches under the new scope.
+      await queryClient.invalidateQueries();
     } catch {
       // Revert on failure — user.selected_property_id is unchanged
     }
