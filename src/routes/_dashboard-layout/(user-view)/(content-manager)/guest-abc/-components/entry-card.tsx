@@ -202,12 +202,23 @@ export function EntryCard({ entry }: EntryCardProps) {
   );
 }
 
+// Mirrors the read-view EntryCard's exact heights so swapping skeleton →
+// content doesn't shift layout: a 28px header row (matching the header, whose
+// height comes from the icon action buttons) and two 18.5px description lines.
 export function EntryCardSkeleton() {
   return (
-    <Item variant="outline" className="flex-col items-stretch gap-2 p-4">
-      <Skeleton className="h-4 w-1/3" />
-      <Skeleton className="h-3 w-full" />
-      <Skeleton className="h-3 w-4/5" />
+    <Item variant="outline" className="flex-col items-stretch gap-1.5 p-4">
+      <div className="flex h-7 items-center">
+        <Skeleton className="h-4 w-32" />
+      </div>
+      <div>
+        <div className="flex h-[18.5px] items-center">
+          <Skeleton className="h-3 w-full" />
+        </div>
+        <div className="flex h-[18.5px] items-center">
+          <Skeleton className="h-3 w-4/5" />
+        </div>
+      </div>
     </Item>
   );
 }
