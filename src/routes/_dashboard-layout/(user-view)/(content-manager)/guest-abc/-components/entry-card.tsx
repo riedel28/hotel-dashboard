@@ -37,7 +37,7 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
 
   const handleUpdate = async () => {
     setIsUpdating(true);
-    await new Promise(resolve => setTimeout(resolve, SAVE_DELAY_MS));
+    await new Promise((resolve) => setTimeout(resolve, SAVE_DELAY_MS));
     onUpdate({
       title: draftTitle.trim(),
       description: draftDescription.trim()
@@ -55,7 +55,7 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
           <Label>Title</Label>
           <Input
             value={draftTitle}
-            onChange={e => setDraftTitle(e.target.value)}
+            onChange={(e) => setDraftTitle(e.target.value)}
             disabled={isUpdating}
           />
         </div>
@@ -63,7 +63,7 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
           <Label>Description</Label>
           <Textarea
             value={draftDescription}
-            onChange={e => setDraftDescription(e.target.value)}
+            onChange={(e) => setDraftDescription(e.target.value)}
             rows={4}
             disabled={isUpdating}
           />
@@ -121,7 +121,7 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
 
 export function EntryCardSkeleton() {
   return (
-    <Item variant="muted" className="flex-col items-stretch gap-2 p-4">
+    <Item variant="outline" className="flex-col items-stretch gap-2 p-4">
       <Skeleton className="h-4 w-1/3" />
       <Skeleton className="h-3 w-full" />
       <Skeleton className="h-3 w-4/5" />

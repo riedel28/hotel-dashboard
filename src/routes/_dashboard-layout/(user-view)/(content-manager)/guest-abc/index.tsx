@@ -40,11 +40,11 @@ function GuestABCPage() {
       [letter]: [...(prev[letter] ?? []), entry]
     }));
     toast.info(
-      <span>
+      <p className="font-normal">
         <Trans>
           Entry <span className="font-semibold">{entry.title}</span> was added
         </Trans>
-      </span>
+      </p>
     );
   };
 
@@ -60,11 +60,11 @@ function GuestABCPage() {
       [letter]: (prev[letter] ?? []).map((e, i) => (i === index ? entry : e))
     }));
     toast.success(
-      <span>
+      <p className="font-normal">
         <Trans>
           Entry <span className="font-semibold">{entry.title}</span> was updated
         </Trans>
-      </span>
+      </p>
     );
     refetch();
   };
