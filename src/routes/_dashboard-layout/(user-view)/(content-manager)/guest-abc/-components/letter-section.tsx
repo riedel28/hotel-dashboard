@@ -5,17 +5,15 @@ import type { Entry } from './types';
 interface LetterSectionProps {
   letter: string;
   items: Entry[];
-  isFetching: boolean;
+  isLoading: boolean;
   sectionRefs: RefObject<Record<string, HTMLDivElement | null>>;
-  onUpdateEntry: (letter: string, index: number, entry: Entry) => void;
 }
 
 export function LetterSection({
   letter,
   items,
-  isFetching,
-  sectionRefs,
-  onUpdateEntry
+  isLoading,
+  sectionRefs
 }: LetterSectionProps) {
   return (
     <div
@@ -28,16 +26,11 @@ export function LetterSection({
         {letter}
       </span>
 
-      {items.map((entry, index) =>
-        isFetching ? (
-          <EntryCardSkeleton key={index} />
+      {items.map((entry) =>
+        isLoading ? (
+          <EntryCardSkeleton key={entry.id} />
         ) : (
-          <EntryCard
-            key={index}
-            title={entry.title}
-            description={entry.description}
-            onUpdate={(updated) => onUpdateEntry(letter, index, updated)}
-          />
+          <EntryCard key={entry.id} entry={entry} />
         )
       )}
     </div>

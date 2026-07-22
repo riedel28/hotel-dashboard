@@ -1,7 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import {
+  createGuestAbcEntry,
+  createGuestAbcEntrySchema
+} from '@/api/guest-abc';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -18,37 +26,24 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { type Entry, type EntryFormValues, entrySchema } from './types';
+import type { EntryFormValues } from './types';
 
 interface AddEntryModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  letters: string[];
-  onAdd: (letter: string, entry: Entry) => void;
 }
 
-export function AddEntryModal({
-  open,
-  onOpenChange,
-  letters,
-  onAdd
-}: AddEntryModalProps) {
-  const defaultValues: EntryFormValues = {
-    letter: letters[0] ?? '',
-    title: '',
-    description: ''
-  };
+const defaultValues: EntryFormValues = {
+  title: '',
+  description: ''
+};
+
+export function AddEntryModal({ open, onOpenChange }: AddEntryModalProps) {
+  const queryClient = useQueryClient();
 
   const form = useForm<EntryFormValues>({
-    resolver: zodResolver(entrySchema),
+    resolver: zodResolver(createGuestAbcEntrySchema),
     mode: 'onChange',
     defaultValues
   });
@@ -61,12 +56,26 @@ export function AddEntryModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  const addEntryMutation = useMutation({
+    mutationFn: (values: EntryFormValues) => createGuestAbcEntry(values),
+    onSuccess: (entry) => {
+      queryClient.invalidateQueries({ queryKey: ['guest-abc'] });
+      onOpenChange(false);
+      toast.info(
+        <p className="font-normal">
+          <Trans>
+            Entry <span className="font-semibold">{entry.title}</span> was added
+          </Trans>
+        </p>
+      );
+    },
+    onError: () => {
+      toast.error(t`Failed to add entry. Please try again.`);
+    }
+  });
+
   const onSubmit = (values: EntryFormValues) => {
-    onAdd(values.letter, {
-      title: values.title.trim(),
-      description: values.description.trim()
-    });
-    onOpenChange(false);
+    addEntryMutation.mutate(values);
   };
 
   return (
@@ -80,33 +89,6 @@ export function AddEntryModal({
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
           <FieldSet className="gap-4">
             <FieldGroup className="gap-4">
-              <Controller
-                control={form.control}
-                name="letter"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="gap-2">
-                    <FieldLabel htmlFor={field.name}>
-                      <Trans>Letter</Trans>
-                    </FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger
-                        id={field.name}
-                        aria-invalid={fieldState.invalid}
-                        className="w-full uppercase"
-                      >
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {letters.map((l) => (
-                          <SelectItem key={l} value={l} className="uppercase">
-                            {l}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                )}
-              />
               <Controller
                 control={form.control}
                 name="title"
@@ -155,10 +137,17 @@ export function AddEntryModal({
               variant="outline"
               type="button"
               onClick={() => onOpenChange(false)}
+              disabled={addEntryMutation.isPending}
             >
               <Trans>Cancel</Trans>
             </Button>
-            <Button type="submit" disabled={!form.formState.isValid}>
+            <Button
+              type="submit"
+              disabled={!form.formState.isValid || addEntryMutation.isPending}
+            >
+              {addEntryMutation.isPending && (
+                <Loader2Icon className="animate-spin" />
+              )}
               <Trans>Add</Trans>
             </Button>
           </DialogFooter>

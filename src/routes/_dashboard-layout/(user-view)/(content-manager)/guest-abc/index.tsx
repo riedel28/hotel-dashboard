@@ -1,8 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { PlusIcon } from 'lucide-react';
+import { BookOpenIcon, PlusIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { toast } from 'sonner';
+import { guestAbcQueryOptions } from '@/api/guest-abc';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,64 +13,40 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { AddEntryModal } from './-components/add-entry-modal';
 import { LetterNav } from './-components/letter-nav';
 import { LetterSection } from './-components/letter-section';
-import type { Entry, GuestAbcData } from './-components/types';
+import { groupByLetter } from './-components/types';
 import { useStickyTop } from './-hooks/use-sticky-top';
-import guestAbcData from './guest-abc-data.json';
-
-// Fake latency for the simulated refetch after a mutation.
-const REFETCH_DELAY_MS = 900;
 
 function GuestABCPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Guest ABC`);
 
-  const [data, setData] = useState<GuestAbcData>(guestAbcData);
   const [addOpen, setAddOpen] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
 
   const [barRef, stuck] = useStickyTop<HTMLDivElement>();
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const handleAddEntry = (letter: string, entry: Entry) => {
-    setData((prev) => ({
-      ...prev,
-      [letter]: [...(prev[letter] ?? []), entry]
-    }));
-    toast.info(
-      <p className="font-normal">
-        <Trans>
-          Entry <span className="font-semibold">{entry.title}</span> was added
-        </Trans>
-      </p>
-    );
-  };
+  const {
+    data: entries = [],
+    isFetching,
+    isPending
+  } = useQuery(guestAbcQueryOptions());
+  const grouped = groupByLetter(entries);
 
-  // Simulate refetching the list from the server after a mutation.
-  const refetch = () => {
-    setIsFetching(true);
-    window.setTimeout(() => setIsFetching(false), REFETCH_DELAY_MS);
-  };
-
-  const handleUpdateEntry = (letter: string, index: number, entry: Entry) => {
-    setData((prev) => ({
-      ...prev,
-      [letter]: (prev[letter] ?? []).map((e, i) => (i === index ? entry : e))
-    }));
-    toast.success(
-      <p className="font-normal">
-        <Trans>
-          Entry <span className="font-semibold">{entry.title}</span> was updated
-        </Trans>
-      </p>
-    );
-    refetch();
-  };
-
-  const entries = Object.entries(data);
+  // Only treat as empty once the query has settled, so the initial load
+  // doesn't flash the empty state.
+  const isEmpty = !isPending && entries.length === 0;
 
   const addEntryButton = (
     <Button onClick={() => setAddOpen(true)}>
@@ -106,15 +83,36 @@ function GuestABCPage() {
         <h1 className="text-xl font-bold">
           <Trans>Guest ABC</Trans>
         </h1>
-        {stuck ? null : addEntryButton}
+        {stuck || isEmpty ? null : addEntryButton}
       </div>
 
       <LetterNav
         containerRef={barRef}
-        entries={entries}
+        entries={grouped}
         sectionRefs={sectionRefs}
+        isLoading={isFetching}
         stuck={stuck}
       />
+
+      {isEmpty && (
+        <Empty className="mt-6 border max-w-xl">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <BookOpenIcon />
+            </EmptyMedia>
+            <EmptyTitle>
+              <Trans>No entries yet</Trans>
+            </EmptyTitle>
+            <EmptyDescription>
+              <Trans>
+                Guest ABC entries help guests find hotel information from A to
+                Z. Add your first entry to get started.
+              </Trans>
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>{addEntryButton}</EmptyContent>
+        </Empty>
+      )}
 
       {stuck ? (
         <div className="sticky top-20 z-20 flex h-0 items-start justify-end">
@@ -122,25 +120,19 @@ function GuestABCPage() {
         </div>
       ) : null}
 
-      {entries.map(([letter, items]) =>
+      {grouped.map(([letter, items]) =>
         items.length === 0 ? null : (
           <LetterSection
             key={letter}
             letter={letter}
             items={items}
-            isFetching={isFetching}
+            isLoading={isFetching}
             sectionRefs={sectionRefs}
-            onUpdateEntry={handleUpdateEntry}
           />
         )
       )}
 
-      <AddEntryModal
-        open={addOpen}
-        onOpenChange={setAddOpen}
-        letters={Object.keys(data)}
-        onAdd={handleAddEntry}
-      />
+      <AddEntryModal open={addOpen} onOpenChange={setAddOpen} />
     </div>
   );
 }

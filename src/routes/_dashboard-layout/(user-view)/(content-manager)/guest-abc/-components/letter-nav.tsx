@@ -1,6 +1,7 @@
 import type { RefObject } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useHorizontalOverflowMask } from '../-hooks/use-horizontal-overflow-mask';
 import { useScrollSpy } from '../-hooks/use-scroll-spy';
@@ -11,12 +12,14 @@ interface LetterNavProps {
   entries: [string, Entry[]][];
   sectionRefs: RefObject<Record<string, HTMLDivElement | null>>;
   stuck: boolean;
+  isLoading: boolean;
 }
 
 export function LetterNav({
   containerRef,
   entries,
   sectionRefs,
+  isLoading,
   stuck
 }: LetterNavProps) {
   const { viewportRef, maskImage } = useHorizontalOverflowMask();
@@ -35,25 +38,29 @@ export function LetterNav({
         style={{ maskImage, WebkitMaskImage: maskImage }}
       >
         <div className="flex gap-3.5">
-          {entries.map(([letter, items]) => (
-            <Button
-              key={letter}
-              size="icon"
-              variant="secondary"
-              data-active={activeLetter === letter || undefined}
-              disabled={items.length === 0}
-              onClick={() => scrollToLetter(letter)}
-              className={cn(
-                'relative size-12 shrink-0 cursor-pointer  border border-border text-lg font-medium uppercase transition-colors duration-150 ease-out motion-reduce:transition-none disabled:cursor-default',
-                items.length === 0 && 'opacity-40'
-              )}
-            >
-              {letter}
-              <span className="absolute text-[9px] text-muted-foreground/90 right-1 bottom-0.5">
-                {items.length || null}
-              </span>
-            </Button>
-          ))}
+          {entries.map(([letter, items]) =>
+            isLoading ? (
+              <Skeleton className="size-12 shrink-0" />
+            ) : (
+              <Button
+                key={letter}
+                size="icon"
+                variant="secondary"
+                data-active={activeLetter === letter || undefined}
+                disabled={items.length === 0}
+                onClick={() => scrollToLetter(letter)}
+                className={cn(
+                  'relative size-12 shrink-0 cursor-pointer  border border-border text-lg font-medium uppercase transition-colors duration-150 ease-out motion-reduce:transition-none disabled:cursor-default',
+                  items.length === 0 && 'opacity-40'
+                )}
+              >
+                {letter}
+                <span className="absolute text-[9px] text-muted-foreground/90 right-1 bottom-0.5">
+                  {items.length || null}
+                </span>
+              </Button>
+            )
+          )}
         </div>
       </ScrollArea>
     </div>

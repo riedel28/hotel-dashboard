@@ -1,6 +1,23 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit2Icon, Loader2Icon, TrashIcon } from 'lucide-react';
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import {
+  createGuestAbcEntrySchema,
+  updateGuestAbcEntry
+} from '@/api/guest-abc';
 import { Button } from '@/components/ui/button';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
   Item,
@@ -9,116 +26,174 @@ import {
   ItemHeader,
   ItemTitle
 } from '@/components/ui/item';
-import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
-import type { Entry } from './types';
-
-// Fake latency so the save spinner is perceptible.
-const SAVE_DELAY_MS = 800;
+import { DeleteEntryDialog } from './delete-entry-dialog';
+import type { Entry, EntryFormValues } from './types';
 
 interface EntryCardProps {
-  title: string;
-  description: string;
-  onUpdate: (entry: Entry) => void;
+  entry: Entry;
 }
 
-export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
+export function EntryCard({ entry }: EntryCardProps) {
+  const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [draftTitle, setDraftTitle] = useState(title);
-  const [draftDescription, setDraftDescription] = useState(description);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const form = useForm<EntryFormValues>({
+    resolver: zodResolver(createGuestAbcEntrySchema),
+    mode: 'onChange',
+    defaultValues: {
+      title: entry.title,
+      description: entry.description
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (values: EntryFormValues) =>
+      updateGuestAbcEntry(entry.id, values),
+    onSuccess: (updated) => {
+      queryClient.invalidateQueries({ queryKey: ['guest-abc'] });
+      setIsEditing(false);
+      toast.success(
+        <p className="font-normal">
+          <Trans>
+            Entry <span className="font-semibold">{updated.title}</span> was
+            updated
+          </Trans>
+        </p>
+      );
+    },
+    onError: () => {
+      toast.error(t`Failed to update entry. Please try again.`);
+    }
+  });
 
   const startEditing = () => {
-    setDraftTitle(title);
-    setDraftDescription(description);
+    form.reset({ title: entry.title, description: entry.description });
     setIsEditing(true);
   };
 
-  const handleUpdate = async () => {
-    setIsUpdating(true);
-    await new Promise((resolve) => setTimeout(resolve, SAVE_DELAY_MS));
-    onUpdate({
-      title: draftTitle.trim(),
-      description: draftDescription.trim()
-    });
-    setIsUpdating(false);
-    setIsEditing(false);
+  const onSubmit = (values: EntryFormValues) => {
+    updateMutation.mutate(values);
   };
-
-  const canSubmit = draftTitle.trim() !== '' && draftDescription.trim() !== '';
 
   if (isEditing) {
     return (
       <Item variant="outline" className="flex-col items-stretch gap-3 p-4">
-        <div className="w-full space-y-2">
-          <Label>Title</Label>
-          <Input
-            value={draftTitle}
-            onChange={(e) => setDraftTitle(e.target.value)}
-            disabled={isUpdating}
-          />
-        </div>
-        <div className="w-full space-y-2">
-          <Label>Description</Label>
-          <Textarea
-            value={draftDescription}
-            onChange={(e) => setDraftDescription(e.target.value)}
-            rows={4}
-            disabled={isUpdating}
-          />
-        </div>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3">
+          <FieldSet className="gap-4">
+            <FieldGroup className="gap-4">
+              <Controller
+                control={form.control}
+                name="title"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Title</Trans>
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      disabled={updateMutation.isPending}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="description"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Description</Trans>
+                    </FieldLabel>
+                    <Textarea
+                      {...field}
+                      id={field.name}
+                      rows={4}
+                      aria-invalid={fieldState.invalid}
+                      disabled={updateMutation.isPending}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
 
-        <div className="flex gap-2 justify-end">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setIsEditing(false)}
-            disabled={isUpdating}
-          >
-            Cancel
-          </Button>
-          <Button
-            size="sm"
-            variant="default"
-            onClick={handleUpdate}
-            disabled={isUpdating || !canSubmit}
-          >
-            {isUpdating && <Loader2Icon className="animate-spin" />}
-            Update
-          </Button>
-        </div>
+          <div className="flex gap-2 justify-end">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+              disabled={updateMutation.isPending}
+            >
+              <Trans>Cancel</Trans>
+            </Button>
+            <Button
+              type="submit"
+              size="sm"
+              variant="default"
+              disabled={updateMutation.isPending || !form.formState.isValid}
+            >
+              {updateMutation.isPending && (
+                <Loader2Icon className="animate-spin" />
+              )}
+              <Trans>Update</Trans>
+            </Button>
+          </div>
+        </form>
       </Item>
     );
   }
 
   return (
-    <Item
-      variant="outline"
-      className="flex-col items-stretch gap-1.5 p-4 animate-in fade-in-0 duration-200 motion-reduce:animate-none"
-    >
-      <ItemHeader>
-        <ItemTitle className="text-base">{title}</ItemTitle>
-        <ItemActions className="gap-0.5 opacity-0 transition-opacity group-hover/item:opacity-100 focus-within:opacity-100">
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            className="text-muted-foreground"
-            onClick={startEditing}
-          >
-            <Edit2Icon className="size-3.5" />
-          </Button>
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            className="text-muted-foreground"
-          >
-            <TrashIcon className="size-3.5" />
-          </Button>
-        </ItemActions>
-      </ItemHeader>
-      <ItemDescription className="text-[13px]">{description}</ItemDescription>
-    </Item>
+    <>
+      <Item
+        variant="outline"
+        className="flex-col items-stretch gap-1.5 p-4 animate-in fade-in-0 duration-200 motion-reduce:animate-none"
+      >
+        <ItemHeader>
+          <ItemTitle className="text-base">{entry.title}</ItemTitle>
+          <ItemActions className="gap-0.5 opacity-0 transition-opacity group-hover/item:opacity-100 focus-within:opacity-100">
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              className="text-muted-foreground"
+              onClick={startEditing}
+            >
+              <Edit2Icon className="size-3.5" />
+            </Button>
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              className="text-muted-foreground"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <TrashIcon className="size-3.5" />
+            </Button>
+          </ItemActions>
+        </ItemHeader>
+        <ItemDescription className="text-[13px]">
+          {entry.description}
+        </ItemDescription>
+      </Item>
+
+      <DeleteEntryDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        entryId={entry.id}
+        entryTitle={entry.title}
+      />
+    </>
   );
 }
 
