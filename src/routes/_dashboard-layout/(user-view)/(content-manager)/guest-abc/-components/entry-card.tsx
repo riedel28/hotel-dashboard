@@ -37,7 +37,7 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
 
   const handleUpdate = async () => {
     setIsUpdating(true);
-    await new Promise((resolve) => setTimeout(resolve, SAVE_DELAY_MS));
+    await new Promise(resolve => setTimeout(resolve, SAVE_DELAY_MS));
     onUpdate({
       title: draftTitle.trim(),
       description: draftDescription.trim()
@@ -50,12 +50,12 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
 
   if (isEditing) {
     return (
-      <Item variant="muted" className="flex-col items-stretch gap-3 p-4">
+      <Item variant="outline" className="flex-col items-stretch gap-3 p-4">
         <div className="w-full space-y-2">
           <Label>Title</Label>
           <Input
             value={draftTitle}
-            onChange={(e) => setDraftTitle(e.target.value)}
+            onChange={e => setDraftTitle(e.target.value)}
             disabled={isUpdating}
           />
         </div>
@@ -63,7 +63,7 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
           <Label>Description</Label>
           <Textarea
             value={draftDescription}
-            onChange={(e) => setDraftDescription(e.target.value)}
+            onChange={e => setDraftDescription(e.target.value)}
             rows={4}
             disabled={isUpdating}
           />
@@ -95,7 +95,7 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
   return (
     <Item variant="outline" className="flex-col items-stretch gap-1.5 p-4">
       <ItemHeader>
-        <ItemTitle>{title}</ItemTitle>
+        <ItemTitle className="text-base">{title}</ItemTitle>
         <ItemActions className="gap-0.5 opacity-0 transition-opacity group-hover/item:opacity-100 focus-within:opacity-100">
           <Button
             size="icon-sm"

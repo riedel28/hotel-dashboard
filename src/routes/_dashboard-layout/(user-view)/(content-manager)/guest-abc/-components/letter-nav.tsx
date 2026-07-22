@@ -33,7 +33,7 @@ export function LetterNav({
         viewportRef={viewportRef}
         style={{ maskImage, WebkitMaskImage: maskImage }}
       >
-        <div className="flex gap-4">
+        <div className="flex gap-3.5">
           {entries.map(([letter, items]) => (
             <button
               key={letter}
