@@ -185,6 +185,32 @@ export const rooms = pgTable(
   ]
 );
 
+// Guest ABC entries table (per-property alphabetical guest directory)
+export const guestAbcEntries = pgTable(
+  'guest_abc_entries',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    letter: text('letter').notNull(),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('guest_abc_entries_property_id_idx').on(table.property_id),
+    index('guest_abc_entries_letter_idx').on(table.letter)
+  ]
+);
+
 export const monitoringLogs = pgTable(
   'monitoring_logs',
   {
@@ -258,6 +284,9 @@ export type NewProperty = typeof properties.$inferInsert;
 
 export type Room = typeof rooms.$inferSelect;
 export type NewRoom = typeof rooms.$inferInsert;
+
+export type GuestAbcEntry = typeof guestAbcEntries.$inferSelect;
+export type NewGuestAbcEntry = typeof guestAbcEntries.$inferInsert;
 
 export const roles = pgTable('roles', {
   id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
@@ -347,8 +376,20 @@ export const roomsRelations = relations(rooms, ({ one }) => ({
 
 // Properties relations
 export const propertiesRelations = relations(properties, ({ many }) => ({
-  rooms: many(rooms)
+  rooms: many(rooms),
+  guestAbcEntries: many(guestAbcEntries)
 }));
+
+// Guest ABC entries relations
+export const guestAbcEntriesRelations = relations(
+  guestAbcEntries,
+  ({ one }) => ({
+    property: one(properties, {
+      fields: [guestAbcEntries.property_id],
+      references: [properties.id]
+    })
+  })
+);
 
 // UserRoles relations (junction table)
 export const userRolesRelations = relations(userRoles, ({ one }) => ({
