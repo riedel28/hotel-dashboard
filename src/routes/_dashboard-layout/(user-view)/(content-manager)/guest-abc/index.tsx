@@ -95,7 +95,7 @@ function GuestABCPage() {
       />
 
       {isEmpty && (
-        <Empty className="mt-6 border max-w-xl">
+        <Empty className="border max-w-xl">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <BookOpenIcon />
