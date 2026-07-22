@@ -120,6 +120,7 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 
 - Hosted on **Neon** (serverless PostgreSQL) — connections may fail on cold start, retries resolve it
 - Schema managed with **Drizzle ORM**; `db:push` applies changes directly, `db:generate` creates migration files (interactive, may not work in CI)
+- `db:push` is **interactive** — it prints the DDL and waits for an arrow-key "Yes/No" confirmation, so it hangs in non-interactive/agent shells. Either run it yourself (e.g. `! cd backend && bun run db:push`), or, for purely additive changes, apply the printed DDL directly (idempotent `CREATE TABLE IF NOT EXISTS …` / `CREATE INDEX IF NOT EXISTS …`) against `DATABASE_URL`.
 - Check constraints must be updated manually via SQL if `db:push` doesn't detect the change:
   ```sql
   ALTER TABLE table_name DROP CONSTRAINT IF EXISTS constraint_name;
@@ -167,3 +168,5 @@ Always run before committing:
 
 - `bun run typecheck:all` - Verify TypeScript compilation
 - `bun run check` - Ensure code quality and formatting
+
+> **Backend `tsc` OOMs.** Running a full backend type-check (`cd backend && tsc --noEmit`) exhausts the Node heap (>8 GB) because of Drizzle ORM's + `drizzle-zod`'s inferred type graph — it is effectively unrunnable and is **not** part of the gate. Bun runs the backend by transpiling (no type-check), so this doesn't affect runtime. To sanity-check backend files, transpile them instead: `bun build <file> --target=node`. The `typecheck:all` gate above covers the frontend + node configs only.
