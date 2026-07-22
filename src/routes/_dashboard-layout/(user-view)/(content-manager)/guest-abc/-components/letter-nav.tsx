@@ -1,4 +1,5 @@
 import type { RefObject } from 'react';
+import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { useHorizontalOverflowMask } from '../-hooks/use-horizontal-overflow-mask';
@@ -35,15 +36,15 @@ export function LetterNav({
       >
         <div className="flex gap-3.5">
           {entries.map(([letter, items]) => (
-            <button
+            <Button
               key={letter}
-              type="button"
-              data-letter={letter}
+              size="icon"
+              variant="secondary"
               data-active={activeLetter === letter || undefined}
               disabled={items.length === 0}
               onClick={() => scrollToLetter(letter)}
               className={cn(
-                'relative flex size-12 shrink-0 cursor-pointer items-center justify-center rounded-lg border shadow-xs bg-accent text-lg font-medium text-accent-foreground uppercase disabled:cursor-default',
+                'relative size-12 shrink-0 cursor-pointer  border border-border text-lg font-medium uppercase transition-colors duration-150 ease-out motion-reduce:transition-none disabled:cursor-default',
                 items.length === 0 && 'opacity-40'
               )}
             >
@@ -51,7 +52,7 @@ export function LetterNav({
               <span className="absolute text-[9px] text-muted-foreground/90 right-1 bottom-0.5">
                 {items.length || null}
               </span>
-            </button>
+            </Button>
           ))}
         </div>
       </ScrollArea>

@@ -93,7 +93,10 @@ export function EntryCard({ title, description, onUpdate }: EntryCardProps) {
   }
 
   return (
-    <Item variant="outline" className="flex-col items-stretch gap-1.5 p-4">
+    <Item
+      variant="outline"
+      className="flex-col items-stretch gap-1.5 p-4 animate-in fade-in-0 duration-200 motion-reduce:animate-none"
+    >
       <ItemHeader>
         <ItemTitle className="text-base">{title}</ItemTitle>
         <ItemActions className="gap-0.5 opacity-0 transition-opacity group-hover/item:opacity-100 focus-within:opacity-100">
