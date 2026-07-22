@@ -20,7 +20,7 @@ function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
         // Disabled
         'disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50',
         // Dark mode
-        'dark:bg-input/30',
+        'dark:bg-input/30 dark:disabled:bg-input/80',
         className
       )}
       {...props}
