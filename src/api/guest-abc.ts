@@ -13,7 +13,12 @@ import { client, handleApiError } from './client';
 export function guestAbcQueryOptions() {
   return queryOptions({
     queryKey: ['guest-abc'],
-    queryFn: fetchGuestAbcEntries
+    queryFn: fetchGuestAbcEntries,
+    // Entries change rarely; keep them fresh for a while and cached longer.
+    // Local changes and property switches invalidate ['guest-abc'], so a
+    // generous staleTime is safe.
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30 // 30 minutes
   });
 }
 

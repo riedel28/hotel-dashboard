@@ -140,5 +140,10 @@ function GuestABCPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
 )({
+  // Prefetch entries during navigation so the page paints with data already in
+  // cache (avoids the loading flash on entry/reload).
+  loader: ({ context: { queryClient } }) => {
+    return queryClient.ensureQueryData(guestAbcQueryOptions());
+  },
   component: GuestABCPage
 });
