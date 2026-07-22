@@ -127,7 +127,7 @@ msgstr ""
 msgid "Activate Account"
 msgstr "Konto aktivieren"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:470
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:151
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-product-modal.tsx:101
 msgid "Add"
@@ -141,9 +141,8 @@ msgstr "Fügen Sie eine zusätzliche Sicherheitsebene hinzu, um Ihr Konto zu sch
 msgid "Add category"
 msgstr "Kategorie hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:249
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:293
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:385
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:52
 msgid "Add entry"
 msgstr ""
 
@@ -438,7 +437,9 @@ msgid "Business"
 msgstr "Geschäftlich"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:467
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:142
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:139
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:170
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:187
@@ -655,7 +656,7 @@ msgstr "Enthält einen Großbuchstaben"
 
 #: src/routes/_dashboard-layout.tsx:253
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:216
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:230
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:68
 msgid "Content Manager"
 msgstr "Content Manager"
 
@@ -771,6 +772,7 @@ msgstr "Datum"
 #~ msgid "DE +49"
 #~ msgstr "DE +49"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:85
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:52
@@ -791,6 +793,10 @@ msgstr "Kategorie löschen"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:32
 msgid "Delete category?"
 msgstr "Kategorie löschen?"
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:57
+msgid "Delete entry?"
+msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:34
 msgid "Delete product?"
@@ -819,7 +825,8 @@ msgstr "Abreisedatum"
 msgid "Desc"
 msgstr "Abst."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:444
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:113
 msgid "Description"
 msgstr ""
 
@@ -1061,13 +1068,17 @@ msgid "Enter your password"
 msgstr "Passwort eingeben"
 
 #. placeholder {0}: entry.title
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:66
 msgid "Entry <0>{0}</0> was added"
 msgstr ""
 
-#. placeholder {0}: entry.title
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:106
+#. placeholder {0}: updated.title
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:60
 msgid "Entry <0>{0}</0> was updated"
+msgstr ""
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:40
+msgid "Entry <0>{entryTitle}</0> was deleted"
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:332
@@ -1136,6 +1147,10 @@ msgstr "Ereignis"
 msgid "Failed to activate account. The link may have expired."
 msgstr "Konto konnte nicht aktiviert werden. Der Link ist möglicherweise abgelaufen."
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:73
+msgid "Failed to add entry. Please try again."
+msgstr ""
+
 #: src/routes/_auth-layout/auth/sign-up.tsx:130
 msgid "Failed to create account. Please try again."
 msgstr "Konto konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
@@ -1154,6 +1169,10 @@ msgstr "Zimmer konnte nicht erstellt werden"
 
 #~ msgid "Failed to create user"
 #~ msgstr "Benutzer konnte nicht erstellt werden"
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:48
+msgid "Failed to delete entry. Please try again."
+msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:364
 msgid "Failed to load categories"
@@ -1203,6 +1222,10 @@ msgstr "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden. Bit
 
 #~ msgid "Failed to send SMS"
 #~ msgstr "SMS konnte nicht gesendet werden"
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:68
+msgid "Failed to update entry. Please try again."
+msgstr ""
 
 #~ msgid "Failed to update guest. Please try again."
 #~ msgstr "Gast konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
@@ -1331,10 +1354,14 @@ msgstr "Diesem Benutzer Administratorrechte gewähren"
 #: src/routes/_dashboard-layout.tsx:260
 #: src/routes/_dashboard-layout.tsx:262
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:225
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:73
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:236
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:33
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:74
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:82
 msgid "Guest ABC"
+msgstr ""
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:97
+msgid "Guest ABC entries help guests find hotel information from A to Z. Add your first entry to get started."
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:150
@@ -1441,7 +1468,7 @@ msgstr "Hallo von About!"
 msgid "Hide password"
 msgstr "Passwort ausblenden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:224
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:67
@@ -1579,8 +1606,8 @@ msgstr "Nachname ist erforderlich"
 #~ msgstr "Zuletzt getestet um {0}"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:397
-msgid "Letter"
-msgstr ""
+#~ msgid "Letter"
+#~ msgstr ""
 
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:179
 msgid "Light"
@@ -1807,6 +1834,10 @@ msgstr "Kein Land gefunden."
 #: src/components/ui/data-grid-table.tsx:413
 msgid "No data available"
 msgstr "Keine Daten verfügbar"
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:94
+msgid "No entries yet"
+msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:192
 msgid "No fellow travelers"
@@ -3050,7 +3081,12 @@ msgstr "Dieser Bestätigungslink ist ungültig oder abgelaufen. Bitte fordern Si
 msgid "This verification link is invalid."
 msgstr "Dieser Bestätigungslink ist ungültig."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:424
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:60
+msgid "This will permanently delete <0>{entryTitle}</0>. This action cannot be undone."
+msgstr ""
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:93
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-product-modal.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-product-modal.tsx:75
 msgid "Title"
@@ -3164,6 +3200,10 @@ msgstr "Spalte {title} lösen"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:769
 #~ msgid "Unsaved changes"
 #~ msgstr ""
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:150
+msgid "Update"
+msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:456
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:769
