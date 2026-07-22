@@ -1,5 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+import { inArray } from 'drizzle-orm';
+
+import { deriveLetter } from '../../../shared/types/guest-abc';
 import { db } from '../db/pool';
 import {
+  guestAbcEntries,
   guests,
   monitoringLogs,
   properties,
@@ -10,6 +17,19 @@ import {
 } from '../db/schema';
 import { truncateAllTables } from '../db/truncate-all';
 import { hashPassword } from '../utils/password';
+
+// The Overlook Hotel — the canonical demo property. Seeded Guest ABC content
+// attaches here, and demo users' selected property is pointed at it.
+const OVERLOOK_HOTEL_ID = 'cc198b13-4933-43aa-977e-dcd95fa30770';
+
+type GuestAbcSeed = Record<string, { title: string; description: string }[]>;
+
+const guestAbcData: GuestAbcSeed = JSON.parse(
+  fs.readFileSync(
+    path.resolve(import.meta.dir, 'data/guest-abc-data.json'),
+    'utf-8'
+  )
+);
 
 async function seed() {
   console.log('🌱 Starting database seed...');
@@ -261,6 +281,30 @@ async function seed() {
       }
     ]);
 
+    // Step 4b: Seed Guest ABC entries for The Overlook Hotel.
+    // Letter is derived from each title (buckets are recomputed, not trusted).
+    console.log('Creating demo Guest ABC entries...');
+    const guestAbcRows = Object.values(guestAbcData)
+      .flat()
+      .map((entry) => ({
+        property_id: OVERLOOK_HOTEL_ID,
+        letter: deriveLetter(entry.title),
+        title: entry.title,
+        description: entry.description
+      }));
+    if (guestAbcRows.length > 0) {
+      await db.insert(guestAbcEntries).values(guestAbcRows);
+    }
+
+    // Point the demo users at The Overlook Hotel so the seeded Guest ABC
+    // content is visible immediately after logging in.
+    await db
+      .update(users)
+      .set({ selected_property_id: OVERLOOK_HOTEL_ID })
+      .where(
+        inArray(users.email, ['cool_new_user@example.com', 'john@example.com'])
+      );
+
     // Step 5: Create demo monitoring logs
     console.log('Creating demo monitoring logs...');
     await db.insert(monitoringLogs).values([
@@ -321,6 +365,7 @@ async function seed() {
       `- Total guests: ${reservationsWithGuests.reduce((sum, res) => sum + res.guests.length, 0)}`
     );
     console.log(`- Created ${allProperties.length} properties`);
+    console.log(`- Created ${guestAbcRows.length} Guest ABC entries`);
     console.log(`- Created ${allLogs.length} monitoring logs`);
     console.log('\n🏨 Sample Reservations:');
     reservationsWithGuests.forEach((res) => {
