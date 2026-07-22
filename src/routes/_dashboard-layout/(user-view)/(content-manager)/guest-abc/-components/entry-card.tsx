@@ -79,8 +79,13 @@ export function EntryCard({ entry }: EntryCardProps) {
   };
 
   if (isEditing) {
+    // Item's base is `flex flex-wrap`; force nowrap so the column layout
+    // doesn't inflate the form's height.
     return (
-      <Item variant="outline" className="flex-col items-stretch gap-3 p-4">
+      <Item
+        variant="outline"
+        className="flex-col flex-nowrap items-stretch gap-3 p-4"
+      >
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3">
           <FieldSet className="gap-4">
             <FieldGroup className="gap-4">
