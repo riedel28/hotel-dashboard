@@ -79,10 +79,17 @@ function GuestABCPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex min-h-9 items-center justify-between gap-4">
-        <h1 className="text-xl font-bold">
-          <Trans>Guest ABC</Trans>
-        </h1>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-xl font-bold">
+            <Trans>Guest ABC</Trans>
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            <Trans>
+              Manage the hotel information your guests can browse, from A to Z.
+            </Trans>
+          </p>
+        </div>
         {stuck || isEmpty ? null : addEntryButton}
       </div>
 

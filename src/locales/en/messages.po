@@ -145,7 +145,7 @@ msgid "Add category"
 msgstr "Add category"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:86
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:54
 msgid "Add entry"
 msgstr "Add entry"
 
@@ -454,7 +454,7 @@ msgstr "Business"
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:142
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:71
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:139
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:144
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:170
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:187
@@ -681,7 +681,7 @@ msgstr "Contains an uppercase letter"
 
 #: src/routes/_dashboard-layout.tsx:253
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:216
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:70
 msgid "Content Manager"
 msgstr "Content Manager"
 
@@ -858,7 +858,7 @@ msgid "Desc"
 msgstr "Desc"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:118
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:118
 msgid "Description"
 msgstr "Description"
 
@@ -1407,12 +1407,12 @@ msgstr "Grant administrator privileges to this user"
 #: src/routes/_dashboard-layout.tsx:262
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:225
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:33
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:74
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:85
 msgid "Guest ABC"
 msgstr "Guest ABC"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:114
 msgid "Guest ABC entries help guests find hotel information from A to Z. Add your first entry to get started."
 msgstr "Guest ABC entries help guests find hotel information from A to Z. Add your first entry to get started."
 
@@ -1529,7 +1529,7 @@ msgstr "Hello from About!"
 msgid "Hide password"
 msgstr "Hide password"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:67
@@ -1740,6 +1740,10 @@ msgstr "Manage hotel properties, view details, and configure settings"
 msgid "Manage room inventory, availability, and room type configurations"
 msgstr "Manage room inventory, availability, and room type configurations"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:88
+msgid "Manage the hotel information your guests can browse, from A to Z."
+msgstr "Manage the hotel information your guests can browse, from A to Z."
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:52
 #~ msgid "Manage this property's connection to its Adyen payment account."
 #~ msgstr "Manage this property's connection to its Adyen payment account."
@@ -1910,7 +1914,7 @@ msgstr "No country found."
 msgid "No data available"
 msgstr "No data available"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:111
 msgid "No entries yet"
 msgstr "No entries yet"
 
@@ -3214,7 +3218,7 @@ msgid "This will permanently delete <0>{entryTitle}</0>. This action cannot be u
 msgstr "This will permanently delete <0>{entryTitle}</0>. This action cannot be undone."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-product-modal.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-product-modal.tsx:75
 msgid "Title"
@@ -3337,7 +3341,7 @@ msgstr "Unpin {title} column"
 #~ msgid "Unsaved changes"
 #~ msgstr "Unsaved changes"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:155
 msgid "Update"
 msgstr "Update"
 
