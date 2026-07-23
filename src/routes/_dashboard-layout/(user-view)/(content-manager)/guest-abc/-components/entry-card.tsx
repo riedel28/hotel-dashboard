@@ -84,7 +84,7 @@ export function EntryCard({ entry }: EntryCardProps) {
     return (
       <Item
         variant="outline"
-        className="flex-col flex-nowrap items-stretch gap-3 p-4"
+        className="flex-col flex-nowrap items-stretch gap-3 p-4 origin-top animate-in fade-in-0 zoom-in-95 duration-200 ease-out motion-reduce:animate-none"
       >
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3">
           <FieldSet className="gap-4">
@@ -164,11 +164,19 @@ export function EntryCard({ entry }: EntryCardProps) {
     <>
       <Item
         variant="outline"
-        className="flex-col items-stretch gap-1.5 p-4 animate-in fade-in-0 duration-200 motion-reduce:animate-none"
+        className="flex-col items-stretch gap-1.5 p-4 origin-top animate-in fade-in-0 zoom-in-95 duration-200 ease-out motion-reduce:animate-none"
       >
         <ItemHeader>
           <ItemTitle className="text-base">{entry.title}</ItemTitle>
-          <ItemActions className="gap-0.5 opacity-0 transition-opacity group-hover/item:opacity-100 focus-within:opacity-100">
+          {/*
+            Scope the opacity transition to the hovered/focused state only.
+            On cancel the card collapses out from under the cursor, so hover
+            flips true→false for a frame; an always-on transition would then
+            fade the actions out from that transient reveal (a visible blink).
+            Transitioning only while revealed keeps the hover fade-in but hides
+            instantly on collapse.
+          */}
+          <ItemActions className="gap-0.5 opacity-0 group-hover/item:opacity-100 group-hover/item:transition-opacity focus-within:opacity-100 focus-within:transition-opacity">
             <Button
               size="icon-sm"
               variant="ghost"
