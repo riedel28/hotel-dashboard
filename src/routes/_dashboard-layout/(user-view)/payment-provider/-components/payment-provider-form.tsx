@@ -260,9 +260,12 @@ export function PaymentProviderForm() {
 
   return (
     <div className="flex flex-row gap-8">
-      <PaymentProviderTableOfContents sections={PAYMENT_FORM_SECTIONS} />
+      <PaymentProviderTableOfContents
+        sections={PAYMENT_FORM_SECTIONS}
+        className="hidden xl:block"
+      />
 
-      <Card className="relative max-w-4xl overflow-visible">
+      <Card className="relative min-w-0 flex-1 max-w-4xl overflow-visible">
         <CardHeader>
           <div className="flex items-center justify-between gap-3">
             <div className="flex flex-col gap-1.5">
@@ -302,25 +305,23 @@ export function PaymentProviderForm() {
           <form
             id="payment-provider-form"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-6 md:gap-8"
           >
             {/* ─── Section 1: Credentials ─────────────────────────────── */}
             <section
               id="credentials"
               aria-labelledby={sectionHeadingId('credentials')}
-              className="grid scroll-mt-4 grid-cols-[320px_1fr] gap-4"
+              className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
             >
-              <div>
-                <SectionHeading
-                  id={sectionHeadingId('credentials')}
-                  title={<Trans>Credentials</Trans>}
-                  description={
-                    <Trans>
-                      Technical connection details for your Adyen account.
-                    </Trans>
-                  }
-                />
-              </div>
+              <SectionHeading
+                id={sectionHeadingId('credentials')}
+                title={<Trans>Credentials</Trans>}
+                description={
+                  <Trans>
+                    Technical connection details for your Adyen account.
+                  </Trans>
+                }
+              />
 
               <div className="flex flex-col gap-5">
                 <Controller
@@ -547,19 +548,15 @@ export function PaymentProviderForm() {
             <section
               id="recipient"
               aria-labelledby={sectionHeadingId('recipient')}
-              className="grid scroll-mt-4 grid-cols-[320px_1fr] gap-4"
+              className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
             >
-              <div>
-                <SectionHeading
-                  id={sectionHeadingId('recipient')}
-                  title={<Trans>Payment recipient</Trans>}
-                  description={
-                    <Trans>
-                      The merchant address shown on payment receipts.
-                    </Trans>
-                  }
-                />
-              </div>
+              <SectionHeading
+                id={sectionHeadingId('recipient')}
+                title={<Trans>Payment recipient</Trans>}
+                description={
+                  <Trans>The merchant address shown on payment receipts.</Trans>
+                }
+              />
 
               <div className="flex flex-col gap-5">
                 <Controller
@@ -603,7 +600,7 @@ export function PaymentProviderForm() {
                   )}
                 />
 
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[2fr_8fr]">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-[3fr_7fr] lg:grid-cols-[2fr_8fr]">
                   <Controller
                     control={form.control}
                     name="zip"
@@ -674,20 +671,18 @@ export function PaymentProviderForm() {
             <section
               id="mapping"
               aria-labelledby={sectionHeadingId('mapping')}
-              className="grid scroll-mt-4 grid-cols-[320px_1fr] gap-4"
+              className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
             >
-              <div>
-                <SectionHeading
-                  id={sectionHeadingId('mapping')}
-                  title={<Trans>Mapping codes</Trans>}
-                  description={
-                    <Trans>
-                      Accounting codes reported to your PMS per payment method
-                      and channel.
-                    </Trans>
-                  }
-                />
-              </div>
+              <SectionHeading
+                id={sectionHeadingId('mapping')}
+                title={<Trans>Mapping codes</Trans>}
+                description={
+                  <Trans>
+                    Accounting codes reported to your PMS per payment method and
+                    channel.
+                  </Trans>
+                }
+              />
 
               {/* Real table on desktop; rows collapse to stacked cards on
                 mobile via display overrides (single set of inputs, no dupes). */}
@@ -709,7 +704,7 @@ export function PaymentProviderForm() {
                   {PAYMENT_METHODS.map(({ id, name }) => (
                     <TableRow
                       key={id}
-                      className="hover:bg-transparent h-12 max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4"
+                      className="hover:bg-transparent md:h-12 max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4"
                     >
                       <TableCell className="max-md:col-span-2 max-md:p-0">
                         <div className="flex items-center gap-2.5 md:h-8">
@@ -752,22 +747,24 @@ export function PaymentProviderForm() {
               Last updated 20.07.2026, 21:49 · John Doe
             </span>
 
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancel}
-              disabled={!isDirty || isSubmitting}
-            >
-              <Trans>Cancel</Trans>
-            </Button>
-            <Button
-              type="submit"
-              form="payment-provider-form"
-              disabled={isSubmitting}
-            >
-              {isSubmitting && <Loader2Icon className="animate-spin" />}
-              <Trans>Update config</Trans>
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancel}
+                disabled={!isDirty || isSubmitting}
+              >
+                <Trans>Cancel</Trans>
+              </Button>
+              <Button
+                type="submit"
+                form="payment-provider-form"
+                disabled={isSubmitting}
+              >
+                {isSubmitting && <Loader2Icon className="animate-spin" />}
+                <Trans>Update config</Trans>
+              </Button>
+            </div>
           </div>
         </CardFooter>
 
