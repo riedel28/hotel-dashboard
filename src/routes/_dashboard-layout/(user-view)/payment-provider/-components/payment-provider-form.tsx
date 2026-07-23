@@ -1,15 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
-import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  ArrowUpRightIcon,
-  CheckIcon,
-  Loader2Icon,
-  UnplugIcon,
-  XIcon
-} from 'lucide-react';
+import { Trans } from '@lingui/react/macro';
+import { ArrowUpRightIcon, Loader2Icon } from 'lucide-react';
 import * as React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -32,74 +26,23 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { CopyButton } from '@/components/ui/copy-button';
-import { CountryPicker } from '@/components/ui/country-picker';
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput
-} from '@/components/ui/input-group';
-import { Label } from '@/components/ui/label';
-import { PasswordInput } from '@/components/ui/password-input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
+import { CredentialsSection } from './credentials-section';
+import { MappingCodesSection } from './mapping-codes-section';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
+  PAYMENT_METHODS,
+  type PaymentProviderFormData
+} from './payment-provider-form-types';
 import {
   PAYMENT_FORM_SECTIONS,
-  PaymentProviderTableOfContents,
-  sectionHeadingId
+  PaymentProviderTableOfContents
 } from './payment-provider-toc';
+import { PaymentRecipientSection } from './payment-recipient-section';
 import {
-  type PaymentEnvironment,
   type PaymentTestConnectionConfig,
   PaymentTestConnectionDialog,
   type PaymentTestConnectionResult
 } from './payment-test-connection-dialog';
-
-type MethodId = 'mastercard' | 'visa' | 'amex' | 'paypal';
-
-interface MappingCode {
-  ecom: string;
-  pos: string;
-}
-
-interface PaymentProviderFormData {
-  environment: PaymentEnvironment;
-  merchantId: string;
-  apiKey: string;
-  clientKey: string;
-  publicKey: string;
-  additionalConfig: string;
-  addressLine1: string;
-  addressLine2: string;
-  zip: string;
-  city: string;
-  country: string;
-  mappings: Record<MethodId, MappingCode>;
-}
-
-const PAYMENT_METHODS: Array<{ id: MethodId; name: string }> = [
-  { id: 'mastercard', name: 'MasterCard' },
-  { id: 'visa', name: 'Visa' },
-  { id: 'amex', name: 'American Express' },
-  { id: 'paypal', name: 'PayPal' }
-];
 
 const DEFAULT_VALUES: PaymentProviderFormData = {
   environment: 'test',
@@ -123,8 +66,6 @@ const DEFAULT_VALUES: PaymentProviderFormData = {
 };
 
 export function PaymentProviderForm() {
-  const { i18n } = useLingui();
-
   const [isReplacingApiKey, setIsReplacingApiKey] = React.useState(false);
   const [confirmLiveOpen, setConfirmLiveOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -228,7 +169,6 @@ export function PaymentProviderForm() {
     defaultValues: DEFAULT_VALUES
   });
 
-  const { dirtyFields } = form.formState;
   const isDirty = form.formState.isDirty;
 
   const onSubmit = async (values: PaymentProviderFormData) => {
@@ -256,6 +196,11 @@ export function PaymentProviderForm() {
       merchantId: values.merchantId
     });
     setTestDialogOpen(true);
+  };
+
+  const handleRequestLiveConfirm = (apply: () => void) => {
+    confirmLiveRef.current = apply;
+    setConfirmLiveOpen(true);
   };
 
   return (
@@ -307,434 +252,20 @@ export function PaymentProviderForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-6 md:gap-8"
           >
-            {/* ─── Section 1: Credentials ─────────────────────────────── */}
-            <section
-              id="credentials"
-              aria-labelledby={sectionHeadingId('credentials')}
-              className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
-            >
-              <SectionHeading
-                id={sectionHeadingId('credentials')}
-                title={<Trans>Credentials</Trans>}
-                description={
-                  <Trans>
-                    Technical connection details for your Adyen account.
-                  </Trans>
-                }
-              />
-
-              <div className="flex flex-col gap-5">
-                <Controller
-                  control={form.control}
-                  name="environment"
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel>
-                        <Trans>Environment</Trans>
-                      </FieldLabel>
-                      <RadioGroup
-                        value={field.value}
-                        onValueChange={(value) => {
-                          const next = value as PaymentEnvironment;
-                          if (next === 'live' && field.value === 'test') {
-                            confirmLiveRef.current = () =>
-                              field.onChange('live');
-                            setConfirmLiveOpen(true);
-                            return;
-                          }
-                          field.onChange(next);
-                        }}
-                        className="grid w-full grid-cols-2 gap-2"
-                      >
-                        <Label
-                          htmlFor="environment-test"
-                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
-                        >
-                          <RadioGroupItem value="test" id="environment-test" />
-                          <Trans>Test</Trans>
-                        </Label>
-                        <Label
-                          htmlFor="environment-live"
-                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
-                        >
-                          <RadioGroupItem value="live" id="environment-live" />
-                          <Trans>Live</Trans>
-                        </Label>
-                      </RadioGroup>
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="merchantId"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Merchant ID</Trans>
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                        autoComplete="off"
-                        spellCheck={false}
-                        placeholder="merchant-account-name"
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                {/* API Key: masked "configured" state with Replace flow */}
-                <Controller
-                  control={form.control}
-                  name="apiKey"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>API Key</Trans>
-                      </FieldLabel>
-                      <PasswordInput
-                        {...field}
-                        id={field.name}
-                        placeholder={t`Enter your API Key`}
-                        autoComplete="off"
-                        aria-required="true"
-                        aria-invalid={fieldState.invalid}
-                        aria-describedby={
-                          fieldState.invalid ? `${field.name}-error` : undefined
-                        }
-                      />
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="clientKey"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Client Key</Trans>
-                      </FieldLabel>
-                      <InputGroup>
-                        <InputGroupInput
-                          id={field.name}
-                          {...field}
-                          aria-invalid={fieldState.invalid}
-                          autoComplete="off"
-                          spellCheck={false}
-                        />
-                        <InputGroupAddon align="inline-end">
-                          <CopyButton
-                            text={field.value}
-                            size="icon-xs"
-                            aria-label={t`Copy Client Key`}
-                          />
-                        </InputGroupAddon>
-                      </InputGroup>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="publicKey"
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Public Key</Trans>
-                      </FieldLabel>
-                      <InputGroup>
-                        <InputGroupInput
-                          id={field.name}
-                          {...field}
-                          autoComplete="off"
-                          spellCheck={false}
-                        />
-                        <InputGroupAddon align="inline-end">
-                          <CopyButton
-                            text={field.value}
-                            size="icon-xs"
-                            aria-label={t`Copy Public Key`}
-                          />
-                        </InputGroupAddon>
-                      </InputGroup>
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="additionalConfig"
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Additional configuration</Trans>
-                        <span className="-ml-1 font-normal text-muted-foreground">
-                          (<Trans>Optional</Trans>)
-                        </span>
-                      </FieldLabel>
-                      <Textarea
-                        id={field.name}
-                        {...field}
-                        rows={4}
-                        spellCheck={false}
-                        className="font-mono text-xs!"
-                      />
-                      <FieldDescription>
-                        <Trans>
-                          Optional JSON or certificates passed to the Adyen SDK.
-                        </Trans>
-                      </FieldDescription>
-                    </Field>
-                  )}
-                />
-
-                <div className="flex flex-wrap items-center gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleTestConnection}
-                  >
-                    <UnplugIcon data-icon="inline-start" />
-                    <Trans>Test connection</Trans>
-                  </Button>
-                  {lastTestResult && (
-                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <span
-                        className={cn(
-                          'flex size-3.5 items-center justify-center rounded-full text-white',
-                          lastTestResult.passed
-                            ? 'bg-emerald-500 dark:bg-emerald-600'
-                            : 'bg-red-500 dark:bg-red-600'
-                        )}
-                      >
-                        {lastTestResult.passed ? (
-                          <CheckIcon
-                            className="size-2.5"
-                            strokeWidth={3.5}
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <XIcon
-                            className="size-2.5"
-                            strokeWidth={3.5}
-                            aria-hidden="true"
-                          />
-                        )}
-                      </span>
-                      <Trans>
-                        Tested at{' '}
-                        {i18n.date(lastTestResult.finishedAt, {
-                          timeStyle: 'short'
-                        })}
-                      </Trans>
-                    </p>
-                  )}
-                </div>
-              </div>
-            </section>
+            <CredentialsSection
+              control={form.control}
+              onRequestLiveConfirm={handleRequestLiveConfirm}
+              onTestConnection={handleTestConnection}
+              lastTestResult={lastTestResult}
+            />
 
             <Separator />
 
-            {/* ─── Section 2: Payment recipient ───────────────────────── */}
-            <section
-              id="recipient"
-              aria-labelledby={sectionHeadingId('recipient')}
-              className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
-            >
-              <SectionHeading
-                id={sectionHeadingId('recipient')}
-                title={<Trans>Payment recipient</Trans>}
-                description={
-                  <Trans>The merchant address shown on payment receipts.</Trans>
-                }
-              />
-
-              <div className="flex flex-col gap-5">
-                <Controller
-                  control={form.control}
-                  name="addressLine1"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Address line</Trans>
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                        autoComplete="address-line1"
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="addressLine2"
-                  render={({ field }) => (
-                    <Field>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Address line 2</Trans>{' '}
-                        <span className="-ml-1 font-normal text-muted-foreground">
-                          (<Trans>Optional</Trans>)
-                        </span>
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        {...field}
-                        autoComplete="address-line2"
-                      />
-                    </Field>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-[3fr_7fr] lg:grid-cols-[2fr_8fr]">
-                  <Controller
-                    control={form.control}
-                    name="zip"
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                          <Trans>ZIP</Trans>
-                        </FieldLabel>
-                        <Input
-                          id={field.name}
-                          {...field}
-                          aria-invalid={fieldState.invalid}
-                          autoComplete="postal-code"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                  <Controller
-                    control={form.control}
-                    name="city"
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                          <Trans>City</Trans>
-                        </FieldLabel>
-                        <Input
-                          id={field.name}
-                          {...field}
-                          aria-invalid={fieldState.invalid}
-                          autoComplete="address-level2"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                </div>
-
-                <Controller
-                  control={form.control}
-                  name="country"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Country</Trans>
-                      </FieldLabel>
-                      <CountryPicker
-                        value={field.value}
-                        onValueChange={(value) => field.onChange(value ?? '')}
-                        className="bg-background dark:bg-input/30"
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </div>
-            </section>
+            <PaymentRecipientSection control={form.control} />
 
             <Separator />
 
-            {/* ─── Section 3: Mapping codes ───────────────────────────── */}
-            <section
-              id="mapping"
-              aria-labelledby={sectionHeadingId('mapping')}
-              className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
-            >
-              <SectionHeading
-                id={sectionHeadingId('mapping')}
-                title={<Trans>Mapping codes</Trans>}
-                description={
-                  <Trans>
-                    Accounting codes reported to your PMS per payment method and
-                    channel.
-                  </Trans>
-                }
-              />
-
-              {/* Real table on desktop; rows collapse to stacked cards on
-                mobile via display overrides (single set of inputs, no dupes). */}
-              <Table borderless className="max-md:block">
-                <TableHeader className="max-md:hidden">
-                  <TableRow className="hover:bg-transparent">
-                    <TableHead className="w-1/2 text-[13px]">
-                      <Trans>Payment method</Trans>
-                    </TableHead>
-                    <TableHead className="w-1/4 text-[13px]">
-                      <Trans>E-com</Trans>
-                    </TableHead>
-                    <TableHead className="w-1/4 text-[13px]">
-                      <Trans>POS</Trans>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="max-md:block">
-                  {PAYMENT_METHODS.map(({ id, name }) => (
-                    <TableRow
-                      key={id}
-                      className="hover:bg-transparent md:h-12 max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4"
-                    >
-                      <TableCell className="max-md:col-span-2 max-md:p-0">
-                        <div className="flex items-center gap-2.5 md:h-8">
-                          <BrandMark brand={id} />
-                          <span className="text-sm">{name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="max-md:p-0">
-                        <MappingCell
-                          control={form.control}
-                          method={id}
-                          kind="ecom"
-                          label={<Trans>E-com</Trans>}
-                          dirty={Boolean(dirtyFields.mappings?.[id]?.ecom)}
-                        />
-                      </TableCell>
-                      <TableCell className="max-md:p-0">
-                        <MappingCell
-                          control={form.control}
-                          method={id}
-                          kind="pos"
-                          label={<Trans>POS</Trans>}
-                          dirty={Boolean(dirtyFields.mappings?.[id]?.pos)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </section>
+            <MappingCodesSection control={form.control} />
           </form>
         </CardContent>
 
@@ -809,113 +340,4 @@ export function PaymentProviderForm() {
       </Card>
     </div>
   );
-}
-
-function SectionHeading({
-  id,
-  title,
-  description
-}: {
-  id?: string;
-  title: React.ReactNode;
-  description: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <h2 id={id} className="text-[15px] font-medium">
-        {title}
-      </h2>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </div>
-  );
-}
-
-function MappingCell({
-  control,
-  method,
-  kind,
-  label,
-  dirty
-}: {
-  control: ReturnType<typeof useForm<PaymentProviderFormData>>['control'];
-  method: MethodId;
-  kind: 'ecom' | 'pos';
-  label: React.ReactNode;
-  dirty: boolean;
-}) {
-  return (
-    <Controller
-      control={control}
-      name={`mappings.${method}.${kind}` as const}
-      render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={field.name} className="md:hidden">
-            {label}
-          </FieldLabel>
-          <InputGroup className="w-fit h-7.5">
-            <InputGroupInput
-              id={field.name}
-              {...field}
-              type="text"
-              inputMode="numeric"
-              aria-invalid={fieldState.invalid}
-              placeholder="0000"
-              className={cn('min-w-12 tabular-nums')}
-            />
-            {dirty && (
-              <InputGroupAddon align="inline-end">
-                <span
-                  className="size-1.5 rounded-full bg-yellow-500"
-                  aria-label={t`Changed`}
-                />
-              </InputGroupAddon>
-            )}
-          </InputGroup>
-
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
-      )}
-    />
-  );
-}
-
-function BrandMark({ brand }: { brand: MethodId }) {
-  const chip =
-    'flex h-5 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[5px] border';
-  switch (brand) {
-    case 'mastercard':
-      return (
-        <span className={cn(chip, 'border-border bg-white')}>
-          <svg viewBox="0 0 32 20" className="h-3.5" aria-hidden="true">
-            <circle cx="13" cy="10" r="6" fill="#EB001B" />
-            <circle cx="19" cy="10" r="6" fill="#F79E1B" fillOpacity="0.85" />
-          </svg>
-        </span>
-      );
-    case 'visa':
-      return (
-        <span className={cn(chip, 'border-border bg-white')}>
-          <span className="text-[10px] font-black italic tracking-tight text-[#1434CB]">
-            VISA
-          </span>
-        </span>
-      );
-    case 'amex':
-      return (
-        <span className={cn(chip, 'border-transparent bg-[#016FD0]')}>
-          <span className="text-[7px] font-bold uppercase tracking-tight text-white">
-            Amex
-          </span>
-        </span>
-      );
-    case 'paypal':
-      return (
-        <span className={cn(chip, 'border-border bg-white')}>
-          <span className="text-[8px] font-black italic">
-            <span className="text-[#003087]">Pay</span>
-            <span className="text-[#0079C1]">Pal</span>
-          </span>
-        </span>
-      );
-  }
 }
