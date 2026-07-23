@@ -245,7 +245,8 @@ export function PaymentTestConnectionDialog({
                   <CopyButton
                     text={step.error}
                     size="icon-xs"
-                    className="-my-0.5 -mr-1"
+                    buttonClassName="bg-transparent!"
+                    iconClassName="-my-0.5 -mr-1 text-rose-800 dark:text-rose-300"
                   />
                 </div>
               )}
@@ -323,7 +324,7 @@ function EndpointNode({
 }) {
   return (
     <div className="flex w-24 shrink-0 flex-col items-center gap-2 text-center">
-      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-background dark:bg-input/30 text-foreground/70">
+      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card dark:bg-input/30 text-foreground/70">
         {icon}
       </div>
       <span className="text-xs leading-tight font-medium">{label}</span>
@@ -344,7 +345,7 @@ function StatusDisc({ ok, className }: { ok: boolean; className?: string }) {
         className
       )}
     >
-      <Icon className="size-[55%]" strokeWidth={3} aria-hidden="true" />
+      <Icon className="size-[60%]" strokeWidth={3} aria-hidden="true" />
     </span>
   );
 }
@@ -365,7 +366,7 @@ function ConnectionLine({
         phase === 'done' &&
           (allPassed
             ? 'bg-emerald-500 dark:bg-emerald-800'
-            : 'bg-rose-500/70 dark:bg-rose-900')
+            : 'bg-rose-500 dark:bg-rose-900')
       )}
     />
   );
@@ -374,7 +375,9 @@ function ConnectionLine({
 function StepStatusIcon({ status }: { status: StepStatus }) {
   switch (status) {
     case 'running':
-      return <Loader2Icon className="size-4.5 animate-spin text-primary" />;
+      return (
+        <Loader2Icon className="size-4.5 animate-spin text-muted-foreground" />
+      );
     case 'passed':
       return <StatusDisc ok className="size-4.5" />;
     case 'failed':

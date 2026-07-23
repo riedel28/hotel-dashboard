@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 type CopyButtonProps = Omit<ButtonProps, 'children' | 'onClick'> & {
   copiedLabel?: string;
   copyLabel?: string;
+  iconClassName?: string;
+  buttonClassName?: string;
   text: string;
 };
 
@@ -16,6 +18,8 @@ function CopyButton({
   text,
   type = 'button',
   variant = 'ghost',
+  iconClassName,
+  buttonClassName,
   ...props
 }: CopyButtonProps) {
   const { copy, copied } = useCopyToClipboard();
@@ -28,7 +32,7 @@ function CopyButton({
       type={type}
       variant={variant}
       onClick={() => copy(text)}
-      className="group hover:bg-transparent!"
+      className={cn('group hover:bg-transparent!', buttonClassName)}
       {...props}
     >
       <Icon
@@ -36,7 +40,8 @@ function CopyButton({
         className={cn(
           'size-3.5 text-muted-foreground group-hover:text-foreground',
           copied &&
-            'text-emerald-600 group-hover:text-emerald-600 dark:text-emerald-300'
+            'text-emerald-600 group-hover:text-emerald-600 dark:text-emerald-300',
+          iconClassName
         )}
       />
     </Button>
