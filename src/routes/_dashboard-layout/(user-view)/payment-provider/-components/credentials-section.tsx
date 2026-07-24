@@ -36,13 +36,15 @@ interface CredentialsSectionProps {
   onRequestLiveConfirm: (apply: () => void) => void;
   onTestConnection: () => void;
   lastTestResult: PaymentTestConnectionResult | null;
+  disabled?: boolean;
 }
 
 export function CredentialsSection({
   control,
   onRequestLiveConfirm,
   onTestConnection,
-  lastTestResult
+  lastTestResult,
+  disabled = false
 }: CredentialsSectionProps) {
   const { i18n } = useLingui();
 
@@ -71,7 +73,7 @@ export function CredentialsSection({
               </FieldLabel>
               <RadioGroup
                 value={field.value}
-                onValueChange={(value) => {
+                onValueChange={value => {
                   const next = value as PaymentEnvironment;
                   if (next === 'live' && field.value === 'test') {
                     onRequestLiveConfirm(() => field.onChange('live'));
@@ -83,16 +85,24 @@ export function CredentialsSection({
               >
                 <Label
                   htmlFor="environment-test"
-                  className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                  className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted has-[button:disabled]:cursor-not-allowed has-[button:disabled]:opacity-50 dark:bg-input/30"
                 >
-                  <RadioGroupItem value="test" id="environment-test" />
+                  <RadioGroupItem
+                    value="test"
+                    id="environment-test"
+                    disabled={disabled}
+                  />
                   <Trans>Test</Trans>
                 </Label>
                 <Label
                   htmlFor="environment-live"
-                  className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                  className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted has-[button:disabled]:cursor-not-allowed has-[button:disabled]:opacity-50 dark:bg-input/30"
                 >
-                  <RadioGroupItem value="live" id="environment-live" />
+                  <RadioGroupItem
+                    value="live"
+                    id="environment-live"
+                    disabled={disabled}
+                  />
                   <Trans>Live</Trans>
                 </Label>
               </RadioGroup>
@@ -112,11 +122,19 @@ export function CredentialsSection({
                 id={field.name}
                 {...field}
                 aria-invalid={fieldState.invalid}
+                aria-describedby={
+                  fieldState.invalid ? `${field.name}-error` : undefined
+                }
                 autoComplete="off"
                 spellCheck={false}
                 placeholder="merchant-account-name"
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              {fieldState.invalid && (
+                <FieldError
+                  id={`${field.name}-error`}
+                  errors={[fieldState.error]}
+                />
+              )}
             </Field>
           )}
         />
@@ -141,6 +159,12 @@ export function CredentialsSection({
                   fieldState.invalid ? `${field.name}-error` : undefined
                 }
               />
+              {fieldState.invalid && (
+                <FieldError
+                  id={`${field.name}-error`}
+                  errors={[fieldState.error]}
+                />
+              )}
             </Field>
           )}
         />
@@ -158,6 +182,9 @@ export function CredentialsSection({
                   id={field.name}
                   {...field}
                   aria-invalid={fieldState.invalid}
+                  aria-describedby={
+                    fieldState.invalid ? `${field.name}-error` : undefined
+                  }
                   autoComplete="off"
                   spellCheck={false}
                 />
@@ -169,7 +196,12 @@ export function CredentialsSection({
                   />
                 </InputGroupAddon>
               </InputGroup>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              {fieldState.invalid && (
+                <FieldError
+                  id={`${field.name}-error`}
+                  errors={[fieldState.error]}
+                />
+              )}
             </Field>
           )}
         />
@@ -229,12 +261,21 @@ export function CredentialsSection({
         />
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button type="button" variant="outline" onClick={onTestConnection}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onTestConnection}
+            disabled={disabled}
+          >
             <UnplugIcon data-icon="inline-start" />
             <Trans>Test connection</Trans>
           </Button>
           {lastTestResult && (
-            <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <p
+              className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground"
+              role="status"
+              aria-live="polite"
+            >
               <span
                 className={cn(
                   'flex size-3.5 items-center justify-center rounded-full text-white',
@@ -245,7 +286,7 @@ export function CredentialsSection({
               >
                 {lastTestResult.passed ? (
                   <CheckIcon
-                    className="size-2.5"
+                    className="size-[65%]"
                     strokeWidth={3.5}
                     aria-hidden="true"
                   />
@@ -257,12 +298,22 @@ export function CredentialsSection({
                   />
                 )}
               </span>
-              <Trans>
-                Tested at{' '}
-                {i18n.date(lastTestResult.finishedAt, {
-                  timeStyle: 'short'
-                })}
-              </Trans>
+              <span>
+                {lastTestResult.passed ? (
+                  <Trans>Connection successful</Trans>
+                ) : (
+                  <Trans>Connection failed</Trans>
+                )}
+              </span>
+              <span aria-hidden="true">·</span>
+              <span>
+                <Trans>
+                  Tested at{' '}
+                  {i18n.date(lastTestResult.finishedAt, {
+                    timeStyle: 'short'
+                  })}
+                </Trans>
+              </span>
             </p>
           )}
         </div>

@@ -58,7 +58,7 @@ function formatDuration(ms: number) {
 }
 
 function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export function PaymentTestConnectionDialog({
@@ -118,13 +118,13 @@ export function PaymentTestConnectionDialog({
       if (runIdRef.current !== runId) return;
 
       if (failed) {
-        setSteps((prev) =>
+        setSteps(prev =>
           prev.map((s, i) => (i === index ? { ...s, status: 'skipped' } : s))
         );
         continue;
       }
 
-      setSteps((prev) =>
+      setSteps(prev =>
         prev.map((s, i) => (i === index ? { ...s, status: 'running' } : s))
       );
 
@@ -138,7 +138,7 @@ export function PaymentTestConnectionDialog({
       if (!stepPassed) {
         failed = true;
         const error = mockErrorFor(stepDef.id);
-        setSteps((prev) =>
+        setSteps(prev =>
           prev.map((s, i) =>
             i === index ? { ...s, status: 'failed', durationMs, error } : s
           )
@@ -146,7 +146,7 @@ export function PaymentTestConnectionDialog({
         continue;
       }
 
-      setSteps((prev) =>
+      setSteps(prev =>
         prev.map((s, i) =>
           i === index ? { ...s, status: 'passed', durationMs } : s
         )
@@ -169,8 +169,8 @@ export function PaymentTestConnectionDialog({
     }
   }, [open, runTests]);
 
-  const passedCount = steps.filter((s) => s.status === 'passed').length;
-  const failedCount = steps.filter((s) => s.status === 'failed').length;
+  const passedCount = steps.filter(s => s.status === 'passed').length;
+  const failedCount = steps.filter(s => s.status === 'failed').length;
   const allPassed = phase === 'done' && failedCount === 0;
 
   return (
@@ -200,7 +200,7 @@ export function PaymentTestConnectionDialog({
 
             {phase === 'running' ? (
               <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-background dark:bg-input/30 text-muted-foreground">
-                <Loader2Icon className="size-4 animate-spin" />
+                <Loader2Icon className="size-4 animate-spin motion-reduce:animate-none" />
               </div>
             ) : (
               <StatusDisc ok={allPassed} className="size-9" />
@@ -217,7 +217,7 @@ export function PaymentTestConnectionDialog({
         </div>
 
         <ul className="divide-y divide-border/60 rounded-xl border border-border/60">
-          {steps.map((step) => (
+          {steps.map(step => (
             <li key={step.id} className="flex flex-col gap-2 px-3.5 py-2.5">
               <div className="flex items-center gap-2.5">
                 <StepStatusIcon status={step.status} />
@@ -240,7 +240,10 @@ export function PaymentTestConnectionDialog({
                 </span>
               </div>
               {step.status === 'failed' && step.error && (
-                <div className="ml-7 flex items-center gap-2 rounded-lg border border-rose-200/70 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-800 dark:border-rose-800/30 dark:bg-rose-800/20 dark:text-rose-300">
+                <div
+                  className="ml-7 flex items-center gap-2 rounded-lg border border-rose-200/70 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-800 dark:border-rose-800/30 dark:bg-rose-800/20 dark:text-rose-300"
+                  role="alert"
+                >
                   <span className="flex-1">{step.error}</span>
                   <CopyButton
                     text={step.error}
@@ -255,6 +258,8 @@ export function PaymentTestConnectionDialog({
         </ul>
 
         <div
+          role="status"
+          aria-live="polite"
           className={cn(
             'flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm',
             phase === 'running'
@@ -265,7 +270,7 @@ export function PaymentTestConnectionDialog({
           )}
         >
           {phase === 'running' ? (
-            <Loader2Icon className="size-4.5 shrink-0 animate-spin" />
+            <Loader2Icon className="size-4.5 shrink-0 animate-spin motion-reduce:animate-none" />
           ) : (
             <StatusDisc ok={allPassed} className="size-4.5" />
           )}
@@ -294,7 +299,7 @@ export function PaymentTestConnectionDialog({
         <DialogFooter>
           {phase === 'running' ? (
             <DialogClose render={<Button variant="outline" />}>
-              <Trans>Cancel</Trans>
+              <Trans>Stop test</Trans>
             </DialogClose>
           ) : (
             <>
@@ -323,7 +328,7 @@ function EndpointNode({
   badge?: React.ReactNode;
 }) {
   return (
-    <div className="flex w-24 shrink-0 flex-col items-center gap-2 text-center">
+    <div className="flex w-16 shrink-0 flex-col items-center gap-2 text-center sm:w-24">
       <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card dark:bg-input/30 text-foreground/70">
         {icon}
       </div>
@@ -338,7 +343,7 @@ function StatusDisc({ ok, className }: { ok: boolean; className?: string }) {
   return (
     <span
       className={cn(
-        'flex shrink-0 items-center justify-center rounded-full text-rose-50 dark:text-rose-200',
+        'flex shrink-0 items-center justify-center rounded-full text-white',
         ok
           ? 'bg-emerald-500 dark:bg-emerald-600'
           : 'bg-rose-500 dark:bg-rose-900',
@@ -362,7 +367,7 @@ function ConnectionLine({
       className={cn(
         'h-0.5 flex-1 rounded-full',
         phase === 'running' &&
-          'animate-connection-dash bg-[repeating-linear-gradient(90deg,var(--color-muted-foreground)_0px,var(--color-muted-foreground)_5px,transparent_5px,transparent_12px)]',
+          'animate-connection-dash bg-[repeating-linear-gradient(90deg,var(--color-muted-foreground)_0px,var(--color-muted-foreground)_5px,transparent_5px,transparent_12px)] motion-reduce:animate-none',
         phase === 'done' &&
           (allPassed
             ? 'bg-emerald-500 dark:bg-emerald-800'
@@ -376,7 +381,7 @@ function StepStatusIcon({ status }: { status: StepStatus }) {
   switch (status) {
     case 'running':
       return (
-        <Loader2Icon className="size-4.5 animate-spin text-muted-foreground" />
+        <Loader2Icon className="size-4.5 animate-spin text-muted-foreground motion-reduce:animate-none" />
       );
     case 'passed':
       return <StatusDisc ok className="size-4.5" />;

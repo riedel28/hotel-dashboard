@@ -10,11 +10,11 @@ export function SectionHeading({
   description: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <h2 id={id} className="text-[15px] font-medium">
+    <div className="flex max-w-xs flex-col gap-1">
+      <h2 id={id} tabIndex={-1} className="text-[15px] font-semibold">
         {title}
       </h2>
-      <p className="text-sm text-muted-foreground">{description}</p>
+      <p className="text-sm text-muted-foreground text-pretty">{description}</p>
     </div>
   );
 }

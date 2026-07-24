@@ -1,4 +1,3 @@
-import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 import { type Control, Controller, useFormState } from 'react-hook-form';
@@ -31,7 +30,7 @@ interface MappingCodesSectionProps {
 }
 
 export function MappingCodesSection({ control }: MappingCodesSectionProps) {
-  const { dirtyFields } = useFormState({ control });
+  const { dirtyFields, isDirty } = useFormState({ control });
 
   return (
     <section
@@ -99,6 +98,13 @@ export function MappingCodesSection({ control }: MappingCodesSectionProps) {
             </TableRow>
           ))}
         </TableBody>
+
+        {isDirty && (
+          <p className="px-4 mt-1.5 text-xs text-muted-foreground flex gap-2 items-center transition-all">
+            <span className="size-1.5 rounded-full bg-amber-500 dark:bg-amber-300" />
+            <Trans>Unsaved changes</Trans>
+          </p>
+        )}
       </Table>
     </section>
   );
@@ -126,27 +132,32 @@ function MappingCell({
           <FieldLabel htmlFor={field.name} className="md:hidden">
             {label}
           </FieldLabel>
-          <InputGroup className="w-fit h-7.5">
+          <InputGroup className="h-7.5 w-full md:w-fit">
             <InputGroupInput
               id={field.name}
               {...field}
               type="text"
               inputMode="numeric"
               aria-invalid={fieldState.invalid}
+              aria-describedby={
+                fieldState.invalid ? `${field.name}-error` : undefined
+              }
               placeholder="0000"
-              className={cn('min-w-12 tabular-nums')}
+              className={cn('min-w-16 tabular-nums')}
             />
             {dirty && (
               <InputGroupAddon align="inline-end">
-                <span
-                  className="size-1.5 rounded-full bg-yellow-500"
-                  aria-label={t`Changed`}
-                />
+                <span className="size-1.5 rounded-full bg-amber-500 dark:bg-amber-300" />
               </InputGroupAddon>
             )}
           </InputGroup>
 
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError
+              id={`${field.name}-error`}
+              errors={[fieldState.error]}
+            />
+          )}
         </Field>
       )}
     />

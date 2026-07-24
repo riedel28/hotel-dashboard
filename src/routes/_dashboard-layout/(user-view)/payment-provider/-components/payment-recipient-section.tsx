@@ -10,10 +10,12 @@ import { SectionHeading } from './section-heading';
 
 interface PaymentRecipientSectionProps {
   control: Control<PaymentProviderFormData>;
+  disabled?: boolean;
 }
 
 export function PaymentRecipientSection({
-  control
+  control,
+  disabled = false
 }: PaymentRecipientSectionProps) {
   return (
     <section
@@ -42,9 +44,17 @@ export function PaymentRecipientSection({
                 id={field.name}
                 {...field}
                 aria-invalid={fieldState.invalid}
+                aria-describedby={
+                  fieldState.invalid ? `${field.name}-error` : undefined
+                }
                 autoComplete="address-line1"
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              {fieldState.invalid && (
+                <FieldError
+                  id={`${field.name}-error`}
+                  errors={[fieldState.error]}
+                />
+              )}
             </Field>
           )}
         />
@@ -78,10 +88,16 @@ export function PaymentRecipientSection({
                   id={field.name}
                   {...field}
                   aria-invalid={fieldState.invalid}
+                  aria-describedby={
+                    fieldState.invalid ? `${field.name}-error` : undefined
+                  }
                   autoComplete="postal-code"
                 />
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError
+                    id={`${field.name}-error`}
+                    errors={[fieldState.error]}
+                  />
                 )}
               </Field>
             )}
@@ -98,10 +114,16 @@ export function PaymentRecipientSection({
                   id={field.name}
                   {...field}
                   aria-invalid={fieldState.invalid}
+                  aria-describedby={
+                    fieldState.invalid ? `${field.name}-error` : undefined
+                  }
                   autoComplete="address-level2"
                 />
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError
+                    id={`${field.name}-error`}
+                    errors={[fieldState.error]}
+                  />
                 )}
               </Field>
             )}
@@ -113,15 +135,26 @@ export function PaymentRecipientSection({
           name="country"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>
+              <FieldLabel id={`${field.name}-label`}>
                 <Trans>Country</Trans>
               </FieldLabel>
               <CountryPicker
                 value={field.value}
                 onValueChange={(value) => field.onChange(value ?? '')}
+                aria-labelledby={`${field.name}-label`}
+                aria-invalid={fieldState.invalid}
+                aria-describedby={
+                  fieldState.invalid ? `${field.name}-error` : undefined
+                }
+                disabled={disabled}
                 className="bg-background dark:bg-input/30"
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              {fieldState.invalid && (
+                <FieldError
+                  id={`${field.name}-error`}
+                  errors={[fieldState.error]}
+                />
+              )}
             </Field>
           )}
         />

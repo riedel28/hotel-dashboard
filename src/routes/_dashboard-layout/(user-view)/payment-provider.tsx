@@ -44,11 +44,11 @@ function RouteComponent() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex flex-col gap-1">
-        <h1 className="text-xl font-bold">
+      <div className="flex max-w-2xl flex-col gap-1 mb-6">
+        <h1 className="text-xl font-semibold text-balance">
           <Trans>Payment Provider</Trans>
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground text-pretty">
           <Trans>
             Manage this property's connection to its payment account.
           </Trans>

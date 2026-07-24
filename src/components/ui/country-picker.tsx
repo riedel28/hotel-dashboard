@@ -31,6 +31,9 @@ interface CountryPickerProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
+  'aria-labelledby'?: string;
 }
 
 export function CountryPicker({
@@ -39,7 +42,10 @@ export function CountryPicker({
   codes,
   placeholder,
   disabled,
-  className
+  className,
+  'aria-describedby': ariaDescribedby,
+  'aria-invalid': ariaInvalid,
+  'aria-labelledby': ariaLabelledby
 }: CountryPickerProps) {
   const { i18n, t } = useLingui();
   const locale = i18n.locale;
@@ -81,7 +87,12 @@ export function CountryPicker({
           'border-input h-9 bg-input/30 ring-offset-background flex w-full items-center justify-between overflow-hidden rounded-lg border px-3 py-2 text-sm',
           className
         )}
-        aria-label={placeholder ?? t`Select country`}
+        aria-label={
+          ariaLabelledby ? undefined : (placeholder ?? t`Select country`)
+        }
+        aria-describedby={ariaDescribedby}
+        aria-invalid={ariaInvalid}
+        aria-labelledby={ariaLabelledby}
       >
         <ComboboxValue>
           {selectedCountry ? (

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { ArrowUpRightIcon, Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
@@ -66,6 +66,7 @@ const DEFAULT_VALUES: PaymentProviderFormData = {
 };
 
 export function PaymentProviderForm() {
+  const { i18n } = useLingui();
   const [isReplacingApiKey, setIsReplacingApiKey] = React.useState(false);
   const [confirmLiveOpen, setConfirmLiveOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -74,6 +75,7 @@ export function PaymentProviderForm() {
     React.useState<PaymentTestConnectionConfig | null>(null);
   const [lastTestResult, setLastTestResult] =
     React.useState<PaymentTestConnectionResult | null>(null);
+  const [lastSavedAt, setLastSavedAt] = React.useState<Date | null>(null);
 
   const confirmLiveRef = React.useRef<(() => void) | null>(null);
 
@@ -170,16 +172,21 @@ export function PaymentProviderForm() {
   });
 
   const isDirty = form.formState.isDirty;
+  const environment = form.watch('environment');
 
   const onSubmit = async (values: PaymentProviderFormData) => {
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsSubmitting(false);
-    setIsReplacingApiKey(false);
-    // Reset to the just-saved values so the form is no longer dirty and any
-    // replaced key falls back to the masked "configured" state.
-    form.reset({ ...values, apiKey: '' });
-    toast.success(t`Config updated`);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 800));
+      setIsReplacingApiKey(false);
+      // Reset to the just-saved values so the form is no longer dirty and any
+      // replaced key falls back to the masked "configured" state.
+      form.reset({ ...values, apiKey: '' });
+      setLastSavedAt(new Date());
+      toast.success(t`Configuration updated`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCancel = () => {
@@ -188,6 +195,7 @@ export function PaymentProviderForm() {
   };
 
   const handleTestConnection = async () => {
+    if (isSubmitting) return;
     const valid = await form.trigger();
     if (!valid) return;
     const values = form.getValues();
@@ -212,7 +220,7 @@ export function PaymentProviderForm() {
 
       <Card className="relative min-w-0 flex-1 max-w-4xl overflow-visible">
         <CardHeader>
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center-safe gap-2">
                 <CardTitle>
@@ -220,12 +228,23 @@ export function PaymentProviderForm() {
                 </CardTitle>
 
                 <Badge
+                  color={environment === 'live' ? 'orange' : 'sky'}
+                  size="sm"
+                >
+                  {environment === 'live' ? (
+                    <Trans>Live environment</Trans>
+                  ) : (
+                    <Trans>Test environment</Trans>
+                  )}
+                </Badge>
+
+                <Badge
                   variant="outline"
                   size="sm"
-                  className="bg-accent text-accent-foreground text-[11px] rounded-md cursor-pointer"
+                  className="cursor-pointer rounded-md bg-accent text-[11px] text-accent-foreground"
                   render={
                     <a
-                      href="https:google.com"
+                      href="https://docs.adyen.com/development-resources/api-credentials/"
                       target="_blank"
                       rel="noopener noreferrer"
                     />
@@ -250,22 +269,29 @@ export function PaymentProviderForm() {
           <form
             id="payment-provider-form"
             onSubmit={form.handleSubmit(onSubmit)}
+            aria-busy={isSubmitting}
             className="flex flex-col gap-6 md:gap-8"
           >
-            <CredentialsSection
-              control={form.control}
-              onRequestLiveConfirm={handleRequestLiveConfirm}
-              onTestConnection={handleTestConnection}
-              lastTestResult={lastTestResult}
-            />
+            <fieldset disabled={isSubmitting} className="contents">
+              <CredentialsSection
+                control={form.control}
+                onRequestLiveConfirm={handleRequestLiveConfirm}
+                onTestConnection={handleTestConnection}
+                lastTestResult={lastTestResult}
+                disabled={isSubmitting}
+              />
 
-            <Separator />
+              <Separator />
 
-            <PaymentRecipientSection control={form.control} />
+              <PaymentRecipientSection
+                control={form.control}
+                disabled={isSubmitting}
+              />
 
-            <Separator />
+              <Separator />
 
-            <MappingCodesSection control={form.control} />
+              <MappingCodesSection control={form.control} />
+            </fieldset>
           </form>
         </CardContent>
 
@@ -274,9 +300,22 @@ export function PaymentProviderForm() {
           flush against the very bottom of the viewport, not above the padding. */}
         <CardFooter className="sticky -bottom-4 z-10 -mb-6 rounded-b-xl border-t border-border/60 bg-card/80 py-4! backdrop-blur md:-bottom-8">
           <div className="flex w-full flex-wrap items-center justify-end gap-3">
-            <span className="truncate text-xs text-muted-foreground self-center mr-auto">
-              Last updated 20.07.2026, 21:49 · John Doe
-            </span>
+            <div
+              className="mr-auto min-w-0 text-xs text-muted-foreground"
+              role="status"
+              aria-live="polite"
+            >
+              {isSubmitting ? (
+                <Trans>Saving changes…</Trans>
+              ) : isDirty ? null : lastSavedAt ? (
+                <Trans>
+                  Last updated at{' '}
+                  {i18n.date(lastSavedAt, { timeStyle: 'short' })}
+                </Trans>
+              ) : (
+                <Trans>No unsaved changes</Trans>
+              )}
+            </div>
 
             <div className="flex gap-2">
               <Button
@@ -292,8 +331,16 @@ export function PaymentProviderForm() {
                 form="payment-provider-form"
                 disabled={isSubmitting}
               >
-                {isSubmitting && <Loader2Icon className="animate-spin" />}
-                <Trans>Update config</Trans>
+                {isSubmitting && (
+                  <Loader2Icon className="animate-spin" aria-hidden="true" />
+                )}
+                <span>
+                  {isSubmitting ? (
+                    <Trans>Saving changes</Trans>
+                  ) : (
+                    <Trans>Save changes</Trans>
+                  )}
+                </span>
               </Button>
             </div>
           </div>
