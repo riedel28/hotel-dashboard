@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
+import { SectionNav } from '@/components/section-nav';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,10 +33,7 @@ import {
   PAYMENT_METHODS,
   type PaymentProviderFormData
 } from './payment-provider-form-types';
-import {
-  PAYMENT_FORM_SECTIONS,
-  PaymentProviderTableOfContents
-} from './payment-provider-toc';
+import { PAYMENT_FORM_SECTIONS } from './payment-provider-toc';
 import { PaymentRecipientSection } from './payment-recipient-section';
 import {
   type PaymentTestConnectionConfig,
@@ -213,9 +210,9 @@ export function PaymentProviderForm() {
 
   return (
     <div className="flex flex-row gap-8">
-      <PaymentProviderTableOfContents
+      <SectionNav
         sections={PAYMENT_FORM_SECTIONS}
-        className="hidden xl:block"
+        className="order-2 hidden xl:block"
       />
 
       <Card className="relative min-w-0 flex-1 max-w-4xl overflow-visible">

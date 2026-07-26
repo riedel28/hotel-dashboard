@@ -1,0 +1,229 @@
+import { useLingui } from '@lingui/react/macro';
+import * as React from 'react';
+
+import { cn } from '@/lib/utils';
+
+export interface NavSection {
+  /** DOM id of the matching <section> on the page. */
+  id: string;
+  label: React.ReactNode;
+  /** Draws a warning dot — used to surface a section that needs the user. */
+  attention?: boolean;
+}
+
+/** Id of the heading that names a section, used for `aria-labelledby`. */
+export function sectionHeadingId(sectionId: string) {
+  return `${sectionId}-heading`;
+}
+
+/** The scroll container sections live in (see _dashboard-layout `<main>`). */
+const SCROLL_ROOT_ID = 'main-content';
+
+/**
+ * Tracks which section is currently in view within the scroll container so the
+ * navigation can highlight it as the user scrolls.
+ */
+export function useActiveSection(sections: NavSection[]) {
+  const [activeId, setActiveId] = React.useState(sections[0]?.id ?? '');
+
+  React.useEffect(() => {
+    const root = document.getElementById(SCROLL_ROOT_ID);
+    if (!root) return;
+
+    // Distance below the container's top edge at which a section is considered
+    // to have become the "current" one.
+    const ACTIVATION_OFFSET = 120;
+    let frame = 0;
+
+    const compute = () => {
+      frame = 0;
+      const rootTop = root.getBoundingClientRect().top;
+
+      // A short final section can't scroll to the activation line, so once the
+      // container is scrolled to the bottom the last section is always current.
+      const atBottom =
+        root.scrollTop + root.clientHeight >= root.scrollHeight - 2;
+      if (atBottom) {
+        const last = sections.at(-1);
+        if (last) setActiveId(last.id);
+        return;
+      }
+
+      // Otherwise the current section is the last one whose top has crossed the
+      // activation line.
+      let current = sections[0]?.id ?? '';
+      for (const { id } of sections) {
+        const el = document.getElementById(id);
+        if (
+          el &&
+          el.getBoundingClientRect().top - rootTop <= ACTIVATION_OFFSET
+        ) {
+          current = id;
+        }
+      }
+      setActiveId(current);
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(compute);
+    };
+
+    compute();
+    root.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      root.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [sections]);
+
+  return [activeId, setActiveId] as const;
+}
+
+/**
+ * Scrolls to a section and moves focus there, so the jump lands for keyboard
+ * and screen-reader users too rather than only shifting pixels.
+ */
+export function scrollToSection(id: string) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+  target.scrollIntoView({
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    block: 'start'
+  });
+  target.focus({ preventScroll: true });
+  return true;
+}
+
+interface SectionNavProps {
+  sections: NavSection[];
+  className?: string;
+  /**
+   * `rail` is the sticky vertical list used on wide screens; `chips` is the
+   * horizontally scrollable bar that replaces it when the column disappears.
+   */
+  orientation?: 'rail' | 'chips';
+  /** Rendered under the rail, after a separator. Ignored by `chips`. */
+  children?: React.ReactNode;
+}
+
+export function SectionNav({
+  sections,
+  className,
+  orientation = 'rail',
+  children
+}: SectionNavProps) {
+  const { t } = useLingui();
+  const [activeId, setActiveId] = useActiveSection(sections);
+  const activeChipRef = React.useRef<HTMLAnchorElement>(null);
+
+  // Keep the current chip in view as the user scrolls the page, otherwise the
+  // highlight drifts off the edge of the bar and reads as "nothing selected".
+  React.useEffect(() => {
+    if (orientation !== 'chips') return;
+    activeChipRef.current?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+      inline: 'nearest',
+      block: 'nearest'
+    });
+  }, [orientation]);
+
+  const handleClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    if (!document.getElementById(id)) return;
+    event.preventDefault();
+    scrollToSection(id);
+    window.history.replaceState(null, '', `#${id}`);
+    setActiveId(id);
+  };
+
+  if (orientation === 'chips') {
+    return (
+      <nav
+        aria-label={t`On this page`}
+        className={cn(
+          'bg-background/85 sticky top-0 z-10 -mx-1 border-b px-1 py-2 backdrop-blur-sm',
+          className
+        )}
+      >
+        <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {sections.map(({ id, label, attention }) => {
+            const isActive = id === activeId;
+            return (
+              <li key={id} className="snap-start">
+                <a
+                  ref={isActive ? activeChipRef : undefined}
+                  href={`#${id}`}
+                  aria-current={isActive ? 'location' : undefined}
+                  onClick={(event) => handleClick(event, id)}
+                  className={cn(
+                    // 44px tall: this bar is thumbed at arm's length on a tablet.
+                    'flex h-11 items-center gap-1.5 rounded-md border px-3 text-sm whitespace-nowrap transition-colors',
+                    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
+                    isActive
+                      ? 'border-primary/40 bg-primary/10 text-foreground font-semibold'
+                      : 'text-muted-foreground hover:text-foreground border-transparent'
+                  )}
+                >
+                  {label}
+                  {attention && (
+                    <span
+                      aria-hidden="true"
+                      className="bg-amber-500 size-1.5 shrink-0 rounded-full"
+                    />
+                  )}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    );
+  }
+
+  return (
+    <nav
+      aria-label={t`On this page`}
+      className={cn('sticky top-2 h-fit w-50 self-start text-sm', className)}
+    >
+      <ul className="flex flex-col">
+        {sections.map(({ id, label, attention }) => {
+          const isActive = id === activeId;
+          return (
+            <li key={id}>
+              <a
+                href={`#${id}`}
+                aria-current={isActive ? 'location' : undefined}
+                onClick={(event) => handleClick(event, id)}
+                className={cn(
+                  'text-muted-foreground hover:text-foreground flex items-center gap-2 border-s-2 border-transparent px-3 py-1.25 font-normal transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
+                  isActive && 'border-primary text-foreground font-semibold'
+                )}
+              >
+                <span className="min-w-0 flex-1 truncate">{label}</span>
+                {attention && (
+                  <span
+                    aria-hidden="true"
+                    className="bg-amber-500 size-1.5 shrink-0 rounded-full"
+                  />
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      {children && <div className="mt-4 border-t pt-4">{children}</div>}
+    </nav>
+  );
+}

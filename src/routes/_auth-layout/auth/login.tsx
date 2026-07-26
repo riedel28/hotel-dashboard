@@ -6,14 +6,17 @@ import {
   AlertTriangleIcon,
   Loader2Icon,
   MessageCircleIcon,
-  RefreshCwIcon
+  RefreshCwIcon,
+  ShieldCheckIcon
 } from 'lucide-react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { useAuth } from '@/auth';
+import { OtpField } from '@/components/otp-field';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -21,7 +24,6 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
-
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { loginSchema } from '@/lib/schemas';
 
@@ -66,12 +68,22 @@ function LoginPage() {
     }
   });
 
+  const [challengeToken, setChallengeToken] = useState<string | null>(null);
+
+  const finishSignIn = async () => {
+    await router.invalidate();
+    await navigate({ to: search.redirect || fallback });
+    toast.success(t`Successfully logged in!`);
+  };
+
   const loginMutation = useMutation({
     mutationFn: auth.login,
-    onSuccess: async () => {
-      await router.invalidate();
-      await navigate({ to: search.redirect || fallback });
-      toast.success(t`Successfully logged in!`);
+    onSuccess: async (result) => {
+      if (result.status === 'two-factor-required') {
+        setChallengeToken(result.challengeToken);
+        return;
+      }
+      await finishSignIn();
     },
     onError: (error) => {
       if (error instanceof ApiError && error.code === 'EMAIL_NOT_VERIFIED') {
@@ -95,6 +107,19 @@ function LoginPage() {
   const onSubmit = (data: LoginFormValues) => {
     loginMutation.mutate(data);
   };
+
+  // Password accepted, second factor outstanding. The password form is replaced
+  // rather than extended, so there's one thing to do on screen at a time.
+  if (challengeToken) {
+    return (
+      <TwoFactorStep
+        challengeToken={challengeToken}
+        rememberMe={form.getValues('rememberMe') ?? false}
+        onCancel={() => setChallengeToken(null)}
+        onComplete={finishSignIn}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-1 items-center justify-center py-10">
@@ -258,6 +283,151 @@ function LoginPage() {
         <p className="text-sm text-muted-foreground text-center">
           Don't have an account? <Link to="/auth/sign-up">Sign up</Link>
         </p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Second step of a 2FA sign-in. Accepts a code from the authenticator app, or a
+ * recovery code for the case the phone is lost — without that escape hatch,
+ * enabling 2FA would be a way to lock yourself out permanently.
+ */
+function TwoFactorStep({
+  challengeToken,
+  rememberMe,
+  onCancel,
+  onComplete
+}: {
+  challengeToken: string;
+  rememberMe: boolean;
+  onCancel: () => void;
+  onComplete: () => Promise<void>;
+}) {
+  const auth = useAuth();
+  const { t } = useLingui();
+  const [code, setCode] = useState('');
+  const [useRecoveryCode, setUseRecoveryCode] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const mutation = useMutation({
+    mutationFn: () =>
+      auth.completeTwoFactorLogin({ challengeToken, code, rememberMe }),
+    onSuccess: () => void onComplete(),
+    onError: (caught) => {
+      setCode('');
+      if (caught instanceof ApiError && caught.code === 'CHALLENGE_EXPIRED') {
+        toast.error(t`That sign-in attempt expired. Please start again.`);
+        onCancel();
+        return;
+      }
+      setError(
+        caught instanceof Error
+          ? caught.message
+          : t`That code isn't valid. Check your app and try again.`
+      );
+    }
+  });
+
+  const canSubmit = useRecoveryCode
+    ? /^[a-z0-9]{4}-[a-z0-9]{4}$/.test(code.trim())
+    : /^\d{6}$/.test(code);
+
+  return (
+    <div className="flex flex-1 items-center justify-center py-10">
+      <div className="flex w-full max-w-sm flex-col gap-5">
+        <div className="mb-3 flex flex-col items-start gap-4">
+          <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg dark:bg-cyan-950 dark:text-cyan-200/90">
+            <ShieldCheckIcon />
+          </div>
+          <div className="space-y-1.5">
+            <h1 className="text-2xl font-semibold">
+              <Trans>Two-step verification</Trans>
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              {useRecoveryCode ? (
+                <Trans>Enter one of your unused recovery codes.</Trans>
+              ) : (
+                <Trans>
+                  Enter the 6-digit code from your authenticator app.
+                </Trans>
+              )}
+            </p>
+          </div>
+        </div>
+
+        <form
+          className="flex flex-col gap-5"
+          onSubmit={(event) => {
+            event.preventDefault();
+            setError(null);
+            mutation.mutate();
+          }}
+        >
+          <Field data-invalid={Boolean(error)} className="gap-2">
+            {useRecoveryCode ? (
+              <Input
+                value={code}
+                onChange={(event) => setCode(event.target.value.toLowerCase())}
+                placeholder="a1b2-c3d4"
+                autoComplete="off"
+                spellCheck={false}
+                className="font-mono"
+                aria-invalid={Boolean(error)}
+                aria-label={t`Recovery code`}
+              />
+            ) : (
+              <OtpField
+                value={code}
+                onChange={(next) => {
+                  setCode(next);
+                  if (error) setError(null);
+                }}
+                onComplete={() => mutation.mutate()}
+                invalid={Boolean(error)}
+                disabled={mutation.isPending}
+                autoFocus
+              />
+            )}
+            {error && <FieldError errors={[{ message: error }]} />}
+          </Field>
+
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={!canSubmit || mutation.isPending}
+            aria-busy={mutation.isPending}
+          >
+            {mutation.isPending && (
+              <Loader2Icon
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+            <Trans>Verify</Trans>
+          </Button>
+        </form>
+
+        <div className="flex flex-col items-center gap-1 text-sm">
+          <Button
+            variant="link"
+            size="sm"
+            onClick={() => {
+              setUseRecoveryCode((value) => !value);
+              setCode('');
+              setError(null);
+            }}
+          >
+            {useRecoveryCode ? (
+              <Trans>Use a code from my app instead</Trans>
+            ) : (
+              <Trans>I don't have my phone</Trans>
+            )}
+          </Button>
+          <Button variant="link" size="sm" onClick={onCancel}>
+            <Trans>Back to sign in</Trans>
+          </Button>
+        </div>
       </div>
     </div>
   );

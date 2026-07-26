@@ -19,13 +19,32 @@ const client = axios.create({
   }
 });
 
+/**
+ * 401s the caller is expected to handle in place. These mean "prove yourself
+ * again for this one action", not "your session is gone" — signing the user out
+ * and bouncing them to the login page would destroy whatever they were doing.
+ */
+const IN_FLOW_CHALLENGE_CODES = new Set([
+  'REAUTH_REQUIRED',
+  'REAUTH_FAILED',
+  'INVALID_CURRENT_PASSWORD',
+  'INVALID_2FA_CODE',
+  'CHALLENGE_EXPIRED'
+]);
+
 // Pass through responses and errors unchanged
 client.interceptors.response.use(
   (response) => response,
   (error) => {
     if (isAxiosError(error)) {
       const status = error.response?.status;
-      if (status === 401 || status === 403) {
+      const code = (error.response?.data as { code?: string } | undefined)
+        ?.code;
+
+      if (
+        (status === 401 || status === 403) &&
+        !(code && IN_FLOW_CHALLENGE_CODES.has(code))
+      ) {
         unauthorizedHandler?.();
       }
     }

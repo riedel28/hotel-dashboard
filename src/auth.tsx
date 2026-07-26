@@ -2,16 +2,32 @@ import * as React from 'react';
 
 import {
   login as apiLogin,
+  loginTwoFactor as apiLoginTwoFactor,
   logout as apiLogout,
   updateSelectedProperty as apiUpdateSelectedProperty
 } from './api/auth';
-import type { AuthResponse, LoginData, User } from './lib/schemas';
+import type { LoginData, User } from './lib/schemas';
+
+/**
+ * Signing in is one step or two depending on whether the account has
+ * two-factor authentication, so the caller has to be told which happened.
+ */
+export type LoginResult =
+  | { status: 'authenticated'; user: User }
+  | { status: 'two-factor-required'; challengeToken: string };
 
 export interface AuthContext {
   isAuthenticated: boolean;
-  login: (credentials: LoginData) => Promise<AuthResponse>;
+  login: (credentials: LoginData) => Promise<LoginResult>;
+  completeTwoFactorLogin: (input: {
+    challengeToken: string;
+    code: string;
+    rememberMe?: boolean;
+  }) => Promise<User>;
   logout: () => Promise<void>;
   updateSelectedProperty: (propertyId: string | null) => Promise<User>;
+  /** Refreshes the cached copy after the profile page saves changes. */
+  syncUser: (user: User) => void;
   user: User | null;
 }
 
@@ -50,14 +66,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = React.useCallback(async (credentials: LoginData) => {
-    const response = await apiLogin(credentials);
-    if (response) {
+  const login = React.useCallback(
+    async (credentials: LoginData): Promise<LoginResult> => {
+      const response = await apiLogin(credentials);
+
+      // No session yet — the server is holding it back until the second factor.
+      if ('requires_2fa' in response) {
+        return {
+          status: 'two-factor-required',
+          challengeToken: response.challenge_token
+        };
+      }
+
       setStoredUser(response.user);
       setUser(response.user);
-      return response;
-    }
-    throw new Error('Login failed');
+      return { status: 'authenticated', user: response.user };
+    },
+    []
+  );
+
+  const completeTwoFactorLogin = React.useCallback(
+    async ({
+      challengeToken,
+      code,
+      rememberMe
+    }: {
+      challengeToken: string;
+      code: string;
+      rememberMe?: boolean;
+    }) => {
+      const response = await apiLoginTwoFactor({
+        challenge_token: challengeToken,
+        code,
+        rememberMe
+      });
+      setStoredUser(response.user);
+      setUser(response.user);
+      return response.user;
+    },
+    []
+  );
+
+  const syncUser = React.useCallback((next: User) => {
+    setStoredUser(next);
+    setUser(next);
   }, []);
 
   const updateSelectedProperty = React.useCallback(
@@ -77,9 +129,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider
       value={{
+        completeTwoFactorLogin,
         isAuthenticated,
         login,
         logout,
+        syncUser,
         updateSelectedProperty,
         user
       }}

@@ -1,130 +1,244 @@
+import { i18n } from '@lingui/core';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { CheckIcon, XIcon } from 'lucide-react';
-import { useMemo } from 'react';
+import { CheckIcon } from 'lucide-react';
+import * as React from 'react';
+
+import { cn } from '@/lib/utils';
+import {
+  MIN_PASSWORD_LENGTH,
+  strongPasswordSchema
+} from '../../../shared/types/users';
+
+/**
+ * Strength is entropy-based rather than "how many rules did you satisfy".
+ * `Hotel2026!` ticks every checklist box and is still one of the first things
+ * an attacker tries, so a rules-only meter would call it strong and lie.
+ *
+ * The checklist stays too — it states the policy the server actually enforces —
+ * but it answers "will this be accepted", not "is this any good".
+ */
+
+type Score = 0 | 1 | 2 | 3 | 4;
+
+interface Estimator {
+  check: (
+    password: string,
+    userInputs?: (string | number)[]
+  ) => { score: Score; feedback: { warning: string | null } };
+}
+
+let estimatorPromise: Promise<Estimator> | null = null;
+
+/**
+ * Loaded on first keystroke, never in the initial bundle — most sessions never
+ * open a password field at all.
+ *
+ * Only `language-common` is pulled in: its leaked-password ranking is what
+ * actually catches a guessable password, and it costs ~420 KB. The per-language
+ * packs are another ~2 MB of surnames and Wikipedia titles, which mostly guard
+ * against "my password is a famous word" — a poor trade here, and the part that
+ * matters for *this* user is covered by feeding their own details in as
+ * `userInputs` below.
+ */
+function loadEstimator(): Promise<Estimator> {
+  if (estimatorPromise) return estimatorPromise;
+
+  estimatorPromise = (async () => {
+    const [core, common, translations] = await Promise.all([
+      import('@zxcvbn-ts/core'),
+      import('@zxcvbn-ts/language-common'),
+      i18n.locale === 'de'
+        ? import('@zxcvbn-ts/language-de/dist/translations')
+        : import('@zxcvbn-ts/language-en/dist/translations')
+    ]);
+
+    return new core.ZxcvbnFactory({
+      graphs: common.adjacencyGraphs,
+      translations: translations.default ?? translations,
+      dictionary: common.dictionary
+    }) as Estimator;
+  })();
+
+  return estimatorPromise;
+}
+
+interface Requirement {
+  label: React.ReactNode;
+  met: boolean;
+}
+
+function useRequirements(password: string): Requirement[] {
+  return React.useMemo(
+    () => [
+      {
+        label: <Trans>At least {MIN_PASSWORD_LENGTH} characters</Trans>,
+        met: password.length >= MIN_PASSWORD_LENGTH
+      },
+      {
+        label: <Trans>Upper and lowercase letters</Trans>,
+        met: /[a-z]/.test(password) && /[A-Z]/.test(password)
+      },
+      {
+        label: <Trans>At least one number</Trans>,
+        met: /\d/.test(password)
+      },
+      {
+        label: <Trans>At least one symbol</Trans>,
+        met: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)
+      }
+    ],
+    [password]
+  );
+}
 
 interface PasswordStrengthMeterProps {
   password: string;
+  /**
+   * Name, email and the like. Feeding these in catches the very common
+   * "password built out of my own details", which no dictionary would flag.
+   */
+  userInputs?: string[];
+  className?: string;
 }
 
 export function PasswordStrengthMeter({
-  password
+  password,
+  userInputs,
+  className
 }: PasswordStrengthMeterProps) {
   const { t } = useLingui();
+  const requirements = useRequirements(password);
+  const [score, setScore] = React.useState<Score | null>(null);
+  const [warning, setWarning] = React.useState<string | null>(null);
 
-  const requirements = useMemo(
-    () => [
-      {
-        regex: /.{8,}/,
-        text: t`At least 8 characters`
-      },
-      {
-        regex: /[0-9]/,
-        text: t`Contains a number`
-      },
-      {
-        regex: /[a-z]/,
-        text: t`Contains a lowercase letter`
-      },
-      {
-        regex: /[A-Z]/,
-        text: t`Contains an uppercase letter`
-      },
-      {
-        regex: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
-        text: t`Contains a special character`
-      }
-    ],
-    [t]
-  );
+  // Serialised so the effect doesn't re-run on every re-render of the parent.
+  const inputsKey = (userInputs ?? []).join('\u0000');
 
-  const strength = useMemo(
-    () =>
-      requirements.map((req) => ({
-        met: req.regex.test(password),
-        text: req.text
-      })),
-    [password, requirements]
-  );
+  React.useEffect(() => {
+    if (!password) {
+      setScore(null);
+      setWarning(null);
+      return;
+    }
 
-  const strengthScore = useMemo(() => {
-    return strength.filter((req) => req.met).length;
-  }, [strength]);
+    let cancelled = false;
 
-  const getStrengthColor = (score: number) => {
-    if (score === 0) return 'bg-border';
-    if (score <= 1) return 'bg-red-500';
-    if (score <= 2) return 'bg-orange-500';
-    if (score === 3) return 'bg-amber-500';
-    return 'bg-emerald-500';
+    void loadEstimator().then((estimator) => {
+      if (cancelled) return;
+      const result = estimator.check(
+        password,
+        inputsKey ? inputsKey.split('\u0000') : []
+      );
+      setScore(result.score);
+      setWarning(result.feedback.warning);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [password, inputsKey]);
+
+  const meetsPolicy = strongPasswordSchema.safeParse(password).success;
+
+  const labels: Record<Score, string> = {
+    0: t`Very weak`,
+    1: t`Weak`,
+    2: t`Fair`,
+    3: t`Good`,
+    4: t`Strong`
   };
 
-  const getStrengthText = (score: number) => {
-    if (score === 0) return <Trans>Enter a password</Trans>;
-    if (score <= 2) return <Trans>Weak password</Trans>;
-    if (score <= 3) return <Trans>Medium password</Trans>;
-    if (score <= 4) return <Trans>Good password</Trans>;
-    return <Trans>Strong password</Trans>;
+  const segmentColors: Record<Score, string> = {
+    0: 'bg-red-500',
+    1: 'bg-red-500',
+    2: 'bg-amber-500',
+    3: 'bg-lime-500',
+    4: 'bg-emerald-500'
   };
+
+  const filled = score === null ? 0 : score + 1;
 
   return (
-    <div>
-      {/* Password strength indicator */}
-      <div
-        className="mt-3 mb-4 h-1 w-full overflow-hidden rounded-full bg-border"
-        role="progressbar"
-        aria-valuenow={strengthScore}
-        aria-valuemin={0}
-        aria-valuemax={5}
-        aria-label={t`Password strength`}
-      >
+    <div className={cn('space-y-2', className)}>
+      <div className="flex items-center gap-3">
         <div
-          className={`h-full ${getStrengthColor(strengthScore)} transition-all duration-500 ease-out`}
-          style={{ width: `${(strengthScore / 5) * 100}%` }}
-        ></div>
+          className="flex flex-1 gap-1"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={5}
+          aria-valuenow={filled}
+          aria-label={t`Password strength`}
+        >
+          {[0, 1, 2, 3, 4].map((segment) => (
+            <span
+              key={segment}
+              className={cn(
+                'h-1 flex-1 rounded-full transition-colors duration-300',
+                segment < filled && score !== null
+                  ? segmentColors[score]
+                  : 'bg-border'
+              )}
+            />
+          ))}
+        </div>
+        <span className="text-muted-foreground w-20 shrink-0 text-right text-xs font-medium">
+          {score !== null && labels[score]}
+        </span>
       </div>
 
-      {/* Password strength description */}
-      <p className="mb-2 text-sm font-medium text-foreground">
-        {getStrengthText(strengthScore)}{' '}
+      {/*
+        Announced rather than shouted: the level changes on nearly every
+        keystroke, so a rude live region would talk over the typing itself.
+      */}
+      <p aria-live="polite" className="sr-only">
+        {score !== null && labels[score]}
       </p>
 
-      {/* Password requirements list */}
-      <ul
-        className="space-y-1.5"
-        aria-label={t`Password strength requirements`}
-      >
-        {strength.map((req, index) => (
-          <li key={index} className="flex items-center gap-2">
-            {req.met ? (
+      {warning && score !== null && score < 3 && (
+        <p className="text-xs text-amber-600 dark:text-amber-500">{warning}</p>
+      )}
+
+      <ul className="space-y-1" aria-label={t`Password requirements`}>
+        {requirements.map((requirement, index) => (
+          <li key={index} className="flex items-center gap-2 text-xs">
+            {requirement.met ? (
               <CheckIcon
-                size={16}
-                className="text-emerald-500"
+                className="size-3.5 shrink-0 text-emerald-600 duration-150 animate-in zoom-in-50 dark:text-emerald-500"
                 aria-hidden="true"
               />
             ) : (
-              <XIcon
-                size={16}
-                className="text-muted-foreground/80"
+              // A neutral circle, not a red cross: an unwritten password hasn't
+              // failed anything yet.
+              <span
                 aria-hidden="true"
+                className="border-muted-foreground/40 size-3.5 shrink-0 rounded-full border"
               />
             )}
             <span
-              className={`text-xs ${
-                req.met ? 'text-emerald-600' : 'text-muted-foreground'
-              }`}
+              className={cn(
+                requirement.met
+                  ? 'text-emerald-700 dark:text-emerald-500'
+                  : 'text-muted-foreground'
+              )}
             >
-              {req.text}{' '}
-              <span className="sr-only">
-                {req.met ? (
-                  <Trans> - Requirement met</Trans>
-                ) : (
-                  <Trans> - Requirement not met</Trans>
-                )}
-              </span>
+              {requirement.label}
+            </span>
+            <span className="sr-only">
+              {requirement.met ? (
+                <Trans>— met</Trans>
+              ) : (
+                <Trans>— not met yet</Trans>
+              )}
             </span>
           </li>
         ))}
       </ul>
+
+      {!meetsPolicy && password.length > 0 && (
+        <p className="sr-only" aria-live="polite">
+          <Trans>Password does not yet meet all requirements</Trans>
+        </p>
+      )}
     </div>
   );
 }

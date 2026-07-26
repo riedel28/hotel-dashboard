@@ -1,18 +1,38 @@
 import {
+  type AuthResponse,
   authResponseSchema,
   type LoginData,
+  type LoginResponse,
+  loginResponseSchema,
   type RegisterData,
   type User,
   userSchema
 } from '@/lib/schemas';
 import { client, handleApiError } from './client';
 
-async function login(user: LoginData) {
+/**
+ * Either signs the user in or, when the account has two-factor authentication,
+ * hands back a challenge token to be exchanged in `loginTwoFactor`.
+ */
+async function login(user: LoginData): Promise<LoginResponse> {
   try {
     const response = await client.post('/auth/login', user);
-    return authResponseSchema.parse(response.data);
+    return loginResponseSchema.parse(response.data);
   } catch (err) {
     handleApiError(err, 'login');
+  }
+}
+
+async function loginTwoFactor(data: {
+  challenge_token: string;
+  code: string;
+  rememberMe?: boolean;
+}): Promise<AuthResponse> {
+  try {
+    const response = await client.post('/auth/login/2fa', data);
+    return authResponseSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'loginTwoFactor');
   }
 }
 
@@ -126,6 +146,7 @@ export {
   acceptInvitation,
   forgotPassword,
   login,
+  loginTwoFactor,
   logout,
   register,
   resendVerification,
