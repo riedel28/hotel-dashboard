@@ -132,7 +132,7 @@ function MappingCell({
           <FieldLabel htmlFor={field.name} className="md:hidden">
             {label}
           </FieldLabel>
-          <InputGroup className="h-7.5 w-full md:w-fit">
+          <InputGroup className="h-9 md:h-7.5 w-full md:w-fit">
             <InputGroupInput
               id={field.name}
               {...field}
