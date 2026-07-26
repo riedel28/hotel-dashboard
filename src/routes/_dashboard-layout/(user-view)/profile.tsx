@@ -17,15 +17,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-import { useDocumentTitle } from '@/hooks/use-document-title';
-import { getUserInitials } from '@/lib/utils';
-import { TwoFactorSection } from './profile/-components/2fa-section';
-import { AvatarSection } from './profile/-components/avatar-section';
-import { PasswordSection } from './profile/-components/password-section';
-import { PersonalSection } from './profile/-components/personal-section';
-import { RolesSection } from './profile/-components/roles-section';
 import {
   Item,
   ItemContent,
@@ -33,6 +24,14 @@ import {
   ItemMedia,
   ItemTitle
 } from '@/components/ui/item';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useDocumentTitle } from '@/hooks/use-document-title';
+import { getUserInitials } from '@/lib/utils';
+import { TwoFactorSection } from './profile/-components/2fa-section';
+import { AvatarSection } from './profile/-components/avatar-section';
+import { PasswordSection } from './profile/-components/password-section';
+import { PersonalSection } from './profile/-components/personal-section';
+import { RolesSection } from './profile/-components/roles-section';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
   component: RouteComponent

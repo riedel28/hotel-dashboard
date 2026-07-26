@@ -73,7 +73,7 @@ export function CredentialsSection({
               </FieldLabel>
               <RadioGroup
                 value={field.value}
-                onValueChange={value => {
+                onValueChange={(value) => {
                   const next = value as PaymentEnvironment;
                   if (next === 'live' && field.value === 'test') {
                     onRequestLiveConfirm(() => field.onChange('live'));

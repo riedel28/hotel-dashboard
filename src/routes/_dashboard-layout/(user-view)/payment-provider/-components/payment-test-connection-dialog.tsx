@@ -58,7 +58,7 @@ function formatDuration(ms: number) {
 }
 
 function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function PaymentTestConnectionDialog({
@@ -118,13 +118,13 @@ export function PaymentTestConnectionDialog({
       if (runIdRef.current !== runId) return;
 
       if (failed) {
-        setSteps(prev =>
+        setSteps((prev) =>
           prev.map((s, i) => (i === index ? { ...s, status: 'skipped' } : s))
         );
         continue;
       }
 
-      setSteps(prev =>
+      setSteps((prev) =>
         prev.map((s, i) => (i === index ? { ...s, status: 'running' } : s))
       );
 
@@ -138,7 +138,7 @@ export function PaymentTestConnectionDialog({
       if (!stepPassed) {
         failed = true;
         const error = mockErrorFor(stepDef.id);
-        setSteps(prev =>
+        setSteps((prev) =>
           prev.map((s, i) =>
             i === index ? { ...s, status: 'failed', durationMs, error } : s
           )
@@ -146,7 +146,7 @@ export function PaymentTestConnectionDialog({
         continue;
       }
 
-      setSteps(prev =>
+      setSteps((prev) =>
         prev.map((s, i) =>
           i === index ? { ...s, status: 'passed', durationMs } : s
         )
@@ -169,8 +169,8 @@ export function PaymentTestConnectionDialog({
     }
   }, [open, runTests]);
 
-  const passedCount = steps.filter(s => s.status === 'passed').length;
-  const failedCount = steps.filter(s => s.status === 'failed').length;
+  const passedCount = steps.filter((s) => s.status === 'passed').length;
+  const failedCount = steps.filter((s) => s.status === 'failed').length;
   const allPassed = phase === 'done' && failedCount === 0;
 
   return (
@@ -217,7 +217,7 @@ export function PaymentTestConnectionDialog({
         </div>
 
         <ul className="divide-y divide-border/60 rounded-xl border border-border/60">
-          {steps.map(step => (
+          {steps.map((step) => (
             <li key={step.id} className="flex flex-col gap-2 px-3.5 py-2.5">
               <div className="flex items-center gap-2.5">
                 <StepStatusIcon status={step.status} />

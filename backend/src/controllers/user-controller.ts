@@ -16,6 +16,70 @@ import { sendInvitationEmail } from '../utils/email';
 import { escapeLikePattern } from '../utils/sql';
 import { generateVerificationToken } from '../utils/token';
 
+interface UserRow {
+  id: number;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  country_code: string | null;
+  is_admin: boolean;
+  email_verified: boolean;
+  created_at: Date;
+  updated_at: Date;
+  userRoles: { role: { id: number; name: string } }[];
+}
+
+interface ProfileRow extends UserRow {
+  avatar_url: string | null;
+  totp_enabled_at: Date | null;
+}
+
+/** Flattens the userRoles join. Deliberately omits avatar_url — see toProfileResponse. */
+function toUserResponse(user: UserRow) {
+  return {
+    id: user.id,
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    country_code: user.country_code,
+    is_admin: user.is_admin,
+    email_verified: user.email_verified,
+    created_at: user.created_at,
+    updated_at: user.updated_at,
+    roles: user.userRoles.map((ur) => ur.role)
+  };
+}
+
+/**
+ * Single-user shape. Adds the avatar, which is a ~20 KB base64 string and so is
+ * kept out of the list response (docs/adr/0001-avatar-as-data-uri.md), plus the
+ * 2FA flag derived from totp_enabled_at.
+ */
+function toProfileResponse(user: ProfileRow) {
+  return {
+    ...toUserResponse(user),
+    avatar_url: user.avatar_url,
+    two_factor_enabled: user.totp_enabled_at !== null
+  };
+}
+
+/** Columns that must never leave the server, plus the bulky avatar. */
+const LIST_COLUMNS = {
+  password: false,
+  avatar_url: false,
+  totp_secret: false,
+  totp_enabled_at: false,
+  totp_last_used_at: false,
+  token_version: false
+} as const;
+
+const DETAIL_COLUMNS = {
+  password: false,
+  totp_secret: false,
+  totp_last_used_at: false,
+  token_version: false
+} as const;
+
 async function getUsers(req: Request, res: Response) {
   try {
     const { page, per_page, q, sort_by, sort_order } = req.query;
@@ -75,7 +139,7 @@ async function getUsers(req: Request, res: Response) {
       sortDirection === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
 
     const usersData = await db.query.users.findMany({
-      columns: { password: false },
+      columns: LIST_COLUMNS,
       where: searchCondition,
       with: {
         userRoles: {
@@ -89,19 +153,7 @@ async function getUsers(req: Request, res: Response) {
       orderBy
     });
 
-    // Transform the response to flatten roles
-    const transformedUsers = usersData.map((user) => ({
-      id: user.id,
-      email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      country_code: user.country_code,
-      is_admin: user.is_admin,
-      email_verified: user.email_verified,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
-      roles: user.userRoles.map((ur) => ur.role)
-    }));
+    const transformedUsers = usersData.map(toUserResponse);
 
     // Get total count for pagination
     const totalCountResult = await db
@@ -178,7 +230,7 @@ async function createUser(req: Request, res: Response) {
 
       // Fetch the created user with roles
       return tx.query.users.findFirst({
-        columns: { password: false },
+        columns: LIST_COLUMNS,
         where: eq(users.id, newUser.id),
         with: {
           userRoles: {
@@ -194,65 +246,116 @@ async function createUser(req: Request, res: Response) {
       return res.status(500).json({ error: 'Failed to create user' });
     }
 
-    // Transform the response to flatten roles
-    const transformedUser = {
-      id: userWithRoles.id,
-      email: userWithRoles.email,
-      first_name: userWithRoles.first_name,
-      last_name: userWithRoles.last_name,
-      country_code: userWithRoles.country_code,
-      is_admin: userWithRoles.is_admin,
-      email_verified: userWithRoles.email_verified,
-      created_at: userWithRoles.created_at,
-      updated_at: userWithRoles.updated_at,
-      roles: userWithRoles.userRoles.map((ur) => ur.role)
-    };
-
-    res.status(201).json(transformedUser);
+    res.status(201).json(toUserResponse(userWithRoles));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create user' });
   }
 }
 
+async function findProfileById(userId: number) {
+  return db.query.users.findFirst({
+    columns: DETAIL_COLUMNS,
+    where: eq(users.id, userId),
+    with: {
+      userRoles: {
+        with: {
+          role: true
+        }
+      }
+    }
+  });
+}
+
 async function getUserById(req: Request, res: Response) {
   const { id } = req.params;
 
   try {
-    const user = await db.query.users.findFirst({
-      columns: { password: false },
-      where: eq(users.id, Number(id)),
-      with: {
-        userRoles: {
-          with: {
-            role: true
-          }
-        }
-      }
-    });
+    const user = await findProfileById(Number(id));
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Transform the response to flatten roles
-    const transformedUser = {
-      id: user.id,
-      email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      country_code: user.country_code,
-      is_admin: user.is_admin,
-      email_verified: user.email_verified,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
-      roles: user.userRoles.map((ur) => ur.role)
-    };
-
-    res.status(200).json(transformedUser);
+    res.status(200).json(toProfileResponse(user));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch user' });
+  }
+}
+
+/** The signed-in user's own record. Never needs an id from the client. */
+async function getMe(req: AuthenticatedRequest, res: Response) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+
+  try {
+    const user = await findProfileById(Number(req.user.id));
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json(toProfileResponse(user));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+}
+
+/**
+ * Self-service profile update. Unlike PATCH /users/:id this accepts no email,
+ * no is_admin and no role_ids — a user cannot rename their own login or promote
+ * themselves, whatever the request body says.
+ */
+async function updateMe(req: AuthenticatedRequest, res: Response) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+
+  const userId = Number(req.user.id);
+  const { expected_updated_at, ...updates } = req.body ?? {};
+
+  try {
+    const existing = await db
+      .select({ updated_at: users.updated_at })
+      .from(users)
+      .where(eq(users.id, userId));
+
+    if (!existing[0]) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Optimistic concurrency: refuse rather than clobber an edit made elsewhere
+    // (an administrator changing this same row while the page sat open).
+    if (expected_updated_at) {
+      const expected = new Date(expected_updated_at).getTime();
+      if (expected !== existing[0].updated_at.getTime()) {
+        return res.status(409).json({
+          error: 'This profile was updated elsewhere',
+          code: 'STALE_PROFILE'
+        });
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      await db
+        .update(users)
+        .set({ ...updates, updated_at: new Date() })
+        .where(eq(users.id, userId));
+    }
+
+    const user = await findProfileById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json(toProfileResponse(user));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update profile' });
   }
 }
 
@@ -304,7 +407,7 @@ async function updateUser(req: Request, res: Response) {
 
       // Fetch the updated user with roles
       return tx.query.users.findFirst({
-        columns: { password: false },
+        columns: DETAIL_COLUMNS,
         where: eq(users.id, userId),
         with: {
           userRoles: {
@@ -320,19 +423,7 @@ async function updateUser(req: Request, res: Response) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Transform the response to flatten roles
-    const transformedUser = {
-      id: userWithRoles.id,
-      email: userWithRoles.email,
-      first_name: userWithRoles.first_name,
-      last_name: userWithRoles.last_name,
-      country_code: userWithRoles.country_code,
-      is_admin: userWithRoles.is_admin,
-      email_verified: userWithRoles.email_verified,
-      created_at: userWithRoles.created_at,
-      updated_at: userWithRoles.updated_at,
-      roles: userWithRoles.userRoles.map((ur) => ur.role)
-    };
+    const transformedUser = toProfileResponse(userWithRoles);
 
     res.status(200).json(transformedUser);
   } catch (error) {
@@ -347,7 +438,7 @@ async function deleteUser(req: Request, res: Response) {
   try {
     // First fetch the user to return it after deletion
     const user = await db.query.users.findFirst({
-      columns: { password: false },
+      columns: LIST_COLUMNS,
       where: eq(users.id, Number(id)),
       with: {
         userRoles: {
@@ -365,21 +456,7 @@ async function deleteUser(req: Request, res: Response) {
     // Delete user (user_roles will be cascade deleted due to FK constraint)
     await db.delete(users).where(eq(users.id, Number(id)));
 
-    // Transform the response to flatten roles
-    const transformedUser = {
-      id: user.id,
-      email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      country_code: user.country_code,
-      is_admin: user.is_admin,
-      email_verified: user.email_verified,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
-      roles: user.userRoles.map((ur) => ur.role)
-    };
-
-    res.status(200).json(transformedUser);
+    res.status(200).json(toUserResponse(user));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to delete user' });
@@ -499,7 +576,7 @@ async function inviteUser(req: Request, res: Response) {
 
       // Fetch the created user with roles
       return tx.query.users.findFirst({
-        columns: { password: false },
+        columns: LIST_COLUMNS,
         where: eq(users.id, newUser.id),
         with: {
           userRoles: {
@@ -530,20 +607,7 @@ async function inviteUser(req: Request, res: Response) {
       return res.status(500).json({ error: 'Failed to invite user' });
     }
 
-    const transformedUser = {
-      id: userWithRoles.id,
-      email: userWithRoles.email,
-      first_name: userWithRoles.first_name,
-      last_name: userWithRoles.last_name,
-      country_code: userWithRoles.country_code,
-      is_admin: userWithRoles.is_admin,
-      email_verified: userWithRoles.email_verified,
-      created_at: userWithRoles.created_at,
-      updated_at: userWithRoles.updated_at,
-      roles: userWithRoles.userRoles.map((ur) => ur.role)
-    };
-
-    res.status(201).json(transformedUser);
+    res.status(201).json(toUserResponse(userWithRoles));
   } catch (error) {
     const err = error as Error & { statusCode?: number };
     if (err.statusCode === 409) {
@@ -616,10 +680,12 @@ async function resendInvitation(req: Request, res: Response) {
 export {
   createUser,
   deleteUser,
+  getMe,
   getUserById,
   getUsers,
   inviteUser,
   resendInvitation,
+  updateMe,
   updateSelectedProperty,
   updateUser
 };

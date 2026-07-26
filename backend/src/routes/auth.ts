@@ -1,8 +1,18 @@
 import { Router } from 'express';
 import { z } from 'zod';
 
+import {
+  changePasswordSchema,
+  loginTwoFactorSchema
+} from '../../../shared/types/profile';
 import { strongPasswordSchema } from '../../../shared/types/users';
-import { login, logout, register } from '../controllers/auth-controller';
+import {
+  changePassword,
+  login,
+  loginTwoFactor,
+  logout,
+  register
+} from '../controllers/auth-controller';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/authorization';
 import { validateBody } from '../middleware/validation';
@@ -36,7 +46,25 @@ router.post(
   register
 );
 router.post('/login', validateBody(loginSchema), login);
+
+// Second step of a 2FA sign-in. Unauthenticated by design — the caller holds a
+// challenge token, not a session.
+router.post(
+  '/login/2fa',
+  validateBody(
+    loginTwoFactorSchema.extend({ rememberMe: z.boolean().optional() })
+  ),
+  loginTwoFactor
+);
+
 router.post('/logout', logout);
+
+router.post(
+  '/change-password',
+  authenticateToken,
+  validateBody(changePasswordSchema),
+  changePassword
+);
 
 export { loginSchema, registerSchema };
 

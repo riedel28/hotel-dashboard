@@ -177,7 +177,7 @@ export function PaymentProviderForm() {
   const onSubmit = async (values: PaymentProviderFormData) => {
     setIsSubmitting(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise((resolve) => setTimeout(resolve, 800));
       setIsReplacingApiKey(false);
       // Reset to the just-saved values so the form is no longer dirty and any
       // replaced key falls back to the masked "configured" state.

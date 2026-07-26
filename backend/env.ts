@@ -28,6 +28,9 @@ const envSchema = z.object({
 
   // Security
   BCRYPT_ROUNDS: z.coerce.number().min(10).max(20).default(12),
+  // Encrypts TOTP shared secrets at rest. Falls back to JWT_SECRET when unset;
+  // rotating whichever is in use invalidates every enrolled authenticator.
+  TOTP_ENCRYPTION_KEY: z.string().min(32).optional(),
 
   // Rate Limiting
   RATE_LIMIT_WINDOW_MS: z.coerce.number().positive().default(900000),

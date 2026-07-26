@@ -136,7 +136,7 @@ export function PaymentProviderTableOfContents({
               <a
                 href={`#${id}`}
                 aria-current={isActive ? 'location' : undefined}
-                onClick={event => handleClick(event, id)}
+                onClick={(event) => handleClick(event, id)}
                 className={cn(
                   'block border-s-2 border-transparent px-3 py-1.25 font-normal text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
                   isActive && 'border-primary font-semibold text-foreground'

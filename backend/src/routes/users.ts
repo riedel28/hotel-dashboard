@@ -1,5 +1,5 @@
 import { Router } from 'express';
-
+import { updateProfileSchema } from '../../../shared/types/profile';
 import {
   createUserSchema,
   fetchUserByIdSchema,
@@ -12,15 +12,21 @@ import {
 import {
   createUser,
   deleteUser,
+  getMe,
   getUserById,
   getUsers,
   inviteUser,
   resendInvitation,
+  updateMe,
   updateSelectedProperty,
   updateUser
 } from '../controllers/user-controller';
 import { authenticateToken } from '../middleware/auth';
-import { requireAdmin, stripAdminFields } from '../middleware/authorization';
+import {
+  requireAdmin,
+  requireSelfOrAdmin,
+  stripAdminFields
+} from '../middleware/authorization';
 import {
   validateBody,
   validateParams,
@@ -61,8 +67,17 @@ router.patch(
   updateSelectedProperty
 );
 
-// Get user by id
-router.get('/:id', validateParams(fetchUserByIdSchema), getUserById);
+// Current user's own profile. Declared before '/:id' so "me" isn't parsed as an id.
+router.get('/me', getMe);
+router.patch('/me', validateBody(updateProfileSchema), updateMe);
+
+// Get user by id — a user may read their own record, admins may read anyone's
+router.get(
+  '/:id',
+  validateParams(fetchUserByIdSchema),
+  requireSelfOrAdmin(),
+  getUserById
+);
 
 // Update user (strip admin fields for non-admins to prevent privilege escalation)
 router.patch(
