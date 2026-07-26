@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { ArrowUpRightIcon, Shield, ShieldCheck } from 'lucide-react';
+import { ArrowUpRightIcon, ShieldCheckIcon, ShieldIcon } from 'lucide-react';
 import { useId, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -9,22 +9,21 @@ import { z } from 'zod';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
+import {
   Field,
   FieldContent,
   FieldDescription,
   FieldError,
   FieldLabel
 } from '@/components/ui/field';
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemFooter,
-  ItemHeader,
-  ItemMedia,
-  ItemTitle
-} from '@/components/ui/item';
 import { Switch } from '@/components/ui/switch';
 
 interface TwoFactorSectionProps {
@@ -70,21 +69,21 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
   };
 
   return (
-    <Item variant="outline" className="p-6 gap-6 rounded-xl">
-      <ItemHeader>
-        <ItemMedia variant="icon" className="mr-2 rounded-lg">
-          {enabled ? (
-            <ShieldCheck className="size-5" />
-          ) : (
-            <Shield className="size-5" />
-          )}
-        </ItemMedia>
-        <ItemContent>
-          <ItemTitle>
-            <div className="flex items-center gap-2">
-              <ItemTitle className="text-base">
+    <Card>
+      <CardHeader>
+        <div className="flex items-start gap-3">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-sm border bg-muted">
+            {enabled ? (
+              <ShieldCheckIcon className="size-4" />
+            ) : (
+              <ShieldIcon className="size-4" />
+            )}
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <CardTitle>
                 <Trans>Two-Factor Authentication</Trans>
-              </ItemTitle>
+              </CardTitle>
               {enabled ? (
                 <Badge variant="secondary" size="sm">
                   <Trans>Enabled</Trans>
@@ -95,20 +94,26 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
                 </Badge>
               )}
             </div>{' '}
-          </ItemTitle>
-          <ItemDescription>
-            <Trans>
-              Add an extra layer of security to keep your account safe
-            </Trans>
-          </ItemDescription>
-        </ItemContent>
-        <ItemActions>
-          <Button variant="outline" onClick={handleSetup} disabled={isLoading}>
-            <Trans>Set up 2FA</Trans>
-          </Button>
-        </ItemActions>
-      </ItemHeader>
-      <ItemContent className="space-y-0">
+            <CardDescription>
+              <Trans>
+                Add an extra layer of security to keep your account safe
+              </Trans>
+            </CardDescription>
+          </div>
+        </div>
+        {!enabled && (
+          <CardAction>
+            <Button
+              variant="outline"
+              onClick={handleSetup}
+              disabled={isLoading}
+            >
+              <Trans>Set up 2FA</Trans>
+            </Button>
+          </CardAction>
+        )}
+      </CardHeader>
+      <CardContent className="space-y-3">
         <p>
           {enabled ? (
             <Trans>Two-factor authentication is active on your account.</Trans>
@@ -186,9 +191,9 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
             }
           />
         </div>
-      </ItemContent>
+      </CardContent>
 
-      <ItemFooter>
+      <CardFooter className="border-t">
         <Controller
           control={form.control}
           name="enabled"
@@ -238,7 +243,7 @@ export function TwoFactorSection({ isEnabled = false }: TwoFactorSectionProps) {
             </Field>
           )}
         />
-      </ItemFooter>
-    </Item>
+      </CardFooter>
+    </Card>
   );
 }

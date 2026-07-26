@@ -1,7 +1,14 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import { Camera, Lock, Shield, User, Users } from 'lucide-react';
+import {
+  CameraIcon,
+  LockIcon,
+  ShieldIcon,
+  UserIcon,
+  UsersIcon
+} from 'lucide-react';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,6 +26,13 @@ import { AvatarSection } from './profile/-components/avatar-section';
 import { PasswordSection } from './profile/-components/password-section';
 import { PersonalSection } from './profile/-components/personal-section';
 import { RolesSection } from './profile/-components/roles-section';
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle
+} from '@/components/ui/item';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
   component: RouteComponent
@@ -57,91 +71,131 @@ function RouteComponent() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6">
-        <h1 className="text-xl font-bold">
-          <Trans>Profile</Trans>
-        </h1>
-      </div>
-
-      <Tabs defaultValue="personal" orientation="horizontal" className="w-full">
-        <div className="grid w-full gap-4 md:gap-6 lg:grid-cols-[280px_1fr]">
-          {/* Sidebar Navigation */}
-          <div>
-            <TabsList
-              variant="line"
-              className="h-auto w-full flex-row overflow-x-auto bg-transparent py-2 lg:flex-col lg:overflow-x-visible"
-            >
-              <TabsTrigger
-                value="personal"
-                className="h-auto shrink-0 gap-2 p-2.5 data-active:bg-muted! lg:w-full lg:justify-start"
-              >
-                <User className="h-4 w-4 shrink-0" />
-                <span className="text-sm font-medium">
-                  <Trans>Personal</Trans>
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="password"
-                className="h-auto shrink-0 gap-2 p-2.5 data-active:bg-muted! lg:w-full lg:justify-start"
-              >
-                <Lock className="h-4 w-4 shrink-0" />
-                <span className="text-sm font-medium">
-                  <Trans>Password</Trans>
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="roles"
-                className="h-auto shrink-0 gap-2 p-2.5 data-active:bg-muted! lg:w-full lg:justify-start"
-              >
-                <Users className="h-4 w-4 shrink-0" />
-                <span className="text-sm font-medium">
-                  <Trans>Roles</Trans>
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="avatar"
-                className="h-auto shrink-0 gap-2 p-2.5 data-active:bg-muted! lg:w-full lg:justify-start"
-              >
-                <Camera className="h-4 w-4 shrink-0" />
-                <span className="text-sm font-medium">
-                  <Trans>Avatar</Trans>
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="twoFactor"
-                className="h-auto shrink-0 gap-2 p-2.5 data-active:bg-muted! lg:w-full lg:justify-start"
-              >
-                <Shield className="h-4 w-4 shrink-0" />
-                <span className="text-sm font-medium">
-                  <Trans>Two Factor</Trans>
-                </span>
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          {/* Content Area */}
-          <div className="min-w-0">
-            <TabsContent value="personal" className="mt-0">
-              <PersonalSection />
-            </TabsContent>
-            <TabsContent value="avatar" className="mt-0">
-              <AvatarSection
-                currentAvatar={userData.avatar}
-                userInitials={userInitials}
-              />
-            </TabsContent>
-            <TabsContent value="password" className="mt-0">
-              <PasswordSection />
-            </TabsContent>
-            <TabsContent value="roles" className="mt-0">
-              <RolesSection initialRoles={[1]} />
-            </TabsContent>
-            <TabsContent value="twoFactor" className="mt-0">
-              <TwoFactorSection isEnabled={userData.twoFactorEnabled} />
-            </TabsContent>
-          </div>
+      <div className="space-y-6">
+        <div className="flex max-w-2xl flex-col gap-1">
+          <h1 className="text-xl font-semibold text-balance">
+            <Trans>Profile</Trans>
+          </h1>
+          <p className="text-sm text-muted-foreground text-pretty">
+            <Trans>Manage user settings</Trans>
+          </p>
         </div>
-      </Tabs>
+
+        <Item variant="outline" size="default" className="max-w-lg">
+          <ItemMedia variant="default">
+            <Avatar size="xl">
+              <AvatarImage src={userData.avatar ?? undefined} alt="" />
+              <AvatarFallback>{userInitials}</AvatarFallback>
+            </Avatar>
+          </ItemMedia>
+          <ItemContent className="flex flex-col gap-0">
+            <ItemTitle className="text-lg">
+              {userData.firstName} {userData.lastName}
+            </ItemTitle>
+            <ItemDescription className="text-base">
+              {userData.email}
+            </ItemDescription>
+          </ItemContent>
+        </Item>
+
+        <Tabs
+          defaultValue="personal"
+          orientation="horizontal"
+          className="w-full"
+        >
+          <div className="grid w-full gap-6 lg:grid-cols-[200px_minmax(0,1fr)] lg:items-start">
+            {/* Sidebar Navigation */}
+            <div className="lg:sticky lg:top-2">
+              <TabsList
+                variant="line"
+                className="h-auto w-full flex-row justify-start overflow-x-auto bg-transparent p-0 lg:flex-col lg:items-stretch lg:overflow-x-visible"
+              >
+                <p
+                  aria-hidden="true"
+                  className="hidden px-3 pt-1 pb-1 text-xs font-medium text-muted-foreground lg:block"
+                >
+                  <Trans>Profile</Trans>
+                </p>
+                <TabsTrigger
+                  value="personal"
+                  className="h-auto shrink-0 gap-2 rounded-none border-l px-3 py-2 font-normal text-muted-foreground data-active:border-l-2 data-active:border-l-primary data-active:font-semibold data-active:text-foreground hover:text-foreground after:hidden lg:w-full lg:justify-start"
+                >
+                  <UserIcon className="h-4 w-4 shrink-0" />
+                  <span className="text-sm font-medium">
+                    <Trans>Personal</Trans>
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="avatar"
+                  className="h-auto shrink-0 gap-2 rounded-none border-l px-3 py-2 font-normal text-muted-foreground data-active:border-l-2 data-active:border-l-primary data-active:font-semibold data-active:text-foreground hover:text-foreground after:hidden lg:w-full lg:justify-start"
+                >
+                  <CameraIcon className="h-4 w-4 shrink-0" />
+                  <span className="text-sm font-medium">
+                    <Trans>Profile Picture</Trans>
+                  </span>
+                </TabsTrigger>
+
+                <p
+                  aria-hidden="true"
+                  className="hidden px-3 pt-4 pb-1 text-xs font-medium text-muted-foreground lg:block"
+                >
+                  <Trans>Security</Trans>
+                </p>
+                <TabsTrigger
+                  value="password"
+                  className="h-auto shrink-0 gap-2 rounded-none border-l px-3 py-2 font-normal text-muted-foreground data-active:border-l-2 data-active:border-l-primary data-active:font-semibold data-active:text-foreground hover:text-foreground after:hidden lg:w-full lg:justify-start"
+                >
+                  <LockIcon className="h-4 w-4 shrink-0" />
+                  <span className="text-sm font-medium">
+                    <Trans>Password</Trans>
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="twoFactor"
+                  className="h-auto shrink-0 gap-2 rounded-none border-l px-3 py-2 font-normal text-muted-foreground data-active:border-l-2 data-active:border-l-primary data-active:font-semibold data-active:text-foreground hover:text-foreground after:hidden lg:w-full lg:justify-start"
+                >
+                  <ShieldIcon className="h-4 w-4 shrink-0" />
+                  <span className="text-sm font-medium">
+                    <Trans>Two Factor</Trans>
+                  </span>
+                </TabsTrigger>
+
+                <TabsTrigger
+                  value="roles"
+                  className="mt-3 h-auto shrink-0 gap-2 rounded-none border-l px-3 py-2 font-normal text-muted-foreground data-active:border-l-2 data-active:border-l-primary data-active:font-semibold data-active:text-foreground hover:text-foreground after:hidden lg:mt-4 lg:w-full lg:justify-start"
+                >
+                  <UsersIcon className="h-4 w-4 shrink-0" />
+                  <span className="text-sm font-medium">
+                    <Trans>Roles</Trans>
+                  </span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            {/* Content Area */}
+            <div className="min-w-0 lg:max-w-xl">
+              <TabsContent value="personal" className="mt-0">
+                <PersonalSection />
+              </TabsContent>
+              <TabsContent value="avatar" className="mt-0">
+                <AvatarSection
+                  currentAvatar={userData.avatar}
+                  userInitials={userInitials}
+                />
+              </TabsContent>
+              <TabsContent value="password" className="mt-0">
+                <PasswordSection />
+              </TabsContent>
+              <TabsContent value="roles" className="mt-0">
+                <RolesSection initialRoles={[1]} />
+              </TabsContent>
+              <TabsContent value="twoFactor" className="mt-0">
+                <TwoFactorSection isEnabled={userData.twoFactorEnabled} />
+              </TabsContent>
+            </div>
+          </div>
+        </Tabs>
+      </div>
     </div>
   );
 }

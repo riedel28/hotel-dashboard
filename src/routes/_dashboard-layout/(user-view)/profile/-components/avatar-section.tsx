@@ -115,11 +115,9 @@ export function AvatarSection({
       <CardContent>
         <FieldSet className="gap-4">
           <Field orientation="horizontal" className="items-start gap-4">
-            <Avatar className="size-20 border border-border">
+            <Avatar size="xl">
               <AvatarImage src={avatar || undefined} alt={t`Profile picture`} />
-              <AvatarFallback className="text-lg font-semibold">
-                {userInitials}
-              </AvatarFallback>
+              <AvatarFallback>{userInitials}</AvatarFallback>
             </Avatar>
             <FieldContent className="gap-3">
               <FieldLabel htmlFor={fileInputId} className="sr-only">
