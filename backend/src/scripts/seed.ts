@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { inArray } from 'drizzle-orm';
 
@@ -24,11 +25,12 @@ const OVERLOOK_HOTEL_ID = 'cc198b13-4933-43aa-977e-dcd95fa30770';
 
 type GuestAbcSeed = Record<string, { title: string; description: string }[]>;
 
+// `import.meta.dir` is Bun-only and resolves to undefined under vitest, which
+// imports this module transitively via src/routes/test.ts.
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+
 const guestAbcData: GuestAbcSeed = JSON.parse(
-  fs.readFileSync(
-    path.resolve(import.meta.dir, 'data/guest-abc-data.json'),
-    'utf-8'
-  )
+  fs.readFileSync(path.resolve(scriptDir, 'data/guest-abc-data.json'), 'utf-8')
 );
 
 async function seed() {
