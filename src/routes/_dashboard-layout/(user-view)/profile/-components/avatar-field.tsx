@@ -291,14 +291,14 @@ export function AvatarField({ user }: AvatarFieldProps) {
         </div>
 
         {rejection && (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-danger text-sm">
             {rejection}
           </p>
         )}
 
         {failed && (
           <p role="alert" className="flex items-center gap-2 text-sm">
-            <span className="text-destructive">
+            <span className="text-danger">
               <Trans>Upload failed.</Trans>
             </span>
             <Button

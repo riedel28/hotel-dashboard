@@ -176,7 +176,7 @@ export function TwoFactorSection() {
             <Button
               type="button"
               variant="ghost"
-              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              className="text-danger hover:text-danger hover:bg-destructive/10"
               onClick={() => setDisableOpen(true)}
             >
               <Trans>Turn off two-factor authentication</Trans>

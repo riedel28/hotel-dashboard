@@ -66,7 +66,7 @@ export function CategoryActionsDropdown({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="text-destructive focus:text-destructive"
+            className="text-danger focus:text-danger"
             onClick={() => {
               onDeleteCategory(categoryId, categoryTitle);
             }}
