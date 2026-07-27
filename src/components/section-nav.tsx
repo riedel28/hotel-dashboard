@@ -123,15 +123,12 @@ interface SectionNavProps {
    * horizontally scrollable bar that replaces it when the column disappears.
    */
   orientation?: 'rail' | 'chips';
-  /** Rendered under the rail, after a separator. Ignored by `chips`. */
-  children?: React.ReactNode;
 }
 
 export function SectionNav({
   sections,
   className,
-  orientation = 'rail',
-  children
+  orientation = 'rail'
 }: SectionNavProps) {
   const { t } = useLingui();
   const [activeId, setActiveId] = useActiveSection(sections);
@@ -240,7 +237,6 @@ export function SectionNav({
           );
         })}
       </ul>
-      {children && <div className="mt-4 border-t pt-4">{children}</div>}
     </nav>
   );
 }

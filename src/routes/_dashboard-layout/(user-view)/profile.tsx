@@ -37,10 +37,7 @@ import {
   UnsavedChangesGuard
 } from './profile/-components/profile-section';
 import { RolesSection } from './profile/-components/roles-section';
-import {
-  TwoFactorNavCallout,
-  TwoFactorSection
-} from './profile/-components/two-factor-section';
+import { TwoFactorSection } from './profile/-components/two-factor-section';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
   component: RouteComponent,
@@ -212,11 +209,7 @@ function RouteComponent() {
           <SectionNav
             sections={SECTIONS}
             className="order-first hidden lg:block"
-          >
-            <React.Suspense fallback={null}>
-              <TwoFactorNavCallout />
-            </React.Suspense>
-          </SectionNav>
+          />
         </div>
       </div>
 
