@@ -62,8 +62,16 @@ export function PersonalSection({
   const schema = React.useMemo(
     () =>
       z.object({
-        first_name: z.string().trim().min(1, t`First name is required`).max(50),
-        last_name: z.string().trim().min(1, t`Last name is required`).max(50),
+        first_name: z
+          .string()
+          .trim()
+          .min(1, t`First name is required`)
+          .max(50),
+        last_name: z
+          .string()
+          .trim()
+          .min(1, t`Last name is required`)
+          .max(50),
         country_code: z.string().length(2).nullable()
       }),
     []
@@ -96,7 +104,7 @@ export function PersonalSection({
   const mutation = useMutation({
     mutationFn: (values: FormData) =>
       updateMe({ ...values, expected_updated_at: user.updated_at }),
-    onSuccess: (updated) => {
+    onSuccess: updated => {
       queryClient.setQueryData(profileKeys.me, updated);
       form.reset({
         first_name: updated.first_name ?? '',
@@ -106,7 +114,7 @@ export function PersonalSection({
       flash();
       toast.success(lingui`Profile updated`);
     },
-    onError: (error) => {
+    onError: error => {
       if (error instanceof ApiError && error.code === 'STALE_PROFILE') {
         onConflict();
         return;
@@ -122,7 +130,7 @@ export function PersonalSection({
   const isSaving = mutation.isPending;
   React.useEffect(() => onSavingChange(isSaving), [isSaving, onSavingChange]);
 
-  const submit = form.handleSubmit((values) => mutation.mutate(values));
+  const submit = form.handleSubmit(values => mutation.mutate(values));
   const resetForm = React.useCallback(() => reset(defaults), [defaults, reset]);
 
   React.useEffect(() => {
@@ -256,24 +264,19 @@ function EmailField({ user }: { user: User }) {
               className={cn(
                 // A square box is what makes rounded-full a circle; without it
                 // the button shrink-wraps the glyph and comes out as a pill.
-                'flex size-4 shrink-0 items-center justify-center rounded-full text-white mr-1',
-                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
-                verified ? 'bg-emerald-500' : 'bg-transparent'
+                'flex bg-transparent size-4 shrink-0 items-center justify-center rounded-full text-white mr-1',
+                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current'
               )}
             >
-              {/* Sized in absolute units — a percentage would resolve against a
-                  box that is itself sized by this glyph. The triangle runs a
-                  step smaller: its bounding box is far fuller than the check's,
-                  so matching them by number would make it look oversized. */}
               {verified ? (
                 <CheckIcon
-                  className="size-2.5"
+                  className="size-4 text-emerald-500"
                   strokeWidth={3}
                   aria-hidden="true"
                 />
               ) : (
                 <TriangleAlertIcon
-                  className="size-4 text-amber-700 dark:text-amber-400"
+                  className="size-4 text-amber-700 dark:text-amber-500"
                   aria-hidden="true"
                 />
               )}
