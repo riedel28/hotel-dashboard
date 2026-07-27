@@ -150,7 +150,7 @@ function RouteComponent() {
       <div className="space-y-6">
         <div className="flex max-w-2xl flex-col gap-1">
           <h1 className="text-xl font-semibold text-balance">
-            <Trans>My profile</Trans>
+            <Trans>Profile</Trans>
           </h1>
           <p className="text-muted-foreground text-sm text-pretty">
             <Trans>
@@ -185,7 +185,7 @@ function RouteComponent() {
         <div className="flex flex-row gap-8">
           {/* Capped rather than full-bleed: a form line longer than about
               720px is measurably harder to read. */}
-          <div className="flex min-w-0 flex-1 flex-col gap-6 lg:max-w-3xl">
+          <div className="flex min-w-0 flex-1 flex-col gap-6 lg:max-w-2xl">
             <PersonalSection
               user={user}
               onDirtyChange={setPersonalDirty}

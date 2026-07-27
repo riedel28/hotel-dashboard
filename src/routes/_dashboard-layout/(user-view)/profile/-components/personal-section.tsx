@@ -21,7 +21,6 @@ import {
   FieldLabel
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import type { User } from '../../../../../../shared/types/users';
 import { AvatarField } from './avatar-field';
 import {
@@ -136,8 +135,6 @@ export function PersonalSection({
       >
         <AvatarField user={user} />
 
-        <Separator />
-
         <FieldGroup className="gap-4">
           {/* Two across even on tablet — a name pair reads as one thing, and
               stacking it wastes the width these screens do have. */}
@@ -215,12 +212,12 @@ export function PersonalSection({
  * warning to the old one, neither of which exists yet.
  */
 function EmailField({ user }: { user: User }) {
-  const { t: lingui } = useLingui();
+  const { t } = useLingui();
 
   const resend = useMutation({
     mutationFn: () => resendVerification(user.email),
-    onSuccess: () => toast.success(lingui`Verification email sent`),
-    onError: () => toast.error(lingui`Couldn't send the email. Try again.`)
+    onSuccess: () => toast.success(t`Verification email sent`),
+    onError: () => toast.error(t`Couldn't send the email. Try again.`)
   });
 
   return (

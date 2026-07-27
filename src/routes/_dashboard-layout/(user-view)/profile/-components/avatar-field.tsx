@@ -173,7 +173,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
           rejection && 'border-destructive'
         )}
       >
-        <Avatar size="xl" className="size-full">
+        <Avatar size="xl" className="size-full border">
           {displayedAvatar && !imageBroken && (
             <AvatarImage
               src={displayedAvatar}

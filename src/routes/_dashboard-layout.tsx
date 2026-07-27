@@ -437,10 +437,17 @@ function DashboardLayout() {
       <DashboardSidebar />
       <SidebarInset className="flex h-full min-w-0 flex-col">
         <Header />
+        {/* `relative` is load-bearing: without it, absolutely positioned
+            descendants (every `sr-only` span, for one) resolve against the
+            inset instead of this scroll container, so their offsets inflate
+            the shell's scroll height rather than this one's. That gives the
+            `overflow-hidden` wrapper a few hundred pixels it can be scrolled
+            to — which `scrollIntoView` promptly does, sliding the page under
+            the sticky header and clipping its bottom edge. */}
         <main
           id="main-content"
           tabIndex={-1}
-          className="min-h-0 flex-1 overflow-auto px-3 py-2 pb-4 md:px-6 md:py-4 md:pb-8 focus:outline-none"
+          className="relative min-h-0 flex-1 overflow-auto px-3 py-2 pb-4 md:px-6 md:py-4 md:pb-8 focus:outline-none"
         >
           <Outlet />
         </main>

@@ -63,7 +63,9 @@ export function ProfileSection({
       // scroll position — otherwise keyboard users land nowhere.
       tabIndex={-1}
       aria-labelledby={sectionHeadingId(id)}
-      className="scroll-mt-4 focus-visible:outline-none"
+      // Below `lg` the chip bar is sticky over the top of the scroll area, so a
+      // jump has to clear its 60px or it lands on the card's own title.
+      className="scroll-mt-16 focus-visible:outline-none lg:scroll-mt-4"
     >
       <Card className={cn('@container/section', className)}>
         <CardHeader>
@@ -135,11 +137,11 @@ export function ProfileSectionForm({
       className="contents"
     >
       <CardContent className="space-y-6">{children}</CardContent>
-      <CardFooter className="flex-col-reverse gap-2 border-t pt-4 sm:flex-row sm:justify-end">
+      <CardFooter className="flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         {isDirty && !alwaysEnabled && (
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             onClick={onReset}
             disabled={isSubmitting}
             className="w-full sm:w-auto"

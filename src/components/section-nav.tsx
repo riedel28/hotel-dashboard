@@ -90,14 +90,27 @@ export function scrollToSection(id: string) {
   const target = document.getElementById(id);
   if (!target) return false;
 
-  const prefersReducedMotion = window.matchMedia(
+  const behavior: ScrollBehavior = window.matchMedia(
     '(prefers-reduced-motion: reduce)'
-  ).matches;
+  ).matches
+    ? 'auto'
+    : 'smooth';
 
-  target.scrollIntoView({
-    behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    block: 'start'
-  });
+  // Drive the scroll container by hand rather than through `scrollIntoView`:
+  // that walks *every* scrollable ancestor, and the layout shell's
+  // `overflow-hidden` wrapper counts as one the moment anything gives it
+  // scrollable overflow.
+  const root = document.getElementById(SCROLL_ROOT_ID);
+  if (root) {
+    const offset =
+      target.getBoundingClientRect().top - root.getBoundingClientRect().top;
+    const scrollMargin =
+      Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    root.scrollTo({ top: root.scrollTop + offset - scrollMargin, behavior });
+  } else {
+    target.scrollIntoView({ behavior, block: 'start' });
+  }
+
   target.focus({ preventScroll: true });
   return true;
 }
@@ -153,11 +166,15 @@ export function SectionNav({
       <nav
         aria-label={t`On this page`}
         className={cn(
-          'bg-background/85 sticky top-0 z-10 -mx-1 border-b px-1 py-2 backdrop-blur-sm',
+          // The negative offsets cancel the scroll container's own top padding
+          // (see _dashboard-layout `<main>`), which sticky would otherwise pin
+          // below — leaving a strip of scrolling content between the bar and
+          // the header.
+          'bg-background sticky -top-2 z-10 -mx-6 px-6 py-2 border-b backdrop-blur-sm md:-top-4 ',
           className
         )}
       >
-        <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden">
           {sections.map(({ id, label, attention }) => {
             const isActive = id === activeId;
             return (
@@ -169,10 +186,10 @@ export function SectionNav({
                   onClick={(event) => handleClick(event, id)}
                   className={cn(
                     // 44px tall: this bar is thumbed at arm's length on a tablet.
-                    'flex h-11 items-center gap-1.5 rounded-md border px-3 text-sm whitespace-nowrap transition-colors',
+                    'flex h-11 items-center gap-1.5 rounded-lg font-semibold hover:bg-muted px-6 text-base whitespace-nowrap transition-colors',
                     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
                     isActive
-                      ? 'border-primary/40 bg-primary/10 text-foreground font-semibold'
+                      ? 'bg-muted font-semibold'
                       : 'text-muted-foreground hover:text-foreground border-transparent'
                   )}
                 >
