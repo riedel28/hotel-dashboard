@@ -47,10 +47,7 @@ export function DeleteProductDialog({
           <AlertDialogCancel>
             <Trans>Cancel</Trans>
           </AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            onClick={onConfirm}
-          >
+          <AlertDialogAction variant="destructive" onClick={onConfirm}>
             <Trash className="mr-2 h-4 w-4" />
             <Trans>Delete</Trans>
           </AlertDialogAction>

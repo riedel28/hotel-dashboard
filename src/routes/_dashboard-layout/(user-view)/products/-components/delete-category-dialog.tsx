@@ -45,10 +45,7 @@ export function DeleteCategoryDialog({
           <AlertDialogCancel>
             <Trans>Cancel</Trans>
           </AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            onClick={onConfirm}
-          >
+          <AlertDialogAction variant="destructive" onClick={onConfirm}>
             <Trans>Delete</Trans>
           </AlertDialogAction>
         </AlertDialogFooter>
