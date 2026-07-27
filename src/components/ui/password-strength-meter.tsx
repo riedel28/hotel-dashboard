@@ -1,6 +1,6 @@
 import { i18n } from '@lingui/core';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, MinusIcon } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -149,18 +149,33 @@ export function PasswordStrengthMeter({
   };
 
   const segmentColors: Record<Score, string> = {
-    0: 'bg-red-500',
-    1: 'bg-red-500',
+    0: 'bg-rose-500/90',
+    1: 'bg-rose-500/90',
     2: 'bg-amber-500',
-    3: 'bg-lime-500',
+    3: 'bg-emerald-500',
     4: 'bg-emerald-500'
+  };
+
+  // Same reading as the bars. Darker than the fills in light mode: a 500 that
+  // reads fine as a 4px bar drops under 4.5:1 as 12px text.
+  const labelColors: Record<Score, string> = {
+    0: 'text-rose-600 dark:text-rose-400',
+    1: 'text-rose-600 dark:text-rose-400',
+    2: 'text-amber-600 dark:text-amber-400',
+    3: 'text-emerald-700 dark:text-emerald-400',
+    4: 'text-emerald-700 dark:text-emerald-400'
   };
 
   const filled = score === null ? 0 : score + 1;
 
   return (
-    <div className={cn('space-y-2', className)}>
-      <div className="flex items-center gap-3">
+    // `flex`, not `space-y-*`: the sr-only live regions below are absolutely
+    // positioned, and `space-y` would still hand their in-flow siblings a
+    // margin as they mount and unmount. Flex gap skips out-of-flow children.
+    <div className={cn('flex flex-col gap-1.5', className)}>
+      {/* Height reserved: the label is blank until the estimator resolves, and
+          a collapsing row shoves the whole checklist on the first keystroke. */}
+      <div className="flex min-h-4 items-center gap-3">
         <div
           className="flex flex-1 gap-1"
           role="progressbar"
@@ -181,7 +196,12 @@ export function PasswordStrengthMeter({
             />
           ))}
         </div>
-        <span className="text-muted-foreground w-20 shrink-0 text-right text-xs font-medium">
+        <span
+          className={cn(
+            'w-20 shrink-0 text-right text-xs font-medium transition-colors duration-300',
+            score === null ? 'text-muted-foreground' : labelColors[score]
+          )}
+        >
           {score !== null && labels[score]}
         </span>
       </div>
@@ -194,9 +214,11 @@ export function PasswordStrengthMeter({
         {score !== null && labels[score]}
       </p>
 
-      {warning && score !== null && score < 3 && (
-        <p className="text-xs text-amber-600 dark:text-amber-500">{warning}</p>
-      )}
+      {/* Always rendered, for the reason above: warnings come and go as the
+          password changes, and an appearing line would move the checklist. */}
+      <p className="text-xs text-amber-600 dark:text-amber-500">
+        {warning && score !== null && score < 3 ? warning : null}
+      </p>
 
       <ul className="space-y-1" aria-label={t`Password requirements`}>
         {requirements.map((requirement, index) => (
@@ -207,11 +229,11 @@ export function PasswordStrengthMeter({
                 aria-hidden="true"
               />
             ) : (
-              // A neutral circle, not a red cross: an unwritten password hasn't
+              // A neutral dash, not a red cross: an unwritten password hasn't
               // failed anything yet.
-              <span
+              <MinusIcon
+                className="text-muted-foreground/50 size-3.5 shrink-0"
                 aria-hidden="true"
-                className="border-muted-foreground/40 size-3.5 shrink-0 rounded-full border"
               />
             )}
             <span
