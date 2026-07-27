@@ -5,7 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import {
   KeyRoundIcon,
   Loader2Icon,
-  ShieldCheckIcon,
+  RotateCwIcon,
   ShieldIcon,
   SmartphoneIcon,
   TriangleAlertIcon
@@ -29,6 +29,14 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle
+} from '@/components/ui/item';
 import { AuthenticatorApps } from './authenticator-apps';
 import { ProfileSection } from './profile-section';
 import { useReauthedAction } from './reauth-dialog';
@@ -74,15 +82,26 @@ export function TwoFactorSection() {
       }
       action={
         status.enabled ? (
-          <Badge color="emerald" size="sm" className="gap-1 py-1">
-            <ShieldCheckIcon aria-hidden="true" />
+          <Badge
+            color="emerald"
+            size="sm"
+            className="px-2 py-1 rounded-md border-foreground/10"
+          >
+            <span
+              className="size-1.5 bg-emerald-700 dark:bg-emerald-300 rounded-full mr-0.5"
+              aria-hidden="true"
+            />
             <Trans>Enabled</Trans>
           </Badge>
         ) : (
-          <Badge variant="outline" size="sm" className="gap-1 py-1">
+          <Badge
+            color="gray"
+            size="sm"
+            className="px-2 py-1 rounded-md border-foreground/10"
+          >
             <span
               aria-hidden="true"
-              className="bg-muted-foreground/60 size-1.5 rounded-full"
+              className="bg-muted-foreground/60 size-1.5 rounded-full mr-0.5"
             />
             <Trans>Disabled</Trans>
           </Badge>
@@ -92,16 +111,18 @@ export function TwoFactorSection() {
       {status.enabled ? (
         <>
           <CardContent className="space-y-5">
-            <div className="flex items-start gap-3">
-              <SmartphoneIcon
-                className="text-muted-foreground mt-0.5 size-4 shrink-0"
-                aria-hidden="true"
-              />
-              <div className="text-sm">
-                <p className="font-medium">
+            <Item className="p-0">
+              <ItemMedia>
+                <SmartphoneIcon
+                  className="text-muted-foreground size-5 shrink-0"
+                  aria-hidden="true"
+                />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle>
                   <Trans>Authenticator app</Trans>
-                </p>
-                <p className="text-muted-foreground">
+                </ItemTitle>
+                <ItemDescription>
                   {status.enabled_at && (
                     <Trans>
                       Added on {dayjs(status.enabled_at).format('D MMM YYYY')}
@@ -115,22 +136,23 @@ export function TwoFactorSection() {
                       </Trans>
                     </>
                   )}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-start justify-between gap-3 border-t pt-4">
-              <div className="flex items-start gap-3">
+                </ItemDescription>
+              </ItemContent>
+            </Item>
+            <Item className="p-0">
+              <ItemMedia>
                 <KeyRoundIcon
-                  className="text-muted-foreground mt-0.5 size-4 shrink-0"
+                  className="text-muted-foreground size-5 shrink-0"
                   aria-hidden="true"
                 />
-                <div className="text-sm">
-                  <p className="font-medium">
-                    <Trans>Recovery codes</Trans>
-                  </p>
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle>
+                  <Trans>Recovery codes</Trans>
+                </ItemTitle>
+                <ItemDescription>
                   {status.recovery_codes_generated ? (
-                    <p
+                    <span
                       className={
                         status.recovery_codes_remaining < LOW_RECOVERY_CODES
                           ? 'text-amber-600 dark:text-amber-500'
@@ -141,38 +163,39 @@ export function TwoFactorSection() {
                         {status.recovery_codes_remaining} of 10 codes remaining
                       </Trans>
                       {' · '}
-                      <Trans>Each code works once.</Trans>
-                    </p>
+                      <Trans>Each code works once</Trans>
+                    </span>
                   ) : (
-                    <p className="text-amber-600 dark:text-amber-500">
+                    <span className="text-amber-600 dark:text-amber-500">
                       <Trans>You haven't saved any recovery codes yet.</Trans>
-                    </p>
+                    </span>
                   )}
-                </div>
-              </div>
-
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={regenerate.run}
-                disabled={regenerate.isRunning}
-                aria-busy={regenerate.isRunning}
-              >
-                {regenerate.isRunning && (
-                  <Loader2Icon
-                    className="size-4 animate-spin"
-                    aria-hidden="true"
-                  />
-                )}
-                <Trans>Regenerate</Trans>
-              </Button>
-            </div>
+                </ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={regenerate.run}
+                  disabled={regenerate.isRunning}
+                  aria-busy={regenerate.isRunning}
+                >
+                  {regenerate.isRunning ? (
+                    <Loader2Icon
+                      className="size-4 animate-spin"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <RotateCwIcon className="size-3.25 mr-0.5" />
+                  )}
+                  <Trans>Regenerate</Trans>
+                </Button>
+              </ItemActions>
+            </Item>
           </CardContent>
 
-          <CardFooter className="border-t pt-4">
-            {/* Ghost, not solid red: destructive but routine, and it still has
-                its own confirmation behind it. */}
+          <CardFooter>
             <Button
               type="button"
               variant="ghost"

@@ -90,10 +90,10 @@ export function TwoFactorDisableDialog({
               </DialogDescription>
             </DialogHeader>
 
-            <div className="my-5 space-y-4">
-              <p className="flex items-start gap-2 rounded-md border border-amber-500/40 bg-amber-500/5 p-3 text-sm">
+            <div className="my-5 space-y-5">
+              <p className="flex items-start gap-2 rounded-md border text-amber-800 dark:text-amber-400 border-amber-500/40 bg-amber-50 dark:bg-amber-900/30 p-3 text-sm">
                 <TriangleAlertIcon
-                  className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-500"
+                  className="mt-0.5 size-4 shrink-0 text-amber-800 dark:text-amber-400"
                   aria-hidden="true"
                 />
                 <Trans>
@@ -102,47 +102,49 @@ export function TwoFactorDisableDialog({
                 </Trans>
               </p>
 
-              <Field data-invalid={Boolean(error)} className="gap-2">
-                <FieldDescription>
+              <Field data-invalid={Boolean(error)} className="gap-2.5">
+                <FieldDescription className="text-center">
                   {useRecoveryCode ? (
-                    <Trans>Enter one of your unused recovery codes.</Trans>
+                    <Trans>Enter one of your unused recovery codes</Trans>
                   ) : (
                     <Trans>
-                      Enter the current code from your authenticator app.
+                      Enter the current code from your authenticator app
                     </Trans>
                   )}
                 </FieldDescription>
 
-                {useRecoveryCode ? (
-                  <Input
-                    value={code}
-                    onChange={(event) =>
-                      setCode(event.target.value.toLowerCase())
-                    }
-                    placeholder="a1b2-c3d4"
-                    autoComplete="off"
-                    spellCheck={false}
-                    className="max-w-40 font-mono"
-                    aria-invalid={Boolean(error)}
-                    aria-label={t`Recovery code`}
-                  />
-                ) : (
-                  <OtpField
-                    value={code}
-                    onChange={setCode}
-                    invalid={Boolean(error)}
-                    disabled={action.isRunning}
-                  />
-                )}
+                <div className="flex justify-center text-center">
+                  {useRecoveryCode ? (
+                    <Input
+                      value={code}
+                      onChange={(event) =>
+                        setCode(event.target.value.toLowerCase())
+                      }
+                      placeholder="a1b2-c3d4"
+                      autoComplete="off"
+                      spellCheck={false}
+                      className="max-w-40 font-mono"
+                      aria-invalid={Boolean(error)}
+                      aria-label={t`Recovery code`}
+                    />
+                  ) : (
+                    <OtpField
+                      value={code}
+                      onChange={setCode}
+                      invalid={Boolean(error)}
+                      disabled={action.isRunning}
+                    />
+                  )}
 
-                {error && <FieldError errors={[{ message: error }]} />}
+                  {error && <FieldError errors={[{ message: error }]} />}
+                </div>
               </Field>
 
               <Button
                 type="button"
                 variant="link"
                 size="sm"
-                className="h-auto p-0"
+                className="h-auto p-0 text-cyan-800 dark:text-cyan-200/85 w-full text-center"
                 onClick={() => {
                   setUseRecoveryCode((value) => !value);
                   setCode('');
@@ -160,7 +162,7 @@ export function TwoFactorDisableDialog({
             <DialogFooter>
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={() => onOpenChange(false)}
               >
                 <Trans>Keep it on</Trans>
