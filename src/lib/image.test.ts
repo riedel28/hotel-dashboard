@@ -5,7 +5,6 @@ import {
   dataUriByteLength,
   formatBytes,
   ImageRejected,
-  initialsColor,
   loadImageFile
 } from './image';
 
@@ -37,26 +36,6 @@ describe('formatBytes', () => {
 
   test('switches to megabytes with one decimal', () => {
     expect(formatBytes(Math.round(5.2 * 1024 * 1024))).toBe('5.2 MB');
-  });
-});
-
-describe('initialsColor', () => {
-  test('is stable for the same seed', () => {
-    expect(initialsColor(42)).toBe(initialsColor(42));
-    expect(initialsColor('42')).toBe(initialsColor(42));
-  });
-
-  test('differs across seeds', () => {
-    const colors = new Set([1, 2, 3, 4, 5, 6, 7, 8].map(initialsColor));
-    expect(colors.size).toBeGreaterThan(1);
-  });
-
-  test('always produces a hue in range', () => {
-    for (let seed = 0; seed < 200; seed++) {
-      const match = /^hsl\((\d+) 45% 42%\)$/.exec(initialsColor(seed));
-      expect(match).not.toBeNull();
-      expect(Number(match?.[1])).toBeLessThan(360);
-    }
   });
 });
 

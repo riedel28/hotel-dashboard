@@ -128,7 +128,7 @@ export function AvatarCropperDialog({
         )}
 
         <DialogFooter>
-          <Button type="button" variant="ghost" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel}>
             <Trans>Cancel</Trans>
           </Button>
           <Button

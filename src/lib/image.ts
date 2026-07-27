@@ -150,17 +150,3 @@ export function formatBytes(bytes: number): string {
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
-
-/**
- * Deterministic colour for the initials fallback, so a given person always gets
- * the same one. Hue only — saturation and lightness stay fixed to keep white
- * text legible on every result.
- */
-export function initialsColor(seed: number | string): string {
-  const text = String(seed);
-  let hash = 0;
-  for (let i = 0; i < text.length; i++) {
-    hash = (hash * 31 + text.charCodeAt(i)) | 0;
-  }
-  return `hsl(${Math.abs(hash) % 360} 45% 42%)`;
-}

@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Loader2Icon, RotateCcwIcon, UploadIcon } from 'lucide-react';
+import { Loader2Icon, UploadIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -8,15 +8,9 @@ import { profileKeys, updateMe } from '@/api/profile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
-import {
   ACCEPT_ATTRIBUTE,
   formatBytes,
   ImageRejected,
-  initialsColor,
   type LoadedImage,
   loadImageFile,
   releaseImage
@@ -32,8 +26,8 @@ import { AvatarCropperDialog } from './avatar-cropper-dialog';
  */
 const MAX_SOURCE_BYTES = 20 * 1024 * 1024;
 
-/** How long the undo affordance stays on screen after a successful upload. */
-const UNDO_WINDOW_MS = 5000;
+/** How long the toast — and with it the chance to undo — stays on screen. */
+const UNDO_WINDOW_MS = 8000;
 
 interface AvatarFieldProps {
   user: User;
@@ -55,7 +49,6 @@ export function AvatarField({ user }: AvatarFieldProps) {
   /** Shown instead of the saved avatar while an upload is in flight. */
   const [preview, setPreview] = React.useState<string | null>(null);
   const [failed, setFailed] = React.useState<string | null>(null);
-  const [undoTarget, setUndoTarget] = React.useState<string | null>(null);
   const [imageBroken, setImageBroken] = React.useState(false);
 
   const initials =
@@ -77,13 +70,21 @@ export function AvatarField({ user }: AvatarFieldProps) {
     }
   });
 
+  /**
+   * Every change to the picture is one call, and every one of them is
+   * reversible from its toast — which is why removing doesn't ask first.
+   */
   const upload = (dataUri: string | null, previousAvatar: string | null) => {
     setPreview(dataUri);
     mutation.mutate(dataUri, {
       onSuccess: () => {
-        setUndoTarget(previousAvatar);
-        window.setTimeout(() => setUndoTarget(null), UNDO_WINDOW_MS);
-        toast.success(dataUri ? t`Photo updated` : t`Photo removed`);
+        toast.success(dataUri ? t`Photo updated` : t`Photo removed`, {
+          duration: UNDO_WINDOW_MS,
+          action: {
+            label: t`Undo`,
+            onClick: () => upload(previousAvatar, dataUri)
+          }
+        });
       }
     });
   };
@@ -173,7 +174,14 @@ export function AvatarField({ user }: AvatarFieldProps) {
           rejection && 'border-destructive'
         )}
       >
-        <Avatar size="xl" className="size-full border">
+        {/* Keyed on whether there's a picture at all: the root latches its
+            loading status at "loaded", so without a remount the initials never
+            come back once a photo has been removed. */}
+        <Avatar
+          key={displayedAvatar ? 'photo' : 'initials'}
+          size="xl"
+          className="size-full border"
+        >
           {displayedAvatar && !imageBroken && (
             <AvatarImage
               src={displayedAvatar}
@@ -181,10 +189,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
               onError={() => setImageBroken(true)}
             />
           )}
-          <AvatarFallback
-            style={{ backgroundColor: initialsColor(user.id), color: 'white' }}
-            className="text-xl font-medium"
-          >
+          <AvatarFallback className="text-xl font-medium">
             {initials}
           </AvatarFallback>
         </Avatar>
@@ -244,48 +249,14 @@ export function AvatarField({ user }: AvatarFieldProps) {
           </Button>
 
           {user.avatar_url && (
-            <Popover>
-              <PopoverTrigger
-                render={
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    disabled={isUploading}
-                  >
-                    <Trans>Remove</Trans>
-                  </Button>
-                }
-              />
-              <PopoverContent className="w-64 space-y-3">
-                <p className="text-sm">
-                  <Trans>Remove your photo and go back to initials?</Trans>
-                </p>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  className="w-full"
-                  onClick={() => upload(null, user.avatar_url ?? null)}
-                >
-                  <Trans>Remove photo</Trans>
-                </Button>
-              </PopoverContent>
-            </Popover>
-          )}
-
-          {undoTarget !== undefined && undoTarget !== null && (
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => {
-                upload(undoTarget, displayedAvatar);
-                setUndoTarget(null);
-              }}
+              disabled={isUploading}
+              onClick={() => upload(null, user.avatar_url ?? null)}
             >
-              <RotateCcwIcon aria-hidden="true" />
-              <Trans>Undo</Trans>
+              <Trans>Remove</Trans>
             </Button>
           )}
         </div>
