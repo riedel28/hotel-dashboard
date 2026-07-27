@@ -67,8 +67,13 @@ export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
       title={<Trans>Roles &amp; access</Trans>}
       description={<Trans>What you're allowed to do in the back-office.</Trans>}
       action={
-        <Badge variant="outline" size="sm" className="gap-1 py-1">
-          <LockIcon aria-hidden="true" />
+        <Badge
+          variant="outline"
+          color="gray"
+          size="sm"
+          className="px-2 py-1 rounded-md"
+        >
+          <LockIcon className="mr-0.5" aria-hidden="true" />
           <Trans>Read-only</Trans>
         </Badge>
       }
@@ -108,7 +113,7 @@ export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
             type="button"
             variant="link"
             size="sm"
-            className="h-auto p-0"
+            className="h-auto p-0 text-cyan-800 dark:text-cyan-200/85"
             onClick={() => setShowAll((open) => !open)}
             aria-expanded={showAll}
           >
@@ -151,7 +156,7 @@ function UnassignedRoles({ assignedRoles }: { assignedRoles: Role[] }) {
 
   return (
     <div className="mt-3 space-y-2">
-      <p className="text-muted-foreground text-xs font-medium uppercase">
+      <p className="text-muted-foreground text-xs font-medium">
         <Trans>Not assigned</Trans>
       </p>
       <div className="flex flex-wrap gap-2">

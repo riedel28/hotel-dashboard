@@ -243,7 +243,7 @@ export function PasswordSection({
                   />
                   {confirmMatches && (
                     <CheckIcon
-                      className="pointer-events-none absolute end-9 top-1/2 size-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-500"
+                      className="pointer-events-none absolute inset-e-9 top-1/2 size-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-500"
                       aria-hidden="true"
                     />
                   )}
@@ -285,13 +285,9 @@ export function PasswordSection({
             />
           )}
 
-          <div>
-            {/* A real link, not a Button rendered as one — wrapping it in
-                Button costs the anchor semantics and the visible URL. */}
-            <Link to="/auth/forgot-password">
-              <Trans>Forgot your current password?</Trans>
-            </Link>
-          </div>
+          <Link to="/auth/forgot-password">
+            <Trans>Forgot your current password?</Trans>
+          </Link>
 
           {signedOutElsewhere && (
             <p className="text-muted-foreground flex items-start gap-2 rounded-md border border-dashed p-3 text-sm">
