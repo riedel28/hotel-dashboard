@@ -14,7 +14,10 @@ function InputOTP({
     <OTPInput
       data-slot="input-otp"
       containerClassName={cn(
-        'cn-input-otp flex items-center has-disabled:opacity-50',
+        // `group/otp` is what lets the slots see the invalid state: the flag
+        // lands on the hidden <input>, which is a sibling of the slot group
+        // but a descendant of this container.
+        'cn-input-otp group/otp flex items-center has-disabled:opacity-50',
         containerClassName
       )}
       spellCheck={false}
@@ -28,10 +31,7 @@ function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="input-otp-group"
-      className={cn(
-        'flex items-center rounded-md has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40',
-        className
-      )}
+      className={cn('flex items-center gap-2', className)}
       {...props}
     />
   );
@@ -45,19 +45,31 @@ function InputOTPSlot({
   index: number;
 }) {
   const inputOTPContext = React.useContext(OTPInputContext);
-  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
+  const { char, placeholderChar, hasFakeCaret, isActive } =
+    inputOTPContext?.slots[index] ?? {};
 
   return (
     <div
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        'relative flex size-9 items-center justify-center border-y border-r border-input text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-3 data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40',
+        // Base — mirrors <Input>, minus the height: 44px stays a touch target.
+        'relative flex size-11 items-center justify-center rounded-lg border border-input text-sm outline-none transition-colors',
+        // Focus: the active cell gets <Input>'s focus-visible treatment.
+        'data-[active=true]:z-10 data-[active=true]:border-primary data-[active=true]:shadow-[inset_0_0_0_1px_var(--color-primary)]',
+        // Error, on every cell. The active-cell pair is spelled out rather
+        // than left to cascade order: it ties with the focus rule above on
+        // specificity, and `data-*` sorts later, so focus would win.
+        'group-has-aria-invalid/otp:border-destructive group-has-aria-invalid/otp:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
+        'group-has-aria-invalid/otp:data-[active=true]:border-destructive group-has-aria-invalid/otp:data-[active=true]:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
+        'dark:bg-input/30',
         className
       )}
       {...props}
     >
-      {char}
+      {char ?? (
+        <span className="text-muted-foreground/60">{placeholderChar}</span>
+      )}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />

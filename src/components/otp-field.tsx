@@ -4,7 +4,6 @@ import type * as React from 'react';
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot
 } from '@/components/ui/input-otp';
 import { TOTP_CODE_LENGTH } from '../../shared/types/profile';
@@ -48,6 +47,8 @@ export function OtpField({
       inputMode="numeric"
       // Lets iOS and Android offer the code straight from the SMS/app banner.
       autoComplete="one-time-code"
+      // Indexed per slot, not repeated across them — one glyph per box.
+      placeholder={'○'.repeat(TOTP_CODE_LENGTH)}
       pattern="[0-9]*"
       aria-invalid={invalid}
       aria-describedby={ariaDescribedby}
@@ -58,9 +59,6 @@ export function OtpField({
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
         <InputOTPSlot index={2} />
-      </InputOTPGroup>
-      <InputOTPSeparator />
-      <InputOTPGroup>
         <InputOTPSlot index={3} />
         <InputOTPSlot index={4} />
         <InputOTPSlot index={5} />
