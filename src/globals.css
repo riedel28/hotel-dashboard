@@ -26,6 +26,8 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-danger: var(--danger);
+  --color-badge-destructive: var(--badge-destructive);
+  --color-badge-destructive-foreground: var(--badge-destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -82,6 +84,10 @@
   --destructive: oklch(0.514 0.222 16.935);
   --destructive-foreground: oklch(0.969 0.015 12.422);
   --danger: oklch(0.514 0.222 16.935);
+  /* Badge chips are a pale fill + dark label, unlike the solid --destructive
+     button. Dark mode inverts the roles: the fill token is tinted at 20%. */
+  --badge-destructive: oklch(0.969 0.015 12.422);
+  --badge-destructive-foreground: oklch(0.455 0.188 13.697);
   --border: oklch(0.925 0.005 214.3);
   --input: oklch(0.925 0.005 214.3);
   --ring: oklch(0.723 0.014 214.4);
@@ -121,6 +127,8 @@
   --destructive: oklch(0.712 0.194 13.428);
   --destructive-foreground: oklch(0.941 0.03 12.58);
   --danger: oklch(0.892 0.058 10.001);
+  --badge-destructive: oklch(0.645 0.246 16.439);
+  --badge-destructive-foreground: oklch(0.892 0.058 10.001);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.56 0.021 213.5);
