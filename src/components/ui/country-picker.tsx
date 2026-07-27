@@ -84,7 +84,7 @@ export function CountryPicker({
     >
       <ComboboxTrigger
         className={cn(
-          'border-input h-9 bg-input/30 ring-offset-background flex w-full items-center justify-between overflow-hidden rounded-lg border px-3 py-2 text-sm',
+          'border-input h-9 dark:bg-input/30 ring-offset-background flex w-full items-center justify-between overflow-hidden rounded-lg border px-3 py-2 text-sm',
           className
         )}
         aria-label={

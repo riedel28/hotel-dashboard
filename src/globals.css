@@ -122,11 +122,12 @@
   --muted-foreground: oklch(0.723 0.014 214.4);
   --accent: oklch(0.275 0.011 216.9);
   --accent-foreground: oklch(0.987 0.002 197.1);
-  /* On the dark card, a rose vivid enough to fill (L 0.712) only reaches
-     Lc -46 as text, so --danger climbs to rose-200 for body legibility. */
+  /* --danger tracks --destructive here rather than lightening to rose-200:
+     one destructive tone reads more consistently across the dark surfaces
+     than a separate text-only ramp did. */
   --destructive: oklch(0.712 0.194 13.428);
   --destructive-foreground: oklch(0.941 0.03 12.58);
-  --danger: oklch(0.892 0.058 10.001);
+  --danger: oklch(0.712 0.194 13.428);
   --badge-destructive: oklch(0.645 0.246 16.439);
   --badge-destructive-foreground: oklch(0.892 0.058 10.001);
   --border: oklch(1 0 0 / 10%);
