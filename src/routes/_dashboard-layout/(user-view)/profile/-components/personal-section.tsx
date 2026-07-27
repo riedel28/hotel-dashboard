@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { BadgeCheckIcon, TriangleAlertIcon } from 'lucide-react';
+import { CheckIcon, TriangleAlertIcon } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -10,7 +10,6 @@ import { z } from 'zod';
 import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { profileKeys, updateMe } from '@/api/profile';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CountryPicker } from '@/components/ui/country-picker';
 import {
@@ -21,6 +20,17 @@ import {
   FieldLabel
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput
+} from '@/components/ui/input-group';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 import type { User } from '../../../../../../shared/types/users';
 import { AvatarField } from './avatar-field';
 import {
@@ -220,31 +230,71 @@ function EmailField({ user }: { user: User }) {
     onError: () => toast.error(t`Couldn't send the email. Try again.`)
   });
 
+  const verified = user.email_verified;
+
   return (
     <Field className="gap-2">
       <FieldLabel htmlFor="profile-email">
         <Trans>Email</Trans>
       </FieldLabel>
-      <Input
-        id="profile-email"
-        type="email"
-        value={user.email}
-        readOnly
-        disabled
-        autoComplete="email"
-      />
-      <FieldDescription className="flex flex-wrap items-center gap-2">
-        {user.email_verified ? (
-          <Badge color="emerald" size="xs" className="gap-1 py-0.5">
-            <BadgeCheckIcon aria-hidden="true" />
-            <Trans>Verified</Trans>
-          </Badge>
-        ) : (
-          <>
-            <Badge color="yellow" size="xs" className="gap-1 py-0.5">
-              <TriangleAlertIcon aria-hidden="true" />
-              <Trans>Unverified</Trans>
-            </Badge>
+      {/* The control is disabled, but the group must not fade with it — the
+          verification mark in the addon is the one thing here worth reading. */}
+      <InputGroup className="has-disabled:opacity-100">
+        <InputGroupInput
+          id="profile-email"
+          type="email"
+          value={user.email}
+          readOnly
+          disabled
+          autoComplete="email"
+        />
+        <InputGroupAddon align="inline-end">
+          <Tooltip>
+            <TooltipTrigger
+              type="button"
+              aria-label={verified ? t`Email verified` : t`Email not verified`}
+              className={cn(
+                // A square box is what makes rounded-full a circle; without it
+                // the button shrink-wraps the glyph and comes out as a pill.
+                'flex size-4 shrink-0 items-center justify-center rounded-full text-white mr-1',
+                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
+                verified ? 'bg-emerald-500' : 'bg-transparent'
+              )}
+            >
+              {/* Sized in absolute units — a percentage would resolve against a
+                  box that is itself sized by this glyph. The triangle runs a
+                  step smaller: its bounding box is far fuller than the check's,
+                  so matching them by number would make it look oversized. */}
+              {verified ? (
+                <CheckIcon
+                  className="size-2.5"
+                  strokeWidth={3}
+                  aria-hidden="true"
+                />
+              ) : (
+                <TriangleAlertIcon
+                  className="size-4 text-amber-700 dark:text-amber-400"
+                  aria-hidden="true"
+                />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>
+              {verified ? (
+                <Trans>This address is verified.</Trans>
+              ) : (
+                <Trans>
+                  This address isn't verified yet. Check your inbox for the
+                  confirmation link.
+                </Trans>
+              )}
+            </TooltipContent>
+          </Tooltip>
+        </InputGroupAddon>
+      </InputGroup>
+      <FieldDescription className="flex flex-wrap items-center gap-x-2">
+        {!verified && (
+          <span className="flex items-center gap-x-2">
+            <Trans>Not verified yet.</Trans>
             <Button
               type="button"
               variant="link"
@@ -255,7 +305,7 @@ function EmailField({ user }: { user: User }) {
             >
               <Trans>Resend</Trans>
             </Button>
-          </>
+          </span>
         )}
         <span>
           <Trans>To change your email, contact your administrator.</Trans>
