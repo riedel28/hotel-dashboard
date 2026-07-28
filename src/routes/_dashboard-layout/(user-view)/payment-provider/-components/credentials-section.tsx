@@ -1,6 +1,6 @@
 import { t } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { CheckIcon, UnplugIcon, XIcon } from 'lucide-react';
+import { UnplugIcon } from 'lucide-react';
 import { type Control, Controller } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -20,8 +20,8 @@ import {
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
 import type { PaymentProviderFormData } from './payment-provider-form-types';
 import { sectionHeadingId } from './payment-provider-toc';
 import type {
@@ -276,28 +276,11 @@ export function CredentialsSection({
               role="status"
               aria-live="polite"
             >
-              <span
-                className={cn(
-                  'flex size-3.5 items-center justify-center rounded-full text-white',
-                  lastTestResult.passed
-                    ? 'bg-emerald-500 dark:bg-emerald-600'
-                    : 'bg-red-500 dark:bg-red-600'
-                )}
-              >
-                {lastTestResult.passed ? (
-                  <CheckIcon
-                    className="size-[65%]"
-                    strokeWidth={3.5}
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <XIcon
-                    className="size-2.5"
-                    strokeWidth={3.5}
-                    aria-hidden="true"
-                  />
-                )}
-              </span>
+              <StatusDisc
+                variant="solid"
+                status={lastTestResult.passed ? 'success' : 'error'}
+                size="xs"
+              />
               <span>
                 {lastTestResult.passed ? (
                   <Trans>Connection successful</Trans>

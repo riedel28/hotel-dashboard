@@ -1,13 +1,11 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  CheckIcon,
   CircleDashedIcon,
   CloudIcon,
   Loader2Icon,
   MinusIcon,
   RotateCwIcon,
-  ServerIcon,
-  XIcon
+  ServerIcon
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -22,6 +20,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
+import { StatusDisc } from '@/components/ui/status-disc';
 import { cn } from '@/lib/utils';
 
 type StepStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped';
@@ -219,7 +218,10 @@ export function TestConnectionDialog({
                 <Loader2Icon className="size-4 animate-spin" />
               </div>
             ) : (
-              <StatusDisc ok={allPassed} className="size-9" />
+              <StatusDisc
+                status={allPassed ? 'success' : 'error'}
+                variant="solid"
+              />
             )}
 
             <ConnectionLine phase={phase} allPassed={allPassed} />
@@ -281,7 +283,11 @@ export function TestConnectionDialog({
           {phase === 'running' ? (
             <Loader2Icon className="size-4.5 shrink-0 animate-spin" />
           ) : (
-            <StatusDisc ok={allPassed} className="size-4.5" />
+            <StatusDisc
+              status={allPassed ? 'success' : 'error'}
+              variant="solid"
+              size="sm"
+            />
           )}
           <span className="flex-1 font-medium">
             {phase === 'running' ? (
@@ -344,23 +350,6 @@ function EndpointNode({
   );
 }
 
-function StatusDisc({ ok, className }: { ok: boolean; className?: string }) {
-  const Icon = ok ? CheckIcon : XIcon;
-  return (
-    <span
-      className={cn(
-        'flex shrink-0 items-center justify-center rounded-full text-rose-50 dark:text-rose-200',
-        ok
-          ? 'bg-emerald-500 dark:bg-emerald-600'
-          : 'bg-rose-500 dark:bg-rose-900',
-        className
-      )}
-    >
-      <Icon className="size-[55%]" strokeWidth={3} aria-hidden="true" />
-    </span>
-  );
-}
-
 function ConnectionLine({
   phase,
   allPassed
@@ -388,9 +377,9 @@ function StepStatusIcon({ status }: { status: StepStatus }) {
     case 'running':
       return <Loader2Icon className="size-4.5 animate-spin text-primary" />;
     case 'passed':
-      return <StatusDisc ok className="size-4.5" />;
+      return <StatusDisc status="success" variant="solid" size="sm" />;
     case 'failed':
-      return <StatusDisc ok={false} className="size-4.5" />;
+      return <StatusDisc status="error" variant="solid" size="sm" />;
     case 'skipped':
       return (
         <span className="flex size-4.5 shrink-0 items-center justify-center rounded-full bg-muted">
