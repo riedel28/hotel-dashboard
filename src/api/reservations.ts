@@ -9,6 +9,7 @@ import {
   type FetchReservationsResponse,
   fetchReservationsParamsSchema,
   fetchReservationsResponseSchema,
+  fromReservationStates,
   type Guest,
   type GuestSearchResult,
   guestSchema,
@@ -19,6 +20,7 @@ import {
   reservationSchema,
   reservationStateSchema,
   reservationStatusSchema,
+  toReservationStates,
   type UpdateReservationData
 } from '../../shared/types/reservations';
 
@@ -157,6 +159,7 @@ export {
   fetchReservations,
   fetchReservationsParamsSchema,
   fetchReservationsResponseSchema,
+  fromReservationStates,
   type Guest,
   type GuestSearchResult,
   guestSchema,
@@ -171,5 +174,6 @@ export {
   reservationStatusSchema,
   reservationsQueryOptions,
   searchGuests,
+  toReservationStates,
   updateReservationById
 };

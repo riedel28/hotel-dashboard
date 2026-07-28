@@ -39,8 +39,13 @@ msgstr "..."
 msgid "(opens in new tab)"
 msgstr "(öffnet in neuem Tab)"
 
+#. placeholder {0}: selectedOptions.length
+#: src/components/ui/data-grid-checkbox-filter.tsx:149
+msgid "{0, plural, one {# selected} other {# selected}}"
+msgstr "{0, plural, one {# ausgewählt} other {# ausgewählt}}"
+
 #. placeholder {0}: themeLabels[currentTheme]
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:168
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:169
 msgid "{0}"
 msgstr "{0}"
 
@@ -59,10 +64,9 @@ msgstr "Noch {0} von 10 Codes"
 msgid "{0} roles total"
 msgstr "{0} Rollen insgesamt"
 
-#. placeholder {0}: selectedOptions.length
 #: src/components/ui/data-grid-checkbox-filter.tsx:97
-msgid "{0} selected"
-msgstr "{0} ausgewählt"
+#~ msgid "{0} selected"
+#~ msgstr "{0} ausgewählt"
 
 #. placeholder {0}: guest.last_name
 #. placeholder {1}: guest.first_name
@@ -310,7 +314,7 @@ msgstr "Es ist ein Fehler beim Abrufen der Monitoring-Protokolle aufgetreten"
 msgid "An error occurred while fetching properties"
 msgstr "Beim Abrufen der Unterkünfte ist ein Fehler aufgetreten"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:101
 msgid "An error occurred while fetching reservations"
 msgstr "Es ist ein Fehler beim Abrufen der Reservierungen aufgetreten"
 
@@ -522,7 +526,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-product-modal.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:132
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:154
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:136
@@ -648,7 +652,7 @@ msgstr ""
 msgid "City is required"
 msgstr ""
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:169
+#: src/components/ui/data-grid-checkbox-filter.tsx:224
 msgid "Clear all"
 msgstr "Alle zurücksetzen"
 
@@ -780,7 +784,7 @@ msgstr "Weiter"
 msgid "Copied reservation number"
 msgstr "Reservierungsnummer kopiert"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:95
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -897,7 +901,7 @@ msgstr "Kunden"
 #~ msgid "Czech Republic"
 #~ msgstr "Tschechische Republik"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:183
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:184
 msgid "Dark"
 msgstr "Dunkel"
 
@@ -1005,7 +1009,7 @@ msgstr "Doe"
 #~ msgstr "Haben Sie noch kein Konto?"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/status-cell.tsx:27
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:315
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-status-filter.tsx:39
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:256
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:308
 msgid "Done"
@@ -1020,11 +1024,11 @@ msgstr "Erledigt"
 msgid "Door Locks"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:77
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:79
 msgid "Download .txt"
 msgstr ".txt herunterladen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:77
 msgid "Drag to move, pinch or use the slider to zoom."
 msgstr "Zum Verschieben ziehen, zum Zoomen den Regler oder zwei Finger verwenden."
 
@@ -1720,7 +1724,7 @@ msgstr "Passwort ausblenden"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:43
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:31
@@ -1745,7 +1749,7 @@ msgid "Host is required"
 msgstr ""
 
 #: src/routes/_dashboard-layout.tsx:122
-#: src/routes/_dashboard-layout.tsx:498
+#: src/routes/_dashboard-layout.tsx:490
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:256
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -1899,7 +1903,7 @@ msgstr "Zuletzt verwendet {0}"
 #~ msgid "Letter"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:179
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:180
 msgid "Light"
 msgstr "Hell"
 
@@ -1927,7 +1931,7 @@ msgstr "Lädt..."
 #~ msgstr "Standort"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:74
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:204
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:205
 msgid "Log out"
 msgstr "Abmelden"
 
@@ -2256,8 +2260,8 @@ msgstr "Belegt"
 #~ msgid "OK"
 #~ msgstr "OK"
 
-#: src/components/section-nav.tsx:215
-#: src/components/section-nav.tsx:262
+#: src/components/section-nav.tsx:228
+#: src/components/section-nav.tsx:275
 msgid "On this page"
 msgstr "Auf dieser Seite"
 
@@ -2412,7 +2416,7 @@ msgstr ""
 #~ msgstr "Zahlungen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/status-cell.tsx:29
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:311
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-status-filter.tsx:29
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:109
 msgid "Pending"
 msgstr "Ausstehend"
@@ -2540,7 +2544,7 @@ msgstr ""
 msgid "POS"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:72
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:74
 msgid "Position your photo"
 msgstr "Foto ausrichten"
 
@@ -2556,7 +2560,7 @@ msgstr "Zurück"
 msgid "Primary Guest"
 msgstr "Hauptgast"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:99
 msgid "Print"
 msgstr "Drucken"
 
@@ -2593,7 +2597,7 @@ msgstr "Produkte"
 #~ msgid "Products in {categoryTitle}"
 #~ msgstr "Produkte in {categoryTitle}"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:281
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:282
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:59
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:144
@@ -2729,13 +2733,13 @@ msgstr "Wiederherstellungscode"
 msgid "Recovery codes"
 msgstr "Wiederherstellungscodes"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:87
 msgid "Recovery codes copied"
 msgstr "Wiederherstellungscodes kopiert"
 
 #: src/components/ui/data-grid-refresh-button.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:86
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:112
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-refresh.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:86
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:103
@@ -2854,9 +2858,9 @@ msgstr "Reservierung erfolgreich aktualisiert"
 #: src/routes/_dashboard-layout.tsx:207
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:189
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:59
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:73
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:50
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:72
 #: src/routes/_dashboard-layout/index.tsx:23
 msgid "Reservations"
 msgstr "Reservierungen"
@@ -3012,7 +3016,7 @@ msgstr "Änderungen speichern"
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:143
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:145
 msgid "Save photo"
 msgstr "Foto speichern"
 
@@ -3094,6 +3098,10 @@ msgstr "Benutzer suchen"
 #~ msgid "Security"
 #~ msgstr ""
 
+#: src/components/ui/data-grid-checkbox-filter.tsx:162
+msgid "Select"
+msgstr "Auswählen"
+
 #~ msgid "Select a category to edit"
 #~ msgstr "Wählen Sie eine Kategorie zum Bearbeiten aus"
 
@@ -3109,7 +3117,7 @@ msgstr "Zimmer auswählen"
 msgid "Select a room..."
 msgstr "Zimmer auswählen..."
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:183
+#: src/components/ui/data-grid-checkbox-filter.tsx:244
 #: src/components/ui/data-grid-table.tsx:484
 msgid "Select all"
 msgstr "Alle auswählen"
@@ -3152,9 +3160,8 @@ msgstr "Zeile auswählen"
 msgid "Select stage"
 msgstr "Phase auswählen"
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:78
 #: src/components/ui/data-grid-radio-filter.tsx:52
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:331
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-status-filter.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:173
 msgid "Select status"
@@ -3300,7 +3307,7 @@ msgstr "Jemand — vermutlich ein Administrator — hat Ihren Datensatz geänder
 #: src/routes/__root.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:223
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:75
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:106
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:97
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:90
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:75
@@ -3342,7 +3349,7 @@ msgid "Start"
 msgstr "Start"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/status-cell.tsx:31
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:313
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-status-filter.tsx:34
 msgid "Started"
 msgstr "Gestartet"
 
@@ -3353,9 +3360,9 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:82
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:288
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-status-filter.tsx:57
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:114
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:125
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:330
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:139
@@ -3441,7 +3448,7 @@ msgstr "Gewechselt zu {0}"
 #~ msgid "Switzerland"
 #~ msgstr "Schweiz"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:187
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:188
 msgid "System"
 msgstr "System"
 
@@ -3568,7 +3575,7 @@ msgstr "Der Benutzer {userName} wurde gelöscht"
 msgid "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 msgstr "Der Benutzer <0>{userName}</0> wird gelöscht. Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:162
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:163
 msgid "Theme"
 msgstr "Design"
 
@@ -3592,7 +3599,7 @@ msgstr ""
 msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:122
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:124
 msgid "This image is small, so it may look blurry once cropped."
 msgstr "Dieses Bild ist klein und könnte nach dem Zuschneiden unscharf wirken."
 
@@ -3863,7 +3870,7 @@ msgstr "Benutzerdetails"
 #~ msgid "User features: View reservations, make payments, access basic settings"
 #~ msgstr "Benutzerfunktionen: Reservierungen anzeigen, Zahlungen tätigen, grundlegende Einstellungen zugreifen"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:255
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:256
 msgid "User menu"
 msgstr "Benutzermenü"
 
@@ -3902,7 +3909,7 @@ msgstr ""
 msgid "Users"
 msgstr "Benutzer"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:206
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:207
 msgid "v{version}"
 msgstr "v{version}"
 
@@ -4119,6 +4126,6 @@ msgstr ""
 msgid "ZIP / Postal code is required"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:111
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:113
 msgid "Zoom"
 msgstr "Zoom"

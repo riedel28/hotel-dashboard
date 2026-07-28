@@ -31,6 +31,29 @@ const reservationStatusFilterSchema = z.preprocess(
   ])
 );
 
+type ReservationStatusFilter = z.infer<typeof reservationStatusFilterSchema>;
+
+/**
+ * The `status` search param spells "no filter" as the string `'all'` and a
+ * single status as a bare string. Callers work in terms of a plain list, so the
+ * two helpers below own that encoding rather than every consumer re-deriving it.
+ */
+export function toReservationStates(
+  status: ReservationStatusFilter | undefined
+): ReservationState[] {
+  if (!status || status === 'all') {
+    return [];
+  }
+
+  return Array.isArray(status) ? status : [status];
+}
+
+export function fromReservationStates(
+  states: ReservationState[]
+): ReservationStatusFilter {
+  return states.length > 0 ? states : 'all';
+}
+
 export const checkinMethodSchema = z.enum([
   'android',
   'ios',

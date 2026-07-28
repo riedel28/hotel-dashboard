@@ -12,8 +12,10 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
   fetchReservationsParamsSchema,
+  fromReservationStates,
   type ReservationState,
-  reservationsQueryOptions
+  reservationsQueryOptions,
+  toReservationStates
 } from '@/api/reservations';
 
 import {
@@ -25,7 +27,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { DataGridCheckboxFilter } from '@/components/ui/data-grid-checkbox-filter';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
   ErrorDisplayActions,
@@ -41,18 +42,10 @@ import { AddReservationModal } from '../reservations/-components/add-reservation
 import { ReservationClearFilters } from '../reservations/-components/reservation-clear-filters';
 import { ReservationSearch } from '../reservations/-components/reservation-search';
 import { ReservationSearchResults } from '../reservations/-components/reservation-search-results';
+import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
 import { ReservationsFilters } from '../reservations/-components/reservations-filters';
 import { ReservationDateFilter } from '../reservations/-components/reservations-table/reservation-date-filter';
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
-
-const reservationStatusOptions = [
-  { value: 'pending', color: 'bg-badge-warning-foreground' },
-  { value: 'started', color: 'bg-badge-default-foreground' },
-  { value: 'done', color: 'bg-badge-success-foreground' }
-] as const satisfies ReadonlyArray<{
-  value: ReservationState;
-  color: string;
-}>;
 
 function ReservationsPage() {
   const { t } = useLingui();
@@ -174,7 +167,7 @@ function ReservationsContent() {
       search: (prev) => ({
         ...prev,
         page: 1,
-        status: newStatus.length > 0 ? newStatus : 'all'
+        status: fromReservationStates(newStatus)
       })
     });
   };
@@ -295,44 +288,18 @@ function ReservationsContent() {
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
     : [{ id: 'received_at', desc: true }];
 
-  const hasActiveStatusFilters = Array.isArray(status)
-    ? status.length > 0
-    : Boolean(status && status !== 'all');
-  const hasActiveFilters = Boolean(q || from || to || hasActiveStatusFilters);
-  const selectedStatuses: ReservationState[] = Array.isArray(status)
-    ? status
-    : status && status !== 'all'
-      ? [status]
-      : [];
-  const statusFilterOptions = reservationStatusOptions.map((option) => ({
-    value: option.value,
-    label:
-      option.value === 'pending' ? (
-        <Trans>Pending</Trans>
-      ) : option.value === 'started' ? (
-        <Trans>Started</Trans>
-      ) : (
-        <Trans>Done</Trans>
-      ),
-    icon: (
-      <span
-        className={`size-1.5 rounded-full ${option.color}`}
-        aria-hidden="true"
-      />
-    )
-  }));
+  const selectedStatuses = toReservationStates(status);
+  const hasActiveFilters = Boolean(
+    q || from || to || selectedStatuses.length > 0
+  );
 
   return (
     <div className="space-y-2.5">
       <ReservationsFilters>
         <ReservationSearch value={q} onChange={handleSearchChange} />
-        <DataGridCheckboxFilter
-          label={<Trans>Status</Trans>}
-          placeholder={<Trans>Select status</Trans>}
+        <ReservationStatusFilter
           value={selectedStatuses}
           onValueChange={handleStatusChange}
-          options={statusFilterOptions}
-          showFooter
           className="lg:w-[180px]"
         />
         <ReservationDateFilter

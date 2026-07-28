@@ -1,24 +1,12 @@
 import { t } from '@lingui/core/macro';
 import type { ReservationStatus } from '@/api/reservations';
-import type { BadgeProps } from '@/components/ui/badge';
 
 import { Badge } from '@/components/ui/badge';
 
+import { getReservationStatusStyle } from '../../../reservation-status';
+
 interface StatusCellProps {
   status: ReservationStatus;
-}
-
-function getStatusVariant(status: ReservationStatus): BadgeProps['color'] {
-  switch (status) {
-    case 'done':
-      return 'emerald';
-    case 'pending':
-      return 'yellow';
-    case 'started':
-      return 'sky';
-    default:
-      return 'gray';
-  }
 }
 
 function getStatusLabel(status: ReservationStatus): string {
@@ -36,7 +24,11 @@ function getStatusLabel(status: ReservationStatus): string {
 
 export function StatusCell({ status }: StatusCellProps) {
   return (
-    <Badge size="sm" variant="outline" color={getStatusVariant(status)}>
+    <Badge
+      size="sm"
+      variant="outline"
+      color={getReservationStatusStyle(status).badgeColor}
+    >
       {getStatusLabel(status)}
     </Badge>
   );
