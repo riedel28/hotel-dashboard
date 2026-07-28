@@ -1,23 +1,22 @@
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { PencilIcon, Trash2Icon, XIcon } from 'lucide-react';
+import { PencilIcon, RefreshCwIcon, Trash2Icon, XIcon } from 'lucide-react';
 import * as React from 'react';
 import {
   deleteProduct,
   fetchProductsByCategory,
   updateProduct
 } from '@/api/products';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  ErrorDisplay,
-  ErrorDisplayActions,
-  ErrorDisplayIcon,
-  ErrorDisplayMessage,
-  ErrorDisplayRetryButton,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty';
 
 import { cn } from '@/lib/utils';
 
@@ -95,21 +94,34 @@ export function ProductsList() {
         </CardHeader>
         <CardContent className="pt-0">
           <div className="flex min-h-[140px] items-center justify-center">
-            <ErrorDisplay variant="destructive" size="sm" className="w-full">
-              <ErrorDisplayIcon icon={XIcon} />
-              <ErrorDisplayTitle>
-                <Trans>Failed to load products</Trans>
-              </ErrorDisplayTitle>
-              <ErrorDisplayMessage>
-                {productsQuery.error?.message}
-              </ErrorDisplayMessage>
-              <ErrorDisplayActions>
-                <ErrorDisplayRetryButton
-                  onRetry={() => productsQuery.refetch()}
-                  isRetrying={productsQuery.isFetching}
-                />
-              </ErrorDisplayActions>
-            </ErrorDisplay>
+            <Empty variant="destructive" className="w-full md:p-6">
+              <EmptyHeader>
+                <EmptyMedia variant="destructive">
+                  <XIcon />
+                </EmptyMedia>
+                <EmptyTitle>
+                  <Trans>Failed to load products</Trans>
+                </EmptyTitle>
+                <EmptyDescription>
+                  {productsQuery.error?.message}
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button
+                  variant="destructive"
+                  onClick={() => productsQuery.refetch()}
+                  disabled={productsQuery.isFetching}
+                >
+                  <RefreshCwIcon
+                    className={cn(
+                      'mr-2 h-4 w-4',
+                      productsQuery.isFetching && 'animate-spin'
+                    )}
+                  />
+                  <Trans>Try again</Trans>
+                </Button>
+              </EmptyContent>
+            </Empty>
           </div>
         </CardContent>
       </Card>

@@ -1,9 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  QueryErrorResetBoundary,
-  useQueryClient,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link as RouterLink } from '@tanstack/react-router';
 import {
   type ColumnDef,
@@ -13,13 +9,13 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table';
-import { PenSquareIcon, RefreshCwIcon, Trash2Icon } from 'lucide-react';
+import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
-import { Suspense, useMemo, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { useMemo, useState } from 'react';
 import type { Property } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 import { propertiesQueryOptions } from '@/api/properties';
+import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,7 +24,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
@@ -42,12 +37,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
 import { Skeleton } from '@/components/ui/skeleton';
 import { StageBadge } from '@/components/ui/stage-badge';
 import { useDocumentTitle } from '@/hooks/use-document-title';
@@ -503,7 +492,9 @@ function PropertiesPage() {
         <AddPropertyModal />
       </div>
 
-      <Suspense
+      <QueryBoundary
+        className="min-h-[60vh] items-center justify-center"
+        message={<Trans>An error occurred while fetching properties</Trans>}
         fallback={
           <PropertiesTable
             data={[]}
@@ -515,41 +506,8 @@ function PropertiesPage() {
           />
         }
       >
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <div className="flex min-h-[60vh] items-center justify-center">
-                  <ErrorDisplayError className="w-md max-w-md">
-                    <ErrorDisplayTitle>
-                      <Trans>Something went wrong</Trans>
-                    </ErrorDisplayTitle>
-                    <ErrorDisplayMessage>
-                      {(error instanceof Error ? error.message : null) || (
-                        <Trans>
-                          An error occurred while fetching properties
-                        </Trans>
-                      )}
-                    </ErrorDisplayMessage>
-                    <ErrorDisplayActions>
-                      <Button
-                        variant="destructive"
-                        onClick={resetErrorBoundary}
-                      >
-                        <RefreshCwIcon className="mr-2 h-4 w-4" />
-                        <Trans>Refresh</Trans>
-                      </Button>
-                    </ErrorDisplayActions>
-                  </ErrorDisplayError>
-                </div>
-              )}
-            >
-              <PropertiesContent />
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      </Suspense>
+        <PropertiesContent />
+      </QueryBoundary>
     </div>
   );
 }

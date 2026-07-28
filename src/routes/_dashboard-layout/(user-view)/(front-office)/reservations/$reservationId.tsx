@@ -1,13 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  QueryErrorResetBoundary,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { RefreshCw } from 'lucide-react';
-import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { reservationByIdQueryOptions } from '@/api/reservations';
+import { QueryBoundary } from '@/components/query-boundary';
 
 import {
   Breadcrumb,
@@ -17,13 +12,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
-import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
@@ -63,38 +51,9 @@ function ReservationPage() {
       </div>
 
       <div>
-        <Suspense fallback={<FormSkeleton />}>
-          <QueryErrorResetBoundary>
-            {({ reset }) => (
-              <ErrorBoundary
-                onReset={reset}
-                fallbackRender={({ error, resetErrorBoundary }) => (
-                  <div className="flex">
-                    <ErrorDisplayError className="w-md max-w-md">
-                      <ErrorDisplayTitle>
-                        <Trans>Something went wrong</Trans>
-                      </ErrorDisplayTitle>
-                      <ErrorDisplayMessage>
-                        {error instanceof Error ? error.message : String(error)}
-                      </ErrorDisplayMessage>
-                      <ErrorDisplayActions>
-                        <Button
-                          variant="destructive"
-                          onClick={resetErrorBoundary}
-                        >
-                          <RefreshCw className="mr-2 h-4 w-4" />
-                          <Trans>Refresh</Trans>
-                        </Button>
-                      </ErrorDisplayActions>
-                    </ErrorDisplayError>
-                  </div>
-                )}
-              >
-                <ReservationForm />
-              </ErrorBoundary>
-            )}
-          </QueryErrorResetBoundary>
-        </Suspense>
+        <QueryBoundary fallback={<FormSkeleton />}>
+          <ReservationForm />
+        </QueryBoundary>
       </div>
     </div>
   );

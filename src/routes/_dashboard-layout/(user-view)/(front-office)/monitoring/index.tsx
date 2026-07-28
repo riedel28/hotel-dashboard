@@ -9,7 +9,6 @@ import {
   fetchMonitoringLogsParamsSchema,
   monitoringQueryOptions
 } from '@/api/monitoring';
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,11 +21,12 @@ import { Button } from '@/components/ui/button';
 import { DataGridRadioFilter } from '@/components/ui/data-grid-radio-filter';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle
+} from '@/components/ui/empty';
 
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
@@ -218,24 +218,28 @@ function MonitoringPage() {
     if (monitoringQuery.isError) {
       return (
         <div className="flex min-h-[60vh] items-center justify-center">
-          <ErrorDisplayError className="w-md max-w-md">
-            <ErrorDisplayTitle>
-              <Trans>Something went wrong</Trans>
-            </ErrorDisplayTitle>
-            <ErrorDisplayMessage>
-              {monitoringQuery.error.message || (
-                <Trans>An error occurred while fetching monitoring logs</Trans>
-              )}
-            </ErrorDisplayMessage>
-            <ErrorDisplayActions>
+          <Empty variant="destructive" className="w-md max-w-md">
+            <EmptyHeader>
+              <EmptyTitle>
+                <Trans>Something went wrong</Trans>
+              </EmptyTitle>
+              <EmptyDescription>
+                {monitoringQuery.error.message || (
+                  <Trans>
+                    An error occurred while fetching monitoring logs
+                  </Trans>
+                )}
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
               <DataGridRefreshButton
                 variant="destructive"
                 isRefreshing={monitoringQuery.isFetching}
                 onRefresh={handleRefresh}
                 className="w-auto sm:ml-0"
               />
-            </ErrorDisplayActions>
-          </ErrorDisplayError>
+            </EmptyContent>
+          </Empty>
         </div>
       );
     }

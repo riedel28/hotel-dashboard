@@ -1,15 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  QueryErrorResetBoundary,
-  useQueryClient,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
-import { RefreshCwIcon } from 'lucide-react';
-import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { fetchRoomsParamsSchema, roomsQueryOptions } from '@/api/rooms';
+import { QueryBoundary } from '@/components/query-boundary';
 
 import {
   Breadcrumb,
@@ -19,13 +13,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
-import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
 
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
@@ -67,7 +54,9 @@ function RoomsPage() {
         <AddRoomModal />
       </div>
 
-      <Suspense
+      <QueryBoundary
+        className="min-h-[60vh] items-center justify-center"
+        message={<Trans>An error occurred while fetching rooms</Trans>}
         fallback={
           <RoomsTable
             data={[]}
@@ -79,39 +68,8 @@ function RoomsPage() {
           />
         }
       >
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <div className="flex min-h-[60vh] items-center justify-center">
-                  <ErrorDisplayError className="w-md max-w-md">
-                    <ErrorDisplayTitle>
-                      <Trans>Something went wrong</Trans>
-                    </ErrorDisplayTitle>
-                    <ErrorDisplayMessage>
-                      {(error instanceof Error ? error.message : null) || (
-                        <Trans>An error occurred while fetching rooms</Trans>
-                      )}
-                    </ErrorDisplayMessage>
-                    <ErrorDisplayActions>
-                      <Button
-                        variant="destructive"
-                        onClick={resetErrorBoundary}
-                      >
-                        <RefreshCwIcon className="mr-2 h-4 w-4" />
-                        <Trans>Refresh</Trans>
-                      </Button>
-                    </ErrorDisplayActions>
-                  </ErrorDisplayError>
-                </div>
-              )}
-            >
-              <RoomsContent />
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      </Suspense>
+        <RoomsContent />
+      </QueryBoundary>
     </div>
   );
 }

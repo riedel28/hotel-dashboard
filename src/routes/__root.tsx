@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro';
 import {
   type QueryClient,
-  QueryErrorResetBoundary
+  useQueryErrorResetBoundary
 } from '@tanstack/react-query';
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import React from 'react';
@@ -18,11 +18,12 @@ import { RefreshCwIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle
+} from '@/components/ui/empty';
 import { NotFound } from '@/components/ui/not-found';
 
 import type { AuthContext } from '../auth';
@@ -32,6 +33,54 @@ interface MyRouterContext {
   queryClient: QueryClient;
 }
 
+/**
+ * Reached when an error escapes the route's own boundary — a failed loader, or
+ * a render error outside a `QueryBoundary`. `useQueryErrorResetBoundary` reads
+ * the same module-level context the pages read, so clearing it here lets the
+ * retried route refetch instead of re-throwing its cached error. Rendering a
+ * `QueryErrorResetBoundary` provider here would not work: no query runs inside
+ * this subtree, since it replaces the route that owns them.
+ */
+function RootErrorComponent({
+  error,
+  reset
+}: {
+  error: unknown;
+  reset: () => void;
+}) {
+  const { reset: resetQueries } = useQueryErrorResetBoundary();
+
+  return (
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <Empty variant="destructive" className="w-md max-w-md">
+        <EmptyHeader>
+          <EmptyTitle>
+            <Trans>Something went wrong</Trans>
+          </EmptyTitle>
+          <EmptyDescription>
+            {(error instanceof Error ? error.message : null) || (
+              <Trans>An unexpected error occurred</Trans>
+            )}
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button
+            variant="destructive"
+            size="lg"
+            onClick={() => {
+              resetQueries();
+              reset();
+            }}
+          >
+            <RefreshCwIcon className="mr-2 h-4 w-4" />
+            <Trans>Try Again</Trans>
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </div>
+  );
+}
+
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
@@ -39,41 +88,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <TanStackRouterDevtools position="bottom-right" initialIsOpen={false} />
     </>
   ),
-  errorComponent: ({ error, reset }) => {
-    return (
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <QueryErrorResetBoundary>
-          {({ reset: resetQuery }) => (
-            <ErrorDisplayError className="w-md max-w-md">
-              <ErrorDisplayTitle>
-                <Trans>Something went wrong</Trans>
-              </ErrorDisplayTitle>
-              <ErrorDisplayMessage>
-                {error instanceof Error
-                  ? error.message
-                  : String(error) || (
-                      <Trans>An unexpected error occurred</Trans>
-                    )}
-              </ErrorDisplayMessage>
-              <ErrorDisplayActions>
-                <Button
-                  variant="destructive"
-                  size="lg"
-                  onClick={() => {
-                    reset();
-                    resetQuery();
-                  }}
-                >
-                  <RefreshCwIcon className="mr-2 h-4 w-4" />
-                  <Trans>Try Again</Trans>
-                </Button>
-              </ErrorDisplayActions>
-            </ErrorDisplayError>
-          )}
-        </QueryErrorResetBoundary>
-      </div>
-    );
-  },
+  errorComponent: RootErrorComponent,
   notFoundComponent: () => {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">

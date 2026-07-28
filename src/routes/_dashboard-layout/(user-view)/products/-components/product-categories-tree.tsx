@@ -4,7 +4,7 @@ import { useTree } from '@headless-tree/react';
 import { Trans } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { XIcon } from 'lucide-react';
+import { RefreshCwIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 import {
@@ -16,16 +16,16 @@ import {
   transformFlatCategoriesToTree,
   updateProductCategory
 } from '@/api/product-categories';
-
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  ErrorDisplay,
-  ErrorDisplayActions,
-  ErrorDisplayIcon,
-  ErrorDisplayMessage,
-  ErrorDisplayRetryButton,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 
@@ -358,24 +358,37 @@ export function ProductCategoriesTree() {
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
-          <ErrorDisplay variant="destructive" size="sm" className="w-full">
-            <ErrorDisplayIcon icon={XIcon} />
-            <ErrorDisplayTitle>
-              <Trans>Failed to load categories</Trans>
-            </ErrorDisplayTitle>
-            <ErrorDisplayMessage>
-              <Trans>
-                There was an error loading the product categories. Please try
-                again.
-              </Trans>
-            </ErrorDisplayMessage>
-            <ErrorDisplayActions>
-              <ErrorDisplayRetryButton
-                onRetry={() => categoriesQuery.refetch()}
-                isRetrying={categoriesQuery.isRefetching}
-              />
-            </ErrorDisplayActions>
-          </ErrorDisplay>
+          <Empty variant="destructive" className="w-full md:p-6">
+            <EmptyHeader>
+              <EmptyMedia variant="destructive">
+                <XIcon />
+              </EmptyMedia>
+              <EmptyTitle>
+                <Trans>Failed to load categories</Trans>
+              </EmptyTitle>
+              <EmptyDescription>
+                <Trans>
+                  There was an error loading the product categories. Please try
+                  again.
+                </Trans>
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button
+                variant="destructive"
+                onClick={() => categoriesQuery.refetch()}
+                disabled={categoriesQuery.isRefetching}
+              >
+                <RefreshCwIcon
+                  className={cn(
+                    'mr-2 h-4 w-4',
+                    categoriesQuery.isRefetching && 'animate-spin'
+                  )}
+                />
+                <Trans>Try again</Trans>
+              </Button>
+            </EmptyContent>
+          </Empty>
         </CardContent>
       </Card>
     );
