@@ -467,17 +467,9 @@ export const Route = createFileRoute('/_dashboard-layout')({
       });
     }
   },
-  loader: async ({ context: { auth, queryClient }, location }) => {
-    // Double-check authentication before making API call
-    // This prevents the loader from running if auth check in beforeLoad somehow fails
-    if (!auth.isAuthenticated) {
-      throw redirect({
-        to: '/auth/login',
-        search: {
-          redirect: location.href
-        }
-      });
-    }
+  // No auth check here: `beforeLoad` above always runs first, and its redirect
+  // throws, so an unauthenticated request never reaches this loader.
+  loader: async ({ context: { queryClient } }) => {
     const properties = await queryClient.ensureQueryData(
       propertiesQueryOptions()
     );

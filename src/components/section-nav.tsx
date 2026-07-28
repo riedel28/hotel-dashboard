@@ -1,4 +1,5 @@
 import { useLingui } from '@lingui/react/macro';
+import { useNavigate } from '@tanstack/react-router';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -184,6 +185,7 @@ export function SectionNav({
   const { t } = useLingui();
   const [activeId, setActiveId] = useActiveSection(sections);
   const activeChipRef = React.useRef<HTMLAnchorElement>(null);
+  const navigate = useNavigate();
 
   // Keep the current chip in view as the user scrolls the page, otherwise the
   // highlight drifts off the edge of the bar and reads as "nothing selected".
@@ -205,7 +207,18 @@ export function SectionNav({
     if (!document.getElementById(id)) return;
     event.preventDefault();
     scrollToSection(id);
-    window.history.replaceState(null, '', `#${id}`);
+    // Through the router rather than `history.replaceState`: the router keeps
+    // its own copy of the location and only watches `popstate`, so writing the
+    // hash behind its back leaves `router.state.location` stale, and the next
+    // navigation would rebuild the URL from that stale copy.
+    // `search` is carried over explicitly: the router treats search params as
+    // opt-in, so omitting it would strip them from any page that has them.
+    void navigate({
+      to: '.',
+      hash: id,
+      search: (prev: Record<string, unknown>) => prev,
+      replace: true
+    });
     setActiveId(id);
   };
 
