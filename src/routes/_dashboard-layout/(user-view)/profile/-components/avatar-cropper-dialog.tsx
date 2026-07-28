@@ -40,13 +40,15 @@ export function AvatarCropperDialog({
   const [pixelCrop, setPixelCrop] = React.useState<Area | null>(null);
   const [isRendering, setIsRendering] = React.useState(false);
 
-  // Reset the view whenever a different picture comes in, otherwise the second
-  // upload starts at the first one's pan and zoom.
+  // Keyed on the image, not on mount: this dialog is rendered permanently by
+  // AvatarField and only its body unmounts, so without this the second upload
+  // starts at the first one's pan and zoom — and worse, confirms against a
+  // `pixelCrop` measured for the previous picture.
   React.useEffect(() => {
     setCrop({ x: 0, y: 0 });
     setZoom(1);
     setPixelCrop(null);
-  }, []);
+  }, [image]);
 
   const handleConfirm = async () => {
     if (!image || !pixelCrop) return;

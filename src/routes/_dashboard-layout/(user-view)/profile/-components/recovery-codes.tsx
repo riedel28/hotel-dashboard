@@ -33,7 +33,9 @@ export function RecoveryCodes({ codes }: RecoveryCodesProps) {
     link.href = url;
     link.download = 'recovery-codes.txt';
     link.click();
-    URL.revokeObjectURL(url);
+    // Revoked a tick later, not inline: some browsers read the blob after the
+    // click returns, and pulling the URL out from under them cancels the save.
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const print = () => {
