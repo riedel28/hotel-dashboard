@@ -138,10 +138,14 @@ export function AvatarField({ user }: AvatarFieldProps) {
     };
   }, []);
 
-  const closeCropper = () => {
-    if (pending) releaseImage(pending);
-    setPending(null);
-  };
+  // The blob behind a pending crop is owned by this effect rather than by the
+  // close handler, so it is also released when the page unmounts mid-crop.
+  React.useEffect(() => {
+    if (!pending) return;
+    return () => releaseImage(pending);
+  }, [pending]);
+
+  const closeCropper = () => setPending(null);
 
   const displayedAvatar = preview ?? user.avatar_url ?? null;
   const isUploading = mutation.isPending;

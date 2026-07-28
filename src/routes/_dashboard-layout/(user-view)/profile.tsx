@@ -4,12 +4,17 @@ import { createFileRoute } from '@tanstack/react-router';
 import { WifiOffIcon } from 'lucide-react';
 import * as React from 'react';
 
-import { meQueryOptions, profileKeys } from '@/api/profile';
+import {
+  meQueryOptions,
+  profileKeys,
+  twoFactorStatusQueryOptions
+} from '@/api/profile';
 import {
   type NavSection,
   SectionNav,
-  scrollToSection
+  useHashSectionJump
 } from '@/components/section-nav';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,7 +46,13 @@ import { TwoFactorSection } from './profile/-components/two-factor-section';
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
   component: RouteComponent,
-  loader: ({ context }) => context.queryClient.ensureQueryData(meQueryOptions())
+  loader: ({ context }) => {
+    // Kicked off alongside the profile rather than awaited with it: the shell
+    // doesn't need it, but leaving it to the suspended card means the request
+    // can't even start until /users/me has come back.
+    void context.queryClient.prefetchQuery(twoFactorStatusQueryOptions());
+    return context.queryClient.ensureQueryData(meQueryOptions());
+  }
 });
 
 const SECTIONS: NavSection[] = [
@@ -85,46 +96,8 @@ function RouteComponent() {
     []
   );
 
-  // Security emails link straight at a card ("/profile#two-factor"). The
-  // two-factor section is behind Suspense, so on a cold load the anchor doesn't
-  // exist yet — keep looking for a moment rather than silently doing nothing.
-  React.useEffect(() => {
-    const id = window.location.hash.slice(1);
-    if (!id) return;
-
-    const RETRY_MS = 100;
-    const MAX_ATTEMPTS = 20;
-    let attempts = 0;
-    let timer = 0;
-
-    const highlight = ['ring-2', 'ring-primary/50', 'rounded-xl'];
-    let cleanupHighlight = 0;
-
-    const attempt = () => {
-      attempts += 1;
-
-      if (scrollToSection(id)) {
-        const target = document.getElementById(id);
-        target?.classList.add(...highlight);
-        cleanupHighlight = window.setTimeout(
-          () => target?.classList.remove(...highlight),
-          1200
-        );
-        return;
-      }
-
-      if (attempts < MAX_ATTEMPTS) {
-        timer = window.setTimeout(attempt, RETRY_MS);
-      }
-    };
-
-    timer = window.setTimeout(attempt, RETRY_MS);
-
-    return () => {
-      window.clearTimeout(timer);
-      window.clearTimeout(cleanupHighlight);
-    };
-  }, []);
+  // Security emails link straight at a card ("/profile#two-factor").
+  useHashSectionJump();
 
   return (
     <div className="space-y-1 pb-20 lg:pb-0">
@@ -157,19 +130,15 @@ function RouteComponent() {
         </div>
 
         {!isOnline && (
-          <p
-            role="status"
-            className="flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/5 px-3 py-2 text-sm"
-          >
-            <WifiOffIcon
-              className="size-4 shrink-0 text-amber-600 dark:text-amber-500"
-              aria-hidden="true"
-            />
-            <Trans>
-              You're offline. Your changes are kept here and can be saved once
-              you're back online.
-            </Trans>
-          </p>
+          <Alert variant="warning" role="status">
+            <WifiOffIcon aria-hidden="true" />
+            <AlertDescription>
+              <Trans>
+                You're offline. Your changes are kept here and can be saved once
+                you're back online.
+              </Trans>
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* The chip bar takes over wherever the side rail no longer fits. */}
@@ -191,10 +160,7 @@ function RouteComponent() {
               onConflict={() => setConflictOpen(true)}
             />
 
-            <PasswordSection
-              user={user}
-              twoFactorEnabled={user.two_factor_enabled ?? false}
-            />
+            <PasswordSection user={user} />
 
             <React.Suspense fallback={<SectionSkeleton />}>
               <TwoFactorSection />

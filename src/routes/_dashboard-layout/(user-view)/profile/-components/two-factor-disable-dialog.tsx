@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { disableTwoFactor, profileKeys } from '@/api/profile';
 import { isCompleteOtp, OtpField } from '@/components/otp-field';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -17,6 +18,7 @@ import {
 } from '@/components/ui/dialog';
 import { Field, FieldDescription, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { recoveryCodeSchema } from '../../../../../../shared/types/profile';
 import { useReauthedAction } from './reauth-dialog';
 
 interface TwoFactorDisableDialogProps {
@@ -64,7 +66,7 @@ export function TwoFactorDisableDialog({
   });
 
   const canSubmit = useRecoveryCode
-    ? /^[a-z0-9]{4}-[a-z0-9]{4}$/.test(code.trim())
+    ? recoveryCodeSchema.safeParse(code.trim()).success
     : isCompleteOtp(code);
 
   return (
@@ -91,16 +93,15 @@ export function TwoFactorDisableDialog({
             </DialogHeader>
 
             <div className="my-5 space-y-5">
-              <p className="flex items-start gap-2 rounded-md border text-amber-800 dark:text-amber-400 border-amber-500/40 bg-amber-50 dark:bg-amber-900/30 p-3 text-sm">
-                <TriangleAlertIcon
-                  className="mt-0.5 size-4 shrink-0 text-amber-800 dark:text-amber-400"
-                  aria-hidden="true"
-                />
-                <Trans>
-                  Your recovery codes will be deleted, and you'll be signed out
-                  on all other devices.
-                </Trans>
-              </p>
+              <Alert variant="warning">
+                <TriangleAlertIcon aria-hidden="true" />
+                <AlertDescription>
+                  <Trans>
+                    Your recovery codes will be deleted, and you'll be signed
+                    out on all other devices.
+                  </Trans>
+                </AlertDescription>
+              </Alert>
 
               <Field data-invalid={Boolean(error)} className="gap-2.5">
                 <FieldDescription className="text-center">

@@ -34,14 +34,11 @@ import {
 
 interface PasswordSectionProps {
   user: User;
-  twoFactorEnabled: boolean;
 }
 
-export function PasswordSection({
-  user,
-  twoFactorEnabled
-}: PasswordSectionProps) {
+export function PasswordSection({ user }: PasswordSectionProps) {
   const { t: lingui } = useLingui();
+  const twoFactorEnabled = user.two_factor_enabled ?? false;
   const { flash, flashClass } = useSuccessFlash();
   const [capsLockOn, setCapsLockOn] = React.useState(false);
   const [signedOutElsewhere, setSignedOutElsewhere] = React.useState(false);
@@ -90,7 +87,6 @@ export function PasswordSection({
   });
 
   const newPassword = form.watch('new_password');
-  const confirmPassword = form.watch('confirm_password');
 
   const mutation = useMutation({
     mutationFn: (values: FormData) =>
@@ -133,9 +129,6 @@ export function PasswordSection({
   });
 
   const submit = form.handleSubmit((values) => mutation.mutate(values));
-
-  const confirmMatches =
-    confirmPassword.length > 0 && confirmPassword === newPassword;
 
   return (
     <ProfileSection
@@ -241,7 +234,7 @@ export function PasswordSection({
                     autoComplete="new-password"
                     aria-invalid={fieldState.invalid}
                   />
-                  {confirmMatches && (
+                  {field.value.length > 0 && field.value === newPassword && (
                     <CheckIcon
                       className="pointer-events-none absolute inset-e-9 top-1/2 size-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-500"
                       aria-hidden="true"

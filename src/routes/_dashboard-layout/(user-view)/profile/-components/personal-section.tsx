@@ -48,6 +48,15 @@ interface PersonalSectionProps {
   onConflict: () => void;
 }
 
+/** The editable subset of a user, in the shape the form holds it. */
+function toFormValues(user: User) {
+  return {
+    first_name: user.first_name ?? '',
+    last_name: user.last_name ?? '',
+    country_code: user.country_code ?? null
+  };
+}
+
 export function PersonalSection({
   user,
   onDirtyChange,
@@ -62,16 +71,8 @@ export function PersonalSection({
   const schema = React.useMemo(
     () =>
       z.object({
-        first_name: z
-          .string()
-          .trim()
-          .min(1, t`First name is required`)
-          .max(50),
-        last_name: z
-          .string()
-          .trim()
-          .min(1, t`Last name is required`)
-          .max(50),
+        first_name: z.string().trim().min(1, t`First name is required`).max(50),
+        last_name: z.string().trim().min(1, t`Last name is required`).max(50),
         country_code: z.string().length(2).nullable()
       }),
     []
@@ -80,11 +81,7 @@ export function PersonalSection({
   type FormData = z.infer<typeof schema>;
 
   const defaults: FormData = React.useMemo(
-    () => ({
-      first_name: user.first_name ?? '',
-      last_name: user.last_name ?? '',
-      country_code: user.country_code ?? null
-    }),
+    () => toFormValues(user),
     [user.first_name, user.last_name, user.country_code]
   );
 
@@ -104,17 +101,13 @@ export function PersonalSection({
   const mutation = useMutation({
     mutationFn: (values: FormData) =>
       updateMe({ ...values, expected_updated_at: user.updated_at }),
-    onSuccess: updated => {
+    onSuccess: (updated) => {
       queryClient.setQueryData(profileKeys.me, updated);
-      form.reset({
-        first_name: updated.first_name ?? '',
-        last_name: updated.last_name ?? '',
-        country_code: updated.country_code ?? null
-      });
+      form.reset(toFormValues(updated));
       flash();
       toast.success(lingui`Profile updated`);
     },
-    onError: error => {
+    onError: (error) => {
       if (error instanceof ApiError && error.code === 'STALE_PROFILE') {
         onConflict();
         return;
@@ -130,12 +123,20 @@ export function PersonalSection({
   const isSaving = mutation.isPending;
   React.useEffect(() => onSavingChange(isSaving), [isSaving, onSavingChange]);
 
-  const submit = form.handleSubmit(values => mutation.mutate(values));
+  const submit = form.handleSubmit((values) => mutation.mutate(values));
   const resetForm = React.useCallback(() => reset(defaults), [defaults, reset]);
 
+  // `handleSubmit` hands back a new function every render, so the handle is
+  // read through a ref — registering the closure directly would re-run the
+  // effect below on every single render.
+  const latestSubmit = React.useRef(submit);
+  latestSubmit.current = submit;
+
+  const save = React.useCallback(() => void latestSubmit.current(), []);
+
   React.useEffect(() => {
-    registerControls({ save: () => void submit(), reset: resetForm });
-  }, [registerControls, submit, resetForm]);
+    registerControls({ save, reset: resetForm });
+  }, [registerControls, save, resetForm]);
 
   return (
     <ProfileSection
@@ -148,7 +149,7 @@ export function PersonalSection({
         isDirty={isDirty}
         isSubmitting={mutation.isPending}
         submitLabel={<Trans>Save changes</Trans>}
-        onSubmit={() => void submit()}
+        onSubmit={save}
         onReset={resetForm}
       >
         <AvatarField user={user} />

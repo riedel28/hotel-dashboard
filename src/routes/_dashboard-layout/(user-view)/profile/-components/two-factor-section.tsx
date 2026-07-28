@@ -7,8 +7,7 @@ import {
   Loader2Icon,
   RotateCwIcon,
   ShieldIcon,
-  SmartphoneIcon,
-  TriangleAlertIcon
+  SmartphoneIcon
 } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
@@ -37,6 +36,7 @@ import {
   ItemMedia,
   ItemTitle
 } from '@/components/ui/item';
+import { cn } from '@/lib/utils';
 import { AuthenticatorApps } from './authenticator-apps';
 import { ProfileSection } from './profile-section';
 import { useReauthedAction } from './reauth-dialog';
@@ -81,31 +81,22 @@ export function TwoFactorSection() {
         <Trans>A second step at sign-in, from an app on your phone.</Trans>
       }
       action={
-        status.enabled ? (
-          <Badge
-            color="emerald"
-            size="sm"
-            className="px-2 py-1 rounded-md border-foreground/10"
-          >
-            <span
-              className="size-1.5 bg-emerald-700 dark:bg-emerald-300 rounded-full mr-0.5"
-              aria-hidden="true"
-            />
-            <Trans>Enabled</Trans>
-          </Badge>
-        ) : (
-          <Badge
-            color="gray"
-            size="sm"
-            className="px-2 py-1 rounded-md border-foreground/10"
-          >
-            <span
-              aria-hidden="true"
-              className="bg-muted-foreground/60 size-1.5 rounded-full mr-0.5"
-            />
-            <Trans>Disabled</Trans>
-          </Badge>
-        )
+        <Badge
+          color={status.enabled ? 'emerald' : 'gray'}
+          size="sm"
+          className="px-2 py-1 rounded-md border-foreground/10"
+        >
+          <span
+            aria-hidden="true"
+            className={cn(
+              'size-1.5 rounded-full mr-0.5',
+              status.enabled
+                ? 'bg-emerald-700 dark:bg-emerald-300'
+                : 'bg-muted-foreground/60'
+            )}
+          />
+          {status.enabled ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+        </Badge>
       }
     >
       {status.enabled ? (
@@ -268,27 +259,5 @@ export function TwoFactorSection() {
         </DialogContent>
       </Dialog>
     </ProfileSection>
-  );
-}
-
-/** Nav callout that pulls attention to an account still without 2FA. */
-export function TwoFactorNavCallout() {
-  const { data: status } = useSuspenseQuery(twoFactorStatusQueryOptions());
-
-  if (status.enabled) return null;
-
-  return (
-    <div className="space-y-1.5 text-sm">
-      <p className="flex items-center gap-1.5 font-medium text-amber-600 dark:text-amber-500">
-        <TriangleAlertIcon className="size-3.5 shrink-0" aria-hidden="true" />
-        <Trans>2FA is off</Trans>
-      </p>
-      <a
-        href="#two-factor"
-        className="rounded-sm text-sm text-cyan-800 underline-offset-4 outline-none hover:underline focus-visible:shadow-[0_0_0_2px_var(--color-primary)] dark:text-cyan-200/90"
-      >
-        <Trans>Enable now</Trans>
-      </a>
-    </div>
   );
 }

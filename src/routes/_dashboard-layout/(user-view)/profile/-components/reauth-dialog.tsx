@@ -154,5 +154,5 @@ export function useReauthedAction<T>({
     </Dialog>
   );
 
-  return { run, runWith: invoke, dialog, isRunning };
+  return { run, dialog, isRunning };
 }

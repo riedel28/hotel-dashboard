@@ -115,6 +115,57 @@ export function scrollToSection(id: string) {
   return true;
 }
 
+/** Classes that light a section's border once it has been jumped to. */
+const HIGHLIGHT = ['ring-2', 'ring-primary/50', 'rounded-xl'];
+const HIGHLIGHT_MS = 1200;
+
+/**
+ * Jumps to the section named in the URL hash on first load, then lights its
+ * border briefly so the landing spot is obvious.
+ *
+ * A section rendered behind Suspense isn't in the DOM yet on a cold load — a
+ * link pointing straight at one (`/profile#two-factor`, as the security emails
+ * send) would find nothing — so the target is polled for a moment rather than
+ * looked up once and given up on.
+ */
+export function useHashSectionJump() {
+  React.useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+
+    const RETRY_MS = 100;
+    const MAX_ATTEMPTS = 20;
+    let attempts = 0;
+    let timer = 0;
+    let clearHighlight = 0;
+
+    const attempt = () => {
+      attempts += 1;
+
+      if (scrollToSection(id)) {
+        const target = document.getElementById(id);
+        target?.classList.add(...HIGHLIGHT);
+        clearHighlight = window.setTimeout(
+          () => target?.classList.remove(...HIGHLIGHT),
+          HIGHLIGHT_MS
+        );
+        return;
+      }
+
+      if (attempts < MAX_ATTEMPTS) {
+        timer = window.setTimeout(attempt, RETRY_MS);
+      }
+    };
+
+    timer = window.setTimeout(attempt, RETRY_MS);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.clearTimeout(clearHighlight);
+    };
+  }, []);
+}
+
 interface SectionNavProps {
   sections: NavSection[];
   className?: string;

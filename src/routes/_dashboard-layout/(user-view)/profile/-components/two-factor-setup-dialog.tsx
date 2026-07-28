@@ -1,9 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  CheckIcon,
   ChevronDownIcon,
-  CopyIcon,
   Loader2Icon,
   ShieldCheckIcon,
   SmartphoneIcon
@@ -18,6 +16,15 @@ import {
   startTwoFactorSetup
 } from '@/api/profile';
 import { isCompleteOtp, OtpField, OtpHint } from '@/components/otp-field';
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -25,6 +32,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from '@/components/ui/collapsible';
+import { CopyButton } from '@/components/ui/copy-button';
 import {
   Dialog,
   DialogContent,
@@ -34,7 +42,6 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-import { useCopyToClipboard } from '@/hooks';
 import { cn } from '@/lib/utils';
 import type { TwoFactorSetupResponse } from '../../../../../../shared/types/profile';
 import { AuthenticatorApps } from './authenticator-apps';
@@ -103,14 +110,17 @@ export function TwoFactorSetupDialog({
     runSetup();
   }, [open, runSetup]);
 
+  // Keyed on whether a cooldown is running, not on its value — depending on the
+  // count itself would rebuild the interval on every tick.
+  const cooldownActive = cooldown > 0;
   React.useEffect(() => {
-    if (cooldown <= 0) return;
+    if (!cooldownActive) return;
     const timer = window.setInterval(
       () => setCooldown((seconds) => Math.max(0, seconds - 1)),
       1000
     );
     return () => window.clearInterval(timer);
-  }, [cooldown]);
+  }, [cooldownActive]);
 
   const verify = async (submitted: string) => {
     if (cooldown > 0 || isVerifying) return;
@@ -304,27 +314,23 @@ export function TwoFactorSetupDialog({
 
       {setup.dialog}
 
-      <Dialog open={confirmCancel} onOpenChange={setConfirmCancel}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>
+      <AlertDialog open={confirmCancel} onOpenChange={setConfirmCancel}>
+        <AlertDialogContent className="sm:max-w-sm">
+          <AlertDialogHeader>
+            <AlertDialogTitle>
               <Trans>Cancel setup?</Trans>
-            </DialogTitle>
-            <DialogDescription>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
               <Trans>
                 Two-factor authentication won't be enabled and your account will
                 keep using just a password.
               </Trans>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setConfirmCancel(false)}
-            >
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setConfirmCancel(false)}>
               <Trans>Keep setting up</Trans>
-            </Button>
+            </AlertDialogCancel>
             <Button
               type="button"
               variant="destructive"
@@ -335,9 +341,9 @@ export function TwoFactorSetupDialog({
             >
               <Trans>Cancel setup</Trans>
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
@@ -373,7 +379,6 @@ function StepIndicator({ current }: { current: Step }) {
 
 function ScanStep({ data }: { data: TwoFactorSetupResponse | null }) {
   const { t } = useLingui();
-  const { copied, copy } = useCopyToClipboard();
 
   if (!data) {
     return (
@@ -413,19 +418,11 @@ function ScanStep({ data }: { data: TwoFactorSetupResponse | null }) {
               <code className="flex-1 font-mono text-sm tracking-wider break-all">
                 {data.secret}
               </code>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                onClick={() => void copy(data.secret.replace(/ /g, ''))}
-                aria-label={t`Copy setup key`}
-              >
-                {copied ? (
-                  <CheckIcon aria-hidden="true" />
-                ) : (
-                  <CopyIcon aria-hidden="true" />
-                )}
-              </Button>
+              <CopyButton
+                text={data.secret.replace(/ /g, '')}
+                copyLabel={t`Copy setup key`}
+                copiedLabel={t`Setup key copied`}
+              />
             </div>
             <p className="text-muted-foreground text-xs">
               <Trans>Time-based (TOTP) · 6 digits · 30 seconds</Trans>

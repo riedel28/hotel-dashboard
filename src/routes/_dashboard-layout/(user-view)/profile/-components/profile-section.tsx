@@ -110,6 +110,11 @@ export function ProfileSectionForm({
   const canSubmit =
     !isSubmitting && !disabled && isOnline && (alwaysEnabled || isDirty);
 
+  // Callers pass an inline arrow, so the handler is read through a ref —
+  // depending on the prop itself would rebind this listener every render.
+  const latestSubmit = React.useRef(onSubmit);
+  latestSubmit.current = onSubmit;
+
   // Cmd/Ctrl+S saves the section the caret is inside, matching the muscle
   // memory the rest of the app's forms don't yet have but users bring anyway.
   React.useEffect(() => {
@@ -117,12 +122,12 @@ export function ProfileSectionForm({
       if (!(event.metaKey || event.ctrlKey) || event.key !== 's') return;
       if (!formRef.current?.contains(document.activeElement)) return;
       event.preventDefault();
-      if (canSubmit) onSubmit();
+      if (canSubmit) latestSubmit.current();
     };
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [canSubmit, onSubmit]);
+  }, [canSubmit]);
 
   return (
     <form
@@ -278,7 +283,6 @@ export function useSuccessFlash() {
 
   return {
     flash,
-    flashing,
     flashClass: cn(
       'transition-shadow duration-300',
       flashing && 'ring-2 ring-emerald-500/70'
