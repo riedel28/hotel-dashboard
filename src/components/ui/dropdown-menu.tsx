@@ -198,24 +198,52 @@ function DropdownMenuRadioGroup({ ...props }: MenuPrimitive.RadioGroup.Props) {
 function DropdownMenuRadioItem({
   className,
   children,
+  indicator = 'radio',
   ...props
-}: MenuPrimitive.RadioItem.Props) {
+}: MenuPrimitive.RadioItem.Props & {
+  /**
+   * How the selected option is marked. `radio` draws the usual dial on the
+   * left; `check` drops it for a trailing tick, for menus whose options
+   * already carry their own icon and would read as a form otherwise.
+   */
+  indicator?: 'radio' | 'check';
+}) {
+  const isCheck = indicator === 'check';
+
   return (
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={cn(
-        "focus:bg-accent focus:text-accent-foreground gap-2 rounded-sm py-1 pl-9 pr-2 text-sm [&_svg:not([class*='size-'])]:size-4 relative flex cursor-default items-center focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-checked:[&_[data-slot=dropdown-menu-radio-item-indicator]]:border-primary data-checked:[&_[data-slot=dropdown-menu-radio-item-indicator]]:bg-primary [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "focus:bg-accent focus:text-accent-foreground gap-2 rounded-sm py-1 text-sm [&_svg:not([class*='size-'])]:size-4 relative flex cursor-default items-center focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        isCheck
+          ? 'px-1.5'
+          : 'pl-9 pr-2 data-checked:[&_[data-slot=dropdown-menu-radio-item-indicator]]:border-primary data-checked:[&_[data-slot=dropdown-menu-radio-item-indicator]]:bg-primary',
         className
       )}
       {...props}
     >
-      <span
-        className="pointer-events-none absolute left-2 flex size-4 items-center justify-center rounded-full border border-input bg-background dark:bg-input/30"
-        data-slot="dropdown-menu-radio-item-indicator"
-      >
-        <MenuPrimitive.RadioItemIndicator className="size-1.5 rounded-full bg-white" />
-      </span>
-      {children}
+      {isCheck ? (
+        <>
+          {children}
+          {/* Renders only while this option is the selected one. */}
+          <MenuPrimitive.RadioItemIndicator
+            className="ml-auto flex items-center"
+            data-slot="dropdown-menu-radio-item-indicator"
+          >
+            <CheckIcon className="size-3.5" aria-hidden="true" />
+          </MenuPrimitive.RadioItemIndicator>
+        </>
+      ) : (
+        <>
+          <span
+            className="pointer-events-none absolute left-2 flex size-4 items-center justify-center rounded-full border border-input bg-background dark:bg-input/30"
+            data-slot="dropdown-menu-radio-item-indicator"
+          >
+            <MenuPrimitive.RadioItemIndicator className="size-1.5 rounded-full bg-white" />
+          </span>
+          {children}
+        </>
+      )}
     </MenuPrimitive.RadioItem>
   );
 }

@@ -113,7 +113,8 @@ function LanguageSubmenu({
             <DropdownMenuRadioItem
               key={lang.code}
               value={lang.code}
-              className="overflow-hidden [&>svg]:shrink-0 px-1.5 py-1"
+              indicator="check"
+              className="overflow-hidden [&>svg]:shrink-0 py-1"
             >
               <CountryFlag
                 code={lang.country}
@@ -174,15 +175,15 @@ function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
           value={currentTheme}
           onValueChange={(value) => onThemeChange(value as Theme)}
         >
-          <DropdownMenuRadioItem value="light">
+          <DropdownMenuRadioItem value="light" indicator="check">
             <SunIcon />
             <Trans>Light</Trans>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="dark">
+          <DropdownMenuRadioItem value="dark" indicator="check">
             <MoonIcon />
             <Trans>Dark</Trans>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="system">
+          <DropdownMenuRadioItem value="system" indicator="check">
             <MonitorIcon />
             <Trans>System</Trans>
           </DropdownMenuRadioItem>
