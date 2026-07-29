@@ -4,26 +4,26 @@ import { type Control, Controller } from 'react-hook-form';
 import { CountryPicker } from '@/components/ui/country-picker';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import type { PaymentProviderFormData } from './payment-provider-form-types';
-import { sectionHeadingId } from './payment-provider-toc';
-import { SectionHeading } from './section-heading';
+import { sectionHeadingId } from './adyen-form-toc';
+import type { AdyenFormData } from './adyen-form-types';
+import { AdyenSectionHeading } from './adyen-section-heading';
 
-interface PaymentRecipientSectionProps {
-  control: Control<PaymentProviderFormData>;
+interface AdyenRecipientSectionProps {
+  control: Control<AdyenFormData>;
   disabled?: boolean;
 }
 
-export function PaymentRecipientSection({
+export function AdyenRecipientSection({
   control,
   disabled = false
-}: PaymentRecipientSectionProps) {
+}: AdyenRecipientSectionProps) {
   return (
     <section
       id="recipient"
       aria-labelledby={sectionHeadingId('recipient')}
       className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
     >
-      <SectionHeading
+      <AdyenSectionHeading
         id={sectionHeadingId('recipient')}
         title={<Trans>Payment recipient</Trans>}
         description={

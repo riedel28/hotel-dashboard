@@ -17,19 +17,21 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { sectionHeadingId } from './adyen-form-toc';
 import {
-  type MethodId,
-  PAYMENT_METHODS,
-  type PaymentProviderFormData
-} from './payment-provider-form-types';
-import { sectionHeadingId } from './payment-provider-toc';
-import { SectionHeading } from './section-heading';
+  ADYEN_PAYMENT_METHODS,
+  type AdyenFormData,
+  type AdyenMethodId
+} from './adyen-form-types';
+import { AdyenSectionHeading } from './adyen-section-heading';
 
-interface MappingCodesSectionProps {
-  control: Control<PaymentProviderFormData>;
+interface AdyenMappingCodesSectionProps {
+  control: Control<AdyenFormData>;
 }
 
-export function MappingCodesSection({ control }: MappingCodesSectionProps) {
+export function AdyenMappingCodesSection({
+  control
+}: AdyenMappingCodesSectionProps) {
   const { dirtyFields, isDirty } = useFormState({ control });
 
   return (
@@ -38,7 +40,7 @@ export function MappingCodesSection({ control }: MappingCodesSectionProps) {
       aria-labelledby={sectionHeadingId('mapping')}
       className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
     >
-      <SectionHeading
+      <AdyenSectionHeading
         id={sectionHeadingId('mapping')}
         title={<Trans>Mapping codes</Trans>}
         description={
@@ -66,7 +68,7 @@ export function MappingCodesSection({ control }: MappingCodesSectionProps) {
           </TableRow>
         </TableHeader>
         <TableBody className="max-md:block">
-          {PAYMENT_METHODS.map(({ id, name }) => (
+          {ADYEN_PAYMENT_METHODS.map(({ id, name }) => (
             <TableRow
               key={id}
               className="hover:bg-transparent md:h-12 max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4"
@@ -117,8 +119,8 @@ function MappingCell({
   label,
   dirty
 }: {
-  control: Control<PaymentProviderFormData>;
-  method: MethodId;
+  control: Control<AdyenFormData>;
+  method: AdyenMethodId;
   kind: 'ecom' | 'pos';
   label: ReactNode;
   dirty: boolean;
@@ -164,7 +166,7 @@ function MappingCell({
   );
 }
 
-function BrandMark({ brand }: { brand: MethodId }) {
+function BrandMark({ brand }: { brand: AdyenMethodId }) {
   const chip =
     'flex h-5 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[5px] border';
   switch (brand) {

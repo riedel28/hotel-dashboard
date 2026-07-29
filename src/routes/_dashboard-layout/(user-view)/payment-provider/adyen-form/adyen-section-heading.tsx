@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export function SectionHeading({
+export function AdyenSectionHeading({
   id,
   title,
   description

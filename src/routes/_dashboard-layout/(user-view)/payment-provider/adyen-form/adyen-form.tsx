@@ -27,21 +27,18 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { CredentialsSection } from './credentials-section';
-import { MappingCodesSection } from './mapping-codes-section';
+import { AdyenCredentialsSection } from './adyen-credentials-section';
+import { ADYEN_FORM_SECTIONS } from './adyen-form-toc';
+import { ADYEN_PAYMENT_METHODS, type AdyenFormData } from './adyen-form-types';
+import { AdyenMappingCodesSection } from './adyen-mapping-codes-section';
+import { AdyenRecipientSection } from './adyen-recipient-section';
 import {
-  PAYMENT_METHODS,
-  type PaymentProviderFormData
-} from './payment-provider-form-types';
-import { PAYMENT_FORM_SECTIONS } from './payment-provider-toc';
-import { PaymentRecipientSection } from './payment-recipient-section';
-import {
-  type PaymentTestConnectionConfig,
-  PaymentTestConnectionDialog,
-  type PaymentTestConnectionResult
-} from './payment-test-connection-dialog';
+  type AdyenTestConnectionConfig,
+  AdyenTestConnectionDialog,
+  type AdyenTestConnectionResult
+} from './adyen-test-connection-dialog';
 
-const DEFAULT_VALUES: PaymentProviderFormData = {
+const DEFAULT_VALUES: AdyenFormData = {
   environment: 'test',
   merchantId: 'CasablancaHotelECOM',
   apiKey: '',
@@ -62,16 +59,16 @@ const DEFAULT_VALUES: PaymentProviderFormData = {
   }
 };
 
-export function PaymentProviderForm() {
+export function AdyenForm() {
   const { i18n } = useLingui();
   const [isReplacingApiKey, setIsReplacingApiKey] = React.useState(false);
   const [confirmLiveOpen, setConfirmLiveOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [testDialogOpen, setTestDialogOpen] = React.useState(false);
   const [testConfig, setTestConfig] =
-    React.useState<PaymentTestConnectionConfig | null>(null);
+    React.useState<AdyenTestConnectionConfig | null>(null);
   const [lastTestResult, setLastTestResult] =
-    React.useState<PaymentTestConnectionResult | null>(null);
+    React.useState<AdyenTestConnectionResult | null>(null);
   const [lastSavedAt, setLastSavedAt] = React.useState<Date | null>(null);
 
   const confirmLiveRef = React.useRef<(() => void) | null>(null);
@@ -147,7 +144,7 @@ export function PaymentProviderForm() {
             });
           }
 
-          for (const { id } of PAYMENT_METHODS) {
+          for (const { id } of ADYEN_PAYMENT_METHODS) {
             for (const kind of ['ecom', 'pos'] as const) {
               const value = data.mappings[id]?.[kind] ?? '';
               if (value && !/^\d{1,12}$/.test(value)) {
@@ -163,7 +160,7 @@ export function PaymentProviderForm() {
     [isReplacingApiKey]
   );
 
-  const form = useForm<PaymentProviderFormData>({
+  const form = useForm<AdyenFormData>({
     resolver: zodResolver(schema),
     defaultValues: DEFAULT_VALUES
   });
@@ -171,7 +168,7 @@ export function PaymentProviderForm() {
   const isDirty = form.formState.isDirty;
   const environment = form.watch('environment');
 
-  const onSubmit = async (values: PaymentProviderFormData) => {
+  const onSubmit = async (values: AdyenFormData) => {
     setIsSubmitting(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 800));
@@ -211,7 +208,7 @@ export function PaymentProviderForm() {
   return (
     <div className="flex flex-row gap-8">
       <SectionNav
-        sections={PAYMENT_FORM_SECTIONS}
+        sections={ADYEN_FORM_SECTIONS}
         className="order-2 hidden xl:block"
       />
 
@@ -264,13 +261,13 @@ export function PaymentProviderForm() {
 
         <CardContent>
           <form
-            id="payment-provider-form"
+            id="adyen-form"
             onSubmit={form.handleSubmit(onSubmit)}
             aria-busy={isSubmitting}
             className="flex flex-col gap-6 md:gap-8"
           >
             <fieldset disabled={isSubmitting} className="contents">
-              <CredentialsSection
+              <AdyenCredentialsSection
                 control={form.control}
                 onRequestLiveConfirm={handleRequestLiveConfirm}
                 onTestConnection={handleTestConnection}
@@ -280,14 +277,14 @@ export function PaymentProviderForm() {
 
               <Separator />
 
-              <PaymentRecipientSection
+              <AdyenRecipientSection
                 control={form.control}
                 disabled={isSubmitting}
               />
 
               <Separator />
 
-              <MappingCodesSection control={form.control} />
+              <AdyenMappingCodesSection control={form.control} />
             </fieldset>
           </form>
         </CardContent>
@@ -323,11 +320,7 @@ export function PaymentProviderForm() {
               >
                 <Trans>Cancel</Trans>
               </Button>
-              <Button
-                type="submit"
-                form="payment-provider-form"
-                disabled={isSubmitting}
-              >
+              <Button type="submit" form="adyen-form" disabled={isSubmitting}>
                 {isSubmitting && (
                   <Loader2Icon className="animate-spin" aria-hidden="true" />
                 )}
@@ -374,7 +367,7 @@ export function PaymentProviderForm() {
         </AlertDialog>
 
         {testConfig && (
-          <PaymentTestConnectionDialog
+          <AdyenTestConnectionDialog
             open={testDialogOpen}
             onOpenChange={setTestDialogOpen}
             config={testConfig}

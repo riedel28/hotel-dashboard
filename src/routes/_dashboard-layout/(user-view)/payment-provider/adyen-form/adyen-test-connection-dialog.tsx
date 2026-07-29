@@ -34,23 +34,23 @@ interface TestStep {
   error?: string;
 }
 
-export type PaymentEnvironment = 'test' | 'live';
+export type AdyenEnvironment = 'test' | 'live';
 
-export interface PaymentTestConnectionConfig {
-  environment: PaymentEnvironment;
+export interface AdyenTestConnectionConfig {
+  environment: AdyenEnvironment;
   merchantId: string;
 }
 
-export interface PaymentTestConnectionResult {
+export interface AdyenTestConnectionResult {
   passed: boolean;
   finishedAt: Date;
 }
 
-interface PaymentTestConnectionDialogProps {
+interface AdyenTestConnectionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  config: PaymentTestConnectionConfig;
-  onFinished?: (result: PaymentTestConnectionResult) => void;
+  config: AdyenTestConnectionConfig;
+  onFinished?: (result: AdyenTestConnectionResult) => void;
 }
 
 function formatDuration(ms: number) {
@@ -61,11 +61,11 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function PaymentTestConnectionDialog({
+export function AdyenTestConnectionDialog({
   open,
   onOpenChange,
   onFinished
-}: PaymentTestConnectionDialogProps) {
+}: AdyenTestConnectionDialogProps) {
   const { t, i18n } = useLingui();
 
   const [steps, setSteps] = React.useState<TestStep[]>([]);

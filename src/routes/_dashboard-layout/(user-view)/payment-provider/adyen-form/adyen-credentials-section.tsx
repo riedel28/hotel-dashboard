@@ -22,30 +22,30 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
-import type { PaymentProviderFormData } from './payment-provider-form-types';
-import { sectionHeadingId } from './payment-provider-toc';
+import { sectionHeadingId } from './adyen-form-toc';
+import type { AdyenFormData } from './adyen-form-types';
+import { AdyenSectionHeading } from './adyen-section-heading';
 import type {
-  PaymentEnvironment,
-  PaymentTestConnectionResult
-} from './payment-test-connection-dialog';
-import { SectionHeading } from './section-heading';
+  AdyenEnvironment,
+  AdyenTestConnectionResult
+} from './adyen-test-connection-dialog';
 
-interface CredentialsSectionProps {
-  control: Control<PaymentProviderFormData>;
+interface AdyenCredentialsSectionProps {
+  control: Control<AdyenFormData>;
   /** Called when the user tries to switch to Live; `apply` commits the change. */
   onRequestLiveConfirm: (apply: () => void) => void;
   onTestConnection: () => void;
-  lastTestResult: PaymentTestConnectionResult | null;
+  lastTestResult: AdyenTestConnectionResult | null;
   disabled?: boolean;
 }
 
-export function CredentialsSection({
+export function AdyenCredentialsSection({
   control,
   onRequestLiveConfirm,
   onTestConnection,
   lastTestResult,
   disabled = false
-}: CredentialsSectionProps) {
+}: AdyenCredentialsSectionProps) {
   const { i18n } = useLingui();
 
   return (
@@ -54,7 +54,7 @@ export function CredentialsSection({
       aria-labelledby={sectionHeadingId('credentials')}
       className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
     >
-      <SectionHeading
+      <AdyenSectionHeading
         id={sectionHeadingId('credentials')}
         title={<Trans>Credentials</Trans>}
         description={
@@ -74,7 +74,7 @@ export function CredentialsSection({
               <RadioGroup
                 value={field.value}
                 onValueChange={(value) => {
-                  const next = value as PaymentEnvironment;
+                  const next = value as AdyenEnvironment;
                   if (next === 'live' && field.value === 'test') {
                     onRequestLiveConfirm(() => field.onChange('live'));
                     return;

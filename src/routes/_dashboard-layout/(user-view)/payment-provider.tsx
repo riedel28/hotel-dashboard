@@ -10,7 +10,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { useDocumentTitle } from '@/hooks/use-document-title';
-import { PaymentProviderForm } from './payment-provider/-components/payment-provider-form';
+import { AdyenForm } from './payment-provider/adyen-form/adyen-form';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/payment-provider'
@@ -55,7 +55,7 @@ function RouteComponent() {
         </p>
       </div>
 
-      <PaymentProviderForm />
+      <AdyenForm />
     </div>
   );
 }
