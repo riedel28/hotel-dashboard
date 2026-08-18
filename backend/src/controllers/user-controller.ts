@@ -7,7 +7,6 @@ import { db } from '../db/pool';
 import {
   emailVerificationTokens,
   properties,
-  roles,
   userRoles,
   users
 } from '../db/schema';
