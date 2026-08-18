@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "useTabs": false,
+  "tabWidth": 2,
+  "printWidth": 80,
+  "singleQuote": true,
+  "jsxSingleQuote": false,
+  "quoteProps": "as-needed",
+  "trailingComma": "none",
+  "semi": true,
+  "arrowParens": "always",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "ignorePatterns": [
+    "src/routeTree.gen.ts",
+    "src/locales/**/messages.js",
+    "**/*.md",
+    "**/*.yml",
+    "**/*.yaml",
+    "**/*.toml"
+  ],
+  "sortImports": {
+    "enabled": true,
+    "newlinesBetween": true
+  },
+  "sortTailwindcss": {
+    "enabled": true,
+    "stylesheet": "src/globals.css",
+    "functions": ["cn", "clsx", "cva"]
+  },
+  "sortPackageJson": false
+}
