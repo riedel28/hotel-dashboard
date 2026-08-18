@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
-
 import { cn } from '@/lib/utils';
 
 interface DataGridCheckboxFilterOption<TValue extends string> {
@@ -50,8 +49,10 @@ function useDataGridCheckboxFilter() {
   return context;
 }
 
-interface DataGridCheckboxFilterProps<TValue extends string>
-  extends Omit<ButtonProps, 'children' | 'onChange' | 'value'> {
+interface DataGridCheckboxFilterProps<TValue extends string> extends Omit<
+  ButtonProps,
+  'children' | 'onChange' | 'value'
+> {
   options: DataGridCheckboxFilterOption<TValue>[];
   value: TValue[];
   onValueChange: (value: TValue[]) => void;

@@ -22,6 +22,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
+
 import { sectionHeadingId } from './adyen-form-toc';
 import type { AdyenFormData } from './adyen-form-types';
 import { AdyenSectionHeading } from './adyen-section-heading';

@@ -2,9 +2,9 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
+
 import { fetchRoomsParamsSchema, roomsQueryOptions } from '@/api/rooms';
 import { QueryBoundary } from '@/components/query-boundary';
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,7 +13,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 

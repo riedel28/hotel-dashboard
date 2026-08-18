@@ -1,4 +1,5 @@
 import type { RefObject } from 'react';
+
 import { EntryCard, EntryCardSkeleton } from './entry-card';
 import type { Entry } from './types';
 
@@ -20,9 +21,9 @@ export function LetterSection({
       ref={(el) => {
         sectionRefs.current[letter] = el;
       }}
-      className="scroll-mt-24 p-4 flex flex-col gap-4 max-w-lg"
+      className="flex max-w-lg scroll-mt-24 flex-col gap-4 p-4"
     >
-      <span className="text-2xl text-foreground/80 font-semibold uppercase">
+      <span className="text-2xl font-semibold text-foreground/80 uppercase">
         {letter}
       </span>
 

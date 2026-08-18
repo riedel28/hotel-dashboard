@@ -17,6 +17,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+
 import { sectionHeadingId } from './adyen-form-toc';
 import {
   ADYEN_PAYMENT_METHODS,
@@ -71,7 +72,7 @@ export function AdyenMappingCodesSection({
           {ADYEN_PAYMENT_METHODS.map(({ id, name }) => (
             <TableRow
               key={id}
-              className="hover:bg-transparent md:h-12 max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4"
+              className="hover:bg-transparent max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4 md:h-12"
             >
               <TableCell className="max-md:col-span-2 max-md:p-0">
                 <div className="flex items-center gap-2.5 md:h-8">
@@ -102,7 +103,7 @@ export function AdyenMappingCodesSection({
         </TableBody>
 
         {isDirty && (
-          <p className="px-4 mt-1.5 text-xs text-muted-foreground flex gap-2 items-center transition-all">
+          <p className="mt-1.5 flex items-center gap-2 px-4 text-xs text-muted-foreground transition-all">
             <span className="size-1.5 rounded-full bg-amber-500 dark:bg-amber-300" />
             <Trans>Unsaved changes</Trans>
           </p>
@@ -134,7 +135,7 @@ function MappingCell({
           <FieldLabel htmlFor={field.name} className="md:hidden">
             {label}
           </FieldLabel>
-          <InputGroup className="h-9 md:h-7.5 w-full md:w-fit">
+          <InputGroup className="h-9 w-full md:h-7.5 md:w-fit">
             <InputGroupInput
               id={field.name}
               {...field}
@@ -182,7 +183,7 @@ function BrandMark({ brand }: { brand: AdyenMethodId }) {
     case 'visa':
       return (
         <span className={cn(chip, 'border-border bg-white')}>
-          <span className="text-[10px] font-black italic tracking-tight text-[#1434CB]">
+          <span className="text-[10px] font-black tracking-tight text-[#1434CB] italic">
             VISA
           </span>
         </span>
@@ -190,7 +191,7 @@ function BrandMark({ brand }: { brand: AdyenMethodId }) {
     case 'amex':
       return (
         <span className={cn(chip, 'border-transparent bg-[#016FD0]')}>
-          <span className="text-[7px] font-bold uppercase tracking-tight text-white">
+          <span className="text-[7px] font-bold tracking-tight text-white uppercase">
             Amex
           </span>
         </span>

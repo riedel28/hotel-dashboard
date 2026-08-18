@@ -58,7 +58,7 @@ function VerifyEmailPage() {
         <div className="text-center">
           <Link
             to="/auth/login"
-            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
           >
             <Trans>Back to login</Trans>
           </Link>
@@ -107,7 +107,7 @@ function VerifyEmailPage() {
         <div className="text-center">
           <Link
             to="/auth/login"
-            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
           >
             <Trans>Back to login</Trans>
           </Link>
@@ -125,7 +125,7 @@ function VerifyEmailPage() {
         <h1 className="text-2xl font-bold">
           <Trans>Email verified!</Trans>
         </h1>
-        <p className="text-muted-foreground text-balance">
+        <p className="text-balance text-muted-foreground">
           <Trans>
             Your email has been verified successfully. You can now log in.
           </Trans>
@@ -134,7 +134,7 @@ function VerifyEmailPage() {
       <div className="text-center">
         <Link
           to="/auth/login"
-          className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
         >
           <Trans>Go to login</Trans>
         </Link>

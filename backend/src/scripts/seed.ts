@@ -13,7 +13,6 @@ import {
   properties,
   reservations,
   roles,
-  rooms,
   users
 } from '../db/schema';
 import { truncateAllTables } from '../db/truncate-all';

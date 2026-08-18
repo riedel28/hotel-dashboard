@@ -80,7 +80,7 @@ export function AvatarCropperDialog({
 
         {image && (
           <>
-            <div className="bg-muted relative h-72 w-full overflow-hidden rounded-lg">
+            <div className="relative h-72 w-full overflow-hidden rounded-lg bg-muted">
               <Cropper
                 image={image.objectUrl}
                 crop={crop}
@@ -98,7 +98,7 @@ export function AvatarCropperDialog({
 
             <div className="flex items-center gap-3">
               <ZoomOutIcon
-                className="text-muted-foreground size-4 shrink-0"
+                className="size-4 shrink-0 text-muted-foreground"
                 aria-hidden="true"
               />
               <Slider
@@ -114,7 +114,7 @@ export function AvatarCropperDialog({
                 className="flex-1"
               />
               <ZoomInIcon
-                className="text-muted-foreground size-4 shrink-0"
+                className="size-4 shrink-0 text-muted-foreground"
                 aria-hidden="true"
               />
             </div>

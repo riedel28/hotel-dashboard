@@ -6,6 +6,7 @@ import {
   InputOTPGroup,
   InputOTPSlot
 } from '@/components/ui/input-otp';
+
 import { TOTP_CODE_LENGTH } from '../../shared/types/profile';
 
 interface OtpFieldProps {
@@ -69,7 +70,7 @@ export function OtpField({
 
 export function OtpHint({ id }: { id?: string }) {
   return (
-    <p id={id} className="text-muted-foreground text-sm">
+    <p id={id} className="text-sm text-muted-foreground">
       <Trans>
         Codes are time-based — if yours keeps failing, check that your phone's
         clock is set automatically.

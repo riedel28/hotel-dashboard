@@ -1,5 +1,6 @@
 import { CreditCard, LayoutGrid, Lock, type LucideIcon } from 'lucide-react';
 import { type MonitoringType } from 'shared/types/monitoring';
+
 import { Badge, type BadgeColorProps } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +34,7 @@ export function TypeCell({ type }: TypeCellProps) {
       size="sm"
       color={color}
       className={cn(
-        'shrink-0 rounded-md flex items-center gap-1.5 border border-foreground/10',
+        'flex shrink-0 items-center gap-1.5 rounded-md border border-foreground/10',
         type === 'pms' ? 'uppercase' : 'capitalize'
       )}
     >

@@ -3,6 +3,7 @@ import { RefreshCwIcon, SearchIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Property, PropertyStage } from 'shared/types/properties';
 import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import {
   Combobox,
@@ -42,7 +43,7 @@ function LoadingSkeleton() {
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}
-          className="bg-muted h-9 w-full rounded-md"
+          className="h-9 w-full rounded-md bg-muted"
           aria-hidden="true"
         />
       ))}
@@ -146,7 +147,7 @@ function PropertySelector({
       onValueChange={handlePropertySelect}
     >
       <ComboboxTrigger
-        className="min-w-0 max-w-full flex items-center justify-between hover:bg-accent px-2.5 py-1.5 rounded-md text-foreground gap-2 data-popup-open:bg-accent"
+        className="flex max-w-full min-w-0 items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-foreground hover:bg-accent data-popup-open:bg-accent"
         aria-label={t`Select property`}
       >
         <ComboboxValue>
@@ -186,7 +187,7 @@ function PropertySelector({
         <div className="p-1">
           <Button
             variant="ghost"
-            className="w-full h-8 text-sm font-normal text-muted-foreground"
+            className="h-8 w-full text-sm font-normal text-muted-foreground"
             aria-label={t`Reload properties`}
             onClick={handleReloadProperties}
             disabled={loading}

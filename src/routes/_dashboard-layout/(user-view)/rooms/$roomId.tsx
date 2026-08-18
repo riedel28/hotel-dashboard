@@ -1,9 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+
 import { roomByIdQueryOptions } from '@/api/rooms';
 import { QueryBoundary } from '@/components/query-boundary';
-
 import {
   Breadcrumb,
   BreadcrumbItem,

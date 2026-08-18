@@ -10,8 +10,8 @@ import {
   createPropertySchema
 } from 'shared/types/properties';
 import { toast } from 'sonner';
-import { createProperty } from '@/api/properties';
 
+import { createProperty } from '@/api/properties';
 import { Button } from '@/components/ui/button';
 import { CountryPicker } from '@/components/ui/country-picker';
 import {

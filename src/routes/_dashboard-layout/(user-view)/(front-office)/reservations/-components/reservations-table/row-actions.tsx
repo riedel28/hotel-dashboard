@@ -6,8 +6,8 @@ import { type Row } from '@tanstack/react-table';
 import { MessageSquareDot, PenSquare, Trash } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
-import type { Reservation } from '@/api/reservations';
 
+import type { Reservation } from '@/api/reservations';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
@@ -31,7 +31,7 @@ export function RowActions({ row }: RowActionsProps) {
     <>
       <DropdownMenu>
         <DataGridRowActions />
-        <DropdownMenuContent align="end" className="min-w-40 w-auto">
+        <DropdownMenuContent align="end" className="w-auto min-w-40">
           <DropdownMenuItem
             onClick={() => {
               toast.info(t`Pushed to device`);

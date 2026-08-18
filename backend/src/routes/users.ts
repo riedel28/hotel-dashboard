@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { updateProfileSchema } from '../../../shared/types/profile';
 import {
   createUserSchema,

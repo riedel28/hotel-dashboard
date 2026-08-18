@@ -38,7 +38,7 @@ function StoreLink({ href, children }: { href: string; children: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 underline-offset-4 hover:underline"
+      className="inline-flex items-center gap-0.5 text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
     >
       {children}
       <ArrowUpRightIcon className="size-3" aria-hidden="true" />
@@ -52,7 +52,7 @@ function StoreLink({ href, children }: { href: string; children: string }) {
 export function AuthenticatorApps() {
   return (
     <Collapsible>
-      <CollapsibleTrigger className="text-muted-foreground hover:text-foreground group/apps flex items-center gap-1 text-sm underline-offset-4 hover:underline">
+      <CollapsibleTrigger className="group/apps flex items-center gap-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
         <ChevronDownIcon
           className="size-4 transition-transform group-data-[panel-open]/apps:rotate-180"
           aria-hidden="true"
@@ -78,7 +78,7 @@ export function AuthenticatorApps() {
               </li>
             ))}
           </ul>
-          <p className="text-muted-foreground border-t pt-2.5 text-xs">
+          <p className="border-t pt-2.5 text-xs text-muted-foreground">
             <Trans>
               Already have one? Any TOTP app works — just scan the QR code.
             </Trans>

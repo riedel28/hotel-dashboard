@@ -1,10 +1,10 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
+
 import {
   fetchReservationsParamsSchema,
   reservationsQueryOptions
 } from '@/api/reservations';
-
 import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
@@ -15,9 +15,9 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
-
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
+
 import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
 import { ReservationClearFilters } from '../reservations/-components/reservation-clear-filters';
 import { ReservationSearch } from '../reservations/-components/reservation-search';

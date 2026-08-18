@@ -9,6 +9,7 @@ import {
   type UpdatePropertyData,
   updatePropertySchema
 } from 'shared/types/properties';
+
 import { client, handleApiError } from './client';
 
 export function propertiesQueryOptions(params?: FetchPropertiesParams) {

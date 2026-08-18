@@ -11,7 +11,7 @@
  * sync with the class families advertised in .design-sync/conventions.md — that
  * file tells the agent what it may use, and this file is what makes it real.
  */
-@import "../src/globals.css";
+@import '../src/globals.css';
 
 /* Display, flex and grid */
 @source inline("{sm:,md:,lg:,}{block,inline-block,inline,flex,inline-flex,grid,inline-grid,hidden,contents}");

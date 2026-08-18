@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dialog';
 import { Field, FieldDescription, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+
 import { recoveryCodeSchema } from '../../../../../../shared/types/profile';
 import { useReauthedAction } from './reauth-dialog';
 
@@ -145,7 +146,7 @@ export function TwoFactorDisableDialog({
                 type="button"
                 variant="link"
                 size="sm"
-                className="h-auto p-0 text-cyan-800 dark:text-cyan-200/85 w-full text-center"
+                className="h-auto w-full p-0 text-center text-cyan-800 dark:text-cyan-200/85"
                 onClick={() => {
                   setUseRecoveryCode((value) => !value);
                   setCode('');

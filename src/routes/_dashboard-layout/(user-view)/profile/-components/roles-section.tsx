@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+
 import type { Role } from '../../../../../../shared/types/users';
 import { ProfileSection } from './profile-section';
 
@@ -35,7 +36,7 @@ function RoleChip({ role, assigned }: { role: Role; assigned: boolean }) {
       <Badge
         variant="outline"
         size="sm"
-        className="text-muted-foreground border-dashed py-1"
+        className="border-dashed py-1 text-muted-foreground"
       >
         {role.name}
       </Badge>
@@ -71,7 +72,7 @@ export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
           variant="outline"
           color="gray"
           size="sm"
-          className="px-2 py-1 rounded-md"
+          className="rounded-md px-2 py-1"
         >
           <LockIcon className="mr-0.5" aria-hidden="true" />
           <Trans>Read-only</Trans>
@@ -85,7 +86,7 @@ export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
               <ZapIcon aria-hidden="true" />
               <Trans>Administrator</Trans>
             </Badge>
-            <span className="text-muted-foreground text-sm">
+            <span className="text-sm text-muted-foreground">
               <Trans>
                 Full access to every property and every staff account.
               </Trans>
@@ -100,7 +101,7 @@ export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
             ))}
           </div>
         ) : (
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             <Trans>
               No roles assigned. Contact your administrator if you're missing
               access you need.
@@ -131,7 +132,7 @@ export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
           )}
         </div>
 
-        <p className="text-muted-foreground border-t pt-4 text-sm">
+        <p className="border-t pt-4 text-sm text-muted-foreground">
           <Trans>
             To change your roles, contact your account administrator.
           </Trans>
@@ -148,7 +149,7 @@ function UnassignedRoles({ assignedRoles }: { assignedRoles: Role[] }) {
 
   if (unassigned.length === 0) {
     return (
-      <p className="text-muted-foreground mt-3 text-sm">
+      <p className="mt-3 text-sm text-muted-foreground">
         <Trans>You have every role that exists.</Trans>
       </p>
     );
@@ -156,7 +157,7 @@ function UnassignedRoles({ assignedRoles }: { assignedRoles: Role[] }) {
 
   return (
     <div className="mt-3 space-y-2">
-      <p className="text-muted-foreground text-xs font-medium">
+      <p className="text-xs font-medium text-muted-foreground">
         <Trans>Not assigned</Trans>
       </p>
       <div className="flex flex-wrap gap-2">

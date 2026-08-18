@@ -1,16 +1,18 @@
 import { SearchIcon } from 'lucide-react';
 import { useCallback, useState } from 'react';
+
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput
 } from '@/components/ui/input-group';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
-
 import { cn } from '@/lib/utils';
 
-interface SearchInputProps
-  extends Omit<React.ComponentProps<'input'>, 'onChange' | 'value' | 'type'> {
+interface SearchInputProps extends Omit<
+  React.ComponentProps<'input'>,
+  'onChange' | 'value' | 'type'
+> {
   value?: string;
   wrapperClassName?: string;
   onChange?: (value: string) => void;

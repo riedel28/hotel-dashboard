@@ -8,8 +8,8 @@ import {
 } from '../../../shared/types/guest-abc';
 import { db } from '../db/pool';
 import {
-  type GuestAbcEntry,
   guestAbcEntries,
+  type GuestAbcEntry,
   type NewGuestAbcEntry,
   users
 } from '../db/schema';

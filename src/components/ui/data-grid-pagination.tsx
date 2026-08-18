@@ -12,7 +12,6 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-
 import { cn } from '@/lib/utils';
 
 interface DataGridPaginationProps {
@@ -171,7 +170,7 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
     <div
       data-slot="data-grid-pagination"
       className={cn(
-        'flex grow flex-wrap items-start md:items-center justify-between gap-2.5 sm:flex-row py-0',
+        'flex grow flex-wrap items-start justify-between gap-2.5 py-0 sm:flex-row md:items-center',
         mergedProps?.className
       )}
     >
@@ -180,7 +179,7 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
           mergedProps?.infoSkeleton
         ) : (
           <>
-            <div className="order-2 text-sm text-nowrap text-muted-foreground ml-0 md:ml-2 sm:order-1">
+            <div className="order-2 ml-0 text-sm text-nowrap text-muted-foreground sm:order-1 md:ml-2">
               {mergedProps?.info?.startsWith('pagination.') ? (
                 <Trans>
                   {from} - {to} of {recordCount}
@@ -240,7 +239,7 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
           mergedProps?.sizesSkeleton
         ) : (
           <>
-            <div className="hidden md:block text-sm text-muted-foreground">
+            <div className="hidden text-sm text-muted-foreground md:block">
               <Trans>Rows per page</Trans>
             </div>
             <Select
@@ -251,7 +250,7 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
               }}
             >
               <SelectTrigger
-                className="w-fit min-w-[70px] mr-0 md:mr-2"
+                className="mr-0 w-fit min-w-[70px] md:mr-2"
                 size="sm"
               >
                 <SelectValue />

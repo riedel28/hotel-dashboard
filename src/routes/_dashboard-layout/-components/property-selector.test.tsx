@@ -1,7 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+
 import { createMockProperty, render } from '@/test-utils';
+
 import PropertySelector from './property-selector';
 
 // Mock sonner toast

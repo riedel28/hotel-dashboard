@@ -74,8 +74,9 @@ function Tree({
   );
 }
 
-interface TreeItemProps<T = unknown>
-  extends React.HTMLAttributes<HTMLButtonElement> {
+interface TreeItemProps<
+  T = unknown
+> extends React.HTMLAttributes<HTMLButtonElement> {
   item: ItemInstance<T>;
   indent?: number;
   asChild?: boolean;
@@ -150,8 +151,9 @@ function TreeItem<T = unknown>({
   );
 }
 
-interface TreeItemLabelProps<T = unknown>
-  extends React.HTMLAttributes<HTMLSpanElement> {
+interface TreeItemLabelProps<
+  T = unknown
+> extends React.HTMLAttributes<HTMLSpanElement> {
   item?: ItemInstance<T>;
 }
 

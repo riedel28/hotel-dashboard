@@ -5,6 +5,7 @@ import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { XIcon } from 'lucide-react';
 import type { MonitoringStatus, MonitoringType } from 'shared/types/monitoring';
+
 import {
   fetchMonitoringLogsParamsSchema,
   monitoringQueryOptions
@@ -27,9 +28,9 @@ import {
   EmptyHeader,
   EmptyTitle
 } from '@/components/ui/empty';
-
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
+
 import { StatusCell } from './-components/cells/status-cell';
 import { TypeCell } from './-components/cells/type-cell';
 import { MonitoringDateFilter } from './-components/monitoring-date-filter';

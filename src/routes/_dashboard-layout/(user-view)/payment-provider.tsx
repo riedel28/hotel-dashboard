@@ -10,6 +10,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+
 import { AdyenForm } from './payment-provider/adyen-form/adyen-form';
 
 export const Route = createFileRoute(
@@ -44,11 +45,11 @@ function RouteComponent() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex max-w-2xl flex-col gap-1 mb-6">
+      <div className="mb-6 flex max-w-2xl flex-col gap-1">
         <h1 className="text-xl font-semibold text-balance">
           <Trans>Payment Provider</Trans>
         </h1>
-        <p className="text-sm text-muted-foreground text-pretty">
+        <p className="text-sm text-pretty text-muted-foreground">
           <Trans>
             Manage this property's connection to its payment account.
           </Trans>

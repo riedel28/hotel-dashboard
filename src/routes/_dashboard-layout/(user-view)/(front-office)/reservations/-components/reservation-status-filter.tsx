@@ -2,7 +2,6 @@ import { Trans } from '@lingui/react/macro';
 
 import type { ReservationState } from '@/api/reservations';
 import type { DataGridCheckboxFilterOption } from '@/components/ui/data-grid-checkbox-filter';
-
 import { DataGridCheckboxFilter } from '@/components/ui/data-grid-checkbox-filter';
 
 import { getReservationStatusStyle } from './reservation-status';

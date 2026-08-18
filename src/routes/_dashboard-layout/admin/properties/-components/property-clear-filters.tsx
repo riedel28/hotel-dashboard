@@ -20,7 +20,7 @@ export function PropertyClearFilters({
     <Button
       variant="secondary"
       onClick={onClear}
-      className="text-muted-foreground hover:text-foreground transition-colors"
+      className="text-muted-foreground transition-colors hover:text-foreground"
     >
       <XIcon />
       <Trans>Clear filters</Trans>

@@ -10,7 +10,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { ProductCategoriesTree } from './-components/product-categories-tree';

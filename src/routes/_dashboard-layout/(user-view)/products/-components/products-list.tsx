@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { PencilIcon, RefreshCwIcon, Trash2Icon, XIcon } from 'lucide-react';
 import * as React from 'react';
+
 import {
   deleteProduct,
   fetchProductsByCategory,
@@ -17,7 +18,6 @@ import {
   EmptyMedia,
   EmptyTitle
 } from '@/components/ui/empty';
-
 import { cn } from '@/lib/utils';
 
 import { Route as ProductsRoute } from '../index';

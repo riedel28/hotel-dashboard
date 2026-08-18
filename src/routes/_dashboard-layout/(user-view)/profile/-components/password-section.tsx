@@ -7,6 +7,7 @@ import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
 import { ApiError } from '@/api/client';
 import { changePassword } from '@/api/profile';
 import { isCompleteOtp, OtpField } from '@/components/otp-field';
@@ -20,6 +21,7 @@ import {
 import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
+
 import {
   MAX_PASSWORD_LENGTH,
   MIN_PASSWORD_LENGTH,
@@ -283,7 +285,7 @@ export function PasswordSection({ user }: PasswordSectionProps) {
           </Link>
 
           {signedOutElsewhere && (
-            <p className="text-muted-foreground flex items-start gap-2 rounded-md border border-dashed p-3 text-sm">
+            <p className="flex items-start gap-2 rounded-md border border-dashed p-3 text-sm text-muted-foreground">
               <InfoIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <Trans>
                 Your password was changed, so you've been signed out on all

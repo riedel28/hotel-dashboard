@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-
 import { cn } from '@/lib/utils';
 
 interface DataGridRadioFilterOption<TValue extends string> {
@@ -22,8 +21,10 @@ interface DataGridRadioFilterOption<TValue extends string> {
   disabled?: boolean;
 }
 
-interface DataGridRadioFilterProps<TValue extends string>
-  extends Omit<ButtonProps, 'children' | 'onChange' | 'value'> {
+interface DataGridRadioFilterProps<TValue extends string> extends Omit<
+  ButtonProps,
+  'children' | 'onChange' | 'value'
+> {
   options: DataGridRadioFilterOption<TValue>[];
   value?: TValue;
   onValueChange: (value: TValue | undefined) => void;
@@ -61,7 +62,7 @@ function DataGridRadioFilter<TValue extends string>({
           <Button
             variant="ghost"
             className={cn(
-              'hover:bg-background data-popup-open:bg-background inline-flex h-9 min-w-fit items-center justify-between gap-2 border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground',
+              'inline-flex h-9 min-w-fit items-center justify-between gap-2 border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:bg-background hover:text-accent-foreground data-popup-open:bg-background dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground',
               className
             )}
             {...props}

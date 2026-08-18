@@ -13,8 +13,8 @@ import {
   EmptyMedia,
   EmptyTitle
 } from '@/components/ui/empty';
-
 import { cn } from '@/lib/utils';
+
 import { StatusDisc } from './ui/status-disc';
 
 interface QueryBoundaryProps {

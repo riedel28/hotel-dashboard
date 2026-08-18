@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Toaster, toast } from 'tanstack-dashboard-ui';
+import { toast, Toaster } from 'tanstack-dashboard-ui';
 
 /**
  * `Toaster` only renders the region — toasts arrive through the imperative

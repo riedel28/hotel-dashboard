@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getCountryName } from '@/lib/countries';
+
 import { RowActions } from './row-actions';
 
 interface UsersTableProps {
@@ -101,8 +102,8 @@ export default function UsersTable({
                   {getInitials(row.original.first_name, row.original.last_name)}
                 </AvatarFallback>
               </Avatar>
-              <div className="space-y-px min-w-0 flex-1">
-                <div className="font-medium text-foreground truncate flex items-center gap-2">
+              <div className="min-w-0 flex-1 space-y-px">
+                <div className="flex items-center gap-2 truncate font-medium text-foreground">
                   {fullName || <Trans>No name</Trans>}
                   {!row.original.email_verified && (
                     <Badge size="xs" variant="outline" color="yellow">
@@ -140,7 +141,7 @@ export default function UsersTable({
           />
         ),
         cell: (info) => (
-          <span className="truncate block max-w-full">
+          <span className="block max-w-full truncate">
             {info.getValue() as string}
           </span>
         ),
@@ -215,7 +216,7 @@ export default function UsersTable({
               <Badge
                 size="xs"
                 variant="secondary"
-                className="shrink-0 rounded-md text-foreground/80 border border-foreground/10 capitalize"
+                className="shrink-0 rounded-md border border-foreground/10 text-foreground/80 capitalize"
               >
                 {firstRole.name}
               </Badge>
@@ -234,7 +235,7 @@ export default function UsersTable({
                           key={role.id}
                           size="xs"
                           variant="secondary"
-                          className="shrink-0 rounded-md text-foreground/80 border border-foreground/10 capitalize"
+                          className="shrink-0 rounded-md border border-foreground/10 text-foreground/80 capitalize"
                         >
                           {role.name}
                         </Badge>

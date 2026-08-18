@@ -22,7 +22,7 @@ function DataGridRowActions({
     <DropdownMenuTrigger
       className={cn(
         buttonVariants({ variant: 'ghost' }),
-        'flex size-7 group data-[state=open]:bg-muted',
+        'group flex size-7 data-[state=open]:bg-muted',
         className
       )}
       {...props}

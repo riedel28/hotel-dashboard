@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
-import type { CheckinMethod, Guest, Reservation } from '@/api/reservations';
 
+import type { CheckinMethod, Guest, Reservation } from '@/api/reservations';
 import { CopyButton } from '@/components/ui/copy-button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
@@ -33,7 +33,7 @@ interface DetailValueProps {
 function DetailSection({ title, children }: DetailSectionProps) {
   return (
     <section className="min-w-0 space-y-2">
-      <h3 className="text-pretty mb-2.5 text-[13px] leading-5 font-medium text-foreground">
+      <h3 className="mb-2.5 text-[13px] leading-5 font-medium text-pretty text-foreground">
         {title}
       </h3>
       <div className="min-w-0 space-y-2">{children}</div>
@@ -61,7 +61,7 @@ function DetailValue({ children, className, title }: DetailValueProps) {
   return (
     <span
       className={cn(
-        'min-w-0 flex-1 wrap-break-word text-right text-sm',
+        'min-w-0 flex-1 text-right text-sm wrap-break-word',
         className
       )}
       title={title}
@@ -121,7 +121,7 @@ export function ReservationDetails({ reservation }: ReservationDetailsProps) {
     <div className="box-border w-full max-w-[calc(100vw-2rem)] space-y-2 overflow-hidden bg-card px-2 py-2 sm:space-y-3 sm:px-4 sm:py-2.5 lg:max-w-none">
       <div className="space-y-2">
         <div className="flex min-w-0 flex-wrap items-center gap-3">
-          <h2 className="text-pretty text-base leading-6 font-medium">
+          <h2 className="text-base leading-6 font-medium text-pretty">
             <Trans>Reservation details</Trans>
           </h2>
           <div className="min-w-0">
@@ -139,7 +139,7 @@ export function ReservationDetails({ reservation }: ReservationDetailsProps) {
         </div>
       </div>
 
-      <div className="grid min-w-0 grid-cols-1 justify-items-stretch gap-x-4 gap-y-3 rounded-md bg-muted/50 p-2.5 dark:bg-muted sm:grid-cols-2 sm:gap-y-4 sm:p-4 2xl:grid-cols-4 2xl:max-w-none xl:max-w-4xl xl:gap-x-12">
+      <div className="grid min-w-0 grid-cols-1 justify-items-stretch gap-x-4 gap-y-3 rounded-md bg-muted/50 p-2.5 sm:grid-cols-2 sm:gap-y-4 sm:p-4 xl:max-w-4xl xl:gap-x-12 2xl:max-w-none 2xl:grid-cols-4 dark:bg-muted">
         <DetailSection title={<Trans>Booking</Trans>}>
           <DetailRow label={<Trans>Reservation Number</Trans>}>
             <DetailValue title={reservation.booking_nr}>

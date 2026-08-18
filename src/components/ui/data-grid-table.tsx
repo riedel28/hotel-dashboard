@@ -13,14 +13,13 @@ import { type CSSProperties, Fragment, type ReactNode } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { useDataGrid } from '@/components/ui/data-grid';
-
 import { cn } from '@/lib/utils';
 
 const headerCellSpacingVariants = cva('', {
   variants: {
     size: {
-      dense: 'px-1.5 h-9',
-      default: 'px-2 h-10'
+      dense: 'h-9 px-1.5',
+      default: 'h-10 px-2'
     }
   },
   defaultVariants: {

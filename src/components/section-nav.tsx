@@ -231,11 +231,11 @@ export function SectionNav({
           // (see _dashboard-layout `<main>`), which sticky would otherwise pin
           // below — leaving a strip of scrolling content between the bar and
           // the header.
-          'bg-background sticky -top-2 z-10 -mx-6 px-6 py-2 border-b backdrop-blur-sm md:-top-4 ',
+          'sticky -top-2 z-10 -mx-6 border-b bg-background px-6 py-2 backdrop-blur-sm md:-top-4',
           className
         )}
       >
-        <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden">
+        <ul className="flex snap-x snap-mandatory scrollbar-none gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {sections.map(({ id, label, attention }) => {
             const isActive = id === activeId;
             return (
@@ -247,18 +247,18 @@ export function SectionNav({
                   onClick={(event) => handleClick(event, id)}
                   className={cn(
                     // 44px tall: this bar is thumbed at arm's length on a tablet.
-                    'flex h-11 items-center gap-1.5 rounded-lg font-semibold hover:bg-muted px-6 text-base whitespace-nowrap transition-colors',
+                    'flex h-11 items-center gap-1.5 rounded-lg px-6 text-base font-semibold whitespace-nowrap transition-colors hover:bg-muted',
                     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
                     isActive
                       ? 'bg-muted font-semibold'
-                      : 'text-muted-foreground hover:text-foreground border-transparent'
+                      : 'border-transparent text-muted-foreground hover:text-foreground'
                   )}
                 >
                   {label}
                   {attention && (
                     <span
                       aria-hidden="true"
-                      className="bg-amber-500 size-1.5 shrink-0 rounded-full"
+                      className="size-1.5 shrink-0 rounded-full bg-amber-500"
                     />
                   )}
                 </a>
@@ -285,15 +285,15 @@ export function SectionNav({
                 aria-current={isActive ? 'location' : undefined}
                 onClick={(event) => handleClick(event, id)}
                 className={cn(
-                  'text-muted-foreground hover:text-foreground flex items-center gap-2 border-s-2 border-transparent px-3 py-1.25 font-normal transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
-                  isActive && 'border-primary text-foreground font-semibold'
+                  'flex items-center gap-2 border-s-2 border-transparent px-3 py-1.25 font-normal text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
+                  isActive && 'border-primary font-semibold text-foreground'
                 )}
               >
                 <span className="min-w-0 flex-1 truncate">{label}</span>
                 {attention && (
                   <span
                     aria-hidden="true"
-                    className="bg-amber-500 size-1.5 shrink-0 rounded-full"
+                    className="size-1.5 shrink-0 rounded-full bg-amber-500"
                   />
                 )}
               </a>

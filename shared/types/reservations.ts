@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { countryCodeSchema } from './properties';
 
 export const reservationStatusSchema = z.enum([
