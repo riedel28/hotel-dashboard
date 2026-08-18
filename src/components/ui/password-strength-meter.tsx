@@ -4,6 +4,7 @@ import { CheckIcon, MinusIcon } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+
 import {
   MIN_PASSWORD_LENGTH,
   strongPasswordSchema
@@ -225,14 +226,14 @@ export function PasswordStrengthMeter({
           <li key={index} className="flex items-center gap-2 text-xs">
             {requirement.met ? (
               <CheckIcon
-                className="size-3.5 shrink-0 text-emerald-600 duration-150 animate-in zoom-in-50 dark:text-emerald-500"
+                className="size-3.5 shrink-0 animate-in text-emerald-600 duration-150 zoom-in-50 dark:text-emerald-500"
                 aria-hidden="true"
               />
             ) : (
               // A neutral dash, not a red cross: an unwritten password hasn't
               // failed anything yet.
               <MinusIcon
-                className="text-muted-foreground/50 size-3.5 shrink-0"
+                className="size-3.5 shrink-0 text-muted-foreground/50"
                 aria-hidden="true"
               />
             )}

@@ -65,7 +65,7 @@ export function RecoveryCodes({ codes }: RecoveryCodesProps) {
 
   return (
     <div className="space-y-3">
-      <ul className="bg-muted/40 grid grid-cols-2 gap-x-4 gap-y-1.5 rounded-lg border p-4 font-mono text-sm sm:grid-cols-3">
+      <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 rounded-lg border bg-muted/40 p-4 font-mono text-sm sm:grid-cols-3">
         {codes.map((code) => (
           <li key={code} className="tracking-wide tabular-nums">
             {code}

@@ -2,8 +2,8 @@ import { Trans } from '@lingui/react/macro';
 import { useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon, LogOutIcon } from 'lucide-react';
 import { useState } from 'react';
-import { useAuth } from '@/auth';
 
+import { useAuth } from '@/auth';
 import {
   AlertDialog,
   AlertDialogCancel,

@@ -10,8 +10,8 @@ import {
 import dayjs from 'dayjs';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import type { Reservation } from '@/api/reservations';
 
+import type { Reservation } from '@/api/reservations';
 import { Button } from '@/components/ui/button';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
@@ -19,6 +19,7 @@ import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDate } from '@/utils/date';
+
 import { BalanceCell } from './-components/cells/balance-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { StatusCell } from './-components/cells/status-cell';

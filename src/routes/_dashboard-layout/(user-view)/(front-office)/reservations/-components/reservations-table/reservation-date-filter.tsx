@@ -13,7 +13,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
-
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
@@ -148,7 +147,7 @@ function ReservationDateFilter({
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <PopoverTrigger
         className={cn(
-          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal hover:text-accent-foreground dark:bg-input/30 dark:border-input whitespace-nowrap',
+          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground data-popup-open:bg-accent dark:border-input dark:bg-input/30',
           className
         )}
       >

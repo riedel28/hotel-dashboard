@@ -2,8 +2,8 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
-import { deletePropertyById } from '@/api/properties';
 
+import { deletePropertyById } from '@/api/properties';
 import {
   AlertDialog,
   AlertDialogCancel,

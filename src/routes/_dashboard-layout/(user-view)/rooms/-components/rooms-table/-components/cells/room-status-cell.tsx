@@ -1,5 +1,6 @@
 import { Trans } from '@lingui/react/macro';
 import type { RoomStatus } from 'shared/types/rooms';
+
 import { Badge, type BadgeProps } from '@/components/ui/badge';
 
 const statusVariantMap: Record<RoomStatus, BadgeProps['color']> = {

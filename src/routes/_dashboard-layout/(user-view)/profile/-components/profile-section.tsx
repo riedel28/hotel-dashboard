@@ -237,10 +237,10 @@ export function MobileSaveBar({
 
   return (
     <div
-      className="bg-background/95 fixed inset-x-0 bottom-0 z-20 flex items-center gap-2 border-t px-4 py-3 backdrop-blur-sm lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-20 flex items-center gap-2 border-t bg-background/95 px-4 py-3 backdrop-blur-sm lg:hidden"
       style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
     >
-      <span className="text-muted-foreground flex-1 text-sm">
+      <span className="flex-1 text-sm text-muted-foreground">
         <Trans>Unsaved changes</Trans>
       </span>
       <Button

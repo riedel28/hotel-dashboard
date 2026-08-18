@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDocumentTitle, useOnlineStatus } from '@/hooks';
+
 import { PasswordSection } from './profile/-components/password-section';
 import { PersonalSection } from './profile/-components/personal-section';
 import {
@@ -122,7 +123,7 @@ function RouteComponent() {
           <h1 className="text-xl font-semibold text-balance">
             <Trans>Profile</Trans>
           </h1>
-          <p className="text-muted-foreground text-sm text-pretty">
+          <p className="text-sm text-pretty text-muted-foreground">
             <Trans>
               Manage your personal details, security and access rights.
             </Trans>
@@ -225,7 +226,7 @@ function RouteComponent() {
 
 function SectionSkeleton() {
   return (
-    <div className="ring-foreground/10 space-y-4 rounded-xl p-6 shadow-xs ring-1">
+    <div className="space-y-4 rounded-xl p-6 shadow-xs ring-1 ring-foreground/10">
       <Skeleton className="h-5 w-40" />
       <Skeleton className="h-4 w-64" />
       <Skeleton className="h-24 w-full" />

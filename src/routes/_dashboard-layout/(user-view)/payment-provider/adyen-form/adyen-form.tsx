@@ -6,6 +6,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
 import { SectionNav } from '@/components/section-nav';
 import {
   AlertDialog,
@@ -27,6 +28,7 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+
 import { AdyenCredentialsSection } from './adyen-credentials-section';
 import { ADYEN_FORM_SECTIONS } from './adyen-form-toc';
 import { ADYEN_PAYMENT_METHODS, type AdyenFormData } from './adyen-form-types';
@@ -212,7 +214,7 @@ export function AdyenForm() {
         className="order-2 hidden xl:block"
       />
 
-      <Card className="relative min-w-0 flex-1 max-w-4xl overflow-visible">
+      <Card className="relative max-w-4xl min-w-0 flex-1 overflow-visible">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1.5">

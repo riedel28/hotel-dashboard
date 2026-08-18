@@ -14,7 +14,7 @@ export function AdyenSectionHeading({
       <h2 id={id} tabIndex={-1} className="text-[15px] font-semibold">
         {title}
       </h2>
-      <p className="text-sm text-muted-foreground text-pretty">{description}</p>
+      <p className="text-sm text-pretty text-muted-foreground">{description}</p>
     </div>
   );
 }

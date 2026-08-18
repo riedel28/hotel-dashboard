@@ -36,6 +36,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+
 import {
   type TestConnectionConfig,
   TestConnectionDialog,
@@ -174,7 +175,7 @@ export function DoorLocksForm() {
               <Badge
                 variant="outline"
                 size="sm"
-                className="bg-accent text-accent-foreground text-[11px] rounded-md cursor-pointer"
+                className="cursor-pointer rounded-md bg-accent text-[11px] text-accent-foreground"
                 render={
                   <a
                     href="https:google.com"
@@ -215,7 +216,7 @@ export function DoorLocksForm() {
                 setIntegrationMode(value as IntegrationMode)
               }
             >
-              <TabsList className="w-full h-9!">
+              <TabsList className="h-9! w-full">
                 <TabsTrigger value="pms" className="flex-1 text-foreground/70!">
                   <Trans>PMS-Schnittstelle</Trans>
                 </TabsTrigger>
@@ -296,14 +297,14 @@ export function DoorLocksForm() {
                       >
                         <Label
                           htmlFor="ship-type-https"
-                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                          className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
                         >
                           <RadioGroupItem value="https" id="ship-type-https" />
                           HTTPS
                         </Label>
                         <Label
                           htmlFor="ship-type-stp"
-                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 h-9 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                          className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
                         >
                           <RadioGroupItem value="stp" id="ship-type-stp" />
                           STP
@@ -411,7 +412,7 @@ export function DoorLocksForm() {
       <CardFooter className="-mb-6 flex-col items-stretch gap-3 py-4!">
         <div className="flex flex-wrap justify-end gap-2">
           {lastTestResult && (
-            <p className="flex shrink-0 text-xs items-center mr-auto gap-1.5 text-wrap">
+            <p className="mr-auto flex shrink-0 items-center gap-1.5 text-xs text-wrap">
               <span
                 className={cn(
                   'flex size-3.5 items-center justify-center rounded-full text-white',
@@ -456,7 +457,7 @@ export function DoorLocksForm() {
             <Trans>Update config</Trans>
           </Button>
 
-          <span className="truncate text-xs text-muted-foreground mt-2">
+          <span className="mt-2 truncate text-xs text-muted-foreground">
             Last updated 13.04.2026, 11:18 · John Doe
           </span>
         </div>

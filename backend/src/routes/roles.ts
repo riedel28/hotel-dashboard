@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { getRoles } from '../controllers/roles-controller';
 import { authenticateToken } from '../middleware/auth';
 

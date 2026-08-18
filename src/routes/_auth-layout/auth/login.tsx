@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
 import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { useAuth } from '@/auth';
@@ -124,8 +125,8 @@ function LoginPage() {
   return (
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
-        <div className="flex flex-col items-start gap-4 mb-3">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-cyan-950 dark:text-cyan-200/90 text-sm font-bold text-primary">
+        <div className="mb-3 flex flex-col items-start gap-4">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary dark:bg-cyan-950 dark:text-cyan-200/90">
             <MessageCircleIcon />
           </div>
           <div className="space-y-1.5">
@@ -239,7 +240,7 @@ function LoginPage() {
               render={({ field }) => (
                 <Field
                   orientation="horizontal"
-                  className="flex items-center gap-2 w-auto"
+                  className="flex w-auto items-center gap-2"
                 >
                   <Checkbox
                     id={field.name}
@@ -280,7 +281,7 @@ function LoginPage() {
           </Button>
         </form>
 
-        <p className="text-sm text-muted-foreground text-center">
+        <p className="text-center text-sm text-muted-foreground">
           Don't have an account? <Link to="/auth/sign-up">Sign up</Link>
         </p>
       </div>
@@ -337,14 +338,14 @@ function TwoFactorStep({
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg dark:bg-cyan-950 dark:text-cyan-200/90">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-cyan-950 dark:text-cyan-200/90">
             <ShieldCheckIcon />
           </div>
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold">
               <Trans>Two-step verification</Trans>
             </h1>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
               {useRecoveryCode ? (
                 <Trans>Enter one of your unused recovery codes.</Trans>
               ) : (

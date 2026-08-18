@@ -1,5 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
+
 import { useAuth } from '@/auth';
 import { SidebarGroup } from '@/components/ui/sidebar';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -21,7 +22,7 @@ export function SidebarViewToggle() {
           <TabsTrigger
             value="user"
             nativeButton={false}
-            className="flex-1 h-6 text-xs"
+            className="h-6 flex-1 text-xs"
             render={<Link to="/" />}
           >
             <Trans>User</Trans>
@@ -29,7 +30,7 @@ export function SidebarViewToggle() {
           <TabsTrigger
             value="admin"
             nativeButton={false}
-            className="flex-1 h-6 text-xs"
+            className="h-6 flex-1 text-xs"
             render={<Link to="/admin" />}
           >
             <Trans>Admin</Trans>

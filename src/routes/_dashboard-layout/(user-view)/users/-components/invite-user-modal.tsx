@@ -6,9 +6,9 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
 import { rolesQueryOptions } from '@/api/roles';
 import { inviteUser } from '@/api/users';
-
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -106,7 +106,7 @@ export function InviteUserModal() {
           </Button>
         }
       />
-      <DialogContent className="max-w-xl! max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-xl! overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             <Trans>Invite User</Trans>
@@ -190,7 +190,7 @@ export function InviteUserModal() {
                   <Field
                     data-invalid={fieldState.invalid}
                     orientation="horizontal"
-                    className="gap-3 items-center border rounded-md p-3"
+                    className="items-center gap-3 rounded-md border p-3"
                   >
                     <FieldContent>
                       <FieldLabel
@@ -267,7 +267,7 @@ export function InviteUserModal() {
                         })}
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 justify-center rounded-lg p-4 border bg-muted">
+                      <div className="flex items-center justify-center gap-2 rounded-lg border bg-muted p-4">
                         <span className="text-sm text-muted-foreground">
                           <Trans>No roles available</Trans>
                         </span>

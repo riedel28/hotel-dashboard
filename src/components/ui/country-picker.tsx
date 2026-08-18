@@ -1,6 +1,7 @@
 import { useLingui } from '@lingui/react/macro';
 import { SearchIcon } from 'lucide-react';
 import { useMemo } from 'react';
+
 import {
   Combobox,
   ComboboxContent,
@@ -84,7 +85,7 @@ export function CountryPicker({
     >
       <ComboboxTrigger
         className={cn(
-          'border-input h-9 dark:bg-input/30 ring-offset-background flex w-full items-center justify-between overflow-hidden rounded-lg border px-3 py-2 text-sm',
+          'flex h-9 w-full items-center justify-between overflow-hidden rounded-lg border border-input px-3 py-2 text-sm ring-offset-background dark:bg-input/30',
           className
         )}
         aria-label={

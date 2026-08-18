@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { BookOpenIcon, PlusIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
+
 import { guestAbcQueryOptions } from '@/api/guest-abc';
 import {
   Breadcrumb,
@@ -22,6 +23,7 @@ import {
   EmptyTitle
 } from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+
 import { AddEntryModal } from './-components/add-entry-modal';
 import { LetterNav } from './-components/letter-nav';
 import { LetterSection } from './-components/letter-section';
@@ -102,7 +104,7 @@ function GuestABCPage() {
       />
 
       {isEmpty && (
-        <Empty className="border max-w-xl">
+        <Empty className="max-w-xl border">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <BookOpenIcon />

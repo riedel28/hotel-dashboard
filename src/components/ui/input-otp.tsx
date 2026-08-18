@@ -1,6 +1,7 @@
 import { OTPInput, OTPInputContext } from 'input-otp';
 import { MinusIcon } from 'lucide-react';
 import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 function InputOTP({
@@ -54,7 +55,7 @@ function InputOTPSlot({
       data-active={isActive}
       className={cn(
         // Base — mirrors <Input>, minus the height: 44px stays a touch target.
-        'relative flex size-11 items-center justify-center rounded-lg border border-input text-sm outline-none transition-colors',
+        'relative flex size-11 items-center justify-center rounded-lg border border-input text-sm transition-colors outline-none',
         // Focus: the active cell gets <Input>'s focus-visible treatment.
         'data-[active=true]:z-10 data-[active=true]:border-primary data-[active=true]:shadow-[inset_0_0_0_1px_var(--color-primary)]',
         // Error, on every cell. The active-cell pair is spelled out rather

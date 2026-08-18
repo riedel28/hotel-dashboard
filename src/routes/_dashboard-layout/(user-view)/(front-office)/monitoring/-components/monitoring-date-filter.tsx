@@ -13,7 +13,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
-
 import { cn } from '@/lib/utils';
 
 interface MonitoringDateFilterProps {
@@ -142,7 +141,7 @@ export function MonitoringDateFilter({
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <PopoverTrigger
         className={cn(
-          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
+          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap shadow-xs hover:bg-accent hover:text-accent-foreground data-popup-open:bg-accent dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
           className
         )}
       >
@@ -175,7 +174,7 @@ export function MonitoringDateFilter({
                     type="button"
                     variant="ghost"
                     className={cn(
-                      'h-8 w-full justify-start font-normal text-xs',
+                      'h-8 w-full justify-start text-xs font-normal',
                       selectedPreset === preset.label && 'bg-accent'
                     )}
                     onClick={() => handlePresetSelect(preset)}

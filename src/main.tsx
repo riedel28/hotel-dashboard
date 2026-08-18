@@ -6,11 +6,12 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
+import { setUnauthorizedHandler } from './api/client';
 import { AuthProvider, useAuth } from './auth';
 import { ThemeProvider } from './components/theme-provider';
-import { Toaster } from './components/ui/sonner';
+
 import './globals.css';
-import { setUnauthorizedHandler } from './api/client';
+import { Toaster } from './components/ui/sonner';
 import { loadCatalog } from './i18n';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';

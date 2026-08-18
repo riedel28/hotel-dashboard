@@ -61,7 +61,7 @@ export function RoomStatusFilter({ value, onChange }: RoomStatusFilterProps) {
         </SelectItem>
         <SelectItem value="available">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-badge-success-foreground"></span>
+            <span className="bg-badge-success-foreground size-1.5 rounded-full"></span>
             <span>
               <Trans>Available</Trans>
             </span>
@@ -69,7 +69,7 @@ export function RoomStatusFilter({ value, onChange }: RoomStatusFilterProps) {
         </SelectItem>
         <SelectItem value="occupied">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-badge-info-foreground"></span>
+            <span className="bg-badge-info-foreground size-1.5 rounded-full"></span>
             <span>
               <Trans>Occupied</Trans>
             </span>
@@ -77,7 +77,7 @@ export function RoomStatusFilter({ value, onChange }: RoomStatusFilterProps) {
         </SelectItem>
         <SelectItem value="maintenance">
           <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-badge-warning-foreground"></span>
+            <span className="bg-badge-warning-foreground size-1.5 rounded-full"></span>
             <span>
               <Trans>Maintenance</Trans>
             </span>

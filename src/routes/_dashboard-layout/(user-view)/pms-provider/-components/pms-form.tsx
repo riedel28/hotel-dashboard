@@ -3,6 +3,7 @@ import { Trans } from '@lingui/react/macro';
 import { ArrowUpRightIcon, Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -54,7 +55,7 @@ export function PmsForm() {
               <Badge
                 variant="outline"
                 size="sm"
-                className="bg-accent text-accent-foreground text-[11px] rounded-md cursor-pointer"
+                className="cursor-pointer rounded-md bg-accent text-[11px] text-accent-foreground"
                 render={
                   <a
                     href="https:google.com"
@@ -168,7 +169,7 @@ export function PmsForm() {
             </Field>
           </FieldGroup>
 
-          <div className="flex flex-col justify-end gap-4 items-end mt-2">
+          <div className="mt-2 flex flex-col items-end justify-end gap-4">
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting && (
                 <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />

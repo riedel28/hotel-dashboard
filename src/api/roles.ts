@@ -1,5 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { client, handleApiError } from '@/api/client';
+
 import { type Role, rolesSchema } from '../../shared/types/roles';
 
 export function rolesQueryOptions() {

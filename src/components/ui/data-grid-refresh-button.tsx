@@ -2,11 +2,12 @@ import { Trans } from '@lingui/react/macro';
 import { RefreshCwIcon } from 'lucide-react';
 
 import { Button, type ButtonProps } from '@/components/ui/button';
-
 import { cn } from '@/lib/utils';
 
-interface DataGridRefreshButtonProps
-  extends Omit<ButtonProps, 'children' | 'disabled' | 'onClick'> {
+interface DataGridRefreshButtonProps extends Omit<
+  ButtonProps,
+  'children' | 'disabled' | 'onClick'
+> {
   isRefreshing: boolean;
   onRefresh: () => void;
 }

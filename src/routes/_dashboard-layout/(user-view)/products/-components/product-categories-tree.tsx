@@ -7,6 +7,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { RefreshCwIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
+
 import {
   createProductCategory,
   deleteProductCategory,
@@ -28,7 +29,6 @@ import {
 } from '@/components/ui/empty';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
-
 import { cn } from '@/lib/utils';
 
 import { Route as ProductsRoute } from '../index';

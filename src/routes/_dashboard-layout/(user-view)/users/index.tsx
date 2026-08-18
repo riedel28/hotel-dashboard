@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import { XIcon } from 'lucide-react';
+
 import { fetchUsersParamsSchema, usersQueryOptions } from '@/api/users';
 import {
   Breadcrumb,

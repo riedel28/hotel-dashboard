@@ -6,6 +6,7 @@ import { Edit2Icon, Loader2Icon, TrashIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+
 import {
   createGuestAbcEntrySchema,
   updateGuestAbcEntry
@@ -28,6 +29,7 @@ import {
 } from '@/components/ui/item';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
+
 import { DeleteEntryDialog } from './delete-entry-dialog';
 import type { Entry, EntryFormValues } from './types';
 
@@ -84,7 +86,7 @@ export function EntryCard({ entry }: EntryCardProps) {
     return (
       <Item
         variant="outline"
-        className="flex-col flex-nowrap items-stretch gap-3 p-4 origin-top animate-in fade-in-0 zoom-in-95 duration-200 ease-out motion-reduce:animate-none"
+        className="origin-top animate-in flex-col flex-nowrap items-stretch gap-3 p-4 duration-200 ease-out fade-in-0 zoom-in-95 motion-reduce:animate-none"
       >
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-3">
           <FieldSet className="gap-4">
@@ -133,7 +135,7 @@ export function EntryCard({ entry }: EntryCardProps) {
             </FieldGroup>
           </FieldSet>
 
-          <div className="flex gap-2 justify-end">
+          <div className="flex justify-end gap-2">
             <Button
               type="button"
               size="sm"
@@ -164,7 +166,7 @@ export function EntryCard({ entry }: EntryCardProps) {
     <>
       <Item
         variant="outline"
-        className="flex-col items-stretch gap-1.5 p-4 origin-top animate-in fade-in-0 zoom-in-95 duration-200 ease-out motion-reduce:animate-none"
+        className="origin-top animate-in flex-col items-stretch gap-1.5 p-4 duration-200 ease-out fade-in-0 zoom-in-95 motion-reduce:animate-none"
       >
         <ItemHeader>
           <ItemTitle className="text-base">{entry.title}</ItemTitle>

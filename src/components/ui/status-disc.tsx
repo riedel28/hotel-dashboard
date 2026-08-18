@@ -70,7 +70,8 @@ const strokeWidths = {
 } as const;
 
 interface StatusDiscProps
-  extends Omit<React.ComponentProps<'span'>, 'children'>,
+  extends
+    Omit<React.ComponentProps<'span'>, 'children'>,
     VariantProps<typeof statusDiscVariants> {
   /**
    * Accessible name. Omit when adjacent text already states the outcome — the

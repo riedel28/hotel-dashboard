@@ -19,7 +19,6 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
-
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { registerSchema } from '@/lib/schemas';
 
@@ -74,7 +73,7 @@ function SuccessView({ email }: SuccessViewProps) {
           <h1 className="text-2xl font-semibold">
             <Trans>Check your email</Trans>
           </h1>
-          <p className="text-muted-foreground text-balance">
+          <p className="text-balance text-muted-foreground">
             <Trans>
               We&apos;ve sent a verification email to{' '}
               <span className="font-medium">{email}</span>. Click the link in
@@ -143,8 +142,8 @@ function SignUpPage() {
   return (
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
-        <div className="flex flex-col items-start gap-4 mb-3">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 dark:bg-cyan-950 dark:text-cyan-200/90 text-sm font-bold text-primary">
+        <div className="mb-3 flex flex-col items-start gap-4">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary dark:bg-cyan-950 dark:text-cyan-200/90">
             <MessageCircleIcon aria-hidden="true" />
           </div>
           <div className="space-y-1.5">
@@ -296,7 +295,7 @@ function SignUpPage() {
           </Button>
         </form>
 
-        <p className="text-sm text-muted-foreground text-center">
+        <p className="text-center text-sm text-muted-foreground">
           <Trans>Already have an account?</Trans>{' '}
           <Link to="/auth/login">
             <Trans>Login</Trans>

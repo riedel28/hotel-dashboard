@@ -5,8 +5,8 @@ import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
 import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
-import type { Room } from '@/api/rooms';
 
+import type { Room } from '@/api/rooms';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,

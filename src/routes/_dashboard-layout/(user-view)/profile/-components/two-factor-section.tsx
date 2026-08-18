@@ -37,6 +37,7 @@ import {
   ItemTitle
 } from '@/components/ui/item';
 import { cn } from '@/lib/utils';
+
 import { AuthenticatorApps } from './authenticator-apps';
 import { ProfileSection } from './profile-section';
 import { useReauthedAction } from './reauth-dialog';
@@ -84,12 +85,12 @@ export function TwoFactorSection() {
         <Badge
           color={status.enabled ? 'emerald' : 'gray'}
           size="sm"
-          className="px-2 py-1 rounded-md border-foreground/10"
+          className="rounded-md border-foreground/10 px-2 py-1"
         >
           <span
             aria-hidden="true"
             className={cn(
-              'size-1.5 rounded-full mr-0.5',
+              'mr-0.5 size-1.5 rounded-full',
               status.enabled
                 ? 'bg-emerald-700 dark:bg-emerald-300'
                 : 'bg-muted-foreground/60'
@@ -105,7 +106,7 @@ export function TwoFactorSection() {
             <Item className="p-0">
               <ItemMedia>
                 <SmartphoneIcon
-                  className="text-muted-foreground size-5 shrink-0"
+                  className="size-5 shrink-0 text-muted-foreground"
                   aria-hidden="true"
                 />
               </ItemMedia>
@@ -133,7 +134,7 @@ export function TwoFactorSection() {
             <Item className="p-0">
               <ItemMedia>
                 <KeyRoundIcon
-                  className="text-muted-foreground size-5 shrink-0"
+                  className="size-5 shrink-0 text-muted-foreground"
                   aria-hidden="true"
                 />
               </ItemMedia>
@@ -178,7 +179,7 @@ export function TwoFactorSection() {
                       aria-hidden="true"
                     />
                   ) : (
-                    <RotateCwIcon className="size-3.25 mr-0.5" />
+                    <RotateCwIcon className="mr-0.5 size-3.25" />
                   )}
                   <Trans>Regenerate</Trans>
                 </Button>
@@ -190,7 +191,7 @@ export function TwoFactorSection() {
             <Button
               type="button"
               variant="ghost"
-              className="text-danger hover:text-danger hover:bg-destructive/10"
+              className="text-danger hover:bg-destructive/10 hover:text-danger"
               onClick={() => setDisableOpen(true)}
             >
               <Trans>Turn off two-factor authentication</Trans>
@@ -200,7 +201,7 @@ export function TwoFactorSection() {
       ) : (
         <CardContent className="space-y-4">
           <div className="flex items-start gap-3">
-            <div className="bg-muted grid size-9 shrink-0 place-items-center rounded-lg border">
+            <div className="grid size-9 shrink-0 place-items-center rounded-lg border bg-muted">
               <ShieldIcon className="size-4" aria-hidden="true" />
             </div>
             <div className="space-y-1 text-sm">

@@ -14,6 +14,7 @@ import * as React from 'react';
 import { useMemo, useState } from 'react';
 import type { Property } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
+
 import { propertiesQueryOptions } from '@/api/properties';
 import { QueryBoundary } from '@/components/query-boundary';
 import {

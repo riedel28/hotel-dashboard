@@ -40,7 +40,7 @@ export function RowActions({ row }: RowActionsProps) {
     <>
       <DropdownMenu>
         <DataGridRowActions />
-        <DropdownMenuContent align="end" className="min-w-[130px] w-auto">
+        <DropdownMenuContent align="end" className="w-auto min-w-[130px]">
           <DropdownMenuItem
             render={(props) => (
               <RouterLink

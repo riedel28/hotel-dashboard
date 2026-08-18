@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro';
 import { GlobeIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import * as React from 'react';
+
 import { Button, type ButtonProps } from '@/components/ui/button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import {
@@ -58,7 +59,7 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
             <DropdownMenuRadioItem
               key={lang.code}
               value={lang.code}
-              className="overflow-hidden [&>svg]:shrink-0 px-1.5 py-1"
+              className="overflow-hidden px-1.5 py-1 [&>svg]:shrink-0"
             >
               <CountryFlag
                 code={lang.country}

@@ -43,6 +43,7 @@ import {
 } from '@/components/ui/dialog';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { cn } from '@/lib/utils';
+
 import type { TwoFactorSetupResponse } from '../../../../../../shared/types/profile';
 import { AuthenticatorApps } from './authenticator-apps';
 import { useReauthedAction } from './reauth-dialog';
@@ -360,15 +361,15 @@ function StepIndicator({ current }: { current: Step }) {
             className={cn(
               'h-1.5 rounded-full transition-all duration-300',
               position === index
-                ? 'bg-primary w-6'
+                ? 'w-6 bg-primary'
                 : position < index
-                  ? 'bg-primary/50 w-1.5'
-                  : 'bg-border w-1.5'
+                  ? 'w-1.5 bg-primary/50'
+                  : 'w-1.5 bg-border'
             )}
           />
         ))}
       </div>
-      <span className="text-muted-foreground text-xs font-medium">
+      <span className="text-xs font-medium text-muted-foreground">
         <Trans>
           Step {index + 1} of {STEP_ORDER.length}
         </Trans>
@@ -384,7 +385,7 @@ function ScanStep({ data }: { data: TwoFactorSetupResponse | null }) {
     return (
       <div className="grid h-60 place-items-center">
         <Loader2Icon
-          className="text-muted-foreground size-6 animate-spin"
+          className="size-6 animate-spin text-muted-foreground"
           aria-hidden="true"
         />
       </div>
@@ -405,7 +406,7 @@ function ScanStep({ data }: { data: TwoFactorSetupResponse | null }) {
       </div>
 
       <Collapsible>
-        <CollapsibleTrigger className="text-muted-foreground hover:text-foreground group/manual flex items-center gap-1 text-sm underline-offset-4 hover:underline">
+        <CollapsibleTrigger className="group/manual flex items-center gap-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
           <ChevronDownIcon
             className="size-4 transition-transform group-data-[panel-open]/manual:rotate-180"
             aria-hidden="true"
@@ -424,7 +425,7 @@ function ScanStep({ data }: { data: TwoFactorSetupResponse | null }) {
                 copiedLabel={t`Setup key copied`}
               />
             </div>
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               <Trans>Time-based (TOTP) · 6 digits · 30 seconds</Trans>
             </p>
           </div>
@@ -480,7 +481,7 @@ function VerifyStep({
       />
       {error && <FieldError errors={[{ message: error }]} />}
       {cooldown > 0 && (
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           <Trans>Too many attempts. Try again in {cooldown} seconds.</Trans>
         </p>
       )}

@@ -7,6 +7,7 @@ import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
 import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { profileKeys, updateMe } from '@/api/profile';
@@ -31,6 +32,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+
 import type { User } from '../../../../../../shared/types/users';
 import { AvatarField } from './avatar-field';
 import {
@@ -71,8 +73,16 @@ export function PersonalSection({
   const schema = React.useMemo(
     () =>
       z.object({
-        first_name: z.string().trim().min(1, t`First name is required`).max(50),
-        last_name: z.string().trim().min(1, t`Last name is required`).max(50),
+        first_name: z
+          .string()
+          .trim()
+          .min(1, t`First name is required`)
+          .max(50),
+        last_name: z
+          .string()
+          .trim()
+          .min(1, t`Last name is required`)
+          .max(50),
         country_code: z.string().length(2).nullable()
       }),
     []
@@ -265,7 +275,7 @@ function EmailField({ user }: { user: User }) {
               className={cn(
                 // A square box is what makes rounded-full a circle; without it
                 // the button shrink-wraps the glyph and comes out as a pill.
-                'flex bg-transparent size-4 shrink-0 items-center justify-center rounded-full text-white mr-1',
+                'mr-1 flex size-4 shrink-0 items-center justify-center rounded-full bg-transparent text-white',
                 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current'
               )}
             >

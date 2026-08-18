@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { generate } from 'otplib';
 import request from 'supertest';
+
 import app from '../src/app';
 import { db } from '../src/db/pool';
 import { users } from '../src/db/schema';

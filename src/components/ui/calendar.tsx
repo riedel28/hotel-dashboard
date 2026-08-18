@@ -5,7 +5,6 @@ import * as React from 'react';
 import { DayPicker } from 'react-day-picker';
 
 import { buttonVariants } from '@/components/ui/button';
-
 import { cn } from '@/lib/utils';
 
 function Calendar({
@@ -27,11 +26,11 @@ function Calendar({
         nav: 'absolute top-0 flex w-full justify-between z-10',
         button_previous: cn(
           buttonVariants({ variant: 'ghost' }),
-          'size-8 text-muted-foreground/80 hover:text-foreground p-0'
+          'size-8 p-0 text-muted-foreground/80 hover:text-foreground'
         ),
         button_next: cn(
           buttonVariants({ variant: 'ghost' }),
-          'size-8 text-muted-foreground/80 hover:text-foreground p-0'
+          'size-8 p-0 text-muted-foreground/80 hover:text-foreground'
         ),
         weekday: 'size-8 p-0 text-xs font-medium text-muted-foreground/80',
         day_button:

@@ -199,7 +199,7 @@ export function AdyenTestConnectionDialog({
             <ConnectionLine phase={phase} allPassed={allPassed} />
 
             {phase === 'running' ? (
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-background dark:bg-input/30 text-muted-foreground">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-background text-muted-foreground dark:bg-input/30">
                 <Loader2Icon className="size-4 animate-spin motion-reduce:animate-none" />
               </div>
             ) : (
@@ -231,7 +231,7 @@ export function AdyenTestConnectionDialog({
                 >
                   {step.name}
                 </span>
-                <span className="text-xs tabular-nums text-muted-foreground">
+                <span className="text-xs text-muted-foreground tabular-nums">
                   {step.status === 'skipped' ? (
                     <Trans>Skipped</Trans>
                   ) : step.durationMs !== undefined ? (
@@ -329,7 +329,7 @@ function EndpointNode({
 }) {
   return (
     <div className="flex w-16 shrink-0 flex-col items-center gap-2 text-center sm:w-24">
-      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card dark:bg-input/30 text-foreground/70">
+      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card text-foreground/70 dark:bg-input/30">
         {icon}
       </div>
       <span className="text-xs leading-tight font-medium">{label}</span>

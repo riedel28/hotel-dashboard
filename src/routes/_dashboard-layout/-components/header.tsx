@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { TextAlignJustifyIcon } from 'lucide-react';
 import * as React from 'react';
+
 import { propertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
 import { Button } from '@/components/ui/button';
@@ -47,7 +48,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b bg-background/95 px-3 md:px-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:ps-3.5">
+      <header className="sticky top-0 z-50 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/60 md:px-4 md:ps-3.5">
         <div className="flex h-12 items-center justify-between gap-4">
           {/* Left side */}
           {/* Mobile menu trigger */}

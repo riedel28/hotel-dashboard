@@ -9,12 +9,12 @@ import {
   UserCircleIcon
 } from 'lucide-react';
 import { useState } from 'react';
+
 import { useAuth } from '@/auth';
 import { useTheme } from '@/components/theme-provider';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { CountryFlag } from '@/components/ui/country-flag';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -92,7 +92,7 @@ function LanguageSubmenu({
 
           <Badge
             variant="outline"
-            className="flex h-5 min-w-5 items-center text-[11px] gap-2 px-1.5 rounded-sm"
+            className="flex h-5 min-w-5 items-center gap-2 rounded-sm px-1.5 text-[11px]"
           >
             {currentLanguage?.label}
             <CountryFlag
@@ -114,7 +114,7 @@ function LanguageSubmenu({
               key={lang.code}
               value={lang.code}
               indicator="check"
-              className="overflow-hidden [&>svg]:shrink-0 py-1"
+              className="overflow-hidden py-1 [&>svg]:shrink-0"
             >
               <CountryFlag
                 code={lang.country}
@@ -164,7 +164,7 @@ function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
           </div>
           <Badge
             variant="outline"
-            className="flex h-5 min-w-5 items-center text-[11px] gap-2 px-1.5 rounded-sm"
+            className="flex h-5 min-w-5 items-center gap-2 rounded-sm px-1.5 text-[11px]"
           >
             <Trans>{themeLabels[currentTheme]}</Trans>
           </Badge>

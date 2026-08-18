@@ -16,6 +16,7 @@ import {
   releaseImage
 } from '@/lib/image';
 import { cn } from '@/lib/utils';
+
 import type { User } from '../../../../../../shared/types/users';
 import { AvatarCropperDialog } from './avatar-cropper-dialog';
 
@@ -174,7 +175,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
         className={cn(
           'relative grid size-20 shrink-0 place-items-center rounded-full border-2 border-dashed border-transparent p-1 transition-transform sm:size-24',
           'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
-          isDragging && 'border-primary bg-primary/5 scale-102',
+          isDragging && 'scale-102 border-primary bg-primary/5',
           rejection && 'border-destructive'
         )}
       >
@@ -199,13 +200,13 @@ export function AvatarField({ user }: AvatarFieldProps) {
         </Avatar>
 
         {isDragging && (
-          <span className="bg-background/80 absolute inset-0 grid place-items-center rounded-full text-xs font-medium">
+          <span className="absolute inset-0 grid place-items-center rounded-full bg-background/80 text-xs font-medium">
             <UploadIcon className="size-5" aria-hidden="true" />
           </span>
         )}
 
         {isUploading && (
-          <span className="bg-background/70 absolute inset-0 grid place-items-center rounded-full">
+          <span className="absolute inset-0 grid place-items-center rounded-full bg-background/70">
             <Loader2Icon className="size-6 animate-spin" aria-hidden="true" />
           </span>
         )}
@@ -233,7 +234,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
           <p className="text-sm font-medium">
             <Trans>Profile picture</Trans>
           </p>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             <Trans>
               Drop an image here or choose one. It's resized automatically, so
               any size is fine.
@@ -266,7 +267,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
         </div>
 
         {rejection && (
-          <p role="alert" className="text-danger text-sm">
+          <p role="alert" className="text-sm text-danger">
             {rejection}
           </p>
         )}
