@@ -89,7 +89,7 @@ export function EditCategoryModal({
             </FieldGroup>
           </FieldSet>
 
-          <DialogFooter>
+          <DialogFooter className="mt-2">
             <Button
               variant="outline"
               type="button"

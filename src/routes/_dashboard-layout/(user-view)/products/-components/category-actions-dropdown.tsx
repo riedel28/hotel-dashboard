@@ -32,7 +32,7 @@ export function CategoryActionsDropdown({
   onDeleteCategory
 }: CategoryActionsDropdownProps) {
   return (
-    <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+    <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 has-data-popup-open:opacity-100">
       <DropdownMenu>
         <DropdownMenuTrigger
           className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }))}
@@ -41,12 +41,13 @@ export function CategoryActionsDropdown({
             e.stopPropagation();
           }}
         >
-          <MoreHorizontalIcon className="size-4" />
+          <MoreHorizontalIcon className="size-4 text-muted-foreground" />
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          align="end"
+          align="start"
           side="right"
           onClick={(e) => e.stopPropagation()}
+          className="w-48"
         >
           <DropdownMenuItem
             onClick={() => {
@@ -66,7 +67,7 @@ export function CategoryActionsDropdown({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="text-danger focus:text-danger"
+            className="focus:bg-destructive/10 focus:text-danger focus:**:text-danger!"
             onClick={() => {
               onDeleteCategory(categoryId, categoryTitle);
             }}

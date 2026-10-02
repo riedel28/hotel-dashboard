@@ -1,7 +1,7 @@
 import type { ItemInstance } from '@headless-tree/core';
 import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { RefreshCwIcon, XIcon } from 'lucide-react';
@@ -41,6 +41,108 @@ import { useCategoryModals } from './use-category-modals';
 
 type TreeItemData = { name: string; children?: string[]; nodeId?: number };
 
+// 20px puts each indent guide under the centre of its parent's chevron.
+const indent = 20;
+
+interface CategoriesTreeProps {
+  itemsMap: Record<string, TreeItemData>;
+  selectedCategoryId: number | null;
+  expandedItems: string[];
+  setExpandedItems: React.Dispatch<React.SetStateAction<string[]>>;
+  onSelect: (categoryId: number) => void;
+  onAddSubcategory: (categoryId: number) => void;
+  onEditCategory: (categoryId: number, initialTitle: string) => void;
+  onDeleteCategory: (categoryId: number, title: string) => void;
+}
+
+// Declared at module level so it keeps its identity (and the tree its DOM)
+// across parent renders; expansion state is owned by the parent.
+function CategoriesTree({
+  itemsMap,
+  selectedCategoryId,
+  expandedItems,
+  setExpandedItems,
+  onSelect,
+  onAddSubcategory,
+  onEditCategory,
+  onDeleteCategory
+}: CategoriesTreeProps) {
+  const tree = useTree<TreeItemData>({
+    state: { expandedItems },
+    setExpandedItems,
+    indent,
+    rootItemId: 'root',
+    getItemName: (item) => item.getItemData().name,
+    isItemFolder: (item) => (item.getItemData()?.children?.length ?? 0) > 0,
+    dataLoader: {
+      getItem: (itemId) =>
+        itemsMap[itemId] ?? { name: 'unknown', children: [] },
+      getChildren: (itemId) => itemsMap[itemId]?.children ?? []
+    },
+    features: [syncDataLoaderFeature, hotkeysCoreFeature]
+  });
+
+  // Pick up added, removed or renamed categories without remounting.
+  React.useEffect(() => {
+    tree.rebuildTree();
+  }, [tree, itemsMap]);
+
+  return (
+    <Tree indent={indent} tree={tree}>
+      {tree.getItems().map((item: ItemInstance<TreeItemData>) => {
+        const id = item.getId();
+        const data = item.getItemData();
+        const numericId = typeof data?.nodeId === 'number' ? data.nodeId : null;
+        const isSelected =
+          numericId != null && selectedCategoryId === numericId;
+
+        return (
+          <TreeItem
+            key={id}
+            item={item}
+            // Indent guides: one vertical line per ancestor level, drawn only
+            // across this item's indentation. pb-1 (instead of a gap between
+            // items) keeps the lines continuous. Rows mounted by expanding a
+            // folder fade/slide in.
+            className="relative pb-1 duration-150 ease-out before:absolute before:inset-y-0 before:start-0 before:w-(--tree-padding) before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_15px,var(--border)_15px,var(--border)_16px,transparent_16px,transparent_var(--tree-indent))] motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-1"
+          >
+            <TreeItemLabel
+              aria-selected={isSelected}
+              className={cn(
+                'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm font-medium',
+                isSelected
+                  ? 'bg-accent text-accent-foreground'
+                  : 'hover:bg-accent'
+              )}
+              onClick={() => {
+                // Folders are toggled by headless-tree's own item click
+                // handler (the click bubbles to the TreeItem); leaves select.
+                if (!item.isFolder() && numericId != null) {
+                  onSelect(numericId);
+                }
+              }}
+            >
+              <div className="flex w-full items-center justify-between gap-1">
+                <span>{data?.name}</span>
+
+                {numericId != null ? (
+                  <CategoryActionsDropdown
+                    categoryId={numericId}
+                    categoryTitle={data?.name ?? ''}
+                    onAddSubcategory={onAddSubcategory}
+                    onEditCategory={onEditCategory}
+                    onDeleteCategory={onDeleteCategory}
+                  />
+                ) : null}
+              </div>
+            </TreeItemLabel>
+          </TreeItem>
+        );
+      })}
+    </Tree>
+  );
+}
+
 export function ProductCategoriesTree() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -56,14 +158,16 @@ export function ProductCategoriesTree() {
     select: transformFlatCategoriesToTree
   });
 
+  const { t } = useLingui();
+
   const createCategoryMutation = useMutation({
     mutationFn: createProductCategory,
-    onSuccess: () => {
+    onSuccess: (category) => {
       queryClient.invalidateQueries({ queryKey: ['product-categories'] });
-      toast.success('Category created successfully');
+      toast.success(t`Category “${category.title}” added`);
     },
     onError: (error) => {
-      toast.error('Failed to create category', {
+      toast.error(t`Failed to create category`, {
         description: error.message
       });
     }
@@ -75,31 +179,30 @@ export function ProductCategoriesTree() {
       ...data
     }: { id: number } & Partial<Omit<ProductCategory, 'id'>>) =>
       updateProductCategory(id, data),
-    onSuccess: () => {
+    onSuccess: (category) => {
       queryClient.invalidateQueries({ queryKey: ['product-categories'] });
-      toast.success('Category updated successfully');
+      toast.success(t`Category “${category.title}” updated`);
     },
     onError: (error) => {
-      toast.error('Failed to update category', {
+      toast.error(t`Failed to update category`, {
         description: error.message
       });
     }
   });
 
   const deleteCategoryMutation = useMutation({
-    mutationFn: deleteProductCategory,
-    onSuccess: () => {
+    mutationFn: ({ id }: { id: number; title: string }) =>
+      deleteProductCategory(id),
+    onSuccess: (_, category) => {
       queryClient.invalidateQueries({ queryKey: ['product-categories'] });
-      toast.success('Category deleted successfully');
+      toast.success(t`Category “${category.title}” deleted`);
     },
     onError: (error) => {
-      toast.error('Failed to delete category', {
+      toast.error(t`Failed to delete category`, {
         description: error.message
       });
     }
   });
-
-  const indent = 12;
 
   const { itemsMap } = React.useMemo(() => {
     const map: Record<string, TreeItemData> = {};
@@ -127,116 +230,29 @@ export function ProductCategoriesTree() {
     return { itemsMap: map };
   }, [categoriesQuery.data]);
 
-  const treeKey = React.useMemo(() => {
-    const ids: number[] = [];
-    if (categoriesQuery.data) {
-      const visit = (nodes: NestedProductCategory[]) => {
-        for (const n of nodes) {
-          ids.push(n.id);
-          if (n.children && n.children.length) visit(n.children);
-        }
-      };
-      visit(categoriesQuery.data);
-    }
-    return ids.sort((a, b) => a - b).join('-');
-  }, [categoriesQuery.data]);
-
   const [expandedItems, setExpandedItems] = React.useState<string[]>(['root']);
 
-  const handleToggleFolder = React.useCallback((itemId: string) => {
-    setExpandedItems((prev) => {
-      const has = prev.includes(itemId);
-      const next = has ? prev.filter((id) => id !== itemId) : [...prev, itemId];
-      return next.includes('root') ? next : ['root', ...next];
-    });
-  }, []);
-
-  function CategoriesTreeInner({
-    itemsMap,
-    selectedCategoryId
-  }: {
-    itemsMap: Record<string, TreeItemData>;
-    selectedCategoryId: number | null;
-  }) {
-    const tree = useTree<TreeItemData>({
-      initialState: { expandedItems },
-      indent,
-      rootItemId: 'root',
-      getItemName: (item) => item.getItemData().name,
-      isItemFolder: (item) => (item.getItemData()?.children?.length ?? 0) > 0,
-      dataLoader: {
-        getItem: (itemId) =>
-          itemsMap[itemId] ?? { name: 'unknown', children: [] },
-        getChildren: (itemId) => itemsMap[itemId]?.children ?? []
-      },
-      features: [syncDataLoaderFeature, hotkeysCoreFeature]
-    });
-
-    return (
-      <Tree key={treeKey} indent={indent} tree={tree} className="space-y-1">
-        {tree.getItems().map((item: ItemInstance<TreeItemData>) => {
-          const id = item.getId() as string;
-          const data = item.getItemData();
-          const numericId =
-            typeof data?.nodeId === 'number' ? data.nodeId : null;
-          const isSelected =
-            numericId != null && selectedCategoryId === numericId;
-
-          return (
-            <TreeItem key={id} item={item}>
-              <TreeItemLabel
-                aria-selected={isSelected}
-                className={cn(
-                  'group w-full justify-between rounded-sm px-2 py-1 text-sm font-medium',
-                  isSelected
-                    ? 'bg-accent text-accent-foreground'
-                    : 'hover:bg-accent'
-                )}
-                onClick={() => {
-                  // Toggle expand/collapse for folders. Do not navigate on folders.
-                  if (typeof item.isFolder === 'function' && item.isFolder()) {
-                    const expandable = item as ItemInstance<TreeItemData> & {
-                      toggleExpanded?: () => void;
-                      setExpanded?: (expanded: boolean) => void;
-                      isExpanded?: () => boolean;
-                    };
-                    if (expandable.toggleExpanded) {
-                      expandable.toggleExpanded();
-                    } else if (
-                      expandable.setExpanded &&
-                      expandable.isExpanded
-                    ) {
-                      expandable.setExpanded(!expandable.isExpanded());
-                    }
-                    handleToggleFolder(id);
-                    return;
-                  }
-                  // Leaf: navigate/select
-                  if (numericId != null) {
-                    handleCategorySelect(numericId);
-                  }
-                }}
-              >
-                <div className="flex w-full items-center justify-between gap-1">
-                  <span>{data?.name}</span>
-
-                  {numericId != null ? (
-                    <CategoryActionsDropdown
-                      categoryId={numericId}
-                      categoryTitle={data?.name ?? ''}
-                      onAddSubcategory={openAddSubcategoryModal}
-                      onEditCategory={openEditCategoryModal}
-                      onDeleteCategory={openDeleteCategoryModal}
-                    />
-                  ) : null}
-                </div>
-              </TreeItemLabel>
-            </TreeItem>
-          );
-        })}
-      </Tree>
+  // Expand the ancestors of the category selected in the URL, so it's visible
+  // after a reload or back/forward navigation.
+  React.useEffect(() => {
+    if (selectedCategoryId == null) return;
+    const parentOf = new Map<string, string>();
+    for (const [id, node] of Object.entries(itemsMap)) {
+      node.children?.forEach((childId) => parentOf.set(childId, id));
+    }
+    const ancestors: string[] = [];
+    let current = parentOf.get(String(selectedCategoryId));
+    while (current && current !== 'root') {
+      ancestors.push(current);
+      current = parentOf.get(current);
+    }
+    if (ancestors.length === 0) return;
+    setExpandedItems((prev) =>
+      ancestors.every((id) => prev.includes(id))
+        ? prev
+        : [...new Set([...prev, ...ancestors])]
     );
-  }
+  }, [itemsMap, selectedCategoryId]);
 
   const {
     pendingAddSubcategoryForId,
@@ -313,9 +329,10 @@ export function ProductCategoriesTree() {
   const handleDeleteCategory = async () => {
     if (pendingDeleteCategory) {
       try {
-        await deleteCategoryMutation.mutateAsync(
-          pendingDeleteCategory.categoryId
-        );
+        await deleteCategoryMutation.mutateAsync({
+          id: pendingDeleteCategory.categoryId,
+          title: pendingDeleteCategory.title
+        });
         if (selectedCategoryId === pendingDeleteCategory.categoryId) {
           handleCategoryDeselect();
         }
@@ -336,11 +353,12 @@ export function ProductCategoriesTree() {
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className="space-y-2 pl-4">
-            <Skeleton className="h-7 w-1/2 rounded-md" />
-            <Skeleton className="h-7 w-1/3 rounded-md" />
-            <Skeleton className="h-7 w-1/2 rounded-md" />
-            <Skeleton className="h-7 w-1/3 rounded-md" />
+          {/* Matches real rows: 40px label + 4px gap, 20px per indent level. */}
+          <div className="flex flex-col gap-1">
+            <Skeleton className="h-10 w-1/2 rounded-lg" />
+            <Skeleton className="ms-5 h-10 w-2/5 rounded-lg" />
+            <Skeleton className="ms-5 h-10 w-1/3 rounded-lg" />
+            <Skeleton className="h-10 w-2/5 rounded-lg" />
           </div>
         </CardContent>
       </Card>
@@ -406,10 +424,15 @@ export function ProductCategoriesTree() {
           {!categoriesQuery.data || categoriesQuery.data.length === 0 ? (
             <CategoriesEmptyState onAddCategory={openAddRootCategoryModal} />
           ) : (
-            <CategoriesTreeInner
-              key={treeKey}
+            <CategoriesTree
               itemsMap={itemsMap}
               selectedCategoryId={selectedCategoryId}
+              expandedItems={expandedItems}
+              setExpandedItems={setExpandedItems}
+              onSelect={handleCategorySelect}
+              onAddSubcategory={openAddSubcategoryModal}
+              onEditCategory={openEditCategoryModal}
+              onDeleteCategory={openDeleteCategoryModal}
             />
           )}
         </CardContent>
@@ -418,6 +441,7 @@ export function ProductCategoriesTree() {
         open={pendingAddSubcategoryForId != null}
         onOpenChange={(open) => !open && closeAddSubcategoryModal()}
         onSave={handleAddSubcategory}
+        isSubcategory
       />
       <AddCategoryModal
         open={pendingAddRootCategory}

@@ -1,10 +1,16 @@
-import { client } from '@/api/client';
+import {
+  type CreateProductCategoryData,
+  createProductCategorySchema,
+  fetchProductCategoriesResponseSchema,
+  type ProductCategory,
+  productCategorySchema,
+  type UpdateProductCategoryData,
+  updateProductCategorySchema
+} from 'shared/types/products';
 
-export type ProductCategory = {
-  id: number;
-  title: string;
-  parent_id: number | null;
-};
+import { client, handleApiError } from './client';
+
+export type { ProductCategory };
 
 export type NestedProductCategory = ProductCategory & {
   children: NestedProductCategory[];
@@ -38,71 +44,55 @@ export function transformFlatCategoriesToTree(
 
   return roots;
 }
-type ProductCategoryRaw = {
-  id: string | number;
-  title: string;
-  parent_id: string | number | null;
-};
-
 async function fetchProductCategories(): Promise<ProductCategory[]> {
-  const { data } = await client.get<ProductCategoryRaw[]>(
-    '/product-categories'
-  );
-
-  // Ensure id and parent_id are numbers since JSON server returns them as strings
-  return data.map((category) => ({
-    ...category,
-    id: Number(category.id),
-    parent_id: category.parent_id ? Number(category.parent_id) : null
-  }));
+  try {
+    const response = await client.get('/product-categories');
+    return fetchProductCategoriesResponseSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchProductCategories');
+  }
 }
 
 async function fetchProductCategoryById(id: number): Promise<ProductCategory> {
-  const { data } = await client.get<ProductCategoryRaw>(
-    `/product-categories/${id}`
-  );
-
-  // Ensure id is a number since JSON server returns it as a string
-  return {
-    ...data,
-    id: Number(data.id),
-    parent_id: data.parent_id ? Number(data.parent_id) : null
-  };
+  try {
+    const response = await client.get(`/product-categories/${id}`);
+    return productCategorySchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchProductCategoryById');
+  }
 }
 
 async function createProductCategory(
-  payload: Omit<ProductCategory, 'id'>
+  data: CreateProductCategoryData
 ): Promise<ProductCategory> {
-  const { data } = await client.post<ProductCategoryRaw>(
-    '/product-categories',
-    payload
-  );
-  // Ensure id is a number since JSON server returns it as a string
-  return {
-    ...data,
-    id: Number(data.id),
-    parent_id: data.parent_id ? Number(data.parent_id) : null
-  };
+  try {
+    const validated = createProductCategorySchema.parse(data);
+    const response = await client.post('/product-categories', validated);
+    return productCategorySchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'createProductCategory');
+  }
 }
 
 async function updateProductCategory(
   id: number,
-  payload: Partial<Omit<ProductCategory, 'id'>>
+  data: UpdateProductCategoryData
 ): Promise<ProductCategory> {
-  const { data } = await client.patch<ProductCategoryRaw>(
-    `/product-categories/${id}`,
-    payload
-  );
-  // Ensure id is a number since JSON server returns it as a string
-  return {
-    ...data,
-    id: Number(data.id),
-    parent_id: data.parent_id ? Number(data.parent_id) : null
-  };
+  try {
+    const validated = updateProductCategorySchema.parse(data);
+    const response = await client.patch(`/product-categories/${id}`, validated);
+    return productCategorySchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'updateProductCategory');
+  }
 }
 
 async function deleteProductCategory(id: number): Promise<void> {
-  await client.delete(`/product-categories/${id}`);
+  try {
+    await client.delete(`/product-categories/${id}`);
+  } catch (err) {
+    handleApiError(err, 'deleteProductCategory');
+  }
 }
 
 export {
