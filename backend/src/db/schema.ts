@@ -1,5 +1,6 @@
 import { relations, sql } from 'drizzle-orm';
 import {
+  type AnyPgColumn,
   bigint,
   boolean,
   check,
@@ -194,6 +195,67 @@ export const rooms = pgTable(
   ]
 );
 
+// Product categories (per-property tree via self-referencing parent_id).
+// FKs use the default NO ACTION so deleting a category that still has
+// children or products fails, while a property delete still cascades cleanly.
+export const productCategories = pgTable(
+  'product_categories',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    parent_id: bigint('parent_id', { mode: 'number' }).references(
+      (): AnyPgColumn => productCategories.id
+    ),
+    title: text('title').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('product_categories_property_id_idx').on(table.property_id),
+    index('product_categories_parent_id_idx').on(table.parent_id)
+  ]
+);
+
+// Products (per-property, each in exactly one category)
+export const products = pgTable(
+  'products',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    category_id: bigint('category_id', { mode: 'number' })
+      .notNull()
+      .references(() => productCategories.id),
+    title: text('title').notNull(),
+    price: numeric('price', { precision: 10, scale: 2 }).notNull(),
+    quantity: integer('quantity').notNull().default(0),
+    description: text('description'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('products_property_id_idx').on(table.property_id),
+    index('products_category_id_idx').on(table.category_id),
+    check('products_price_check', sql`${table.price} >= 0`),
+    check('products_quantity_check', sql`${table.quantity} >= 0`)
+  ]
+);
+
 // Guest ABC entries table (per-property alphabetical guest directory)
 export const guestAbcEntries = pgTable(
   'guest_abc_entries',
@@ -296,6 +358,12 @@ export type NewRoom = typeof rooms.$inferInsert;
 
 export type GuestAbcEntry = typeof guestAbcEntries.$inferSelect;
 export type NewGuestAbcEntry = typeof guestAbcEntries.$inferInsert;
+
+export type ProductCategory = typeof productCategories.$inferSelect;
+export type NewProductCategory = typeof productCategories.$inferInsert;
+
+export type Product = typeof products.$inferSelect;
+export type NewProduct = typeof products.$inferInsert;
 
 export const roles = pgTable('roles', {
   id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
@@ -417,7 +485,9 @@ export const roomsRelations = relations(rooms, ({ one }) => ({
 // Properties relations
 export const propertiesRelations = relations(properties, ({ many }) => ({
   rooms: many(rooms),
-  guestAbcEntries: many(guestAbcEntries)
+  guestAbcEntries: many(guestAbcEntries),
+  productCategories: many(productCategories),
+  products: many(products)
 }));
 
 // Guest ABC entries relations
