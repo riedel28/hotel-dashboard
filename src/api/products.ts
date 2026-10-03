@@ -1,77 +1,76 @@
-import { client } from '@/api/client';
+import {
+  type CreateProductData,
+  createProductSchema,
+  fetchProductsResponseSchema,
+  type Product,
+  productSchema,
+  type UpdateProductData,
+  updateProductSchema
+} from 'shared/types/products';
 
-type Product = { id: number; title: string; category_id: number };
-
-type ProductRaw = {
-  id: string | number;
-  title: string;
-  category_id: string | number;
-};
+import { client, handleApiError } from './client';
 
 async function fetchProducts(): Promise<Product[]> {
-  const { data } = await client.get<ProductRaw[]>('/products');
-
-  // Ensure id and category_id are numbers since JSON server returns them as strings
-  return data.map((product) => ({
-    ...product,
-    id: Number(product.id),
-    category_id: Number(product.category_id)
-  }));
+  try {
+    const response = await client.get('/products');
+    return fetchProductsResponseSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchProducts');
+  }
 }
 
 async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
-  const { data } = await client.get<ProductRaw[]>('/products', {
-    params: { category_id: categoryId }
-  });
-
-  // Ensure id and category_id are numbers since JSON server returns them as strings
-  return data.map((product) => ({
-    ...product,
-    id: Number(product.id),
-    category_id: Number(product.category_id)
-  }));
+  try {
+    const response = await client.get('/products', {
+      params: { category_id: categoryId }
+    });
+    return fetchProductsResponseSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchProductsByCategory');
+  }
 }
 
 async function fetchProductById(id: number): Promise<Product> {
-  const { data } = await client.get<ProductRaw>(`/products/${id}`);
-
-  // Ensure id and category_id are numbers since JSON server returns them as strings
-  return {
-    ...data,
-    id: Number(data.id),
-    category_id: Number(data.category_id)
-  };
+  try {
+    const response = await client.get(`/products/${id}`);
+    return productSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchProductById');
+  }
 }
 
-async function createProduct(payload: Omit<Product, 'id'>): Promise<Product> {
-  const { data } = await client.post<ProductRaw>('/products', payload);
-
-  // Ensure id and category_id are numbers since JSON server returns them as strings
-  return {
-    ...data,
-    id: Number(data.id),
-    category_id: Number(data.category_id)
-  };
+async function createProduct(data: CreateProductData): Promise<Product> {
+  try {
+    const validated = createProductSchema.parse(data);
+    const response = await client.post('/products', validated);
+    return productSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'createProduct');
+  }
 }
 
 async function updateProduct(
   id: number,
-  payload: Partial<Omit<Product, 'id'>>
+  data: UpdateProductData
 ): Promise<Product> {
-  const { data } = await client.patch<ProductRaw>(`/products/${id}`, payload);
-
-  // Ensure id and category_id are numbers since JSON server returns them as strings
-  return {
-    ...data,
-    id: Number(data.id),
-    category_id: Number(data.category_id)
-  };
+  try {
+    const validated = updateProductSchema.parse(data);
+    const response = await client.patch(`/products/${id}`, validated);
+    return productSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'updateProduct');
+  }
 }
 
 async function deleteProduct(id: number): Promise<void> {
-  await client.delete(`/products/${id}`);
+  try {
+    await client.delete(`/products/${id}`);
+  } catch (err) {
+    handleApiError(err, 'deleteProduct');
+  }
 }
 
+export type { Product };
 export {
   createProduct,
   deleteProduct,

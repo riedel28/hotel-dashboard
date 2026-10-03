@@ -25,6 +25,7 @@ interface AddCategoryModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (newTitle: string) => void;
+  isSubcategory?: boolean;
 }
 
 const schema = z.object({
@@ -34,7 +35,8 @@ const schema = z.object({
 export function AddCategoryModal({
   open,
   onOpenChange,
-  onSave
+  onSave,
+  isSubcategory = false
 }: AddCategoryModalProps) {
   const form = useForm<{ title: string }>({
     resolver: zodResolver(schema),
@@ -56,7 +58,11 @@ export function AddCategoryModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans>Add subcategory</Trans>
+            {isSubcategory ? (
+              <Trans>Add subcategory</Trans>
+            ) : (
+              <Trans>Add category</Trans>
+            )}
           </DialogTitle>
         </DialogHeader>
         <form

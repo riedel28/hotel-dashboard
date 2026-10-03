@@ -47,11 +47,11 @@ function ProductsPage() {
         </h1>
       </div>
 
-      <div className="grid grid-cols-12 gap-4 xl:max-w-[1200px]">
-        <div className="col-span-12 lg:col-span-6">
+      <div className="grid grid-cols-12 gap-4 xl:max-w-300">
+        <div className="col-span-12 lg:col-span-5 2xl:col-span-4">
           <ProductCategoriesTree />
         </div>
-        <div className="col-span-12 lg:col-span-6">
+        <div className="col-span-12 lg:col-span-7 2xl:col-span-6">
           <ProductsList />
         </div>
       </div>

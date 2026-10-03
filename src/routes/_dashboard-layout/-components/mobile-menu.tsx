@@ -12,6 +12,7 @@ import {
   HomeIcon,
   LockIcon,
   MessageCircleIcon,
+  ShoppingBagIcon,
   SquareActivityIcon,
   UsersIcon,
   XIcon
@@ -224,6 +225,15 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               onNavigate={handleNavigate}
             >
               <Trans>Guest ABC</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/products"
+              icon={ShoppingBagIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Products</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>

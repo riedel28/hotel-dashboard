@@ -25,7 +25,7 @@ import {
   LockIcon,
   MessageCircleIcon,
   // ReceiptTextIcon,
-  // ShoppingBagIcon,
+  ShoppingBagIcon,
   // ShoppingCartIcon,
   // SmartphoneIcon,
   SquareActivityIcon,
@@ -261,6 +261,15 @@ function UserSidebarContent() {
               tooltip={t`Guest ABC`}
             >
               <Trans>Guest ABC</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/products"
+              icon={ShoppingBagIcon}
+              tooltip={t`Products`}
+            >
+              <Trans>Products</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -10,6 +10,8 @@ import {
   guestAbcEntries,
   guests,
   monitoringLogs,
+  productCategories,
+  products,
   properties,
   reservations,
   roles,
@@ -297,6 +299,133 @@ async function seed() {
       await db.insert(guestAbcEntries).values(guestAbcRows);
     }
 
+    // Step 4c: Seed a product catalog for The Overlook Hotel — three levels
+    // deep, with a free item and multi-line descriptions.
+    console.log('Creating demo products...');
+    type CategorySeed = {
+      title: string;
+      products?: {
+        title: string;
+        price: number;
+        quantity: number;
+        description?: string;
+      }[];
+      children?: CategorySeed[];
+    };
+    const catalog: CategorySeed[] = [
+      {
+        title: 'Mini-bar',
+        children: [
+          {
+            title: 'Drinks',
+            products: [
+              {
+                title: 'Still water 0.5 L',
+                price: 3,
+                quantity: 24,
+                description: 'Local spring water, served chilled.'
+              },
+              { title: 'Cola 0.33 L', price: 4, quantity: 12 }
+            ]
+          },
+          {
+            title: 'Snacks',
+            products: [
+              {
+                title: 'Salted nuts',
+                price: 5,
+                quantity: 8,
+                description: 'Roasted almonds and cashews.\nContains nuts.'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: 'Room service',
+        children: [
+          {
+            title: 'Breakfast',
+            products: [
+              {
+                title: 'Continental breakfast',
+                price: 18,
+                quantity: 40,
+                description:
+                  'Croissant, butter and jam, seasonal fruit, coffee or tea.\nServed 6:30–11:00.'
+              }
+            ]
+          },
+          {
+            title: 'Dinner',
+            products: [{ title: 'Overlook burger', price: 22, quantity: 15 }]
+          }
+        ]
+      },
+      {
+        title: 'Spa',
+        products: [
+          {
+            title: 'Massage 60 min',
+            price: 80,
+            quantity: 6,
+            description: 'Full-body relaxing massage. Book at the front desk.'
+          },
+          {
+            title: 'Sauna',
+            price: 0,
+            quantity: 0,
+            description: 'Free for hotel guests, 7:00–22:00.'
+          }
+        ]
+      }
+    ];
+
+    const insertCatalog = async (
+      nodes: CategorySeed[],
+      parentId: number | null
+    ) => {
+      for (const node of nodes) {
+        const [category] = await db
+          .insert(productCategories)
+          .values({
+            property_id: OVERLOOK_HOTEL_ID,
+            parent_id: parentId,
+            title: node.title
+          })
+          .returning({ id: productCategories.id });
+        if (!category) throw new Error(`Failed to seed ${node.title}`);
+
+        if (node.products?.length) {
+          await db.insert(products).values(
+            node.products.map((product) => ({
+              property_id: OVERLOOK_HOTEL_ID,
+              category_id: category.id,
+              title: product.title,
+              price: product.price.toFixed(2),
+              quantity: product.quantity,
+              description: product.description ?? null
+            }))
+          );
+        }
+        await insertCatalog(node.children ?? [], category.id);
+      }
+    };
+    const countCatalog = (nodes: CategorySeed[]): [number, number] =>
+      nodes.reduce<[number, number]>(
+        ([categories, items], node) => {
+          const [childCategories, childItems] = countCatalog(
+            node.children ?? []
+          );
+          return [
+            categories + 1 + childCategories,
+            items + (node.products?.length ?? 0) + childItems
+          ];
+        },
+        [0, 0]
+      );
+    await insertCatalog(catalog, null);
+
     // Point the demo users at The Overlook Hotel so the seeded Guest ABC
     // content is visible immediately after logging in.
     await db
@@ -367,6 +496,10 @@ async function seed() {
     );
     console.log(`- Created ${allProperties.length} properties`);
     console.log(`- Created ${guestAbcRows.length} Guest ABC entries`);
+    const [categoryCount, productCount] = countCatalog(catalog);
+    console.log(
+      `- Created ${categoryCount} product categories and ${productCount} products`
+    );
     console.log(`- Created ${allLogs.length} monitoring logs`);
     console.log('\n🏨 Sample Reservations:');
     reservationsWithGuests.forEach((res) => {
