@@ -1,12 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  Edit2Icon,
-  PlusCircleIcon,
-  RefreshCwIcon,
-  TrashIcon,
-  XIcon
-} from 'lucide-react';
+import { Edit2Icon, PlusCircleIcon, TrashIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -18,6 +12,7 @@ import {
   type Product,
   updateProduct
 } from '@/api/products';
+import { ErrorState } from '@/components/error-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,16 +23,7 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
 
 import { Route as ProductsRoute } from '../index';
 import { DeleteProductDialog } from './delete-product-dialog';
@@ -169,34 +155,13 @@ export function ProductsList() {
         </CardHeader>
         <CardContent className="pt-0">
           <div className="flex min-h-[140px] items-center justify-center">
-            <Empty variant="destructive" className="w-full md:p-6">
-              <EmptyHeader>
-                <EmptyMedia variant="destructive">
-                  <XIcon />
-                </EmptyMedia>
-                <EmptyTitle>
-                  <Trans>Failed to load products</Trans>
-                </EmptyTitle>
-                <EmptyDescription>
-                  {productsQuery.error?.message}
-                </EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button
-                  variant="destructive"
-                  onClick={() => productsQuery.refetch()}
-                  disabled={productsQuery.isFetching}
-                >
-                  <RefreshCwIcon
-                    className={cn(
-                      'mr-2 h-4 w-4',
-                      productsQuery.isFetching && 'animate-spin'
-                    )}
-                  />
-                  <Trans>Try again</Trans>
-                </Button>
-              </EmptyContent>
-            </Empty>
+            <ErrorState
+              size="sm"
+              title={<Trans>Failed to load products</Trans>}
+              message={productsQuery.error?.message}
+              onRetry={() => productsQuery.refetch()}
+              isRetrying={productsQuery.isFetching}
+            />
           </div>
         </CardContent>
       </Card>

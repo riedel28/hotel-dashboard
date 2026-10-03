@@ -4,7 +4,6 @@ import { useTree } from '@headless-tree/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { RefreshCwIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -17,16 +16,8 @@ import {
   transformFlatCategoriesToTree,
   updateProductCategory
 } from '@/api/product-categories';
-import { Button } from '@/components/ui/button';
+import { ErrorState } from '@/components/error-state';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 import { cn } from '@/lib/utils';
@@ -387,10 +378,10 @@ export function ProductCategoriesTree() {
         <CardContent className="pt-0">
           {/* Matches real rows: 40px label + 4px gap, 20px per indent level. */}
           <div className="flex flex-col gap-1">
-            <Skeleton className="h-10 w-1/2 rounded-lg" />
+            <Skeleton className="h-10 w-full rounded-lg" />
+            <Skeleton className="ms-5 h-10 w-3/5 rounded-lg" />
             <Skeleton className="ms-5 h-10 w-2/5 rounded-lg" />
-            <Skeleton className="ms-5 h-10 w-1/3 rounded-lg" />
-            <Skeleton className="h-10 w-2/5 rounded-lg" />
+            <Skeleton className="h-10 w-full rounded-lg" />
           </div>
         </CardContent>
       </Card>
@@ -408,37 +399,13 @@ export function ProductCategoriesTree() {
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
-          <Empty variant="destructive" className="w-full md:p-6">
-            <EmptyHeader>
-              <EmptyMedia variant="destructive">
-                <XIcon />
-              </EmptyMedia>
-              <EmptyTitle>
-                <Trans>Failed to load categories</Trans>
-              </EmptyTitle>
-              <EmptyDescription>
-                <Trans>
-                  There was an error loading the product categories. Please try
-                  again.
-                </Trans>
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button
-                variant="destructive"
-                onClick={() => categoriesQuery.refetch()}
-                disabled={categoriesQuery.isRefetching}
-              >
-                <RefreshCwIcon
-                  className={cn(
-                    'mr-2 h-4 w-4',
-                    categoriesQuery.isRefetching && 'animate-spin'
-                  )}
-                />
-                <Trans>Try again</Trans>
-              </Button>
-            </EmptyContent>
-          </Empty>
+          <ErrorState
+            size="sm"
+            title={<Trans>Failed to load categories</Trans>}
+            message={categoriesQuery.error?.message}
+            onRetry={() => categoriesQuery.refetch()}
+            isRetrying={categoriesQuery.isRefetching}
+          />
         </CardContent>
       </Card>
     );

@@ -10,10 +10,10 @@ const emptyVariants = cva(
         default: 'border-dashed bg-card',
         // The description is tinted rather than left muted: muted-foreground
         // only reaches 4.1:1 on the tinted card, below the 4.5:1 AA floor for
-        // body text. The title stays neutral — it reads at 17:1, and keeping
-        // red for the action preserves the hierarchy.
+        // body text. The title is tinted the same way so the card reads as
+        // one destructive message.
         destructive:
-          'border-destructive/10 bg-destructive/5 [&_[data-slot=empty-description]]:text-destructive/90',
+          'border-destructive/10 bg-destructive/5 [&_[data-slot=empty-description]]:text-destructive/90 [&_[data-slot=empty-title]]:text-destructive/90',
         warning:
           'border-yellow-200/50 bg-yellow-50/50 dark:border-yellow-800/30 dark:bg-yellow-950/10'
       }
