@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans } from '@lingui/react/macro';
+import { Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { createProductSchema } from 'shared/types/products';
@@ -36,6 +37,7 @@ interface ProductFormModalProps {
   // Edit mode when set; add mode otherwise.
   product?: Product | null;
   onSave: (values: ProductFormValues) => void;
+  isPending?: boolean;
 }
 
 function toDefaults(product?: Product | null): FormInput {
@@ -51,7 +53,8 @@ export function ProductFormModal({
   open,
   onOpenChange,
   product,
-  onSave
+  onSave,
+  isPending = false
 }: ProductFormModalProps) {
   const form = useForm<FormInput, unknown, ProductFormValues>({
     resolver: zodResolver(formSchema),
@@ -181,7 +184,11 @@ export function ProductFormModal({
             >
               <Trans>Cancel</Trans>
             </Button>
-            <Button type="submit" disabled={!form.formState.isValid}>
+            <Button
+              type="submit"
+              disabled={!form.formState.isValid || isPending}
+            >
+              {isPending && <Loader2Icon className="animate-spin" />}
               {isEdit ? <Trans>Save</Trans> : <Trans>Add</Trans>}
             </Button>
           </DialogFooter>

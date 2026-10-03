@@ -75,11 +75,24 @@ export function ProductsList() {
     null
   );
 
+  // After the server confirms a change, patch the cached list right away so
+  // the table updates together with the dialog closing, then refetch in the
+  // background to reconcile. Not optimistic: nothing to roll back.
+  const updateCachedProducts = (update: (products: Product[]) => Product[]) => {
+    const queryKey = ['products', categoryId];
+    queryClient.setQueryData<Product[]>(queryKey, (products) =>
+      products
+        ? update(products).sort((a, b) => a.title.localeCompare(b.title))
+        : products
+    );
+    queryClient.invalidateQueries({ queryKey });
+  };
+
   const createMutation = useMutation({
     mutationFn: (values: ProductFormValues) =>
       createProduct({ ...values, category_id: categoryId as number }),
     onSuccess: (product) => {
-      queryClient.invalidateQueries({ queryKey: ['products', categoryId] });
+      updateCachedProducts((products) => [...products, product]);
       setIsAdding(false);
       toast.success(t`Product “${product.title}” added`);
     },
@@ -92,7 +105,9 @@ export function ProductsList() {
     mutationFn: ({ id, values }: { id: number; values: ProductFormValues }) =>
       updateProduct(id, values),
     onSuccess: (product) => {
-      queryClient.invalidateQueries({ queryKey: ['products', categoryId] });
+      updateCachedProducts((products) =>
+        products.map((item) => (item.id === product.id ? product : item))
+      );
       setPendingEdit(null);
       toast.success(t`Product “${product.title}” updated`);
     },
@@ -104,7 +119,9 @@ export function ProductsList() {
   const deleteMutation = useMutation({
     mutationFn: (product: Product) => deleteProduct(product.id),
     onSuccess: (_, product) => {
-      queryClient.invalidateQueries({ queryKey: ['products', categoryId] });
+      updateCachedProducts((products) =>
+        products.filter((item) => item.id !== product.id)
+      );
       setPendingDelete(null);
       toast.success(t`Product “${product.title}” deleted`);
     },
@@ -273,6 +290,7 @@ export function ProductsList() {
       <ProductFormModal
         open={isAdding}
         onOpenChange={setIsAdding}
+        isPending={createMutation.isPending}
         onSave={(values) => createMutation.mutate(values)}
       />
 
@@ -280,6 +298,7 @@ export function ProductsList() {
         open={pendingEdit != null}
         product={pendingEdit}
         onOpenChange={(open) => !open && setPendingEdit(null)}
+        isPending={updateMutation.isPending}
         onSave={(values) => {
           if (pendingEdit) {
             updateMutation.mutate({ id: pendingEdit.id, values });
@@ -291,6 +310,7 @@ export function ProductsList() {
         open={pendingDelete != null}
         productTitle={pendingDelete?.title ?? ''}
         onOpenChange={(open) => !open && setPendingDelete(null)}
+        isPending={deleteMutation.isPending}
         onConfirm={() => {
           if (pendingDelete) {
             deleteMutation.mutate(pendingDelete);
