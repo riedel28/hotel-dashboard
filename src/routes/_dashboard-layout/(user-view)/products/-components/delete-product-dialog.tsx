@@ -1,6 +1,5 @@
 // React import not needed; using JSX runtime
 import { Trans } from '@lingui/react/macro';
-import { Trash } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -47,8 +46,12 @@ export function DeleteProductDialog({
           <AlertDialogCancel>
             <Trans>Cancel</Trans>
           </AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={onConfirm}>
-            <Trash className="mr-2 h-4 w-4" />
+          <AlertDialogAction
+            variant="ghost"
+            // Soft red, matching the delete item in the actions menus.
+            className="border-destructive/20 bg-destructive/10 text-danger hover:bg-destructive/20 hover:text-danger dark:hover:bg-destructive/30"
+            onClick={onConfirm}
+          >
             <Trans>Delete</Trans>
           </AlertDialogAction>
         </AlertDialogFooter>
