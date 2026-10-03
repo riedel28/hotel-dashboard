@@ -161,7 +161,7 @@ msgstr "Hinzufügen"
 #~ msgstr "Fügen Sie eine zusätzliche Sicherheitsebene hinzu, um Ihr Konto zu schützen"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:64
-#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:22
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:23
 msgid "Add category"
 msgstr "Kategorie hinzufügen"
 
@@ -179,7 +179,7 @@ msgid "Add New Guest"
 msgstr "Neuen Gast hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:75
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:221
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:209
 msgid "Add product"
 msgstr "Produkt hinzufügen"
 
@@ -888,7 +888,7 @@ msgstr "Neues Zimmer erstellen"
 #~ msgid "Create New User"
 #~ msgstr "Neuen Benutzer erstellen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:28
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:19
 msgid "Create the first category to start adding products."
 msgstr "Lege die erste Kategorie an, um Produkte hinzuzufügen."
 
@@ -964,7 +964,7 @@ msgstr "Kategorie löschen?"
 msgid "Delete entry?"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:272
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:253
 msgid "Delete product"
 msgstr "Produkt löschen"
 
@@ -1105,7 +1105,7 @@ msgid "Edit Guest"
 msgstr "Gast bearbeiten"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:75
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:264
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:244
 msgid "Edit product"
 msgstr "Produkt bearbeiten"
 
@@ -1395,7 +1395,7 @@ msgstr "Konto konnte nicht aktiviert werden. Der Link ist möglicherweise abgela
 msgid "Failed to add entry. Please try again."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:87
 msgid "Failed to add product"
 msgstr "Produkt konnte nicht hinzugefügt werden"
 
@@ -1434,7 +1434,7 @@ msgstr "Kategorie konnte nicht gelöscht werden"
 msgid "Failed to delete entry. Please try again."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:112
 msgid "Failed to delete product"
 msgstr "Produkt konnte nicht gelöscht werden"
 
@@ -1442,7 +1442,7 @@ msgstr "Produkt konnte nicht gelöscht werden"
 msgid "Failed to load categories"
 msgstr "Kategorien konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:161
 msgid "Failed to load products"
 msgstr "Produkte konnten nicht geladen werden"
 
@@ -1498,7 +1498,7 @@ msgstr ""
 #~ msgid "Failed to update guest. Please try again."
 #~ msgstr "Gast konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:100
 msgid "Failed to update product"
 msgstr "Produkt konnte nicht aktualisiert werden"
 
@@ -2193,7 +2193,7 @@ msgstr "Weiter"
 #~ msgid "Next slide"
 #~ msgstr "Nächste Folie"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:25
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:16
 msgid "No categories yet"
 msgstr "Noch keine Kategorien"
 
@@ -2637,23 +2637,23 @@ msgstr "Privat"
 #~ msgstr "Zahlungen abwickeln, Transaktionshistorie einsehen, Abrechnung verwalten und Rückerstattungen bearbeiten"
 
 #. placeholder {0}: product.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:84
 msgid "Product “{0}” added"
 msgstr "Produkt „{0}“ hinzugefügt"
 
 #. placeholder {0}: product.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:109
 msgid "Product “{0}” deleted"
 msgstr "Produkt „{0}“ gelöscht"
 
 #. placeholder {0}: product.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:97
 msgid "Product “{0}” updated"
 msgstr "Produkt „{0}“ aktualisiert"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:257
-msgid "Product actions"
-msgstr "Produktaktionen"
+#~ msgid "Product actions"
+#~ msgstr "Produktaktionen"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:352
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:375
@@ -2670,9 +2670,9 @@ msgstr "Production"
 #: src/routes/_dashboard-layout.tsx:270
 #: src/routes/_dashboard-layout.tsx:272
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:236
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:133
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:157
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:201
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:126
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:194
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-loading-state.tsx:11
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
@@ -3193,7 +3193,7 @@ msgstr "Auswählen"
 #~ msgid "Select a category to edit"
 #~ msgstr "Wählen Sie eine Kategorie zum Bearbeiten aus"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:139
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:132
 msgid "Select a category to view products"
 msgstr "Wählen Sie eine Kategorie, um Produkte anzuzeigen"
 
@@ -3763,7 +3763,7 @@ msgid "Too many attempts. Try again in {cooldown} seconds."
 msgstr "Zu viele Versuche. Erneut versuchen in {cooldown} Sekunden."
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:406
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:186
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:179
 msgid "Try again"
 msgstr "Erneut versuchen"
 

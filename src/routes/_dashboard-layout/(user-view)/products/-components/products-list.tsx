@@ -1,11 +1,10 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  EllipsisVerticalIcon,
-  PencilIcon,
+  Edit2Icon,
   PlusCircleIcon,
   RefreshCwIcon,
-  Trash2Icon,
+  TrashIcon,
   XIcon
 } from 'lucide-react';
 import * as React from 'react';
@@ -20,7 +19,7 @@ import {
   updateProduct
 } from '@/api/products';
 import { Badge } from '@/components/ui/badge';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardAction,
@@ -30,13 +29,6 @@ import {
 } from '@/components/ui/card';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import {
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -44,6 +36,7 @@ import {
   EmptyMedia,
   EmptyTitle
 } from '@/components/ui/empty';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
 import { Route as ProductsRoute } from '../index';
@@ -64,7 +57,7 @@ export function ProductsList() {
   });
   const categoryId =
     searchCategoryId != null &&
-    categoriesQuery.data?.some(category => category.id === searchCategoryId)
+    categoriesQuery.data?.some((category) => category.id === searchCategoryId)
       ? searchCategoryId
       : null;
 
@@ -85,12 +78,12 @@ export function ProductsList() {
   const createMutation = useMutation({
     mutationFn: (values: ProductFormValues) =>
       createProduct({ ...values, category_id: categoryId as number }),
-    onSuccess: product => {
+    onSuccess: (product) => {
       queryClient.invalidateQueries({ queryKey: ['products', categoryId] });
       setIsAdding(false);
       toast.success(t`Product “${product.title}” added`);
     },
-    onError: error => {
+    onError: (error) => {
       toast.error(t`Failed to add product`, { description: error.message });
     }
   });
@@ -98,12 +91,12 @@ export function ProductsList() {
   const updateMutation = useMutation({
     mutationFn: ({ id, values }: { id: number; values: ProductFormValues }) =>
       updateProduct(id, values),
-    onSuccess: product => {
+    onSuccess: (product) => {
       queryClient.invalidateQueries({ queryKey: ['products', categoryId] });
       setPendingEdit(null);
       toast.success(t`Product “${product.title}” updated`);
     },
-    onError: error => {
+    onError: (error) => {
       toast.error(t`Failed to update product`, { description: error.message });
     }
   });
@@ -115,7 +108,7 @@ export function ProductsList() {
       setPendingDelete(null);
       toast.success(t`Product “${product.title}” deleted`);
     },
-    onError: error => {
+    onError: (error) => {
       toast.error(t`Failed to delete product`, { description: error.message });
     }
   });
@@ -219,58 +212,58 @@ export function ProductsList() {
         </CardHeader>
         <CardContent className="pt-0">
           {productsQuery.data && productsQuery.data.length > 0 ? (
-            <ul className="grid grid-cols-1 gap-2">
-              {productsQuery.data.map(product => (
-                <li
-                  key={product.id}
-                  className={cn(
-                    'flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-3 py-2.5 transition-colors'
-                  )}
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium">{product.title}</div>
-                    {product.description && (
-                      <div className="truncate text-sm text-muted-foreground">
-                        {product.description}
+            <Table borderless className="table-fixed">
+              <TableBody>
+                {productsQuery.data.map((product) => (
+                  <TableRow
+                    key={product.id}
+                    className="group/row hover:bg-transparent"
+                  >
+                    <TableCell className="py-2.5">
+                      <div className="flex min-w-0 items-baseline gap-2">
+                        <span className="max-w-full flex-none truncate font-medium">
+                          {product.title}
+                        </span>
+                        {product.description && (
+                          <span className="min-w-0 flex-1 truncate text-muted-foreground">
+                            {product.description}
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="shrink-0 text-right tabular-nums">
-                    <div className="text-sm">
-                      <CurrencyFormatter value={product.price} />
-                    </div>
-                    <div className="text-xs text-muted-foreground">
+                    </TableCell>
+                    <TableCell className="w-12 py-2.5 text-right text-muted-foreground tabular-nums">
                       {product.quantity}x
-                    </div>
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      className={cn(
-                        buttonVariants({ size: 'icon', variant: 'ghost' }),
-                        'shrink-0'
-                      )}
-                      aria-label={t`Product actions`}
-                    >
-                      <EllipsisVerticalIcon className="size-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-44">
-                      <DropdownMenuItem onClick={() => setPendingEdit(product)}>
-                        <PencilIcon className="mr-2 size-4" />
-                        <Trans>Edit product</Trans>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        className="focus:bg-destructive/10 focus:text-danger focus:**:text-danger!"
-                        onClick={() => setPendingDelete(product)}
-                      >
-                        <Trash2Icon className="mr-2 size-4" />
-                        <Trans>Delete product</Trans>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </li>
-              ))}
-            </ul>
+                    </TableCell>
+                    <TableCell className="w-20 py-2.5 text-right tabular-nums">
+                      <CurrencyFormatter value={product.price} />
+                    </TableCell>
+                    <TableCell className="w-18 py-1.5">
+                      {/* Revealed on row hover or keyboard focus, like Guest ABC. */}
+                      <div className="flex justify-end gap-0.5 opacity-0 group-hover/row:opacity-100 group-hover/row:transition-opacity focus-within:opacity-100 focus-within:transition-opacity">
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          className="text-muted-foreground"
+                          aria-label={t`Edit product`}
+                          onClick={() => setPendingEdit(product)}
+                        >
+                          <Edit2Icon className="size-3.5" />
+                        </Button>
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          className="text-muted-foreground"
+                          aria-label={t`Delete product`}
+                          onClick={() => setPendingDelete(product)}
+                        >
+                          <TrashIcon className="size-3.5" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           ) : (
             <ProductsEmptyState />
           )}
@@ -280,14 +273,14 @@ export function ProductsList() {
       <ProductFormModal
         open={isAdding}
         onOpenChange={setIsAdding}
-        onSave={values => createMutation.mutate(values)}
+        onSave={(values) => createMutation.mutate(values)}
       />
 
       <ProductFormModal
         open={pendingEdit != null}
         product={pendingEdit}
-        onOpenChange={open => !open && setPendingEdit(null)}
-        onSave={values => {
+        onOpenChange={(open) => !open && setPendingEdit(null)}
+        onSave={(values) => {
           if (pendingEdit) {
             updateMutation.mutate({ id: pendingEdit.id, values });
           }
@@ -297,7 +290,7 @@ export function ProductsList() {
       <DeleteProductDialog
         open={pendingDelete != null}
         productTitle={pendingDelete?.title ?? ''}
-        onOpenChange={open => !open && setPendingDelete(null)}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
         onConfirm={() => {
           if (pendingDelete) {
             deleteMutation.mutate(pendingDelete);
