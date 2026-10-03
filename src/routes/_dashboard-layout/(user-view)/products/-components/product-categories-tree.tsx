@@ -46,6 +46,7 @@ const indent = 20;
 
 interface CategoriesTreeProps {
   itemsMap: Record<string, TreeItemData>;
+  categories: NestedProductCategory[];
   selectedCategoryId: number | null;
   expandedItems: string[];
   setExpandedItems: React.Dispatch<React.SetStateAction<string[]>>;
@@ -53,19 +54,22 @@ interface CategoriesTreeProps {
   onAddSubcategory: (categoryId: number) => void;
   onEditCategory: (categoryId: number, initialTitle: string) => void;
   onDeleteCategory: (categoryId: number, title: string) => void;
+  onMoveCategory: (categoryId: number, newParentId: number | null) => void;
 }
 
 // Declared at module level so it keeps its identity (and the tree its DOM)
 // across parent renders; expansion state is owned by the parent.
 function CategoriesTree({
   itemsMap,
+  categories,
   selectedCategoryId,
   expandedItems,
   setExpandedItems,
   onSelect,
   onAddSubcategory,
   onEditCategory,
-  onDeleteCategory
+  onDeleteCategory,
+  onMoveCategory
 }: CategoriesTreeProps) {
   const tree = useTree<TreeItemData>({
     state: { expandedItems },
@@ -131,9 +135,12 @@ function CategoriesTree({
                   <CategoryActionsDropdown
                     categoryId={numericId}
                     categoryTitle={data?.name ?? ''}
+                    parentId={item.getParent()?.getItemData()?.nodeId ?? null}
+                    categories={categories}
                     onAddSubcategory={onAddSubcategory}
                     onEditCategory={onEditCategory}
                     onDeleteCategory={onDeleteCategory}
+                    onMoveCategory={onMoveCategory}
                   />
                 ) : null}
               </div>
@@ -181,9 +188,13 @@ export function ProductCategoriesTree() {
       ...data
     }: { id: number } & Partial<Omit<ProductCategory, 'id'>>) =>
       updateProductCategory(id, data),
-    onSuccess: (category) => {
+    onSuccess: (category, variables) => {
       queryClient.invalidateQueries({ queryKey: ['product-categories'] });
-      toast.success(t`Category “${category.title}” updated`);
+      toast.success(
+        'parent_id' in variables
+          ? t`Category “${category.title}” moved`
+          : t`Category “${category.title}” updated`
+      );
     },
     onError: (error) => {
       toast.error(t`Failed to update category`, {
@@ -276,6 +287,25 @@ export function ProductCategoriesTree() {
       to: '/products',
       search: { category_id: categoryId }
     });
+  };
+
+  const handleMoveCategory = (
+    categoryId: number,
+    newParentId: number | null
+  ) => {
+    updateCategoryMutation.mutate(
+      { id: categoryId, parent_id: newParentId },
+      {
+        // Reveal the category in its new place.
+        onSuccess: () => {
+          if (newParentId == null) return;
+          const parentKey = String(newParentId);
+          setExpandedItems((prev) =>
+            prev.includes(parentKey) ? prev : [...prev, parentKey]
+          );
+        }
+      }
+    );
   };
 
   const handleCategoryDeselect = () => {
@@ -428,6 +458,7 @@ export function ProductCategoriesTree() {
           ) : (
             <CategoriesTree
               itemsMap={itemsMap}
+              categories={categoriesQuery.data}
               selectedCategoryId={selectedCategoryId}
               expandedItems={expandedItems}
               setExpandedItems={setExpandedItems}
@@ -435,6 +466,7 @@ export function ProductCategoriesTree() {
               onAddSubcategory={openAddSubcategoryModal}
               onEditCategory={openEditCategoryModal}
               onDeleteCategory={openDeleteCategoryModal}
+              onMoveCategory={handleMoveCategory}
             />
           )}
         </CardContent>
