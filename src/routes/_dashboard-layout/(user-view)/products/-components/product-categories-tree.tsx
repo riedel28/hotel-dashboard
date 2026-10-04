@@ -8,7 +8,7 @@ import { useTree } from '@headless-tree/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { PlusIcon } from 'lucide-react';
+import { CheckIcon, PlusIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -186,11 +186,33 @@ function CategoriesTree({
                     aria-label={t`Category name`}
                     maxLength={200}
                     // Same height, text position and weight as the label it
-                    // replaces (11px = the field's border + padding).
-                    className="-ms-[11px] h-8 font-medium"
+                    // replaces. 5px = the field's border + padding, kept
+                    // small so the field doesn't run into a folder's chevron.
+                    className="-ms-[5px] h-8 ps-1 font-medium"
                     onFocus={(e) => e.currentTarget.select()}
                     onClick={(e) => e.stopPropagation()}
                   />
+                  {/* For mouse users who don't know Enter saves. Sits where
+                      the row's "…" button is. Kept out of the Tab order:
+                      leaving the field cancels the rename anyway. */}
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    // Fill the full height, like the field next to it.
+                    className="bg-clip-border"
+                    tabIndex={-1}
+                    aria-label={t`Save`}
+                    title={t`Save`}
+                    // Keep focus in the field, so its blur doesn't cancel
+                    // the rename before the click lands.
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      tree.completeRenaming();
+                    }}
+                  >
+                    <CheckIcon />
+                  </Button>
                 </TreeItemLabel>
               </div>
             </TreeItem>
@@ -287,26 +309,36 @@ export function ProductCategoriesTree() {
       ...data
     }: { id: number } & Partial<Omit<ProductCategory, 'id'>>) =>
       updateProductCategory(id, data),
-    onSuccess: (category, variables) => {
-      // Show the new title right away; the refetch reconciles the rest.
-      queryClient.setQueryData<ProductCategory[]>(
-        ['product-categories'],
-        (categories) =>
-          categories?.map((item) =>
-            item.id === category.id ? { ...item, title: category.title } : item
-          )
+    // A rename is applied optimistically: the row shows the new title at
+    // once and falls back to the old one if the server rejects it. Moves wait
+    // for the server.
+    onMutate: async ({ id, title }) => {
+      if (title === undefined) return;
+      const queryKey = ['product-categories'];
+      await queryClient.cancelQueries({ queryKey });
+      const previous = queryClient.getQueryData<ProductCategory[]>(queryKey);
+      queryClient.setQueryData<ProductCategory[]>(queryKey, (categories) =>
+        categories?.map((item) => (item.id === id ? { ...item, title } : item))
       );
-      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
+      return { previous };
+    },
+    onSuccess: (category, variables) => {
       toast.success(
         'parent_id' in variables
           ? t`Category “${category.title}” moved`
           : t`Category “${category.title}” updated`
       );
     },
-    onError: (error) => {
+    onError: (error, _variables, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(['product-categories'], context.previous);
+      }
       toast.error(t`Failed to update category`, {
         description: error.message
       });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
     }
   });
 
