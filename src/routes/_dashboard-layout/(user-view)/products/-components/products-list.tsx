@@ -154,7 +154,9 @@ export function ProductsList() {
     }
   });
 
-  if (categoriesQuery.isLoading) {
+  // Without a category in the URL the card ends up as the "select a
+  // category" hint below, so only show the table skeleton when one is set.
+  if (categoriesQuery.isLoading && searchCategoryId != null) {
     return <ProductsLoadingState />;
   }
 
