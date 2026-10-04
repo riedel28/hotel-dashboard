@@ -1,5 +1,5 @@
 import { and, asc, eq } from 'drizzle-orm';
-import type { NextFunction, Response } from 'express';
+import type { Response } from 'express';
 
 import {
   type CreateGuestAbcEntryData,
@@ -10,15 +10,13 @@ import { db } from '../db/pool';
 import {
   guestAbcEntries,
   type GuestAbcEntry,
-  type NewGuestAbcEntry,
-  users
+  type NewGuestAbcEntry
 } from '../db/schema';
-import type { AuthenticatedRequest } from '../middleware/auth';
+import type { SelectedPropertyRequest } from '../middleware/selected-property';
 
-// AuthenticatedRequest augmented with the caller's resolved property scope.
-interface GuestAbcRequest extends AuthenticatedRequest {
-  selectedPropertyId?: string | null;
-}
+// Property scope is resolved by attachSelectedProperty. A missing property is
+// handled per handler: GET → [], POST → 400, others → 404.
+type GuestAbcRequest = SelectedPropertyRequest;
 
 // Shape the DB record to match the API schema (dates as ISO strings).
 function transformEntry(entry: GuestAbcEntry) {
@@ -31,31 +29,6 @@ function transformEntry(entry: GuestAbcEntry) {
     created_at: entry.created_at.toISOString(),
     updated_at: entry.updated_at.toISOString()
   };
-}
-
-// Resolve the caller's selected property (the JWT doesn't carry it) and attach
-// it to the request. Runs after authenticateToken, so req.user is present.
-// How a missing property is handled is left to each handler (GET → [], POST →
-// 400, others → 404).
-async function attachSelectedProperty(
-  req: GuestAbcRequest,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    if (!req.user) {
-      return res.status(401).json({ error: 'Authentication required' });
-    }
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, Number(req.user.id)),
-      columns: { selected_property_id: true }
-    });
-    req.selectedPropertyId = user?.selected_property_id ?? null;
-    next();
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to resolve selected property' });
-  }
 }
 
 async function getGuestAbcEntries(req: GuestAbcRequest, res: Response) {
@@ -186,7 +159,6 @@ async function deleteGuestAbcEntry(req: GuestAbcRequest, res: Response) {
 }
 
 export {
-  attachSelectedProperty,
   createGuestAbcEntry,
   deleteGuestAbcEntry,
   getGuestAbcEntries,

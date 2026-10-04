@@ -6,7 +6,6 @@ import {
   productIdParamsSchema,
   updateProductSchema
 } from '../../../shared/types/products';
-import { attachSelectedProperty } from '../controllers/guest-abc-controller';
 import {
   createProduct,
   deleteProduct,
@@ -15,6 +14,7 @@ import {
   updateProduct
 } from '../controllers/product-controller';
 import { authenticateToken } from '../middleware/auth';
+import { attachSelectedProperty } from '../middleware/selected-property';
 import {
   validateBody,
   validateParams,

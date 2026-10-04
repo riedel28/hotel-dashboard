@@ -17,12 +17,28 @@ import {
   type ProductCategory,
   products
 } from '../db/schema';
-import type { AuthenticatedRequest } from '../middleware/auth';
+import type { SelectedPropertyRequest } from '../middleware/selected-property';
 
-// Property scope is resolved by attachSelectedProperty (guest-abc-controller).
-interface ProductsRequest extends AuthenticatedRequest {
-  selectedPropertyId?: string | null;
+// Property scope is resolved by attachSelectedProperty. Without a selected
+// property, lists are empty, single reads are 404 and writes are 400.
+type ProductsRequest = SelectedPropertyRequest;
+
+// For write handlers: the selected property id, or null after answering 400.
+function requireProperty(req: ProductsRequest, res: Response) {
+  const propertyId = req.selectedPropertyId ?? null;
+  if (!propertyId) {
+    res.status(400).json({ error: 'No property selected' });
+  }
+  return propertyId;
 }
+
+// Postgres foreign_key_violation; drizzle wraps the driver error in `cause`.
+function isForeignKeyViolation(error: unknown) {
+  const { code, cause } = error as { code?: string; cause?: { code?: string } };
+  return (code ?? cause?.code) === '23503';
+}
+
+type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 function transformCategory(category: ProductCategory) {
   return {
@@ -55,18 +71,22 @@ function findCategory(id: number, propertyId: string) {
 
 // True if making `parentId` the parent of `categoryId` would create a cycle,
 // i.e. `parentId` is the category itself or one of its descendants.
+// Locks the property's categories for the rest of the transaction, so two
+// concurrent moves can't each pass the check and form a cycle together.
 async function createsCycle(
+  tx: Transaction,
   categoryId: number,
   parentId: number,
   propertyId: string
 ) {
-  const rows = await db
+  const rows = await tx
     .select({
       id: productCategories.id,
       parent_id: productCategories.parent_id
     })
     .from(productCategories)
-    .where(eq(productCategories.property_id, propertyId));
+    .where(eq(productCategories.property_id, propertyId))
+    .for('update');
   const parentOf = new Map(rows.map((row) => [row.id, row.parent_id]));
 
   let current: number | null | undefined = parentId;
@@ -120,10 +140,8 @@ async function getProductCategoryById(req: ProductsRequest, res: Response) {
 
 async function createProductCategory(req: ProductsRequest, res: Response) {
   try {
-    const propertyId = req.selectedPropertyId ?? null;
-    if (!propertyId) {
-      return res.status(400).json({ error: 'No property selected' });
-    }
+    const propertyId = requireProperty(req, res);
+    if (!propertyId) return;
 
     const { title, parent_id } = req.body as CreateProductCategoryData;
     if (parent_id != null && !(await findCategory(parent_id, propertyId))) {
@@ -148,44 +166,49 @@ async function createProductCategory(req: ProductsRequest, res: Response) {
 
 async function updateProductCategory(req: ProductsRequest, res: Response) {
   try {
-    const propertyId = req.selectedPropertyId ?? null;
-    if (!propertyId) {
-      return res.status(404).json({ error: 'Category not found' });
-    }
+    const propertyId = requireProperty(req, res);
+    if (!propertyId) return;
 
     const id = Number(req.params.id);
     const { title, parent_id } = (req.body ?? {}) as UpdateProductCategoryData;
 
-    const updates: Partial<Pick<NewProductCategory, 'title' | 'parent_id'>> =
-      {};
-    if (title !== undefined) {
-      updates.title = title;
-    }
-    if (parent_id !== undefined) {
-      if (parent_id !== null) {
-        if (!(await findCategory(parent_id, propertyId))) {
-          return res.status(400).json({ error: 'Parent category not found' });
-        }
-        if (await createsCycle(id, parent_id, propertyId)) {
-          return res.status(400).json({
-            error: 'A category cannot be moved into itself or its subcategory'
-          });
-        }
+    const result = await db.transaction(async (tx) => {
+      const updates: Partial<Pick<NewProductCategory, 'title' | 'parent_id'>> =
+        {};
+      if (title !== undefined) {
+        updates.title = title;
       }
-      updates.parent_id = parent_id;
-    }
+      if (parent_id !== undefined) {
+        if (parent_id !== null) {
+          if (!(await findCategory(parent_id, propertyId))) {
+            return { error: 'Parent category not found' };
+          }
+          if (await createsCycle(tx, id, parent_id, propertyId)) {
+            return {
+              error: 'A category cannot be moved into itself or its subcategory'
+            };
+          }
+        }
+        updates.parent_id = parent_id;
+      }
 
-    const [category] = await db
-      .update(productCategories)
-      .set({ ...updates, updated_at: new Date() })
-      .where(
-        and(
-          eq(productCategories.id, id),
-          eq(productCategories.property_id, propertyId)
+      const [category] = await tx
+        .update(productCategories)
+        .set({ ...updates, updated_at: new Date() })
+        .where(
+          and(
+            eq(productCategories.id, id),
+            eq(productCategories.property_id, propertyId)
+          )
         )
-      )
-      .returning();
+        .returning();
+      return { category };
+    });
 
+    if ('error' in result) {
+      return res.status(400).json({ error: result.error });
+    }
+    const { category } = result;
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }
@@ -199,34 +222,33 @@ async function updateProductCategory(req: ProductsRequest, res: Response) {
 
 async function deleteProductCategory(req: ProductsRequest, res: Response) {
   try {
-    const propertyId = req.selectedPropertyId ?? null;
-    const id = Number(req.params.id);
-    if (!propertyId || !(await findCategory(id, propertyId))) {
+    const propertyId = requireProperty(req, res);
+    if (!propertyId) return;
+
+    const [deleted] = await db
+      .delete(productCategories)
+      .where(
+        and(
+          eq(productCategories.id, Number(req.params.id)),
+          eq(productCategories.property_id, propertyId)
+        )
+      )
+      .returning({ id: productCategories.id });
+
+    if (!deleted) {
       return res.status(404).json({ error: 'Category not found' });
     }
 
-    // The FKs would reject this too; check first for a readable 409.
-    const [child, product] = await Promise.all([
-      db.query.productCategories.findFirst({
-        where: eq(productCategories.parent_id, id),
-        columns: { id: true }
-      }),
-      db.query.products.findFirst({
-        where: eq(products.category_id, id),
-        columns: { id: true }
-      })
-    ]);
-    if (child || product) {
+    res.status(200).json({ message: 'Category deleted successfully' });
+  } catch (error) {
+    // The FKs reject deleting a category that still has subcategories or
+    // products — atomically, unlike a check-then-delete.
+    if (isForeignKeyViolation(error)) {
       return res.status(409).json({
         error:
           'Category is not empty. Move or delete its subcategories and products first.'
       });
     }
-
-    await db.delete(productCategories).where(eq(productCategories.id, id));
-
-    res.status(200).json({ message: 'Category deleted successfully' });
-  } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to delete category' });
   }
@@ -288,10 +310,8 @@ async function getProductById(req: ProductsRequest, res: Response) {
 
 async function createProduct(req: ProductsRequest, res: Response) {
   try {
-    const propertyId = req.selectedPropertyId ?? null;
-    if (!propertyId) {
-      return res.status(400).json({ error: 'No property selected' });
-    }
+    const propertyId = requireProperty(req, res);
+    if (!propertyId) return;
 
     const { category_id, title, price, quantity, description } =
       req.body as CreateProductData;
@@ -324,10 +344,8 @@ async function createProduct(req: ProductsRequest, res: Response) {
 
 async function updateProduct(req: ProductsRequest, res: Response) {
   try {
-    const propertyId = req.selectedPropertyId ?? null;
-    if (!propertyId) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
+    const propertyId = requireProperty(req, res);
+    if (!propertyId) return;
 
     const id = Number(req.params.id);
     const { category_id, title, price, quantity, description } = (req.body ??
@@ -369,10 +387,8 @@ async function updateProduct(req: ProductsRequest, res: Response) {
 
 async function deleteProduct(req: ProductsRequest, res: Response) {
   try {
-    const propertyId = req.selectedPropertyId ?? null;
-    if (!propertyId) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
+    const propertyId = requireProperty(req, res);
+    if (!propertyId) return;
 
     const [deleted] = await db
       .delete(products)

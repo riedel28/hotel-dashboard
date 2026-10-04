@@ -71,11 +71,16 @@ describe('Products API', () => {
           .expect(200);
         expect(res.body).toEqual([]);
       }
-      await request(app)
-        .post('/api/product-categories')
-        .set('Authorization', noPropertyAuth)
-        .send({ title: 'Mini-bar' })
-        .expect(400);
+      const writes = [
+        request(app).post('/api/product-categories').send({ title: 'Bar' }),
+        request(app).patch('/api/product-categories/1').send({ title: 'Bar' }),
+        request(app).delete('/api/product-categories/1'),
+        request(app).patch('/api/products/1').send({ price: 1 }),
+        request(app).delete('/api/products/1')
+      ];
+      for (const write of writes) {
+        await write.set('Authorization', noPropertyAuth).expect(400);
+      }
     });
 
     it("hides another property's products from read, update and delete", async () => {
