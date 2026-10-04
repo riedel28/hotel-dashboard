@@ -40,10 +40,11 @@ interface ProductFormModalProps {
   isPending?: boolean;
 }
 
-function toDefaults(product?: Product | null): FormInput {
+// A new product has no default price: it must be typed in (0 is allowed).
+function toDefaults(product?: Product | null): Partial<FormInput> {
   return {
     title: product?.title ?? '',
-    price: product?.price ?? 0,
+    price: product?.price,
     quantity: product?.quantity ?? 0,
     description: product?.description ?? ''
   };
@@ -113,11 +114,11 @@ export function ProductFormModal({
                       <NumberInput
                         id="product-price"
                         name={field.name}
-                        value={field.value}
+                        value={field.value ?? null}
                         min={0}
                         step={0.5}
                         format={{ maximumFractionDigits: 2 }}
-                        onValueChange={(value) => field.onChange(value ?? 0)}
+                        onValueChange={field.onChange}
                         onBlur={field.onBlur}
                       />
                       {fieldState.invalid && (
