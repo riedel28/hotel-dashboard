@@ -1,6 +1,11 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Edit2Icon, PlusCircleIcon, TrashIcon } from 'lucide-react';
+import {
+  MoreHorizontalIcon,
+  PencilIcon,
+  PlusCircleIcon,
+  Trash2Icon
+} from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -14,16 +19,32 @@ import {
 } from '@/api/products';
 import { ErrorState } from '@/components/error-state';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { SearchInput } from '@/components/ui/search-input';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
 
 import { Route as ProductsRoute } from '../index';
 import { DeleteProductDialog } from './delete-product-dialog';
@@ -47,6 +68,16 @@ export function ProductsList() {
       ? searchCategoryId
       : null;
 
+  // Titles from the top-level category down to the selected one.
+  const categoryPath: string[] = [];
+  for (
+    let category = categoriesQuery.data?.find((c) => c.id === categoryId);
+    category;
+    category = categoriesQuery.data?.find((c) => c.id === category?.parent_id)
+  ) {
+    categoryPath.unshift(category.title);
+  }
+
   const productsQuery = useQuery<Product[], Error>({
     queryKey: ['products', categoryId],
     enabled: categoryId != null,
@@ -55,6 +86,13 @@ export function ProductsList() {
 
   const { t } = useLingui();
   const queryClient = useQueryClient();
+  const [search, setSearch] = React.useState('');
+  // A search belongs to the category it was typed in.
+  React.useEffect(() => setSearch(''), [categoryId]);
+  const query = search.trim().toLowerCase();
+  const visibleProducts = (productsQuery.data ?? []).filter((product) =>
+    product.title.toLowerCase().includes(query)
+  );
   const [isAdding, setIsAdding] = React.useState(false);
   const [pendingEdit, setPendingEdit] = React.useState<Product | null>(null);
   const [pendingDelete, setPendingDelete] = React.useState<Product | null>(
@@ -172,6 +210,26 @@ export function ProductsList() {
     <>
       <Card className="min-h-[150px]">
         <CardHeader>
+          <Breadcrumb className="min-w-0">
+            <BreadcrumbList className="flex-nowrap">
+              {categoryPath.map((title, index) => (
+                <React.Fragment key={index}>
+                  {index > 0 && <BreadcrumbSeparator />}
+                  <BreadcrumbItem className="min-w-0">
+                    {index === categoryPath.length - 1 ? (
+                      <BreadcrumbPage className="truncate" title={title}>
+                        {title}
+                      </BreadcrumbPage>
+                    ) : (
+                      <span className="truncate" title={title}>
+                        {title}
+                      </span>
+                    )}
+                  </BreadcrumbItem>
+                </React.Fragment>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
           <CardTitle className="flex items-center gap-2 text-base">
             <Trans>Products</Trans>
             {productsQuery.data && productsQuery.data.length > 0 && (
@@ -185,69 +243,99 @@ export function ProductsList() {
               </Badge>
             )}
           </CardTitle>
-          <CardAction>
-            <Button variant="secondary" onClick={() => setIsAdding(true)}>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="mb-3 flex items-center gap-3">
+            <SearchInput
+              key={categoryId}
+              value={search}
+              onChange={setSearch}
+              placeholder={t`Search products`}
+              aria-label={t`Search products`}
+            />
+            <Button
+              variant="secondary"
+              className="shrink-0 bg-clip-border"
+              onClick={() => setIsAdding(true)}
+            >
               <PlusCircleIcon />
               <Trans>Add product</Trans>
             </Button>
-          </CardAction>
-        </CardHeader>
-        <CardContent className="pt-0">
-          {productsQuery.data && productsQuery.data.length > 0 ? (
+          </div>
+          {!productsQuery.data || productsQuery.data.length === 0 ? (
+            <ProductsEmptyState />
+          ) : visibleProducts.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              <Trans>No products found</Trans>
+            </p>
+          ) : (
             <Table borderless className="table-fixed">
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead>
+                    <Trans>Title</Trans>
+                  </TableHead>
+                  <TableHead className="w-20 text-right">
+                    <Trans>Quantity</Trans>
+                  </TableHead>
+                  <TableHead className="w-20 text-right">
+                    <Trans>Price</Trans>
+                  </TableHead>
+                  <TableHead className="w-12">
+                    <span className="sr-only">
+                      <Trans>Actions</Trans>
+                    </span>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
               <TableBody>
-                {productsQuery.data.map((product) => (
-                  <TableRow
-                    key={product.id}
-                    className="group/row hover:bg-transparent"
-                  >
-                    <TableCell className="py-2.5">
-                      <div className="flex min-w-0 items-baseline gap-2">
-                        <span className="max-w-full flex-none truncate font-medium">
-                          {product.title}
-                        </span>
-                        {product.description && (
-                          <span className="min-w-0 flex-1 truncate text-muted-foreground">
-                            {product.description}
-                          </span>
-                        )}
-                      </div>
+                {visibleProducts.map((product) => (
+                  <TableRow key={product.id} className="hover:bg-transparent">
+                    <TableCell className="truncate py-2.5 font-medium">
+                      {product.title}
                     </TableCell>
-                    <TableCell className="w-12 py-2.5 text-right text-muted-foreground tabular-nums">
-                      {product.quantity}x
+                    <TableCell className="py-2.5 text-right text-muted-foreground tabular-nums">
+                      {product.quantity}
                     </TableCell>
-                    <TableCell className="w-20 py-2.5 text-right tabular-nums">
+                    <TableCell className="py-2.5 text-right tabular-nums">
                       <CurrencyFormatter value={product.price} />
                     </TableCell>
-                    <TableCell className="w-18 py-1.5">
-                      {/* Revealed on row hover or keyboard focus, like Guest ABC. */}
-                      <div className="flex justify-end gap-0.5 opacity-0 group-hover/row:opacity-100 group-hover/row:transition-opacity focus-within:opacity-100 focus-within:transition-opacity">
-                        <Button
-                          size="icon-sm"
-                          variant="ghost"
-                          className="text-muted-foreground"
-                          aria-label={t`Edit product`}
-                          onClick={() => setPendingEdit(product)}
+                    <TableCell className="py-1.5 text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger
+                          className={buttonVariants({
+                            size: 'icon-sm',
+                            variant: 'ghost'
+                          })}
+                          aria-label={t`Product actions`}
                         >
-                          <Edit2Icon className="size-3.5" />
-                        </Button>
-                        <Button
-                          size="icon-sm"
-                          variant="ghost"
-                          className="text-muted-foreground"
-                          aria-label={t`Delete product`}
-                          onClick={() => setPendingDelete(product)}
+                          <MoreHorizontalIcon className="size-4 text-muted-foreground" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          align="end"
+                          className="w-auto max-w-72 min-w-40"
                         >
-                          <TrashIcon className="size-3.5" />
-                        </Button>
-                      </div>
+                          <DropdownMenuItem
+                            onClick={() => setPendingEdit(product)}
+                          >
+                            <PencilIcon className="mr-2 size-4" />
+                            <Trans>Edit product</Trans>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="focus:bg-destructive/10 focus:text-danger focus:**:text-danger!"
+                            onClick={() => setPendingDelete(product)}
+                          >
+                            <Trash2Icon className="mr-2 size-4" />
+                            <Trans>Delete product</Trans>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          ) : (
-            <ProductsEmptyState />
           )}
         </CardContent>
       </Card>
