@@ -4,6 +4,7 @@ import { useTree } from '@headless-tree/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import { PlusIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -17,7 +18,14 @@ import {
   updateProductCategory
 } from '@/api/product-categories';
 import { ErrorState } from '@/components/error-state';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import { SearchInput } from '@/components/ui/search-input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
@@ -468,6 +476,21 @@ export function ProductCategoriesTree() {
           <CardTitle className="text-base">
             <Trans>Product categories</Trans>
           </CardTitle>
+          {/* The empty state has its own, labelled button. */}
+          {categoriesQuery.data && categoriesQuery.data.length > 0 && (
+            <CardAction>
+              <Button
+                variant="secondary"
+                size="icon-sm"
+                className="bg-clip-border"
+                aria-label={t`Add category`}
+                title={t`Add category`}
+                onClick={openAddRootCategoryModal}
+              >
+                <PlusIcon />
+              </Button>
+            </CardAction>
+          )}
         </CardHeader>
         <CardContent className="pt-0">
           {!categoriesQuery.data || categoriesQuery.data.length === 0 ? (
