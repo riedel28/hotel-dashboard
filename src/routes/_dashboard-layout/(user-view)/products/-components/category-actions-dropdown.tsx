@@ -77,7 +77,7 @@ function MoveTargets({
         <DropdownMenuSubTrigger>
           <span className="truncate">{node.title}</span>
         </DropdownMenuSubTrigger>
-        <DropdownMenuSubContent className="w-48">
+        <DropdownMenuSubContent className="w-auto max-w-72 min-w-40">
           <DropdownMenuItem
             disabled={node.id === parentId}
             onClick={() => onMove(node.id)}
@@ -123,7 +123,7 @@ export function CategoryActionsDropdown({
           align="end"
           side="right"
           onClick={(e) => e.stopPropagation()}
-          className="w-48"
+          className="w-auto max-w-72 min-w-40"
         >
           <DropdownMenuItem
             onClick={() => {
@@ -147,7 +147,7 @@ export function CategoryActionsDropdown({
               <Trans>Move to category</Trans>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent
-              className="w-48"
+              className="w-auto max-w-72 min-w-40"
               onClick={(e) => e.stopPropagation()}
             >
               <DropdownMenuItem

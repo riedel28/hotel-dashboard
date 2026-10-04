@@ -18,6 +18,7 @@ import {
 } from '@/api/product-categories';
 import { ErrorState } from '@/components/error-state';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SearchInput } from '@/components/ui/search-input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
 import { cn } from '@/lib/utils';
@@ -31,6 +32,19 @@ import { EditCategoryModal } from './edit-category-modal';
 import { useCategoryModals } from './use-category-modals';
 
 type TreeItemData = { name: string; children?: string[]; nodeId?: number };
+
+// Keeps categories whose title matches, with their whole subtree, plus the
+// ancestors leading to them.
+function filterCategories(
+  nodes: NestedProductCategory[],
+  query: string
+): NestedProductCategory[] {
+  return nodes.flatMap((node) => {
+    if (node.title.toLowerCase().includes(query)) return [node];
+    const children = filterCategories(node.children, query);
+    return children.length > 0 ? [{ ...node, children }] : [];
+  });
+}
 
 // 20px puts each indent guide under the centre of its parent's chevron.
 const indent = 20;
@@ -62,9 +76,45 @@ function CategoriesTree({
   onDeleteCategory,
   onMoveCategory
 }: CategoriesTreeProps) {
+  // The Tab stop must be a row that is actually rendered. headless-tree keeps
+  // pointing at the last focused item even after it is filtered out by the
+  // search or hidden in a collapsed folder, which leaves the tree unreachable
+  // by keyboard — so fall back to the selected category, then to the first row.
+  const [focusedItem, setFocusedItem] = React.useState<string | null>(null);
+  const isRendered = (itemId: string | null): itemId is string => {
+    if (itemId == null || !itemsMap[itemId]) return false;
+    const parentId = Object.keys(itemsMap).find((id) =>
+      itemsMap[id]?.children?.includes(itemId)
+    );
+    return (
+      parentId === 'root' ||
+      (parentId != null &&
+        expandedItems.includes(parentId) &&
+        isRendered(parentId))
+    );
+  };
+  const selectedItem =
+    selectedCategoryId != null ? String(selectedCategoryId) : null;
+
   const tree = useTree<TreeItemData>({
-    state: { expandedItems },
+    state: {
+      expandedItems,
+      focusedItem: isRendered(focusedItem)
+        ? focusedItem
+        : isRendered(selectedItem)
+          ? selectedItem
+          : null
+    },
     setExpandedItems,
+    setFocusedItem,
+    // Fires on click and on Enter/Space. Folders are toggled by headless-tree
+    // itself; leaves select.
+    onPrimaryAction: (item) => {
+      const nodeId = item.getItemData()?.nodeId;
+      if (!item.isFolder() && nodeId != null) {
+        onSelect(nodeId);
+      }
+    },
     indent,
     rootItemId: 'root',
     getItemName: (item) => item.getItemData().name,
@@ -109,13 +159,6 @@ function CategoriesTree({
                   ? 'bg-accent text-accent-foreground'
                   : 'hover:bg-accent'
               )}
-              onClick={() => {
-                // Folders are toggled by headless-tree's own item click
-                // handler (the click bubbles to the TreeItem); leaves select.
-                if (!item.isFolder() && numericId != null) {
-                  onSelect(numericId);
-                }
-              }}
             >
               <div className="flex w-full min-w-0 items-center justify-between gap-1">
                 <span className="truncate" title={data?.name}>
@@ -208,11 +251,18 @@ export function ProductCategoriesTree() {
     }
   });
 
+  const [search, setSearch] = React.useState('');
+  const query = search.trim().toLowerCase();
+
   const { itemsMap } = React.useMemo(() => {
     const map: Record<string, TreeItemData> = {};
     const topLevelIds: string[] = [];
+    const visibleCategories =
+      categoriesQuery.data && query
+        ? filterCategories(categoriesQuery.data, query)
+        : categoriesQuery.data;
 
-    if (categoriesQuery.data) {
+    if (visibleCategories) {
       const addNode = (node: NestedProductCategory) => {
         const idStr = String(node.id);
         const childrenIds = (node.children ?? []).map((c) => String(c.id));
@@ -224,7 +274,7 @@ export function ProductCategoriesTree() {
         node.children?.forEach(addNode);
       };
 
-      categoriesQuery.data.forEach((cat) => {
+      visibleCategories.forEach((cat) => {
         topLevelIds.push(String(cat.id));
         addNode(cat);
       });
@@ -232,7 +282,7 @@ export function ProductCategoriesTree() {
 
     map.root = { name: 'root', children: topLevelIds };
     return { itemsMap: map };
-  }, [categoriesQuery.data]);
+  }, [categoriesQuery.data, query]);
 
   const [expandedItems, setExpandedItems] = React.useState<string[]>(['root']);
 
@@ -423,18 +473,35 @@ export function ProductCategoriesTree() {
           {!categoriesQuery.data || categoriesQuery.data.length === 0 ? (
             <CategoriesEmptyState onAddCategory={openAddRootCategoryModal} />
           ) : (
-            <CategoriesTree
-              itemsMap={itemsMap}
-              categories={categoriesQuery.data}
-              selectedCategoryId={selectedCategoryId}
-              expandedItems={expandedItems}
-              setExpandedItems={setExpandedItems}
-              onSelect={handleCategorySelect}
-              onAddSubcategory={openAddSubcategoryModal}
-              onEditCategory={openEditCategoryModal}
-              onDeleteCategory={openDeleteCategoryModal}
-              onMoveCategory={handleMoveCategory}
-            />
+            <>
+              <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder={t`Search categories`}
+                aria-label={t`Search categories`}
+                wrapperClassName="mb-3"
+              />
+              {itemsMap.root?.children?.length === 0 ? (
+                <p className="py-6 text-center text-sm text-muted-foreground">
+                  <Trans>No categories found</Trans>
+                </p>
+              ) : (
+                <CategoriesTree
+                  itemsMap={itemsMap}
+                  categories={categoriesQuery.data}
+                  selectedCategoryId={selectedCategoryId}
+                  // While searching every match is shown expanded; the
+                  // user's own expansion state comes back when it's cleared.
+                  expandedItems={query ? Object.keys(itemsMap) : expandedItems}
+                  setExpandedItems={query ? () => {} : setExpandedItems}
+                  onSelect={handleCategorySelect}
+                  onAddSubcategory={openAddSubcategoryModal}
+                  onEditCategory={openEditCategoryModal}
+                  onDeleteCategory={openDeleteCategoryModal}
+                  onMoveCategory={handleMoveCategory}
+                />
+              )}
+            </>
           )}
         </CardContent>
       </Card>
