@@ -44,21 +44,16 @@ export function transformFlatCategoriesToTree(
 
   return roots;
 }
+// React Query key for the flat category list, shared by the tree and the
+// products card.
+const productCategoriesQueryKey = ['product-categories'] as const;
+
 async function fetchProductCategories(): Promise<ProductCategory[]> {
   try {
     const response = await client.get('/product-categories');
     return fetchProductCategoriesResponseSchema.parse(response.data);
   } catch (err) {
     handleApiError(err, 'fetchProductCategories');
-  }
-}
-
-async function fetchProductCategoryById(id: number): Promise<ProductCategory> {
-  try {
-    const response = await client.get(`/product-categories/${id}`);
-    return productCategorySchema.parse(response.data);
-  } catch (err) {
-    handleApiError(err, 'fetchProductCategoryById');
   }
 }
 
@@ -99,6 +94,6 @@ export {
   createProductCategory,
   deleteProductCategory,
   fetchProductCategories,
-  fetchProductCategoryById,
+  productCategoriesQueryKey,
   updateProductCategory
 };

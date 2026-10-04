@@ -13,6 +13,8 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 
+import { destructiveConfirmClassName } from './destructive-styles';
+
 interface DeleteProductDialogProps {
   open: boolean;
   productTitle: string;
@@ -51,8 +53,7 @@ export function DeleteProductDialog({
           </AlertDialogCancel>
           <AlertDialogAction
             variant="ghost"
-            // Soft red, matching the delete item in the actions menus.
-            className="border-destructive/20 bg-destructive/10 text-danger hover:bg-destructive/20 hover:text-danger dark:hover:bg-destructive/30"
+            className={destructiveConfirmClassName}
             onClick={onConfirm}
             disabled={isPending}
           >

@@ -10,15 +10,6 @@ import {
 
 import { client, handleApiError } from './client';
 
-async function fetchProducts(): Promise<Product[]> {
-  try {
-    const response = await client.get('/products');
-    return fetchProductsResponseSchema.parse(response.data);
-  } catch (err) {
-    handleApiError(err, 'fetchProducts');
-  }
-}
-
 async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
   try {
     const response = await client.get('/products', {
@@ -27,15 +18,6 @@ async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
     return fetchProductsResponseSchema.parse(response.data);
   } catch (err) {
     handleApiError(err, 'fetchProductsByCategory');
-  }
-}
-
-async function fetchProductById(id: number): Promise<Product> {
-  try {
-    const response = await client.get(`/products/${id}`);
-    return productSchema.parse(response.data);
-  } catch (err) {
-    handleApiError(err, 'fetchProductById');
   }
 }
 
@@ -71,11 +53,4 @@ async function deleteProduct(id: number): Promise<void> {
 }
 
 export type { Product };
-export {
-  createProduct,
-  deleteProduct,
-  fetchProductById,
-  fetchProducts,
-  fetchProductsByCategory,
-  updateProduct
-};
+export { createProduct, deleteProduct, fetchProductsByCategory, updateProduct };

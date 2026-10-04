@@ -146,7 +146,7 @@ msgstr "Konto aktiviert!"
 msgid "Accounting codes reported to your PMS per payment method and channel."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:288
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:290
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -155,8 +155,8 @@ msgid "Activate Account"
 msgstr "Konto aktivieren"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:153
-#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:106
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:192
+#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:193
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -164,10 +164,10 @@ msgstr "Hinzufügen"
 #~ msgid "Add an extra layer of security to keep your account safe"
 #~ msgstr "Fügen Sie eine zusätzliche Sicherheitsebene hinzu, um Ihr Konto zu schützen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:71
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:23
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:552
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:553
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:207
 msgid "Add category"
 msgstr "Kategorie hinzufügen"
 
@@ -184,8 +184,8 @@ msgstr "Gast hinzufügen"
 msgid "Add New Guest"
 msgstr "Neuen Gast hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:78
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:264
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:266
 msgid "Add product"
 msgstr "Produkt hinzufügen"
 
@@ -201,8 +201,8 @@ msgstr "Reservierung hinzufügen"
 msgid "Add Room"
 msgstr "Zimmer hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:62
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:131
 msgid "Add subcategory"
 msgstr "Unterkategorie hinzufügen"
 
@@ -355,11 +355,11 @@ msgstr "Anwenden"
 #~ msgid "Approved"
 #~ msgstr "Genehmigt"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:35
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:37
 msgid "Are you sure you want to delete <0>{categoryTitle}</0>? This action cannot be undone."
 msgstr "Möchten Sie <0>{categoryTitle}</0> wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:39
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:41
 msgid "Are you sure you want to delete <0>{productTitle}</0>? This action cannot be undone."
 msgstr "Möchten Sie <0>{productTitle}</0> wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
@@ -529,10 +529,10 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:323
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:356
-#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:103
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:185
+#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:186
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:154
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:253
@@ -564,30 +564,34 @@ msgid "Casablanca"
 msgstr "Casablanca"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:294
+#: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:25
 msgid "Category “{0}” added"
 msgstr "Kategorie „{0}“ hinzugefügt"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:337
+#: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:75
 msgid "Category “{0}” deleted"
 msgstr "Kategorie „{0}“ gelöscht"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:321
+#: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:55
 msgid "Category “{0}” moved"
 msgstr "Kategorie „{0}“ verschoben"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:322
+#: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:56
 msgid "Category “{0}” updated"
 msgstr "Kategorie „{0}“ aktualisiert"
+
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:116
+msgid "Category actions"
+msgstr "Kategorieaktionen"
 
 #~ msgid "Category details"
 #~ msgstr "Kategoriedetails"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:80
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:186
+#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:150
 msgid "Category name"
 msgstr "Kategoriename"
 
@@ -955,8 +959,8 @@ msgstr "Datum"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:82
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:85
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:64
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:55
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:86
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:53
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
@@ -966,11 +970,11 @@ msgstr "Datum"
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:167
 msgid "Delete category"
 msgstr "Kategorie löschen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:32
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:34
 msgid "Delete category?"
 msgstr "Kategorie löschen?"
 
@@ -978,11 +982,11 @@ msgstr "Kategorie löschen?"
 msgid "Delete entry?"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:332
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:334
 msgid "Delete product"
 msgstr "Produkt löschen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:38
 msgid "Delete product?"
 msgstr "Produkt löschen?"
 
@@ -1011,7 +1015,7 @@ msgstr "Abst."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:120
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:120
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:158
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:159
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -1118,8 +1122,8 @@ msgstr "Gast bearbeiten"
 msgid "Edit Guest"
 msgstr "Gast bearbeiten"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:78
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:324
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:326
 msgid "Edit product"
 msgstr "Produkt bearbeiten"
 
@@ -1409,7 +1413,7 @@ msgstr "Konto konnte nicht aktiviert werden. Der Link ist möglicherweise abgela
 msgid "Failed to add entry. Please try again."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:128
 msgid "Failed to add product"
 msgstr "Produkt konnte nicht hinzugefügt werden"
 
@@ -1421,7 +1425,7 @@ msgstr "Passwort konnte nicht geändert werden"
 msgid "Failed to create account. Please try again."
 msgstr "Konto konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:297
+#: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:28
 msgid "Failed to create category"
 msgstr "Kategorie konnte nicht erstellt werden"
 
@@ -1440,7 +1444,7 @@ msgstr "Zimmer konnte nicht erstellt werden"
 #~ msgid "Failed to create user"
 #~ msgstr "Benutzer konnte nicht erstellt werden"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:340
+#: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:78
 msgid "Failed to delete category"
 msgstr "Kategorie konnte nicht gelöscht werden"
 
@@ -1448,15 +1452,15 @@ msgstr "Kategorie konnte nicht gelöscht werden"
 msgid "Failed to delete entry. Please try again."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:153
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:157
 msgid "Failed to delete product"
 msgstr "Produkt konnte nicht gelöscht werden"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:528
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:184
 msgid "Failed to load categories"
 msgstr "Kategorien konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:202
 msgid "Failed to load products"
 msgstr "Produkte konnten nicht geladen werden"
 
@@ -1501,7 +1505,7 @@ msgstr "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden. Bit
 #~ msgid "Failed to send SMS"
 #~ msgstr "SMS konnte nicht gesendet werden"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:326
+#: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:63
 msgid "Failed to update category"
 msgstr "Kategorie konnte nicht aktualisiert werden"
 
@@ -1512,7 +1516,7 @@ msgstr ""
 #~ msgid "Failed to update guest. Please try again."
 #~ msgstr "Gast konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:139
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:143
 msgid "Failed to update product"
 msgstr "Produkt konnte nicht aktualisiert werden"
 
@@ -2142,11 +2146,11 @@ msgstr "Mehr"
 msgid "More pages"
 msgstr "Weitere Seiten"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:86
 msgid "Move here"
 msgstr "Hierher verschieben"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:143
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:140
 msgid "Move to category"
 msgstr "In Kategorie verschieben"
 
@@ -2215,7 +2219,7 @@ msgstr "Weiter"
 #~ msgid "Next slide"
 #~ msgstr "Nächste Folie"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:575
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:228
 msgid "No categories found"
 msgstr "Keine Kategorien gefunden"
 
@@ -2263,7 +2267,7 @@ msgstr "Kein Name"
 msgid "No primary guest"
 msgstr "Kein Hauptgast"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:271
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:273
 msgid "No products found"
 msgstr "Keine Produkte gefunden"
 
@@ -2383,7 +2387,7 @@ msgstr "Öffnen Sie Ihre Authenticator-App und scannen Sie den Code unten."
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:245
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:71
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:160
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:161
 msgid "Optional"
 msgstr "Optional"
 
@@ -2646,11 +2650,11 @@ msgstr "Zurück"
 #~ msgid "Previous slide"
 #~ msgstr "Vorherige Folie"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:284
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:286
 msgid "Price"
 msgstr "Preis"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:111
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:112
 msgid "Price (€)"
 msgstr "Preis (€)"
 
@@ -2671,27 +2675,25 @@ msgstr "Privat"
 #~ msgstr "Zahlungen abwickeln, Transaktionshistorie einsehen, Abrechnung verwalten und Rückerstattungen bearbeiten"
 
 #. placeholder {0}: product.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:125
 msgid "Product “{0}” added"
 msgstr "Produkt „{0}“ hinzugefügt"
 
 #. placeholder {0}: product.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:154
 msgid "Product “{0}” deleted"
 msgstr "Produkt „{0}“ gelöscht"
 
 #. placeholder {0}: product.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:140
 msgid "Product “{0}” updated"
 msgstr "Produkt „{0}“ aktualisiert"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:312
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:314
 msgid "Product actions"
 msgstr "Produktaktionen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:499
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:522
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:543
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:50
 msgid "Product categories"
 msgstr "Produktkategorien"
 
@@ -2704,9 +2706,9 @@ msgstr "Production"
 #: src/routes/_dashboard-layout.tsx:270
 #: src/routes/_dashboard-layout.tsx:272
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:236
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:169
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:193
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:236
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:195
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:238
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-loading-state.tsx:16
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
@@ -2831,8 +2833,8 @@ msgstr "QR-Code zur Einrichtung der Zwei-Faktor-Authentifizierung"
 #~ msgid "Qty: {0}"
 #~ msgstr "Menge: {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:135
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:281
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:283
 msgid "Quantity"
 msgstr "Menge"
 
@@ -2918,7 +2920,7 @@ msgstr "Entfernen"
 #~ msgid "Remove your photo and go back to initials?"
 #~ msgstr "Foto entfernen und wieder Initialen anzeigen?"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:135
 msgid "Rename category"
 msgstr "Kategorie umbenennen"
 
@@ -3123,9 +3125,9 @@ msgstr "Tests laufen… ({passedCount}/{0})"
 msgid "SALTO"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:201
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:202
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:192
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:169
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:193
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:265
 msgid "Save"
 msgstr "Speichern"
@@ -3187,8 +3189,8 @@ msgstr "Diesen QR-Code scannen"
 msgid "Search"
 msgstr "Suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:569
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:570
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:223
 msgid "Search categories"
 msgstr "Kategorien durchsuchen"
 
@@ -3207,8 +3209,8 @@ msgstr "Nach einem Gast suchen..."
 #~ msgid "Search for property"
 #~ msgstr "Nach Property-Namen suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:255
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:256
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:257
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:258
 msgid "Search products"
 msgstr "Produkte durchsuchen"
 
@@ -3243,7 +3245,7 @@ msgstr "Auswählen"
 #~ msgid "Select a category to edit"
 #~ msgstr "Wählen Sie eine Kategorie zum Bearbeiten aus"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:175
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:178
 msgid "Select a category to view products"
 msgstr "Wählen Sie eine Kategorie, um Produkte anzuzeigen"
 
@@ -3769,10 +3771,14 @@ msgstr "Zeitbasiert (TOTP) · 6 Ziffern · 30 Sekunden"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:100
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:90
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:278
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:280
 msgid "Title"
 msgstr "Titel"
+
+#: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:44
+msgid "Title is required"
+msgstr "Titel ist erforderlich"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:93
 msgid "TLS certificate"
@@ -3813,7 +3819,7 @@ msgstr "Token"
 msgid "Too many attempts. Try again in {cooldown} seconds."
 msgstr "Zu viele Versuche. Erneut versuchen in {cooldown} Sekunden."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:153
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:150
 msgid "Top level"
 msgstr "Oberste Ebene"
 

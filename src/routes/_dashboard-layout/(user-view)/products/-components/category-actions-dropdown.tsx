@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import {
   CornerUpRightIcon,
   MoreHorizontalIcon,
@@ -21,17 +21,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
+import { destructiveMenuItemClassName } from './destructive-styles';
+
 interface CategoryActionsDropdownProps {
   categoryId: number;
-  categoryTitle: string;
   // Current parent of this category; null when it is at the top level.
   parentId: number | null;
   // Full category tree, used to pick a move target.
   categories: NestedProductCategory[];
-  onAddSubcategory: (categoryId: number) => void;
+  onAddSubcategory: () => void;
   onRenameCategory: () => void;
-  onDeleteCategory: (categoryId: number, title: string) => void;
-  onMoveCategory: (categoryId: number, newParentId: number | null) => void;
+  onDeleteCategory: () => void;
+  onMoveCategory: (newParentId: number | null) => void;
 }
 
 interface MoveTargetsProps {
@@ -99,7 +100,6 @@ function MoveTargets({
 
 export function CategoryActionsDropdown({
   categoryId,
-  categoryTitle,
   parentId,
   categories,
   onAddSubcategory,
@@ -107,12 +107,13 @@ export function CategoryActionsDropdown({
   onDeleteCategory,
   onMoveCategory
 }: CategoryActionsDropdownProps) {
+  const { t } = useLingui();
   return (
     <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 has-data-popup-open:opacity-100">
       <DropdownMenu>
         <DropdownMenuTrigger
           className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }))}
-          aria-label="Category actions"
+          aria-label={t`Category actions`}
           onClick={(e) => {
             e.stopPropagation();
           }}
@@ -125,11 +126,7 @@ export function CategoryActionsDropdown({
           onClick={(e) => e.stopPropagation()}
           className="w-auto max-w-72 min-w-40"
         >
-          <DropdownMenuItem
-            onClick={() => {
-              onAddSubcategory(categoryId);
-            }}
-          >
+          <DropdownMenuItem onClick={onAddSubcategory}>
             <PlusIcon className="mr-2 size-4" />
             <Trans>Add subcategory</Trans>
           </DropdownMenuItem>
@@ -148,7 +145,7 @@ export function CategoryActionsDropdown({
             >
               <DropdownMenuItem
                 disabled={parentId == null}
-                onClick={() => onMoveCategory(categoryId, null)}
+                onClick={() => onMoveCategory(null)}
               >
                 <Trans>Top level</Trans>
               </DropdownMenuItem>
@@ -157,18 +154,14 @@ export function CategoryActionsDropdown({
                 nodes={categories}
                 categoryId={categoryId}
                 parentId={parentId}
-                onMove={(newParentId) =>
-                  onMoveCategory(categoryId, newParentId)
-                }
+                onMove={onMoveCategory}
               />
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="focus:bg-destructive/10 focus:text-danger focus:**:text-danger!"
-            onClick={() => {
-              onDeleteCategory(categoryId, categoryTitle);
-            }}
+            className={destructiveMenuItemClassName}
+            onClick={onDeleteCategory}
           >
             <Trash2Icon className="mr-2 size-4" />
             <Trans>Delete category</Trans>

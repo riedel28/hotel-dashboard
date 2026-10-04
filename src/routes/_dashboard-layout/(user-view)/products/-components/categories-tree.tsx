@@ -1,0 +1,241 @@
+import type { ItemInstance } from '@headless-tree/core';
+import {
+  hotkeysCoreFeature,
+  renamingFeature,
+  syncDataLoaderFeature
+} from '@headless-tree/core';
+import { useTree } from '@headless-tree/react';
+import { useLingui } from '@lingui/react/macro';
+import { CheckIcon } from 'lucide-react';
+import * as React from 'react';
+
+import type { NestedProductCategory } from '@/api/product-categories';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
+import { cn } from '@/lib/utils';
+
+import { CategoryActionsDropdown } from './category-actions-dropdown';
+import {
+  buildParentMap,
+  rootItemId,
+  type TreeItemData,
+  type TreeItems
+} from './category-tree-data';
+
+// 20px puts each indent guide under the centre of its parent's chevron.
+const indent = 20;
+
+// Indent guides: one vertical line per ancestor level, drawn only across the
+// row's indentation. pb-1 (instead of a gap between rows) keeps the lines
+// continuous.
+const rowClassName =
+  'relative pb-1 before:absolute before:inset-y-0 before:start-0 before:w-(--tree-padding) before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_15px,var(--border)_15px,var(--border)_16px,transparent_16px,transparent_var(--tree-indent))]';
+// Rows mounted by expanding a folder fade/slide in.
+const rowEnterClassName =
+  'duration-150 ease-out motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-1';
+
+interface CategoriesTreeProps {
+  itemsMap: TreeItems;
+  categories: NestedProductCategory[];
+  selectedCategoryId: number | null;
+  expandedItems: string[];
+  setExpandedItems: React.Dispatch<React.SetStateAction<string[]>>;
+  onSelect: (categoryId: number) => void;
+  onAddSubcategory: (categoryId: number) => void;
+  onRenameCategory: (categoryId: number, title: string) => void;
+  onDeleteCategory: (category: { id: number; title: string }) => void;
+  onMoveCategory: (categoryId: number, newParentId: number | null) => void;
+}
+
+// Declared at module level so it keeps its identity (and the tree its DOM)
+// across parent renders; expansion state is owned by the parent.
+export function CategoriesTree({
+  itemsMap,
+  categories,
+  selectedCategoryId,
+  expandedItems,
+  setExpandedItems,
+  onSelect,
+  onAddSubcategory,
+  onRenameCategory,
+  onDeleteCategory,
+  onMoveCategory
+}: CategoriesTreeProps) {
+  const { t } = useLingui();
+  const renamedItemRef = React.useRef<string | null>(null);
+  // The Tab stop must be a row that is actually rendered. headless-tree keeps
+  // pointing at the last focused item even after it is filtered out by the
+  // search or hidden in a collapsed folder, which leaves the tree unreachable
+  // by keyboard — so fall back to the selected category, then to the first row.
+  const [focusedItem, setFocusedItem] = React.useState<string | null>(null);
+  const parentOf = React.useMemo(() => buildParentMap(itemsMap), [itemsMap]);
+  const isRendered = (itemId: string | null): itemId is string => {
+    if (itemId == null || !itemsMap[itemId]) return false;
+    const parentId = parentOf.get(itemId);
+    return (
+      parentId === rootItemId ||
+      (parentId != null &&
+        expandedItems.includes(parentId) &&
+        isRendered(parentId))
+    );
+  };
+  const selectedItem =
+    selectedCategoryId != null ? String(selectedCategoryId) : null;
+
+  const tree = useTree<TreeItemData>({
+    state: {
+      expandedItems,
+      focusedItem: isRendered(focusedItem)
+        ? focusedItem
+        : isRendered(selectedItem)
+          ? selectedItem
+          : null
+    },
+    setExpandedItems,
+    setFocusedItem,
+    // Fires on click and on Enter/Space. Folders are toggled by headless-tree
+    // itself; leaves select.
+    onPrimaryAction: (item) => {
+      const nodeId = item.getItemData()?.nodeId;
+      if (!item.isFolder() && nodeId != null) {
+        onSelect(nodeId);
+      }
+    },
+    indent,
+    rootItemId,
+    getItemName: (item) => item.getItemData().name,
+    isItemFolder: (item) => (item.getItemData()?.children?.length ?? 0) > 0,
+    dataLoader: {
+      // headless-tree may still ask for a category that was just removed.
+      getItem: (itemId) => itemsMap[itemId] ?? { name: '' },
+      getChildren: (itemId) => itemsMap[itemId]?.children ?? []
+    },
+    // Inline rename: started from the row menu or with F2, Enter saves,
+    // Escape or leaving the field cancels.
+    onRename: (item, value) => {
+      const nodeId = item.getItemData()?.nodeId;
+      const title = value.trim();
+      if (nodeId != null && title && title !== item.getItemName()) {
+        onRenameCategory(nodeId, title);
+      }
+    },
+    features: [syncDataLoaderFeature, hotkeysCoreFeature, renamingFeature]
+  });
+
+  // Pick up added, removed or renamed categories without remounting.
+  React.useEffect(() => {
+    tree.rebuildTree();
+  }, [tree, itemsMap]);
+
+  return (
+    <Tree indent={indent} tree={tree}>
+      {tree.getItems().map((item: ItemInstance<TreeItemData>) => {
+        const id = item.getId();
+        const data = item.getItemData();
+        const numericId = typeof data?.nodeId === 'number' ? data.nodeId : null;
+        const isSelected =
+          numericId != null && selectedCategoryId === numericId;
+
+        if (item.isRenaming()) {
+          renamedItemRef.current = id;
+          return (
+            // A div instead of the usual button: a text field can't live
+            // inside a button.
+            <TreeItem key={id} item={item} asChild className={rowClassName}>
+              <div>
+                <TreeItemLabel className="w-full rounded-lg bg-card px-2 py-1 hover:bg-card">
+                  <Input
+                    {...item.getRenameInputProps()}
+                    aria-label={t`Category name`}
+                    maxLength={200}
+                    // Same height, text position and weight as the label it
+                    // replaces. 5px = the field's border + padding, kept
+                    // small so the field doesn't run into a folder's chevron.
+                    className="-ms-[5px] h-8 ps-1 font-medium"
+                    onFocus={(e) => e.currentTarget.select()}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  {/* For mouse users who don't know Enter saves. Sits where
+                      the row's "…" button is. Kept out of the Tab order:
+                      leaving the field cancels the rename anyway. */}
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    // Fill the full height, like the field next to it.
+                    className="bg-clip-border"
+                    tabIndex={-1}
+                    aria-label={t`Save`}
+                    title={t`Save`}
+                    // Keep focus in the field, so its blur doesn't cancel
+                    // the rename before the click lands.
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      tree.completeRenaming();
+                    }}
+                  >
+                    <CheckIcon />
+                  </Button>
+                </TreeItemLabel>
+              </div>
+            </TreeItem>
+          );
+        }
+
+        return (
+          <TreeItem
+            key={id}
+            item={item}
+            // The row swapped back in after a rename is not a new row.
+            className={cn(
+              rowClassName,
+              renamedItemRef.current !== id && rowEnterClassName
+            )}
+          >
+            <TreeItemLabel
+              aria-selected={isSelected}
+              className={cn(
+                // Keyboard focus: the app's thin primary ring, drawn inside
+                // the row so it doesn't spill over its neighbours.
+                'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm font-medium in-focus-visible:ring-2 in-focus-visible:ring-primary in-focus-visible:ring-inset',
+                isSelected
+                  ? 'bg-accent text-accent-foreground'
+                  : 'hover:bg-accent'
+              )}
+            >
+              <div className="flex w-full min-w-0 items-center justify-between gap-1">
+                <span className="truncate" title={data?.name}>
+                  {data?.name}
+                </span>
+
+                {numericId != null ? (
+                  <CategoryActionsDropdown
+                    categoryId={numericId}
+                    parentId={item.getParent()?.getItemData()?.nodeId ?? null}
+                    categories={categories}
+                    onAddSubcategory={() => onAddSubcategory(numericId)}
+                    // Wait for the menu to close and hand focus back before
+                    // the field takes it, or the blur cancels the rename.
+                    onRenameCategory={() =>
+                      setTimeout(() => {
+                        item.setFocused();
+                        item.startRenaming();
+                      })
+                    }
+                    onDeleteCategory={() =>
+                      onDeleteCategory({ id: numericId, title: data.name })
+                    }
+                    onMoveCategory={(newParentId) =>
+                      onMoveCategory(numericId, newParentId)
+                    }
+                  />
+                ) : null}
+              </div>
+            </TreeItemLabel>
+          </TreeItem>
+        );
+      })}
+    </Tree>
+  );
+}

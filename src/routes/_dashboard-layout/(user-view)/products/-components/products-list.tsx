@@ -9,7 +9,10 @@ import {
 import * as React from 'react';
 import { toast } from 'sonner';
 
-import { fetchProductCategories } from '@/api/product-categories';
+import {
+  fetchProductCategories,
+  productCategoriesQueryKey
+} from '@/api/product-categories';
 import {
   createProduct,
   deleteProduct,
@@ -48,6 +51,7 @@ import {
 
 import { Route as ProductsRoute } from '../index';
 import { DeleteProductDialog } from './delete-product-dialog';
+import { destructiveMenuItemClassName } from './destructive-styles';
 import { ProductFormModal, type ProductFormValues } from './product-form-modal';
 import { ProductsEmptyState } from './products-empty-state';
 import { ProductsLoadingState } from './products-loading-state';
@@ -59,7 +63,7 @@ export function ProductsList() {
   // category_id that isn't in the current property's categories (stale link,
   // deleted category, property switch) is treated as no selection.
   const categoriesQuery = useQuery({
-    queryKey: ['product-categories'],
+    queryKey: productCategoriesQueryKey,
     queryFn: fetchProductCategories
   });
   const categoryId =
@@ -162,22 +166,20 @@ export function ProductsList() {
 
   if (categoryId == null) {
     return (
-      <div className="col-span-12 md:col-span-6">
-        <Card className="min-h-[150px]">
-          <CardHeader>
-            <CardTitle className="text-base">
-              <Trans>Products</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="flex min-h-[140px] items-center justify-center">
-              <div className="text-center text-base text-muted-foreground">
-                <Trans>Select a category to view products</Trans>
-              </div>
+      <Card className="min-h-[150px]">
+        <CardHeader>
+          <CardTitle className="text-base">
+            <Trans>Products</Trans>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="flex min-h-[140px] items-center justify-center">
+            <div className="text-center text-base text-muted-foreground">
+              <Trans>Select a category to view products</Trans>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -325,7 +327,7 @@ export function ProductsList() {
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            className="focus:bg-destructive/10 focus:text-danger focus:**:text-danger!"
+                            className={destructiveMenuItemClassName}
                             onClick={() => setPendingDelete(product)}
                           >
                             <Trash2Icon className="mr-2 size-4" />
