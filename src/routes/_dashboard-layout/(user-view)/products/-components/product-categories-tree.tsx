@@ -1,5 +1,9 @@
 import type { ItemInstance } from '@headless-tree/core';
-import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
+import {
+  hotkeysCoreFeature,
+  renamingFeature,
+  syncDataLoaderFeature
+} from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -26,6 +30,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { SearchInput } from '@/components/ui/search-input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
@@ -36,7 +41,6 @@ import { AddCategoryModal } from './add-category-modal';
 import { CategoriesEmptyState } from './categories-empty-state';
 import { CategoryActionsDropdown } from './category-actions-dropdown';
 import { DeleteCategoryDialog } from './delete-category-dialog';
-import { EditCategoryModal } from './edit-category-modal';
 import { useCategoryModals } from './use-category-modals';
 
 type TreeItemData = { name: string; children?: string[]; nodeId?: number };
@@ -57,6 +61,15 @@ function filterCategories(
 // 20px puts each indent guide under the centre of its parent's chevron.
 const indent = 20;
 
+// Indent guides: one vertical line per ancestor level, drawn only across the
+// row's indentation. pb-1 (instead of a gap between rows) keeps the lines
+// continuous.
+const rowClassName =
+  'relative pb-1 before:absolute before:inset-y-0 before:start-0 before:w-(--tree-padding) before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_15px,var(--border)_15px,var(--border)_16px,transparent_16px,transparent_var(--tree-indent))]';
+// Rows mounted by expanding a folder fade/slide in.
+const rowEnterClassName =
+  'duration-150 ease-out motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-1';
+
 interface CategoriesTreeProps {
   itemsMap: Record<string, TreeItemData>;
   categories: NestedProductCategory[];
@@ -65,7 +78,7 @@ interface CategoriesTreeProps {
   setExpandedItems: React.Dispatch<React.SetStateAction<string[]>>;
   onSelect: (categoryId: number) => void;
   onAddSubcategory: (categoryId: number) => void;
-  onEditCategory: (categoryId: number, initialTitle: string) => void;
+  onRenameCategory: (categoryId: number, title: string) => void;
   onDeleteCategory: (categoryId: number, title: string) => void;
   onMoveCategory: (categoryId: number, newParentId: number | null) => void;
 }
@@ -80,10 +93,12 @@ function CategoriesTree({
   setExpandedItems,
   onSelect,
   onAddSubcategory,
-  onEditCategory,
+  onRenameCategory,
   onDeleteCategory,
   onMoveCategory
 }: CategoriesTreeProps) {
+  const { t } = useLingui();
+  const renamedItemRef = React.useRef<string | null>(null);
   // The Tab stop must be a row that is actually rendered. headless-tree keeps
   // pointing at the last focused item even after it is filtered out by the
   // search or hidden in a collapsed folder, which leaves the tree unreachable
@@ -132,7 +147,16 @@ function CategoriesTree({
         itemsMap[itemId] ?? { name: 'unknown', children: [] },
       getChildren: (itemId) => itemsMap[itemId]?.children ?? []
     },
-    features: [syncDataLoaderFeature, hotkeysCoreFeature]
+    // Inline rename: started from the row menu or with F2, Enter saves,
+    // Escape or leaving the field cancels.
+    onRename: (item, value) => {
+      const nodeId = item.getItemData()?.nodeId;
+      const title = value.trim();
+      if (nodeId != null && title && title !== item.getItemName()) {
+        onRenameCategory(nodeId, title);
+      }
+    },
+    features: [syncDataLoaderFeature, hotkeysCoreFeature, renamingFeature]
   });
 
   // Pick up added, removed or renamed categories without remounting.
@@ -149,20 +173,46 @@ function CategoriesTree({
         const isSelected =
           numericId != null && selectedCategoryId === numericId;
 
+        if (item.isRenaming()) {
+          renamedItemRef.current = id;
+          return (
+            // A div instead of the usual button: a text field can't live
+            // inside a button.
+            <TreeItem key={id} item={item} asChild className={rowClassName}>
+              <div>
+                <TreeItemLabel className="w-full rounded-lg bg-card px-2 py-1 hover:bg-card">
+                  <Input
+                    {...item.getRenameInputProps()}
+                    aria-label={t`Category name`}
+                    maxLength={200}
+                    // Same height, text position and weight as the label it
+                    // replaces (11px = the field's border + padding).
+                    className="-ms-[11px] h-8 font-medium"
+                    onFocus={(e) => e.currentTarget.select()}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </TreeItemLabel>
+              </div>
+            </TreeItem>
+          );
+        }
+
         return (
           <TreeItem
             key={id}
             item={item}
-            // Indent guides: one vertical line per ancestor level, drawn only
-            // across this item's indentation. pb-1 (instead of a gap between
-            // items) keeps the lines continuous. Rows mounted by expanding a
-            // folder fade/slide in.
-            className="relative pb-1 duration-150 ease-out before:absolute before:inset-y-0 before:start-0 before:w-(--tree-padding) before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_15px,var(--border)_15px,var(--border)_16px,transparent_16px,transparent_var(--tree-indent))] motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-1"
+            // The row swapped back in after a rename is not a new row.
+            className={cn(
+              rowClassName,
+              renamedItemRef.current !== id && rowEnterClassName
+            )}
           >
             <TreeItemLabel
               aria-selected={isSelected}
               className={cn(
-                'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm font-medium',
+                // Keyboard focus: the app's thin primary ring, drawn inside
+                // the row so it doesn't spill over its neighbours.
+                'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm font-medium in-focus-visible:ring-2 in-focus-visible:ring-primary in-focus-visible:ring-inset',
                 isSelected
                   ? 'bg-accent text-accent-foreground'
                   : 'hover:bg-accent'
@@ -180,7 +230,14 @@ function CategoriesTree({
                     parentId={item.getParent()?.getItemData()?.nodeId ?? null}
                     categories={categories}
                     onAddSubcategory={onAddSubcategory}
-                    onEditCategory={onEditCategory}
+                    // Wait for the menu to close and hand focus back before
+                    // the field takes it, or the blur cancels the rename.
+                    onRenameCategory={() =>
+                      setTimeout(() => {
+                        item.setFocused();
+                        item.startRenaming();
+                      })
+                    }
                     onDeleteCategory={onDeleteCategory}
                     onMoveCategory={onMoveCategory}
                   />
@@ -231,6 +288,14 @@ export function ProductCategoriesTree() {
     }: { id: number } & Partial<Omit<ProductCategory, 'id'>>) =>
       updateProductCategory(id, data),
     onSuccess: (category, variables) => {
+      // Show the new title right away; the refetch reconciles the rest.
+      queryClient.setQueryData<ProductCategory[]>(
+        ['product-categories'],
+        (categories) =>
+          categories?.map((item) =>
+            item.id === category.id ? { ...item, title: category.title } : item
+          )
+      );
       queryClient.invalidateQueries({ queryKey: ['product-categories'] });
       toast.success(
         'parent_id' in variables
@@ -319,14 +384,11 @@ export function ProductCategoriesTree() {
   const {
     pendingAddSubcategoryForId,
     pendingAddRootCategory,
-    pendingEditCategory,
     pendingDeleteCategory,
     openAddSubcategoryModal,
     closeAddSubcategoryModal,
     openAddRootCategoryModal,
     closeAddRootCategoryModal,
-    openEditCategoryModal,
-    closeEditCategoryModal,
     openDeleteCategoryModal,
     closeDeleteCategoryModal
   } = useCategoryModals();
@@ -389,21 +451,6 @@ export function ProductCategoriesTree() {
     } catch {
       // Error is already handled by the mutation's onError
       // Keep modal open so user can retry
-    }
-  };
-
-  const handleEditCategory = async (newTitle: string) => {
-    if (pendingEditCategory) {
-      try {
-        await updateCategoryMutation.mutateAsync({
-          id: pendingEditCategory.categoryId,
-          title: newTitle.trim()
-        });
-        closeEditCategoryModal();
-      } catch {
-        // Error is already handled by the mutation's onError
-        // Keep modal open so user can retry
-      }
     }
   };
 
@@ -519,7 +566,9 @@ export function ProductCategoriesTree() {
                   setExpandedItems={query ? () => {} : setExpandedItems}
                   onSelect={handleCategorySelect}
                   onAddSubcategory={openAddSubcategoryModal}
-                  onEditCategory={openEditCategoryModal}
+                  onRenameCategory={(id, title) =>
+                    updateCategoryMutation.mutate({ id, title })
+                  }
                   onDeleteCategory={openDeleteCategoryModal}
                   onMoveCategory={handleMoveCategory}
                 />
@@ -538,12 +587,6 @@ export function ProductCategoriesTree() {
         open={pendingAddRootCategory}
         onOpenChange={(open) => !open && closeAddRootCategoryModal()}
         onSave={handleAddRootCategory}
-      />
-      <EditCategoryModal
-        open={pendingEditCategory != null}
-        initialTitle={pendingEditCategory?.initialTitle ?? ''}
-        onOpenChange={(open) => !open && closeEditCategoryModal()}
-        onSave={handleEditCategory}
       />
       <DeleteCategoryDialog
         open={pendingDeleteCategory != null}

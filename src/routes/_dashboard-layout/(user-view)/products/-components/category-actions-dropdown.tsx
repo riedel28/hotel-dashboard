@@ -29,7 +29,7 @@ interface CategoryActionsDropdownProps {
   // Full category tree, used to pick a move target.
   categories: NestedProductCategory[];
   onAddSubcategory: (categoryId: number) => void;
-  onEditCategory: (categoryId: number, initialTitle: string) => void;
+  onRenameCategory: () => void;
   onDeleteCategory: (categoryId: number, title: string) => void;
   onMoveCategory: (categoryId: number, newParentId: number | null) => void;
 }
@@ -103,7 +103,7 @@ export function CategoryActionsDropdown({
   parentId,
   categories,
   onAddSubcategory,
-  onEditCategory,
+  onRenameCategory,
   onDeleteCategory,
   onMoveCategory
 }: CategoryActionsDropdownProps) {
@@ -133,13 +133,9 @@ export function CategoryActionsDropdown({
             <PlusIcon className="mr-2 size-4" />
             <Trans>Add subcategory</Trans>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              onEditCategory(categoryId, categoryTitle);
-            }}
-          >
+          <DropdownMenuItem onClick={onRenameCategory}>
             <PencilIcon className="mr-2 size-4" />
-            <Trans>Edit category</Trans>
+            <Trans>Rename category</Trans>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>

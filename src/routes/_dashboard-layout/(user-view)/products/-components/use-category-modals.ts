@@ -5,10 +5,6 @@ export function useCategoryModals() {
     number | null
   >(null);
   const [pendingAddRootCategory, setPendingAddRootCategory] = useState(false);
-  const [pendingEditCategory, setPendingEditCategory] = useState<{
-    categoryId: number;
-    initialTitle: string;
-  } | null>(null);
   const [pendingDeleteCategory, setPendingDeleteCategory] = useState<{
     categoryId: number;
     title: string;
@@ -30,14 +26,6 @@ export function useCategoryModals() {
     setPendingAddRootCategory(false);
   };
 
-  const openEditCategoryModal = (categoryId: number, initialTitle: string) => {
-    setPendingEditCategory({ categoryId, initialTitle });
-  };
-
-  const closeEditCategoryModal = () => {
-    setPendingEditCategory(null);
-  };
-
   const openDeleteCategoryModal = (categoryId: number, title: string) => {
     setPendingDeleteCategory({ categoryId, title });
   };
@@ -50,15 +38,12 @@ export function useCategoryModals() {
     // States
     pendingAddSubcategoryForId,
     pendingAddRootCategory,
-    pendingEditCategory,
     pendingDeleteCategory,
     // Actions
     openAddSubcategoryModal,
     closeAddSubcategoryModal,
     openAddRootCategoryModal,
     closeAddRootCategoryModal,
-    openEditCategoryModal,
-    closeEditCategoryModal,
     openDeleteCategoryModal,
     closeDeleteCategoryModal
   };

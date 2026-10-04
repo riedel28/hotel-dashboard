@@ -169,8 +169,8 @@ msgstr "Add"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:23
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:486
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:487
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:515
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:516
 msgid "Add category"
 msgstr "Add category"
 
@@ -547,7 +547,6 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:103
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
-#: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:154
@@ -580,22 +579,22 @@ msgid "Casablanca"
 msgstr "Casablanca"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:218
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:257
 msgid "Category “{0}” added"
 msgstr "Category “{0}” added"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:253
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:300
 msgid "Category “{0}” deleted"
 msgstr "Category “{0}” deleted"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:237
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:284
 msgid "Category “{0}” moved"
 msgstr "Category “{0}” moved"
 
 #. placeholder {0}: category.title
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:238
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:285
 msgid "Category “{0}” updated"
 msgstr "Category “{0}” updated"
 
@@ -604,7 +603,7 @@ msgstr "Category “{0}” updated"
 #~ msgstr "Category details"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:80
-#: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:175
 msgid "Category name"
 msgstr "Category name"
 
@@ -999,7 +998,7 @@ msgstr "Date"
 msgid "Delete"
 msgstr "Delete"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:174
 msgid "Delete category"
 msgstr "Delete category"
 
@@ -1139,8 +1138,8 @@ msgstr "Edit"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:142
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:60
-msgid "Edit category"
-msgstr "Edit category"
+#~ msgid "Edit category"
+#~ msgstr "Edit category"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:199
 msgid "Edit guest"
@@ -1466,7 +1465,7 @@ msgstr "Failed to change password"
 msgid "Failed to create account. Please try again."
 msgstr "Failed to create account. Please try again."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:221
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:260
 msgid "Failed to create category"
 msgstr "Failed to create category"
 
@@ -1486,7 +1485,7 @@ msgstr "Failed to create room"
 #~ msgid "Failed to create user"
 #~ msgstr "Failed to create user"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:256
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:303
 msgid "Failed to delete category"
 msgstr "Failed to delete category"
 
@@ -1498,7 +1497,7 @@ msgstr "Failed to delete entry. Please try again."
 msgid "Failed to delete product"
 msgstr "Failed to delete product"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:462
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:491
 msgid "Failed to load categories"
 msgstr "Failed to load categories"
 
@@ -1551,7 +1550,7 @@ msgstr "Failed to send password reset email. Please try again."
 #~ msgid "Failed to send SMS"
 #~ msgstr "Failed to send SMS"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:242
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:289
 msgid "Failed to update category"
 msgstr "Failed to update category"
 
@@ -2217,7 +2216,7 @@ msgstr "More pages"
 msgid "Move here"
 msgstr "Move here"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:143
 msgid "Move to category"
 msgstr "Move to category"
 
@@ -2289,7 +2288,7 @@ msgstr "Next"
 #~ msgid "Next slide"
 #~ msgstr "Next slide"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:509
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:538
 msgid "No categories found"
 msgstr "No categories found"
 
@@ -2776,9 +2775,9 @@ msgstr "Product “{0}” updated"
 msgid "Product actions"
 msgstr "Product actions"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:433
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:456
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:477
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:462
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:485
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:506
 msgid "Product categories"
 msgstr "Product categories"
 
@@ -3009,6 +3008,10 @@ msgstr "Remove"
 #~ msgid "Remove your photo and go back to initials?"
 #~ msgstr "Remove your photo and go back to initials?"
 
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:138
+msgid "Rename category"
+msgstr "Rename category"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:903
 #~ msgid "Replace"
 #~ msgstr "Replace"
@@ -3222,7 +3225,6 @@ msgstr "Running tests… ({passedCount}/{0})"
 msgid "SALTO"
 msgstr "SALTO"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-modal.tsx:192
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:265
 msgid "Save"
@@ -3286,8 +3288,8 @@ msgstr "Scan this QR code"
 msgid "Search"
 msgstr "Search"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:503
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:504
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:532
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:533
 msgid "Search categories"
 msgstr "Search categories"
 
@@ -3939,7 +3941,7 @@ msgstr "Token"
 msgid "Too many attempts. Try again in {cooldown} seconds."
 msgstr "Too many attempts. Try again in {cooldown} seconds."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:157
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:153
 msgid "Top level"
 msgstr "Top level"
 
