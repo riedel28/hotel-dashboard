@@ -47,10 +47,10 @@ interface RichTextEditorProps {
   className?: string;
 }
 
-// Paragraph or heading (H1–H6), bold, italic, underline, lists, links and images by URL.
-// Whatever is saved must still be sanitized on the server: this list limits
-// the UI, not what a client can send.
-const extensions = [
+// Paragraph or heading (H1–H6), bold, italic, underline, lists, links and
+// images by URL. Must stay within shared/rich-text.ts, which is also what the
+// server keeps when it sanitizes — the test next to this file checks that.
+export const richTextExtensions = [
   StarterKit.configure({
     blockquote: false,
     code: false,
@@ -74,16 +74,16 @@ const toolbarButtonClassName = cn(
 );
 
 const headingLevels = [1, 2, 3, 4, 5, 6] as const;
-// How each level looks in the style menu; the editor's own heading styles
-// (in RichTextEditor below) mirror these.
-const headingClassNames = {
-  1: 'text-2xl font-semibold',
-  2: 'text-xl font-semibold',
-  3: 'text-lg font-semibold',
-  4: 'text-base font-semibold',
-  5: 'text-sm font-semibold',
-  6: 'text-sm font-medium text-muted-foreground'
-} as const;
+
+// How rich text looks: headings, lists, links and images. Used by the editor
+// and its style menu; apply it wherever saved rich text is rendered.
+export const richTextClassName = cn(
+  '[&_ol]:list-decimal [&_ol]:ps-5 [&_p+p]:mt-2 [&_ul]:list-disc [&_ul]:ps-5',
+  '[&_:is(h1,h2,h3,h4,h5,h6)]:mt-3 [&_:is(h1,h2,h3,h4,h5,h6)]:font-semibold [&_:is(h1,h2,h3,h4,h5,h6):first-child]:mt-0',
+  '[&_h1]:text-2xl [&_h2]:text-xl [&_h3]:text-lg [&_h4]:text-base [&_h5]:text-sm [&_h6]:text-sm [&_h6]:font-medium [&_h6]:text-muted-foreground',
+  '[&_img]:my-2 [&_img]:max-w-full [&_img]:rounded-md',
+  '[&_a]:text-primary [&_a]:underline'
+);
 
 // Paragraph / Heading 1–6 for the current block.
 function TextStyleMenu({
@@ -112,7 +112,11 @@ function TextStyleMenu({
         {level ? t`Heading ${level}` : t`Text`}
         <ChevronDownIcon className="text-muted-foreground" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-48">
+      <DropdownMenuContent
+        align="start"
+        // Each heading is shown the way it will look in the text.
+        className={cn('w-48', richTextClassName)}
+      >
         <DropdownMenuItem
           onClick={() =>
             apply(() => editor.chain().focus().setParagraph().run())
@@ -120,19 +124,25 @@ function TextStyleMenu({
         >
           {t`Text`}
         </DropdownMenuItem>
-        {headingLevels.map((headingLevel) => (
-          <DropdownMenuItem
-            key={headingLevel}
-            className={headingClassNames[headingLevel]}
-            onClick={() =>
-              apply(() =>
-                editor.chain().focus().setHeading({ level: headingLevel }).run()
-              )
-            }
-          >
-            {t`Heading ${headingLevel}`}
-          </DropdownMenuItem>
-        ))}
+        {headingLevels.map((headingLevel) => {
+          const Heading = `h${headingLevel}` as const;
+          return (
+            <DropdownMenuItem
+              key={headingLevel}
+              onClick={() =>
+                apply(() =>
+                  editor
+                    .chain()
+                    .focus()
+                    .setHeading({ level: headingLevel })
+                    .run()
+                )
+              }
+            >
+              <Heading role="presentation">{t`Heading ${headingLevel}`}</Heading>
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -331,7 +341,7 @@ function RichTextEditor({
   className
 }: RichTextEditorProps) {
   const editor = useEditor({
-    extensions,
+    extensions: richTextExtensions,
     content: value,
     editable: !disabled,
     editorProps: {
@@ -342,12 +352,7 @@ function RichTextEditor({
         'aria-multiline': 'true',
         class: cn(
           'max-h-96 min-h-40 overflow-y-auto px-2.5 py-2 text-base outline-none md:text-sm',
-          '[&_ol]:list-decimal [&_ol]:ps-5 [&_p+p]:mt-2 [&_ul]:list-disc [&_ul]:ps-5',
-          // Heading sizes: keep in sync with headingClassNames above.
-          '[&_:is(h1,h2,h3,h4,h5,h6)]:mt-3 [&_:is(h1,h2,h3,h4,h5,h6)]:font-semibold [&_:is(h1,h2,h3,h4,h5,h6):first-child]:mt-0',
-          '[&_h1]:text-2xl [&_h2]:text-xl [&_h3]:text-lg [&_h4]:text-base [&_h5]:text-sm [&_h6]:text-sm [&_h6]:font-medium [&_h6]:text-muted-foreground',
-          '[&_img]:my-2 [&_img]:max-w-full [&_img]:rounded-md',
-          '[&_a]:text-primary [&_a]:underline'
+          richTextClassName
         )
       }
     },
