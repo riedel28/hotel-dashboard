@@ -34,7 +34,7 @@ export function TypeCell({ type }: TypeCellProps) {
       size="sm"
       color={color}
       className={cn(
-        'flex shrink-0 items-center gap-1.5 rounded-md border border-foreground/10',
+        'flex shrink-0 items-center gap-1.5 rounded-md',
         type === 'pms' ? 'uppercase' : 'capitalize'
       )}
     >

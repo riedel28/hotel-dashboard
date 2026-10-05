@@ -44,10 +44,7 @@ export function StageBadge({
     <Badge
       color={config.color}
       size={size}
-      className={cn(
-        'shrink-0 rounded-md border border-foreground/10 capitalize',
-        className
-      )}
+      className={cn('shrink-0 rounded-md capitalize', className)}
       {...props}
     >
       {config.label}

@@ -85,7 +85,7 @@ export function TwoFactorSection() {
         <Badge
           color={status.enabled ? 'emerald' : 'gray'}
           size="sm"
-          className="rounded-md border-foreground/10 px-2 py-1"
+          className="rounded-md px-2 py-1"
         >
           <span
             aria-hidden="true"
