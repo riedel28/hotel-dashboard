@@ -91,7 +91,8 @@ function DataGridRadioFilter<TValue extends string>({
       />
       <DropdownMenuContent align="start" className="w-auto min-w-[150px]">
         <DropdownMenuRadioGroup
-          value={value}
+          // Empty string keeps the group controlled while nothing is selected.
+          value={value ?? ''}
           onValueChange={(nextValue) => onValueChange(nextValue as TValue)}
         >
           {options.map((option) => (

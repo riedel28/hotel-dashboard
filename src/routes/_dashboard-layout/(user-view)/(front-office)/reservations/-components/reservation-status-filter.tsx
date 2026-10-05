@@ -2,37 +2,15 @@ import { Trans } from '@lingui/react/macro';
 
 import type { ReservationState } from '@/api/reservations';
 import type { DataGridCheckboxFilterOption } from '@/components/ui/data-grid-checkbox-filter';
-import { DataGridCheckboxFilter } from '@/components/ui/data-grid-checkbox-filter';
+import {
+  DataGridCheckboxFilter,
+  DataGridCheckboxFilterClear,
+  DataGridCheckboxFilterFooter
+} from '@/components/ui/data-grid-checkbox-filter';
 
-import { getReservationStatusStyle } from './reservation-status';
+import { StatusCell } from './reservations-table/-components/cells/status-cell';
 
-function StatusDot({ status }: { status: ReservationState }) {
-  return (
-    <span
-      className={`ml-1 size-1.5 shrink-0 rounded-full ${getReservationStatusStyle(status).dotClassName}`}
-      aria-hidden="true"
-    />
-  );
-}
-
-const reservationStatusOptions: DataGridCheckboxFilterOption<ReservationState>[] =
-  [
-    {
-      value: 'pending',
-      label: <Trans>Pending</Trans>,
-      icon: <StatusDot status="pending" />
-    },
-    {
-      value: 'started',
-      label: <Trans>Started</Trans>,
-      icon: <StatusDot status="started" />
-    },
-    {
-      value: 'done',
-      label: <Trans>Done</Trans>,
-      icon: <StatusDot status="done" />
-    }
-  ];
+const reservationStatuses: ReservationState[] = ['pending', 'started', 'done'];
 
 interface ReservationStatusFilterProps {
   value: ReservationState[];
@@ -45,15 +23,27 @@ function ReservationStatusFilter({
   onValueChange,
   className
 }: ReservationStatusFilterProps) {
+  const options: DataGridCheckboxFilterOption<ReservationState>[] =
+    reservationStatuses.map((status) => ({
+      value: status,
+      label: <StatusCell status={status} />
+    }));
+
   return (
     <DataGridCheckboxFilter
       label={<Trans>Status</Trans>}
-      placeholder={<Trans>Select status</Trans>}
-      options={reservationStatusOptions}
+      placeholder={<Trans>All statuses</Trans>}
+      options={options}
       value={value}
       onValueChange={onValueChange}
       className={className}
-    />
+    >
+      <DataGridCheckboxFilterFooter>
+        <DataGridCheckboxFilterClear>
+          <Trans>Reset</Trans>
+        </DataGridCheckboxFilterClear>
+      </DataGridCheckboxFilterFooter>
+    </DataGridCheckboxFilter>
   );
 }
 

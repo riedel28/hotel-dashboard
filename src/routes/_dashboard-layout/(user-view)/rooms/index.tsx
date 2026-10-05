@@ -2,6 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
+import type { RoomStatus } from 'shared/types/rooms';
 
 import { fetchRoomsParamsSchema, roomsQueryOptions } from '@/api/rooms';
 import { QueryBoundary } from '@/components/query-boundary';
@@ -102,22 +103,10 @@ function RoomsContent() {
     });
   };
 
-  const handleStatusChange = (newStatus: string | null) => {
-    if (!newStatus) return;
+  const handleStatusChange = (newStatus: RoomStatus | undefined) => {
     navigate({
       to: '/rooms',
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        status:
-          newStatus === 'all'
-            ? undefined
-            : (newStatus as
-                | 'available'
-                | 'occupied'
-                | 'maintenance'
-                | 'out_of_order')
-      })
+      search: (prev) => ({ ...prev, page: 1, status: newStatus })
     });
   };
 
@@ -220,10 +209,7 @@ function RoomsContent() {
     <div className="space-y-2.5">
       <RoomsFilters>
         <RoomSearch value={q} onChange={handleSearchChange} />
-        <RoomStatusFilter
-          value={status ? status : 'all'}
-          onChange={handleStatusChange}
-        />
+        <RoomStatusFilter value={status} onChange={handleStatusChange} />
         <RoomClearFilters
           hasActiveFilters={hasActiveFilters}
           onClear={handleClearFilters}

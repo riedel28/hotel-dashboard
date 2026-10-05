@@ -63,7 +63,7 @@ interface DataGridCheckboxFilterProps<TValue extends string> extends Omit<
 }
 
 const triggerClassName =
-  'hover:bg-background data-popup-open:bg-background inline-flex h-9 min-w-fit items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground';
+  'hover:bg-background data-popup-open:bg-background inline-flex h-9 min-w-fit items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground';
 
 const footerActionClassName =
   'h-7 flex-1 justify-center px-2 font-normal whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground';
@@ -128,26 +128,28 @@ function DataGridCheckboxFilter<TValue extends string>({
               {hasSelection ? (
                 <>
                   <span className="font-normal text-muted-foreground">
-                    {label}
+                    {label}:
                   </span>
-                  <Badge
-                    variant="secondary"
-                    color="gray"
-                    size="xs"
-                    className="min-w-0 rounded-md px-1.5 py-0 leading-5"
-                  >
+                  {selectedOptions.length === 1 ? (
                     <span className="truncate">
-                      {selectedOptions.length === 1 ? (
-                        selectedOptions[0]?.label
-                      ) : (
+                      {selectedOptions[0]?.label}
+                    </span>
+                  ) : (
+                    <Badge
+                      variant="secondary"
+                      color="gray"
+                      size="xs"
+                      className="min-w-0 px-1.5 py-0 leading-5"
+                    >
+                      <span className="truncate">
                         <Plural
                           value={selectedOptions.length}
                           one="# selected"
                           other="# selected"
                         />
-                      )}
-                    </span>
-                  </Badge>
+                      </span>
+                    </Badge>
+                  )}
                 </>
               ) : (
                 <>
