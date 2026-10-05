@@ -20,8 +20,6 @@ import {
   TableRow
 } from '@/components/ui/table';
 
-import { destructiveMenuItemClassName } from './destructive-styles';
-
 interface ProductsTableProps {
   products: Product[];
   onEdit: (product: Product) => void;
@@ -88,7 +86,7 @@ export function ProductsTable({
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    className={destructiveMenuItemClassName}
+                    variant="destructive-soft"
                     onClick={() => onDelete(product)}
                   >
                     <Trash2Icon className="mr-2 size-4" />

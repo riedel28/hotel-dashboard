@@ -13,8 +13,6 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 
-import { destructiveConfirmClassName } from './destructive-styles';
-
 interface DeleteProductDialogProps {
   open: boolean;
   productTitle: string;
@@ -52,8 +50,7 @@ export function DeleteProductDialog({
             <Trans>Cancel</Trans>
           </AlertDialogCancel>
           <AlertDialogAction
-            variant="ghost"
-            className={destructiveConfirmClassName}
+            variant="destructive-soft"
             onClick={onConfirm}
             disabled={isPending}
           >

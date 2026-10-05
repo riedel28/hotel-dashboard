@@ -81,7 +81,8 @@ function DropdownMenuItem({
   ...props
 }: MenuPrimitive.Item.Props & {
   inset?: boolean;
-  variant?: 'default' | 'destructive';
+  // 'destructive-soft' looks like any other item until hovered or focused.
+  variant?: 'default' | 'destructive' | 'destructive-soft';
 }) {
   return (
     <MenuPrimitive.Item
@@ -89,7 +90,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "group/dropdown-menu-item relative flex cursor-default items-center gap-1.5 rounded-sm px-1.5 py-1 text-sm select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary data-inset:pl-8 data-[variant=destructive]:hover:bg-destructive/80 data-[variant=destructive]:hover:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive/80 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:focus-visible:outline-destructive/40 data-[variant=destructive]:dark:hover:bg-destructive/30 data-[variant=destructive]:dark:focus:bg-destructive/30 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:hover:[&_svg]:text-destructive-foreground data-[variant=destructive]:focus:[&_svg]:text-destructive-foreground [&_svg:not([class*='size-'])]:size-3.5",
+        "group/dropdown-menu-item relative flex cursor-default items-center gap-1.5 rounded-sm px-1.5 py-1 text-sm select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary data-inset:pl-8 data-[variant=destructive]:hover:bg-destructive/80 data-[variant=destructive]:hover:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive/80 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:focus-visible:outline-destructive/40 data-[variant=destructive-soft]:focus:bg-destructive/10 data-[variant=destructive-soft]:focus:text-danger data-[variant=destructive-soft]:focus:**:text-danger! data-[variant=destructive]:dark:hover:bg-destructive/30 data-[variant=destructive]:dark:focus:bg-destructive/30 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:hover:[&_svg]:text-destructive-foreground data-[variant=destructive]:focus:[&_svg]:text-destructive-foreground [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       {...props}
