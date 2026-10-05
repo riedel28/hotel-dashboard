@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import * as React from 'react';
@@ -11,6 +11,7 @@ import {
   type ProductCategory,
   transformFlatCategoriesToTree
 } from '@/api/product-categories';
+import { productsByCategoryQueryOptions } from '@/api/products';
 import { ErrorState } from '@/components/error-state';
 import { Button } from '@/components/ui/button';
 import {
@@ -59,6 +60,7 @@ function CategoriesCard({
 export function ProductCategoriesTree() {
   const { t } = useLingui();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const selectedCategoryId = ProductsRoute.useSearch().category_id ?? null;
 
   const categoriesQuery = useQuery<
@@ -169,8 +171,10 @@ export function ProductCategoriesTree() {
 
   if (categoriesQuery.isLoading) {
     return (
-      <CategoriesCard>
-        {/* Matches real rows: 40px label + 4px gap, 20px per indent level. */}
+      // Mirrors the loaded card: the add button, the search field, then rows
+      // like the real ones (40px label + 4px gap, 20px per indent level).
+      <CategoriesCard action={<Skeleton className="size-7 rounded-lg" />}>
+        <Skeleton className="mb-3 h-9 w-full rounded-lg" />
         <div className="flex flex-col gap-1">
           <Skeleton className="h-10 w-full rounded-lg" />
           <Skeleton className="ms-5 h-10 w-3/5 rounded-lg" />
@@ -246,6 +250,12 @@ export function ProductCategoriesTree() {
                     to: '/products',
                     search: { category_id: categoryId }
                   })
+                }
+                // No-op while the cached products are still fresh.
+                onPrefetch={(categoryId) =>
+                  queryClient.prefetchQuery(
+                    productsByCategoryQueryOptions(categoryId)
+                  )
                 }
                 onAddSubcategory={openAddCategory}
                 onRenameCategory={(id, title) =>

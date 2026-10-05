@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   MoreHorizontalIcon,
   PencilIcon,
-  PlusCircleIcon,
+  PlusIcon,
   Trash2Icon
 } from 'lucide-react';
 import * as React from 'react';
@@ -16,8 +16,8 @@ import {
 import {
   createProduct,
   deleteProduct,
-  fetchProductsByCategory,
   type Product,
+  productsByCategoryQueryOptions,
   updateProduct
 } from '@/api/products';
 import { ErrorState } from '@/components/error-state';
@@ -56,6 +56,8 @@ import { ProductFormModal, type ProductFormValues } from './product-form-modal';
 import { ProductsEmptyState } from './products-empty-state';
 import { ProductsLoadingState } from './products-loading-state';
 
+const skeletonDelayMs = 250;
+
 export function ProductsList() {
   const searchCategoryId = ProductsRoute.useSearch().category_id ?? null;
 
@@ -82,11 +84,22 @@ export function ProductsList() {
     categoryPath.unshift(category.title);
   }
 
-  const productsQuery = useQuery<Product[], Error>({
-    queryKey: ['products', categoryId],
-    enabled: categoryId != null,
-    queryFn: () => fetchProductsByCategory(categoryId as number)
+  const productsQuery = useQuery({
+    // The placeholder id is never fetched: the query is disabled without one.
+    ...productsByCategoryQueryOptions(categoryId ?? 0),
+    enabled: categoryId != null
   });
+
+  // A fast response would flash the skeleton for a few frames, so it only
+  // appears once loading has taken a noticeable time. Until then the card
+  // shows its header and toolbar with an empty body.
+  const [showSkeleton, setShowSkeleton] = React.useState(false);
+  React.useEffect(() => {
+    setShowSkeleton(false);
+    if (!productsQuery.isLoading) return;
+    const timeout = setTimeout(() => setShowSkeleton(true), skeletonDelayMs);
+    return () => clearTimeout(timeout);
+  }, [productsQuery.isLoading, categoryId]);
 
   const { t } = useLingui();
   const queryClient = useQueryClient();
@@ -107,8 +120,9 @@ export function ProductsList() {
   // the table updates together with the dialog closing, then refetch in the
   // background to reconcile. Not optimistic: nothing to roll back.
   const updateCachedProducts = (update: (products: Product[]) => Product[]) => {
-    const queryKey = ['products', categoryId];
-    queryClient.setQueryData<Product[]>(queryKey, (products) =>
+    if (categoryId == null) return;
+    const { queryKey } = productsByCategoryQueryOptions(categoryId);
+    queryClient.setQueryData(queryKey, (products) =>
       products
         ? update(products).sort((a, b) => a.title.localeCompare(b.title))
         : products
@@ -183,7 +197,7 @@ export function ProductsList() {
     );
   }
 
-  if (productsQuery.isLoading) {
+  if (productsQuery.isLoading && showSkeleton) {
     return <ProductsLoadingState />;
   }
 
@@ -249,24 +263,26 @@ export function ProductsList() {
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className="mb-3 flex items-center gap-3">
+          <div className="mb-3 flex items-center justify-between gap-3">
             <SearchInput
               key={categoryId}
               value={search}
               onChange={setSearch}
               placeholder={t`Search products`}
               aria-label={t`Search products`}
+              wrapperClassName="2xl:max-w-[400px]"
             />
             <Button
               variant="secondary"
               className="shrink-0 bg-clip-border"
               onClick={() => setIsAdding(true)}
             >
-              <PlusCircleIcon />
+              <PlusIcon />
               <Trans>Add product</Trans>
             </Button>
           </div>
-          {!productsQuery.data || productsQuery.data.length === 0 ? (
+          {productsQuery.isLoading ? null : !productsQuery.data ||
+            productsQuery.data.length === 0 ? (
             <ProductsEmptyState />
           ) : visibleProducts.length === 0 ? (
             <p className="py-6 text-center text-sm text-muted-foreground">

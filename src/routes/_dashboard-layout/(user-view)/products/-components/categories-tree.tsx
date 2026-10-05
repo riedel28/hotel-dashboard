@@ -42,6 +42,8 @@ interface CategoriesTreeProps {
   expandedItems: string[];
   setExpandedItems: React.Dispatch<React.SetStateAction<string[]>>;
   onSelect: (categoryId: number) => void;
+  // Called when a selectable category is hovered or focused.
+  onPrefetch: (categoryId: number) => void;
   onAddSubcategory: (categoryId: number) => void;
   onRenameCategory: (categoryId: number, title: string) => void;
   onDeleteCategory: (category: { id: number; title: string }) => void;
@@ -57,6 +59,7 @@ export function CategoriesTree({
   expandedItems,
   setExpandedItems,
   onSelect,
+  onPrefetch,
   onAddSubcategory,
   onRenameCategory,
   onDeleteCategory,
@@ -187,6 +190,12 @@ export function CategoriesTree({
           <TreeItem
             key={id}
             item={item}
+            // Start loading a category's products before it is clicked.
+            {...(!item.isFolder() &&
+              numericId != null && {
+                onMouseEnter: () => onPrefetch(numericId),
+                onFocus: () => onPrefetch(numericId)
+              })}
             // The row swapped back in after a rename is not a new row.
             className={cn(
               rowClassName,

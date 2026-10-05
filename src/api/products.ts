@@ -1,3 +1,4 @@
+import { queryOptions } from '@tanstack/react-query';
 import {
   type CreateProductData,
   createProductSchema,
@@ -19,6 +20,15 @@ async function fetchProductsByCategory(categoryId: number): Promise<Product[]> {
   } catch (err) {
     handleApiError(err, 'fetchProductsByCategory');
   }
+}
+
+// Shared by the products card and the hover/focus prefetch in the tree, so
+// both hit the same cache entry.
+function productsByCategoryQueryOptions(categoryId: number) {
+  return queryOptions({
+    queryKey: ['products', categoryId] as const,
+    queryFn: () => fetchProductsByCategory(categoryId)
+  });
 }
 
 async function createProduct(data: CreateProductData): Promise<Product> {
@@ -53,4 +63,9 @@ async function deleteProduct(id: number): Promise<void> {
 }
 
 export type { Product };
-export { createProduct, deleteProduct, fetchProductsByCategory, updateProduct };
+export {
+  createProduct,
+  deleteProduct,
+  productsByCategoryQueryOptions,
+  updateProduct
+};
