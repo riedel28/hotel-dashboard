@@ -9,12 +9,13 @@ import { z } from 'zod';
 import type { Product } from '@/api/products';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle
+} from '@/components/ui/drawer';
 import {
   Field,
   FieldError,
@@ -25,7 +26,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { NumberInput } from '@/components/ui/number-input';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
-import { cn } from '@/lib/utils';
 
 const formSchema = createProductSchema.omit({ category_id: true });
 
@@ -73,94 +73,33 @@ export function ProductFormDrawer({
   const isEdit = product != null;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      {/* The app's dialog laid out as a drawer: the form with a rich-text
-          description needs more room than a centred modal. */}
-      <DialogContent
-        // Dimmed but not blurred: the list behind the panel stays readable.
-        overlayClassName="supports-backdrop-filter:backdrop-blur-none"
-        className={cn(
-          'flex max-w-full translate-x-0 translate-y-0 flex-col gap-0 p-0 duration-200 data-open:zoom-in-100 data-closed:zoom-out-100',
-          // Phones: a sheet rising from the bottom, as tall as its content
-          // up to 90% of the screen.
-          'top-auto right-0 bottom-0 left-0 max-h-[90dvh] rounded-t-xl rounded-b-none max-sm:data-open:slide-in-from-bottom max-sm:data-closed:slide-out-to-bottom',
-          // From sm up: a full-height panel on the right edge.
-          'sm:top-0 sm:left-auto sm:h-dvh sm:max-h-none sm:max-w-xl sm:rounded-none sm:data-open:slide-in-from-right sm:data-closed:slide-out-to-right'
-        )}
-      >
-        <DialogHeader className="border-b px-5 py-4">
-          <DialogTitle>
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>
             {isEdit ? <Trans>Edit product</Trans> : <Trans>Add product</Trans>}
-          </DialogTitle>
-        </DialogHeader>
+          </DrawerTitle>
+        </DrawerHeader>
         <form
           onSubmit={form.handleSubmit(onSave)}
           className="flex min-h-0 flex-1 flex-col"
         >
-          <FieldSet className="min-h-0 flex-1 gap-4 overflow-y-auto p-5">
-            <FieldGroup className="gap-4">
-              <Controller
-                control={form.control}
-                name="title"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="gap-2">
-                    <FieldLabel htmlFor="product-title">
-                      <Trans>Title</Trans>
-                    </FieldLabel>
-                    <Input
-                      id="product-title"
-                      autoFocus
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-              <Controller
-                control={form.control}
-                name="description"
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="gap-2">
-                    <FieldLabel htmlFor="product-description">
-                      <Trans>Description</Trans>{' '}
-                      <span className="-ml-1 font-normal text-muted-foreground">
-                        (<Trans>Optional</Trans>)
-                      </span>
-                    </FieldLabel>
-                    <RichTextEditor
-                      id="product-description"
-                      value={field.value ?? ''}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      aria-invalid={fieldState.invalid}
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-              <div className="grid grid-cols-2 gap-4">
+          <DrawerBody>
+            <FieldSet className="gap-4">
+              <FieldGroup className="gap-4">
                 <Controller
                   control={form.control}
-                  name="price"
+                  name="title"
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor="product-price">
-                        <Trans>Price (€)</Trans>
+                      <FieldLabel htmlFor="product-title">
+                        <Trans>Title</Trans>
                       </FieldLabel>
-                      <NumberInput
-                        id="product-price"
-                        name={field.name}
-                        value={field.value ?? null}
-                        min={0}
-                        step={0.5}
-                        format={{ maximumFractionDigits: 2 }}
-                        onValueChange={field.onChange}
-                        onBlur={field.onBlur}
+                      <Input
+                        id="product-title"
+                        autoFocus
+                        {...field}
+                        aria-invalid={fieldState.invalid}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -170,19 +109,21 @@ export function ProductFormDrawer({
                 />
                 <Controller
                   control={form.control}
-                  name="quantity"
+                  name="description"
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor="product-quantity">
-                        <Trans>Quantity</Trans>
+                      <FieldLabel htmlFor="product-description">
+                        <Trans>Description</Trans>{' '}
+                        <span className="-ml-1 font-normal text-muted-foreground">
+                          (<Trans>Optional</Trans>)
+                        </span>
                       </FieldLabel>
-                      <NumberInput
-                        id="product-quantity"
-                        name={field.name}
-                        value={field.value}
-                        min={0}
-                        onValueChange={(value) => field.onChange(value ?? 0)}
+                      <RichTextEditor
+                        id="product-description"
+                        value={field.value ?? ''}
+                        onChange={field.onChange}
                         onBlur={field.onBlur}
+                        aria-invalid={fieldState.invalid}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -190,11 +131,65 @@ export function ProductFormDrawer({
                     </Field>
                   )}
                 />
-              </div>
-            </FieldGroup>
-          </FieldSet>
+                <div className="grid grid-cols-2 gap-4">
+                  <Controller
+                    control={form.control}
+                    name="price"
+                    render={({ field, fieldState }) => (
+                      <Field
+                        data-invalid={fieldState.invalid}
+                        className="gap-2"
+                      >
+                        <FieldLabel htmlFor="product-price">
+                          <Trans>Price (€)</Trans>
+                        </FieldLabel>
+                        <NumberInput
+                          id="product-price"
+                          name={field.name}
+                          value={field.value ?? null}
+                          min={0}
+                          step={0.5}
+                          format={{ maximumFractionDigits: 2 }}
+                          onValueChange={field.onChange}
+                          onBlur={field.onBlur}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name="quantity"
+                    render={({ field, fieldState }) => (
+                      <Field
+                        data-invalid={fieldState.invalid}
+                        className="gap-2"
+                      >
+                        <FieldLabel htmlFor="product-quantity">
+                          <Trans>Quantity</Trans>
+                        </FieldLabel>
+                        <NumberInput
+                          id="product-quantity"
+                          name={field.name}
+                          value={field.value}
+                          min={0}
+                          onValueChange={(value) => field.onChange(value ?? 0)}
+                          onBlur={field.onBlur}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                </div>
+              </FieldGroup>
+            </FieldSet>
+          </DrawerBody>
 
-          <DialogFooter className="border-t px-5 py-4">
+          <DrawerFooter>
             <Button
               variant="outline"
               type="button"
@@ -209,9 +204,9 @@ export function ProductFormDrawer({
               {isPending && <Loader2Icon className="animate-spin" />}
               {isEdit ? <Trans>Update</Trans> : <Trans>Add</Trans>}
             </Button>
-          </DialogFooter>
+          </DrawerFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </DrawerContent>
+    </Drawer>
   );
 }
