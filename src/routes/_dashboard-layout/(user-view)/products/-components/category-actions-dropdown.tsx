@@ -109,7 +109,9 @@ export function CategoryActionsDropdown({
 }: CategoryActionsDropdownProps) {
   const { t } = useLingui();
   return (
-    <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 has-data-popup-open:opacity-100">
+    // Revealed on hover or focus; always visible on touch screens, which have
+    // no hover.
+    <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 has-data-popup-open:opacity-100 pointer-coarse:opacity-100">
       <DropdownMenu>
         <DropdownMenuTrigger
           className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }))}
