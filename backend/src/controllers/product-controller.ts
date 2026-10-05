@@ -10,19 +10,20 @@ import type {
 } from '../../../shared/types/products';
 import { db } from '../db/pool';
 import {
-  type NewProduct,
-  type NewProductCategory,
   type Product,
   productCategories,
   type ProductCategory,
   products
 } from '../db/schema';
+import { isForeignKeyViolation, withFailMessage } from '../middleware/error';
 import type { SelectedPropertyRequest } from '../middleware/selected-property';
 import { sanitizeRichText } from '../utils/rich-text';
 
 // Property scope is resolved by attachSelectedProperty. Without a selected
 // property, lists are empty, single reads are 404 and writes are 400.
 type ProductsRequest = SelectedPropertyRequest;
+// Unexpected errors are logged and answered with a 500 naming the operation.
+const handle = withFailMessage<ProductsRequest>;
 
 // For write handlers: the selected property id, or null after answering 400.
 function requireProperty(req: ProductsRequest, res: Response) {
@@ -32,14 +33,6 @@ function requireProperty(req: ProductsRequest, res: Response) {
   }
   return propertyId;
 }
-
-// Postgres foreign_key_violation; drizzle wraps the driver error in `cause`.
-function isForeignKeyViolation(error: unknown) {
-  const { code, cause } = error as { code?: string; cause?: { code?: string } };
-  return (code ?? cause?.code) === '23503';
-}
-
-type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 function transformCategory(category: ProductCategory) {
   return {
@@ -70,40 +63,34 @@ function findCategory(id: number, propertyId: string) {
   });
 }
 
-// True if making `parentId` the parent of `categoryId` would create a cycle,
-// i.e. `parentId` is the category itself or one of its descendants.
-// Locks the property's categories for the rest of the transaction, so two
-// concurrent moves can't each pass the check and form a cycle together.
-async function createsCycle(
-  tx: Transaction,
+// Why `parentId` can't become the parent of `categoryId`, or null if it can:
+// it must be a category of the same property and neither the category itself
+// nor one of its descendants.
+function invalidParentReason(
+  parentOf: Map<number, number | null>,
   categoryId: number,
-  parentId: number,
-  propertyId: string
+  parentId: number
 ) {
-  const rows = await tx
-    .select({
-      id: productCategories.id,
-      parent_id: productCategories.parent_id
-    })
-    .from(productCategories)
-    .where(eq(productCategories.property_id, propertyId))
-    .for('update');
-  const parentOf = new Map(rows.map((row) => [row.id, row.parent_id]));
-
+  if (!parentOf.has(parentId)) {
+    return 'Parent category not found';
+  }
   let current: number | null | undefined = parentId;
   const seen = new Set<number>();
   while (current != null && !seen.has(current)) {
-    if (current === categoryId) return true;
+    if (current === categoryId) {
+      return 'A category cannot be moved into itself or its subcategory';
+    }
     seen.add(current);
     current = parentOf.get(current);
   }
-  return false;
+  return null;
 }
 
 // --- Categories ---
 
-async function getProductCategories(req: ProductsRequest, res: Response) {
-  try {
+const getProductCategories = handle(
+  'Failed to fetch product categories',
+  async (req, res) => {
     const propertyId = req.selectedPropertyId ?? null;
     if (!propertyId) {
       return res.status(200).json([]);
@@ -116,14 +103,12 @@ async function getProductCategories(req: ProductsRequest, res: Response) {
       .orderBy(asc(productCategories.title));
 
     res.status(200).json(categories.map(transformCategory));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch product categories' });
   }
-}
+);
 
-async function getProductCategoryById(req: ProductsRequest, res: Response) {
-  try {
+const getProductCategoryById = handle(
+  'Failed to fetch product category',
+  async (req, res) => {
     const propertyId = req.selectedPropertyId ?? null;
     const category = propertyId
       ? await findCategory(Number(req.params.id), propertyId)
@@ -133,14 +118,12 @@ async function getProductCategoryById(req: ProductsRequest, res: Response) {
     }
 
     res.status(200).json(transformCategory(category));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch product category' });
   }
-}
+);
 
-async function createProductCategory(req: ProductsRequest, res: Response) {
-  try {
+const createProductCategory = handle(
+  'Failed to create category',
+  async (req, res) => {
     const propertyId = requireProperty(req, res);
     if (!propertyId) return;
 
@@ -159,38 +142,38 @@ async function createProductCategory(req: ProductsRequest, res: Response) {
     }
 
     res.status(201).json(transformCategory(category));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create category' });
   }
-}
+);
 
-async function updateProductCategory(req: ProductsRequest, res: Response) {
-  try {
+const updateProductCategory = handle(
+  'Failed to update category',
+  async (req, res) => {
     const propertyId = requireProperty(req, res);
     if (!propertyId) return;
 
     const id = Number(req.params.id);
-    const { title, parent_id } = (req.body ?? {}) as UpdateProductCategoryData;
+    // Validated by updateProductCategorySchema: only `title` and `parent_id`.
+    const updates = req.body as UpdateProductCategoryData;
 
     const result = await db.transaction(async (tx) => {
-      const updates: Partial<Pick<NewProductCategory, 'title' | 'parent_id'>> =
-        {};
-      if (title !== undefined) {
-        updates.title = title;
-      }
-      if (parent_id !== undefined) {
-        if (parent_id !== null) {
-          if (!(await findCategory(parent_id, propertyId))) {
-            return { error: 'Parent category not found' };
-          }
-          if (await createsCycle(tx, id, parent_id, propertyId)) {
-            return {
-              error: 'A category cannot be moved into itself or its subcategory'
-            };
-          }
-        }
-        updates.parent_id = parent_id;
+      if (updates.parent_id != null) {
+        // Lock the property's categories for the rest of the transaction, so
+        // the parent can't vanish and two concurrent moves can't each pass
+        // the check and form a cycle together.
+        const rows = await tx
+          .select({
+            id: productCategories.id,
+            parent_id: productCategories.parent_id
+          })
+          .from(productCategories)
+          .where(eq(productCategories.property_id, propertyId))
+          .for('update');
+        const error = invalidParentReason(
+          new Map(rows.map((row) => [row.id, row.parent_id])),
+          id,
+          updates.parent_id
+        );
+        if (error) return { error };
       }
 
       const [category] = await tx
@@ -209,24 +192,23 @@ async function updateProductCategory(req: ProductsRequest, res: Response) {
     if ('error' in result) {
       return res.status(400).json({ error: result.error });
     }
-    const { category } = result;
-    if (!category) {
+    if (!result.category) {
       return res.status(404).json({ error: 'Category not found' });
     }
 
-    res.status(200).json(transformCategory(category));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update category' });
+    res.status(200).json(transformCategory(result.category));
   }
-}
+);
 
-async function deleteProductCategory(req: ProductsRequest, res: Response) {
-  try {
+const deleteProductCategory = handle(
+  'Failed to delete category',
+  async (req, res) => {
     const propertyId = requireProperty(req, res);
     if (!propertyId) return;
 
-    const [deleted] = await db
+    // The FKs reject deleting a category that still has subcategories or
+    // products — atomically, unlike a check-then-delete.
+    const deleted = await db
       .delete(productCategories)
       .where(
         and(
@@ -234,185 +216,162 @@ async function deleteProductCategory(req: ProductsRequest, res: Response) {
           eq(productCategories.property_id, propertyId)
         )
       )
-      .returning({ id: productCategories.id });
+      .returning({ id: productCategories.id })
+      .catch((error: unknown) => {
+        if (isForeignKeyViolation(error)) return 'not-empty' as const;
+        throw error;
+      });
 
-    if (!deleted) {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
-    res.status(200).json({ message: 'Category deleted successfully' });
-  } catch (error) {
-    // The FKs reject deleting a category that still has subcategories or
-    // products — atomically, unlike a check-then-delete.
-    if (isForeignKeyViolation(error)) {
+    if (deleted === 'not-empty') {
       return res.status(409).json({
         error:
           'Category is not empty. Move or delete its subcategories and products first.'
       });
     }
-    console.error(error);
-    res.status(500).json({ error: 'Failed to delete category' });
+    if (deleted.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    res.status(200).json({ message: 'Category deleted successfully' });
   }
-}
+);
 
 // --- Products ---
 
-async function getProducts(req: ProductsRequest, res: Response) {
-  try {
-    const propertyId = req.selectedPropertyId ?? null;
-    if (!propertyId) {
-      return res.status(200).json([]);
-    }
+const getProducts = handle('Failed to fetch products', async (req, res) => {
+  const propertyId = req.selectedPropertyId ?? null;
+  if (!propertyId) {
+    return res.status(200).json([]);
+  }
 
-    // Query is validated + coerced by validateQuery(fetchProductsParamsSchema).
-    const { category_id } = req.query as FetchProductsParams;
+  // Query is validated + coerced by validateQuery(fetchProductsParamsSchema).
+  const { category_id } = req.query as FetchProductsParams;
 
-    const rows = await db
-      .select()
-      .from(products)
-      .where(
-        and(
-          eq(products.property_id, propertyId),
-          category_id === undefined
-            ? undefined
-            : eq(products.category_id, category_id)
-        )
+  const rows = await db
+    .select()
+    .from(products)
+    .where(
+      and(
+        eq(products.property_id, propertyId),
+        category_id === undefined
+          ? undefined
+          : eq(products.category_id, category_id)
       )
-      .orderBy(asc(products.title));
+    )
+    .orderBy(asc(products.title));
 
-    res.status(200).json(rows.map(transformProduct));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch products' });
-  }
-}
+  res.status(200).json(rows.map(transformProduct));
+});
 
-async function getProductById(req: ProductsRequest, res: Response) {
-  try {
-    const propertyId = req.selectedPropertyId ?? null;
-    const product = propertyId
-      ? await db.query.products.findFirst({
-          where: and(
-            eq(products.id, Number(req.params.id)),
-            eq(products.property_id, propertyId)
-          )
-        })
-      : undefined;
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.status(200).json(transformProduct(product));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch product' });
-  }
-}
-
-async function createProduct(req: ProductsRequest, res: Response) {
-  try {
-    const propertyId = requireProperty(req, res);
-    if (!propertyId) return;
-
-    const { category_id, title, price, quantity, description } =
-      req.body as CreateProductData;
-    if (!(await findCategory(category_id, propertyId))) {
-      return res.status(400).json({ error: 'Category not found' });
-    }
-
-    const [product] = await db
-      .insert(products)
-      .values({
-        property_id: propertyId,
-        category_id,
-        title,
-        price: price.toFixed(2),
-        quantity,
-        description: sanitizeRichText(description)
-      })
-      .returning();
-
-    if (!product) {
-      return res.status(500).json({ error: 'Failed to create product' });
-    }
-
-    res.status(201).json(transformProduct(product));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create product' });
-  }
-}
-
-async function updateProduct(req: ProductsRequest, res: Response) {
-  try {
-    const propertyId = requireProperty(req, res);
-    if (!propertyId) return;
-
-    const id = Number(req.params.id);
-    const { category_id, title, price, quantity, description } = (req.body ??
-      {}) as UpdateProductData;
-
-    const updates: Partial<
-      Pick<
-        NewProduct,
-        'category_id' | 'title' | 'price' | 'quantity' | 'description'
-      >
-    > = {};
-    if (category_id !== undefined) {
-      if (!(await findCategory(category_id, propertyId))) {
-        return res.status(400).json({ error: 'Category not found' });
-      }
-      updates.category_id = category_id;
-    }
-    if (title !== undefined) updates.title = title;
-    if (price !== undefined) updates.price = price.toFixed(2);
-    if (quantity !== undefined) updates.quantity = quantity;
-    if (description !== undefined) {
-      updates.description = sanitizeRichText(description);
-    }
-
-    const [product] = await db
-      .update(products)
-      .set({ ...updates, updated_at: new Date() })
-      .where(and(eq(products.id, id), eq(products.property_id, propertyId)))
-      .returning();
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.status(200).json(transformProduct(product));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update product' });
-  }
-}
-
-async function deleteProduct(req: ProductsRequest, res: Response) {
-  try {
-    const propertyId = requireProperty(req, res);
-    if (!propertyId) return;
-
-    const [deleted] = await db
-      .delete(products)
-      .where(
-        and(
+const getProductById = handle('Failed to fetch product', async (req, res) => {
+  const propertyId = req.selectedPropertyId ?? null;
+  const product = propertyId
+    ? await db.query.products.findFirst({
+        where: and(
           eq(products.id, Number(req.params.id)),
           eq(products.property_id, propertyId)
         )
-      )
-      .returning();
-
-    if (!deleted) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.status(200).json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to delete product' });
+      })
+    : undefined;
+  if (!product) {
+    return res.status(404).json({ error: 'Product not found' });
   }
+
+  res.status(200).json(transformProduct(product));
+});
+
+// The columns a validated create/update body maps to: the price as numeric
+// text, the description sanitized. Fields that weren't sent stay absent.
+function toProductColumns<T extends UpdateProductData>({
+  price,
+  description,
+  ...rest
+}: T) {
+  return {
+    ...rest,
+    ...(price !== undefined && { price: price.toFixed(2) }),
+    ...(description !== undefined && {
+      description: sanitizeRichText(description)
+    })
+  };
 }
+
+const createProduct = handle('Failed to create product', async (req, res) => {
+  const propertyId = requireProperty(req, res);
+  if (!propertyId) return;
+
+  const body = req.body as CreateProductData;
+  if (!(await findCategory(body.category_id, propertyId))) {
+    return res.status(400).json({ error: 'Category not found' });
+  }
+
+  const [product] = await db
+    .insert(products)
+    .values({
+      ...toProductColumns(body),
+      // Required on create; spelled out so the insert's type sees it.
+      price: body.price.toFixed(2),
+      property_id: propertyId
+    })
+    .returning();
+
+  if (!product) {
+    return res.status(500).json({ error: 'Failed to create product' });
+  }
+
+  res.status(201).json(transformProduct(product));
+});
+
+const updateProduct = handle('Failed to update product', async (req, res) => {
+  const propertyId = requireProperty(req, res);
+  if (!propertyId) return;
+
+  const body = req.body as UpdateProductData;
+  if (
+    body.category_id !== undefined &&
+    !(await findCategory(body.category_id, propertyId))
+  ) {
+    return res.status(400).json({ error: 'Category not found' });
+  }
+
+  const [product] = await db
+    .update(products)
+    .set({ ...toProductColumns(body), updated_at: new Date() })
+    .where(
+      and(
+        eq(products.id, Number(req.params.id)),
+        eq(products.property_id, propertyId)
+      )
+    )
+    .returning();
+
+  if (!product) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+
+  res.status(200).json(transformProduct(product));
+});
+
+const deleteProduct = handle('Failed to delete product', async (req, res) => {
+  const propertyId = requireProperty(req, res);
+  if (!propertyId) return;
+
+  const [deleted] = await db
+    .delete(products)
+    .where(
+      and(
+        eq(products.id, Number(req.params.id)),
+        eq(products.property_id, propertyId)
+      )
+    )
+    .returning();
+
+  if (!deleted) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+
+  res.status(200).json({ message: 'Product deleted successfully' });
+});
 
 export {
   createProduct,
