@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import {
   createProductCategory,
   deleteProductCategory,
-  productCategoriesQueryKey,
+  productCategoriesQueryOptions,
   type ProductCategory,
   updateProductCategory
 } from '@/api/product-categories';
@@ -15,7 +15,7 @@ import {
 export function useCategoryMutations() {
   const { t } = useLingui();
   const queryClient = useQueryClient();
-  const queryKey = productCategoriesQueryKey;
+  const { queryKey } = productCategoriesQueryOptions;
   const refetchCategories = () => queryClient.invalidateQueries({ queryKey });
 
   const createCategory = useMutation({

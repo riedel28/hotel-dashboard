@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 
 import { ProductCategoriesTree } from './-components/product-categories-tree';
 import { ProductsList } from './-components/products-list';
+import { useSelectedCategory } from './-components/use-selected-category';
 
 const productsSearchSchema = z.object({
   category_id: z.number().optional()
@@ -25,7 +26,8 @@ const productsSearchSchema = z.object({
 function ProductsPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Products`);
-  const hasSelection = Route.useSearch().category_id != null;
+  const { categoryId, isResolving } = useSelectedCategory();
+  const hasSelection = categoryId != null || isResolving;
 
   return (
     <div className="space-y-1">

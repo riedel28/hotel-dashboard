@@ -4,13 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import * as React from 'react';
 
-import {
-  fetchProductCategories,
-  type NestedProductCategory,
-  productCategoriesQueryKey,
-  type ProductCategory,
-  transformFlatCategoriesToTree
-} from '@/api/product-categories';
+import { productCategoriesQueryOptions } from '@/api/product-categories';
 import { productsByCategoryQueryOptions } from '@/api/products';
 import { ErrorState } from '@/components/error-state';
 import { Button } from '@/components/ui/button';
@@ -24,18 +18,13 @@ import {
 import { SearchInput } from '@/components/ui/search-input';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { Route as ProductsRoute } from '../index';
 import { AddCategoryModal } from './add-category-modal';
 import { CategoriesEmptyState } from './categories-empty-state';
 import { CategoriesTree } from './categories-tree';
-import {
-  buildParentMap,
-  buildTreeItems,
-  filterCategories,
-  rootItemId
-} from './category-tree-data';
+import { categoryLineage, rootItemId } from './category-tree-data';
 import { DeleteCategoryDialog } from './delete-category-dialog';
 import { useCategoryMutations } from './use-category-mutations';
+import { useSelectedCategory } from './use-selected-category';
 
 function CategoriesCard({
   action,
@@ -61,29 +50,13 @@ export function ProductCategoriesTree() {
   const { t } = useLingui();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const selectedCategoryId = ProductsRoute.useSearch().category_id ?? null;
-
-  const categoriesQuery = useQuery<
-    ProductCategory[],
-    Error,
-    NestedProductCategory[]
-  >({
-    queryKey: productCategoriesQueryKey,
-    queryFn: fetchProductCategories,
-    select: transformFlatCategoriesToTree
-  });
+  const { categoryId: selectedCategoryId } = useSelectedCategory();
+  const categoriesQuery = useQuery(productCategoriesQueryOptions);
   const { createCategory, updateCategory, deleteCategory } =
     useCategoryMutations();
 
   const [search, setSearch] = React.useState('');
   const query = search.trim().toLowerCase();
-
-  const itemsMap = React.useMemo(() => {
-    const categories = categoriesQuery.data ?? [];
-    return buildTreeItems(
-      query ? filterCategories(categories, query) : categories
-    );
-  }, [categoriesQuery.data, query]);
 
   const [expandedItems, setExpandedItems] = React.useState<string[]>([
     rootItemId
@@ -92,21 +65,17 @@ export function ProductCategoriesTree() {
   // Expand the ancestors of the category selected in the URL, so it's visible
   // after a reload or back/forward navigation.
   React.useEffect(() => {
-    if (selectedCategoryId == null) return;
-    const parentOf = buildParentMap(itemsMap);
-    const ancestors: string[] = [];
-    let current = parentOf.get(String(selectedCategoryId));
-    while (current && current !== rootItemId) {
-      ancestors.push(current);
-      current = parentOf.get(current);
-    }
+    if (selectedCategoryId == null || !categoriesQuery.data) return;
+    const ancestors = categoryLineage(categoriesQuery.data, selectedCategoryId)
+      .slice(1)
+      .map((category) => String(category.id));
     if (ancestors.length === 0) return;
     setExpandedItems((prev) =>
       ancestors.every((id) => prev.includes(id))
         ? prev
         : [...new Set([...prev, ...ancestors])]
     );
-  }, [itemsMap, selectedCategoryId]);
+  }, [categoriesQuery.data, selectedCategoryId]);
 
   // `parentId: null` adds a top-level category. The target is kept while the
   // modal closes so its title doesn't change mid-animation.
@@ -232,39 +201,31 @@ export function ProductCategoriesTree() {
               aria-label={t`Search categories`}
               wrapperClassName="mb-3"
             />
-            {itemsMap[rootItemId]?.children?.length === 0 ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                <Trans>No categories found</Trans>
-              </p>
-            ) : (
-              <CategoriesTree
-                itemsMap={itemsMap}
-                categories={categories}
-                selectedCategoryId={selectedCategoryId}
-                // While searching every match is shown expanded; the
-                // user's own expansion state comes back when it's cleared.
-                expandedItems={query ? Object.keys(itemsMap) : expandedItems}
-                setExpandedItems={query ? () => {} : setExpandedItems}
-                onSelect={(categoryId) =>
-                  navigate({
-                    to: '/products',
-                    search: { category_id: categoryId }
-                  })
-                }
-                // No-op while the cached products are still fresh.
-                onPrefetch={(categoryId) =>
-                  queryClient.prefetchQuery(
-                    productsByCategoryQueryOptions(categoryId)
-                  )
-                }
-                onAddSubcategory={openAddCategory}
-                onRenameCategory={(id, title) =>
-                  updateCategory.mutate({ id, title })
-                }
-                onDeleteCategory={setPendingDelete}
-                onMoveCategory={handleMoveCategory}
-              />
-            )}
+            <CategoriesTree
+              categories={categories}
+              query={query}
+              selectedCategoryId={selectedCategoryId}
+              expandedItems={expandedItems}
+              setExpandedItems={setExpandedItems}
+              onSelect={(categoryId) =>
+                navigate({
+                  to: '/products',
+                  search: { category_id: categoryId }
+                })
+              }
+              // No-op while the cached products are still fresh.
+              onPrefetch={(categoryId) =>
+                queryClient.prefetchQuery(
+                  productsByCategoryQueryOptions(categoryId)
+                )
+              }
+              onAddSubcategory={openAddCategory}
+              onRenameCategory={(id, title) =>
+                updateCategory.mutate({ id, title })
+              }
+              onDeleteCategory={setPendingDelete}
+              onMoveCategory={handleMoveCategory}
+            />
           </>
         )}
       </CategoriesCard>

@@ -7,7 +7,6 @@ import {
   Trash2Icon
 } from 'lucide-react';
 
-import type { NestedProductCategory } from '@/api/product-categories';
 import { buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,14 +20,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
+import { rootItemId, type TreeItems } from './category-tree-data';
 import { destructiveMenuItemClassName } from './destructive-styles';
 
 interface CategoryActionsDropdownProps {
   categoryId: number;
   // Current parent of this category; null when it is at the top level.
   parentId: number | null;
-  // Full category tree, used to pick a move target.
-  categories: NestedProductCategory[];
+  // Every category of the property as tree items, used to pick a move target.
+  items: TreeItems;
   onAddSubcategory: () => void;
   onRenameCategory: () => void;
   onDeleteCategory: () => void;
@@ -36,7 +36,9 @@ interface CategoryActionsDropdownProps {
 }
 
 interface MoveTargetsProps {
-  nodes: NestedProductCategory[];
+  items: TreeItems;
+  // The item whose children are listed at this level.
+  parentItemId: string;
   categoryId: number;
   parentId: number | null;
   onMove: (newParentId: number | null) => void;
@@ -47,47 +49,52 @@ interface MoveTargetsProps {
 // The category being moved (and so its whole subtree) and its current parent
 // are shown but disabled.
 function MoveTargets({
-  nodes,
+  items,
+  parentItemId,
   categoryId,
   parentId,
   onMove
 }: MoveTargetsProps) {
-  return nodes.map((node) => {
-    if (node.id === categoryId) {
+  return (items[parentItemId]?.children ?? []).map((itemId) => {
+    const item = items[itemId];
+    if (!item) return null;
+    const id = Number(itemId);
+    const title = <span className="truncate">{item.name}</span>;
+
+    if (id === categoryId) {
       return (
-        <DropdownMenuItem key={node.id} disabled>
-          <span className="truncate">{node.title}</span>
+        <DropdownMenuItem key={itemId} disabled>
+          {title}
         </DropdownMenuItem>
       );
     }
 
-    if (node.children.length === 0) {
+    if (!item.children) {
       return (
         <DropdownMenuItem
-          key={node.id}
-          disabled={node.id === parentId}
-          onClick={() => onMove(node.id)}
+          key={itemId}
+          disabled={id === parentId}
+          onClick={() => onMove(id)}
         >
-          <span className="truncate">{node.title}</span>
+          {title}
         </DropdownMenuItem>
       );
     }
 
     return (
-      <DropdownMenuSub key={node.id}>
-        <DropdownMenuSubTrigger>
-          <span className="truncate">{node.title}</span>
-        </DropdownMenuSubTrigger>
+      <DropdownMenuSub key={itemId}>
+        <DropdownMenuSubTrigger>{title}</DropdownMenuSubTrigger>
         <DropdownMenuSubContent className="w-auto max-w-72 min-w-40">
           <DropdownMenuItem
-            disabled={node.id === parentId}
-            onClick={() => onMove(node.id)}
+            disabled={id === parentId}
+            onClick={() => onMove(id)}
           >
             <Trans>Move here</Trans>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <MoveTargets
-            nodes={node.children}
+            items={items}
+            parentItemId={itemId}
             categoryId={categoryId}
             parentId={parentId}
             onMove={onMove}
@@ -101,7 +108,7 @@ function MoveTargets({
 export function CategoryActionsDropdown({
   categoryId,
   parentId,
-  categories,
+  items,
   onAddSubcategory,
   onRenameCategory,
   onDeleteCategory,
@@ -153,7 +160,8 @@ export function CategoryActionsDropdown({
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <MoveTargets
-                nodes={categories}
+                items={items}
+                parentItemId={rootItemId}
                 categoryId={categoryId}
                 parentId={parentId}
                 onMove={onMoveCategory}

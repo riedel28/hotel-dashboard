@@ -1,55 +1,77 @@
-import type { NestedProductCategory } from '@/api/product-categories';
+import type { ProductCategory } from '@/api/product-categories';
 
 // What headless-tree knows about a row. Item ids are the category id as a
 // string; `rootItemId` is the invisible root holding the top-level categories.
-export type TreeItemData = {
-  name: string;
-  children?: string[];
-  nodeId?: number;
-};
+export type TreeItemData = { name: string; children?: string[] };
 export type TreeItems = Record<string, TreeItemData>;
 
 export const rootItemId = 'root';
 
-// Keeps categories whose title matches, with their whole subtree, plus the
-// ancestors leading to them.
-export function filterCategories(
-  nodes: NestedProductCategory[],
-  query: string
-): NestedProductCategory[] {
-  return nodes.flatMap((node) => {
-    if (node.title.toLowerCase().includes(query)) return [node];
-    const children = filterCategories(node.children, query);
-    return children.length > 0 ? [{ ...node, children }] : [];
-  });
+// The tree item id of a category's parent.
+export function parentItemId(category: ProductCategory) {
+  return category.parent_id == null ? rootItemId : String(category.parent_id);
 }
 
-export function buildTreeItems(categories: NestedProductCategory[]): TreeItems {
-  const items: TreeItems = {
-    [rootItemId]: {
-      name: rootItemId,
-      children: categories.map((category) => String(category.id))
+// Builds the tree's items straight from the flat list; siblings keep the
+// list's order.
+export function buildTreeItems(categories: ProductCategory[]): TreeItems {
+  const items: TreeItems = { [rootItemId]: { name: rootItemId, children: [] } };
+  for (const category of categories) {
+    items[String(category.id)] = { name: category.title };
+  }
+  for (const category of categories) {
+    const parent = items[parentItemId(category)];
+    if (parent) {
+      (parent.children ??= []).push(String(category.id));
     }
-  };
-  const addNode = (node: NestedProductCategory) => {
-    items[String(node.id)] = {
-      name: node.title,
-      children: node.children.length
-        ? node.children.map((child) => String(child.id))
-        : undefined,
-      nodeId: node.id
-    };
-    node.children.forEach(addNode);
-  };
-  categories.forEach(addNode);
+  }
   return items;
 }
 
-// Item id → parent item id.
-export function buildParentMap(items: TreeItems): Map<string, string> {
-  const parentOf = new Map<string, string>();
-  for (const [id, item] of Object.entries(items)) {
-    item.children?.forEach((childId) => parentOf.set(childId, id));
+type CategoriesById = Map<number, ProductCategory>;
+
+function indexById(categories: ProductCategory[]): CategoriesById {
+  return new Map(categories.map((category) => [category.id, category]));
+}
+
+function lineageOf(byId: CategoriesById, categoryId: number) {
+  const lineage: ProductCategory[] = [];
+  let category = byId.get(categoryId);
+  while (category) {
+    lineage.push(category);
+    category =
+      category.parent_id == null ? undefined : byId.get(category.parent_id);
   }
-  return parentOf;
+  return lineage;
+}
+
+// A category followed by its ancestors, nearest first. Empty if the id is
+// unknown.
+export function categoryLineage(
+  categories: ProductCategory[],
+  categoryId: number
+) {
+  return lineageOf(indexById(categories), categoryId);
+}
+
+// Keeps categories whose title matches (`query` is lower-cased), with their
+// whole subtree, plus the ancestors leading to them.
+export function filterCategories(categories: ProductCategory[], query: string) {
+  const byId = indexById(categories);
+  const kept = new Set<number>();
+  // Each category's lineage is walked upwards, which covers both directions:
+  // a match keeps its ancestors, and a category below a match is kept
+  // because that match is in its lineage.
+  for (const category of categories) {
+    const lineage = lineageOf(byId, category.id);
+    const nearestMatch = lineage.findIndex((ancestor) =>
+      ancestor.title.toLowerCase().includes(query)
+    );
+    if (nearestMatch === -1) continue;
+    kept.add(category.id);
+    if (nearestMatch === 0) {
+      lineage.forEach((ancestor) => kept.add(ancestor.id));
+    }
+  }
+  return categories.filter((category) => kept.has(category.id));
 }

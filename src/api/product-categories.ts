@@ -1,3 +1,4 @@
+import { queryOptions } from '@tanstack/react-query';
 import {
   type CreateProductCategoryData,
   createProductCategorySchema,
@@ -12,42 +13,6 @@ import { client, handleApiError } from './client';
 
 export type { ProductCategory };
 
-export type NestedProductCategory = ProductCategory & {
-  children: NestedProductCategory[];
-};
-
-export function transformFlatCategoriesToTree(
-  flat: ProductCategory[]
-): NestedProductCategory[] {
-  const map = new Map<number, NestedProductCategory>();
-  const roots: NestedProductCategory[] = [];
-
-  // Create all nodes first
-  flat.forEach((c) => {
-    map.set(c.id, {
-      id: c.id,
-      title: c.title,
-      parent_id: c.parent_id,
-      children: []
-    });
-  });
-
-  // Build tree structure
-  map.forEach((node) => {
-    if (node.parent_id == null) {
-      roots.push(node);
-    } else {
-      const parent = map.get(node.parent_id);
-      if (parent) parent.children.push(node);
-    }
-  });
-
-  return roots;
-}
-// React Query key for the flat category list, shared by the tree and the
-// products card.
-const productCategoriesQueryKey = ['product-categories'] as const;
-
 async function fetchProductCategories(): Promise<ProductCategory[]> {
   try {
     const response = await client.get('/product-categories');
@@ -56,6 +21,13 @@ async function fetchProductCategories(): Promise<ProductCategory[]> {
     handleApiError(err, 'fetchProductCategories');
   }
 }
+
+// The flat category list. Shared by the tree, the selection and the mutations,
+// so they all read and patch one cache entry.
+const productCategoriesQueryOptions = queryOptions({
+  queryKey: ['product-categories'] as const,
+  queryFn: fetchProductCategories
+});
 
 async function createProductCategory(
   data: CreateProductCategoryData
@@ -93,7 +65,6 @@ async function deleteProductCategory(id: number): Promise<void> {
 export {
   createProductCategory,
   deleteProductCategory,
-  fetchProductCategories,
-  productCategoriesQueryKey,
+  productCategoriesQueryOptions,
   updateProductCategory
 };
