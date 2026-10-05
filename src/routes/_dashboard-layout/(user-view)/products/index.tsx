@@ -1,5 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { ChevronLeftIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import {
@@ -10,10 +11,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+import { buttonVariants } from '@/components/ui/button';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import { cn } from '@/lib/utils';
 
 import { ProductCategoriesTree } from './-components/product-categories-tree';
 import { ProductsList } from './-components/products-list';
+import { useSelectedCategory } from './-components/use-selected-category';
 
 const productsSearchSchema = z.object({
   category_id: z.number().optional()
@@ -22,6 +26,8 @@ const productsSearchSchema = z.object({
 function ProductsPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Products`);
+  const { categoryId, isResolving } = useSelectedCategory();
+  const hasSelection = categoryId != null || isResolving;
 
   return (
     <div className="space-y-1">
@@ -47,11 +53,34 @@ function ProductsPage() {
         </h1>
       </div>
 
-      <div className="grid grid-cols-12 gap-4 xl:max-w-[1200px]">
-        <div className="col-span-12 lg:col-span-6">
+      {/* Two columns from lg up. Below that it's one screen at a time: the
+          categories, then (once one is picked) its products with a way back.
+          Both stay mounted, so the tree keeps its expanded folders. */}
+      <div className="grid grid-cols-12 gap-4 xl:max-w-300">
+        <div
+          className={cn(
+            'col-span-12 lg:col-span-5',
+            hasSelection && 'max-lg:hidden'
+          )}
+        >
           <ProductCategoriesTree />
         </div>
-        <div className="col-span-12 lg:col-span-6">
+        <div
+          className={cn(
+            'col-span-12 lg:col-span-7',
+            !hasSelection && 'max-lg:hidden'
+          )}
+        >
+          <Link
+            to="/products"
+            className={cn(
+              buttonVariants({ variant: 'ghost', size: 'sm' }),
+              'mb-2 text-muted-foreground lg:hidden'
+            )}
+          >
+            <ChevronLeftIcon />
+            <Trans>Categories</Trans>
+          </Link>
           <ProductsList />
         </div>
       </div>

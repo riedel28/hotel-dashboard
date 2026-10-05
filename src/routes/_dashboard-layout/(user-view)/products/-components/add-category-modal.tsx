@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,17 +25,26 @@ interface AddCategoryModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (newTitle: string) => void;
+  isSubcategory?: boolean;
 }
-
-const schema = z.object({
-  title: z.string().trim().min(1, 'Title is required')
-});
 
 export function AddCategoryModal({
   open,
   onOpenChange,
-  onSave
+  onSave,
+  isSubcategory = false
 }: AddCategoryModalProps) {
+  const { t } = useLingui();
+  const schema = React.useMemo(
+    () =>
+      z.object({
+        title: z
+          .string()
+          .trim()
+          .min(1, t`Title is required`)
+      }),
+    [t]
+  );
   const form = useForm<{ title: string }>({
     resolver: zodResolver(schema),
     defaultValues: { title: '' }
@@ -56,7 +65,11 @@ export function AddCategoryModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans>Add subcategory</Trans>
+            {isSubcategory ? (
+              <Trans>Add subcategory</Trans>
+            ) : (
+              <Trans>Add category</Trans>
+            )}
           </DialogTitle>
         </DialogHeader>
         <form
@@ -88,7 +101,7 @@ export function AddCategoryModal({
             </FieldGroup>
           </FieldSet>
 
-          <DialogFooter>
+          <DialogFooter className="mt-2">
             <Button
               variant="outline"
               type="button"

@@ -1,9 +1,11 @@
-import { SearchIcon } from 'lucide-react';
+import { useLingui } from '@lingui/react/macro';
+import { SearchIcon, XIcon } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput
 } from '@/components/ui/input-group';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
@@ -24,12 +26,14 @@ export function SearchInput({
   placeholder,
   value = '',
   onChange,
+  onClear,
   className = '',
   disabled = false,
   debounceMs,
   wrapperClassName = '',
   ...inputProps
 }: SearchInputProps) {
+  const { t } = useLingui();
   const [inputValue, setInputValue] = useState(value);
 
   // Create debounced onChange callback
@@ -56,6 +60,12 @@ export function SearchInput({
     }
   };
 
+  const handleClear = () => {
+    setInputValue('');
+    onChange?.('');
+    onClear?.();
+  };
+
   return (
     <InputGroup className={cn(wrapperClassName)}>
       <InputGroupAddon align="inline-start">
@@ -66,10 +76,23 @@ export function SearchInput({
         value={inputValue}
         onChange={handleInputChange}
         disabled={disabled}
-        className={className}
+        // The native clear button is replaced by our own below.
+        className={cn('[&::-webkit-search-cancel-button]:hidden', className)}
         placeholder={placeholder}
         {...inputProps}
       />
+      {inputValue && !disabled && (
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton
+            size="icon-xs"
+            aria-label={t`Clear search`}
+            className="text-muted-foreground hover:text-foreground"
+            onClick={handleClear}
+          >
+            <XIcon className="size-4" />
+          </InputGroupButton>
+        </InputGroupAddon>
+      )}
     </InputGroup>
   );
 }

@@ -18,7 +18,14 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: ['./src/test-setup.ts'],
     // Exclude backend tests - they have their own config and require NODE_ENV=test
-    exclude: ['**/node_modules/**', '**/backend/**', '**/e2e/**']
+    // ds-dist/src is a symlink to src; without excluding it every test runs
+    // twice.
+    exclude: [
+      '**/node_modules/**',
+      '**/backend/**',
+      '**/e2e/**',
+      '**/ds-dist/**'
+    ]
   },
   resolve: {
     alias: {

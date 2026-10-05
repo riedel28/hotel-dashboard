@@ -1,21 +1,10 @@
-import { Trans } from '@lingui/react/macro';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { RefreshCwIcon } from 'lucide-react';
 import { type ReactNode, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { cn } from '@/lib/utils';
 
-import { StatusDisc } from './ui/status-disc';
+import { ErrorState } from './error-state';
 
 interface QueryBoundaryProps {
   children: ReactNode;
@@ -50,26 +39,13 @@ function QueryBoundary({
         onReset={reset}
         fallbackRender={({ error, resetErrorBoundary }) => (
           <div className={cn('flex', className)}>
-            <Empty variant="destructive" className="w-md max-w-md">
-              <EmptyHeader>
-                <EmptyMedia variant="destructive">
-                  <StatusDisc status="error" variant="soft" size="lg" />
-                </EmptyMedia>
-                <EmptyTitle>
-                  <Trans>Something went wrong</Trans>
-                </EmptyTitle>
-                <EmptyDescription>
-                  {(error instanceof Error ? error.message : null) ||
-                    message || <Trans>An unexpected error occurred</Trans>}
-                </EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button variant="destructive" onClick={resetErrorBoundary}>
-                  <RefreshCwIcon className="mr-2 h-4 w-4" />
-                  <Trans>Refresh</Trans>
-                </Button>
-              </EmptyContent>
-            </Empty>
+            <ErrorState
+              className="w-md max-w-md"
+              message={
+                (error instanceof Error ? error.message : null) || message
+              }
+              onRetry={resetErrorBoundary}
+            />
           </div>
         )}
       >

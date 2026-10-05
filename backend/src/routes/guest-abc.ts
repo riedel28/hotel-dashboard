@@ -6,13 +6,13 @@ import {
   updateGuestAbcEntrySchema
 } from '../../../shared/types/guest-abc';
 import {
-  attachSelectedProperty,
   createGuestAbcEntry,
   deleteGuestAbcEntry,
   getGuestAbcEntries,
   updateGuestAbcEntry
 } from '../controllers/guest-abc-controller';
 import { authenticateToken } from '../middleware/auth';
+import { attachSelectedProperty } from '../middleware/selected-property';
 import { validateBody, validateParams } from '../middleware/validation';
 
 const router = Router();

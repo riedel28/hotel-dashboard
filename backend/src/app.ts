@@ -11,6 +11,8 @@ import { errorHandler, notFound } from './middleware/error';
 import authRouter from './routes/auth';
 import guestAbcRouter from './routes/guest-abc';
 import monitoringRouter from './routes/monitoring';
+import productCategoriesRouter from './routes/product-categories';
+import productsRouter from './routes/products';
 import propertiesRouter from './routes/properties';
 import reservationsRouter from './routes/reservations';
 import rolesRouter from './routes/roles';
@@ -76,6 +78,8 @@ if (env.NODE_ENV !== 'test') {
 }
 app.use('/api/guest-abc', guestAbcRouter);
 app.use('/api/monitoring', monitoringRouter);
+app.use('/api/product-categories', productCategoriesRouter);
+app.use('/api/products', productsRouter);
 app.use('/api/properties', propertiesRouter);
 app.use('/api/reservations', reservationsRouter);
 app.use('/api/roles', rolesRouter);

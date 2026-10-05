@@ -1,439 +1,203 @@
-import type { ItemInstance } from '@headless-tree/core';
-import { hotkeysCoreFeature, syncDataLoaderFeature } from '@headless-tree/core';
-import { useTree } from '@headless-tree/react';
-import { Trans } from '@lingui/react/macro';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Trans, useLingui } from '@lingui/react/macro';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { RefreshCwIcon, XIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import * as React from 'react';
-import { toast } from 'sonner';
 
-import {
-  createProductCategory,
-  deleteProductCategory,
-  fetchProductCategories,
-  type NestedProductCategory,
-  type ProductCategory,
-  transformFlatCategoriesToTree,
-  updateProductCategory
-} from '@/api/product-categories';
+import { productCategoriesQueryOptions } from '@/api/product-categories';
+import { productsByCategoryQueryOptions } from '@/api/products';
+import { ErrorState } from '@/components/error-state';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree';
-import { cn } from '@/lib/utils';
+import { SearchInput } from '@/components/ui/search-input';
 
-import { Route as ProductsRoute } from '../index';
 import { AddCategoryModal } from './add-category-modal';
+import { CategoriesCard } from './categories-card';
 import { CategoriesEmptyState } from './categories-empty-state';
-import { CategoryActionsDropdown } from './category-actions-dropdown';
+import { CategoriesLoadingState } from './categories-loading-state';
+import { CategoriesTree } from './categories-tree';
+import { categoryLineage, rootItemId } from './category-tree-data';
 import { DeleteCategoryDialog } from './delete-category-dialog';
-import { EditCategoryModal } from './edit-category-modal';
-import { useCategoryModals } from './use-category-modals';
-
-type TreeItemData = { name: string; children?: string[]; nodeId?: number };
+import { useCategoryMutations } from './use-category-mutations';
+import { useSelectedCategory } from './use-selected-category';
 
 export function ProductCategoriesTree() {
+  const { t } = useLingui();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const selectedCategoryId = ProductsRoute.useSearch().category_id ?? null;
+  const { categoryId: selectedCategoryId } = useSelectedCategory();
+  const categoriesQuery = useQuery(productCategoriesQueryOptions);
+  const { create, update, remove } = useCategoryMutations();
 
-  const categoriesQuery = useQuery<
-    ProductCategory[],
-    Error,
-    NestedProductCategory[]
-  >({
-    queryKey: ['product-categories'],
-    queryFn: fetchProductCategories,
-    select: transformFlatCategoriesToTree
-  });
+  const [search, setSearch] = React.useState('');
+  const query = search.trim().toLowerCase();
 
-  const createCategoryMutation = useMutation({
-    mutationFn: createProductCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
-      toast.success('Category created successfully');
-    },
-    onError: (error) => {
-      toast.error('Failed to create category', {
-        description: error.message
-      });
-    }
-  });
+  const [expandedItems, setExpandedItems] = React.useState<string[]>([
+    rootItemId
+  ]);
 
-  const updateCategoryMutation = useMutation({
-    mutationFn: ({
-      id,
-      ...data
-    }: { id: number } & Partial<Omit<ProductCategory, 'id'>>) =>
-      updateProductCategory(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
-      toast.success('Category updated successfully');
-    },
-    onError: (error) => {
-      toast.error('Failed to update category', {
-        description: error.message
-      });
-    }
-  });
-
-  const deleteCategoryMutation = useMutation({
-    mutationFn: deleteProductCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
-      toast.success('Category deleted successfully');
-    },
-    onError: (error) => {
-      toast.error('Failed to delete category', {
-        description: error.message
-      });
-    }
-  });
-
-  const indent = 12;
-
-  const { itemsMap } = React.useMemo(() => {
-    const map: Record<string, TreeItemData> = {};
-    const topLevelIds: string[] = [];
-
-    if (categoriesQuery.data) {
-      const addNode = (node: NestedProductCategory) => {
-        const idStr = String(node.id);
-        const childrenIds = (node.children ?? []).map((c) => String(c.id));
-        map[idStr] = {
-          name: node.title,
-          children: childrenIds.length ? childrenIds : undefined,
-          nodeId: node.id
-        };
-        node.children?.forEach(addNode);
-      };
-
-      categoriesQuery.data.forEach((cat) => {
-        topLevelIds.push(String(cat.id));
-        addNode(cat);
-      });
-    }
-
-    map.root = { name: 'root', children: topLevelIds };
-    return { itemsMap: map };
-  }, [categoriesQuery.data]);
-
-  const treeKey = React.useMemo(() => {
-    const ids: number[] = [];
-    if (categoriesQuery.data) {
-      const visit = (nodes: NestedProductCategory[]) => {
-        for (const n of nodes) {
-          ids.push(n.id);
-          if (n.children && n.children.length) visit(n.children);
-        }
-      };
-      visit(categoriesQuery.data);
-    }
-    return ids.sort((a, b) => a - b).join('-');
-  }, [categoriesQuery.data]);
-
-  const [expandedItems, setExpandedItems] = React.useState<string[]>(['root']);
-
-  const handleToggleFolder = React.useCallback((itemId: string) => {
-    setExpandedItems((prev) => {
-      const has = prev.includes(itemId);
-      const next = has ? prev.filter((id) => id !== itemId) : [...prev, itemId];
-      return next.includes('root') ? next : ['root', ...next];
-    });
-  }, []);
-
-  function CategoriesTreeInner({
-    itemsMap,
-    selectedCategoryId
-  }: {
-    itemsMap: Record<string, TreeItemData>;
-    selectedCategoryId: number | null;
-  }) {
-    const tree = useTree<TreeItemData>({
-      initialState: { expandedItems },
-      indent,
-      rootItemId: 'root',
-      getItemName: (item) => item.getItemData().name,
-      isItemFolder: (item) => (item.getItemData()?.children?.length ?? 0) > 0,
-      dataLoader: {
-        getItem: (itemId) =>
-          itemsMap[itemId] ?? { name: 'unknown', children: [] },
-        getChildren: (itemId) => itemsMap[itemId]?.children ?? []
-      },
-      features: [syncDataLoaderFeature, hotkeysCoreFeature]
-    });
-
-    return (
-      <Tree key={treeKey} indent={indent} tree={tree} className="space-y-1">
-        {tree.getItems().map((item: ItemInstance<TreeItemData>) => {
-          const id = item.getId() as string;
-          const data = item.getItemData();
-          const numericId =
-            typeof data?.nodeId === 'number' ? data.nodeId : null;
-          const isSelected =
-            numericId != null && selectedCategoryId === numericId;
-
-          return (
-            <TreeItem key={id} item={item}>
-              <TreeItemLabel
-                aria-selected={isSelected}
-                className={cn(
-                  'group w-full justify-between rounded-sm px-2 py-1 text-sm font-medium',
-                  isSelected
-                    ? 'bg-accent text-accent-foreground'
-                    : 'hover:bg-accent'
-                )}
-                onClick={() => {
-                  // Toggle expand/collapse for folders. Do not navigate on folders.
-                  if (typeof item.isFolder === 'function' && item.isFolder()) {
-                    const expandable = item as ItemInstance<TreeItemData> & {
-                      toggleExpanded?: () => void;
-                      setExpanded?: (expanded: boolean) => void;
-                      isExpanded?: () => boolean;
-                    };
-                    if (expandable.toggleExpanded) {
-                      expandable.toggleExpanded();
-                    } else if (
-                      expandable.setExpanded &&
-                      expandable.isExpanded
-                    ) {
-                      expandable.setExpanded(!expandable.isExpanded());
-                    }
-                    handleToggleFolder(id);
-                    return;
-                  }
-                  // Leaf: navigate/select
-                  if (numericId != null) {
-                    handleCategorySelect(numericId);
-                  }
-                }}
-              >
-                <div className="flex w-full items-center justify-between gap-1">
-                  <span>{data?.name}</span>
-
-                  {numericId != null ? (
-                    <CategoryActionsDropdown
-                      categoryId={numericId}
-                      categoryTitle={data?.name ?? ''}
-                      onAddSubcategory={openAddSubcategoryModal}
-                      onEditCategory={openEditCategoryModal}
-                      onDeleteCategory={openDeleteCategoryModal}
-                    />
-                  ) : null}
-                </div>
-              </TreeItemLabel>
-            </TreeItem>
-          );
-        })}
-      </Tree>
+  // Expand the ancestors of the category selected in the URL, so it's visible
+  // after a reload or back/forward navigation.
+  React.useEffect(() => {
+    if (selectedCategoryId == null || !categoriesQuery.data) return;
+    const ancestors = categoryLineage(categoriesQuery.data, selectedCategoryId)
+      .slice(1)
+      .map((category) => String(category.id));
+    if (ancestors.length === 0) return;
+    setExpandedItems((prev) =>
+      ancestors.every((id) => prev.includes(id))
+        ? prev
+        : [...new Set([...prev, ...ancestors])]
     );
-  }
+  }, [categoriesQuery.data, selectedCategoryId]);
 
-  const {
-    pendingAddSubcategoryForId,
-    pendingAddRootCategory,
-    pendingEditCategory,
-    pendingDeleteCategory,
-    openAddSubcategoryModal,
-    closeAddSubcategoryModal,
-    openAddRootCategoryModal,
-    closeAddRootCategoryModal,
-    openEditCategoryModal,
-    closeEditCategoryModal,
-    openDeleteCategoryModal,
-    closeDeleteCategoryModal
-  } = useCategoryModals();
+  // `parentId: null` adds a top-level category. The target is kept while the
+  // modal closes so its title doesn't change mid-animation.
+  const [addCategory, setAddCategory] = React.useState<{
+    open: boolean;
+    parentId: number | null;
+  }>({ open: false, parentId: null });
+  const openAddCategory = (parentId: number | null) =>
+    setAddCategory({ open: true, parentId });
+  const closeAddCategory = () =>
+    setAddCategory((prev) => ({ ...prev, open: false }));
 
-  const handleCategorySelect = (categoryId: number) => {
-    navigate({
-      to: '/products',
-      search: { category_id: categoryId }
-    });
+  const [pendingDelete, setPendingDelete] = React.useState<{
+    id: number;
+    title: string;
+  } | null>(null);
+
+  // Reveals a category that was just added to or moved into `parentId`.
+  const expandParent = (parentId: number | null) => {
+    if (parentId == null) return;
+    const parentKey = String(parentId);
+    setExpandedItems((prev) =>
+      prev.includes(parentKey) ? prev : [...prev, parentKey]
+    );
   };
 
-  const handleCategoryDeselect = () => {
-    navigate({
-      to: '/products',
-      search: {}
-    });
+  const handleMoveCategory = (
+    categoryId: number,
+    newParentId: number | null
+  ) => {
+    update.mutate(
+      { id: categoryId, parent_id: newParentId },
+      { onSuccess: () => expandParent(newParentId) }
+    );
   };
 
-  const handleAddSubcategory = async (newTitle: string) => {
-    if (pendingAddSubcategoryForId != null) {
-      try {
-        await createCategoryMutation.mutateAsync({
-          title: newTitle.trim(),
-          parent_id: pendingAddSubcategoryForId
-        });
-        closeAddSubcategoryModal();
-      } catch {
-        // Error is already handled by the mutation's onError
-        // Keep modal open so user can retry
-      }
-    }
-  };
-
-  const handleAddRootCategory = async (newTitle: string) => {
-    try {
-      await createCategoryMutation.mutateAsync({
-        title: newTitle.trim(),
-        parent_id: null
-      });
-      closeAddRootCategoryModal();
-    } catch {
-      // Error is already handled by the mutation's onError
-      // Keep modal open so user can retry
-    }
-  };
-
-  const handleEditCategory = async (newTitle: string) => {
-    if (pendingEditCategory) {
-      try {
-        await updateCategoryMutation.mutateAsync({
-          id: pendingEditCategory.categoryId,
-          title: newTitle.trim()
-        });
-        closeEditCategoryModal();
-      } catch {
-        // Error is already handled by the mutation's onError
-        // Keep modal open so user can retry
-      }
-    }
-  };
-
-  const handleDeleteCategory = async () => {
-    if (pendingDeleteCategory) {
-      try {
-        await deleteCategoryMutation.mutateAsync(
-          pendingDeleteCategory.categoryId
-        );
-        if (selectedCategoryId === pendingDeleteCategory.categoryId) {
-          handleCategoryDeselect();
+  // On failure the mutation's onError shows a toast and the dialog stays open
+  // for a retry.
+  const handleAddCategory = (title: string) => {
+    create.mutate(
+      { title, parent_id: addCategory.parentId },
+      {
+        onSuccess: () => {
+          expandParent(addCategory.parentId);
+          closeAddCategory();
         }
-        closeDeleteCategoryModal();
-      } catch {
-        // Error is already handled by the mutation's onError
-        // Keep dialog open so user can retry
       }
-    }
+    );
+  };
+
+  const handleDeleteCategory = () => {
+    if (!pendingDelete) return;
+    remove.mutate(pendingDelete, {
+      onSuccess: () => {
+        if (selectedCategoryId === pendingDelete.id) {
+          navigate({ to: '/products', search: {} });
+        }
+        setPendingDelete(null);
+      }
+    });
   };
 
   if (categoriesQuery.isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            <Trans>Product categories</Trans>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="space-y-2 pl-4">
-            <Skeleton className="h-7 w-1/2 rounded-md" />
-            <Skeleton className="h-7 w-1/3 rounded-md" />
-            <Skeleton className="h-7 w-1/2 rounded-md" />
-            <Skeleton className="h-7 w-1/3 rounded-md" />
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <CategoriesLoadingState />;
   }
-
-  //
 
   if (categoriesQuery.isError) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            <Trans>Product categories</Trans>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <Empty variant="destructive" className="w-full md:p-6">
-            <EmptyHeader>
-              <EmptyMedia variant="destructive">
-                <XIcon />
-              </EmptyMedia>
-              <EmptyTitle>
-                <Trans>Failed to load categories</Trans>
-              </EmptyTitle>
-              <EmptyDescription>
-                <Trans>
-                  There was an error loading the product categories. Please try
-                  again.
-                </Trans>
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button
-                variant="destructive"
-                onClick={() => categoriesQuery.refetch()}
-                disabled={categoriesQuery.isRefetching}
-              >
-                <RefreshCwIcon
-                  className={cn(
-                    'mr-2 h-4 w-4',
-                    categoriesQuery.isRefetching && 'animate-spin'
-                  )}
-                />
-                <Trans>Try again</Trans>
-              </Button>
-            </EmptyContent>
-          </Empty>
-        </CardContent>
-      </Card>
+      <CategoriesCard>
+        <ErrorState
+          size="sm"
+          title={<Trans>Failed to load categories</Trans>}
+          message={categoriesQuery.error?.message}
+          onRetry={() => categoriesQuery.refetch()}
+          isRetrying={categoriesQuery.isRefetching}
+        />
+      </CategoriesCard>
     );
   }
 
+  const categories = categoriesQuery.data ?? [];
+  const hasCategories = categories.length > 0;
+
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            <Trans>Product categories</Trans>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0">
-          {!categoriesQuery.data || categoriesQuery.data.length === 0 ? (
-            <CategoriesEmptyState onAddCategory={openAddRootCategoryModal} />
-          ) : (
-            <CategoriesTreeInner
-              key={treeKey}
-              itemsMap={itemsMap}
-              selectedCategoryId={selectedCategoryId}
+      <CategoriesCard
+        // The empty state has its own, labelled button.
+        action={
+          hasCategories && (
+            <Button
+              variant="secondary"
+              size="icon-sm"
+              className="bg-clip-border"
+              aria-label={t`Add category`}
+              title={t`Add category`}
+              onClick={() => openAddCategory(null)}
+            >
+              <PlusIcon />
+            </Button>
+          )
+        }
+      >
+        {!hasCategories ? (
+          <CategoriesEmptyState onAddCategory={() => openAddCategory(null)} />
+        ) : (
+          <>
+            <SearchInput
+              value={search}
+              onChange={setSearch}
+              placeholder={t`Search categories`}
+              aria-label={t`Search categories`}
+              wrapperClassName="mb-3"
             />
-          )}
-        </CardContent>
-      </Card>
+            <CategoriesTree
+              categories={categories}
+              query={query}
+              selectedCategoryId={selectedCategoryId}
+              expandedItems={expandedItems}
+              setExpandedItems={setExpandedItems}
+              onSelect={(categoryId) =>
+                navigate({
+                  to: '/products',
+                  search: { category_id: categoryId }
+                })
+              }
+              // No-op while the cached products are still fresh.
+              onPrefetch={(categoryId) =>
+                queryClient.prefetchQuery(
+                  productsByCategoryQueryOptions(categoryId)
+                )
+              }
+              onAddSubcategory={openAddCategory}
+              onRenameCategory={(id, title) => update.mutate({ id, title })}
+              onDeleteCategory={setPendingDelete}
+              onMoveCategory={handleMoveCategory}
+            />
+          </>
+        )}
+      </CategoriesCard>
       <AddCategoryModal
-        open={pendingAddSubcategoryForId != null}
-        onOpenChange={(open) => !open && closeAddSubcategoryModal()}
-        onSave={handleAddSubcategory}
-      />
-      <AddCategoryModal
-        open={pendingAddRootCategory}
-        onOpenChange={(open) => !open && closeAddRootCategoryModal()}
-        onSave={handleAddRootCategory}
-      />
-      <EditCategoryModal
-        open={pendingEditCategory != null}
-        initialTitle={pendingEditCategory?.initialTitle ?? ''}
-        onOpenChange={(open) => !open && closeEditCategoryModal()}
-        onSave={handleEditCategory}
+        open={addCategory.open}
+        onOpenChange={(open) => !open && closeAddCategory()}
+        onSave={handleAddCategory}
+        isSubcategory={addCategory.parentId != null}
       />
       <DeleteCategoryDialog
-        open={pendingDeleteCategory != null}
-        categoryTitle={pendingDeleteCategory?.title ?? ''}
-        onOpenChange={(open) => !open && closeDeleteCategoryModal()}
+        open={pendingDelete != null}
+        categoryTitle={pendingDelete?.title ?? ''}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
         onConfirm={handleDeleteCategory}
       />
     </>

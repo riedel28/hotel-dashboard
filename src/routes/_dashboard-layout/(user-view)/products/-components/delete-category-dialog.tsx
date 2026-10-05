@@ -45,7 +45,7 @@ export function DeleteCategoryDialog({
           <AlertDialogCancel>
             <Trans>Cancel</Trans>
           </AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={onConfirm}>
+          <AlertDialogAction variant="destructive-soft" onClick={onConfirm}>
             <Trans>Delete</Trans>
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -122,12 +122,13 @@
   --muted-foreground: oklch(0.723 0.014 214.4);
   --accent: oklch(0.275 0.011 216.9);
   --accent-foreground: oklch(0.987 0.002 197.1);
-  /* --danger tracks --destructive here rather than lightening to rose-200:
-     one destructive tone reads more consistently across the dark surfaces
-     than a separate text-only ramp did. */
+  /* --danger is one step lighter than --destructive: at the fill's lightness
+     the text only reached 3.8:1 on a destructive/30 tint (soft delete button
+     on hover). This tone keeps >= 4.5:1 (WCAG AA) on every dark surface it's
+     used on, while staying clearly red rather than drifting to rose-200. */
   --destructive: oklch(0.712 0.194 13.428);
   --destructive-foreground: oklch(0.941 0.03 12.58);
-  --danger: oklch(0.712 0.194 13.428);
+  --danger: oklch(0.79 0.14 12.5);
   --badge-destructive: oklch(0.645 0.246 16.439);
   --badge-destructive-foreground: oklch(0.892 0.058 10.001);
   --border: oklch(1 0 0 / 10%);

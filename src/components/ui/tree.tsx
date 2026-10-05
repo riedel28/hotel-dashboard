@@ -196,7 +196,7 @@ function TreeItemLabel<T = unknown>({
             />
           )
         ) : (
-          <ChevronDownIcon className="size-4 text-muted-foreground in-aria-[expanded=false]:-rotate-90" />
+          <ChevronDownIcon className="size-4 text-muted-foreground transition-transform duration-150 ease-out in-aria-[expanded=false]:-rotate-90" />
         ))}
       {children ||
         (typeof item.getItemName === 'function' ? item.getItemName() : null)}
