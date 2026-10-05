@@ -12,7 +12,7 @@ import {
 import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import type { Property } from 'shared/types/properties';
+import type { Property, PropertyStage } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 
 import { propertiesQueryOptions } from '@/api/properties';
@@ -310,9 +310,7 @@ function PropertiesContent() {
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
     : [];
 
-  const hasActiveFilters = Boolean(
-    q || (stage && stage !== 'all') || country_code
-  );
+  const hasActiveFilters = Boolean(q || stage?.length || country_code);
 
   const handleSearchChange = (searchTerm: string) => {
     navigate({
@@ -325,15 +323,12 @@ function PropertiesContent() {
     });
   };
 
-  const handleStageChange = (value: string | null) => {
+  const handleStageChange = (stages: PropertyStage[]) => {
     navigate({
       to: '/admin/properties',
       search: (prev) => ({
         ...prev,
-        stage:
-          !value || value === 'all'
-            ? undefined
-            : (value as 'demo' | 'production' | 'staging' | 'template'),
+        stage: stages.length > 0 ? stages : undefined,
         page: 1
       })
     });
@@ -430,7 +425,7 @@ function PropertiesContent() {
     >
       <PropertiesFilters>
         <PropertySearch value={q} onChange={handleSearchChange} />
-        <PropertyStageFilter value={stage} onChange={handleStageChange} />
+        <PropertyStageFilter value={stage ?? []} onChange={handleStageChange} />
         <PropertyCountryFilter
           value={country_code}
           onChange={handleCountryChange}

@@ -23,7 +23,9 @@ export function propertiesQueryOptions(params?: FetchPropertiesParams) {
 
 async function fetchProperties(params?: FetchPropertiesParams) {
   try {
-    const response = await client.get('/properties', { params });
+    const response = await client.get('/properties', {
+      params: { ...params, stage: params?.stage?.join(',') || undefined }
+    });
     return fetchPropertiesResponseSchema.parse(response.data);
   } catch (err) {
     handleApiError(err, 'fetchProperties');

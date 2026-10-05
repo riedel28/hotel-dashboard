@@ -39,7 +39,7 @@ msgid "(opens in new tab)"
 msgstr "(opens in new tab)"
 
 #. placeholder {0}: selectedOptions.length
-#: src/components/ui/data-grid-checkbox-filter.tsx:143
+#: src/components/ui/data-grid-checkbox-filter.tsx:145
 msgid "{0, plural, one {# selected} other {# selected}}"
 msgstr "{0, plural, one {# selected} other {# selected}}"
 
@@ -236,7 +236,7 @@ msgstr "Address line is required"
 
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:36
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:37
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:477
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:472
 msgid "Admin"
 msgstr "Admin"
 
@@ -282,18 +282,22 @@ msgstr "Adyen"
 msgid "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 msgstr "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:36
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:58
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:39
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:61
-msgid "All"
-msgstr "All"
+#~ msgid "All"
+#~ msgstr "All"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/property-country-filter.tsx:20
 msgid "All countries"
 msgstr "All countries"
 
+#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:25
+msgid "All stages"
+msgstr "All stages"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:294
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:35
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:24
 msgid "All statuses"
 msgstr "All statuses"
 
@@ -323,7 +327,7 @@ msgstr "Already have one? Any TOTP app works — just scan the QR code."
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:498
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:493
 msgid "An error occurred while fetching properties"
 msgstr "An error occurred while fetching properties"
 
@@ -331,7 +335,7 @@ msgstr "An error occurred while fetching properties"
 msgid "An error occurred while fetching reservations"
 msgstr "An error occurred while fetching reservations"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:59
 msgid "An error occurred while fetching rooms"
 msgstr "An error occurred while fetching rooms"
 
@@ -453,7 +457,6 @@ msgstr "Authenticator app"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:181
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:16
 msgid "Available"
 msgstr "Available"
@@ -719,7 +722,7 @@ msgstr "City"
 msgid "City is required"
 msgstr "City is required"
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:235
+#: src/components/ui/data-grid-checkbox-filter.tsx:237
 msgid "Clear all"
 msgstr "Clear all"
 
@@ -1040,7 +1043,6 @@ msgstr "Delete property?"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:45
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:156
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:85
 msgid "Demo"
 msgstr "Demo"
 
@@ -1096,7 +1098,6 @@ msgstr "Doe"
 #~ msgid "Don't have an account?"
 #~ msgstr "Don't have an account?"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:32
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/status-cell.tsx:15
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:257
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:309
@@ -1889,11 +1890,11 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:109
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:31
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:31
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:471
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:466
 msgid "Home"
 msgstr "Home"
 
@@ -2128,7 +2129,6 @@ msgstr "Main navigation"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:205
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:187
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:82
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:20
 msgid "Maintenance"
 msgstr "Maintenance"
@@ -2461,7 +2461,6 @@ msgstr "Numbered list"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:202
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:184
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:18
 msgid "Occupied"
 msgstr "Occupied"
@@ -2523,7 +2522,6 @@ msgstr "Our server"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:208
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:190
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:90
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:22
 msgid "Out of Order"
 msgstr "Out of Order"
@@ -2630,7 +2628,6 @@ msgstr "Payment recipient"
 #~ msgid "Payments"
 #~ msgstr "Payments"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:22
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/status-cell.tsx:17
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:110
 msgid "Pending"
@@ -2829,7 +2826,6 @@ msgstr "Product categories"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:46
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:150
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:69
 msgid "Production"
 msgstr "Production"
 
@@ -2908,9 +2904,9 @@ msgstr "Profile updated"
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:105
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:43
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:463
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:483
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:491
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:458
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:478
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:486
 msgid "Properties"
 msgstr "Properties"
 
@@ -3132,9 +3128,11 @@ msgstr "Reservation updated successfully"
 msgid "Reservations"
 msgstr "Reservations"
 
-#: src/components/ui/data-grid-radio-filter.tsx:125
+#: src/components/ui/data-grid-radio-filter.tsx:126
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-date-filter.tsx:201
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
+#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:36
 msgid "Reset"
 msgstr "Reset"
 
@@ -3235,9 +3233,9 @@ msgstr "Room updated successfully"
 #: src/routes/_dashboard-layout.tsx:213
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:200
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:37
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:29
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:43
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:51
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:30
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:44
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:52
 #: src/routes/_dashboard-layout/index.tsx:32
 msgid "Rooms"
 msgstr "Rooms"
@@ -3383,7 +3381,7 @@ msgstr "Search users"
 #~ msgid "Security"
 #~ msgstr "Security"
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:156
+#: src/components/ui/data-grid-checkbox-filter.tsx:158
 msgid "Select"
 msgstr "Select"
 
@@ -3403,7 +3401,7 @@ msgstr "Select a room"
 msgid "Select a room..."
 msgstr "Select a room..."
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:253
+#: src/components/ui/data-grid-checkbox-filter.tsx:255
 #: src/components/ui/data-grid-table.tsx:483
 msgid "Select all"
 msgstr "Select all"
@@ -3448,7 +3446,6 @@ msgid "Select stage"
 msgstr "Select stage"
 
 #: src/components/ui/data-grid-radio-filter.tsx:53
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:51
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:173
 msgid "Select status"
@@ -3620,6 +3617,7 @@ msgstr "Sorry, we couldn't find the page you're looking for."
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:154
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:129
+#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:24
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:201
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:212
 msgid "Stage"
@@ -3627,7 +3625,6 @@ msgstr "Stage"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:47
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:153
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:77
 msgid "Staging"
 msgstr "Staging"
 
@@ -3640,7 +3637,6 @@ msgstr "Staging"
 msgid "Start"
 msgstr "Start"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:27
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/status-cell.tsx:19
 msgid "Started"
 msgstr "Started"
@@ -3652,11 +3648,12 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:82
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:293
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:50
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:115
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:126
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:157
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:23
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:139
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:150
 msgid "Status"
@@ -3765,7 +3762,6 @@ msgstr "Technical connection details for your Adyen account."
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:159
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:93
 msgid "Template"
 msgstr "Template"
 

@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, ilike } from 'drizzle-orm';
+import { and, asc, count, desc, eq, ilike, inArray } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import type { PropertyStage } from '../../../shared/types/properties';
@@ -19,8 +19,10 @@ async function getProperties(req: Request, res: Response) {
       );
     }
 
-    if (stage && stage !== 'all') {
-      conditions.push(eq(propertiesTable.stage, stage as PropertyStage));
+    // Already validated and split into a list by fetchPropertiesParamsSchema.
+    const stages = (stage ?? []) as PropertyStage[];
+    if (stages.length > 0) {
+      conditions.push(inArray(propertiesTable.stage, stages));
     }
 
     if (country_code) {
