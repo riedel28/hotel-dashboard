@@ -296,7 +296,6 @@ function MonitoringPage() {
             onValueChange={handleStatusChange}
             options={statusFilterOptions}
             showFooter
-            clearLabel={<Trans>All statuses</Trans>}
             className="w-full sm:w-[170px]"
           />
           <DataGridRadioFilter
@@ -306,7 +305,6 @@ function MonitoringPage() {
             onValueChange={handleTypeChange}
             options={typeFilterOptions}
             showFooter
-            clearLabel={<Trans>All types</Trans>}
             className="w-full sm:w-[170px]"
           />
           <MonitoringDateFilter

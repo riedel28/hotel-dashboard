@@ -294,7 +294,6 @@ msgid "All countries"
 msgstr "All countries"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:294
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:299
 msgid "All statuses"
 msgstr "All statuses"
 
@@ -308,8 +307,7 @@ msgstr "All statuses"
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:304
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:309
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:303
 msgid "All types"
 msgstr "All types"
 
@@ -725,7 +723,7 @@ msgstr "City is required"
 msgid "Clear all"
 msgstr "Clear all"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:325
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:323
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
@@ -4112,7 +4110,7 @@ msgstr "Two-step verification"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:121
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:303
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:302
 msgid "Type"
 msgstr "Type"
 

@@ -287,7 +287,6 @@ msgid "All countries"
 msgstr "Alle Länder"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:294
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:299
 msgid "All statuses"
 msgstr ""
 
@@ -301,8 +300,7 @@ msgstr ""
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "Alle Tests bestanden ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:304
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:309
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:303
 msgid "All types"
 msgstr ""
 
@@ -700,7 +698,7 @@ msgstr ""
 msgid "Clear all"
 msgstr "Alle zurücksetzen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:325
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:323
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
@@ -3979,7 +3977,7 @@ msgstr "Bestätigung in zwei Schritten"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:121
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:303
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:302
 msgid "Type"
 msgstr "Typ"
 
