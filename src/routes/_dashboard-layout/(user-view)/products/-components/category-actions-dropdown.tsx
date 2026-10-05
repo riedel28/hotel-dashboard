@@ -21,7 +21,6 @@ import {
 import { cn } from '@/lib/utils';
 
 import { rootItemId, type TreeItems } from './category-tree-data';
-import { destructiveMenuItemClassName } from './destructive-styles';
 
 interface CategoryActionsDropdownProps {
   categoryId: number;
@@ -170,7 +169,7 @@ export function CategoryActionsDropdown({
           </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className={destructiveMenuItemClassName}
+            variant="destructive-soft"
             onClick={onDeleteCategory}
           >
             <Trash2Icon className="mr-2 size-4" />

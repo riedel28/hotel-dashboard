@@ -8,43 +8,17 @@ import { productCategoriesQueryOptions } from '@/api/product-categories';
 import { productsByCategoryQueryOptions } from '@/api/products';
 import { ErrorState } from '@/components/error-state';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
 import { SearchInput } from '@/components/ui/search-input';
-import { Skeleton } from '@/components/ui/skeleton';
 
 import { AddCategoryModal } from './add-category-modal';
+import { CategoriesCard } from './categories-card';
 import { CategoriesEmptyState } from './categories-empty-state';
+import { CategoriesLoadingState } from './categories-loading-state';
 import { CategoriesTree } from './categories-tree';
 import { categoryLineage, rootItemId } from './category-tree-data';
 import { DeleteCategoryDialog } from './delete-category-dialog';
 import { useCategoryMutations } from './use-category-mutations';
 import { useSelectedCategory } from './use-selected-category';
-
-function CategoriesCard({
-  action,
-  children
-}: {
-  action?: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">
-          <Trans>Product categories</Trans>
-        </CardTitle>
-        {action && <CardAction>{action}</CardAction>}
-      </CardHeader>
-      <CardContent className="pt-0">{children}</CardContent>
-    </Card>
-  );
-}
 
 export function ProductCategoriesTree() {
   const { t } = useLingui();
@@ -52,8 +26,7 @@ export function ProductCategoriesTree() {
   const queryClient = useQueryClient();
   const { categoryId: selectedCategoryId } = useSelectedCategory();
   const categoriesQuery = useQuery(productCategoriesQueryOptions);
-  const { createCategory, updateCategory, deleteCategory } =
-    useCategoryMutations();
+  const { create, update, remove } = useCategoryMutations();
 
   const [search, setSearch] = React.useState('');
   const query = search.trim().toLowerCase();
@@ -106,7 +79,7 @@ export function ProductCategoriesTree() {
     categoryId: number,
     newParentId: number | null
   ) => {
-    updateCategory.mutate(
+    update.mutate(
       { id: categoryId, parent_id: newParentId },
       { onSuccess: () => expandParent(newParentId) }
     );
@@ -115,7 +88,7 @@ export function ProductCategoriesTree() {
   // On failure the mutation's onError shows a toast and the dialog stays open
   // for a retry.
   const handleAddCategory = (title: string) => {
-    createCategory.mutate(
+    create.mutate(
       { title, parent_id: addCategory.parentId },
       {
         onSuccess: () => {
@@ -128,7 +101,7 @@ export function ProductCategoriesTree() {
 
   const handleDeleteCategory = () => {
     if (!pendingDelete) return;
-    deleteCategory.mutate(pendingDelete, {
+    remove.mutate(pendingDelete, {
       onSuccess: () => {
         if (selectedCategoryId === pendingDelete.id) {
           navigate({ to: '/products', search: {} });
@@ -139,19 +112,7 @@ export function ProductCategoriesTree() {
   };
 
   if (categoriesQuery.isLoading) {
-    return (
-      // Mirrors the loaded card: the add button, the search field, then rows
-      // like the real ones (40px label + 4px gap, 20px per indent level).
-      <CategoriesCard action={<Skeleton className="size-7 rounded-lg" />}>
-        <Skeleton className="mb-3 h-9 w-full rounded-lg" />
-        <div className="flex flex-col gap-1">
-          <Skeleton className="h-10 w-full rounded-lg" />
-          <Skeleton className="ms-5 h-10 w-3/5 rounded-lg" />
-          <Skeleton className="ms-5 h-10 w-2/5 rounded-lg" />
-          <Skeleton className="h-10 w-full rounded-lg" />
-        </div>
-      </CategoriesCard>
-    );
+    return <CategoriesLoadingState />;
   }
 
   if (categoriesQuery.isError) {
@@ -220,9 +181,7 @@ export function ProductCategoriesTree() {
                 )
               }
               onAddSubcategory={openAddCategory}
-              onRenameCategory={(id, title) =>
-                updateCategory.mutate({ id, title })
-              }
+              onRenameCategory={(id, title) => update.mutate({ id, title })}
               onDeleteCategory={setPendingDelete}
               onMoveCategory={handleMoveCategory}
             />

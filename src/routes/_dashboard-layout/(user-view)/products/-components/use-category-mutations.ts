@@ -10,15 +10,19 @@ import {
   updateProductCategory
 } from '@/api/product-categories';
 
-// Create, update (rename or move) and delete for product categories, each
-// with its toasts and cache refresh.
+// Create, update (rename or move) and remove for product categories, each
+// with its toasts.
+//
+// Cache: a rename is optimistic (shown at once, rolled back on failure); the
+// others wait for the server and then refetch the list, since they change
+// its shape. Products do it a third way — see useProductMutations.
 export function useCategoryMutations() {
   const { t } = useLingui();
   const queryClient = useQueryClient();
   const { queryKey } = productCategoriesQueryOptions;
   const refetchCategories = () => queryClient.invalidateQueries({ queryKey });
 
-  const createCategory = useMutation({
+  const create = useMutation({
     mutationFn: createProductCategory,
     onSuccess: (category) => {
       refetchCategories();
@@ -31,7 +35,7 @@ export function useCategoryMutations() {
     }
   });
 
-  const updateCategory = useMutation({
+  const update = useMutation({
     mutationFn: ({
       id,
       ...data
@@ -67,7 +71,7 @@ export function useCategoryMutations() {
     onSettled: refetchCategories
   });
 
-  const deleteCategory = useMutation({
+  const remove = useMutation({
     mutationFn: ({ id }: { id: number; title: string }) =>
       deleteProductCategory(id),
     onSuccess: (_, category) => {
@@ -81,5 +85,5 @@ export function useCategoryMutations() {
     }
   });
 
-  return { createCategory, updateCategory, deleteCategory };
+  return { create, update, remove };
 }

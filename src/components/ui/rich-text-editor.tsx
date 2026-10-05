@@ -95,10 +95,6 @@ function TextStyleMenu({
   level: number | null;
 }) {
   const { t } = useLingui();
-  // Wait for the menu to close and hand focus back, then return it to the
-  // text so typing continues where it was.
-  const apply = (command: () => void) => setTimeout(command);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -116,11 +112,11 @@ function TextStyleMenu({
         align="start"
         // Each heading is shown the way it will look in the text.
         className={cn('w-48', richTextClassName)}
+        // Back to the text, not the menu button, so typing continues.
+        finalFocus={() => editor.view.dom}
       >
         <DropdownMenuItem
-          onClick={() =>
-            apply(() => editor.chain().focus().setParagraph().run())
-          }
+          onClick={() => editor.chain().focus().setParagraph().run()}
         >
           {t`Text`}
         </DropdownMenuItem>
@@ -130,13 +126,7 @@ function TextStyleMenu({
             <DropdownMenuItem
               key={headingLevel}
               onClick={() =>
-                apply(() =>
-                  editor
-                    .chain()
-                    .focus()
-                    .setHeading({ level: headingLevel })
-                    .run()
-                )
+                editor.chain().focus().setHeading({ level: headingLevel }).run()
               }
             >
               <Heading role="presentation">{t`Heading ${headingLevel}`}</Heading>
@@ -379,7 +369,7 @@ function RichTextEditor({
       aria-invalid={invalid || undefined}
       className={cn(
         // Mirrors Textarea: border, focus, invalid, disabled and dark styles.
-        'w-full rounded-md border border-input bg-transparent transition-[color,box-shadow]',
+        'w-full rounded-lg border border-input bg-transparent transition-[color,box-shadow]',
         'focus-within:border-primary focus-within:shadow-[inset_0_0_0_1px_var(--color-primary)]',
         'aria-invalid:border-destructive aria-invalid:focus-within:border-destructive aria-invalid:focus-within:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
         'dark:bg-input/30',

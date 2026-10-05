@@ -12,16 +12,17 @@ import {
 
 import type { ProductFormValues } from './product-form-drawer';
 
-// Create, update and delete for the products of one category, each with its
+// Create, update and remove for the products of one category, each with its
 // toasts.
+//
+// Cache: nothing is optimistic. Once the server confirms, the cached list is
+// patched so the table changes together with the dialog closing, then
+// refetched to reconcile.
 export function useProductMutations(categoryId: number) {
   const { t } = useLingui();
   const queryClient = useQueryClient();
   const { queryKey } = productsByCategoryQueryOptions(categoryId);
 
-  // After the server confirms a change, patch the cached list right away so
-  // the table updates together with the dialog closing, then refetch in the
-  // background to reconcile. Not optimistic: nothing to roll back.
   const updateCachedProducts = (update: (products: Product[]) => Product[]) => {
     queryClient.setQueryData(queryKey, (products) =>
       products

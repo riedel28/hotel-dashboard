@@ -36,6 +36,83 @@ const rowClassName =
 const rowEnterClassName =
   'duration-150 ease-out motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-1';
 
+// A category's row: its name and, on the right, its actions menu.
+function CategoryRow({
+  title,
+  isSelected,
+  children
+}: {
+  title: string;
+  isSelected: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <TreeItemLabel
+      aria-selected={isSelected}
+      className={cn(
+        // Keyboard focus: the app's thin primary ring, drawn inside the row
+        // so it doesn't spill over its neighbours.
+        'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm font-medium in-focus-visible:ring-2 in-focus-visible:ring-primary in-focus-visible:ring-inset',
+        isSelected ? 'bg-accent text-accent-foreground' : 'hover:bg-accent'
+      )}
+    >
+      <div className="flex w-full min-w-0 items-center justify-between gap-1">
+        <span className="truncate" title={title}>
+          {title}
+        </span>
+        {children}
+      </div>
+    </TreeItemLabel>
+  );
+}
+
+// The row while its category is being renamed: a text field in place of the
+// name and a save button in place of the menu.
+function RenameRow({
+  inputProps,
+  onSave
+}: {
+  inputProps: React.ComponentProps<typeof Input>;
+  onSave: () => void;
+}) {
+  const { t } = useLingui();
+  return (
+    <TreeItemLabel className="w-full rounded-lg bg-card px-2 py-1 hover:bg-card">
+      <Input
+        {...inputProps}
+        aria-label={t`Category name`}
+        maxLength={200}
+        // Same height, text position and weight as the name it replaces.
+        // 5px = the field's border + padding, kept small so the field
+        // doesn't run into a folder's chevron.
+        className="-ms-[5px] h-8 ps-1 font-medium"
+        onFocus={(e) => e.currentTarget.select()}
+        onClick={(e) => e.stopPropagation()}
+      />
+      {/* For mouse users who don't know Enter saves. Kept out of the Tab
+          order: leaving the field cancels the rename anyway. */}
+      <Button
+        size="icon"
+        variant="secondary"
+        // Fill the full height, like the field next to it.
+        className="bg-clip-border"
+        tabIndex={-1}
+        aria-label={t`Save`}
+        title={t`Save`}
+        // Keep focus in the field, so its blur doesn't cancel the rename
+        // before the click lands.
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSave();
+        }}
+      >
+        <CheckIcon />
+      </Button>
+    </TreeItemLabel>
+  );
+}
+
 interface CategoriesTreeProps {
   // Every category of the property, flat.
   categories: ProductCategory[];
@@ -69,7 +146,6 @@ export function CategoriesTree({
   onDeleteCategory,
   onMoveCategory
 }: CategoriesTreeProps) {
-  const { t } = useLingui();
   const isSearching = query !== '';
 
   // Every category as tree items; the "Move to category" menu mirrors it.
@@ -202,77 +278,27 @@ export function CategoriesTree({
               }}
             >
               {item.isRenaming() ? (
-                <TreeItemLabel className="w-full rounded-lg bg-card px-2 py-1 hover:bg-card">
-                  <Input
-                    {...item.getRenameInputProps()}
-                    aria-label={t`Category name`}
-                    maxLength={200}
-                    // Same height, text position and weight as the label it
-                    // replaces. 5px = the field's border + padding, kept
-                    // small so the field doesn't run into a folder's chevron.
-                    className="-ms-[5px] h-8 ps-1 font-medium"
-                    onFocus={(e) => e.currentTarget.select()}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  {/* For mouse users who don't know Enter saves. Sits where
-                      the row's "…" button is. Kept out of the Tab order:
-                      leaving the field cancels the rename anyway. */}
-                  <Button
-                    size="icon"
-                    variant="secondary"
-                    // Fill the full height, like the field next to it.
-                    className="bg-clip-border"
-                    tabIndex={-1}
-                    aria-label={t`Save`}
-                    title={t`Save`}
-                    // Keep focus in the field, so its blur doesn't cancel
-                    // the rename before the click lands.
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      tree.completeRenaming();
-                    }}
-                  >
-                    <CheckIcon />
-                  </Button>
-                </TreeItemLabel>
+                <RenameRow
+                  inputProps={item.getRenameInputProps()}
+                  onSave={() => tree.completeRenaming()}
+                />
               ) : (
-                <TreeItemLabel
-                  aria-selected={isSelected}
-                  className={cn(
-                    // Keyboard focus: the app's thin primary ring, drawn
-                    // inside the row so it doesn't spill over its neighbours.
-                    'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm font-medium in-focus-visible:ring-2 in-focus-visible:ring-primary in-focus-visible:ring-inset',
-                    isSelected
-                      ? 'bg-accent text-accent-foreground'
-                      : 'hover:bg-accent'
-                  )}
-                >
-                  <div className="flex w-full min-w-0 items-center justify-between gap-1">
-                    <span className="truncate" title={category.title}>
-                      {category.title}
-                    </span>
-
-                    <CategoryActionsDropdown
-                      categoryId={category.id}
-                      parentId={category.parent_id}
-                      items={allItems}
-                      onAddSubcategory={() => onAddSubcategory(category.id)}
-                      // Wait for the menu to close and hand focus back before
-                      // the field takes it, or the blur cancels the rename.
-                      onRenameCategory={() =>
-                        setTimeout(() => {
-                          item.setFocused();
-                          item.startRenaming();
-                        })
-                      }
-                      onDeleteCategory={() => onDeleteCategory(category)}
-                      onMoveCategory={(newParentId) =>
-                        onMoveCategory(category.id, newParentId)
-                      }
-                    />
-                  </div>
-                </TreeItemLabel>
+                <CategoryRow title={category.title} isSelected={isSelected}>
+                  <CategoryActionsDropdown
+                    categoryId={category.id}
+                    parentId={category.parent_id}
+                    items={allItems}
+                    onAddSubcategory={() => onAddSubcategory(category.id)}
+                    onRenameCategory={() => {
+                      item.setFocused();
+                      item.startRenaming();
+                    }}
+                    onDeleteCategory={() => onDeleteCategory(category)}
+                    onMoveCategory={(newParentId) =>
+                      onMoveCategory(category.id, newParentId)
+                    }
+                  />
+                </CategoryRow>
               )}
             </div>
           </TreeItem>
