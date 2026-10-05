@@ -23,7 +23,8 @@ const quantitySchema = z
   .min(0, 'Quantity must be 0 or greater')
   .max(1_000_000, 'Quantity is too large');
 
-// Plain text for now; rich text (HTML) is tracked in #30. Empty → null.
+// Rich text (HTML) from the editor; the server sanitizes it on write. The
+// limit counts the markup too. Empty → null.
 const descriptionSchema = z
   .string()
   .trim()

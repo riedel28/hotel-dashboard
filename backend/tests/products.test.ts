@@ -271,6 +271,52 @@ describe('Products API', () => {
     expect(res.body.map((p: { title: string }) => p.title)).toEqual(['Cola']);
   });
 
+  it('sanitizes rich-text descriptions on write', async () => {
+    const id = await createCategory('Spa');
+    const create = (description: string) =>
+      request(app)
+        .post('/api/products')
+        .set('Authorization', auth)
+        .send({
+          title: 'Massage',
+          category_id: id,
+          price: 1,
+          quantity: 1,
+          description
+        })
+        .expect(201);
+
+    const allowed =
+      '<h1>Spa</h1><h2>Massage</h2><h6>Details</h6>' +
+      '<p><strong>Deep</strong> <em>tissue</em> <u>massage</u></p>' +
+      '<ul><li>60 min</li></ul><ol><li>Book</li></ol>' +
+      '<img src="https://example.com/spa.jpg" alt="Spa" />';
+    const kept = await create(allowed);
+    expect(kept.body.description).toBe(allowed);
+
+    const stripped = await create(
+      '<blockquote>Hi</blockquote><p onclick="x()">A<script>alert(1)</script></p>' +
+        '<img src="data:image/png;base64,AAAA" onerror="alert(1)">' +
+        '<table><tr><td>T</td></tr></table>' +
+        '<a href="javascript:alert(1)">bad</a>' +
+        '<a href="https://example.com" class="x">ok</a>'
+    );
+    expect(stripped.body.description).toBe(
+      'Hi<p>A</p><img />T<a target="_blank" rel="noopener noreferrer">bad</a>' +
+        '<a href="https://example.com" target="_blank" rel="noopener noreferrer">ok</a>'
+    );
+
+    const empty = await create('<p></p><p><br></p>');
+    expect(empty.body.description).toBeNull();
+
+    const patched = await request(app)
+      .patch(`/api/products/${kept.body.id}`)
+      .set('Authorization', auth)
+      .send({ description: '<p>Plain</p><script>alert(1)</script>' })
+      .expect(200);
+    expect(patched.body.description).toBe('<p>Plain</p>');
+  });
+
   it('rejects invalid prices and quantities', async () => {
     const id = await createCategory('Spa');
     const invalid = [

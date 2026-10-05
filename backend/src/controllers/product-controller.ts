@@ -18,6 +18,7 @@ import {
   products
 } from '../db/schema';
 import type { SelectedPropertyRequest } from '../middleware/selected-property';
+import { sanitizeRichText } from '../utils/rich-text';
 
 // Property scope is resolved by attachSelectedProperty. Without a selected
 // property, lists are empty, single reads are 404 and writes are 400.
@@ -327,7 +328,7 @@ async function createProduct(req: ProductsRequest, res: Response) {
         title,
         price: price.toFixed(2),
         quantity,
-        description: description ?? null
+        description: sanitizeRichText(description)
       })
       .returning();
 
@@ -366,7 +367,9 @@ async function updateProduct(req: ProductsRequest, res: Response) {
     if (title !== undefined) updates.title = title;
     if (price !== undefined) updates.price = price.toFixed(2);
     if (quantity !== undefined) updates.quantity = quantity;
-    if (description !== undefined) updates.description = description;
+    if (description !== undefined) {
+      updates.description = sanitizeRichText(description);
+    }
 
     const [product] = await db
       .update(products)
