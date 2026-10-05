@@ -89,7 +89,7 @@ test.describe('Property Selector', () => {
 
     await page.getByPlaceholder('Search property').fill('NonExistentProperty');
 
-    await expect(page.getByText('No properties found.')).toBeVisible();
+    await expect(page.getByText('No properties found')).toBeVisible();
   });
 
   test('should select a property and show confirmation toast', async ({
