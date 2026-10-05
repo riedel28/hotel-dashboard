@@ -1,16 +1,11 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  QueryErrorResetBoundary,
-  useQueryClient,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
-import { RefreshCwIcon } from 'lucide-react';
-import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { fetchRoomsParamsSchema, roomsQueryOptions } from '@/api/rooms';
+import type { RoomStatus } from 'shared/types/rooms';
 
+import { fetchRoomsParamsSchema, roomsQueryOptions } from '@/api/rooms';
+import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,14 +14,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
-import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
-
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
@@ -61,13 +48,15 @@ function RoomsPage() {
       </Breadcrumb>
 
       <div className="mb-6 flex justify-between">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Rooms</Trans>
         </h1>
         <AddRoomModal />
       </div>
 
-      <Suspense
+      <QueryBoundary
+        className="min-h-[60vh] items-center justify-center"
+        message={<Trans>An error occurred while fetching rooms</Trans>}
         fallback={
           <RoomsTable
             data={[]}
@@ -79,39 +68,8 @@ function RoomsPage() {
           />
         }
       >
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <div className="flex min-h-[60vh] items-center justify-center">
-                  <ErrorDisplayError className="w-md max-w-md">
-                    <ErrorDisplayTitle>
-                      <Trans>Something went wrong</Trans>
-                    </ErrorDisplayTitle>
-                    <ErrorDisplayMessage>
-                      {(error instanceof Error ? error.message : null) || (
-                        <Trans>An error occurred while fetching rooms</Trans>
-                      )}
-                    </ErrorDisplayMessage>
-                    <ErrorDisplayActions>
-                      <Button
-                        variant="destructive"
-                        onClick={resetErrorBoundary}
-                      >
-                        <RefreshCwIcon className="mr-2 h-4 w-4" />
-                        <Trans>Refresh</Trans>
-                      </Button>
-                    </ErrorDisplayActions>
-                  </ErrorDisplayError>
-                </div>
-              )}
-            >
-              <RoomsContent />
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      </Suspense>
+        <RoomsContent />
+      </QueryBoundary>
     </div>
   );
 }
@@ -145,22 +103,10 @@ function RoomsContent() {
     });
   };
 
-  const handleStatusChange = (newStatus: string | null) => {
-    if (!newStatus) return;
+  const handleStatusChange = (newStatus: RoomStatus | undefined) => {
     navigate({
       to: '/rooms',
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        status:
-          newStatus === 'all'
-            ? undefined
-            : (newStatus as
-                | 'available'
-                | 'occupied'
-                | 'maintenance'
-                | 'out_of_order')
-      })
+      search: (prev) => ({ ...prev, page: 1, status: newStatus })
     });
   };
 
@@ -263,10 +209,7 @@ function RoomsContent() {
     <div className="space-y-2.5">
       <RoomsFilters>
         <RoomSearch value={q} onChange={handleSearchChange} />
-        <RoomStatusFilter
-          value={status ? status : 'all'}
-          onChange={handleStatusChange}
-        />
+        <RoomStatusFilter value={status} onChange={handleStatusChange} />
         <RoomClearFilters
           hasActiveFilters={hasActiveFilters}
           onClear={handleClearFilters}

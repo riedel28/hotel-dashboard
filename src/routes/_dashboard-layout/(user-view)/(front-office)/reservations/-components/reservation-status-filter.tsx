@@ -1,91 +1,50 @@
-import { Trans, useLingui } from '@lingui/react/macro';
+import { Trans } from '@lingui/react/macro';
 
+import type { ReservationState } from '@/api/reservations';
+import type { DataGridCheckboxFilterOption } from '@/components/ui/data-grid-checkbox-filter';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
+  DataGridCheckboxFilter,
+  DataGridCheckboxFilterClear,
+  DataGridCheckboxFilterFooter
+} from '@/components/ui/data-grid-checkbox-filter';
+
+import { StatusCell } from './reservations-table/-components/cells/status-cell';
+
+const reservationStatuses: ReservationState[] = ['pending', 'started', 'done'];
 
 interface ReservationStatusFilterProps {
-  value?: 'pending' | 'started' | 'done' | 'all';
-  onChange: (status: string | null) => void;
+  value: ReservationState[];
+  onValueChange: (value: ReservationState[]) => void;
+  className?: string;
 }
 
-const statuses = [
-  { value: 'pending', color: 'bg-badge-warning-foreground' },
-  { value: 'started', color: 'bg-badge-default-foreground' },
-  { value: 'done', color: 'bg-badge-success-foreground' }
-] as const;
-
-export function ReservationStatusFilter({
+function ReservationStatusFilter({
   value,
-  onChange
+  onValueChange,
+  className
 }: ReservationStatusFilterProps) {
-  const { t } = useLingui();
+  const options: DataGridCheckboxFilterOption<ReservationState>[] =
+    reservationStatuses.map((status) => ({
+      value: status,
+      label: <StatusCell status={status} />
+    }));
 
   return (
-    <Select value={value ?? 'all'} onValueChange={onChange} defaultValue="all">
-      <SelectTrigger className="w-full sm:w-[150px]">
-        <SelectValue>
-          {(val) => {
-            if (!val || val === 'all') {
-              return (
-                <span className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-muted-foreground" />
-                  <span>
-                    <Trans>All</Trans>
-                  </span>
-                </span>
-              );
-            }
-            const status = statuses.find((s) => s.value === val);
-            return (
-              <span className="flex items-center gap-2">
-                <span
-                  className={`size-1.5 rounded-full ${status?.color ?? 'bg-muted-foreground'}`}
-                />
-                <span className="capitalize">{t(val)}</span>
-              </span>
-            );
-          }}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent align="start">
-        <SelectItem value="all">
-          <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-muted-foreground" />
-            <span>
-              <Trans>All</Trans>
-            </span>
-          </span>
-        </SelectItem>
-        <SelectItem value="pending">
-          <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-badge-warning-foreground" />
-            <span>
-              <Trans>Pending</Trans>
-            </span>
-          </span>
-        </SelectItem>
-        <SelectItem value="started">
-          <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-badge-default-foreground" />
-            <span>
-              <Trans>Started</Trans>
-            </span>
-          </span>
-        </SelectItem>
-        <SelectItem value="done">
-          <span className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-badge-success-foreground" />
-            <span>
-              <Trans>Done</Trans>
-            </span>
-          </span>
-        </SelectItem>
-      </SelectContent>
-    </Select>
+    <DataGridCheckboxFilter
+      label={<Trans>Status</Trans>}
+      placeholder={<Trans>All statuses</Trans>}
+      options={options}
+      value={value}
+      onValueChange={onValueChange}
+      className={className}
+    >
+      <DataGridCheckboxFilterFooter>
+        <DataGridCheckboxFilterClear>
+          <Trans>Reset</Trans>
+        </DataGridCheckboxFilterClear>
+      </DataGridCheckboxFilterFooter>
+    </DataGridCheckboxFilter>
   );
 }
+
+export { ReservationStatusFilter };

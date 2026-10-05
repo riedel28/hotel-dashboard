@@ -1,4 +1,5 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
+
 import { client, handleApiError } from '@/api/client';
 
 import {
@@ -6,17 +7,21 @@ import {
   type CreateReservationData,
   createReservationSchema,
   type FetchReservationsParams,
-  type FetchReservationsResponse,
   fetchReservationsParamsSchema,
+  type FetchReservationsResponse,
   fetchReservationsResponseSchema,
+  fromReservationStates,
   type Guest,
-  type GuestSearchResult,
   guestSchema,
+  type GuestSearchResult,
   guestSearchResultSchema,
   type Reservation,
-  type ReservationStatus,
   reservationSchema,
+  type ReservationState,
+  reservationStateSchema,
+  type ReservationStatus,
   reservationStatusSchema,
+  toReservationStates,
   type UpdateReservationData
 } from '../../shared/types/reservations';
 
@@ -70,7 +75,12 @@ async function fetchReservations(
   try {
     const validatedParams = fetchReservationsParamsSchema.parse(params);
     const response = await client.get('/reservations', {
-      params: validatedParams
+      params: {
+        ...validatedParams,
+        status: Array.isArray(validatedParams.status)
+          ? validatedParams.status.join(',')
+          : validatedParams.status
+      }
     });
     return fetchReservationsResponseSchema.parse(response.data);
   } catch (err) {
@@ -145,21 +155,26 @@ export {
   createReservation,
   createReservationSchema,
   deleteReservationById,
+  type FetchReservationsParams,
   fetchReservationById,
   fetchReservations,
   fetchReservationsParamsSchema,
   fetchReservationsResponseSchema,
+  fromReservationStates,
   type Guest,
   type GuestSearchResult,
   guestSchema,
   guestSearchQueryOptions,
   guestSearchResultSchema,
   type Reservation,
+  type ReservationState,
   type ReservationStatus,
   reservationByIdQueryOptions,
   reservationSchema,
+  reservationStateSchema,
   reservationStatusSchema,
   reservationsQueryOptions,
   searchGuests,
+  toReservationStates,
   updateReservationById
 };

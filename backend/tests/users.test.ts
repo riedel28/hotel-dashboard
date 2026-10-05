@@ -177,11 +177,29 @@ describe('Users API', () => {
       expect(response.body.roles[0].name).toBe('manager');
     });
 
-    test('should return 404 for non-existent user', async () => {
+    test('should return 404 for non-existent user when admin', async () => {
+      await request(app)
+        .get('/api/users/99999')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(404);
+    });
+
+    test('should return 403 rather than 404 for a non-admin, so ids stay opaque', async () => {
       await request(app)
         .get('/api/users/99999')
         .set('Authorization', `Bearer ${authToken}`)
-        .expect(404);
+        .expect(403);
+    });
+
+    test("should return 403 when a non-admin reads another user's record", async () => {
+      const { user: other } = await createTestUser({
+        email: `other-${Date.now()}@example.com`
+      });
+
+      await request(app)
+        .get(`/api/users/${other.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(403);
     });
 
     test('should return 401 without authentication', async () => {

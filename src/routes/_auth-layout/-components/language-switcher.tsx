@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro';
 import { GlobeIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import * as React from 'react';
+
 import { Button, type ButtonProps } from '@/components/ui/button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import {
@@ -12,7 +13,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { loadCatalog } from '@/i18n';
-import { cn } from '@/lib/utils';
 
 const languages = [
   { code: 'en', label: 'English', country: 'GB' },
@@ -41,19 +41,16 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
           <Button
             variant="ghost"
             size="icon"
-            className={cn(
-              'h-9 w-9 rounded-md text-muted-foreground',
-              'dropdown-menu-trigger:data-popup-open:text-red-500 dropdown-menu-trigger:data-popup-open:bg-muted'
-            )}
+            className="size-8 text-muted-foreground"
             aria-label={t`Change language`}
             {...props}
           >
-            <GlobeIcon className="h-4 w-4" />
+            <GlobeIcon />
           </Button>
         )}
       />
 
-      <DropdownMenuContent align={align} className="w-[160px]">
+      <DropdownMenuContent align={align} className="w-32">
         <DropdownMenuRadioGroup
           value={locale}
           onValueChange={handleChangeLocale}
@@ -62,14 +59,15 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
             <DropdownMenuRadioItem
               key={lang.code}
               value={lang.code}
-              className="overflow-hidden [&>svg]:shrink-0"
+              className="overflow-hidden px-1.5 py-1 [&>svg]:shrink-0"
             >
               <CountryFlag
                 code={lang.country}
                 title={lang.label}
-                className="size-3.5"
+                className="size-4"
                 aria-label={lang.label}
               />
+
               {lang.label}
             </DropdownMenuRadioItem>
           ))}

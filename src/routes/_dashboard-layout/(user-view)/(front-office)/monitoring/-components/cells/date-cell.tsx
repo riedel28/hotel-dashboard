@@ -6,9 +6,11 @@ interface DateCellProps {
 
 export function DateCell({ date }: DateCellProps) {
   return (
-    <div className="flex flex-col">
-      <span>{dayjs(date).format('DD.MM.YYYY')}</span>
-      <span className="text-xs text-muted-foreground">
+    <div className="flex flex-row items-center gap-1.5">
+      <span className="text-[13px] text-muted-foreground">
+        {dayjs(date).format('DD.MM.YYYY')}
+      </span>
+      <span className="text-[13px] text-muted-foreground">
         {dayjs(date).format('HH:mm:ss')}
       </span>
     </div>

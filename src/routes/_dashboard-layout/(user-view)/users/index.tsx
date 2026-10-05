@@ -15,10 +15,11 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import {
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle
+} from '@/components/ui/empty';
 import { SearchInput } from '@/components/ui/search-input';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
@@ -155,16 +156,18 @@ function UsersPage() {
     if (usersQuery.isError) {
       return (
         <div className="flex min-h-[60vh] items-center justify-center">
-          <ErrorDisplayError className="w-md max-w-md">
-            <ErrorDisplayTitle>
-              <Trans>Something went wrong</Trans>
-            </ErrorDisplayTitle>
-            <ErrorDisplayMessage>
-              {usersQuery.error.message || (
-                <Trans>An error occurred while fetching users</Trans>
-              )}
-            </ErrorDisplayMessage>
-          </ErrorDisplayError>
+          <Empty variant="destructive" className="w-md max-w-md">
+            <EmptyHeader>
+              <EmptyTitle>
+                <Trans>Something went wrong</Trans>
+              </EmptyTitle>
+              <EmptyDescription>
+                {usersQuery.error.message || (
+                  <Trans>An error occurred while fetching users</Trans>
+                )}
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         </div>
       );
     }
@@ -206,7 +209,7 @@ function UsersPage() {
       </Breadcrumb>
 
       <div className="mb-6 flex justify-between">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Users</Trans>
         </h1>
         <InviteUserModal />

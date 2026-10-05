@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { countryCodeSchema } from './properties';
 
 export const reservationStatusSchema = z.enum([
@@ -7,6 +8,52 @@ export const reservationStatusSchema = z.enum([
   'done',
   'all'
 ]);
+
+export const reservationStateSchema = z.enum(['pending', 'started', 'done']);
+
+const reservationStatusFilterSchema = z.preprocess(
+  (value) => {
+    if (Array.isArray(value)) {
+      return value
+        .flatMap((item) => String(item).split(','))
+        .filter((item) => item.length > 0);
+    }
+
+    if (typeof value === 'string' && value.includes(',')) {
+      return value.split(',').filter((item) => item.length > 0);
+    }
+
+    return value;
+  },
+  z.union([
+    z.literal('all'),
+    reservationStateSchema,
+    z.array(reservationStateSchema)
+  ])
+);
+
+type ReservationStatusFilter = z.infer<typeof reservationStatusFilterSchema>;
+
+/**
+ * The `status` search param spells "no filter" as the string `'all'` and a
+ * single status as a bare string. Callers work in terms of a plain list, so the
+ * two helpers below own that encoding rather than every consumer re-deriving it.
+ */
+export function toReservationStates(
+  status: ReservationStatusFilter | undefined
+): ReservationState[] {
+  if (!status || status === 'all') {
+    return [];
+  }
+
+  return Array.isArray(status) ? status : [status];
+}
+
+export function fromReservationStates(
+  states: ReservationState[]
+): ReservationStatusFilter {
+  return states.length > 0 ? states : 'all';
+}
 
 export const checkinMethodSchema = z.enum([
   'android',
@@ -79,7 +126,7 @@ export const fetchReservationsParamsSchema = z.object({
     .default(10)
     .optional(),
   q: z.string().max(200).optional(),
-  status: reservationStatusSchema.default('all').optional(),
+  status: reservationStatusFilterSchema.default('all').optional(),
   from: z.iso.date().optional(),
   to: z.iso.date().optional(),
   sort_by: sortableColumnsSchema.optional(),
@@ -151,6 +198,7 @@ export type GuestSearchResult = z.infer<typeof guestSearchResultSchema>;
 
 // Type exports
 export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
+export type ReservationState = z.infer<typeof reservationStateSchema>;
 export type ReservationStatus = z.infer<typeof reservationStatusSchema>;
 export type Reservation = z.infer<typeof reservationSchema>;
 export type Guest = z.infer<typeof guestSchema>;

@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getCountryName } from '@/lib/countries';
+
 import { RowActions } from './row-actions';
 
 interface UsersTableProps {
@@ -96,20 +97,16 @@ export default function UsersTable({
             .join(' ');
           return (
             <div className="flex items-center gap-3">
-              <Avatar className="size-8">
+              <Avatar size="sm">
                 <AvatarFallback>
                   {getInitials(row.original.first_name, row.original.last_name)}
                 </AvatarFallback>
               </Avatar>
-              <div className="space-y-px min-w-0 flex-1">
-                <div className="font-medium text-foreground truncate flex items-center gap-2">
+              <div className="min-w-0 flex-1 space-y-px">
+                <div className="flex items-center gap-2 truncate font-medium text-foreground">
                   {fullName || <Trans>No name</Trans>}
                   {!row.original.email_verified && (
-                    <Badge
-                      size="xs"
-                      variant="warning"
-                      className="shrink-0 rounded-md border border-foreground/10 capitalize"
-                    >
+                    <Badge size="xs" variant="outline" color="yellow">
                       <Trans>Pending</Trans>
                     </Badge>
                   )}
@@ -120,11 +117,10 @@ export default function UsersTable({
         },
         meta: {
           skeleton: (
-            <div className="flex h-[41px] items-center gap-3">
-              <Skeleton className="size-8 rounded-full" />
-              <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <Skeleton className="size-6 rounded-full" />
+              <div className="min-w-0 flex-1">
                 <Skeleton className="h-5 w-24" />
-                <Skeleton className="h-4 w-32" />
               </div>
             </div>
           )
@@ -145,7 +141,7 @@ export default function UsersTable({
           />
         ),
         cell: (info) => (
-          <span className="truncate block max-w-full">
+          <span className="block max-w-full truncate">
             {info.getValue() as string}
           </span>
         ),
@@ -153,7 +149,7 @@ export default function UsersTable({
         meta: {
           headerClassName: '',
           cellClassName: 'text-left',
-          skeleton: <Skeleton className="h-7 w-40" />
+          skeleton: <Skeleton className="h-5 w-40" />
         },
         enableSorting: true,
         enableHiding: true,
@@ -192,7 +188,7 @@ export default function UsersTable({
         meta: {
           headerClassName: '',
           cellClassName: 'text-start',
-          skeleton: <Skeleton className="h-7 w-24" />
+          skeleton: <Skeleton className="h-5 w-24" />
         },
         enableSorting: true,
         enableHiding: true,
@@ -220,7 +216,7 @@ export default function UsersTable({
               <Badge
                 size="xs"
                 variant="secondary"
-                className="shrink-0 rounded-md text-foreground/80 border border-foreground/10 capitalize"
+                className="shrink-0 rounded-md border border-foreground/10 text-foreground/80 capitalize"
               >
                 {firstRole.name}
               </Badge>
@@ -239,7 +235,7 @@ export default function UsersTable({
                           key={role.id}
                           size="xs"
                           variant="secondary"
-                          className="shrink-0 rounded-md text-foreground/80 border border-foreground/10 capitalize"
+                          className="shrink-0 rounded-md border border-foreground/10 text-foreground/80 capitalize"
                         >
                           {role.name}
                         </Badge>
@@ -252,7 +248,7 @@ export default function UsersTable({
           );
         },
         meta: {
-          skeleton: <Skeleton className="h-7 w-20" />
+          skeleton: <Skeleton className="h-5 w-20" />
         },
         size: 150,
         enableSorting: false,
@@ -273,7 +269,7 @@ export default function UsersTable({
         meta: {
           skeleton: (
             <div className="flex items-center justify-center">
-              <Skeleton className="h-6 w-6" />
+              <Skeleton className="size-7" />
             </div>
           )
         },

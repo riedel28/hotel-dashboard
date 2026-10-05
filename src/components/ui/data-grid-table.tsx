@@ -13,14 +13,13 @@ import { type CSSProperties, Fragment, type ReactNode } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { useDataGrid } from '@/components/ui/data-grid';
-
 import { cn } from '@/lib/utils';
 
 const headerCellSpacingVariants = cva('', {
   variants: {
     size: {
-      dense: 'px-2.5 h-8',
-      default: 'px-4'
+      dense: 'h-9 px-1.5',
+      default: 'h-10 px-2'
     }
   },
   defaultVariants: {
@@ -31,8 +30,8 @@ const headerCellSpacingVariants = cva('', {
 const bodyCellSpacingVariants = cva('', {
   variants: {
     size: {
-      dense: 'px-2.5 py-2',
-      default: 'px-4 py-3'
+      dense: 'px-2 py-1.5',
+      default: 'px-3 py-2.5'
     }
   },
   defaultVariants: {
@@ -455,7 +454,7 @@ function DataGridTableRowSelect<TData>({ row }: { row: Row<TData> }) {
     <>
       <div
         className={cn(
-          'absolute start-0 top-0 bottom-0 hidden w-[2px] bg-primary',
+          'absolute inset-s-0 top-0 bottom-0 hidden w-0.5 bg-primary',
           row.getIsSelected() && 'block'
         )}
       ></div>
@@ -490,6 +489,7 @@ function DataGridTableRowSelectAll() {
 function DataGridTable<TData extends object>() {
   const { table, isLoading, props } = useDataGrid<TData>();
   const pagination = table.getState().pagination;
+  const skeletonRowCount = props.skeletonRowCount ?? pagination?.pageSize;
 
   return (
     <DataGridTableBase>
@@ -527,10 +527,8 @@ function DataGridTable<TData extends object>() {
       )}
 
       <DataGridTableBody>
-        {props.loadingMode === 'skeleton' &&
-        isLoading &&
-        pagination?.pageSize ? (
-          Array.from({ length: pagination.pageSize }).map((_, rowIndex) => (
+        {props.loadingMode === 'skeleton' && isLoading && skeletonRowCount ? (
+          Array.from({ length: skeletonRowCount }).map((_, rowIndex) => (
             <DataGridTableBodyRowSkeleton key={rowIndex}>
               {table.getVisibleFlatColumns().map((column, colIndex) => {
                 return (

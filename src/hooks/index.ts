@@ -4,3 +4,4 @@ export { useDebounce } from './use-debounce';
 export { useDebouncedCallback } from './use-debounced-callback';
 export { useDocumentTitle } from './use-document-title';
 export { useIsMobile } from './use-mobile';
+export { useOnlineStatus } from './use-online-status';

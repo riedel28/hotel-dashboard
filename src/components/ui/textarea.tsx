@@ -7,7 +7,20 @@ function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
     <textarea
       data-slot="textarea"
       className={cn(
-        'border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 rounded-md border bg-transparent px-2.5 py-2 text-base shadow-xs transition-[color,box-shadow] focus-visible:ring-[3px] aria-invalid:ring-[3px] md:text-sm placeholder:text-muted-foreground flex field-sizing-content min-h-16 w-full outline-none disabled:cursor-not-allowed disabled:opacity-50',
+        // Base
+        'flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-2.5 py-2 transition-[color,box-shadow] outline-none',
+        // Typography
+        'text-base md:text-sm',
+        // Placeholder
+        'placeholder:text-muted-foreground',
+        // Focus
+        'focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)]',
+        // Error / invalid
+        'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
+        // Disabled
+        'disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50',
+        // Dark mode
+        'dark:bg-input/30 dark:disabled:bg-input/80',
         className
       )}
       {...props}

@@ -11,19 +11,21 @@ import {
 import {
   // ArrowUpRightIcon,
   BedDoubleIcon,
+  BookAIcon,
   BuildingIcon,
-  DoorOpenIcon,
   // CalendarIcon,
-  // CreditCardIcon,
   // FileSpreadsheetIcon,
   // Grid2X2Icon,
+  CreditCardIcon,
+  DoorOpenIcon,
   HomeIcon,
+  LayoutGridIcon,
   // ListTodoIcon,
   LoaderCircleIcon,
-  // LockIcon,
+  LockIcon,
   MessageCircleIcon,
   // ReceiptTextIcon,
-  // ShoppingBagIcon,
+  ShoppingBagIcon,
   // ShoppingCartIcon,
   // SmartphoneIcon,
   SquareActivityIcon,
@@ -32,6 +34,7 @@ import {
   UsersIcon
 } from 'lucide-react';
 import * as React from 'react';
+
 import { propertiesQueryOptions } from '@/api/properties';
 import {
   Sidebar,
@@ -68,7 +71,10 @@ function SidebarLink({
       tooltip={tooltip}
       render={
         <Link
-          activeProps={{ className: '!bg-sidebar-accent' }}
+          activeProps={{
+            className:
+              'bg-primary/10 text-cyan-800 hover:bg-primary/10! hover:text-cyan-800! dark:bg-primary/20! dark:text-cyan-200/90!'
+          }}
           {...(linkProps as LinkProps)}
         >
           <Icon />
@@ -110,7 +116,7 @@ function SidebarHeaderComponent() {
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-            <div className="inline-block rounded-md bg-primary p-1 text-white transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
+            <div className="flex size-6.5 items-center justify-center rounded-md bg-primary/10 text-sm font-bold text-primary transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0 dark:bg-cyan-950 dark:text-cyan-200/90">
               <MessageCircleIcon className="size-4" />
             </div>
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
@@ -243,6 +249,32 @@ function UserSidebarContent() {
       </SidebarGroup>
 
       {/* Content Manager Section */}
+      <SidebarGroup>
+        <SidebarGroupLabel>
+          <Trans>Content Manager</Trans>
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/guest-abc"
+              icon={BookAIcon}
+              tooltip={t`Guest ABC`}
+            >
+              <Trans>Guest ABC</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/products"
+              icon={ShoppingBagIcon}
+              tooltip={t`Products`}
+            >
+              <Trans>Products</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
       {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
           <Trans>Content Manager</Trans>
@@ -302,27 +334,27 @@ function UserSidebarContent() {
       </SidebarGroup> */}
 
       {/* Integrations Section */}
-      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarGroup>
         <SidebarGroupLabel>
           <Trans>Integrations</Trans>
         </SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarLink
-              to="/access-provider"
-              icon={LockIcon}
-              tooltip={t`Access Provider`}
+              to="/pms-provider"
+              icon={LayoutGridIcon}
+              tooltip={t`PMS`}
             >
-              <Trans>Access Provider</Trans>
+              <Trans>PMS</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarLink
-              to="/pms-provider"
-              icon={Grid2X2Icon}
-              tooltip={t`PMS Provider`}
+              to="/door-locks"
+              icon={LockIcon}
+              tooltip={t`Door Locks`}
             >
-              <Trans>PMS Provider</Trans>
+              <Trans>Door Locks</Trans>
             </SidebarLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -335,7 +367,7 @@ function UserSidebarContent() {
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroup> */}
+      </SidebarGroup>
 
       {/* Settings Section */}
       {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -405,20 +437,27 @@ function DashboardSidebar() {
 // Main layout component
 function DashboardLayout() {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-svh overflow-hidden">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-background focus:px-4 focus:py-2 focus:rounded-md focus:ring-2 focus:ring-primary focus:text-foreground"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:ring-2 focus:ring-primary"
       >
         <Trans>Skip to main content</Trans>
       </a>
       <DashboardSidebar />
       <SidebarInset className="flex h-full min-w-0 flex-col">
         <Header />
+        {/* `relative` is load-bearing: without it, absolutely positioned
+            descendants (every `sr-only` span, for one) resolve against the
+            inset instead of this scroll container, so their offsets inflate
+            the shell's scroll height rather than this one's. That gives the
+            `overflow-hidden` wrapper a few hundred pixels it can be scrolled
+            to — which `scrollIntoView` promptly does, sliding the page under
+            the sticky header and clipping its bottom edge. */}
         <main
           id="main-content"
           tabIndex={-1}
-          className="flex-1 overflow-auto px-4 py-2 pb-4 md:px-6 md:py-4 md:pb-8 focus:outline-none"
+          className="relative min-h-0 flex-1 overflow-auto px-3 py-2 pb-4 focus:outline-none md:px-6 md:py-4 md:pb-8"
         >
           <Outlet />
         </main>
@@ -438,17 +477,9 @@ export const Route = createFileRoute('/_dashboard-layout')({
       });
     }
   },
-  loader: async ({ context: { auth, queryClient }, location }) => {
-    // Double-check authentication before making API call
-    // This prevents the loader from running if auth check in beforeLoad somehow fails
-    if (!auth.isAuthenticated) {
-      throw redirect({
-        to: '/auth/login',
-        search: {
-          redirect: location.href
-        }
-      });
-    }
+  // No auth check here: `beforeLoad` above always runs first, and its redirect
+  // throws, so an unauthenticated request never reaches this loader.
+  loader: async ({ context: { queryClient } }) => {
     const properties = await queryClient.ensureQueryData(
       propertiesQueryOptions()
     );

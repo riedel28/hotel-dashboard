@@ -23,7 +23,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuSub,
@@ -31,11 +30,12 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-
 import { cn } from '@/lib/utils';
 
-interface DataGridColumnHeaderProps<TData, TValue>
-  extends HTMLAttributes<HTMLDivElement> {
+interface DataGridColumnHeaderProps<
+  TData,
+  TValue
+> extends HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title?: string;
   icon?: ReactNode;
@@ -98,7 +98,7 @@ function DataGridColumnHeader<TData, TValue>({
           className
         )}
       >
-        {icon && icon}
+        {icon}
         {title}
       </div>
     );
@@ -110,7 +110,7 @@ function DataGridColumnHeader<TData, TValue>({
       <Button
         variant="ghost"
         className={cn(
-          '-ms-2 h-8 rounded-md px-2 text-[13px] font-medium text-muted-foreground hover:bg-secondary hover:text-muted-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground',
+          '-ms-2 h-7 rounded-lg px-2 text-[13px] font-medium text-muted-foreground hover:bg-secondary hover:text-muted-foreground active:translate-y-0! data-[state=open]:bg-secondary data-[state=open]:text-foreground',
           className
         )}
         disabled={isLoading || recordCount === 0}
@@ -131,16 +131,16 @@ function DataGridColumnHeader<TData, TValue>({
         }}
         {...restTriggerProps}
       >
-        {icon && icon}
+        {icon}
         {title}
 
         {column.getCanSort() &&
           (column.getIsSorted() === 'desc' ? (
-            <ChevronDownIcon className="mt-px size-4" />
+            <ChevronDownIcon className="mt-px size-3.5" />
           ) : column.getIsSorted() === 'asc' ? (
-            <ChevronUpIcon className="mt-px size-4" />
+            <ChevronUpIcon className="mt-px size-3.5" />
           ) : (
-            <ChevronsUpDown className="mt-px size-3.5" />
+            <ChevronsUpDown className="mt-px size-3" />
           ))}
       </Button>
     );
@@ -172,7 +172,7 @@ function DataGridColumnHeader<TData, TValue>({
             render={(props) => headerButton(props)}
           />
           <DropdownMenuContent className="w-40" align="start">
-            {filter && <DropdownMenuLabel>{filter}</DropdownMenuLabel>}
+            {filter}
 
             {filter &&
               (column.getCanSort() || column.getCanPin() || visibility) && (

@@ -3,14 +3,15 @@ import {
   type CreateRoomData,
   createRoomSchema,
   type FetchRoomsParams,
-  type FetchRoomsResponse,
   fetchRoomsParamsSchema,
+  type FetchRoomsResponse,
   fetchRoomsResponseSchema,
   type Room,
   roomSchema,
   type UpdateRoomData,
   updateRoomSchema
 } from 'shared/types/rooms';
+
 import { client, handleApiError } from './client';
 
 export function roomsQueryOptions(params: FetchRoomsParams) {

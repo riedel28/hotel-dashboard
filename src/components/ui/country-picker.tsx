@@ -1,6 +1,7 @@
 import { useLingui } from '@lingui/react/macro';
 import { SearchIcon } from 'lucide-react';
 import { useMemo } from 'react';
+
 import {
   Combobox,
   ComboboxContent,
@@ -31,6 +32,9 @@ interface CountryPickerProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
+  'aria-labelledby'?: string;
 }
 
 export function CountryPicker({
@@ -39,7 +43,10 @@ export function CountryPicker({
   codes,
   placeholder,
   disabled,
-  className
+  className,
+  'aria-describedby': ariaDescribedby,
+  'aria-invalid': ariaInvalid,
+  'aria-labelledby': ariaLabelledby
 }: CountryPickerProps) {
   const { i18n, t } = useLingui();
   const locale = i18n.locale;
@@ -78,16 +85,22 @@ export function CountryPicker({
     >
       <ComboboxTrigger
         className={cn(
-          'border-input bg-background ring-offset-background flex h-9 w-full items-center justify-between overflow-hidden rounded-md border px-3 py-2 text-sm shadow-xs',
+          'flex h-9 w-full items-center justify-between overflow-hidden rounded-lg border border-input px-3 py-2 text-sm ring-offset-background dark:bg-input/30',
           className
         )}
-        aria-label={placeholder ?? t`Select country`}
+        aria-label={
+          ariaLabelledby ? undefined : (placeholder ?? t`Select country`)
+        }
+        aria-describedby={ariaDescribedby}
+        aria-invalid={ariaInvalid}
+        aria-labelledby={ariaLabelledby}
       >
         <ComboboxValue>
           {selectedCountry ? (
             <span className="flex min-w-0 items-center gap-2">
               <CountryFlag
                 code={selectedCountry.code}
+                title={selectedCountry.name}
                 className="size-4"
                 aria-label={selectedCountry.code}
               />

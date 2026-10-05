@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
 
 import {
@@ -9,6 +9,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+import { useDocumentTitle } from '@/hooks/use-document-title';
+
+import { PmsForm } from './pms-provider/-components/pms-form';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/pms-provider'
@@ -17,8 +20,11 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const { t } = useLingui();
+  useDocumentTitle(t`PMS`);
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-1">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -28,16 +34,29 @@ function RouteComponent() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
+            <Trans>Integrations</Trans>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
             <BreadcrumbPage>
-              <Trans>PMS Provider</Trans>
+              <Trans>PMS</Trans>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
-        <Trans>Hello '/_dashboard-layout/pms-provider'!</Trans>
+      <div className="mb-6 flex flex-col gap-1">
+        <h1 className="text-xl font-bold">
+          <Trans>PMS</Trans>
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          <Trans>
+            Manage this property's connection to its property management system.
+          </Trans>
+        </p>
       </div>
+
+      <PmsForm />
     </div>
   );
 }

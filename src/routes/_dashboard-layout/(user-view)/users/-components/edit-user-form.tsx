@@ -6,9 +6,9 @@ import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { rolesQueryOptions } from '@/api/roles';
-import { type UpdateUserData, updateUserById } from '@/api/users';
 
+import { rolesQueryOptions } from '@/api/roles';
+import { updateUserById, type UpdateUserData } from '@/api/users';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CountryPicker } from '@/components/ui/country-picker';
@@ -25,9 +25,18 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 
 const updateUserFormSchema = z.object({
-  email: z.string().email(t`Invalid email address`).optional(),
-  first_name: z.string().min(1, t`First name is required`).optional(),
-  last_name: z.string().min(1, t`Last name is required`).optional(),
+  email: z
+    .string()
+    .email(t`Invalid email address`)
+    .optional(),
+  first_name: z
+    .string()
+    .min(1, t`First name is required`)
+    .optional(),
+  last_name: z
+    .string()
+    .min(1, t`Last name is required`)
+    .optional(),
   country_code: z.string().length(2).nullable().optional(),
   is_admin: z.boolean().optional(),
   role_ids: z.array(z.number().int().positive()).optional()
@@ -192,7 +201,7 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
               <Field
                 data-invalid={fieldState.invalid}
                 orientation="horizontal"
-                className="gap-3 items-center border rounded-md p-3"
+                className="items-center gap-3 rounded-md border p-3"
               >
                 <FieldContent>
                   <FieldLabel

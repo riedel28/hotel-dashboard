@@ -127,7 +127,8 @@ test.describe('Authentication', () => {
         .getByRole('button', { name: 'Log out' })
         .click();
 
-      await expect(page).toHaveURL('/auth/login');
+      // The auth guard appends ?redirect=… to the login URL.
+      await expect(page).toHaveURL(/\/auth\/login/);
       await expect(page.getByRole('heading', { name: 'Login' })).toBeVisible();
     });
 
@@ -139,7 +140,8 @@ test.describe('Authentication', () => {
         .getByRole('alertdialog')
         .getByRole('button', { name: 'Log out' })
         .click();
-      await expect(page).toHaveURL('/auth/login');
+      // The auth guard appends ?redirect=… to the login URL.
+      await expect(page).toHaveURL(/\/auth\/login/);
 
       await page.goto('/');
 

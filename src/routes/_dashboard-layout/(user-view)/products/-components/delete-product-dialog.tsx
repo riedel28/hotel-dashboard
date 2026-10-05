@@ -1,6 +1,6 @@
 // React import not needed; using JSX runtime
 import { Trans } from '@lingui/react/macro';
-import { Trash } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -18,13 +18,15 @@ interface DeleteProductDialogProps {
   productTitle: string;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
+  isPending?: boolean;
 }
 
 export function DeleteProductDialog({
   open,
   productTitle,
   onOpenChange,
-  onConfirm
+  onConfirm,
+  isPending = false
 }: DeleteProductDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -44,14 +46,15 @@ export function DeleteProductDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>
             <Trans>Cancel</Trans>
           </AlertDialogCancel>
           <AlertDialogAction
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            variant="destructive-soft"
             onClick={onConfirm}
+            disabled={isPending}
           >
-            <Trash className="mr-2 h-4 w-4" />
+            {isPending && <Loader2Icon className="animate-spin" />}
             <Trans>Delete</Trans>
           </AlertDialogAction>
         </AlertDialogFooter>

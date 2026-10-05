@@ -44,7 +44,8 @@ export async function createTestUser(
     email: user.email,
     first_name: user.first_name || '',
     last_name: user.last_name || '',
-    is_admin: user.is_admin
+    is_admin: user.is_admin,
+    token_version: user.token_version
   });
 
   return { user, token, rawPassword: defaultData.password };

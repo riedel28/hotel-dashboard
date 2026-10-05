@@ -3,26 +3,19 @@ import { Trans } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
-import {
-  MailIcon,
-  MoreHorizontalIcon,
-  PenSquareIcon,
-  TrashIcon
-} from 'lucide-react';
+import { MailIcon, PenSquareIcon, TrashIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
 import { resendInvitation, type User } from '@/api/users';
-import { buttonVariants } from '@/components/ui/button';
+import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger
+  DropdownMenuShortcut
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 
 import { DeleteDialog } from './delete-dialog';
 
@@ -46,18 +39,8 @@ export function RowActions({ row }: RowActionsProps) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(
-            buttonVariants({ variant: 'ghost' }),
-            'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
-          )}
-        >
-          <MoreHorizontalIcon className="h-4 w-4" />
-          <span className="sr-only">
-            <Trans>Open menu</Trans>
-          </span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[200px]">
+        <DataGridRowActions />
+        <DropdownMenuContent align="end" className="w-auto min-w-[130px]">
           <DropdownMenuItem
             render={(props) => (
               <RouterLink
@@ -69,7 +52,7 @@ export function RowActions({ row }: RowActionsProps) {
                 search={{}}
                 replace
               >
-                <PenSquareIcon className="mr-2 h-4 w-4" />
+                <PenSquareIcon className="mr-1 size-4" />
                 <Trans>Edit</Trans>
               </RouterLink>
             )}
@@ -81,7 +64,7 @@ export function RowActions({ row }: RowActionsProps) {
                 onClick={() => resendMutation.mutate()}
                 disabled={resendMutation.isPending}
               >
-                <MailIcon className="mr-2 h-4 w-4" />
+                <MailIcon className="mr-1 size-4" />
                 <Trans>Resend invitation</Trans>
               </DropdownMenuItem>
             </>
@@ -91,7 +74,7 @@ export function RowActions({ row }: RowActionsProps) {
             variant="destructive"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <TrashIcon className="mr-2 h-4 w-4" />
+            <TrashIcon className="mr-1 size-4" />
             <Trans>Delete</Trans>
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>

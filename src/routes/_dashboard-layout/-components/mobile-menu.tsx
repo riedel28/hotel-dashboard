@@ -5,14 +5,20 @@ import { Link, type LinkProps } from '@tanstack/react-router';
 import {
   BedDoubleIcon,
   BedSingleIcon,
+  BookAIcon,
   BuildingIcon,
+  CableIcon,
+  CreditCardIcon,
   HomeIcon,
+  LockIcon,
   MessageCircleIcon,
+  ShoppingBagIcon,
   SquareActivityIcon,
   UsersIcon,
   XIcon
 } from 'lucide-react';
 import * as React from 'react';
+
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -49,7 +55,10 @@ function SidebarLink({
     <SidebarMenuButton
       render={
         <Link
-          activeProps={{ className: '!bg-primary/5' }}
+          activeProps={{
+            className:
+              'bg-primary/10 text-cyan-800 dark:bg-primary/20 dark:text-cyan-200/90'
+          }}
           onClick={onNavigate}
           {...(linkProps as LinkProps)}
         >
@@ -103,6 +112,41 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               onNavigate={handleNavigate}
             >
               <Trans>Customers</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      <SidebarGroup>
+        <SidebarGroupLabel>
+          <Trans>Integrations</Trans>
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/pms-provider"
+              icon={CableIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>PMS</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/door-locks"
+              icon={LockIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Door Locks</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/payment-provider"
+              icon={CreditCardIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Payment Provider</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -163,6 +207,33 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               onNavigate={handleNavigate}
             >
               <Trans>Users</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      {/* Content Manager Section */}
+      <SidebarGroup>
+        <SidebarGroupLabel>
+          <Trans>Content Manager</Trans>
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/guest-abc"
+              icon={BookAIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Guest ABC</Trans>
+            </SidebarLink>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarLink
+              to="/products"
+              icon={ShoppingBagIcon}
+              onNavigate={handleNavigate}
+            >
+              <Trans>Products</Trans>
             </SidebarLink>
           </SidebarMenuItem>
         </SidebarMenu>

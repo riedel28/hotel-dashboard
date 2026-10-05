@@ -1,9 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  QueryErrorResetBoundary,
-  useQueryClient,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link as RouterLink } from '@tanstack/react-router';
 import {
   type ColumnDef,
@@ -13,18 +9,14 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table';
-import {
-  MoreHorizontalIcon,
-  PenSquareIcon,
-  RefreshCwIcon,
-  Trash2Icon
-} from 'lucide-react';
+import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
-import { Suspense, useMemo, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import type { Property } from 'shared/types/properties';
+import { useMemo, useState } from 'react';
+import type { Property, PropertyStage } from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
+
 import { propertiesQueryOptions } from '@/api/properties';
+import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -33,25 +25,19 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button, buttonVariants } from '@/components/ui/button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
+import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
+import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-import {
-  ErrorDisplayActions,
-  ErrorDisplayError,
-  ErrorDisplayMessage,
-  ErrorDisplayTitle
-} from '@/components/ui/error-display';
 import { Skeleton } from '@/components/ui/skeleton';
 import { StageBadge } from '@/components/ui/stage-badge';
 import { useDocumentTitle } from '@/hooks/use-document-title';
@@ -63,7 +49,6 @@ import { DeletePropertyDialog } from './-components/delete-property-dialog';
 import { PropertiesFilters } from './-components/properties-filters';
 import { PropertyClearFilters } from './-components/property-clear-filters';
 import { PropertyCountryFilter } from './-components/property-country-filter';
-import { PropertyRefresh } from './-components/property-refresh';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
 
@@ -73,18 +58,8 @@ function RowActions({ row }: { row: { original: Property } }) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(
-            buttonVariants({ variant: 'ghost' }),
-            'flex h-8 w-8 p-0 data-[state=open]:bg-muted'
-          )}
-        >
-          <MoreHorizontalIcon className="h-4 w-4" />
-          <span className="sr-only">
-            <Trans>Open menu</Trans>
-          </span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[180px]">
+        <DataGridRowActions />
+        <DropdownMenuContent align="end" className="w-35">
           <DropdownMenuItem
             render={(props) => (
               <RouterLink
@@ -169,7 +144,7 @@ function PropertiesTable({
         cell: (info) => {
           const name = info.getValue() as string;
           return (
-            <span className="font-medium line-clamp-1" title={name}>
+            <span className="line-clamp-1" title={name}>
               {name}
             </span>
           );
@@ -335,9 +310,7 @@ function PropertiesContent() {
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
     : [];
 
-  const hasActiveFilters = Boolean(
-    q || (stage && stage !== 'all') || country_code
-  );
+  const hasActiveFilters = Boolean(q || stage?.length || country_code);
 
   const handleSearchChange = (searchTerm: string) => {
     navigate({
@@ -350,15 +323,12 @@ function PropertiesContent() {
     });
   };
 
-  const handleStageChange = (value: string | null) => {
+  const handleStageChange = (stages: PropertyStage[]) => {
     navigate({
       to: '/admin/properties',
       search: (prev) => ({
         ...prev,
-        stage:
-          !value || value === 'all'
-            ? undefined
-            : (value as 'demo' | 'production' | 'staging' | 'template'),
+        stage: stages.length > 0 ? stages : undefined,
         page: 1
       })
     });
@@ -455,7 +425,7 @@ function PropertiesContent() {
     >
       <PropertiesFilters>
         <PropertySearch value={q} onChange={handleSearchChange} />
-        <PropertyStageFilter value={stage} onChange={handleStageChange} />
+        <PropertyStageFilter value={stage ?? []} onChange={handleStageChange} />
         <PropertyCountryFilter
           value={country_code}
           onChange={handleCountryChange}
@@ -464,7 +434,7 @@ function PropertiesContent() {
           hasActiveFilters={hasActiveFilters}
           onClear={handleClearFilters}
         />
-        <PropertyRefresh
+        <DataGridRefreshButton
           isRefreshing={propertiesQuery.isFetching}
           onRefresh={handleRefresh}
         />
@@ -512,13 +482,15 @@ function PropertiesPage() {
       </Breadcrumb>
 
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-xl font-bold">
           <Trans>Properties</Trans>
         </h1>
         <AddPropertyModal />
       </div>
 
-      <Suspense
+      <QueryBoundary
+        className="min-h-[60vh] items-center justify-center"
+        message={<Trans>An error occurred while fetching properties</Trans>}
         fallback={
           <PropertiesTable
             data={[]}
@@ -530,41 +502,8 @@ function PropertiesPage() {
           />
         }
       >
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <div className="flex min-h-[60vh] items-center justify-center">
-                  <ErrorDisplayError className="w-md max-w-md">
-                    <ErrorDisplayTitle>
-                      <Trans>Something went wrong</Trans>
-                    </ErrorDisplayTitle>
-                    <ErrorDisplayMessage>
-                      {(error instanceof Error ? error.message : null) || (
-                        <Trans>
-                          An error occurred while fetching properties
-                        </Trans>
-                      )}
-                    </ErrorDisplayMessage>
-                    <ErrorDisplayActions>
-                      <Button
-                        variant="destructive"
-                        onClick={resetErrorBoundary}
-                      >
-                        <RefreshCwIcon className="mr-2 h-4 w-4" />
-                        <Trans>Refresh</Trans>
-                      </Button>
-                    </ErrorDisplayActions>
-                  </ErrorDisplayError>
-                </div>
-              )}
-            >
-              <PropertiesContent />
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      </Suspense>
+        <PropertiesContent />
+      </QueryBoundary>
     </div>
   );
 }

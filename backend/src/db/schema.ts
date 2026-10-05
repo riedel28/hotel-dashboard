@@ -1,5 +1,6 @@
 import { relations, sql } from 'drizzle-orm';
 import {
+  type AnyPgColumn,
   bigint,
   boolean,
   check,
@@ -113,6 +114,15 @@ export const users = pgTable(
       () => properties.id,
       { onDelete: 'set null' }
     ),
+    // Base64 `data:image/webp` string, not a URL — see docs/adr/0001-avatar-as-data-uri.md
+    avatar_url: text('avatar_url'),
+    // AES-256-GCM ciphertext, never the raw base32 secret
+    totp_secret: text('totp_secret'),
+    // Null while a secret is merely pending — 2FA counts as on only once this is set
+    totp_enabled_at: timestamp('totp_enabled_at', { withTimezone: true }),
+    totp_last_used_at: timestamp('totp_last_used_at', { withTimezone: true }),
+    // Bumped to sign the user out everywhere; compared against the claim in the JWT
+    token_version: integer('token_version').default(0).notNull(),
     created_at: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
@@ -182,6 +192,93 @@ export const rooms = pgTable(
       'rooms_status_check',
       sql`${table.status} IN ('available', 'occupied', 'maintenance', 'out_of_order')`
     )
+  ]
+);
+
+// Product categories (per-property tree via self-referencing parent_id).
+// FKs use the default NO ACTION so deleting a category that still has
+// children or products fails, while a property delete still cascades cleanly.
+export const productCategories = pgTable(
+  'product_categories',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    parent_id: bigint('parent_id', { mode: 'number' }).references(
+      (): AnyPgColumn => productCategories.id
+    ),
+    title: text('title').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('product_categories_property_id_idx').on(table.property_id),
+    index('product_categories_parent_id_idx').on(table.parent_id)
+  ]
+);
+
+// Products (per-property, each in exactly one category)
+export const products = pgTable(
+  'products',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    category_id: bigint('category_id', { mode: 'number' })
+      .notNull()
+      .references(() => productCategories.id),
+    title: text('title').notNull(),
+    price: numeric('price', { precision: 10, scale: 2 }).notNull(),
+    quantity: integer('quantity').notNull().default(0),
+    description: text('description'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('products_property_id_idx').on(table.property_id),
+    index('products_category_id_idx').on(table.category_id),
+    check('products_price_check', sql`${table.price} >= 0`),
+    check('products_quantity_check', sql`${table.quantity} >= 0`)
+  ]
+);
+
+// Guest ABC entries table (per-property alphabetical guest directory)
+export const guestAbcEntries = pgTable(
+  'guest_abc_entries',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    letter: text('letter').notNull(),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('guest_abc_entries_property_id_idx').on(table.property_id),
+    index('guest_abc_entries_letter_idx').on(table.letter)
   ]
 );
 
@@ -259,6 +356,15 @@ export type NewProperty = typeof properties.$inferInsert;
 export type Room = typeof rooms.$inferSelect;
 export type NewRoom = typeof rooms.$inferInsert;
 
+export type GuestAbcEntry = typeof guestAbcEntries.$inferSelect;
+export type NewGuestAbcEntry = typeof guestAbcEntries.$inferInsert;
+
+export type ProductCategory = typeof productCategories.$inferSelect;
+export type NewProductCategory = typeof productCategories.$inferInsert;
+
+export type Product = typeof products.$inferSelect;
+export type NewProduct = typeof products.$inferInsert;
+
 export const roles = pgTable('roles', {
   id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull().unique()
@@ -311,10 +417,30 @@ export const emailVerificationTokens = pgTable(
   ]
 );
 
+// Two-factor recovery codes — one row per code, hashed, spent by stamping used_at
+export const twoFactorRecoveryCodes = pgTable(
+  'two_factor_recovery_codes',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    user_id: bigint('user_id', { mode: 'number' })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    code_hash: text('code_hash').notNull(),
+    used_at: timestamp('used_at', { withTimezone: true }),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [index('two_factor_recovery_codes_user_id_idx').on(table.user_id)]
+);
+
 // Users relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   userRoles: many(userRoles),
   emailVerificationTokens: many(emailVerificationTokens),
+  twoFactorRecoveryCodes: many(twoFactorRecoveryCodes),
   selectedProperty: one(properties, {
     fields: [users.selected_property_id],
     references: [properties.id]
@@ -327,6 +453,17 @@ export const emailVerificationTokensRelations = relations(
   ({ one }) => ({
     user: one(users, {
       fields: [emailVerificationTokens.user_id],
+      references: [users.id]
+    })
+  })
+);
+
+// Two-factor recovery codes relations
+export const twoFactorRecoveryCodesRelations = relations(
+  twoFactorRecoveryCodes,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [twoFactorRecoveryCodes.user_id],
       references: [users.id]
     })
   })
@@ -347,8 +484,22 @@ export const roomsRelations = relations(rooms, ({ one }) => ({
 
 // Properties relations
 export const propertiesRelations = relations(properties, ({ many }) => ({
-  rooms: many(rooms)
+  rooms: many(rooms),
+  guestAbcEntries: many(guestAbcEntries),
+  productCategories: many(productCategories),
+  products: many(products)
 }));
+
+// Guest ABC entries relations
+export const guestAbcEntriesRelations = relations(
+  guestAbcEntries,
+  ({ one }) => ({
+    property: one(properties, {
+      fields: [guestAbcEntries.property_id],
+      references: [properties.id]
+    })
+  })
+);
 
 // UserRoles relations (junction table)
 export const userRolesRelations = relations(userRoles, ({ one }) => ({

@@ -1,0 +1,182 @@
+{
+  "a": [
+    {
+      "title": "Arrival",
+      "description": "Check-in is available from 15:00. Our reception is staffed 24/7, so you are welcome to arrive at any time. If you expect to arrive after midnight, please let us know in advance so we can prepare your keys."
+    },
+    {
+      "title": "Amenities",
+      "description": "Free high-speed Wi-Fi is available in all rooms and public areas. Access to the swimming pool, sauna, and fitness centre is included with your stay."
+    },
+    {
+      "title": "Airport Transfer",
+      "description": "A private airport shuttle can be arranged for an additional fee. Please contact reception at least 24 hours before your transfer and provide your flight number so we can track any delays."
+    }
+  ],
+  "b": [
+    {
+      "title": "Breakfast",
+      "description": "Breakfast is served daily in the main restaurant from 07:00 to 10:30, and until 11:00 on weekends. Our buffet includes fresh pastries, seasonal fruit, hot dishes, and a selection of teas and freshly brewed coffee. Vegetarian, vegan, and gluten-free options are always available. Room service breakfast can be ordered the night before using the door hanger."
+    },
+    {
+      "title": "Bar",
+      "description": "The lobby bar is open from 16:00 until midnight and offers a curated list of wines, craft cocktails, and local specialities."
+    },
+    {
+      "title": "Baggage Storage",
+      "description": "We are happy to store your luggage free of charge before check-in and after check-out. Simply hand your bags to the concierge and keep the numbered ticket you receive."
+    }
+  ],
+  "c": [
+    {
+      "title": "Check-out",
+      "description": "Check-out is by 11:00. Late check-out until 14:00 may be available on request and is subject to availability. Express check-out is possible by leaving your key card at reception."
+    },
+    {
+      "title": "Concierge",
+      "description": "Our concierge team can help with restaurant reservations, theatre tickets, guided tours, and local recommendations. Visit the desk in the lobby or dial 0 from your room phone."
+    }
+  ],
+  "d": [],
+  "e": [
+    {
+      "title": "Emergency",
+      "description": "In case of emergency, dial 0 from your room phone to reach reception at any hour.\nFire exits are marked on the back of your room door and along every corridor.\nIn the event of an alarm, please use the stairs and never the lift.\nA first-aid kit and defibrillator are located at the reception desk."
+    }
+  ],
+  "f": [
+    {
+      "title": "Fitness Centre",
+      "description": "The fitness centre is located on the lower ground floor and is open 24 hours a day. Access is granted with your room key card. Towels and chilled water are provided."
+    },
+    {
+      "title": "Front Desk",
+      "description": "The front desk is staffed around the clock and is your first point of contact for any request during your stay."
+    }
+  ],
+  "g": [],
+  "h": [
+    {
+      "title": "Housekeeping",
+      "description": "Rooms are serviced daily between 09:00 and 15:00.\nIf you prefer not to be disturbed, please hang the 'Do Not Disturb' sign on your door.\nFor extra towels, pillows, or toiletries, contact housekeeping by dialling 0.\nTurndown service is available on request each evening."
+    }
+  ],
+  "i": [
+    {
+      "title": "Internet",
+      "description": "Complimentary Wi-Fi is available throughout the property. Select the 'Hotel-Guest' network and enter your room number and surname to connect. A premium high-bandwidth option is available for streaming and video calls."
+    },
+    {
+      "title": "Iron & Ironing Board",
+      "description": "An iron and ironing board are provided in the wardrobe of every room."
+    }
+  ],
+  "j": [],
+  "k": [
+    {
+      "title": "Keys",
+      "description": "Your room is accessed with a contactless key card. Please keep it away from your phone to avoid demagnetising it. If your card stops working, reception will reactivate it immediately."
+    }
+  ],
+  "l": [
+    {
+      "title": "Laundry",
+      "description": "Same-day laundry and dry-cleaning are available for items collected before 09:00. Use the laundry bag and price list in your wardrobe, then call housekeeping for collection."
+    },
+    {
+      "title": "Luggage",
+      "description": "Bellhop assistance is available at any time. Please dial 0 to arrange help with your bags."
+    },
+    {
+      "title": "Lost & Found",
+      "description": "Items left behind are logged and kept securely for 90 days. Contact reception with a description and we will do our best to reunite you with your belongings."
+    }
+  ],
+  "m": [
+    {
+      "title": "Minibar",
+      "description": "The minibar is restocked daily. Charges are added automatically to your room account when items are removed. Complimentary bottled water is replenished each day at no cost."
+    }
+  ],
+  "n": [],
+  "o": [
+    {
+      "title": "Occupancy",
+      "description": "For safety reasons, room occupancy is limited to the number of guests registered at check-in. Extra beds and cots can be added on request, subject to room type and availability."
+    }
+  ],
+  "p": [
+    {
+      "title": "Parking",
+      "description": "Secure underground parking is available for a nightly fee. Spaces cannot be reserved in advance and are allocated on arrival. Electric-vehicle charging points are located on level -1."
+    },
+    {
+      "title": "Pool",
+      "description": "The indoor pool is open from 07:00 to 22:00.\nChildren under 16 must be accompanied by an adult at all times.\nPlease shower before entering and note that lifeguards are not on duty.\nPool towels are available at the entrance."
+    },
+    {
+      "title": "Pets",
+      "description": "We are a pet-friendly hotel and welcome well-behaved dogs for a small cleaning fee. Please inform us at booking so we can prepare a bed and bowls."
+    }
+  ],
+  "q": [],
+  "r": [
+    {
+      "title": "Restaurant",
+      "description": "Our à la carte restaurant serves lunch from 12:00 to 14:30 and dinner from 18:00 to 22:30. Reservations are recommended, especially at weekends, and can be made through the concierge."
+    },
+    {
+      "title": "Room Service",
+      "description": "In-room dining is available 24 hours a day. Browse the menu in your compendium or on the in-room tablet, then dial 0 to place your order. A service charge and tray fee apply."
+    }
+  ],
+  "s": [
+    {
+      "title": "Spa",
+      "description": "The spa offers a range of massages, facials, and body treatments.\nOpening hours are 10:00 to 20:00 daily.\nWe recommend arriving 15 minutes before your appointment to enjoy the relaxation lounge.\nGift vouchers are available from reception.\nA 24-hour cancellation policy applies to all bookings."
+    },
+    {
+      "title": "Safe",
+      "description": "Each room is equipped with an electronic safe located in the wardrobe. The hotel cannot accept liability for valuables not stored in the safe."
+    },
+    {
+      "title": "Smoking",
+      "description": "All rooms and indoor areas are strictly non-smoking. A cleaning fee will be charged for any breach. A designated smoking area is available in the courtyard."
+    }
+  ],
+  "t": [
+    {
+      "title": "Taxi",
+      "description": "The concierge can arrange a taxi or private car at any time of day. Approximate fares to popular destinations are listed at the front desk."
+    },
+    {
+      "title": "Television",
+      "description": "Your room television offers international channels and streaming apps. Sign in to your own accounts safely; all sessions are wiped automatically at check-out."
+    }
+  ],
+  "u": [],
+  "v": [
+    {
+      "title": "Valet",
+      "description": "Valet parking is offered during peak hours. Hand your keys to the attendant at the main entrance and retrieve your car by calling ahead from your room."
+    }
+  ],
+  "w": [
+    {
+      "title": "Wake-up Call",
+      "description": "To schedule a wake-up call, dial 0 or set it through the in-room tablet. We recommend also setting a personal alarm as a backup."
+    },
+    {
+      "title": "Wi-Fi",
+      "description": "Complimentary wireless internet covers the entire property. Connect to 'Hotel-Guest' and authenticate with your room number and surname."
+    }
+  ],
+  "x": [],
+  "y": [
+    {
+      "title": "Yoga",
+      "description": "Complimentary morning yoga sessions are held in the garden studio on weekdays at 07:30. Mats are provided and all levels are welcome; simply sign up at reception the day before."
+    }
+  ],
+  "z": []
+}

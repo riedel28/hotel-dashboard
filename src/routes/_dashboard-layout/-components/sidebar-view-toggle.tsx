@@ -1,5 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
+
 import { useAuth } from '@/auth';
 import { SidebarGroup } from '@/components/ui/sidebar';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -20,14 +21,16 @@ export function SidebarViewToggle() {
         <TabsList className="w-full">
           <TabsTrigger
             value="user"
-            className="flex-1 h-6 text-xs"
+            nativeButton={false}
+            className="h-6 flex-1 text-xs"
             render={<Link to="/" />}
           >
             <Trans>User</Trans>
           </TabsTrigger>
           <TabsTrigger
             value="admin"
-            className="flex-1 h-6 text-xs"
+            nativeButton={false}
+            className="h-6 flex-1 text-xs"
             render={<Link to="/admin" />}
           >
             <Trans>Admin</Trans>

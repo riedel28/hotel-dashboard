@@ -1,8 +1,18 @@
 import { z } from 'zod';
 
+export const MIN_PASSWORD_LENGTH = 12;
+export const MAX_PASSWORD_LENGTH = 128;
+
 export const strongPasswordSchema = z
   .string()
-  .min(8, 'Password must be at least 8 characters')
+  .min(
+    MIN_PASSWORD_LENGTH,
+    `Password must be at least ${MIN_PASSWORD_LENGTH} characters`
+  )
+  .max(
+    MAX_PASSWORD_LENGTH,
+    `Password must be at most ${MAX_PASSWORD_LENGTH} characters`
+  )
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
   .regex(/\d/, 'Password must contain at least one number')
@@ -25,6 +35,9 @@ export const userSchema = z.object({
   selected_property_id: z.string().uuid().nullable().optional(),
   is_admin: z.boolean(),
   email_verified: z.boolean(),
+  // Omitted from the paginated list response — see docs/adr/0001-avatar-as-data-uri.md
+  avatar_url: z.string().nullable().optional(),
+  two_factor_enabled: z.boolean().optional(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   roles: z.array(roleSchema)
@@ -73,7 +86,9 @@ export const fetchUserByIdSchema = userIdParamsSchema;
 
 export const createUserSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  // Same policy as self-service — an admin-created account must not be the
+  // weak way in.
+  password: strongPasswordSchema,
   first_name: z.string().min(1).optional(),
   last_name: z.string().min(1).optional(),
   country_code: z.string().length(2).nullable().optional(),

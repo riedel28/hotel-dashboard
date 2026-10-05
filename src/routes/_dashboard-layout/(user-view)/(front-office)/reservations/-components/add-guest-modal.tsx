@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import type { Guest } from 'shared/types/reservations';
 import { z } from 'zod';
+
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
@@ -31,7 +32,10 @@ interface AddGuestModalProps {
 const addGuestSchema = z.object({
   firstName: z.string().min(1, t`First name is required`),
   lastName: z.string().min(1, t`Last name is required`),
-  email: z.string().min(1, t`Email is required`).email(t`Invalid email address`)
+  email: z
+    .string()
+    .min(1, t`Email is required`)
+    .email(t`Invalid email address`)
 });
 
 type AddGuestFormData = z.infer<typeof addGuestSchema>;

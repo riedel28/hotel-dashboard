@@ -82,7 +82,7 @@ function ResetPasswordPage() {
         <div className="text-center">
           <Link
             to="/auth/login"
-            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
           >
             <Trans>Back to login</Trans>
           </Link>
@@ -111,7 +111,7 @@ function ResetPasswordPage() {
         <div className="text-center">
           <Link
             to="/auth/login"
-            className="text-primary hover:underline underline-offset-4 font-medium text-sm"
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
           >
             <Trans>Go to login</Trans>
           </Link>
@@ -137,7 +137,7 @@ function ResetPasswordPage() {
 
       <form
         onSubmit={form.handleSubmit((data) => resetMutation.mutate(data))}
-        className="max-w-sm mx-auto space-y-6"
+        className="mx-auto max-w-sm space-y-6"
       >
         <FieldSet className="gap-6">
           <FieldGroup className="gap-4">
@@ -218,7 +218,7 @@ function ResetPasswordPage() {
         </Button>
       </form>
 
-      <div className="text-center -mt-2">
+      <div className="-mt-2 text-center">
         <Button
           variant="link"
           size="sm"

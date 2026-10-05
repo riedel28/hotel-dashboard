@@ -1,33 +1,36 @@
-import { Trans } from '@lingui/react/macro';
-import type { PropertyStage } from 'shared/types/properties';
 import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-const stageVariantMap: Record<PropertyStage, BadgeProps['variant']> = {
-  demo: 'info',
-  production: 'success',
-  staging: 'default',
-  template: 'warning'
+export type PropertyStage = 'demo' | 'production' | 'staging' | 'template';
+
+type StageBadgeProps = Omit<BadgeProps, 'children' | 'color' | 'variant'> & {
+  stage: PropertyStage;
 };
 
-function getStageMessage(stage: PropertyStage) {
-  switch (stage) {
-    case 'demo':
-      return <Trans>Demo</Trans>;
-    case 'production':
-      return <Trans>Production</Trans>;
-    case 'staging':
-      return <Trans>Staging</Trans>;
-    case 'template':
-      return <Trans>Template</Trans>;
-    default:
-      return stage;
+const stageBadgeConfig = {
+  demo: {
+    label: 'Demo',
+    color: 'gray'
+  },
+  production: {
+    label: 'Production',
+    color: 'emerald'
+  },
+  staging: {
+    label: 'Staging',
+    color: 'sky'
+  },
+  template: {
+    label: 'Template',
+    color: 'indigo'
   }
-}
-
-interface StageBadgeProps extends Omit<BadgeProps, 'variant'> {
-  stage: PropertyStage;
-}
+} satisfies Record<
+  PropertyStage,
+  {
+    label: string;
+    color: BadgeProps['color'];
+  }
+>;
 
 export function StageBadge({
   stage,
@@ -35,17 +38,16 @@ export function StageBadge({
   className,
   ...props
 }: StageBadgeProps) {
+  const config = stageBadgeConfig[stage];
+
   return (
     <Badge
-      variant={stageVariantMap[stage] ?? 'secondary'}
+      color={config.color}
       size={size}
-      className={cn(
-        'shrink-0 rounded-md border border-foreground/10 capitalize',
-        className
-      )}
+      className={cn('shrink-0 rounded-md capitalize', className)}
       {...props}
     >
-      {getStageMessage(stage)}
+      {config.label}
     </Badge>
   );
 }

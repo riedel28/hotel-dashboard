@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 
 import app from '../src/app';
-
 import { db } from '../src/db/pool';
 import { roles } from '../src/db/schema';
 import { createTestUser } from './helpers/db-helpers';

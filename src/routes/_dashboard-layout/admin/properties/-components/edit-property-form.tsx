@@ -5,8 +5,8 @@ import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import type { Property } from 'shared/types/properties';
 import { toast } from 'sonner';
-import { updatePropertyById } from '@/api/properties';
 
+import { updatePropertyById } from '@/api/properties';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CountryPicker } from '@/components/ui/country-picker';

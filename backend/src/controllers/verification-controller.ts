@@ -3,11 +3,7 @@ import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { emailVerificationTokens, users } from '../db/schema';
-import {
-  sendInvitationEmail,
-  sendPasswordResetEmail,
-  sendVerificationEmail
-} from '../utils/email';
+import { sendPasswordResetEmail, sendVerificationEmail } from '../utils/email';
 import { hashPassword } from '../utils/password';
 import { generateVerificationToken } from '../utils/token';
 

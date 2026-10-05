@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+
 import { db } from '../db/pool';
 import { roles } from '../db/schema';
 

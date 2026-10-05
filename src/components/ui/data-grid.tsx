@@ -64,6 +64,7 @@ export interface DataGridProps<TData extends object> {
   onRowClick?: (row: TData) => void;
   isLoading?: boolean;
   loadingMode?: 'skeleton' | 'spinner';
+  skeletonRowCount?: number;
   loadingMessage?: ReactNode | string;
   emptyMessage?: ReactNode | string;
   tableLayout?: {
@@ -169,11 +170,11 @@ function DataGrid<TData extends object>({
     ...props,
     tableLayout: {
       ...defaultProps.tableLayout,
-      ...(props.tableLayout || {})
+      ...props.tableLayout
     },
     tableClassNames: {
       ...defaultProps.tableClassNames,
-      ...(props.tableClassNames || {})
+      ...props.tableClassNames
     }
   };
 

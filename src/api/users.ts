@@ -5,8 +5,8 @@ import { client, handleApiError } from '@/api/client';
 import {
   type CreateUserData,
   type FetchUsersParams,
-  type FetchUsersResponse,
   fetchUsersParamsSchema,
+  type FetchUsersResponse,
   fetchUsersResponseSchema,
   type InviteUserData,
   type Role,

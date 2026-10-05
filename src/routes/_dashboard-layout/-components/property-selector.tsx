@@ -3,6 +3,7 @@ import { RefreshCwIcon, SearchIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Property, PropertyStage } from 'shared/types/properties';
 import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import {
   Combobox,
@@ -42,7 +43,7 @@ function LoadingSkeleton() {
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}
-          className="bg-muted h-9 w-full rounded-md"
+          className="h-9 w-full rounded-md bg-muted"
           aria-hidden="true"
         />
       ))}
@@ -146,20 +147,20 @@ function PropertySelector({
       onValueChange={handlePropertySelect}
     >
       <ComboboxTrigger
-        className="min-w-0 max-w-full flex items-center justify-between hover:bg-accent px-3 py-2 rounded-md text-foreground gap-2 data-popup-open:bg-accent"
+        className="flex max-w-full min-w-0 items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-foreground hover:bg-accent data-popup-open:bg-accent"
         aria-label={t`Select property`}
       >
         <ComboboxValue>
           <span className="truncate text-sm">{renderTriggerContent()}</span>
         </ComboboxValue>
       </ComboboxTrigger>
-      <ComboboxContent className="w-sm">
+      <ComboboxContent className="w-90">
         <ComboboxInput
           variant="popup"
           placeholder={t`Search property`}
           iconLeft={
             <SearchIcon
-              className="h-4 w-4 shrink-0 opacity-50"
+              className="size-4 shrink-0 opacity-50"
               aria-hidden="true"
             />
           }
@@ -174,25 +175,25 @@ function PropertySelector({
           <LoadingSkeleton />
         ) : (
           <>
-            <ComboboxEmpty className="py-8 text-center text-sm text-muted-foreground">
-              <Trans>No properties found.</Trans>
+            <ComboboxEmpty className="py-4 text-center text-sm text-muted-foreground">
+              <Trans>No properties found</Trans>
             </ComboboxEmpty>
-            <ComboboxList className="mb-0 space-y-1">
+            <ComboboxList className="mb-0 space-y-1 p-1">
               {(item) => renderPropertyItem(item)}
             </ComboboxList>
           </>
         )}
         <ComboboxSeparator className="my-0" />
-        <div className="p-1">
+        <div className="shrink-0 p-0.75">
           <Button
             variant="ghost"
-            className="w-full h-8 text-sm font-normal text-muted-foreground"
+            className="h-8 w-full text-sm font-normal text-muted-foreground"
             aria-label={t`Reload properties`}
             onClick={handleReloadProperties}
             disabled={loading}
           >
             <RefreshCwIcon
-              className={cn('-ms-2 me-2 size-3.5', loading && 'animate-spin')}
+              className={cn('-ms-2 me-1 size-3.5', loading && 'animate-spin')}
             />
             <Trans>Reload</Trans>
           </Button>

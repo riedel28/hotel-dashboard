@@ -2,8 +2,8 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
-import { client } from '@/api/client';
 
+import { client } from '@/api/client';
 import {
   AlertDialog,
   AlertDialogCancel,

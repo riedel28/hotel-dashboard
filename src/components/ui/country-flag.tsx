@@ -1,6 +1,7 @@
 import { hasFlag } from 'country-flag-icons';
 import * as Flags from 'country-flag-icons/react/3x2';
 import type { ReactNode } from 'react';
+
 import { cn } from '@/lib/utils';
 
 type FlagComponent = (
@@ -9,8 +10,9 @@ type FlagComponent = (
 
 const flagComponents = Flags as Record<string, FlagComponent>;
 
-interface CountryFlagProps
-  extends React.HTMLAttributes<HTMLElement & SVGElement> {
+interface CountryFlagProps extends React.HTMLAttributes<
+  HTMLElement & SVGElement
+> {
   code: string;
   className?: string;
 }

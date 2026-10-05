@@ -78,35 +78,33 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <StatusCell status={row.original.status} />,
         meta: {
-          skeleton: <Skeleton className="h-6 w-16" />,
+          skeleton: <Skeleton className="h-5 w-16" />,
           headerTitle: t`Status`
         },
-        size: 80,
+        maxSize: 90,
         enableSorting: true,
         enableHiding: true,
         enableResizing: false
       },
       {
-        accessorKey: 'logged_at',
-        id: 'logged_at',
+        accessorKey: 'event',
+        id: 'event',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Date`}
+            title={t`Event`}
             visibility={true}
             column={column}
           />
         ),
-        cell: ({ row }) => <DateCell date={row.original.logged_at} />,
+        cell: ({ row }) => <span>{row.original.event}</span>,
         meta: {
-          skeleton: <Skeleton className="h-6 w-24" />,
-          headerTitle: t`Date`
+          skeleton: <Skeleton className="h-5 w-32" />,
+          headerTitle: t`Event`
         },
-        size: 150,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
       },
-
       {
         accessorKey: 'type',
         id: 'type',
@@ -119,7 +117,7 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <TypeCell type={row.original.type} />,
         meta: {
-          skeleton: <Skeleton className="h-6 w-20" />,
+          skeleton: <Skeleton className="h-5 w-20" />,
           headerTitle: t`Type`
         },
         size: 120,
@@ -139,7 +137,7 @@ export function MonitoringTable({
         ),
         cell: ({ row }) => <span>{row.original.booking_nr || '-'}</span>,
         meta: {
-          skeleton: <Skeleton className="h-6 w-24" />,
+          skeleton: <Skeleton className="h-5 w-24" />,
           headerTitle: t`Booking #`
         },
         size: 130,
@@ -147,26 +145,28 @@ export function MonitoringTable({
         enableHiding: true,
         enableResizing: true
       },
+
       {
-        accessorKey: 'event',
-        id: 'event',
+        accessorKey: 'logged_at',
+        id: 'logged_at',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Event`}
+            title={t`Date`}
             visibility={true}
             column={column}
           />
         ),
-        cell: ({ row }) => <span>{row.original.event}</span>,
+        cell: ({ row }) => <DateCell date={row.original.logged_at} />,
         meta: {
-          skeleton: <Skeleton className="h-6 w-32" />,
-          headerTitle: t`Event`
+          skeleton: <Skeleton className="h-5 w-24" />,
+          headerTitle: t`Date`
         },
-        size: 200,
+        maxSize: 150,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
       },
+
       {
         accessorKey: 'log_message',
         id: 'log_message',
@@ -178,15 +178,18 @@ export function MonitoringTable({
           />
         ),
         cell: ({ row }) => (
-          <div className="font-mono text-xs text-foreground bg-muted/50 rounded-md p-2">
+          <code
+            title={row.original.log_message ?? undefined}
+            className="block truncate rounded-md bg-muted/50 px-2 py-1 font-mono text-xs text-foreground"
+          >
             {row.original.log_message || '-'}
-          </div>
+          </code>
         ),
         meta: {
-          skeleton: <Skeleton className="h-6 w-full" />,
+          skeleton: <Skeleton className="h-5 w-full rounded-md" />,
           headerTitle: t`Message`
         },
-        size: 300,
+        minSize: 300,
         enableSorting: false,
         enableHiding: true,
         enableResizing: true
@@ -232,6 +235,7 @@ export function MonitoringTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
+      skeletonRowCount={5}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer>

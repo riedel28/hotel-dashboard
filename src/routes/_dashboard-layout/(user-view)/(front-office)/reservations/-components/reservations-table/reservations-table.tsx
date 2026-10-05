@@ -7,24 +7,27 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import type { Reservation } from '@/api/reservations';
 
+import type { Reservation } from '@/api/reservations';
 import { Button } from '@/components/ui/button';
 import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { formatDate } from '@/utils/date';
 
 import { BalanceCell } from './-components/cells/balance-cell';
-import { DateCell } from './-components/cells/date-cell';
-import { GuestsCell } from './-components/cells/guests-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { StatusCell } from './-components/cells/status-cell';
 import { ReservationDetails } from './-components/reservation-details';
 import { RowActions } from './row-actions';
+
+const formatReservationDate = (date: Date | string) =>
+  dayjs(date).format('DD.MM.YYYY HH:mm');
 
 interface ReservationsTableProps {
   data: Reservation[];
@@ -122,7 +125,7 @@ export default function ReservationsTable({
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Status`
         },
-        size: 90,
+        maxSize: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: false
@@ -143,10 +146,8 @@ export default function ReservationsTable({
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-12" />,
-          cellClassName: 'max-w-[150px] truncate',
           headerTitle: t`Booking #`
         },
-        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -166,39 +167,11 @@ export default function ReservationsTable({
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Room`
         },
-        size: 140,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
       },
 
-      {
-        accessorKey: 'guests',
-        id: 'guests',
-        header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Guests`}
-            visibility={true}
-            column={column}
-          />
-        ),
-        cell: ({ row }) => {
-          return <GuestsCell guests={row.original.guests} />;
-        },
-        meta: {
-          skeleton: (
-            <div className="space-y-1">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-          ),
-          headerTitle: t`Guests`
-        },
-        size: 180,
-        enableSorting: false,
-        enableHiding: true,
-        enableResizing: true
-      },
       {
         accessorKey: 'booking_from',
         id: 'booking_from',
@@ -210,13 +183,16 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return <DateCell isoDate={row.original.booking_from.toISOString()} />;
+          return (
+            <span className="text-[13px]">
+              {formatDate(row.original.booking_from, { preset: 'dateTime' })}
+            </span>
+          );
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Arrival`
         },
-        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -232,13 +208,16 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => {
-          return <DateCell isoDate={row.original.booking_to.toISOString()} />;
+          return (
+            <span className="text-[13px]">
+              {formatReservationDate(row.original.booking_to)}
+            </span>
+          );
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Departure`
         },
-        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -247,11 +226,13 @@ export default function ReservationsTable({
         accessorKey: 'balance',
         id: 'balance',
         header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Balance`}
-            visibility={true}
-            column={column}
-          />
+          <div className="flex justify-end">
+            <DataGridColumnHeader
+              title={t`Balance`}
+              visibility={true}
+              column={column}
+            />
+          </div>
         ),
         cell: ({ row }) => {
           return <BalanceCell value={row.original.balance} currency="EUR" />;
@@ -264,7 +245,6 @@ export default function ReservationsTable({
           ),
           headerTitle: t`Balance`
         },
-        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true

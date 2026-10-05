@@ -109,6 +109,8 @@ test.describe('Edit Guest', () => {
       'carlos.rivera@example.com'
     );
     // Verify the country changed to France
-    await expect(verifyDialog.getByText('France')).toBeVisible();
+    await expect(verifyDialog.getByLabel('Select country')).toContainText(
+      'France'
+    );
   });
 });

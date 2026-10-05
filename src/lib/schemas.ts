@@ -37,7 +37,20 @@ export const authResponseSchema = z.object({
   user: userSchema
 });
 
+/** Returned instead of a session when the password is right but 2FA is on. */
+export const twoFactorChallengeSchema = z.object({
+  requires_2fa: z.literal(true),
+  challenge_token: z.string()
+});
+
+export const loginResponseSchema = z.union([
+  twoFactorChallengeSchema,
+  authResponseSchema
+]);
+
 export type LoginData = z.infer<typeof loginSchema>;
 export type RegisterData = z.infer<typeof registerSchema>;
 export type User = z.infer<typeof userSchema>;
 export type AuthResponse = z.infer<typeof authResponseSchema>;
+export type TwoFactorChallenge = z.infer<typeof twoFactorChallengeSchema>;
+export type LoginResponse = z.infer<typeof loginResponseSchema>;

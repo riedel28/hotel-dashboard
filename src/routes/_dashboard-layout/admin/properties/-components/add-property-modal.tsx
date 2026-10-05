@@ -10,8 +10,8 @@ import {
   createPropertySchema
 } from 'shared/types/properties';
 import { toast } from 'sonner';
-import { createProperty } from '@/api/properties';
 
+import { createProperty } from '@/api/properties';
 import { Button } from '@/components/ui/button';
 import { CountryPicker } from '@/components/ui/country-picker';
 import {
@@ -91,7 +91,7 @@ export function AddPropertyModal() {
       <DialogTrigger
         render={
           <Button>
-            <PlusCircleIcon className="mr-2 h-4 w-4" />
+            <PlusCircleIcon className="mr-1 size-3.5" />
             <Trans>Add Property</Trans>
           </Button>
         }
@@ -102,7 +102,7 @@ export function AddPropertyModal() {
             <Trans>Create New Property</Trans>
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FieldSet className="gap-6">
             <FieldGroup className="gap-4">
               <Controller

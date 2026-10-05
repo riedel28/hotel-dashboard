@@ -1,5 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
+
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
 export const Route = createFileRoute('/_dashboard-layout/admin/customers')({

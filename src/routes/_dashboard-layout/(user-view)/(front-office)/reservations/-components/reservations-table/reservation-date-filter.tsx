@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
-
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 interface ReservationDateFilterProps {
@@ -30,6 +30,7 @@ function ReservationDateFilter({
   onDateChange
 }: ReservationDateFilterProps) {
   const today = new Date();
+  const isMobile = useIsMobile();
 
   // Define preset ranges
   const presets = [
@@ -146,7 +147,7 @@ function ReservationDateFilter({
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <PopoverTrigger
         className={cn(
-          'data-popup-open:bg-accent inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 whitespace-nowrap',
+          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground data-popup-open:bg-accent dark:border-input dark:bg-input/30',
           className
         )}
       >
@@ -168,18 +169,21 @@ function ReservationDateFilter({
           </span>
         )}
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent
+        className="w-[calc(100vw-1rem)] p-0 sm:w-auto"
+        align="start"
+      >
         <div className="flex max-sm:flex-col">
           <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
-            <div className="h-full border-border py-2 sm:border-e">
-              <div className="flex flex-col gap-0.5 px-2">
+            <div className="h-full border-border py-1 sm:border-e">
+              <div className="flex flex-col gap-0.5 px-1">
                 {presets.map((preset, index) => (
                   <Button
                     key={index}
                     type="button"
                     variant="ghost"
                     className={cn(
-                      'h-8 w-full justify-start font-normal',
+                      'h-7 w-full justify-start px-2 text-xs font-normal',
                       selectedPreset === preset.label && 'bg-accent'
                     )}
                     onClick={() => handlePresetSelect(preset)}
@@ -198,14 +202,14 @@ function ReservationDateFilter({
             showOutsideDays={false}
             selected={displayDate}
             onSelect={handleSelect}
-            numberOfMonths={2}
+            numberOfMonths={isMobile ? 1 : 2}
           />
         </div>
-        <div className="flex items-center justify-end gap-1.5 border-t border-border p-3">
-          <Button variant="outline" onClick={handleReset}>
+        <div className="flex items-center justify-end gap-1.5 border-t border-border p-1.5">
+          <Button variant="outline" onClick={handleReset} size="sm">
             <Trans>Reset</Trans>
           </Button>
-          <Button onClick={handleApply}>
+          <Button onClick={handleApply} size="sm">
             <Trans>Apply</Trans>
           </Button>
         </div>

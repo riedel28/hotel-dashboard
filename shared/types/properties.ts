@@ -47,9 +47,17 @@ export const fetchPropertiesParamsSchema = z.object({
     .default(10)
     .optional(),
   q: z.string().max(200).optional(),
-  stage: z
-    .enum(['demo', 'production', 'staging', 'template', 'all'])
-    .optional(),
+  // A list in the URL search params, a comma-separated string on the wire.
+  // 'all' is the legacy spelling of "no filter".
+  stage: z.preprocess(
+    (value) =>
+      typeof value === 'string'
+        ? value === 'all'
+          ? undefined
+          : value.split(',')
+        : value,
+    z.array(propertyStageSchema).optional()
+  ),
   country_code: countryCodeSchema.optional(),
   sort_by: propertySortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.optional()

@@ -9,12 +9,12 @@ import {
   UserCircleIcon
 } from 'lucide-react';
 import { useState } from 'react';
+
 import { useAuth } from '@/auth';
 import { useTheme } from '@/components/theme-provider';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { CountryFlag } from '@/components/ui/country-flag';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,7 +54,7 @@ interface UserInfoLabelProps {
 function UserInfoLabel({ firstName, lastName, email }: UserInfoLabelProps) {
   return (
     <DropdownMenuLabel className="p-0 font-normal">
-      <div className="flex items-center gap-2 px-1.5 py-1.5 text-left text-sm">
+      <div className="flex items-center gap-2 px-2 py-1 text-left text-sm">
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-medium text-foreground">
             {firstName} {lastName}
@@ -86,12 +86,13 @@ function LanguageSubmenu({
       <DropdownMenuSubTrigger hasChevron={false}>
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <GlobeIcon className="h-4 w-4 text-muted-foreground" />
+            <GlobeIcon />
             <Trans>Language</Trans>
           </div>
+
           <Badge
             variant="outline"
-            className="flex h-6 min-w-6 items-center text-xs gap-2 px-2.5 rounded-sm"
+            className="flex h-5 min-w-5 items-center gap-2 px-1.5 text-[11px]"
           >
             {currentLanguage?.label}
             <CountryFlag
@@ -103,7 +104,7 @@ function LanguageSubmenu({
           </Badge>
         </div>
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent className="w-[180px]">
+      <DropdownMenuSubContent className="w-34">
         <DropdownMenuRadioGroup
           value={currentLocale}
           onValueChange={onLocaleChange}
@@ -112,14 +113,16 @@ function LanguageSubmenu({
             <DropdownMenuRadioItem
               key={lang.code}
               value={lang.code}
-              className="overflow-hidden [&>svg]:shrink-0"
+              indicator="check"
+              className="overflow-hidden py-1 [&>svg]:shrink-0"
             >
               <CountryFlag
                 code={lang.country}
                 title={lang.label}
-                className="size-3.5"
+                className="size-4"
                 aria-label={lang.label}
               />
+
               {lang.label}
             </DropdownMenuRadioItem>
           ))}
@@ -156,32 +159,32 @@ function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
       <DropdownMenuSubTrigger hasChevron={false}>
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <ThemeIcon className="h-4 w-4 text-muted-foreground" />
+            <ThemeIcon />
             <Trans>Theme</Trans>
           </div>
           <Badge
             variant="outline"
-            className="flex h-6 min-w-6 items-center text-xs gap-2 px-2.5 rounded-sm"
+            className="flex h-5 min-w-5 items-center gap-2 px-1.5 text-[11px]"
           >
             <Trans>{themeLabels[currentTheme]}</Trans>
           </Badge>
         </div>
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent className="w-[180px]">
+      <DropdownMenuSubContent className="w-34">
         <DropdownMenuRadioGroup
           value={currentTheme}
           onValueChange={(value) => onThemeChange(value as Theme)}
         >
-          <DropdownMenuRadioItem value="light">
-            <SunIcon className="text-muted-foreground" />
+          <DropdownMenuRadioItem value="light" indicator="check">
+            <SunIcon />
             <Trans>Light</Trans>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="dark">
-            <MoonIcon className="text-muted-foreground" />
+          <DropdownMenuRadioItem value="dark" indicator="check">
+            <MoonIcon />
             <Trans>Dark</Trans>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="system">
-            <MonitorIcon className="text-muted-foreground" />
+          <DropdownMenuRadioItem value="system" indicator="check">
+            <MonitorIcon />
             <Trans>System</Trans>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
@@ -198,7 +201,7 @@ interface LogoutMenuItemProps {
 function LogoutMenuItem({ version, onLogout }: LogoutMenuItemProps) {
   return (
     <DropdownMenuItem className="group" onClick={onLogout}>
-      <LogOutIcon className="text-muted-foreground" />
+      <LogOutIcon />
       <Trans>Log out</Trans>
       <span className="ml-auto text-xs text-muted-foreground!">
         <Trans>v{version}</Trans>
@@ -218,6 +221,20 @@ export default function UserMenu() {
 
   const currentLanguage = languages.find((l) => l.code === locale);
   const version = getPackageVersion();
+  const avatarFallback = getAvatarFallback(
+    auth.user?.first_name,
+    auth.user?.last_name
+  );
+
+  function getAvatarFallback(
+    firstName?: string | null,
+    lastName?: string | null
+  ) {
+    const firstInitial = firstName?.trim().charAt(0).toUpperCase() ?? '';
+    const lastInitial = lastName?.trim().charAt(0).toUpperCase() ?? '';
+
+    return `${firstInitial}${lastInitial}` || '?';
+  }
 
   const handleChangeLocale = (value: string) => {
     loadCatalog(value);
@@ -228,26 +245,25 @@ export default function UserMenu() {
     setLogoutDialogOpen(true);
   };
 
-  const handleLogoutSuccess = () => {
-    navigate({ to: '/auth/login' });
+  const handleLogoutSuccess = async () => {
+    await navigate({ to: '/auth/login', replace: true });
   };
 
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger aria-label={t`User menu`}>
-          <Avatar size="default">
-            <AvatarImage
-              src="https://github.com/shadcn.png"
-              alt={`${auth.user?.first_name} ${auth.user?.last_name}`}
-            />
-            <AvatarFallback className="rounded-lg">
-              <Trans>CN</Trans>
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          aria-label={t`User menu`}
+          nativeButton={false}
+          render={
+            <Avatar size="default">
+              <AvatarFallback>{avatarFallback}</AvatarFallback>
+            </Avatar>
+          }
+        />
+
         <DropdownMenuContent
-          className="min-w-56 rounded-lg"
+          className="min-w-50 rounded-lg"
           side="bottom"
           align="end"
           sideOffset={4}
@@ -262,7 +278,7 @@ export default function UserMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem render={<Link to="/profile" />}>
-              <UserCircleIcon className="text-muted-foreground" />
+              <UserCircleIcon className="mr-0.5" />
               <Trans>Profile</Trans>
             </DropdownMenuItem>
             <LanguageSubmenu
