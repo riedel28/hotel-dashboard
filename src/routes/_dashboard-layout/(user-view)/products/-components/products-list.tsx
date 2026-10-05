@@ -52,7 +52,10 @@ import {
 import { Route as ProductsRoute } from '../index';
 import { DeleteProductDialog } from './delete-product-dialog';
 import { destructiveMenuItemClassName } from './destructive-styles';
-import { ProductFormModal, type ProductFormValues } from './product-form-modal';
+import {
+  ProductFormDrawer,
+  type ProductFormValues
+} from './product-form-drawer';
 import { ProductsEmptyState } from './products-empty-state';
 import { ProductsLoadingState } from './products-loading-state';
 
@@ -360,14 +363,14 @@ export function ProductsList() {
         </CardContent>
       </Card>
 
-      <ProductFormModal
+      <ProductFormDrawer
         open={isAdding}
         onOpenChange={setIsAdding}
         isPending={createMutation.isPending}
         onSave={(values) => createMutation.mutate(values)}
       />
 
-      <ProductFormModal
+      <ProductFormDrawer
         open={pendingEdit != null}
         product={pendingEdit}
         onOpenChange={(open) => !open && setPendingEdit(null)}
