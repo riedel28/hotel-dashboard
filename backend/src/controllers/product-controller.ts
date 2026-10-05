@@ -25,6 +25,18 @@ type ProductsRequest = SelectedPropertyRequest;
 // Unexpected errors are logged and answered with a 500 naming the operation.
 const handle = withFailMessage<ProductsRequest>;
 
+// Runs a write whose row references a category. The reference was checked
+// just before, but the category can be deleted in between: the foreign key
+// then rejects the write, which is the same "not found" to the client.
+async function orNotFound<T>(write: PromiseLike<T>) {
+  try {
+    return await write;
+  } catch (error) {
+    if (isForeignKeyViolation(error)) return null;
+    throw error;
+  }
+}
+
 // For write handlers: the selected property id, or null after answering 400.
 function requireProperty(req: ProductsRequest, res: Response) {
   const propertyId = req.selectedPropertyId ?? null;
@@ -132,11 +144,20 @@ const createProductCategory = handle(
       return res.status(400).json({ error: 'Parent category not found' });
     }
 
-    const [category] = await db
-      .insert(productCategories)
-      .values({ property_id: propertyId, title, parent_id: parent_id ?? null })
-      .returning();
-
+    const created = await orNotFound(
+      db
+        .insert(productCategories)
+        .values({
+          property_id: propertyId,
+          title,
+          parent_id: parent_id ?? null
+        })
+        .returning()
+    );
+    if (!created) {
+      return res.status(400).json({ error: 'Parent category not found' });
+    }
+    const [category] = created;
     if (!category) {
       return res.status(500).json({ error: 'Failed to create category' });
     }
@@ -280,41 +301,30 @@ const getProductById = handle('Failed to fetch product', async (req, res) => {
   res.status(200).json(transformProduct(product));
 });
 
-// The columns a validated create/update body maps to: the price as numeric
-// text, the description sanitized. Fields that weren't sent stay absent.
-function toProductColumns<T extends UpdateProductData>({
-  price,
-  description,
-  ...rest
-}: T) {
-  return {
-    ...rest,
-    ...(price !== undefined && { price: price.toFixed(2) }),
-    ...(description !== undefined && {
-      description: sanitizeRichText(description)
-    })
-  };
-}
-
 const createProduct = handle('Failed to create product', async (req, res) => {
   const propertyId = requireProperty(req, res);
   if (!propertyId) return;
 
-  const body = req.body as CreateProductData;
-  if (!(await findCategory(body.category_id, propertyId))) {
+  const { price, description, ...rest } = req.body as CreateProductData;
+  if (!(await findCategory(rest.category_id, propertyId))) {
     return res.status(400).json({ error: 'Category not found' });
   }
 
-  const [product] = await db
-    .insert(products)
-    .values({
-      ...toProductColumns(body),
-      // Required on create; spelled out so the insert's type sees it.
-      price: body.price.toFixed(2),
-      property_id: propertyId
-    })
-    .returning();
-
+  const created = await orNotFound(
+    db
+      .insert(products)
+      .values({
+        ...rest,
+        price: price.toFixed(2),
+        description: sanitizeRichText(description),
+        property_id: propertyId
+      })
+      .returning()
+  );
+  if (!created) {
+    return res.status(400).json({ error: 'Category not found' });
+  }
+  const [product] = created;
   if (!product) {
     return res.status(500).json({ error: 'Failed to create product' });
   }
@@ -326,25 +336,38 @@ const updateProduct = handle('Failed to update product', async (req, res) => {
   const propertyId = requireProperty(req, res);
   if (!propertyId) return;
 
-  const body = req.body as UpdateProductData;
+  // Only the fields that were sent are written.
+  const { price, description, ...rest } = req.body as UpdateProductData;
   if (
-    body.category_id !== undefined &&
-    !(await findCategory(body.category_id, propertyId))
+    rest.category_id !== undefined &&
+    !(await findCategory(rest.category_id, propertyId))
   ) {
     return res.status(400).json({ error: 'Category not found' });
   }
 
-  const [product] = await db
-    .update(products)
-    .set({ ...toProductColumns(body), updated_at: new Date() })
-    .where(
-      and(
-        eq(products.id, Number(req.params.id)),
-        eq(products.property_id, propertyId)
+  const updated = await orNotFound(
+    db
+      .update(products)
+      .set({
+        ...rest,
+        ...(price !== undefined && { price: price.toFixed(2) }),
+        ...(description !== undefined && {
+          description: sanitizeRichText(description)
+        }),
+        updated_at: new Date()
+      })
+      .where(
+        and(
+          eq(products.id, Number(req.params.id)),
+          eq(products.property_id, propertyId)
+        )
       )
-    )
-    .returning();
-
+      .returning()
+  );
+  if (!updated) {
+    return res.status(400).json({ error: 'Category not found' });
+  }
+  const [product] = updated;
   if (!product) {
     return res.status(404).json({ error: 'Product not found' });
   }
