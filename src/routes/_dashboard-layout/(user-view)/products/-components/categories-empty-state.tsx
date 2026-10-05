@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro';
-import { PlusCircleIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -19,7 +19,7 @@ export function CategoriesEmptyState({
         <Trans>Create the first category to start adding products.</Trans>
       </p>
       <Button size="default" onClick={onAddCategory} className="mt-3">
-        <PlusCircleIcon />
+        <PlusIcon />
         <Trans>Add category</Trans>
       </Button>
     </div>
