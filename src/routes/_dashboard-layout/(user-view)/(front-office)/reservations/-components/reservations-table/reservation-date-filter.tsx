@@ -147,7 +147,7 @@ function ReservationDateFilter({
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <PopoverTrigger
         className={cn(
-          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground data-popup-open:bg-accent dark:border-input dark:bg-input/30',
+          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground data-popup-open:bg-accent dark:border-input dark:bg-input/30',
           className
         )}
       >
@@ -175,15 +175,15 @@ function ReservationDateFilter({
       >
         <div className="flex max-sm:flex-col">
           <div className="relative border-border max-sm:order-1 max-sm:border-t sm:w-36">
-            <div className="h-full border-border py-1.5 sm:border-e">
-              <div className="flex flex-col gap-0.5 px-1.5">
+            <div className="h-full border-border py-1 sm:border-e">
+              <div className="flex flex-col gap-0.5 px-1">
                 {presets.map((preset, index) => (
                   <Button
                     key={index}
                     type="button"
                     variant="ghost"
                     className={cn(
-                      'h-8 w-full justify-start font-normal',
+                      'h-7 w-full justify-start px-2 text-xs font-normal',
                       selectedPreset === preset.label && 'bg-accent'
                     )}
                     onClick={() => handlePresetSelect(preset)}
@@ -205,11 +205,11 @@ function ReservationDateFilter({
             numberOfMonths={isMobile ? 1 : 2}
           />
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-border p-2">
-          <Button variant="outline" onClick={handleReset}>
+        <div className="flex items-center justify-end gap-1.5 border-t border-border p-1.5">
+          <Button variant="outline" onClick={handleReset} size="sm">
             <Trans>Reset</Trans>
           </Button>
-          <Button onClick={handleApply}>
+          <Button onClick={handleApply} size="sm">
             <Trans>Apply</Trans>
           </Button>
         </div>
