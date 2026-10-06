@@ -1,3 +1,16 @@
+# [1.16.0](https://github.com/riedel28/hotel-dashboard/compare/v1.15.0...v1.16.0) (2026-10-06)
+
+
+### Bug Fixes
+
+* **filters:** align checkbox filter label offset with radio filter ([8638fe5](https://github.com/riedel28/hotel-dashboard/commit/8638fe56b0ed67f8324fc468c49757264bb6771e))
+* **ui:** unify invalid and focus styles across form controls ([e67910b](https://github.com/riedel28/hotel-dashboard/commit/e67910ba6b00df9dc12c75853ac76dfd5d7c2786))
+
+
+### Features
+
+* **properties:** add per-property nav items ([fbaa293](https://github.com/riedel28/hotel-dashboard/commit/fbaa29315820335abb96ca27c5382b76d0e30a72))
+
 # [1.15.0](https://github.com/riedel28/hotel-dashboard/compare/v1.14.2...v1.15.0) (2026-10-05)
 
 
