@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
+This file provides guidance to coding agents when working with code in this repository.
 
 ## Project Context
 
@@ -15,12 +15,14 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 - `bun run build` - Build for production (includes typecheck)
 - `bun run typecheck` - Run TypeScript type checking
 - `bun run typecheck:all` - Check both main and node TypeScript configs
-- `bun run lint` - Run Biome linter with auto-fix
-- `bun run check` - Run Biome check with auto-fix (lint + format)
-- `bun run format` - Format code with Biome
-- `bun run test` - Run tests once
-- `bun run test:watch` - Run tests in watch mode
-- `bun run test:coverage` - Run tests with coverage
+- `bun run lint` - Run oxlint with auto-fix
+- `bun run check` - Run oxlint with auto-fix, then format with oxfmt
+- `bun run check:ci` - Same checks without writing (what CI runs)
+- `bun run format` - Format code with oxfmt
+- `bun run test` - Run unit tests once (Vitest)
+- `bun run test:watch` - Run unit tests in watch mode
+- `bun run test:coverage` - Run unit tests with coverage
+- `bun run test:e2e` - Run Playwright end-to-end tests (see the warning under Local Dev Server)
 - `bun run preview` - Preview production build
 
 ### Backend (./backend/)
@@ -51,12 +53,15 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 - **TanStack Query** for server state management and caching
 - **TanStack Table** for complex data grids
 - **Lingui** for internationalization (English/German)
-- **Tailwind CSS** with shadcn/ui components
-- **Radix UI** primitives for accessibility
+- **Tailwind CSS 4** with shadcn/ui components
+- **Base UI** (`@base-ui/react`) primitives for accessibility; only Dialog and Slot still come from Radix
+- **React Hook Form** with Zod for forms
+- **Vitest** + Testing Library for unit tests, **Playwright** for end-to-end tests
+- **oxlint** and **oxfmt** for linting and formatting
 
 ### Backend Stack
 
-- **Express.js** with TypeScript
+- **Express 5** with TypeScript, run by **Bun** (transpiled, not type-checked)
 - **PostgreSQL** with **Drizzle ORM**
 - **Zod** for runtime validation
 
@@ -64,18 +69,17 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 
 #### View-Based Architecture
 
-- **User View**: Front-office operations (reservations, payments, content management)
-- **Admin View**: Administrative functions (properties, customers)
-- **Context-driven**: Uses React Context (`ViewProvider`) with localStorage persistence
-- **Auto-switching**: Route-based automatic view switching with undo functionality
+- **User View**: Front-office operations (reservations, rooms, users, content management, integrations)
+- **Admin View**: Administrative functions (properties); administrators only
+- **URL-derived**: the view is not stored anywhere — `useCurrentView()` (`src/hooks/use-current-view.ts`) returns `admin` when the path starts with `/admin`, otherwise `user`
 - **Dynamic Sidebar**: Different navigation based on current view
 
 #### Route Organization
 
 - Routes are file-based using TanStack Router
 - Layout routes: `_auth-layout.tsx`, `_dashboard-layout.tsx`
-- Nested routing with view-specific folders: `(admin-view)`, `(user-view)`
-- Authentication guards at layout level
+- View-specific folders under `_dashboard-layout/`: `(user-view)` is a pathless group, `admin/` is a real `/admin` path segment
+- Guards at layout level: `_dashboard-layout.tsx` requires a signed-in user, `_dashboard-layout/admin.tsx` requires `is_admin`
 
 #### Component Architecture
 
@@ -162,3 +166,11 @@ Always run before committing:
 
 - `bun run typecheck:all` - Verify TypeScript compilation
 - `bun run check` - Ensure code quality and formatting
+
+> **Backend `tsc` OOMs.** Running a full backend type-check (`cd backend && tsc --noEmit`) exhausts the Node heap (>8 GB) because of Drizzle ORM's + `drizzle-zod`'s inferred type graph — it is effectively unrunnable and is **not** part of the gate. Bun runs the backend by transpiling (no type-check), so this doesn't affect runtime. To sanity-check backend files, transpile them instead: `bun build <file> --target=node`. The `typecheck:all` gate above covers the frontend + node configs only.
+
+### Local Dev Server
+
+- Do NOT kill or stop the user's local dev server (`bun run dev`, `bun run client`, Vite, etc.), even after testing in a browser. Assume the user is running their own server and leave it running.
+- When testing in a browser, reuse the already-running server (default `http://localhost:5173`). Only start your own if none is running — and if you started it yourself, you may stop that instance, but never the user's.
+- Do NOT run `bun run test:e2e` while anything is listening on port 5001 or 5173. Locally Playwright reuses a running server, and every spec calls `POST /api/test/reset`, which truncates and reseeds whatever database that backend uses — against the user's dev server that wipes the dev database. Check the ports right before each run.

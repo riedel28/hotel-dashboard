@@ -12,18 +12,17 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 
 #### View-Based Architecture
 
-- **User View**: Front-office operations (reservations, payments, content management)
-- **Admin View**: Administrative functions (properties, customers)
-- **Context-driven**: Uses React Context (`ViewProvider`) with localStorage persistence
-- **Auto-switching**: Route-based automatic view switching with undo functionality
+- **User View**: Front-office operations (reservations, rooms, users, content management, integrations)
+- **Admin View**: Administrative functions (properties); administrators only
+- **URL-derived**: the view is not stored anywhere — `useCurrentView()` (`src/hooks/use-current-view.ts`) returns `admin` when the path starts with `/admin`, otherwise `user`
 - **Dynamic Sidebar**: Different navigation based on current view
 
 #### Route Organization
 
 - Routes are file-based using TanStack Router
 - Layout routes: `_auth-layout.tsx`, `_dashboard-layout.tsx`
-- Nested routing with view-specific folders: `(admin-view)`, `(user-view)`
-- Authentication guards at layout level
+- View-specific folders under `_dashboard-layout/`: `(user-view)` is a pathless group, `admin/` is a real `/admin` path segment
+- Guards at layout level: `_dashboard-layout.tsx` requires a signed-in user, `_dashboard-layout/admin.tsx` requires `is_admin`
 
 #### Component Architecture
 
