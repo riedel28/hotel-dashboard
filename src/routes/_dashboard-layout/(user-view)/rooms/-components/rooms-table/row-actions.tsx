@@ -46,7 +46,7 @@ export function RowActions({ row }: RowActionsProps) {
           />
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            variant="destructive"
+            variant="destructive-soft"
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash2Icon className="mr-2 h-4 w-4" />
