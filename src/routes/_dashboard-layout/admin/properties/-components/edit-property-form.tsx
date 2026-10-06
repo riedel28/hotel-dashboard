@@ -1,9 +1,8 @@
-import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import type { Property } from 'shared/types/properties';
+import type { NavItemId, Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
 import { updatePropertyById } from '@/api/properties';
@@ -26,10 +25,13 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
+import { NavItemsField } from './nav-items-field';
+
 interface EditPropertyFormData {
   name: string;
   country_code: string;
   stage: Property['stage'];
+  disabled_nav_items: NavItemId[];
 }
 
 interface EditPropertyFormProps {
@@ -42,12 +44,14 @@ export function EditPropertyForm({
   propertyData
 }: EditPropertyFormProps) {
   const queryClient = useQueryClient();
+  const { t } = useLingui();
 
   const form = useForm<EditPropertyFormData>({
     values: {
       name: propertyData.name,
       country_code: propertyData.country_code,
-      stage: propertyData.stage
+      stage: propertyData.stage,
+      disabled_nav_items: propertyData.disabled_nav_items
     }
   });
 
@@ -170,6 +174,14 @@ export function EditPropertyForm({
           </FieldSet>
         </CardContent>
       </Card>
+
+      <Controller
+        control={form.control}
+        name="disabled_nav_items"
+        render={({ field }) => (
+          <NavItemsField disabled={field.value} onChange={field.onChange} />
+        )}
+      />
 
       <Button type="submit" disabled={updatePropertyMutation.isPending}>
         {updatePropertyMutation.isPending && (

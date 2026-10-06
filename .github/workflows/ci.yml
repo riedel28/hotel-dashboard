@@ -18,6 +18,21 @@ jobs:
   test:
     name: Test and Build
     runs-on: ubuntu-latest
+    # A private database per job. Sharing one remote test database let two
+    # pull requests' runs rebuild the schema under each other mid-test.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: backoffice_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,9 +63,8 @@ jobs:
       - name: Run backend tests
         env:
           NODE_ENV: test
-          DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/backoffice_test
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          ALLOW_TEST_DB_DESTROY: true
         run: cd ./backend && bun run test
 
       - name: Build
@@ -61,6 +75,21 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # A private database per job. Sharing one remote test database let two
+    # pull requests' runs rebuild the schema under each other mid-test.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: backoffice_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,11 +120,19 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: bunx playwright install-deps chromium
 
+      # The backend test job no longer leaves a schema behind for this one.
+      - name: Apply database migrations
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/backoffice_test
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: cd ./backend && bunx drizzle-kit migrate
+
       - name: Run E2E tests
         env:
           CI: true
           NODE_ENV: test
-          DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/backoffice_test
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           CORS_ORIGIN: http://localhost:5173
           VITE_API_BASE_URL: http://localhost:5001/api

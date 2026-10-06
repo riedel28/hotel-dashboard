@@ -21,11 +21,26 @@ export default function Header() {
     string | undefined
   >();
 
+  // Everything that follows a change of selected Property, in one place. An
+  // effect rather than the change handler, because the router context only
+  // holds the new selection once it has rendered.
+  const selectedPropertyId = user?.selected_property_id;
+  const lastPropertyId = React.useRef(selectedPropertyId);
+  React.useEffect(() => {
+    if (lastPropertyId.current === selectedPropertyId) return;
+    lastPropertyId.current = selectedPropertyId;
+    // Property scope is derived server-side per request, so every cached
+    // query (Guest ABC entries, the Property's nav items, …) belongs to the
+    // previous Property. Marking them stale is synchronous, so the layout's
+    // `beforeLoad` below already refetches.
+    void queryClient.invalidateQueries();
+    void router.invalidate();
+  }, [selectedPropertyId, queryClient, router]);
+
   const handleReloadProperties = async () => {
-    // Remove query from cache to force fresh fetch
-    queryClient.removeQueries({
-      queryKey: propertiesQueryOptions().queryKey
-    });
+    // Remove the list and the selected Property from cache to force a fresh
+    // fetch of both — the latter carries the nav items.
+    queryClient.removeQueries({ queryKey: ['properties'] });
     // Fetch fresh data and update cache
     await queryClient.fetchQuery(propertiesQueryOptions());
     // Invalidate the router to trigger loader refetch with fresh data
@@ -36,10 +51,6 @@ export default function Header() {
     setOptimisticPropertyId(propertyId);
     try {
       await updateSelectedProperty(propertyId);
-      // Property scope is derived server-side per request, so cached data
-      // (e.g. Guest ABC entries) belongs to the previous property. Invalidate
-      // all queries so property-scoped data refetches under the new scope.
-      await queryClient.invalidateQueries();
     } catch {
       // Revert on failure — user.selected_property_id is unchanged
     }

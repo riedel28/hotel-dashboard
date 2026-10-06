@@ -147,6 +147,12 @@ export const properties = pgTable(
     stage: text('stage')
       .notNull()
       .$type<'demo' | 'production' | 'staging' | 'template'>(),
+    // Empty means every nav item is shown, so new catalog entries are on by
+    // default for existing properties.
+    disabled_nav_items: text('disabled_nav_items')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow()

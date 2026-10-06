@@ -26,6 +26,10 @@ _Avoid_: Permission, group
 A single hotel in the chain. A User has one *selected* Property at a time, which scopes what the User View shows.
 _Avoid_: Hotel, site, location
 
+**Nav item**:
+One entry of the User View navigation (`Reservations`, `Rooms`, `Door Locks`, …). An [[administrator]] can switch a Nav item off for a single [[property]]; it then disappears from the sidebar, the mobile menu and the Start page, and its page redirects to Start. **This is navigation only, not access control** — the data and API behind a switched-off Nav item stay reachable, and other pages keep using them. `Start` is not a Nav item in this sense and is always shown.
+_Avoid_: Module, feature, menu entry
+
 ### Identity and security
 
 **Profile**:

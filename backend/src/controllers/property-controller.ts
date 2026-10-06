@@ -1,10 +1,27 @@
 import { and, asc, count, desc, eq, ilike, inArray } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
-import type { PropertyStage } from '../../../shared/types/properties';
+import {
+  navItemIdSchema,
+  type PropertyStage
+} from '../../../shared/types/properties';
 import { db } from '../db/pool';
 import { properties as propertiesTable } from '../db/schema';
 import { escapeLikePattern } from '../utils/sql';
+
+function toPropertyResponse(property: typeof propertiesTable.$inferSelect) {
+  return {
+    id: property.id,
+    name: property.name,
+    country_code: property.country_code,
+    stage: property.stage,
+    // The column is plain text[]: keep only ids still in the catalog, since
+    // the client parses the response strictly.
+    disabled_nav_items: navItemIdSchema.options.filter((id) =>
+      property.disabled_nav_items.includes(id)
+    )
+  };
+}
 
 async function getProperties(req: Request, res: Response) {
   try {
@@ -78,12 +95,7 @@ async function getProperties(req: Request, res: Response) {
     const totalCount = total;
 
     // Transform database records to match API schema (id as string)
-    const transformedProperties = properties.map((property) => ({
-      id: property.id,
-      name: property.name,
-      country_code: property.country_code,
-      stage: property.stage
-    }));
+    const transformedProperties = properties.map(toPropertyResponse);
 
     res.status(200).json({
       index: transformedProperties,
@@ -110,12 +122,7 @@ async function getPropertyById(req: Request, res: Response) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    res.status(200).json({
-      id: property.id,
-      name: property.name,
-      country_code: property.country_code,
-      stage: property.stage
-    });
+    res.status(200).json(toPropertyResponse(property));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch property' });
@@ -125,10 +132,10 @@ async function getPropertyById(req: Request, res: Response) {
 async function updateProperty(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const { name, country_code, stage } = req.body ?? {};
+    const { name, country_code, stage, disabled_nav_items } = req.body ?? {};
 
     const updates = Object.fromEntries(
-      Object.entries({ name, country_code, stage }).filter(
+      Object.entries({ name, country_code, stage, disabled_nav_items }).filter(
         ([, v]) => v !== undefined
       )
     );
@@ -143,12 +150,7 @@ async function updateProperty(req: Request, res: Response) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    res.status(200).json({
-      id: updatedProperty.id,
-      name: updatedProperty.name,
-      country_code: updatedProperty.country_code,
-      stage: updatedProperty.stage
-    });
+    res.status(200).json(toPropertyResponse(updatedProperty));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update property' });
@@ -185,12 +187,7 @@ async function createProperty(req: Request, res: Response) {
       .values({ name, country_code, stage })
       .returning();
 
-    res.status(201).json({
-      id: created.id,
-      name: created.name,
-      country_code: created.country_code,
-      stage: created.stage
-    });
+    res.status(201).json(toPropertyResponse(created));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create property' });

@@ -61,8 +61,8 @@ function InputOTPSlot({
         // Error, on every cell. The active-cell pair is spelled out rather
         // than left to cascade order: it ties with the focus rule above on
         // specificity, and `data-*` sorts later, so focus would win.
-        'group-has-aria-invalid/otp:border-destructive group-has-aria-invalid/otp:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
-        'group-has-aria-invalid/otp:data-[active=true]:border-destructive group-has-aria-invalid/otp:data-[active=true]:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
+        'group-has-aria-invalid/otp:border-danger',
+        'group-has-aria-invalid/otp:data-[active=true]:border-danger group-has-aria-invalid/otp:data-[active=true]:shadow-[inset_0_0_0_1px_var(--color-danger)]',
         'dark:bg-input/30',
         className
       )}

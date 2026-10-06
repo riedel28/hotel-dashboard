@@ -1,16 +1,21 @@
-import { keepPreviousData, queryOptions } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  type QueryClient,
+  queryOptions
+} from '@tanstack/react-query';
 import {
   type CreatePropertyData,
   createPropertySchema,
   type FetchPropertiesParams,
   fetchPropertiesResponseSchema,
+  type NavItemId,
   type Property,
   propertySchema,
   type UpdatePropertyData,
   updatePropertySchema
 } from 'shared/types/properties';
 
-import { client, handleApiError } from './client';
+import { ApiError, client, handleApiError } from './client';
 
 export function propertiesQueryOptions(params?: FetchPropertiesParams) {
   return queryOptions({
@@ -48,6 +53,27 @@ async function fetchPropertyById(id: string): Promise<Property> {
   }
 }
 
+/**
+ * The nav items switched off for a Property. None when no Property is selected
+ * or it has since been deleted (404); any other failure propagates — treating
+ * it as "nothing disabled" would open switched-off pages on a transient error.
+ */
+async function fetchDisabledNavItems(
+  queryClient: QueryClient,
+  propertyId: string | null | undefined
+): Promise<NavItemId[]> {
+  if (!propertyId) return [];
+  try {
+    const property = await queryClient.fetchQuery(
+      propertyByIdQueryOptions(propertyId)
+    );
+    return property.disabled_nav_items;
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return [];
+    throw error;
+  }
+}
+
 async function updatePropertyById(
   id: string,
   updates: UpdatePropertyData
@@ -82,6 +108,7 @@ async function deletePropertyById(id: string): Promise<void> {
 export {
   createProperty,
   deletePropertyById,
+  fetchDisabledNavItems,
   fetchProperties,
   fetchPropertyById,
   propertyByIdQueryOptions,

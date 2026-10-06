@@ -174,9 +174,9 @@ function DataGridCheckboxFilter<TValue extends string>({
             checked={selectedValues.has(option.value)}
             disabled={option.disabled}
             onCheckedChange={(checked) => toggleValue(option.value, checked)}
-            className="py-1.5"
+            className="py-1.5 pl-9"
           >
-            <span className="-ml-0.5 flex min-w-0 items-center gap-2">
+            <span className="flex min-w-0 items-center gap-2">
               {option.icon}
               <span className="truncate">{option.label}</span>
             </span>

@@ -14,6 +14,9 @@ async function dropAllTables() {
       sql`DROP TABLE IF EXISTS ${sql.identifier(row.tablename as string)} CASCADE`
     );
   }
+  // The migration journal lives in its own schema; without this the migrator
+  // would consider every migration already applied to the emptied database.
+  await db.execute(sql`DROP SCHEMA IF EXISTS drizzle CASCADE`);
 }
 
 export default async function setup() {
@@ -24,14 +27,13 @@ export default async function setup() {
   try {
     await dropAllTables();
 
-    console.log('🚀 Pushing schema using drizzle-kit...');
-    execSync(
-      `bunx drizzle-kit push --url="${process.env.DATABASE_URL}" --schema="./src/db/schema.ts" --dialect="postgresql"`,
-      {
-        stdio: 'inherit',
-        cwd: process.cwd()
-      }
-    );
+    // Build the schema from the migration files rather than `push`, so a
+    // schema change without its migration fails here instead of in production.
+    console.log('🚀 Applying migrations using drizzle-kit...');
+    execSync('bunx drizzle-kit migrate', {
+      stdio: 'inherit',
+      cwd: process.cwd()
+    });
 
     console.log('✅ Test database setup complete');
   } catch (error) {

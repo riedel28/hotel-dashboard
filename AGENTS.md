@@ -35,8 +35,9 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 ### Database (./backend/)
 
 - `bun run db:seed` - Seed database with sample data
-- `bun run db:generate` - Generate Drizzle migrations
-- `bun run db:push` - Push schema changes to database
+- `bun run db:generate -- --name <what_changed>` - Generate a migration from schema changes
+- `bun run db:migrate` - Apply pending migrations to the dev database
+- `bun run db:migrate:prod` - Apply pending migrations to production
 - `bun run db:studio` - Open Drizzle Studio GUI
 
 ### Extract/compile internationalization
@@ -123,8 +124,9 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 ### Database
 
 - Hosted on **Neon** (serverless PostgreSQL) — connections may fail on cold start, retries resolve it
-- Schema managed with **Drizzle ORM**; `db:push` applies changes directly, `db:generate` creates migration files (interactive, may not work in CI)
-- Check constraints must be updated manually via SQL if `db:push` doesn't detect the change:
+- Schema managed with **Drizzle ORM** and **migration files** in `backend/drizzle/` — they are the source of truth for every database. To change the schema: edit `backend/src/db/schema.ts`, run `bun run db:generate -- --name <what_changed>` (non-interactive for additive changes; it only prompts when it has to guess a rename), review the generated SQL, commit it, then `bun run db:migrate` (dev) and `bun run db:migrate:prod` at deploy. `db:migrate` never prompts
+- Do not use `db:push` for changes you intend to keep: it bypasses the migration journal and the databases drift apart (there is deliberately no `db:push:prod`). The backend test database is built from the migration files, so a schema change without its migration fails the tests
+- `drizzle-kit` does not always detect a changed check constraint. If the generated migration misses it, add the SQL to that migration file by hand:
   ```sql
   ALTER TABLE table_name DROP CONSTRAINT IF EXISTS constraint_name;
   ALTER TABLE table_name ADD CONSTRAINT constraint_name CHECK (...);
@@ -150,6 +152,7 @@ import { UserIcon, LockIcon, ShieldIcon } from 'lucide-react'
 - Use `<Trans>` components for JSX text: `<Trans>Forgot Password</Trans>`
 - Use `t` macro for strings, validation messages, toasts: `` t`Email is required` ``
 - Do not call translation macros at module scope (locale may not be activated yet)
+- For labels that must live in module-scope data (e.g. the nav item catalog), declare lazy descriptors with `msg` from `@lingui/core/macro` and resolve them in the component with `t(descriptor)` from `useLingui()` — `msg` translates nothing by itself, so the rule above still holds
 - Extract strings with `bun run lingui:extract`, compile with `bun run lingui:compile`
 
 ### Git Commits

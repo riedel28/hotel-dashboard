@@ -26,7 +26,7 @@ function NumberInput({
           // Focus
           'focus-within:border-primary focus-within:shadow-[inset_0_0_0_1px_var(--color-primary)]',
           // Error / invalid (inside a <Field data-invalid>)
-          'in-data-[invalid=true]:border-destructive in-data-[invalid=true]:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
+          'in-data-[invalid=true]:border-danger in-data-[invalid=true]:focus-within:border-danger in-data-[invalid=true]:focus-within:shadow-[inset_0_0_0_1px_var(--color-danger)]',
           // Disabled
           'data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:bg-input/50 data-disabled:opacity-50',
           // Dark mode
