@@ -89,7 +89,10 @@ function DataGridRadioFilter<TValue extends string>({
           </Button>
         )}
       />
-      <DropdownMenuContent align="start" className="w-auto min-w-[150px]">
+      <DropdownMenuContent
+        align="start"
+        className="w-auto min-w-(--anchor-width)"
+      >
         <DropdownMenuRadioGroup
           // Empty string keeps the group controlled while nothing is selected.
           value={value ?? ''}
