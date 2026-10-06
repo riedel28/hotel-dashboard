@@ -44,7 +44,7 @@ function SelectTrigger({
       data-size={size}
       className={cn(
         // Base
-        'flex w-fit items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 whitespace-nowrap transition-[color,box-shadow]',
+        'flex w-fit items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 whitespace-nowrap transition-[color,box-shadow] outline-none',
         // Typography
         'text-sm',
         // Sizes
@@ -58,9 +58,9 @@ function SelectTrigger({
         // Icons
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         // Focus
-        'focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary',
+        'focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)]',
         // Error / invalid
-        'aria-invalid:border-destructive aria-invalid:focus-visible:outline-destructive',
+        'aria-invalid:border-danger aria-invalid:focus-visible:border-danger aria-invalid:focus-visible:shadow-[inset_0_0_0_1px_var(--color-danger)]',
         // Disabled
         'disabled:cursor-not-allowed disabled:opacity-50',
         // Dark mode

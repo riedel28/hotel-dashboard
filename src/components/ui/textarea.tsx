@@ -16,7 +16,7 @@ function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
         // Focus
         'focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)]',
         // Error / invalid
-        'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
+        'aria-invalid:border-danger aria-invalid:focus-visible:border-danger aria-invalid:focus-visible:shadow-[inset_0_0_0_1px_var(--color-danger)]',
         // Disabled
         'disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50',
         // Dark mode

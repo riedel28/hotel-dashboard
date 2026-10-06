@@ -371,7 +371,7 @@ function RichTextEditor({
         // Mirrors Textarea: border, focus, invalid, disabled and dark styles.
         'w-full rounded-lg border border-input bg-transparent transition-[color,box-shadow]',
         'focus-within:border-primary focus-within:shadow-[inset_0_0_0_1px_var(--color-primary)]',
-        'aria-invalid:border-destructive aria-invalid:focus-within:border-destructive aria-invalid:focus-within:shadow-[inset_0_0_0_1px_var(--color-destructive)]',
+        'aria-invalid:border-danger aria-invalid:focus-within:border-danger aria-invalid:focus-within:shadow-[inset_0_0_0_1px_var(--color-danger)]',
         'dark:bg-input/30',
         disabled && 'cursor-not-allowed bg-input/50 opacity-50',
         className
