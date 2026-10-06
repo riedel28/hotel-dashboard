@@ -137,7 +137,9 @@ The frontend runs at `http://localhost:5173` and the backend at `http://localhos
 | `bun run start` | Start in production mode |
 | `bun run test` | Run backend integration tests (uses `.env.test`, isolated DB) |
 | `bun run db:seed` | Seed database with sample data |
-| `bun run db:push` | Push schema changes to database |
+| `bun run db:generate -- --name <what_changed>` | Generate a migration from schema changes |
+| `bun run db:migrate` | Apply pending migrations to the dev database |
+| `bun run db:migrate:prod` | Apply pending migrations to production |
 | `bun run db:studio` | Open Drizzle Studio GUI |
 
 ## Project Structure

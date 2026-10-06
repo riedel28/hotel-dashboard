@@ -21,16 +21,16 @@ export PORT=5001
 export CORS_ORIGIN=http://localhost:5173
 ```
 
-Apply schema
+Apply schema (runs the migrations in `./drizzle`)
 
 ```sh
-psql "$DATABASE_URL" -f ./backend/sql/schema.sql
+bun run db:migrate
 ```
 
 Populate with sample data (optional)
 
 ```sh
-psql "$DATABASE_URL" -f ./backend/sql/seed.sql
+bun run db:seed
 ```
 
 Start dev server

@@ -1,1 +1,0 @@
-ALTER TABLE "users" ADD CONSTRAINT "users_selected_property_id_properties_id_fk" FOREIGN KEY ("selected_property_id") REFERENCES "public"."properties"("id") ON DELETE set null ON UPDATE no action;

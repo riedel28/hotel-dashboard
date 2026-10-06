@@ -1,0 +1,1 @@
+ALTER TABLE "properties" ADD COLUMN "disabled_nav_items" text[] DEFAULT '{}'::text[] NOT NULL;
