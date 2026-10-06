@@ -9,7 +9,6 @@ import {
   ArrowUp,
   Check,
   ChevronDownIcon,
-  ChevronsUpDown,
   ChevronUpIcon,
   PinOff,
   Settings2
@@ -139,9 +138,7 @@ function DataGridColumnHeader<TData, TValue>({
             <ChevronDownIcon className="mt-px size-3.5" />
           ) : column.getIsSorted() === 'asc' ? (
             <ChevronUpIcon className="mt-px size-3.5" />
-          ) : (
-            <ChevronsUpDown className="mt-px size-3" />
-          ))}
+          ) : null)}
       </Button>
     );
   };
