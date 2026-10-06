@@ -1,23 +1,13 @@
 'use client';
 
 import { Trans } from '@lingui/react/macro';
-import { Link, type LinkProps } from '@tanstack/react-router';
 import {
-  BedDoubleIcon,
-  BedSingleIcon,
-  BookAIcon,
   BuildingIcon,
-  CableIcon,
-  CreditCardIcon,
   HomeIcon,
-  LockIcon,
   MessageCircleIcon,
-  ShoppingBagIcon,
-  SquareActivityIcon,
   UsersIcon,
   XIcon
 } from 'lucide-react';
-import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -30,45 +20,16 @@ import {
 import {
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem
 } from '@/components/ui/sidebar';
 import { useCurrentView } from '@/hooks/use-current-view';
+import {
+  SidebarLink,
+  UserNavContent
+} from '@/routes/_dashboard-layout/-components/sidebar-nav';
 import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
-
-interface SidebarLinkProps extends LinkProps {
-  icon: React.ComponentType<{ className?: string }>;
-  children: React.ReactNode;
-  onNavigate?: () => void;
-}
-
-function SidebarLink({
-  icon: Icon,
-  children,
-  onNavigate,
-  ...linkProps
-}: SidebarLinkProps) {
-  return (
-    <SidebarMenuButton
-      render={
-        <Link
-          activeProps={{
-            className:
-              'bg-primary/10 text-cyan-800 dark:bg-primary/20 dark:text-cyan-200/90'
-          }}
-          onClick={onNavigate}
-          {...(linkProps as LinkProps)}
-        >
-          <Icon />
-          <span>{children}</span>
-        </Link>
-      }
-    />
-  );
-}
 
 interface MobileMenuProps {
   open: boolean;
@@ -116,128 +77,6 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
-
-      <SidebarGroup>
-        <SidebarGroupLabel>
-          <Trans>Integrations</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/pms-provider"
-              icon={CableIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>PMS</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/door-locks"
-              icon={LockIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Door Locks</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/payment-provider"
-              icon={CreditCardIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Payment Provider</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-    </SidebarContent>
-  );
-
-  // User menu content
-  const UserMenuContent = () => (
-    <SidebarContent>
-      <SidebarGroup>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink to="/" icon={HomeIcon} onNavigate={handleNavigate}>
-              <Trans>Start</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/monitoring"
-              icon={SquareActivityIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Monitoring</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-
-      {/* Front Office Section */}
-      <SidebarGroup>
-        <SidebarGroupLabel>
-          <Trans>Front Office</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/reservations"
-              icon={BedDoubleIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Reservations</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/rooms"
-              icon={BedSingleIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Rooms</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/users"
-              icon={UsersIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Users</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-
-      {/* Content Manager Section */}
-      <SidebarGroup>
-        <SidebarGroupLabel>
-          <Trans>Content Manager</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/guest-abc"
-              icon={BookAIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Guest ABC</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/products"
-              icon={ShoppingBagIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Products</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
     </SidebarContent>
   );
 
@@ -280,7 +119,11 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
             </SidebarMenu>
           </SidebarHeader>
           <SidebarViewToggle />
-          {currentView === 'admin' ? <AdminMenuContent /> : <UserMenuContent />}
+          {currentView === 'admin' ? (
+            <AdminMenuContent />
+          ) : (
+            <UserNavContent onNavigate={handleNavigate} />
+          )}
         </div>
       </SheetContent>
     </Sheet>

@@ -1,20 +1,27 @@
-import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import type { Property } from 'shared/types/properties';
+import type { NavItemId, Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
 import { updatePropertyById } from '@/api/properties';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -25,11 +32,13 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { toggleableNavGroups } from '@/routes/_dashboard-layout/-components/nav-items';
 
 interface EditPropertyFormData {
   name: string;
   country_code: string;
   stage: Property['stage'];
+  disabled_nav_items: NavItemId[];
 }
 
 interface EditPropertyFormProps {
@@ -42,12 +51,14 @@ export function EditPropertyForm({
   propertyData
 }: EditPropertyFormProps) {
   const queryClient = useQueryClient();
+  const { t } = useLingui();
 
   const form = useForm<EditPropertyFormData>({
     values: {
       name: propertyData.name,
       country_code: propertyData.country_code,
-      stage: propertyData.stage
+      stage: propertyData.stage,
+      disabled_nav_items: propertyData.disabled_nav_items
     }
   });
 
@@ -168,6 +179,66 @@ export function EditPropertyForm({
               />
             </FieldGroup>
           </FieldSet>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <Trans>Nav items</Trans>
+          </CardTitle>
+          <CardDescription>
+            <Trans>
+              Unchecked nav items are hidden from the navigation and the Start
+              page for this property.
+            </Trans>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Controller
+            control={form.control}
+            name="disabled_nav_items"
+            render={({ field }) => (
+              <div className="space-y-5">
+                {toggleableNavGroups.map((group) => (
+                  <FieldSet key={group.key} className="gap-3">
+                    {group.label && (
+                      <FieldLegend variant="label">
+                        {t(group.label)}
+                      </FieldLegend>
+                    )}
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {group.items.map(({ id, label }) => (
+                        <Field
+                          key={id}
+                          orientation="horizontal"
+                          className="gap-3 rounded-md border bg-muted/20 p-3"
+                        >
+                          <Checkbox
+                            id={`nav-item-${id}`}
+                            checked={!field.value.includes(id)}
+                            onCheckedChange={(checked) =>
+                              field.onChange(
+                                checked
+                                  ? field.value.filter((v) => v !== id)
+                                  : [...field.value, id]
+                              )
+                            }
+                          />
+                          <FieldLabel
+                            htmlFor={`nav-item-${id}`}
+                            className="cursor-pointer text-sm font-normal"
+                          >
+                            {t(label)}
+                          </FieldLabel>
+                        </Field>
+                      ))}
+                    </div>
+                  </FieldSet>
+                ))}
+              </div>
+            )}
+          />
         </CardContent>
       </Card>
 

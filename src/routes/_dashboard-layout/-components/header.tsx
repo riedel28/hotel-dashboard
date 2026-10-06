@@ -21,11 +21,25 @@ export default function Header() {
     string | undefined
   >();
 
+  // Re-run the layout's `beforeLoad` once the new selection has reached the
+  // router context, so the nav items (and the redirect away from a page the
+  // new Property has switched off) follow the Property. Done in an effect, not
+  // in `handlePropertyChange`: there the context may still hold the old user.
+  const selectedPropertyId = user?.selected_property_id;
+  const lastPropertyId = React.useRef(selectedPropertyId);
+  React.useEffect(() => {
+    if (lastPropertyId.current === selectedPropertyId) return;
+    lastPropertyId.current = selectedPropertyId;
+    // Mark the cached copy stale first, so `beforeLoad` refetches the new
+    // Property's nav items instead of trusting an earlier visit.
+    void queryClient.invalidateQueries({ queryKey: ['properties'] });
+    void router.invalidate();
+  }, [selectedPropertyId, queryClient, router]);
+
   const handleReloadProperties = async () => {
-    // Remove query from cache to force fresh fetch
-    queryClient.removeQueries({
-      queryKey: propertiesQueryOptions().queryKey
-    });
+    // Remove the list and the selected Property from cache to force a fresh
+    // fetch of both — the latter carries the nav items.
+    queryClient.removeQueries({ queryKey: ['properties'] });
     // Fetch fresh data and update cache
     await queryClient.fetchQuery(propertiesQueryOptions());
     // Invalidate the router to trigger loader refetch with fresh data

@@ -20,11 +20,28 @@ export const propertyStageSchema = z.enum([
   'template'
 ]);
 
+// Nav items an Administrator can switch off per Property. `Start` is always
+// shown and is deliberately absent.
+export const navItemIdSchema = z.enum([
+  'monitoring',
+  'reservations',
+  'rooms',
+  'users',
+  'guest-abc',
+  'products',
+  'pms-provider',
+  'door-locks',
+  'payment-provider'
+]);
+
 export const propertySchema = z.object({
   id: z.uuid(),
   name: z.string().min(1),
   country_code: countryCodeSchema,
-  stage: propertyStageSchema
+  stage: propertyStageSchema,
+  disabled_nav_items: z
+    .array(navItemIdSchema)
+    .transform((ids) => [...new Set(ids)])
 });
 
 export const propertySortableColumnsSchema = z.enum([
@@ -85,6 +102,7 @@ export const propertyIdParamsSchema = z.object({
 
 // Type exports
 export type PropertyStage = z.infer<typeof propertyStageSchema>;
+export type NavItemId = z.infer<typeof navItemIdSchema>;
 export type Property = z.infer<typeof propertySchema>;
 export type CreatePropertyData = z.infer<typeof createPropertySchema>;
 export type FetchPropertiesParams = z.infer<typeof fetchPropertiesParamsSchema>;

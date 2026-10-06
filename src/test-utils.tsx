@@ -37,5 +37,6 @@ export const createMockProperty = (
   id,
   name,
   country_code,
-  stage
+  stage,
+  disabled_nav_items: []
 });

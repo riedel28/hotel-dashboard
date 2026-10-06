@@ -1,113 +1,39 @@
 'use client';
 
 import { Trans, useLingui } from '@lingui/react/macro';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import {
-  createFileRoute,
-  Link,
-  type LinkProps,
-  Outlet,
-  redirect
-} from '@tanstack/react-router';
-import {
-  // ArrowUpRightIcon,
-  BedDoubleIcon,
-  BookAIcon,
   BuildingIcon,
-  // CalendarIcon,
-  // FileSpreadsheetIcon,
-  // Grid2X2Icon,
-  CreditCardIcon,
-  DoorOpenIcon,
   HomeIcon,
-  LayoutGridIcon,
-  // ListTodoIcon,
   LoaderCircleIcon,
-  LockIcon,
-  MessageCircleIcon,
-  // ReceiptTextIcon,
-  ShoppingBagIcon,
-  // ShoppingCartIcon,
-  // SmartphoneIcon,
-  SquareActivityIcon,
-  // TabletIcon,
-  // TvIcon,
-  UsersIcon
+  MessageCircleIcon
 } from 'lucide-react';
-import * as React from 'react';
+import type { NavItemId } from 'shared/types/properties';
 
-import { propertiesQueryOptions } from '@/api/properties';
+import { ApiError } from '@/api/client';
+import {
+  propertiesQueryOptions,
+  propertyByIdQueryOptions
+} from '@/api/properties';
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  // SidebarMenuBadge,
-  SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
 import { useCurrentView } from '@/hooks/use-current-view';
 import Header from '@/routes/_dashboard-layout/-components/header';
+import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
+import {
+  SidebarLink,
+  UserNavContent
+} from '@/routes/_dashboard-layout/-components/sidebar-nav';
 import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
-
-interface SidebarLinkProps extends LinkProps {
-  icon: React.ComponentType<{ className?: string }>;
-  children: React.ReactNode;
-  tooltip?: string;
-}
-
-function SidebarLink({
-  icon: Icon,
-  children,
-  tooltip,
-  ...linkProps
-}: SidebarLinkProps) {
-  return (
-    <SidebarMenuButton
-      tooltip={tooltip}
-      render={
-        <Link
-          activeProps={{
-            className:
-              'bg-primary/10 text-cyan-800 hover:bg-primary/10! hover:text-cyan-800! dark:bg-primary/20! dark:text-cyan-200/90!'
-          }}
-          {...(linkProps as LinkProps)}
-        >
-          <Icon />
-          <span>{children}</span>
-        </Link>
-      }
-    />
-  );
-}
-
-// Sample data for content manager items
-// const contentManagerItems = [
-//   {
-//     name: 'Mobile CMS',
-//     url: '/mobile-cms',
-//     icon: SmartphoneIcon
-//   },
-//   {
-//     name: 'TV',
-//     url: '/tv',
-//     icon: TvIcon
-//   },
-//   {
-//     name: 'Products',
-//     url: '/products',
-//     icon: ShoppingBagIcon
-//   },
-//   {
-//     name: 'Events',
-//     url: '/events',
-//     icon: CalendarIcon
-//   }
-// ];
 
 // Sidebar header component
 function SidebarHeaderComponent() {
@@ -163,257 +89,6 @@ function AdminSidebarContent() {
   );
 }
 
-// User sidebar content
-function UserSidebarContent() {
-  const { t } = useLingui();
-
-  return (
-    <SidebarContent>
-      <SidebarGroup>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/"
-              icon={HomeIcon}
-              tooltip={t`Start`}
-              activeOptions={{ exact: true }}
-            >
-              <Trans>Start</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/monitoring"
-              icon={SquareActivityIcon}
-              tooltip={t`Monitoring`}
-            >
-              <Trans>Monitoring</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-
-      {/* Front Office Section */}
-      <SidebarGroup>
-        <SidebarGroupLabel>
-          <Trans>Front Office</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/reservations"
-              icon={BedDoubleIcon}
-              tooltip={t`Reservations`}
-            >
-              <Trans>Reservations</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink to="/rooms" icon={DoorOpenIcon} tooltip={t`Rooms`}>
-              <Trans>Rooms</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink to="/users" icon={UsersIcon} tooltip={t`Users`}>
-              <Trans>Users</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          {/* <SidebarMenuItem>
-            <SidebarLink
-              to="/registration-forms"
-              icon={ListTodoIcon}
-              tooltip={t`Registration forms`}
-            >
-              <Trans>Registration forms</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/payments"
-              icon={ReceiptTextIcon}
-              tooltip={t`Payments`}
-            >
-              <Trans>Payments</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/orders"
-              icon={ShoppingCartIcon}
-              tooltip={t`Orders`}
-            >
-              <Trans>Orders</Trans>
-            </SidebarLink>
-          </SidebarMenuItem> */}
-        </SidebarMenu>
-      </SidebarGroup>
-
-      {/* Content Manager Section */}
-      <SidebarGroup>
-        <SidebarGroupLabel>
-          <Trans>Content Manager</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/guest-abc"
-              icon={BookAIcon}
-              tooltip={t`Guest ABC`}
-            >
-              <Trans>Guest ABC</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/products"
-              icon={ShoppingBagIcon}
-              tooltip={t`Products`}
-            >
-              <Trans>Products</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-
-      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-        <SidebarGroupLabel>
-          <Trans>Content Manager</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          {contentManagerItems.map((item) => {
-            const getItemLabel = (url: string) => {
-              switch (url) {
-                case '/mobile-cms':
-                  return <Trans>Mobile App</Trans>;
-                case '/tv':
-                  return <Trans>TV App</Trans>;
-                case '/products':
-                  return <Trans>Products</Trans>;
-                case '/events':
-                  return <Trans>Events</Trans>;
-                default:
-                  return item.name;
-              }
-            };
-            const getItemTooltip = (url: string) => {
-              switch (url) {
-                case '/mobile-cms':
-                  return t`Mobile App`;
-                case '/tv':
-                  return t`TV App`;
-                case '/products':
-                  return t`Products`;
-                case '/events':
-                  return t`Events`;
-                default:
-                  return item.name;
-              }
-            };
-
-            return (
-              <SidebarMenuItem key={item.name}>
-                <SidebarLink
-                  to={item.url as LinkProps['to']}
-                  icon={item.icon}
-                  tooltip={getItemTooltip(item.url)}
-                >
-                  {getItemLabel(item.url)}
-                </SidebarLink>
-                {item.url === '/tv' && (
-                  <SidebarMenuBadge>
-                    <ArrowUpRightIcon
-                      className="size-4 text-muted-foreground/80"
-                      aria-hidden="true"
-                    />
-                  </SidebarMenuBadge>
-                )}
-              </SidebarMenuItem>
-            );
-          })}
-        </SidebarMenu>
-      </SidebarGroup> */}
-
-      {/* Integrations Section */}
-      <SidebarGroup>
-        <SidebarGroupLabel>
-          <Trans>Integrations</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/pms-provider"
-              icon={LayoutGridIcon}
-              tooltip={t`PMS`}
-            >
-              <Trans>PMS</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/door-locks"
-              icon={LockIcon}
-              tooltip={t`Door Locks`}
-            >
-              <Trans>Door Locks</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/payment-provider"
-              icon={CreditCardIcon}
-              tooltip={t`Payment Provider`}
-            >
-              <Trans>Payment Provider</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-
-      {/* Settings Section */}
-      {/* <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-        <SidebarGroupLabel>
-          <Trans>Settings</Trans>
-        </SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/company"
-              icon={BuildingIcon}
-              tooltip={t`Company data`}
-            >
-              <Trans>Company data</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/checkin-page"
-              icon={FileSpreadsheetIcon}
-              tooltip={t`Checkin Page`}
-            >
-              <Trans>Checkin Page</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink to="/users" icon={UsersIcon} tooltip={t`Users`}>
-              <Trans>Users</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink to="/rooms" icon={DoorOpenIcon} tooltip={t`Rooms`}>
-              <Trans>Rooms</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink to="/devices" icon={TabletIcon} tooltip={t`Devices`}>
-              <Trans>Devices</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup> */}
-    </SidebarContent>
-  );
-}
-
 // Main sidebar component
 function DashboardSidebar() {
   const currentView = useCurrentView();
@@ -427,7 +102,7 @@ function DashboardSidebar() {
         {currentView === 'admin' ? (
           <AdminSidebarContent />
         ) : (
-          <UserSidebarContent />
+          <UserNavContent tooltips />
         )}
       </nav>
     </Sidebar>
@@ -467,7 +142,7 @@ function DashboardLayout() {
 }
 
 export const Route = createFileRoute('/_dashboard-layout')({
-  beforeLoad: ({ context, location }) => {
+  beforeLoad: async ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
       throw redirect({
         to: '/auth/login',
@@ -476,6 +151,26 @@ export const Route = createFileRoute('/_dashboard-layout')({
         }
       });
     }
+
+    // No selected Property, or one that has since been deleted (404): show
+    // every nav item. Any other failure propagates — treating it as "nothing
+    // disabled" would open switched-off pages on a transient error.
+    const propertyId = context.auth.user?.selected_property_id;
+    const disabledNavItems: NavItemId[] = propertyId
+      ? await context.queryClient
+          .fetchQuery(propertyByIdQueryOptions(propertyId))
+          .then((property) => property.disabled_nav_items)
+          .catch((error: unknown) => {
+            if (error instanceof ApiError && error.status === 404) return [];
+            throw error;
+          })
+      : [];
+
+    if (isNavPathDisabled(location.pathname, disabledNavItems)) {
+      throw redirect({ to: '/' });
+    }
+
+    return { disabledNavItems };
   },
   // No auth check here: `beforeLoad` above always runs first, and its redirect
   // throws, so an unauthenticated request never reaches this loader.

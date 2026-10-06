@@ -54,10 +54,12 @@ client.interceptors.response.use(
 
 class ApiError extends Error {
   code?: string;
-  constructor(message: string, code?: string) {
+  status?: number;
+  constructor(message: string, code?: string, status?: number) {
     super(message);
     this.name = 'ApiError';
     this.code = code;
+    this.status = status;
   }
 }
 
@@ -70,7 +72,8 @@ function handleApiError(err: unknown, context: string): never {
     }>;
     throw new ApiError(
       ae.response?.data?.error ?? ae.response?.data?.message ?? ae.message,
-      ae.response?.data?.code
+      ae.response?.data?.code,
+      ae.response?.status
     );
   }
   if (err instanceof z.ZodError) {

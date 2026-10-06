@@ -77,6 +77,7 @@ import { UserIcon, LockIcon, ShieldIcon } from 'lucide-react'
 - Use `<Trans>` components for JSX text: `<Trans>Forgot Password</Trans>`
 - Use `t` macro for strings, validation messages, toasts: `` t`Email is required` ``
 - Do not call translation macros at module scope (locale may not be activated yet)
+- For labels that must live in module-scope data (e.g. the nav item catalog), declare lazy descriptors with `msg` from `@lingui/core/macro` and resolve them in the component with `t(descriptor)` from `useLingui()` — `msg` translates nothing by itself, so the rule above still holds
 - Extract strings with `bun run lingui:extract`, compile with `bun run lingui:compile`
 
 ### Local Dev Server

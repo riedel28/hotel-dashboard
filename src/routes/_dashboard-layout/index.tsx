@@ -1,13 +1,12 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { createFileRoute, Link } from '@tanstack/react-router';
-import {
-  ActivityIcon,
-  BedDoubleIcon,
-  DoorOpenIcon,
-  UsersIcon
-} from 'lucide-react';
+import { createFileRoute, Link, type LinkProps } from '@tanstack/react-router';
+import type { NavItemId } from 'shared/types/properties';
 
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import {
+  toggleableNavItems,
+  useDisabledNavItems
+} from '@/routes/_dashboard-layout/-components/nav-items';
 
 import { useAuth } from '../../auth';
 
@@ -19,34 +18,46 @@ function StartPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Dashboard`);
   const auth = useAuth();
+  const disabledNavItems = useDisabledNavItems();
 
-  const quickActions = [
+  // Cards are nav items from the shared catalog, so a nav item switched off
+  // for the selected Property loses its card too.
+  const cards: {
+    id: NavItemId;
+    description: string;
+    search?: LinkProps['search'];
+  }[] = [
     {
-      title: t`Reservations`,
+      id: 'reservations',
       description: t`View and manage guest reservations, check-ins, and booking details`,
-      icon: BedDoubleIcon,
-      href: '/reservations',
       search: { page: 1, per_page: 10 }
     },
     {
-      title: t`Rooms`,
-      description: t`Manage room inventory, availability, and room type configurations`,
-      icon: DoorOpenIcon,
-      href: '/rooms'
+      id: 'rooms',
+      description: t`Manage room inventory, availability, and room type configurations`
     },
     {
-      title: t`Users`,
-      description: t`Manage users, view user details, and assign roles`,
-      icon: UsersIcon,
-      href: '/users'
+      id: 'users',
+      description: t`Manage users, view user details, and assign roles`
     },
     {
-      title: t`Monitoring`,
-      description: t`Monitor daily operations, track occupancy, and oversee front-office activity`,
-      icon: ActivityIcon,
-      href: '/monitoring'
+      id: 'monitoring',
+      description: t`Monitor daily operations, track occupancy, and oversee front-office activity`
     }
   ];
+
+  const quickActions = cards
+    .filter((card) => !disabledNavItems.includes(card.id))
+    .map((card) => {
+      const item = toggleableNavItems.find((i) => i.id === card.id)!;
+      return {
+        title: t(item.label),
+        description: card.description,
+        icon: item.icon,
+        href: item.to,
+        search: card.search
+      };
+    });
 
   const userName = auth.user?.first_name;
 

@@ -166,4 +166,74 @@ describe('Properties API', () => {
       }
     });
   });
+
+  describe('PATCH /api/properties/:id disabled_nav_items', () => {
+    async function createAdminAndPickProperty() {
+      const { token } = await createTestUser({ is_admin: true });
+      const [property] = await db.select().from(propertiesTable).limit(1);
+      return { token, property };
+    }
+
+    test('defaults to no disabled nav items', async () => {
+      const { property } = await createAdminAndPickProperty();
+
+      const response = await request(app)
+        .get(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.disabled_nav_items).toEqual([]);
+    });
+
+    test('saves disabled nav items without touching other fields', async () => {
+      const { token, property } = await createAdminAndPickProperty();
+
+      const response = await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ disabled_nav_items: ['rooms', 'door-locks'] })
+        .expect(200);
+
+      expect(response.body.disabled_nav_items).toEqual(['rooms', 'door-locks']);
+      expect(response.body.name).toBe(property.name);
+
+      const reread = await request(app)
+        .get(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      expect(reread.body.disabled_nav_items).toEqual(['rooms', 'door-locks']);
+    });
+
+    test('stores each nav item id once', async () => {
+      const { token, property } = await createAdminAndPickProperty();
+
+      const response = await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ disabled_nav_items: ['rooms', 'rooms', 'users'] })
+        .expect(200);
+
+      expect(response.body.disabled_nav_items).toEqual(['rooms', 'users']);
+    });
+
+    test('rejects an unknown nav item id', async () => {
+      const { token, property } = await createAdminAndPickProperty();
+
+      await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ disabled_nav_items: ['rooms', 'not-a-nav-item'] })
+        .expect(400);
+    });
+
+    test('rejects a non-admin', async () => {
+      const { property } = await createAdminAndPickProperty();
+
+      await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ disabled_nav_items: ['rooms'] })
+        .expect(403);
+    });
+  });
 });
