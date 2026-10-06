@@ -15,9 +15,10 @@ function toPropertyResponse(property: typeof propertiesTable.$inferSelect) {
     name: property.name,
     country_code: property.country_code,
     stage: property.stage,
-    // Drop ids that have since left the catalog; the client parses strictly.
-    disabled_nav_items: property.disabled_nav_items.filter((id) =>
-      navItemIdSchema.options.includes(id)
+    // The column is plain text[]: keep only ids still in the catalog, since
+    // the client parses the response strictly.
+    disabled_nav_items: navItemIdSchema.options.filter((id) =>
+      property.disabled_nav_items.includes(id)
     )
   };
 }

@@ -7,21 +7,13 @@ import { toast } from 'sonner';
 
 import { updatePropertyById } from '@/api/properties';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -32,7 +24,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { toggleableNavGroups } from '@/routes/_dashboard-layout/-components/nav-items';
+
+import { NavItemsField } from './nav-items-field';
 
 interface EditPropertyFormData {
   name: string;
@@ -182,65 +175,13 @@ export function EditPropertyForm({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <Trans>Nav items</Trans>
-          </CardTitle>
-          <CardDescription>
-            <Trans>
-              Unchecked nav items are hidden from the navigation and the Start
-              page for this property.
-            </Trans>
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Controller
-            control={form.control}
-            name="disabled_nav_items"
-            render={({ field }) => (
-              <div className="space-y-5">
-                {toggleableNavGroups.map((group) => (
-                  <FieldSet key={group.key} className="gap-3">
-                    {group.label && (
-                      <FieldLegend variant="label">
-                        {t(group.label)}
-                      </FieldLegend>
-                    )}
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      {group.items.map(({ id, label }) => (
-                        <Field
-                          key={id}
-                          orientation="horizontal"
-                          className="gap-3 rounded-md border bg-muted/20 p-3"
-                        >
-                          <Checkbox
-                            id={`nav-item-${id}`}
-                            checked={!field.value.includes(id)}
-                            onCheckedChange={(checked) =>
-                              field.onChange(
-                                checked
-                                  ? field.value.filter((v) => v !== id)
-                                  : [...field.value, id]
-                              )
-                            }
-                          />
-                          <FieldLabel
-                            htmlFor={`nav-item-${id}`}
-                            className="cursor-pointer text-sm font-normal"
-                          >
-                            {t(label)}
-                          </FieldLabel>
-                        </Field>
-                      ))}
-                    </div>
-                  </FieldSet>
-                ))}
-              </div>
-            )}
-          />
-        </CardContent>
-      </Card>
+      <Controller
+        control={form.control}
+        name="disabled_nav_items"
+        render={({ field }) => (
+          <NavItemsField disabled={field.value} onChange={field.onChange} />
+        )}
+      />
 
       <Button type="submit" disabled={updatePropertyMutation.isPending}>
         {updatePropertyMutation.isPending && (

@@ -1,13 +1,7 @@
 'use client';
 
 import { Trans } from '@lingui/react/macro';
-import {
-  BuildingIcon,
-  HomeIcon,
-  MessageCircleIcon,
-  UsersIcon,
-  XIcon
-} from 'lucide-react';
+import { MessageCircleIcon, XIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,17 +12,12 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import {
-  SidebarContent,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem
 } from '@/components/ui/sidebar';
-import { useCurrentView } from '@/hooks/use-current-view';
-import {
-  SidebarLink,
-  UserNavContent
-} from '@/routes/_dashboard-layout/-components/sidebar-nav';
+import { DashboardNav } from '@/routes/_dashboard-layout/-components/sidebar-nav';
 import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
 
 interface MobileMenuProps {
@@ -37,49 +26,6 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
-  const currentView = useCurrentView();
-
-  const handleNavigate = () => {
-    onOpenChange(false);
-  };
-
-  // Admin menu content
-  const AdminMenuContent = () => (
-    <SidebarContent>
-      <SidebarGroup>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/admin"
-              icon={HomeIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Start</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/admin/properties"
-              icon={BuildingIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Properties</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/admin/customers"
-              icon={UsersIcon}
-              onNavigate={handleNavigate}
-            >
-              <Trans>Customers</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-    </SidebarContent>
-  );
-
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -119,11 +65,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
             </SidebarMenu>
           </SidebarHeader>
           <SidebarViewToggle />
-          {currentView === 'admin' ? (
-            <AdminMenuContent />
-          ) : (
-            <UserNavContent onNavigate={handleNavigate} />
-          )}
+          <DashboardNav onNavigate={() => onOpenChange(false)} />
         </div>
       </SheetContent>
     </Sheet>

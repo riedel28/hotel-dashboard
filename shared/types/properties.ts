@@ -39,9 +39,7 @@ export const propertySchema = z.object({
   name: z.string().min(1),
   country_code: countryCodeSchema,
   stage: propertyStageSchema,
-  disabled_nav_items: z
-    .array(navItemIdSchema)
-    .transform((ids) => [...new Set(ids)])
+  disabled_nav_items: z.array(navItemIdSchema)
 });
 
 export const propertySortableColumnsSchema = z.enum([
@@ -94,7 +92,14 @@ export const createPropertySchema = z.object({
   stage: propertyStageSchema
 });
 
-export const updatePropertySchema = propertySchema.omit({ id: true }).partial();
+export const updatePropertySchema = propertySchema
+  .omit({ id: true })
+  .extend({
+    disabled_nav_items: z
+      .array(navItemIdSchema)
+      .transform((ids) => [...new Set(ids)])
+  })
+  .partial();
 
 export const propertyIdParamsSchema = z.object({
   id: z.uuid()

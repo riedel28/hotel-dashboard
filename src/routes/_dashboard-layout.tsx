@@ -2,22 +2,14 @@
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-import {
-  BuildingIcon,
-  HomeIcon,
-  LoaderCircleIcon,
-  MessageCircleIcon
-} from 'lucide-react';
-import type { NavItemId } from 'shared/types/properties';
+import { LoaderCircleIcon, MessageCircleIcon } from 'lucide-react';
 
-import { ApiError } from '@/api/client';
 import {
-  propertiesQueryOptions,
-  propertyByIdQueryOptions
+  fetchDisabledNavItems,
+  propertiesQueryOptions
 } from '@/api/properties';
 import {
   Sidebar,
-  SidebarContent,
   SidebarGroup,
   SidebarHeader,
   SidebarInset,
@@ -26,13 +18,9 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
-import { useCurrentView } from '@/hooks/use-current-view';
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
-import {
-  SidebarLink,
-  UserNavContent
-} from '@/routes/_dashboard-layout/-components/sidebar-nav';
+import { DashboardNav } from '@/routes/_dashboard-layout/-components/sidebar-nav';
 import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
 
 // Sidebar header component
@@ -56,42 +44,8 @@ function SidebarHeaderComponent() {
   );
 }
 
-// Admin sidebar content
-function AdminSidebarContent() {
-  const { t } = useLingui();
-
-  return (
-    <SidebarContent>
-      <SidebarGroup>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/admin"
-              icon={HomeIcon}
-              tooltip={t`Start`}
-              activeOptions={{ exact: true }}
-            >
-              <Trans>Start</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarLink
-              to="/admin/properties"
-              icon={BuildingIcon}
-              tooltip={t`Properties`}
-            >
-              <Trans>Properties</Trans>
-            </SidebarLink>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-    </SidebarContent>
-  );
-}
-
 // Main sidebar component
 function DashboardSidebar() {
-  const currentView = useCurrentView();
   const { t } = useLingui();
 
   return (
@@ -99,11 +53,7 @@ function DashboardSidebar() {
       <SidebarHeaderComponent />
       <SidebarViewToggle />
       <nav aria-label={t`Main navigation`}>
-        {currentView === 'admin' ? (
-          <AdminSidebarContent />
-        ) : (
-          <UserNavContent tooltips />
-        )}
+        <DashboardNav />
       </nav>
     </Sidebar>
   );
@@ -152,19 +102,10 @@ export const Route = createFileRoute('/_dashboard-layout')({
       });
     }
 
-    // No selected Property, or one that has since been deleted (404): show
-    // every nav item. Any other failure propagates — treating it as "nothing
-    // disabled" would open switched-off pages on a transient error.
-    const propertyId = context.auth.user?.selected_property_id;
-    const disabledNavItems: NavItemId[] = propertyId
-      ? await context.queryClient
-          .fetchQuery(propertyByIdQueryOptions(propertyId))
-          .then((property) => property.disabled_nav_items)
-          .catch((error: unknown) => {
-            if (error instanceof ApiError && error.status === 404) return [];
-            throw error;
-          })
-      : [];
+    const disabledNavItems = await fetchDisabledNavItems(
+      context.queryClient,
+      context.auth.user?.selected_property_id
+    );
 
     if (isNavPathDisabled(location.pathname, disabledNavItems)) {
       throw redirect({ to: '/' });

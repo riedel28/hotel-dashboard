@@ -3,10 +3,8 @@ import { createFileRoute, Link, type LinkProps } from '@tanstack/react-router';
 import type { NavItemId } from 'shared/types/properties';
 
 import { useDocumentTitle } from '@/hooks/use-document-title';
-import {
-  toggleableNavItems,
-  useDisabledNavItems
-} from '@/routes/_dashboard-layout/-components/nav-items';
+import { navItems } from '@/routes/_dashboard-layout/-components/nav-items';
+import { useDisabledNavItems } from '@/routes/_dashboard-layout/-components/sidebar-nav';
 
 import { useAuth } from '../../auth';
 
@@ -48,16 +46,13 @@ function StartPage() {
 
   const quickActions = cards
     .filter((card) => !disabledNavItems.includes(card.id))
-    .map((card) => {
-      const item = toggleableNavItems.find((i) => i.id === card.id)!;
-      return {
-        title: t(item.label),
-        description: card.description,
-        icon: item.icon,
-        href: item.to,
-        search: card.search
-      };
-    });
+    .map(({ id, description, search }) => ({
+      title: t(navItems[id].label),
+      description,
+      icon: navItems[id].icon,
+      href: navItems[id].to,
+      search
+    }));
 
   const userName = auth.user?.first_name;
 

@@ -1,26 +1,37 @@
 import { describe, expect, test } from 'vitest';
 
-import { isNavPathDisabled, visibleNavGroups } from './nav-items';
+import { isNavPathDisabled, userNavSections } from './nav-items';
 
-describe('visibleNavGroups', () => {
+const paths = (sections: ReturnType<typeof userNavSections>) =>
+  sections.flatMap((section) => section.links.map((link) => link.to));
+
+describe('userNavSections', () => {
   test('shows everything when nothing is disabled', () => {
-    const ids = visibleNavGroups([]).flatMap((g) => g.items.map((i) => i.to));
-    expect(ids).toContain('/rooms');
-    expect(ids).toContain('/payment-provider');
+    expect(paths(userNavSections([]))).toEqual([
+      '/',
+      '/monitoring',
+      '/reservations',
+      '/rooms',
+      '/users',
+      '/guest-abc',
+      '/products',
+      '/pms-provider',
+      '/door-locks',
+      '/payment-provider'
+    ]);
   });
 
   test('removes disabled items and keeps Start', () => {
-    const groups = visibleNavGroups(['monitoring', 'rooms']);
-    const paths = groups.flatMap((g) => g.items.map((i) => i.to));
-    expect(paths).not.toContain('/rooms');
-    expect(paths).not.toContain('/monitoring');
-    expect(paths).toContain('/');
-    expect(paths).toContain('/reservations');
+    const shown = paths(userNavSections(['monitoring', 'rooms']));
+    expect(shown).not.toContain('/rooms');
+    expect(shown).not.toContain('/monitoring');
+    expect(shown).toContain('/');
+    expect(shown).toContain('/reservations');
   });
 
   test('drops a group once all its items are disabled', () => {
-    const groups = visibleNavGroups(['guest-abc', 'products']);
-    expect(groups.map((g) => g.key)).toEqual([
+    const sections = userNavSections(['guest-abc', 'products']);
+    expect(sections.map((section) => section.key)).toEqual([
       'main',
       'front-office',
       'integrations'

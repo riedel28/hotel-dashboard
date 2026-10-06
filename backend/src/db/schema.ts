@@ -16,8 +16,6 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import type { NavItemId } from '../../../shared/types/properties';
-
 export const reservations = pgTable(
   'reservations',
   {
@@ -153,7 +151,6 @@ export const properties = pgTable(
     // default for existing properties.
     disabled_nav_items: text('disabled_nav_items')
       .array()
-      .$type<NavItemId[]>()
       .notNull()
       .default(sql`'{}'::text[]`),
     created_at: timestamp('created_at', { withTimezone: true })

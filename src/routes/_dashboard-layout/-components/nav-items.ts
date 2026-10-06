@@ -1,9 +1,10 @@
 import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
-import { getRouteApi, type LinkProps } from '@tanstack/react-router';
+import type { LinkProps } from '@tanstack/react-router';
 import {
   BedDoubleIcon,
   BookAIcon,
+  BuildingIcon,
   CreditCardIcon,
   DoorOpenIcon,
   HomeIcon,
@@ -14,143 +15,144 @@ import {
   UsersIcon
 } from 'lucide-react';
 import type * as React from 'react';
-import type { NavItemId } from 'shared/types/properties';
+import { type NavItemId, navItemIdSchema } from 'shared/types/properties';
 
-export interface NavItem {
-  /** Absent for items that cannot be switched off (Start). */
-  id?: NavItemId;
+// Labels are lazy `msg` descriptors, resolved with `t(label)` at render.
+export interface NavLink {
   to: NonNullable<LinkProps['to']>;
   icon: React.ComponentType<{ className?: string }>;
   label: MessageDescriptor;
   exact?: boolean;
 }
 
-export interface NavGroup {
+export interface NavSection {
   key: string;
   label?: MessageDescriptor;
-  items: NavItem[];
+  links: NavLink[];
 }
 
-// The User View navigation: the single source for the desktop sidebar, the
-// mobile menu, the Start page cards and the per-Property nav item settings.
-// Labels are lazy `msg` descriptors, resolved with `t(label)` at render.
-export const userNavGroups: NavGroup[] = [
+type NavGroupKey = 'main' | 'front-office' | 'content-manager' | 'integrations';
+
+// Start is not a nav item: it cannot be switched off, so it is pinned to its
+// group instead of living in the catalog.
+const navGroups: {
+  key: NavGroupKey;
+  label?: MessageDescriptor;
+  pinned?: NavLink[];
+}[] = [
   {
     key: 'main',
-    items: [
-      { to: '/', icon: HomeIcon, label: msg`Start`, exact: true },
-      {
-        id: 'monitoring',
-        to: '/monitoring',
-        icon: SquareActivityIcon,
-        label: msg`Monitoring`
-      }
-    ]
+    pinned: [{ to: '/', icon: HomeIcon, label: msg`Start`, exact: true }]
   },
-  {
-    key: 'front-office',
-    label: msg`Front Office`,
-    items: [
-      {
-        id: 'reservations',
-        to: '/reservations',
-        icon: BedDoubleIcon,
-        label: msg`Reservations`
-      },
-      { id: 'rooms', to: '/rooms', icon: DoorOpenIcon, label: msg`Rooms` },
-      { id: 'users', to: '/users', icon: UsersIcon, label: msg`Users` }
-    ]
+  { key: 'front-office', label: msg`Front Office` },
+  { key: 'content-manager', label: msg`Content Manager` },
+  { key: 'integrations', label: msg`Integrations` }
+];
+
+// The nav item catalog: the single source for the sidebar, the mobile menu,
+// the Start page cards and the per-Property settings. Keyed by the shared id
+// enum, so an id without an entry here does not compile. Items appear in the
+// enum's order.
+export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
+  monitoring: {
+    group: 'main',
+    to: '/monitoring',
+    icon: SquareActivityIcon,
+    label: msg`Monitoring`
   },
-  {
-    key: 'content-manager',
-    label: msg`Content Manager`,
-    items: [
-      {
-        id: 'guest-abc',
-        to: '/guest-abc',
-        icon: BookAIcon,
-        label: msg`Guest ABC`
-      },
-      {
-        id: 'products',
-        to: '/products',
-        icon: ShoppingBagIcon,
-        label: msg`Products`
-      }
-    ]
+  reservations: {
+    group: 'front-office',
+    to: '/reservations',
+    icon: BedDoubleIcon,
+    label: msg`Reservations`
   },
+  rooms: {
+    group: 'front-office',
+    to: '/rooms',
+    icon: DoorOpenIcon,
+    label: msg`Rooms`
+  },
+  users: {
+    group: 'front-office',
+    to: '/users',
+    icon: UsersIcon,
+    label: msg`Users`
+  },
+  'guest-abc': {
+    group: 'content-manager',
+    to: '/guest-abc',
+    icon: BookAIcon,
+    label: msg`Guest ABC`
+  },
+  products: {
+    group: 'content-manager',
+    to: '/products',
+    icon: ShoppingBagIcon,
+    label: msg`Products`
+  },
+  'pms-provider': {
+    group: 'integrations',
+    to: '/pms-provider',
+    icon: LayoutGridIcon,
+    label: msg`PMS`
+  },
+  'door-locks': {
+    group: 'integrations',
+    to: '/door-locks',
+    icon: LockIcon,
+    label: msg`Door Locks`
+  },
+  'payment-provider': {
+    group: 'integrations',
+    to: '/payment-provider',
+    icon: CreditCardIcon,
+    label: msg`Payment Provider`
+  }
+};
+
+const navItemIdsIn = (group: NavGroupKey) =>
+  navItemIdSchema.options.filter((id) => navItems[id].group === group);
+
+/** The catalog by group, for the per-Property settings. */
+export const navItemGroups = navGroups.map(({ key, label }) => ({
+  key,
+  label,
+  ids: navItemIdsIn(key)
+}));
+
+/** The User View navigation with the disabled nav items left out. */
+export function userNavSections(disabled: readonly NavItemId[]): NavSection[] {
+  return navGroups
+    .map(({ key, label, pinned = [] }) => ({
+      key,
+      label,
+      links: [
+        ...pinned,
+        ...navItemIdsIn(key)
+          .filter((id) => !disabled.includes(id))
+          .map((id) => navItems[id])
+      ]
+    }))
+    .filter((section) => section.links.length > 0);
+}
+
+export const adminNavSections: NavSection[] = [
   {
-    key: 'integrations',
-    label: msg`Integrations`,
-    items: [
-      {
-        id: 'pms-provider',
-        to: '/pms-provider',
-        icon: LayoutGridIcon,
-        label: msg`PMS`
-      },
-      {
-        id: 'door-locks',
-        to: '/door-locks',
-        icon: LockIcon,
-        label: msg`Door Locks`
-      },
-      {
-        id: 'payment-provider',
-        to: '/payment-provider',
-        icon: CreditCardIcon,
-        label: msg`Payment Provider`
-      }
+    key: 'main',
+    links: [
+      { to: '/admin', icon: HomeIcon, label: msg`Start`, exact: true },
+      { to: '/admin/properties', icon: BuildingIcon, label: msg`Properties` }
     ]
   }
 ];
-
-export type ToggleableNavItem = NavItem & { id: NavItemId };
-
-function isToggleable(item: NavItem): item is ToggleableNavItem {
-  return item.id !== undefined;
-}
-
-/** The catalog an Administrator chooses from: every group minus Start. */
-export const toggleableNavGroups = userNavGroups
-  .map((group) => ({ ...group, items: group.items.filter(isToggleable) }))
-  .filter((group) => group.items.length > 0);
-
-export const toggleableNavItems = toggleableNavGroups.flatMap(
-  (group) => group.items
-);
-
-/** Groups with disabled items removed; a group left empty is dropped. */
-export function visibleNavGroups(disabled: readonly NavItemId[]): NavGroup[] {
-  return userNavGroups
-    .map((group) => ({
-      ...group,
-      items: group.items.filter(
-        (item) => !isToggleable(item) || !disabled.includes(item.id)
-      )
-    }))
-    .filter((group) => group.items.length > 0);
-}
 
 /** True when `pathname` is a disabled nav item's page or anything beneath it. */
 export function isNavPathDisabled(
   pathname: string,
   disabled: readonly NavItemId[]
 ): boolean {
-  return toggleableNavItems.some(
-    (item) =>
-      disabled.includes(item.id) &&
-      (pathname === item.to || pathname.startsWith(`${item.to}/`))
-  );
-}
-
-const dashboardRoute = getRouteApi('/_dashboard-layout');
-
-/** Nav items switched off for the selected Property. */
-export function useDisabledNavItems(): NavItemId[] {
-  return dashboardRoute.useRouteContext().disabledNavItems;
-}
-
-export function useVisibleNavGroups(): NavGroup[] {
-  return visibleNavGroups(useDisabledNavItems());
+  return disabled.some((id) => {
+    const { to } = navItems[id];
+    return pathname === to || pathname.startsWith(`${to}/`);
+  });
 }
