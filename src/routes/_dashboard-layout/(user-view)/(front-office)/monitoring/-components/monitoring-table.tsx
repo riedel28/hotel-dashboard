@@ -2,6 +2,7 @@ import { useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
   type PaginationState,
+  type RowSelectionState,
   type SortingState,
   useTable
 } from '@tanstack/react-table';
@@ -44,6 +45,8 @@ interface MonitoringTableProps {
   bookingFilter?: string;
   onBookingFilterToggle: (bookingNr: string) => void;
   emptyMessage?: ReactNode;
+  selectedLogId?: number;
+  onLogOpen: (logId: number) => void;
 }
 
 export function MonitoringTable({
@@ -58,7 +61,9 @@ export function MonitoringTable({
   onSortingChange,
   bookingFilter,
   onBookingFilterToggle,
-  emptyMessage
+  emptyMessage,
+  selectedLogId,
+  onLogOpen
 }: MonitoringTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -148,9 +153,15 @@ export function MonitoringTable({
           />
         ),
         cell: ({ row }) => (
-          <span className="block truncate" title={row.original.event}>
+          // The keyboard way into the log; a mouse click anywhere on the row
+          // bubbles to the same handler
+          <button
+            type="button"
+            title={row.original.event}
+            className="block max-w-full truncate rounded-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
             {row.original.event}
-          </span>
+          </button>
         ),
         meta: {
           skeleton: <Skeleton className="h-5 w-32" />,
@@ -228,6 +239,11 @@ export function MonitoringTable({
     columns.map((column) => column.id as string)
   );
 
+  const rowSelection = useMemo<RowSelectionState>(
+    () => (selectedLogId === undefined ? {} : { [selectedLogId]: true }),
+    [selectedLogId]
+  );
+
   const table = useTable({
     features: dataGridFeatures,
     columns,
@@ -237,8 +253,11 @@ export function MonitoringTable({
     state: {
       pagination,
       sorting,
-      columnOrder
+      columnOrder,
+      rowSelection
     },
+    // Selection only marks the log open in the details panel
+    enableRowSelection: true,
     onPaginationChange: onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
@@ -251,6 +270,7 @@ export function MonitoringTable({
     <DataGrid
       table={table}
       recordCount={totalCount}
+      onRowClick={(log) => onLogOpen(log.id)}
       tableClassNames={{
         edgeCell: 'px-5'
       }}

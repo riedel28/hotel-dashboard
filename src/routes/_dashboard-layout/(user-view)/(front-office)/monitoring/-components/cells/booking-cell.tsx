@@ -27,7 +27,11 @@ export function BookingCell({
   }
 
   return (
-    <div className="flex min-w-0 items-center gap-1">
+    // The row opens the log on click; the link and the filter must not
+    <div
+      className="flex min-w-0 items-center gap-1"
+      onClick={(event) => event.stopPropagation()}
+    >
       {/* The wrapper clips a long number; clipping the link itself would
           also cut its hover underline */}
       <span className="min-w-0 truncate py-0.5" title={bookingNr}>

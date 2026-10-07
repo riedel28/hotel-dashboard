@@ -4,13 +4,14 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { ListFilterIcon, XIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import type {
   FetchMonitoringLogsParams,
   MonitoringPeriod,
   MonitoringStatus,
   MonitoringType
 } from 'shared/types/monitoring';
+import { z } from 'zod';
 
 import {
   fetchMonitoringLogsParamsSchema,
@@ -47,6 +48,7 @@ import { cn } from '@/lib/utils';
 
 import { StatusCell } from './-components/cells/status-cell';
 import { TypeCell } from './-components/cells/type-cell';
+import { LogDetailsDrawer } from './-components/log-details-drawer';
 import { MonitoringPeriodFilter } from './-components/monitoring-period-filter';
 import { MonitoringTable } from './-components/monitoring-table';
 
@@ -79,8 +81,13 @@ function LogCount({ count }: { count: number | undefined }) {
   );
 }
 
+// The page's own state on top of the list filters: the log open in the panel
+const monitoringSearchSchema = fetchMonitoringLogsParamsSchema.extend({
+  log: z.coerce.number().int().positive().optional()
+});
+
 function MonitoringPage() {
-  const search = Route.useSearch();
+  const { log: openLogId, ...search } = Route.useSearch();
   const { page, per_page, q, status, type, booking_nr, from, to } = search;
   const navigate = Route.useNavigate();
   const { t } = useLingui();
@@ -102,6 +109,21 @@ function MonitoringPage() {
       search: (prev) => ({ ...prev, ...filters, page: undefined }),
       replace: true
     });
+  };
+
+  // Opening and closing push history entries so Back closes the panel;
+  // stepping between logs replaces the current one
+  const handleLogOpen = (logId: number) => {
+    navigate({ search: (prev) => ({ ...prev, log: logId }) });
+  };
+  const handleLogSelect = useCallback(
+    (logId: number) => {
+      navigate({ search: (prev) => ({ ...prev, log: logId }), replace: true });
+    },
+    [navigate]
+  );
+  const handleLogClose = () => {
+    navigate({ search: (prev) => ({ ...prev, log: undefined }) });
   };
 
   const handleBookingFilterToggle = (bookingNr: string) => {
@@ -262,6 +284,8 @@ function MonitoringPage() {
         bookingFilter={booking_nr}
         onBookingFilterToggle={handleBookingFilterToggle}
         emptyMessage={emptyMessage}
+        selectedLogId={openLogId}
+        onLogOpen={handleLogOpen}
       />
     );
   };
@@ -408,6 +432,23 @@ function MonitoringPage() {
           {renderTableContent()}
         </div>
       </div>
+
+      <LogDetailsDrawer
+        logId={openLogId}
+        pageLogs={monitoringQuery.data?.index ?? []}
+        onSelect={handleLogSelect}
+        onClose={handleLogClose}
+        onShowAllForBooking={(bookingNr) =>
+          navigate({
+            search: (prev) => ({
+              ...prev,
+              booking_nr: bookingNr,
+              page: undefined,
+              log: undefined
+            })
+          })
+        }
+      />
     </div>
   );
 }
@@ -416,7 +457,7 @@ export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
 )({
   // A stale or hand-edited link loses its bad params, not the whole page
-  validateSearch: lenientSearch(fetchMonitoringLogsParamsSchema),
+  validateSearch: lenientSearch(monitoringSearchSchema),
   // Keep default values out of the URL
   search: {
     middlewares: [
