@@ -1,10 +1,16 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { XIcon } from 'lucide-react';
-import type { MonitoringStatus, MonitoringType } from 'shared/types/monitoring';
+import { useState } from 'react';
+import type {
+  FetchMonitoringLogsParams,
+  MonitoringPeriod,
+  MonitoringStatus,
+  MonitoringType
+} from 'shared/types/monitoring';
 
 import {
   fetchMonitoringLogsParamsSchema,
@@ -19,7 +25,11 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { DataGridRadioFilter } from '@/components/ui/data-grid-radio-filter';
+import {
+  DataGridCheckboxFilter,
+  DataGridCheckboxFilterClear,
+  DataGridCheckboxFilterFooter
+} from '@/components/ui/data-grid-checkbox-filter';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
   Empty,
@@ -28,85 +38,65 @@ import {
   EmptyHeader,
   EmptyTitle
 } from '@/components/ui/empty';
+import { SearchInput } from '@/components/ui/search-input';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
-import { StatusCell } from './-components/cells/status-cell';
 import { TypeCell } from './-components/cells/type-cell';
-import { MonitoringDateFilter } from './-components/monitoring-date-filter';
+import { MonitoringPeriodFilter } from './-components/monitoring-period-filter';
 import { MonitoringTable } from './-components/monitoring-table';
 
-const monitoringStatusOptions = [
-  { value: 'success' },
-  { value: 'error' }
-] as const satisfies ReadonlyArray<{
-  value: MonitoringStatus;
-}>;
+const DEFAULT_PERIOD: MonitoringPeriod = '24h';
+const DEFAULT_PAGE_SIZE = 50;
 
-const monitoringTypeOptions = [
-  { value: 'pms' },
-  { value: 'door lock' },
-  { value: 'payment' }
-] as const satisfies ReadonlyArray<{
-  value: MonitoringType;
-}>;
+const monitoringTypeOptions = (
+  ['pms', 'door lock', 'payment'] satisfies MonitoringType[]
+).map((value) => ({ value, label: <TypeCell type={value} /> }));
+
+type MonitoringSearch = FetchMonitoringLogsParams;
 
 function MonitoringPage() {
-  const { page, per_page, status, type, from, to, sort_by, sort_order } =
-    Route.useSearch();
+  const search = Route.useSearch();
+  const { page, per_page, q, status, type, booking_nr, from, to } = search;
   const navigate = Route.useNavigate();
   const { t } = useLingui();
   useDocumentTitle(t`Monitoring`);
+  // SearchInput keeps its own text; bumping the key empties it on reset
+  const [searchResetKey, setSearchResetKey] = useState(0);
+
+  const hasCustomRange = Boolean(from || to);
+  const period = hasCustomRange ? undefined : (search.period ?? DEFAULT_PERIOD);
+  const pageSize = per_page ?? DEFAULT_PAGE_SIZE;
 
   const monitoringQuery = useQuery(
-    monitoringQueryOptions({
-      page,
-      per_page,
-      status,
-      type,
-      from,
-      to,
-      sort_by,
-      sort_order
-    })
+    monitoringQueryOptions({ ...search, period, per_page: pageSize })
   );
 
-  const handleRefresh = () => {
-    monitoringQuery.refetch();
-  };
-
-  const handleStatusChange = (newStatus: MonitoringStatus | undefined) => {
+  // Filters replace the history entry and always return to the first page
+  const setFilters = (filters: Partial<MonitoringSearch>) => {
     navigate({
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        status: newStatus
-      })
+      search: (prev) => ({ ...prev, ...filters, page: undefined }),
+      replace: true
     });
   };
 
-  const handleTypeChange = (newType: MonitoringType | undefined) => {
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        type: newType
-      })
+  const handleBookingFilterToggle = (bookingNr: string) => {
+    setFilters({
+      booking_nr: bookingNr === booking_nr ? undefined : bookingNr
     });
   };
 
-  const handleDateChange = (
-    dateRange: { from?: Date; to?: Date } | undefined
-  ) => {
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        from: dateRange?.from
-          ? dayjs(dateRange.from).format('YYYY-MM-DD')
-          : undefined,
-        to: dateRange?.to ? dayjs(dateRange.to).format('YYYY-MM-DD') : undefined
-      })
+  const handleClearFilters = () => {
+    setSearchResetKey((key) => key + 1);
+    setFilters({
+      q: undefined,
+      status: undefined,
+      type: undefined,
+      booking_nr: undefined,
+      period: undefined,
+      from: undefined,
+      to: undefined
     });
   };
 
@@ -117,10 +107,7 @@ function MonitoringPage() {
   ) => {
     const pagination =
       typeof updaterOrValue === 'function'
-        ? updaterOrValue({
-            pageIndex: (page ?? 1) - 1,
-            pageSize: per_page ?? 10
-          })
+        ? updaterOrValue({ pageIndex: (page ?? 1) - 1, pageSize })
         : updaterOrValue;
 
     navigate({
@@ -128,94 +115,81 @@ function MonitoringPage() {
         ...prev,
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
-      })
+      }),
+      replace: true
     });
   };
+
+  const sorting: SortingState = [
+    {
+      id: search.sort_by ?? 'logged_at',
+      desc: (search.sort_order ?? 'desc') === 'desc'
+    }
+  ];
 
   const handleSortingChange = (
     updaterOrValue: SortingState | ((old: SortingState) => SortingState)
   ) => {
-    const sorting =
+    const [firstSort] =
       typeof updaterOrValue === 'function'
-        ? updaterOrValue(
-            sort_by
-              ? [{ id: sort_by, desc: sort_order === 'desc' }]
-              : [{ id: 'logged_at', desc: true }]
-          )
+        ? updaterOrValue(sorting)
         : updaterOrValue;
 
-    const firstSort = sorting[0];
-    if (firstSort) {
-      navigate({
-        search: (prev) => ({
-          ...prev,
-          page: 1,
-          sort_by: firstSort.id as
-            | 'logged_at'
-            | 'status'
-            | 'type'
-            | 'booking_nr'
-            | 'event',
-          sort_order: firstSort.desc ? ('desc' as const) : ('asc' as const)
-        })
-      });
-    } else {
-      navigate({
-        search: (prev) => ({
-          ...prev,
-          page: 1,
-          sort_by: undefined,
-          sort_order: undefined
-        })
-      });
-    }
-  };
-
-  const handleClearFilters = () => {
-    navigate({
-      search: {
-        page: 1,
-        per_page: per_page,
-        status: undefined,
-        type: undefined,
-        from: undefined,
-        to: undefined,
-        sort_by: undefined,
-        sort_order: undefined
-      }
+    setFilters({
+      sort_by: firstSort?.id as MonitoringSearch['sort_by'],
+      sort_order: firstSort?.desc === false ? 'asc' : 'desc'
     });
   };
 
-  const sorting: SortingState = sort_by
-    ? [{ id: sort_by, desc: sort_order === 'desc' }]
-    : [{ id: 'logged_at', desc: true }];
-  const statusFilterOptions = monitoringStatusOptions.map((option) => ({
-    value: option.value,
-    label: <StatusCell status={option.value} />
-  }));
-  const typeFilterOptions = monitoringTypeOptions.map((option) => ({
-    value: option.value,
-    label: <TypeCell type={option.value} />
-  }));
-  const hasActiveFilters = Boolean(status || type || from || to);
+  const hasActiveFilters = Boolean(
+    q ||
+    status ||
+    type?.length ||
+    booking_nr ||
+    hasCustomRange ||
+    period !== DEFAULT_PERIOD
+  );
+  const counts = monitoringQuery.data?.counts;
+  const statusOptions: Array<{
+    value: MonitoringStatus | 'all';
+    label: string;
+    count: number | undefined;
+  }> = [
+    { value: 'all', label: t`All`, count: counts?.all },
+    { value: 'success', label: t`OK`, count: counts?.success },
+    { value: 'error', label: t`Errors`, count: counts?.error }
+  ];
+
+  const emptyMessage = (
+    <div className="flex flex-col items-center gap-1 py-6 text-sm">
+      <p className="font-medium text-foreground">
+        {hasActiveFilters ? (
+          <Trans>Nothing found</Trans>
+        ) : (
+          <Trans>No logs in the last 24 hours</Trans>
+        )}
+      </p>
+      <p className="text-muted-foreground">
+        {hasActiveFilters ? (
+          <Trans>No logs match the current filters.</Trans>
+        ) : (
+          <Trans>Pick a longer period to see older logs.</Trans>
+        )}
+      </p>
+      {hasActiveFilters && (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="mt-2"
+          onClick={handleClearFilters}
+        >
+          <Trans>Clear filters</Trans>
+        </Button>
+      )}
+    </div>
+  );
 
   const renderTableContent = () => {
-    if (monitoringQuery.isLoading) {
-      return (
-        <MonitoringTable
-          data={[]}
-          isLoading={true}
-          pageIndex={(page ?? 1) - 1}
-          pageSize={per_page ?? 10}
-          totalCount={0}
-          pageCount={0}
-          onPaginationChange={handlePaginationChange}
-          sorting={sorting}
-          onSortingChange={handleSortingChange}
-        />
-      );
-    }
-
     if (monitoringQuery.isError) {
       return (
         <div className="flex min-h-[60vh] items-center justify-center">
@@ -236,7 +210,7 @@ function MonitoringPage() {
               <DataGridRefreshButton
                 variant="destructive"
                 isRefreshing={monitoringQuery.isFetching}
-                onRefresh={handleRefresh}
+                onRefresh={() => monitoringQuery.refetch()}
                 className="w-auto sm:ml-0"
               />
             </EmptyContent>
@@ -245,22 +219,22 @@ function MonitoringPage() {
       );
     }
 
-    if (monitoringQuery.data) {
-      return (
-        <MonitoringTable
-          data={monitoringQuery.data.index}
-          pageIndex={(page ?? 1) - 1}
-          pageSize={per_page ?? 10}
-          totalCount={monitoringQuery.data.total}
-          pageCount={monitoringQuery.data.page_count}
-          onPaginationChange={handlePaginationChange}
-          sorting={sorting}
-          onSortingChange={handleSortingChange}
-        />
-      );
-    }
-
-    return null;
+    return (
+      <MonitoringTable
+        data={monitoringQuery.data?.index ?? []}
+        isLoading={monitoringQuery.isLoading}
+        pageIndex={(page ?? 1) - 1}
+        pageSize={pageSize}
+        totalCount={monitoringQuery.data?.total ?? 0}
+        pageCount={monitoringQuery.data?.page_count ?? 0}
+        onPaginationChange={handlePaginationChange}
+        sorting={sorting}
+        onSortingChange={handleSortingChange}
+        bookingFilter={booking_nr}
+        onBookingFilterToggle={handleBookingFilterToggle}
+        emptyMessage={emptyMessage}
+      />
+    );
   };
 
   return (
@@ -288,45 +262,109 @@ function MonitoringPage() {
       </div>
 
       <div className="space-y-2.5">
-        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-          <DataGridRadioFilter
-            label={<Trans>Status</Trans>}
-            placeholder={<Trans>All statuses</Trans>}
-            value={status}
-            onValueChange={handleStatusChange}
-            options={statusFilterOptions}
-            showFooter
-            className="w-full sm:w-[170px]"
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <SearchInput
+            key={searchResetKey}
+            value={q ?? ''}
+            onChange={(value) => setFilters({ q: value || undefined })}
+            placeholder={t`Search event, message, reservation number`}
+            aria-label={t`Search logs`}
+            className="text-sm"
+            wrapperClassName="w-full sm:max-w-md sm:flex-1"
+            debounceMs={300}
           />
-          <DataGridRadioFilter
+          <MonitoringPeriodFilter
+            period={period}
+            from={from}
+            to={to}
+            onPeriodChange={(next) =>
+              setFilters({
+                period: next,
+                from: undefined,
+                to: undefined
+              })
+            }
+            onRangeChange={(range) =>
+              setFilters({
+                period: undefined,
+                from: dayjs(range.from).format('YYYY-MM-DD'),
+                to: dayjs(range.to).format('YYYY-MM-DD')
+              })
+            }
+            className="w-full sm:w-auto"
+          />
+          <DataGridRefreshButton
+            isRefreshing={monitoringQuery.isFetching}
+            onRefresh={() => monitoringQuery.refetch()}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <ToggleGroup
+            variant="outline"
+            aria-label={t`Status`}
+            value={[status ?? 'all']}
+            onValueChange={([next]) => {
+              // Pressing the active item again would deselect it; keep it
+              if (next) {
+                setFilters({
+                  status:
+                    next === 'all' ? undefined : (next as MonitoringStatus)
+                });
+              }
+            }}
+          >
+            {statusOptions.map((option) => (
+              <ToggleGroupItem
+                key={option.value}
+                value={option.value}
+                className="gap-1.5 px-3"
+              >
+                {option.label}
+                {option.count !== undefined && (
+                  <span className="text-xs text-muted-foreground tabular-nums">
+                    {option.count}
+                  </span>
+                )}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+          <DataGridCheckboxFilter
             label={<Trans>Type</Trans>}
             placeholder={<Trans>All types</Trans>}
-            value={type}
-            onValueChange={handleTypeChange}
-            options={typeFilterOptions}
-            showFooter
+            options={monitoringTypeOptions}
+            value={type ?? []}
+            onValueChange={(next) =>
+              setFilters({ type: next.length > 0 ? next : undefined })
+            }
             className="w-full sm:w-[170px]"
-          />
-          <MonitoringDateFilter
-            from={from ? new Date(from) : undefined}
-            to={to ? new Date(to) : undefined}
-            onDateChange={handleDateChange}
-            className="w-full sm:w-[220px]"
-          />
+          >
+            <DataGridCheckboxFilterFooter>
+              <DataGridCheckboxFilterClear>
+                <Trans>Reset</Trans>
+              </DataGridCheckboxFilterClear>
+            </DataGridCheckboxFilterFooter>
+          </DataGridCheckboxFilter>
+          {booking_nr && (
+            <Button
+              variant="secondary"
+              aria-label={t`Remove filter by reservation ${booking_nr}`}
+              onClick={() => setFilters({ booking_nr: undefined })}
+            >
+              <Trans>Reservation {booking_nr}</Trans>
+              <XIcon className="size-4" />
+            </Button>
+          )}
           {hasActiveFilters && (
             <Button
               variant="secondary"
               onClick={handleClearFilters}
-              className="w-full text-muted-foreground hover:text-foreground sm:w-auto"
+              className="w-full text-muted-foreground hover:text-foreground sm:ml-auto sm:w-auto"
             >
               <XIcon className="mr-2 h-4 w-4" />
               <Trans>Clear filters</Trans>
             </Button>
           )}
-          <DataGridRefreshButton
-            isRefreshing={monitoringQuery.isFetching}
-            onRefresh={handleRefresh}
-          />
         </div>
 
         <div
@@ -347,6 +385,18 @@ function MonitoringPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
 )({
-  validateSearch: (search) => fetchMonitoringLogsParamsSchema.parse(search),
+  validateSearch: fetchMonitoringLogsParamsSchema,
+  // Keep default values out of the URL
+  search: {
+    middlewares: [
+      stripSearchParams({
+        page: 1,
+        per_page: DEFAULT_PAGE_SIZE,
+        period: DEFAULT_PERIOD,
+        sort_by: 'logged_at',
+        sort_order: 'desc'
+      })
+    ]
+  },
   component: MonitoringPage
 });

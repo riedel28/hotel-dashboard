@@ -5,14 +5,16 @@ interface DateCellProps {
 }
 
 export function DateCell({ date }: DateCellProps) {
+  const value = dayjs(date);
+  const isCurrentYear = value.year() === dayjs().year();
+
   return (
-    <div className="flex flex-row items-center gap-1.5">
-      <span className="text-[13px] text-muted-foreground">
-        {dayjs(date).format('DD.MM.YYYY')}
-      </span>
-      <span className="text-[13px] text-muted-foreground">
-        {dayjs(date).format('HH:mm:ss')}
-      </span>
-    </div>
+    <time
+      dateTime={value.toISOString()}
+      title={value.format('DD.MM.YYYY HH:mm:ss [UTC]Z')}
+      className="text-[13px] text-muted-foreground tabular-nums"
+    >
+      {value.format(isCurrentYear ? 'DD.MM HH:mm:ss' : 'DD.MM.YYYY HH:mm:ss')}
+    </time>
   );
 }

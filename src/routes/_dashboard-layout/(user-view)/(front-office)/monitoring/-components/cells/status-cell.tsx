@@ -18,7 +18,7 @@ export function StatusCell({ status }: StatusCellProps) {
       className="rounded-md"
     >
       <span className="mr-0.5 size-1.25 rounded-full bg-current/80"></span>
-      {isSuccess ? <Trans>Ready</Trans> : <Trans>Error</Trans>}
+      {isSuccess ? <Trans>OK</Trans> : <Trans>Error</Trans>}
     </Badge>
   );
 }
