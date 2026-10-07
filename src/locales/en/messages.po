@@ -875,7 +875,7 @@ msgstr "Copy"
 msgid "Copy Client Key"
 msgstr "Copy Client Key"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:201
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:208
 msgid "Copy message"
 msgstr "Copy message"
 
@@ -2128,7 +2128,7 @@ msgstr "Live environment"
 msgid "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 msgstr "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:130
 msgid "Loading log…"
 msgstr "Loading log…"
 
@@ -2144,7 +2144,7 @@ msgstr "Loading..."
 #~ msgid "Location"
 #~ msgstr "Location"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:122
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:123
 msgid "Log not found"
 msgstr "Log not found"
 
@@ -2251,13 +2251,13 @@ msgstr "Merchant ID"
 msgid "Merchant ID is required"
 msgstr "Merchant ID is required"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:196
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:198
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:211
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:226
 msgid "Message"
 msgstr "Message"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:202
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:209
 msgid "Message copied"
 msgstr "Message copied"
 
@@ -2580,7 +2580,7 @@ msgstr "Optional JSON or certificates passed to the Adyen SDK."
 #~ msgstr "Orders"
 
 #. placeholder {0}: log.booking_nr
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:214
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:219
 msgid "Other logs for reservation {0}"
 msgstr "Other logs for reservation {0}"
 
@@ -3156,7 +3156,7 @@ msgstr "Resend invitation"
 msgid "Resend verification email"
 msgstr "Resend verification email"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:166
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:180
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:198
 msgid "Reservation"
@@ -3642,7 +3642,7 @@ msgstr "SHIP-URL is required"
 msgid "Show"
 msgstr "Show"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:251
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:256
 msgid "Show all"
 msgstr "Show all"
 
@@ -3720,7 +3720,7 @@ msgstr "Someone — most likely an administrator — changed your record while t
 
 #: src/components/error-state.tsx:64
 #: src/routes/__root.tsx:58
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:125
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:250
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:162
 msgid "Something went wrong"
@@ -3731,7 +3731,7 @@ msgstr "Something went wrong"
 msgid "Sorry, we couldn't find the page you're looking for."
 msgstr "Sorry, we couldn't find the page you're looking for."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:185
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:188
 msgid "Source"
 msgstr "Source"
 
@@ -4041,7 +4041,7 @@ msgstr "This invitation link is invalid."
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr "This is the service code that will be used to skip payment at check-in."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:131
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:132
 msgid "This log does not exist or was removed."
 msgstr "This log does not exist or was removed."
 
