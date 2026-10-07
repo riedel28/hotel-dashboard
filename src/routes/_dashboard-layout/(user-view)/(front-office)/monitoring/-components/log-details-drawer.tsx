@@ -194,21 +194,23 @@ function LogDetails({
         )}
 
         <section className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium">
-              <Trans>Message</Trans>
-            </h3>
+          <h3 className="text-sm font-medium">
+            <Trans>Message</Trans>
+          </h3>
+          <div className="relative">
+            {/* Right padding keeps the first line clear of the copy button */}
+            <pre className="rounded-md border bg-muted/50 p-3 pr-10 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap">
+              {log.log_message || '—'}
+            </pre>
             {log.log_message && (
               <CopyButton
                 text={log.log_message}
                 copyLabel={t`Copy message`}
                 copiedLabel={t`Message copied`}
+                buttonClassName="absolute top-1.5 right-1.5"
               />
             )}
           </div>
-          <pre className="rounded-md border bg-muted/50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap">
-            {log.log_message || '—'}
-          </pre>
         </section>
 
         {log.booking_nr && (
@@ -246,7 +248,7 @@ function LogDetails({
             )}
             <button
               type="button"
-              className="cursor-pointer rounded-sm text-sm underline decoration-dotted underline-offset-4 outline-none hover:decoration-solid focus-visible:ring-2 focus-visible:ring-ring"
+              className="cursor-pointer rounded-sm text-sm underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
               onClick={() =>
                 log.booking_nr && onShowAllForBooking(log.booking_nr)
               }
