@@ -1,0 +1,1 @@
+CREATE INDEX "monitoring_logs_booking_nr_idx" ON "monitoring_logs" USING btree ("booking_nr");

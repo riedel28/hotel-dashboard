@@ -5,7 +5,7 @@ import {
   type SortingState,
   useTable
 } from '@tanstack/react-table';
-import { useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
 import {
@@ -20,6 +20,7 @@ import { DataGridTable } from '@/components/ui/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { BookingCell } from './cells/booking-cell';
 import { DateCell } from './cells/date-cell';
 import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
@@ -40,18 +41,24 @@ interface MonitoringTableProps {
   onSortingChange?: (
     updaterOrValue: SortingState | ((old: SortingState) => SortingState)
   ) => void;
+  bookingFilter?: string;
+  onBookingFilterToggle: (bookingNr: string) => void;
+  emptyMessage?: ReactNode;
 }
 
 export function MonitoringTable({
   data,
   isLoading = false,
   pageIndex = 0,
-  pageSize = 10,
+  pageSize = 50,
   totalCount = 0,
   pageCount = 0,
   onPaginationChange,
   sorting: sortingProp,
-  onSortingChange
+  onSortingChange,
+  bookingFilter,
+  onBookingFilterToggle,
+  emptyMessage
 }: MonitoringTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -84,26 +91,28 @@ export function MonitoringTable({
           skeleton: <Skeleton className="h-5 w-16" />,
           headerTitle: t`Status`
         },
-        maxSize: 90,
+        size: 90,
         enableSorting: true,
         enableHiding: true,
         enableResizing: false
       },
       {
-        accessorKey: 'event',
-        id: 'event',
+        accessorKey: 'logged_at',
+        id: 'logged_at',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Event`}
+            title={t`Date`}
             visibility={true}
             column={column}
           />
         ),
-        cell: ({ row }) => <span>{row.original.event}</span>,
+        cell: ({ row }) => <DateCell date={row.original.logged_at} />,
         meta: {
-          skeleton: <Skeleton className="h-5 w-32" />,
-          headerTitle: t`Event`
+          skeleton: <Skeleton className="h-5 w-24" />,
+          headerTitle: t`Date`
         },
+        // Fits "DD.MM HH:mm:ss"; a date from another year wraps to two lines
+        size: 128,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -129,47 +138,60 @@ export function MonitoringTable({
         enableResizing: true
       },
       {
+        accessorKey: 'event',
+        id: 'event',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Event`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => (
+          <span className="block truncate" title={row.original.event}>
+            {row.original.event}
+          </span>
+        ),
+        meta: {
+          skeleton: <Skeleton className="h-5 w-32" />,
+          headerTitle: t`Event`
+        },
+        size: 150,
+        enableSorting: true,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
         accessorKey: 'booking_nr',
         id: 'booking_nr',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Booking #`}
+            title={t`Reservation`}
             visibility={true}
             column={column}
           />
         ),
-        cell: ({ row }) => <span>{row.original.booking_nr || '-'}</span>,
-        meta: {
-          skeleton: <Skeleton className="h-5 w-24" />,
-          headerTitle: t`Booking #`
-        },
-        size: 130,
-        enableSorting: true,
-        enableHiding: true,
-        enableResizing: true
-      },
-
-      {
-        accessorKey: 'logged_at',
-        id: 'logged_at',
-        header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Date`}
-            visibility={true}
-            column={column}
+        cell: ({ row }) => (
+          <BookingCell
+            bookingNr={row.original.booking_nr}
+            reservationId={row.original.reservation_id}
+            isFiltered={
+              bookingFilter !== undefined &&
+              bookingFilter === row.original.booking_nr
+            }
+            onToggleFilter={onBookingFilterToggle}
           />
         ),
-        cell: ({ row }) => <DateCell date={row.original.logged_at} />,
         meta: {
           skeleton: <Skeleton className="h-5 w-24" />,
-          headerTitle: t`Date`
+          headerTitle: t`Reservation`
         },
-        maxSize: 150,
+        // Fits a generated number (RES- plus eight characters) and the filter
+        size: 168,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
       },
-
       {
         accessorKey: 'log_message',
         id: 'log_message',
@@ -183,7 +205,7 @@ export function MonitoringTable({
         cell: ({ row }) => (
           <code
             title={row.original.log_message ?? undefined}
-            className="block truncate rounded-md bg-muted/50 px-2 py-1 font-mono text-xs text-foreground"
+            className="block truncate font-mono text-xs text-foreground"
           >
             {row.original.log_message || '-'}
           </code>
@@ -192,13 +214,14 @@ export function MonitoringTable({
           skeleton: <Skeleton className="h-5 w-full rounded-md" />,
           headerTitle: t`Message`
         },
+        size: 344,
         minSize: 300,
         enableSorting: false,
         enableHiding: true,
         enableResizing: true
       }
     ],
-    [t]
+    [t, bookingFilter, onBookingFilterToggle]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
@@ -231,6 +254,7 @@ export function MonitoringTable({
       tableClassNames={{
         edgeCell: 'px-5'
       }}
+      emptyMessage={emptyMessage}
       tableLayout={{
         columnsPinnable: false,
         columnsMovable: false,

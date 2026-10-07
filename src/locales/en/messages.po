@@ -282,20 +282,22 @@ msgstr "Adyen"
 msgid "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 msgstr "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:39
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:61
-#~ msgid "All"
-#~ msgstr "All"
+#: src/components/ui/data-grid-segmented-filter.tsx:54
+msgid "All"
+msgstr "All"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/property-country-filter.tsx:20
 msgid "All countries"
 msgstr "All countries"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:314
+msgid "All logs"
+msgstr "All logs"
+
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:25
 msgid "All stages"
 msgstr "All stages"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:294
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:35
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:24
 msgid "All statuses"
@@ -311,7 +313,7 @@ msgstr "All statuses"
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:303
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:326
 msgid "All types"
 msgstr "All types"
 
@@ -323,7 +325,7 @@ msgstr "Already have an account?"
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Already have one? Any TOTP app works — just scan the QR code."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:229
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:232
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
@@ -357,10 +359,13 @@ msgid "API Key"
 msgstr "API Key"
 
 #: src/components/ui/rich-text-editor.tsx:218
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-date-filter.tsx:204
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:213
 msgid "Apply"
 msgstr "Apply"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:132
+msgid "Apply custom range"
+msgstr "Apply custom range"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:335
 #~ msgid "Approved"
@@ -481,6 +486,7 @@ msgstr "Available"
 #~ msgid "Avatar upload is not yet implemented"
 #~ msgstr "Avatar upload is not yet implemented"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:281
 msgid "Back"
 msgstr "Back"
@@ -515,8 +521,10 @@ msgstr "Bold"
 msgid "Booking"
 msgstr "Booking"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:136
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:144
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:353
+#~ msgid "Booking {booking_nr}"
+#~ msgstr "Booking {booking_nr}"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:141
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:152
 msgid "Booking #"
@@ -726,7 +734,8 @@ msgstr "City is required"
 msgid "Clear all"
 msgstr "Clear all"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:323
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:215
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:367
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
@@ -991,8 +1000,8 @@ msgstr "Dark"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:157
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:112
 msgid "Date"
 msgstr "Date"
 
@@ -1173,8 +1182,8 @@ msgstr "Edit product"
 msgid "Edit Property"
 msgstr "Edit Property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:43
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:74
 msgid "Edit reservation"
 msgstr "Edit reservation"
 
@@ -1445,8 +1454,12 @@ msgstr "Error deleting user"
 #~ msgid "Error uploading avatar"
 #~ msgstr "Error uploading avatar"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:97
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:293
+#~ msgid "Errors"
+#~ msgstr "Errors"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:157
 msgid "Event"
 msgstr "Event"
 
@@ -1614,6 +1627,14 @@ msgstr "Fetch merchant account"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:57
 #~ msgid "File size must be less than 5MB"
 #~ msgstr "File size must be less than 5MB"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:49
+#~ msgid "Filter by booking"
+#~ msgstr "Filter by booking"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:57
+msgid "Filter by reservation"
+msgstr "Filter by reservation"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:177
 msgid "First name"
@@ -1873,8 +1894,8 @@ msgid "Hide password"
 msgstr "Hide password"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:66
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:272
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:31
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:275
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
@@ -2018,6 +2039,22 @@ msgstr "Keep setting up"
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:90
 msgid "Language"
 msgstr "Language"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:21
+msgid "Last 24 hours"
+msgstr "Last 24 hours"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:23
+msgid "Last 30 days"
+msgstr "Last 30 days"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:22
+msgid "Last 7 days"
+msgstr "Last 7 days"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:20
+msgid "Last hour"
+msgstr "Last hour"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:197
 msgid "Last name"
@@ -2202,8 +2239,8 @@ msgstr "Merchant ID"
 msgid "Merchant ID is required"
 msgstr "Merchant ID is required"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:178
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:193
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:215
 msgid "Message"
 msgstr "Message"
 
@@ -2232,12 +2269,12 @@ msgid "Monitor daily operations, track occupancy, and oversee front-office activ
 msgstr "Monitor daily operations, track occupancy, and oversee front-office activity"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:61
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:59
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:278
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:281
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:286
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:289
 msgid "Monitoring Logs"
 msgstr "Monitoring Logs"
 
@@ -2369,6 +2406,14 @@ msgstr "No guests added yet"
 msgid "No guests found"
 msgstr "No guests found"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:198
+msgid "No logs in the last 24 hours"
+msgstr "No logs in the last 24 hours"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:203
+msgid "No logs match the current filters."
+msgstr "No logs match the current filters."
+
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:110
 msgid "No name"
 msgstr "No name"
@@ -2448,6 +2493,10 @@ msgstr "Not provided"
 msgid "Not verified yet."
 msgstr "Not verified yet."
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:196
+msgid "Nothing found"
+msgstr "Nothing found"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:232
 msgid "Number of People"
 msgstr "Number of People"
@@ -2462,9 +2511,9 @@ msgstr "Numbered list"
 msgid "Occupied"
 msgstr "Occupied"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:36
-#~ msgid "OK"
-#~ msgstr "OK"
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
+msgid "OK"
+msgstr "OK"
 
 #: src/components/section-nav.tsx:228
 #: src/components/section-nav.tsx:275
@@ -2657,10 +2706,13 @@ msgstr "Photo removed"
 msgid "Photo updated"
 msgstr "Photo updated"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-date-filter.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:168
 msgid "Pick a date range"
 msgstr "Pick a date range"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:205
+msgid "Pick a longer period to see older logs."
+msgstr "Pick a longer period to see older logs."
 
 #: src/components/ui/data-grid-column-header.tsx:242
 msgid "Pin to left"
@@ -2962,8 +3014,8 @@ msgid "Read-only"
 msgstr "Read-only"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
-msgid "Ready"
-msgstr "Ready"
+#~ msgid "Ready"
+#~ msgstr "Ready"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:244
 msgid "Received At"
@@ -3025,6 +3077,26 @@ msgstr "Remember me"
 msgid "Remove"
 msgstr "Remove"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:49
+#~ msgid "Remove booking filter"
+#~ msgstr "Remove booking filter"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:350
+#~ msgid "Remove filter by booking {booking_nr}"
+#~ msgstr "Remove filter by booking {booking_nr}"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:46
+#~ msgid "Remove filter by booking {bookingNr}"
+#~ msgstr "Remove filter by booking {bookingNr}"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:341
+#~ msgid "Remove filter by reservation {booking_nr}"
+#~ msgstr "Remove filter by reservation {booking_nr}"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:53
+msgid "Remove filter by reservation {bookingNr}"
+msgstr "Remove filter by reservation {bookingNr}"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:155
 #~ msgid "Remove Image"
 #~ msgstr "Remove Image"
@@ -3032,6 +3104,10 @@ msgstr "Remove"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:266
 #~ msgid "Remove photo"
 #~ msgstr "Remove photo"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:57
+msgid "Remove reservation filter"
+msgstr "Remove reservation filter"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:257
 #~ msgid "Remove your photo and go back to initials?"
@@ -3058,9 +3134,14 @@ msgstr "Resend invitation"
 msgid "Resend verification email"
 msgstr "Resend verification email"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/share-dialog.tsx:256
-#~ msgid "Reservation"
-#~ msgstr "Reservation"
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:169
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:187
+msgid "Reservation"
+msgstr "Reservation"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:344
+#~ msgid "Reservation {booking_nr}"
+#~ msgstr "Reservation {booking_nr}"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:75
 msgid "Reservation created successfully"
@@ -3074,7 +3155,7 @@ msgstr "Reservation created successfully"
 msgid "Reservation details"
 msgstr "Reservation details"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:22
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:33
 msgid "Reservation Details"
 msgstr "Reservation Details"
 
@@ -3107,7 +3188,7 @@ msgid "Reservation updated successfully"
 msgstr "Reservation updated successfully"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:67
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:33
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:47
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:55
@@ -3115,7 +3196,7 @@ msgid "Reservations"
 msgstr "Reservations"
 
 #: src/components/ui/data-grid-radio-filter.tsx:129
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-date-filter.tsx:201
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:336
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:36
@@ -3323,6 +3404,14 @@ msgstr "Search categories"
 msgid "Search country..."
 msgstr "Search country..."
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:269
+#~ msgid "Search event, message, booking number"
+#~ msgstr "Search event, message, booking number"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:305
+msgid "Search event, message, reservation number"
+msgstr "Search event, message, reservation number"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-search-combobox.tsx:109
 msgid "Search for a guest"
 msgstr "Search for a guest"
@@ -3334,6 +3423,10 @@ msgstr "Search for a guest..."
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:183
 #~ msgid "Search for property"
 #~ msgstr "Search for property"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:304
+msgid "Search logs"
+msgstr "Search logs"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:117
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:118
@@ -3526,6 +3619,10 @@ msgstr "SHIP-URL is required"
 msgid "Show"
 msgstr "Show"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:391
+msgid "Show all logs"
+msgstr "Show all logs"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:124
 msgid "Show all roles"
 msgstr "Show all roles"
@@ -3538,6 +3635,14 @@ msgstr "Show all roles"
 #~ msgid "Show details"
 #~ msgstr "Show details"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:47
+#~ msgid "Show only logs of booking {bookingNr}"
+#~ msgstr "Show only logs of booking {bookingNr}"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:54
+msgid "Show only logs of reservation {bookingNr}"
+msgstr "Show only logs of reservation {bookingNr}"
+
 #: src/components/ui/password-input.tsx:37
 msgid "Show password"
 msgstr "Show password"
@@ -3549,6 +3654,10 @@ msgstr "Show results for: <0>\"{q}\"</0>"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-search-results.tsx:16
 msgid "Show results for: <0>\"{searchQuery}\"</0>"
 msgstr "Show results for: <0>\"{searchQuery}\"</0>"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:381
+msgid "Showing only logs for reservation <0>{booking_nr}</0>"
+msgstr "Showing only logs for reservation <0>{booking_nr}</0>"
 
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:37
 msgid "Sidebar"
@@ -3584,7 +3693,7 @@ msgstr "Someone — most likely an administrator — changed your record while t
 
 #: src/components/error-state.tsx:64
 #: src/routes/__root.tsx:58
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:225
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:228
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:162
 msgid "Something went wrong"
 msgstr "Something went wrong"
@@ -3624,9 +3733,9 @@ msgstr "Started"
 msgid "Station"
 msgstr "Station"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:77
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:85
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:293
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:92
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:311
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:118
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:129
@@ -4083,9 +4192,9 @@ msgstr "Two-factor authentication won't be enabled and your account will keep us
 msgid "Two-step verification"
 msgstr "Two-step verification"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:116
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:124
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:302
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:125
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:325
 msgid "Type"
 msgstr "Type"
 

@@ -66,6 +66,42 @@ describe('Reservations API', () => {
     });
   });
 
+  describe('booking number uniqueness', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    const createReservation = () =>
+      request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ room_name: 'Room 101' });
+
+    test('should retry with a new booking number on collision', async () => {
+      const now = Date.now();
+      vi.spyOn(Date, 'now').mockReturnValue(now);
+
+      const first = await createReservation().expect(201);
+      const second = await createReservation().expect(201);
+
+      expect(second.body.booking_nr).not.toBe(first.body.booking_nr);
+      expect(second.body.booking_nr.startsWith(first.body.booking_nr)).toBe(
+        true
+      );
+    });
+
+    test('should return 409 when updating to an existing booking number', async () => {
+      const first = await createReservation().expect(201);
+      const second = await createReservation().expect(201);
+
+      await request(app)
+        .patch(`/api/reservations/${second.body.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ booking_nr: first.body.booking_nr })
+        .expect(409);
+    });
+  });
+
   describe('GET /api/reservations', () => {
     beforeEach(async () => {
       const reservationData = {

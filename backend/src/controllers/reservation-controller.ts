@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 import {
   and,
   asc,
@@ -18,7 +20,7 @@ import {
   reservations as reservationsTable,
   rooms as roomsTable
 } from '../db/schema';
-import { escapeLikePattern } from '../utils/sql';
+import { escapeLikePattern, isUniqueViolation } from '../utils/sql';
 
 const reservationStates = ['pending', 'started', 'done'] as const;
 
@@ -162,40 +164,59 @@ async function getReservationById(req: Request, res: Response) {
   }
 }
 
+const MAX_BOOKING_NR_ATTEMPTS = 3;
+
 async function createReservation(req: Request, res: Response) {
   const { room_name } = req.body;
 
-  // Generate a unique booking number
-  const booking_nr = `RES-${Date.now().toString(36).toUpperCase()}`;
+  // booking_nr is unique in the database; two requests in the same
+  // millisecond would collide, so a retry adds a random suffix.
+  const baseBookingNr = `RES-${Date.now().toString(36).toUpperCase()}`;
 
   try {
-    const [newReservation] = await db
-      .insert(reservationsTable)
-      .values({
-        state: 'pending',
-        booking_nr,
-        guest_email: null,
-        primary_guest_name: '',
-        booking_id: '',
-        room_name,
-        booking_from: new Date(),
-        booking_to: new Date(),
-        check_in_via: 'web',
-        check_out_via: 'web',
-        last_opened_at: null,
-        received_at: new Date(),
-        completed_at: null,
-        updated_at: null,
-        page_url: null,
-        balance: '0',
-        adults: 1,
-        youth: 0,
-        children: 0,
-        infants: 0,
-        purpose: 'private',
-        room: room_name
-      })
-      .returning();
+    let newReservation: typeof reservationsTable.$inferSelect | undefined;
+
+    for (let attempt = 1; !newReservation; attempt++) {
+      const booking_nr =
+        attempt === 1
+          ? baseBookingNr
+          : `${baseBookingNr}-${randomBytes(2).toString('hex').toUpperCase()}`;
+
+      try {
+        [newReservation] = await db
+          .insert(reservationsTable)
+          .values({
+            state: 'pending',
+            booking_nr,
+            guest_email: null,
+            primary_guest_name: '',
+            booking_id: '',
+            room_name,
+            booking_from: new Date(),
+            booking_to: new Date(),
+            check_in_via: 'web',
+            check_out_via: 'web',
+            last_opened_at: null,
+            received_at: new Date(),
+            completed_at: null,
+            updated_at: null,
+            page_url: null,
+            balance: '0',
+            adults: 1,
+            youth: 0,
+            children: 0,
+            infants: 0,
+            purpose: 'private',
+            room: room_name
+          })
+          .returning();
+        break;
+      } catch (error) {
+        if (!isUniqueViolation(error) || attempt === MAX_BOOKING_NR_ATTEMPTS) {
+          throw error;
+        }
+      }
+    }
 
     if (!newReservation) {
       return res.status(500).json({ error: 'Failed to create reservation' });
@@ -359,6 +380,9 @@ async function updateReservation(req: Request, res: Response) {
 
     res.status(200).json(reservationWithGuests);
   } catch (error) {
+    if (isUniqueViolation(error)) {
+      return res.status(409).json({ error: 'Booking number already exists' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Failed to update reservation' });
   }

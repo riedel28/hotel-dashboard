@@ -2,7 +2,7 @@ import request from 'supertest';
 
 import app from '../src/app';
 import { db } from '../src/db/pool';
-import { monitoringLogs } from '../src/db/schema';
+import { monitoringLogs, reservations } from '../src/db/schema';
 import { createTestUser } from './helpers/db-helpers';
 
 describe('Monitoring API', () => {
@@ -47,6 +47,12 @@ describe('Monitoring API', () => {
   });
 
   describe('GET /api/monitoring', () => {
+    const get = (query: string) =>
+      request(app)
+        .get(`/api/monitoring${query}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
     test('should get all monitoring logs successfully', async () => {
       const response = await request(app)
         .get('/api/monitoring')
@@ -118,6 +124,72 @@ describe('Monitoring API', () => {
 
       expect(response.body.index).toHaveLength(1);
       expect(response.body.index[0].booking_nr).toBe('BK-002');
+    });
+
+    test('should include the whole day of a date-only `to`', async () => {
+      const response = await get('?from=2024-01-01&to=2024-01-01');
+
+      expect(response.body.index).toHaveLength(3);
+    });
+
+    test('should filter by a list of types', async () => {
+      const response = await get('?type=pms,payment');
+
+      expect(
+        response.body.index.map((log: { type: string }) => log.type).sort()
+      ).toEqual(['payment', 'pms']);
+    });
+
+    test('should filter by relative period', async () => {
+      await db.insert(monitoringLogs).values({
+        status: 'error',
+        logged_at: new Date(Date.now() - 30 * 60 * 1000),
+        type: 'pms',
+        event: 'Recent'
+      });
+
+      const response = await get('?period=1h');
+
+      expect(response.body.index).toHaveLength(1);
+      expect(response.body.index[0].event).toBe('Recent');
+    });
+
+    test('should filter by exact booking number', async () => {
+      const response = await get('?booking_nr=BK-002');
+
+      expect(response.body.index).toHaveLength(1);
+      expect(response.body.index[0].booking_nr).toBe('BK-002');
+    });
+
+    test('should count statuses ignoring the status filter', async () => {
+      const response = await get('?status=error');
+
+      expect(response.body.total).toBe(1);
+      expect(response.body.counts).toEqual({ all: 3, success: 2, error: 1 });
+    });
+
+    test('should apply the other filters to status counts', async () => {
+      const response = await get('?type=pms');
+
+      expect(response.body.counts).toEqual({ all: 1, success: 1, error: 0 });
+    });
+
+    test('should link a log to the reservation with its booking number', async () => {
+      const [reservation] = await db
+        .insert(reservations)
+        .values({
+          state: 'pending',
+          booking_nr: 'BK-001',
+          booking_from: new Date(),
+          booking_to: new Date()
+        })
+        .returning();
+
+      const response = await get('?sort_by=booking_nr&sort_order=asc');
+
+      expect(response.body.index).toHaveLength(3);
+      expect(response.body.index[0].reservation_id).toBe(reservation?.id);
+      expect(response.body.index[1].reservation_id).toBeNull();
     });
 
     test('should sort by date descending by default', async () => {

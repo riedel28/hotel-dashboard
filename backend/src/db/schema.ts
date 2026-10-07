@@ -11,6 +11,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  uniqueIndex,
   uuid
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -54,6 +55,7 @@ export const reservations = pgTable(
   },
   (table) => [
     index('reservations_state_idx').on(table.state),
+    uniqueIndex('reservations_booking_nr_key').on(table.booking_nr),
     index('reservations_received_at_idx').on(table.received_at),
     index('reservations_booking_from_idx').on(table.booking_from),
     index('reservations_booking_to_idx').on(table.booking_to),
@@ -308,6 +310,7 @@ export const monitoringLogs = pgTable(
     index('monitoring_logs_status_idx').on(table.status),
     index('monitoring_logs_type_idx').on(table.type),
     index('monitoring_logs_logged_at_idx').on(table.logged_at),
+    index('monitoring_logs_booking_nr_idx').on(table.booking_nr),
     check(
       'monitoring_logs_status_check',
       sql`${table.status} IN ('success', 'error')`

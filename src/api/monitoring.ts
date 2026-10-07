@@ -1,4 +1,5 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 
 import { client, handleApiError } from '@/api/client';
 
@@ -9,42 +10,10 @@ import {
   fetchMonitoringLogsResponseSchema
 } from '../../shared/types/monitoring';
 
-function monitoringQueryOptions({
-  page,
-  per_page,
-  status,
-  type,
-  q,
-  from,
-  to,
-  sort_by,
-  sort_order
-}: FetchMonitoringLogsParams) {
+function monitoringQueryOptions(params: FetchMonitoringLogsParams) {
   return queryOptions({
-    queryKey: [
-      'monitoring',
-      page,
-      per_page,
-      status,
-      type,
-      q,
-      from,
-      to,
-      sort_by,
-      sort_order
-    ],
-    queryFn: () =>
-      fetchMonitoringLogs({
-        page,
-        per_page,
-        status,
-        type,
-        q,
-        from,
-        to,
-        sort_by,
-        sort_order
-      }),
+    queryKey: ['monitoring', params],
+    queryFn: () => fetchMonitoringLogs(params),
     placeholderData: keepPreviousData
   });
 }
@@ -53,9 +22,16 @@ async function fetchMonitoringLogs(
   params: FetchMonitoringLogsParams
 ): Promise<FetchMonitoringLogsResponse> {
   try {
-    const validatedParams = fetchMonitoringLogsParamsSchema.parse(params);
+    const { type, from, to, ...rest } =
+      fetchMonitoringLogsParamsSchema.parse(params);
     const response = await client.get('/monitoring', {
-      params: validatedParams
+      params: {
+        ...rest,
+        type: type?.length ? type.join(',') : undefined,
+        // The range is picked in whole days of the viewer's time zone
+        from: from && dayjs(from).startOf('day').toISOString(),
+        to: to && dayjs(to).endOf('day').toISOString()
+      }
     });
     return fetchMonitoringLogsResponseSchema.parse(response.data);
   } catch (err) {
