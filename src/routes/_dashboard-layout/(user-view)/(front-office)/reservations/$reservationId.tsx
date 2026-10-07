@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { ArrowLeftIcon } from 'lucide-react';
+import { ChevronLeftIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { reservationByIdQueryOptions } from '@/api/reservations';
@@ -48,7 +48,7 @@ function ReservationPage() {
             }}
             className="mb-2 inline-flex items-center gap-1 rounded-sm text-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <ArrowLeftIcon className="size-4" aria-hidden="true" />
+            <ChevronLeftIcon className="size-4" aria-hidden="true" />
             <Trans>Back</Trans>
           </a>
         )}
