@@ -257,7 +257,8 @@ function MonitoringPage() {
       </div>
 
       <div className="space-y-2.5">
-        {/* One wrapping row. Phones: two filters to a row (half-width basis),
+        {/* One wrapping row. Phones: two filters to a row (type gets a little
+            more than half so its widest badge fits),
             then Clear filters as a full row. In between: search stretches to
             fill its row.
             Wide screens: everything in one line, Clear filters on the right. */}
@@ -289,7 +290,7 @@ function MonitoringPage() {
             onValueChange={(next) =>
               setFilters({ type: next.length > 0 ? next : undefined })
             }
-            className="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:w-[170px] sm:flex-none sm:basis-auto"
+            className="min-w-0 flex-1 basis-[calc(55%-0.25rem)] sm:w-[200px] sm:flex-none sm:basis-auto"
           >
             <DataGridCheckboxFilterFooter>
               <DataGridCheckboxFilterClear>
@@ -315,7 +316,7 @@ function MonitoringPage() {
                 to: dayjs(range.to).format('YYYY-MM-DD')
               })
             }
-            className="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:flex-none sm:basis-auto"
+            className="min-w-0 flex-1 basis-[calc(45%-0.25rem)] sm:flex-none sm:basis-auto"
           />
           {hasActiveFilters && (
             <Button
