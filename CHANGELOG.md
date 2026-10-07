@@ -1,3 +1,22 @@
+# [1.17.0](https://github.com/riedel28/hotel-dashboard/compare/v1.16.0...v1.17.0) (2026-10-07)
+
+
+### Bug Fixes
+
+* **monitoring:** full-width underline and back path on the reservation link ([10fe5b4](https://github.com/riedel28/hotel-dashboard/commit/10fe5b40938aa1e80d33774f0d4e1efa1e7be4fd))
+* **monitoring:** tolerate invalid search params in the URL ([71a9431](https://github.com/riedel28/hotel-dashboard/commit/71a943162b2b7852547fb8d9646408fc202a9e0e))
+* **reservations:** accept only genuine in-app back paths ([2dca0cc](https://github.com/riedel28/hotel-dashboard/commit/2dca0cccdb6f832ec76c28bff4f5a12b0f85e368))
+* **reservations:** enforce unique booking_nr ([d4c7e14](https://github.com/riedel28/hotel-dashboard/commit/d4c7e1436eeeeb5e308c0903ab913b8e792331bd))
+
+
+### Features
+
+* **monitoring:** extend the logs API with filters and status counts ([7c936d6](https://github.com/riedel28/hotel-dashboard/commit/7c936d6506bc609244835079edfea8b5bbcab47d))
+* **monitoring:** show log counts in the status filter ([57b36de](https://github.com/riedel28/hotel-dashboard/commit/57b36dea8c035b343d4b65ae0329d1282324f113))
+* **reservations:** optional back link on the reservation page ([a15131e](https://github.com/riedel28/hotel-dashboard/commit/a15131e4c83b929a9a7aea49753582081a6d6ad3))
+* **ui:** add DataGridSegmentedFilter ([5ea124f](https://github.com/riedel28/hotel-dashboard/commit/5ea124f1bc0a3e70f8c91371ddec2b190d891e97))
+* **ui:** tint the selected segment of DataGridSegmentedFilter like its badge ([eff570f](https://github.com/riedel28/hotel-dashboard/commit/eff570f22fcb8830102b727d22208830e8908bae))
+
 # [1.16.0](https://github.com/riedel28/hotel-dashboard/compare/v1.15.0...v1.16.0) (2026-10-06)
 
 
