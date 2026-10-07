@@ -170,8 +170,9 @@ export function MonitoringTable({
           skeleton: <Skeleton className="h-5 w-24" />,
           headerTitle: t`Reservation`
         },
-        // Fits a generated number (RES- plus eight characters) and the filter
-        size: 168,
+        // Fits a generated number (RES- plus eight characters); the filter
+        // button overlays the cell and needs no room
+        size: 140,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -198,7 +199,7 @@ export function MonitoringTable({
           skeleton: <Skeleton className="h-5 w-full rounded-md" />,
           headerTitle: t`Message`
         },
-        size: 344,
+        size: 372,
         minSize: 300,
         enableSorting: false,
         enableHiding: true,
@@ -239,7 +240,9 @@ export function MonitoringTable({
       recordCount={totalCount}
       onRowClick={(log) => onLogOpen(log.id)}
       tableClassNames={{
-        edgeCell: 'px-5'
+        edgeCell: 'px-5',
+        // Lets cells reveal controls while their row is hovered
+        bodyRow: 'group/row'
       }}
       emptyMessage={emptyMessage}
       tableLayout={{
