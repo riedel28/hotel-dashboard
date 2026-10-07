@@ -1,3 +1,19 @@
+# [1.18.0](https://github.com/riedel28/hotel-dashboard/compare/v1.17.0...v1.18.0) (2026-10-07)
+
+
+### Bug Fixes
+
+* **monitoring:** open the log from the empty part of the reservation cell ([d59a452](https://github.com/riedel28/hotel-dashboard/commit/d59a4520c38e3cd3cdb1139dee5c2adb873c4380))
+* **ui:** keep text colour of outline badge links on hover ([3c7155f](https://github.com/riedel28/hotel-dashboard/commit/3c7155f8c9f02c4f11228c1127c61e96605a40a5))
+
+
+### Features
+
+* **monitoring:** add GET /monitoring/:id ([1596ccc](https://github.com/riedel28/hotel-dashboard/commit/1596ccc13be3008d53ff52df69c6951539bf70f5))
+* **monitoring:** add log details drawer ([b70e3a6](https://github.com/riedel28/hotel-dashboard/commit/b70e3a6b02910b7c63533379295b0df5d468daf5))
+* **monitoring:** return to the open log from the reservation page ([63744df](https://github.com/riedel28/hotel-dashboard/commit/63744df1074285b9f9a5c82853fc8e063bd80d17))
+* **ui:** optional suffix on DataGridRadioFilter options ([676b235](https://github.com/riedel28/hotel-dashboard/commit/676b235289bbc6682419fc78e657016ea655d099))
+
 # [1.17.0](https://github.com/riedel28/hotel-dashboard/compare/v1.16.0...v1.17.0) (2026-10-07)
 
 
