@@ -8,7 +8,6 @@ import {
   gte,
   ilike,
   inArray,
-  lt,
   lte,
   or
 } from 'drizzle-orm';
@@ -35,7 +34,13 @@ const periodMs: Record<MonitoringPeriod, number> = {
   '30d': 30 * DAY_MS
 };
 
-const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+const sortColumns = {
+  logged_at: monitoringTable.logged_at,
+  status: monitoringTable.status,
+  type: monitoringTable.type,
+  booking_nr: monitoringTable.booking_nr,
+  event: monitoringTable.event
+} satisfies Record<FetchMonitoringLogsParams['sort_by'], unknown>;
 
 // Logs with the id of the reservation carrying the same booking number
 function selectLogs() {
@@ -51,80 +56,68 @@ function selectLogs() {
     );
 }
 
+/**
+ * Every filter except status: the status counts are taken over these, and the
+ * list adds the status on top.
+ */
+function buildConditions({
+  type,
+  booking_nr,
+  q,
+  period,
+  from,
+  to
+}: FetchMonitoringLogsParams) {
+  const conditions = [];
+
+  if (type && type.length > 0) {
+    conditions.push(inArray(monitoringTable.type, type));
+  }
+
+  if (booking_nr) {
+    conditions.push(eq(monitoringTable.booking_nr, booking_nr));
+  }
+
+  if (q) {
+    const escaped = escapeLikePattern(q);
+    conditions.push(
+      or(
+        ilike(monitoringTable.booking_nr, `%${escaped}%`),
+        ilike(monitoringTable.log_message, `%${escaped}%`),
+        ilike(monitoringTable.event, `%${escaped}%`),
+        ilike(monitoringTable.sub, `%${escaped}%`)
+      )
+    );
+  }
+
+  // An explicit range wins over a relative period
+  if (from || to) {
+    if (from) {
+      conditions.push(gte(monitoringTable.logged_at, new Date(from)));
+    }
+    if (to) {
+      conditions.push(lte(monitoringTable.logged_at, new Date(to)));
+    }
+  } else if (period) {
+    conditions.push(
+      gte(monitoringTable.logged_at, new Date(Date.now() - periodMs[period]))
+    );
+  }
+
+  return conditions;
+}
+
 async function getMonitoringLogs(req: Request, res: Response) {
   try {
     // validateQuery has already replaced req.query with the parsed schema output
-    const {
-      page,
-      per_page,
-      status,
-      type,
-      q,
-      booking_nr,
-      period,
-      from,
-      to,
-      sort_by,
-      sort_order
-    } = req.query as FetchMonitoringLogsParams;
+    const params = req.query as FetchMonitoringLogsParams;
+    const { page, per_page, status, sort_by, sort_order } = params;
 
-    // Every filter except status: the status counts are taken over these
-    const conditions = [];
+    const conditions = buildConditions(params);
 
-    if (type && type.length > 0) {
-      conditions.push(inArray(monitoringTable.type, type));
-    }
-
-    if (booking_nr) {
-      conditions.push(eq(monitoringTable.booking_nr, booking_nr));
-    }
-
-    if (q) {
-      const escaped = escapeLikePattern(q);
-      conditions.push(
-        or(
-          ilike(monitoringTable.booking_nr, `%${escaped}%`),
-          ilike(monitoringTable.log_message, `%${escaped}%`),
-          ilike(monitoringTable.event, `%${escaped}%`),
-          ilike(monitoringTable.sub, `%${escaped}%`)
-        )
-      );
-    }
-
-    if (from || to) {
-      if (from) {
-        conditions.push(gte(monitoringTable.logged_at, new Date(from)));
-      }
-      if (to) {
-        // A date-only `to` means "through the end of that day"
-        conditions.push(
-          DATE_ONLY.test(to)
-            ? lt(
-                monitoringTable.logged_at,
-                new Date(new Date(to).getTime() + DAY_MS)
-              )
-            : lte(monitoringTable.logged_at, new Date(to))
-        );
-      }
-    } else if (period) {
-      conditions.push(
-        gte(monitoringTable.logged_at, new Date(Date.now() - periodMs[period]))
-      );
-    }
-
-    const sortColumns = {
-      logged_at: monitoringTable.logged_at,
-      status: monitoringTable.status,
-      type: monitoringTable.type,
-      booking_nr: monitoringTable.booking_nr,
-      event: monitoringTable.event
-    };
-    const orderByColumn = sortColumns[sort_by ?? 'logged_at'];
+    const orderByColumn = sortColumns[sort_by];
     const orderBy =
       sort_order === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
-
-    const limit = per_page ?? 50;
-    const currentPage = page ?? 1;
 
     const [logs, statusCounts] = await Promise.all([
       selectLogs()
@@ -135,8 +128,8 @@ async function getMonitoringLogs(req: Request, res: Response) {
           )
         )
         .orderBy(orderBy, desc(monitoringTable.id))
-        .limit(limit)
-        .offset((currentPage - 1) * limit),
+        .limit(per_page)
+        .offset((page - 1) * per_page),
       db
         .select({ status: monitoringTable.status, count: count() })
         .from(monitoringTable)
@@ -153,11 +146,11 @@ async function getMonitoringLogs(req: Request, res: Response) {
 
     res.status(200).json({
       index: logs,
-      page: currentPage,
-      per_page: limit,
+      page,
+      per_page,
       total,
       counts,
-      page_count: Math.ceil(total / limit)
+      page_count: Math.ceil(total / per_page)
     });
   } catch (error) {
     console.error(error);

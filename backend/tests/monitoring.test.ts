@@ -126,12 +126,6 @@ describe('Monitoring API', () => {
       expect(response.body.index[0].booking_nr).toBe('BK-002');
     });
 
-    test('should include the whole day of a date-only `to`', async () => {
-      const response = await get('?from=2024-01-01&to=2024-01-01');
-
-      expect(response.body.index).toHaveLength(3);
-    });
-
     test('should filter by a list of types', async () => {
       const response = await get('?type=pms,payment');
 

@@ -34,7 +34,7 @@ export const sortableMonitoringColumnsSchema = z.enum([
 ]);
 
 export const fetchMonitoringLogsParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1).optional(),
+  page: z.coerce.number().int().positive().default(1),
   per_page: z.coerce
     .number()
     .int()
@@ -42,8 +42,7 @@ export const fetchMonitoringLogsParamsSchema = z.object({
     .refine((val) => [5, 10, 25, 50, 100].includes(val), {
       message: 'per_page must be one of: 5, 10, 25, 50, 100'
     })
-    .default(50)
-    .optional(),
+    .default(50),
   q: z.string().max(200).optional(),
   status: monitoringStatusSchema.optional(),
   // A list; a query string spells it comma-separated ("pms,payment")
@@ -56,11 +55,11 @@ export const fetchMonitoringLogsParamsSchema = z.object({
   booking_nr: z.string().max(200).optional(),
   // Relative window ending now; ignored when from/to are given
   period: monitoringPeriodSchema.optional(),
-  // ISO date or datetime; a date-only `to` covers that whole day
+  // ISO date or datetime, both bounds inclusive
   from: dateStringSchema.optional(),
   to: dateStringSchema.optional(),
-  sort_by: sortableMonitoringColumnsSchema.default('logged_at').optional(),
-  sort_order: z.enum(['asc', 'desc']).default('desc').optional()
+  sort_by: sortableMonitoringColumnsSchema.default('logged_at'),
+  sort_order: z.enum(['asc', 'desc']).default('desc')
 });
 
 export const monitoringLogIdParamsSchema = z.object({

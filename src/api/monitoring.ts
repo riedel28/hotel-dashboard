@@ -12,7 +12,11 @@ import {
   monitoringLogSchema
 } from '../../shared/types/monitoring';
 
-function monitoringQueryOptions(params: FetchMonitoringLogsParams) {
+// Callers name only the filters they care about; the schema fills in paging
+// and sorting defaults.
+type MonitoringLogsQuery = Partial<FetchMonitoringLogsParams>;
+
+function monitoringQueryOptions(params: MonitoringLogsQuery) {
   return queryOptions({
     queryKey: ['monitoring', params],
     queryFn: () => fetchMonitoringLogs(params),
@@ -21,7 +25,7 @@ function monitoringQueryOptions(params: FetchMonitoringLogsParams) {
 }
 
 async function fetchMonitoringLogs(
-  params: FetchMonitoringLogsParams
+  params: MonitoringLogsQuery
 ): Promise<FetchMonitoringLogsResponse> {
   try {
     const { type, from, to, ...rest } =
@@ -64,6 +68,7 @@ export {
   fetchMonitoringLog,
   fetchMonitoringLogs,
   fetchMonitoringLogsParamsSchema,
+  type MonitoringLogsQuery,
   monitoringLogQueryOptions,
   monitoringQueryOptions
 };
