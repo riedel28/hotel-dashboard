@@ -16,6 +16,7 @@ import {
   fetchMonitoringLogsParamsSchema,
   monitoringQueryOptions
 } from '@/api/monitoring';
+import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -154,10 +155,21 @@ function MonitoringPage() {
     value: MonitoringStatus | 'all';
     label: string;
     count: number | undefined;
+    dotClassName?: string;
   }> = [
     { value: 'all', label: t`All`, count: counts?.all },
-    { value: 'success', label: t`OK`, count: counts?.success },
-    { value: 'error', label: t`Errors`, count: counts?.error }
+    {
+      value: 'success',
+      label: t`OK`,
+      count: counts?.success,
+      dotClassName: 'bg-emerald-500'
+    },
+    {
+      value: 'error',
+      label: t`Errors`,
+      count: counts?.error,
+      dotClassName: 'bg-rose-500'
+    }
   ];
 
   const emptyMessage = (
@@ -318,11 +330,25 @@ function MonitoringPage() {
                   value={option.value}
                   className="px-2.5 data-active:bg-muted data-active:shadow-none! dark:data-active:bg-muted"
                 >
+                  {option.dotClassName && (
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        'size-1.5 rounded-full',
+                        option.dotClassName
+                      )}
+                    />
+                  )}
                   {option.label}
                   {option.count !== undefined && (
-                    <span className="text-xs font-normal text-muted-foreground tabular-nums">
+                    <Badge
+                      variant="secondary"
+                      color="gray"
+                      size="xs"
+                      className="px-1.5 py-0 leading-5 tabular-nums"
+                    >
                       {option.count}
-                    </span>
+                    </Badge>
                   )}
                 </TabsTrigger>
               ))}
