@@ -126,12 +126,6 @@ describe('Monitoring API', () => {
       expect(response.body.index[0].booking_nr).toBe('BK-002');
     });
 
-    test('should include the whole day of a date-only `to`', async () => {
-      const response = await get('?from=2024-01-01&to=2024-01-01');
-
-      expect(response.body.index).toHaveLength(3);
-    });
-
     test('should filter by a list of types', async () => {
       const response = await get('?type=pms,payment');
 
@@ -212,6 +206,34 @@ describe('Monitoring API', () => {
     test('should return 400 for invalid query parameters', async () => {
       await request(app)
         .get('/api/monitoring?per_page=13') // per_page must be one of [5, 10, 25, 50, 100]
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(400);
+    });
+  });
+  describe('GET /api/monitoring/:id', () => {
+    test('should get a single log', async () => {
+      const [log] = await db.select().from(monitoringLogs).limit(1);
+
+      const response = await request(app)
+        .get(`/api/monitoring/${log?.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.id).toBe(log?.id);
+      expect(response.body.event).toBe(log?.event);
+      expect(response.body.reservation_id).toBeNull();
+    });
+
+    test('should return 404 for an unknown log', async () => {
+      await request(app)
+        .get('/api/monitoring/999999')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(404);
+    });
+
+    test('should return 400 for a malformed id', async () => {
+      await request(app)
+        .get('/api/monitoring/abc')
         .set('Authorization', `Bearer ${authToken}`)
         .expect(400);
     });

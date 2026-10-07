@@ -17,6 +17,8 @@ import { cn } from '@/lib/utils';
 interface DataGridRadioFilterOption<TValue extends string> {
   value: TValue;
   label: ReactNode;
+  /** Shown at the right edge of the option's menu row only, e.g. a count. */
+  suffix?: ReactNode;
   icon?: ReactNode;
   disabled?: boolean;
 }
@@ -107,6 +109,9 @@ function DataGridRadioFilter<TValue extends string>({
               className="py-1.5"
             >
               {option.label}
+              {option.suffix && (
+                <span className="ml-auto">{option.suffix}</span>
+              )}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>

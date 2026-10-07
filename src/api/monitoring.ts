@@ -1,16 +1,21 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 
-import { client, handleApiError } from '@/api/client';
+import { ApiError, client, handleApiError } from '@/api/client';
 
 import {
   type FetchMonitoringLogsParams,
   fetchMonitoringLogsParamsSchema,
   type FetchMonitoringLogsResponse,
-  fetchMonitoringLogsResponseSchema
+  fetchMonitoringLogsResponseSchema,
+  type MonitoringLog,
+  monitoringLogSchema
 } from '../../shared/types/monitoring';
 
-function monitoringQueryOptions(params: FetchMonitoringLogsParams) {
+// Callers name only the filters they care about; the schema fills in paging
+// and sorting defaults.
+type MonitoringLogsQuery = Partial<FetchMonitoringLogsParams>;
+
+function monitoringQueryOptions(params: MonitoringLogsQuery) {
   return queryOptions({
     queryKey: ['monitoring', params],
     queryFn: () => fetchMonitoringLogs(params),
@@ -19,18 +24,14 @@ function monitoringQueryOptions(params: FetchMonitoringLogsParams) {
 }
 
 async function fetchMonitoringLogs(
-  params: FetchMonitoringLogsParams
+  params: MonitoringLogsQuery
 ): Promise<FetchMonitoringLogsResponse> {
   try {
-    const { type, from, to, ...rest } =
-      fetchMonitoringLogsParamsSchema.parse(params);
+    const { type, ...rest } = fetchMonitoringLogsParamsSchema.parse(params);
     const response = await client.get('/monitoring', {
       params: {
         ...rest,
-        type: type?.length ? type.join(',') : undefined,
-        // The range is picked in whole days of the viewer's time zone
-        from: from && dayjs(from).startOf('day').toISOString(),
-        to: to && dayjs(to).endOf('day').toISOString()
+        type: type?.length ? type.join(',') : undefined
       }
     });
     return fetchMonitoringLogsResponseSchema.parse(response.data);
@@ -39,8 +40,30 @@ async function fetchMonitoringLogs(
   }
 }
 
+function monitoringLogQueryOptions(id: number) {
+  return queryOptions({
+    queryKey: ['monitoring', 'log', id],
+    queryFn: () => fetchMonitoringLog(id),
+    // A missing log stays missing
+    retry: (failureCount, error) =>
+      !(error instanceof ApiError && error.status === 404) && failureCount < 3
+  });
+}
+
+async function fetchMonitoringLog(id: number): Promise<MonitoringLog> {
+  try {
+    const response = await client.get(`/monitoring/${id}`);
+    return monitoringLogSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'fetchMonitoringLog');
+  }
+}
+
 export {
+  fetchMonitoringLog,
   fetchMonitoringLogs,
   fetchMonitoringLogsParamsSchema,
+  type MonitoringLogsQuery,
+  monitoringLogQueryOptions,
   monitoringQueryOptions
 };
