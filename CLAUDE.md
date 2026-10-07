@@ -63,6 +63,10 @@ This is a **hotel management dashboard** application with a dual-view system (Us
 - Strict TypeScript configuration
 - No `any` types allowed without explicit permission
 
+### Library Skills (TanStack Intent)
+
+TanStack Table ships agent skills inside its npm packages. Before editing table code (`src/components/ui/data-grid*.tsx`, any `useTable` call), load the matching skill listed in the `intent-skills` block at the top of `AGENTS.md`, e.g. `bunx --no-install --package @tanstack/intent intent load @tanstack/react-table#table-state`. Allowed skill sources are the `intent.skills` list in `package.json`.
+
 ### Icon Imports
 
 Always import icons with the `Icon` suffix for clarity:

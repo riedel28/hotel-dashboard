@@ -1,11 +1,9 @@
 import { useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
-  getCoreRowModel,
-  getSortedRowModel,
   type PaginationState,
   type SortingState,
-  useReactTable
+  useTable
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
@@ -13,7 +11,12 @@ import { useMemo, useState } from 'react';
 
 import type { Reservation } from '@/api/reservations';
 import { Button } from '@/components/ui/button';
-import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
+import {
+  DataGrid,
+  DataGridContainer,
+  type DataGridFeatures,
+  dataGridFeatures
+} from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
@@ -73,7 +76,7 @@ export default function ReservationsTable({
   const sorting = sortingProp ?? internalSorting;
   const { t } = useLingui();
 
-  const columns = useMemo<ColumnDef<Reservation>[]>(
+  const columns = useMemo<ColumnDef<DataGridFeatures, Reservation>[]>(
     () => [
       {
         id: 'id',
@@ -281,7 +284,8 @@ export default function ReservationsTable({
     columns.map((column) => column.id as string)
   );
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataGridFeatures,
     columns,
     data: data || [],
     pageCount: pageCount, // Calculate from backend values
@@ -295,8 +299,6 @@ export default function ReservationsTable({
     onPaginationChange: onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     manualPagination: true, // Enable manual pagination for server-side
     manualSorting: true, // Enable manual sorting for server-side
     enableSortingRemoval: false

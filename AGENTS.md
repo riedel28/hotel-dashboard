@@ -1,3 +1,32 @@
+<!-- intent-skills:start -->
+# TanStack Intent - before editing files, run the matching guidance command.
+tanstackIntent:
+  - id: "@tanstack/react-table#getting-started"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/react-table#getting-started"
+    for: "Create and render Table v9 with the react adapter. Route reusable createTableHook components, Query and Virtual integration, and framework setup; use table-state for reactive ownership."
+  - id: "@tanstack/react-table#migrate-v8-to-v9"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/react-table#migrate-v8-to-v9"
+    for: "Migrate react Table v8 to v9. Audit framework construction, rendering, state, and app hooks, with shared API changes in the core migration skill."
+  - id: "@tanstack/react-table#table-state"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/react-table#table-state"
+    for: "Read and control Table v9 state in react. Use for tracked reads, subscriptions, controlled slices, and framework-specific reactive boundaries."
+  - id: "@tanstack/table-core#core"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/table-core#core"
+    for: "Use TanStack Table v9 core architecture, stable data and columns, and inferred types. Route setup, missing APIs, row models, state, features, and framework-specific work."
+  - id: "@tanstack/table-core#custom-features"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/table-core#custom-features"
+    for: "Implement a Table v9 plugin when built-ins and typed meta are insufficient. Covers FeatureMaps, runtime lifecycle hooks, prototypes, and a complete checked example."
+  - id: "@tanstack/table-core#migrate-v8-to-v9"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/table-core#migrate-v8-to-v9"
+    for: "Audit and migrate Table v8 to v9. Inventory affected APIs, follow the shared checklist, and read only the required architecture, state, feature, and TypeScript mappings."
+  - id: "@tanstack/table-core#table-features"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/table-core#table-features"
+    for: "Add or debug Table v9 features: registration, row-model slots, prerequisites, sorting, filtering, pagination, selection, spanning, and column layout. Read only task-relevant feature references."
+  - id: "@tanstack/table-core#table-state"
+    run: "bunx --no-install --package @tanstack/intent intent load @tanstack/table-core#table-state"
+    for: "Choose Table v9 state ownership, atoms, initialization, updates, and resets. Load for controlled slices or state coordination; use the adapter state skill for reactive reads."
+<!-- intent-skills:end -->
+
 # AGENTS.md
 
 This file provides guidance to coding agents when working with code in this repository.

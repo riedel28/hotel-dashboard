@@ -9,52 +9,52 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardLayoutRouteImport } from './routes/_dashboard-layout'
 import { Route as AuthLayoutRouteImport } from './routes/_auth-layout'
+import { Route as DashboardLayoutRouteImport } from './routes/_dashboard-layout'
 import { Route as DashboardLayoutIndexRouteImport } from './routes/_dashboard-layout/index'
 import { Route as DashboardLayoutAdminRouteImport } from './routes/_dashboard-layout/admin'
+import { Route as AuthLayoutAuthAcceptInvitationRouteImport } from './routes/_auth-layout/auth/accept-invitation'
+import { Route as AuthLayoutAuthForgotPasswordRouteImport } from './routes/_auth-layout/auth/forgot-password'
+import { Route as AuthLayoutAuthLoginRouteImport } from './routes/_auth-layout/auth/login'
+import { Route as AuthLayoutAuthResetPasswordRouteImport } from './routes/_auth-layout/auth/reset-password'
+import { Route as AuthLayoutAuthSignUpRouteImport } from './routes/_auth-layout/auth/sign-up'
+import { Route as AuthLayoutAuthVerifyEmailRouteImport } from './routes/_auth-layout/auth/verify-email'
+import { Route as DashboardLayoutuserViewAboutRouteImport } from './routes/_dashboard-layout/(user-view)/about'
+import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './routes/_dashboard-layout/(user-view)/access-provider'
+import { Route as DashboardLayoutuserViewAnalyticsRouteImport } from './routes/_dashboard-layout/(user-view)/analytics'
+import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes/_dashboard-layout/(user-view)/checkin-page'
+import { Route as DashboardLayoutuserViewCompanyRouteImport } from './routes/_dashboard-layout/(user-view)/company'
+import { Route as DashboardLayoutuserViewDevicesRouteImport } from './routes/_dashboard-layout/(user-view)/devices'
+import { Route as DashboardLayoutuserViewDoorLocksRouteImport } from './routes/_dashboard-layout/(user-view)/door-locks'
+import { Route as DashboardLayoutuserViewEventsRouteImport } from './routes/_dashboard-layout/(user-view)/events'
+import { Route as DashboardLayoutuserViewMobileCmsRouteImport } from './routes/_dashboard-layout/(user-view)/mobile-cms'
+import { Route as DashboardLayoutuserViewPaymentProviderRouteImport } from './routes/_dashboard-layout/(user-view)/payment-provider'
+import { Route as DashboardLayoutuserViewPmsProviderRouteImport } from './routes/_dashboard-layout/(user-view)/pms-provider'
+import { Route as DashboardLayoutuserViewProfileRouteImport } from './routes/_dashboard-layout/(user-view)/profile'
+import { Route as DashboardLayoutuserViewTvRouteImport } from './routes/_dashboard-layout/(user-view)/tv'
 import { Route as DashboardLayoutAdminIndexRouteImport } from './routes/_dashboard-layout/admin/index'
 import { Route as DashboardLayoutAdminCustomersRouteImport } from './routes/_dashboard-layout/admin/customers'
-import { Route as DashboardLayoutuserViewTvRouteImport } from './routes/_dashboard-layout/(user-view)/tv'
-import { Route as DashboardLayoutuserViewProfileRouteImport } from './routes/_dashboard-layout/(user-view)/profile'
-import { Route as DashboardLayoutuserViewPmsProviderRouteImport } from './routes/_dashboard-layout/(user-view)/pms-provider'
-import { Route as DashboardLayoutuserViewPaymentProviderRouteImport } from './routes/_dashboard-layout/(user-view)/payment-provider'
-import { Route as DashboardLayoutuserViewMobileCmsRouteImport } from './routes/_dashboard-layout/(user-view)/mobile-cms'
-import { Route as DashboardLayoutuserViewEventsRouteImport } from './routes/_dashboard-layout/(user-view)/events'
-import { Route as DashboardLayoutuserViewDoorLocksRouteImport } from './routes/_dashboard-layout/(user-view)/door-locks'
-import { Route as DashboardLayoutuserViewDevicesRouteImport } from './routes/_dashboard-layout/(user-view)/devices'
-import { Route as DashboardLayoutuserViewCompanyRouteImport } from './routes/_dashboard-layout/(user-view)/company'
-import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes/_dashboard-layout/(user-view)/checkin-page'
-import { Route as DashboardLayoutuserViewAnalyticsRouteImport } from './routes/_dashboard-layout/(user-view)/analytics'
-import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './routes/_dashboard-layout/(user-view)/access-provider'
-import { Route as DashboardLayoutuserViewAboutRouteImport } from './routes/_dashboard-layout/(user-view)/about'
-import { Route as AuthLayoutAuthVerifyEmailRouteImport } from './routes/_auth-layout/auth/verify-email'
-import { Route as AuthLayoutAuthSignUpRouteImport } from './routes/_auth-layout/auth/sign-up'
-import { Route as AuthLayoutAuthResetPasswordRouteImport } from './routes/_auth-layout/auth/reset-password'
-import { Route as AuthLayoutAuthLoginRouteImport } from './routes/_auth-layout/auth/login'
-import { Route as AuthLayoutAuthForgotPasswordRouteImport } from './routes/_auth-layout/auth/forgot-password'
-import { Route as AuthLayoutAuthAcceptInvitationRouteImport } from './routes/_auth-layout/auth/accept-invitation'
-import { Route as DashboardLayoutAdminPropertiesIndexRouteImport } from './routes/_dashboard-layout/admin/properties/index'
-import { Route as DashboardLayoutuserViewUsersIndexRouteImport } from './routes/_dashboard-layout/(user-view)/users/index'
-import { Route as DashboardLayoutuserViewRoomsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/index'
-import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
-import { Route as DashboardLayoutAdminPropertiesPropertyIdRouteImport } from './routes/_dashboard-layout/admin/properties/$propertyId'
-import { Route as DashboardLayoutuserViewUsersUserIdRouteImport } from './routes/_dashboard-layout/(user-view)/users/$userId'
-import { Route as DashboardLayoutuserViewRoomsRoomIdRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/$roomId'
-import { Route as DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/registration-forms'
-import { Route as DashboardLayoutuserViewfrontOfficePaymentsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/payments'
 import { Route as DashboardLayoutuserViewfrontOfficeOrdersRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/orders'
-import { Route as DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/index'
-import { Route as DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index'
+import { Route as DashboardLayoutuserViewfrontOfficePaymentsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/payments'
+import { Route as DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/registration-forms'
+import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
+import { Route as DashboardLayoutuserViewRoomsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/index'
+import { Route as DashboardLayoutuserViewRoomsRoomIdRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/$roomId'
+import { Route as DashboardLayoutuserViewUsersIndexRouteImport } from './routes/_dashboard-layout/(user-view)/users/index'
+import { Route as DashboardLayoutuserViewUsersUserIdRouteImport } from './routes/_dashboard-layout/(user-view)/users/$userId'
+import { Route as DashboardLayoutAdminPropertiesIndexRouteImport } from './routes/_dashboard-layout/admin/properties/index'
+import { Route as DashboardLayoutAdminPropertiesPropertyIdRouteImport } from './routes/_dashboard-layout/admin/properties/$propertyId'
 import { Route as DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index'
+import { Route as DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index'
+import { Route as DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/index'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsReservationIdRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
 
-const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
-  id: '/_dashboard-layout',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthLayoutRoute = AuthLayoutRouteImport.update({
   id: '/_auth-layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
+  id: '/_dashboard-layout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardLayoutIndexRoute = DashboardLayoutIndexRouteImport.update({
@@ -67,6 +67,118 @@ const DashboardLayoutAdminRoute = DashboardLayoutAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
+const AuthLayoutAuthAcceptInvitationRoute =
+  AuthLayoutAuthAcceptInvitationRouteImport.update({
+    id: '/auth/accept-invitation',
+    path: '/auth/accept-invitation',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
+const AuthLayoutAuthForgotPasswordRoute =
+  AuthLayoutAuthForgotPasswordRouteImport.update({
+    id: '/auth/forgot-password',
+    path: '/auth/forgot-password',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
+const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const AuthLayoutAuthResetPasswordRoute =
+  AuthLayoutAuthResetPasswordRouteImport.update({
+    id: '/auth/reset-password',
+    path: '/auth/reset-password',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
+const AuthLayoutAuthSignUpRoute = AuthLayoutAuthSignUpRouteImport.update({
+  id: '/auth/sign-up',
+  path: '/auth/sign-up',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const AuthLayoutAuthVerifyEmailRoute =
+  AuthLayoutAuthVerifyEmailRouteImport.update({
+    id: '/auth/verify-email',
+    path: '/auth/verify-email',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewAboutRoute =
+  DashboardLayoutuserViewAboutRouteImport.update({
+    id: '/(user-view)/about',
+    path: '/about',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewAccessProviderRoute =
+  DashboardLayoutuserViewAccessProviderRouteImport.update({
+    id: '/(user-view)/access-provider',
+    path: '/access-provider',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewAnalyticsRoute =
+  DashboardLayoutuserViewAnalyticsRouteImport.update({
+    id: '/(user-view)/analytics',
+    path: '/analytics',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewCheckinPageRoute =
+  DashboardLayoutuserViewCheckinPageRouteImport.update({
+    id: '/(user-view)/checkin-page',
+    path: '/checkin-page',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewCompanyRoute =
+  DashboardLayoutuserViewCompanyRouteImport.update({
+    id: '/(user-view)/company',
+    path: '/company',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewDevicesRoute =
+  DashboardLayoutuserViewDevicesRouteImport.update({
+    id: '/(user-view)/devices',
+    path: '/devices',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewDoorLocksRoute =
+  DashboardLayoutuserViewDoorLocksRouteImport.update({
+    id: '/(user-view)/door-locks',
+    path: '/door-locks',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewEventsRoute =
+  DashboardLayoutuserViewEventsRouteImport.update({
+    id: '/(user-view)/events',
+    path: '/events',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewMobileCmsRoute =
+  DashboardLayoutuserViewMobileCmsRouteImport.update({
+    id: '/(user-view)/mobile-cms',
+    path: '/mobile-cms',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewPaymentProviderRoute =
+  DashboardLayoutuserViewPaymentProviderRouteImport.update({
+    id: '/(user-view)/payment-provider',
+    path: '/payment-provider',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewPmsProviderRoute =
+  DashboardLayoutuserViewPmsProviderRouteImport.update({
+    id: '/(user-view)/pms-provider',
+    path: '/pms-provider',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewProfileRoute =
+  DashboardLayoutuserViewProfileRouteImport.update({
+    id: '/(user-view)/profile',
+    path: '/profile',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewTvRoute =
+  DashboardLayoutuserViewTvRouteImport.update({
+    id: '/(user-view)/tv',
+    path: '/tv',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 const DashboardLayoutAdminIndexRoute =
   DashboardLayoutAdminIndexRouteImport.update({
     id: '/',
@@ -79,164 +191,10 @@ const DashboardLayoutAdminCustomersRoute =
     path: '/customers',
     getParentRoute: () => DashboardLayoutAdminRoute,
   } as any)
-const DashboardLayoutuserViewTvRoute =
-  DashboardLayoutuserViewTvRouteImport.update({
-    id: '/(user-view)/tv',
-    path: '/tv',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewProfileRoute =
-  DashboardLayoutuserViewProfileRouteImport.update({
-    id: '/(user-view)/profile',
-    path: '/profile',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewPmsProviderRoute =
-  DashboardLayoutuserViewPmsProviderRouteImport.update({
-    id: '/(user-view)/pms-provider',
-    path: '/pms-provider',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewPaymentProviderRoute =
-  DashboardLayoutuserViewPaymentProviderRouteImport.update({
-    id: '/(user-view)/payment-provider',
-    path: '/payment-provider',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewMobileCmsRoute =
-  DashboardLayoutuserViewMobileCmsRouteImport.update({
-    id: '/(user-view)/mobile-cms',
-    path: '/mobile-cms',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewEventsRoute =
-  DashboardLayoutuserViewEventsRouteImport.update({
-    id: '/(user-view)/events',
-    path: '/events',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewDoorLocksRoute =
-  DashboardLayoutuserViewDoorLocksRouteImport.update({
-    id: '/(user-view)/door-locks',
-    path: '/door-locks',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewDevicesRoute =
-  DashboardLayoutuserViewDevicesRouteImport.update({
-    id: '/(user-view)/devices',
-    path: '/devices',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewCompanyRoute =
-  DashboardLayoutuserViewCompanyRouteImport.update({
-    id: '/(user-view)/company',
-    path: '/company',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewCheckinPageRoute =
-  DashboardLayoutuserViewCheckinPageRouteImport.update({
-    id: '/(user-view)/checkin-page',
-    path: '/checkin-page',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewAnalyticsRoute =
-  DashboardLayoutuserViewAnalyticsRouteImport.update({
-    id: '/(user-view)/analytics',
-    path: '/analytics',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewAccessProviderRoute =
-  DashboardLayoutuserViewAccessProviderRouteImport.update({
-    id: '/(user-view)/access-provider',
-    path: '/access-provider',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewAboutRoute =
-  DashboardLayoutuserViewAboutRouteImport.update({
-    id: '/(user-view)/about',
-    path: '/about',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const AuthLayoutAuthVerifyEmailRoute =
-  AuthLayoutAuthVerifyEmailRouteImport.update({
-    id: '/auth/verify-email',
-    path: '/auth/verify-email',
-    getParentRoute: () => AuthLayoutRoute,
-  } as any)
-const AuthLayoutAuthSignUpRoute = AuthLayoutAuthSignUpRouteImport.update({
-  id: '/auth/sign-up',
-  path: '/auth/sign-up',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-const AuthLayoutAuthResetPasswordRoute =
-  AuthLayoutAuthResetPasswordRouteImport.update({
-    id: '/auth/reset-password',
-    path: '/auth/reset-password',
-    getParentRoute: () => AuthLayoutRoute,
-  } as any)
-const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-const AuthLayoutAuthForgotPasswordRoute =
-  AuthLayoutAuthForgotPasswordRouteImport.update({
-    id: '/auth/forgot-password',
-    path: '/auth/forgot-password',
-    getParentRoute: () => AuthLayoutRoute,
-  } as any)
-const AuthLayoutAuthAcceptInvitationRoute =
-  AuthLayoutAuthAcceptInvitationRouteImport.update({
-    id: '/auth/accept-invitation',
-    path: '/auth/accept-invitation',
-    getParentRoute: () => AuthLayoutRoute,
-  } as any)
-const DashboardLayoutAdminPropertiesIndexRoute =
-  DashboardLayoutAdminPropertiesIndexRouteImport.update({
-    id: '/properties/',
-    path: '/properties/',
-    getParentRoute: () => DashboardLayoutAdminRoute,
-  } as any)
-const DashboardLayoutuserViewUsersIndexRoute =
-  DashboardLayoutuserViewUsersIndexRouteImport.update({
-    id: '/(user-view)/users/',
-    path: '/users/',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewRoomsIndexRoute =
-  DashboardLayoutuserViewRoomsIndexRouteImport.update({
-    id: '/(user-view)/rooms/',
-    path: '/rooms/',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewProductsIndexRoute =
-  DashboardLayoutuserViewProductsIndexRouteImport.update({
-    id: '/(user-view)/products/',
-    path: '/products/',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutAdminPropertiesPropertyIdRoute =
-  DashboardLayoutAdminPropertiesPropertyIdRouteImport.update({
-    id: '/properties/$propertyId',
-    path: '/properties/$propertyId',
-    getParentRoute: () => DashboardLayoutAdminRoute,
-  } as any)
-const DashboardLayoutuserViewUsersUserIdRoute =
-  DashboardLayoutuserViewUsersUserIdRouteImport.update({
-    id: '/(user-view)/users/$userId',
-    path: '/users/$userId',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewRoomsRoomIdRoute =
-  DashboardLayoutuserViewRoomsRoomIdRouteImport.update({
-    id: '/(user-view)/rooms/$roomId',
-    path: '/rooms/$roomId',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute =
-  DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport.update({
-    id: '/(user-view)/(front-office)/registration-forms',
-    path: '/registration-forms',
+const DashboardLayoutuserViewfrontOfficeOrdersRoute =
+  DashboardLayoutuserViewfrontOfficeOrdersRouteImport.update({
+    id: '/(user-view)/(front-office)/orders',
+    path: '/orders',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewfrontOfficePaymentsRoute =
@@ -245,16 +203,58 @@ const DashboardLayoutuserViewfrontOfficePaymentsRoute =
     path: '/payments',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-const DashboardLayoutuserViewfrontOfficeOrdersRoute =
-  DashboardLayoutuserViewfrontOfficeOrdersRouteImport.update({
-    id: '/(user-view)/(front-office)/orders',
-    path: '/orders',
+const DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute =
+  DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport.update({
+    id: '/(user-view)/(front-office)/registration-forms',
+    path: '/registration-forms',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-const DashboardLayoutuserViewfrontOfficeReservationsIndexRoute =
-  DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport.update({
-    id: '/(user-view)/(front-office)/reservations/',
-    path: '/reservations/',
+const DashboardLayoutuserViewProductsIndexRoute =
+  DashboardLayoutuserViewProductsIndexRouteImport.update({
+    id: '/(user-view)/products/',
+    path: '/products/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewRoomsIndexRoute =
+  DashboardLayoutuserViewRoomsIndexRouteImport.update({
+    id: '/(user-view)/rooms/',
+    path: '/rooms/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewRoomsRoomIdRoute =
+  DashboardLayoutuserViewRoomsRoomIdRouteImport.update({
+    id: '/(user-view)/rooms/$roomId',
+    path: '/rooms/$roomId',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewUsersIndexRoute =
+  DashboardLayoutuserViewUsersIndexRouteImport.update({
+    id: '/(user-view)/users/',
+    path: '/users/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewUsersUserIdRoute =
+  DashboardLayoutuserViewUsersUserIdRouteImport.update({
+    id: '/(user-view)/users/$userId',
+    path: '/users/$userId',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutAdminPropertiesIndexRoute =
+  DashboardLayoutAdminPropertiesIndexRouteImport.update({
+    id: '/properties/',
+    path: '/properties/',
+    getParentRoute: () => DashboardLayoutAdminRoute,
+  } as any)
+const DashboardLayoutAdminPropertiesPropertyIdRoute =
+  DashboardLayoutAdminPropertiesPropertyIdRouteImport.update({
+    id: '/properties/$propertyId',
+    path: '/properties/$propertyId',
+    getParentRoute: () => DashboardLayoutAdminRoute,
+  } as any)
+const DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute =
+  DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport.update({
+    id: '/(user-view)/(content-manager)/guest-abc/',
+    path: '/guest-abc/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute =
@@ -263,10 +263,10 @@ const DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute =
     path: '/monitoring/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-const DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute =
-  DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport.update({
-    id: '/(user-view)/(content-manager)/guest-abc/',
-    path: '/guest-abc/',
+const DashboardLayoutuserViewfrontOfficeReservationsIndexRoute =
+  DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport.update({
+    id: '/(user-view)/(front-office)/reservations/',
+    path: '/reservations/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute =
@@ -525,18 +525,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_dashboard-layout': {
-      id: '/_dashboard-layout'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DashboardLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth-layout': {
       id: '/_auth-layout'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_dashboard-layout': {
+      id: '/_dashboard-layout'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof DashboardLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_dashboard-layout/': {
@@ -553,6 +553,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutAdminRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
+    '/_auth-layout/auth/accept-invitation': {
+      id: '/_auth-layout/auth/accept-invitation'
+      path: '/auth/accept-invitation'
+      fullPath: '/auth/accept-invitation'
+      preLoaderRoute: typeof AuthLayoutAuthAcceptInvitationRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth-layout/auth/forgot-password': {
+      id: '/_auth-layout/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthLayoutAuthForgotPasswordRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth-layout/auth/login': {
+      id: '/_auth-layout/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLayoutAuthLoginRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth-layout/auth/reset-password': {
+      id: '/_auth-layout/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthLayoutAuthResetPasswordRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth-layout/auth/sign-up': {
+      id: '/_auth-layout/auth/sign-up'
+      path: '/auth/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthLayoutAuthSignUpRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth-layout/auth/verify-email': {
+      id: '/_auth-layout/auth/verify-email'
+      path: '/auth/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthLayoutAuthVerifyEmailRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/about': {
+      id: '/_dashboard-layout/(user-view)/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof DashboardLayoutuserViewAboutRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/access-provider': {
+      id: '/_dashboard-layout/(user-view)/access-provider'
+      path: '/access-provider'
+      fullPath: '/access-provider'
+      preLoaderRoute: typeof DashboardLayoutuserViewAccessProviderRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/analytics': {
+      id: '/_dashboard-layout/(user-view)/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof DashboardLayoutuserViewAnalyticsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/checkin-page': {
+      id: '/_dashboard-layout/(user-view)/checkin-page'
+      path: '/checkin-page'
+      fullPath: '/checkin-page'
+      preLoaderRoute: typeof DashboardLayoutuserViewCheckinPageRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/company': {
+      id: '/_dashboard-layout/(user-view)/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof DashboardLayoutuserViewCompanyRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/devices': {
+      id: '/_dashboard-layout/(user-view)/devices'
+      path: '/devices'
+      fullPath: '/devices'
+      preLoaderRoute: typeof DashboardLayoutuserViewDevicesRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/door-locks': {
+      id: '/_dashboard-layout/(user-view)/door-locks'
+      path: '/door-locks'
+      fullPath: '/door-locks'
+      preLoaderRoute: typeof DashboardLayoutuserViewDoorLocksRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/events': {
+      id: '/_dashboard-layout/(user-view)/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof DashboardLayoutuserViewEventsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/mobile-cms': {
+      id: '/_dashboard-layout/(user-view)/mobile-cms'
+      path: '/mobile-cms'
+      fullPath: '/mobile-cms'
+      preLoaderRoute: typeof DashboardLayoutuserViewMobileCmsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/payment-provider': {
+      id: '/_dashboard-layout/(user-view)/payment-provider'
+      path: '/payment-provider'
+      fullPath: '/payment-provider'
+      preLoaderRoute: typeof DashboardLayoutuserViewPaymentProviderRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/pms-provider': {
+      id: '/_dashboard-layout/(user-view)/pms-provider'
+      path: '/pms-provider'
+      fullPath: '/pms-provider'
+      preLoaderRoute: typeof DashboardLayoutuserViewPmsProviderRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/profile': {
+      id: '/_dashboard-layout/(user-view)/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof DashboardLayoutuserViewProfileRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/tv': {
+      id: '/_dashboard-layout/(user-view)/tv'
+      path: '/tv'
+      fullPath: '/tv'
+      preLoaderRoute: typeof DashboardLayoutuserViewTvRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
     '/_dashboard-layout/admin/': {
       id: '/_dashboard-layout/admin/'
       path: '/'
@@ -567,193 +700,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutAdminCustomersRouteImport
       parentRoute: typeof DashboardLayoutAdminRoute
     }
-    '/_dashboard-layout/(user-view)/tv': {
-      id: '/_dashboard-layout/(user-view)/tv'
-      path: '/tv'
-      fullPath: '/tv'
-      preLoaderRoute: typeof DashboardLayoutuserViewTvRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/profile': {
-      id: '/_dashboard-layout/(user-view)/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof DashboardLayoutuserViewProfileRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/pms-provider': {
-      id: '/_dashboard-layout/(user-view)/pms-provider'
-      path: '/pms-provider'
-      fullPath: '/pms-provider'
-      preLoaderRoute: typeof DashboardLayoutuserViewPmsProviderRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/payment-provider': {
-      id: '/_dashboard-layout/(user-view)/payment-provider'
-      path: '/payment-provider'
-      fullPath: '/payment-provider'
-      preLoaderRoute: typeof DashboardLayoutuserViewPaymentProviderRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/mobile-cms': {
-      id: '/_dashboard-layout/(user-view)/mobile-cms'
-      path: '/mobile-cms'
-      fullPath: '/mobile-cms'
-      preLoaderRoute: typeof DashboardLayoutuserViewMobileCmsRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/events': {
-      id: '/_dashboard-layout/(user-view)/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof DashboardLayoutuserViewEventsRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/door-locks': {
-      id: '/_dashboard-layout/(user-view)/door-locks'
-      path: '/door-locks'
-      fullPath: '/door-locks'
-      preLoaderRoute: typeof DashboardLayoutuserViewDoorLocksRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/devices': {
-      id: '/_dashboard-layout/(user-view)/devices'
-      path: '/devices'
-      fullPath: '/devices'
-      preLoaderRoute: typeof DashboardLayoutuserViewDevicesRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/company': {
-      id: '/_dashboard-layout/(user-view)/company'
-      path: '/company'
-      fullPath: '/company'
-      preLoaderRoute: typeof DashboardLayoutuserViewCompanyRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/checkin-page': {
-      id: '/_dashboard-layout/(user-view)/checkin-page'
-      path: '/checkin-page'
-      fullPath: '/checkin-page'
-      preLoaderRoute: typeof DashboardLayoutuserViewCheckinPageRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/analytics': {
-      id: '/_dashboard-layout/(user-view)/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof DashboardLayoutuserViewAnalyticsRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/access-provider': {
-      id: '/_dashboard-layout/(user-view)/access-provider'
-      path: '/access-provider'
-      fullPath: '/access-provider'
-      preLoaderRoute: typeof DashboardLayoutuserViewAccessProviderRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/about': {
-      id: '/_dashboard-layout/(user-view)/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof DashboardLayoutuserViewAboutRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_auth-layout/auth/verify-email': {
-      id: '/_auth-layout/auth/verify-email'
-      path: '/auth/verify-email'
-      fullPath: '/auth/verify-email'
-      preLoaderRoute: typeof AuthLayoutAuthVerifyEmailRouteImport
-      parentRoute: typeof AuthLayoutRoute
-    }
-    '/_auth-layout/auth/sign-up': {
-      id: '/_auth-layout/auth/sign-up'
-      path: '/auth/sign-up'
-      fullPath: '/auth/sign-up'
-      preLoaderRoute: typeof AuthLayoutAuthSignUpRouteImport
-      parentRoute: typeof AuthLayoutRoute
-    }
-    '/_auth-layout/auth/reset-password': {
-      id: '/_auth-layout/auth/reset-password'
-      path: '/auth/reset-password'
-      fullPath: '/auth/reset-password'
-      preLoaderRoute: typeof AuthLayoutAuthResetPasswordRouteImport
-      parentRoute: typeof AuthLayoutRoute
-    }
-    '/_auth-layout/auth/login': {
-      id: '/_auth-layout/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLayoutAuthLoginRouteImport
-      parentRoute: typeof AuthLayoutRoute
-    }
-    '/_auth-layout/auth/forgot-password': {
-      id: '/_auth-layout/auth/forgot-password'
-      path: '/auth/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthLayoutAuthForgotPasswordRouteImport
-      parentRoute: typeof AuthLayoutRoute
-    }
-    '/_auth-layout/auth/accept-invitation': {
-      id: '/_auth-layout/auth/accept-invitation'
-      path: '/auth/accept-invitation'
-      fullPath: '/auth/accept-invitation'
-      preLoaderRoute: typeof AuthLayoutAuthAcceptInvitationRouteImport
-      parentRoute: typeof AuthLayoutRoute
-    }
-    '/_dashboard-layout/admin/properties/': {
-      id: '/_dashboard-layout/admin/properties/'
-      path: '/properties'
-      fullPath: '/admin/properties/'
-      preLoaderRoute: typeof DashboardLayoutAdminPropertiesIndexRouteImport
-      parentRoute: typeof DashboardLayoutAdminRoute
-    }
-    '/_dashboard-layout/(user-view)/users/': {
-      id: '/_dashboard-layout/(user-view)/users/'
-      path: '/users'
-      fullPath: '/users/'
-      preLoaderRoute: typeof DashboardLayoutuserViewUsersIndexRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/rooms/': {
-      id: '/_dashboard-layout/(user-view)/rooms/'
-      path: '/rooms'
-      fullPath: '/rooms/'
-      preLoaderRoute: typeof DashboardLayoutuserViewRoomsIndexRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/products/': {
-      id: '/_dashboard-layout/(user-view)/products/'
-      path: '/products'
-      fullPath: '/products/'
-      preLoaderRoute: typeof DashboardLayoutuserViewProductsIndexRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/admin/properties/$propertyId': {
-      id: '/_dashboard-layout/admin/properties/$propertyId'
-      path: '/properties/$propertyId'
-      fullPath: '/admin/properties/$propertyId'
-      preLoaderRoute: typeof DashboardLayoutAdminPropertiesPropertyIdRouteImport
-      parentRoute: typeof DashboardLayoutAdminRoute
-    }
-    '/_dashboard-layout/(user-view)/users/$userId': {
-      id: '/_dashboard-layout/(user-view)/users/$userId'
-      path: '/users/$userId'
-      fullPath: '/users/$userId'
-      preLoaderRoute: typeof DashboardLayoutuserViewUsersUserIdRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/rooms/$roomId': {
-      id: '/_dashboard-layout/(user-view)/rooms/$roomId'
-      path: '/rooms/$roomId'
-      fullPath: '/rooms/$roomId'
-      preLoaderRoute: typeof DashboardLayoutuserViewRoomsRoomIdRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/(front-office)/registration-forms': {
-      id: '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
-      path: '/registration-forms'
-      fullPath: '/registration-forms'
-      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport
+    '/_dashboard-layout/(user-view)/(front-office)/orders': {
+      id: '/_dashboard-layout/(user-view)/(front-office)/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeOrdersRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/(front-office)/payments': {
@@ -763,18 +714,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficePaymentsRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(user-view)/(front-office)/orders': {
-      id: '/_dashboard-layout/(user-view)/(front-office)/orders'
-      path: '/orders'
-      fullPath: '/orders'
-      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeOrdersRouteImport
+    '/_dashboard-layout/(user-view)/(front-office)/registration-forms': {
+      id: '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
+      path: '/registration-forms'
+      fullPath: '/registration-forms'
+      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(user-view)/(front-office)/reservations/': {
-      id: '/_dashboard-layout/(user-view)/(front-office)/reservations/'
-      path: '/reservations'
-      fullPath: '/reservations/'
-      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport
+    '/_dashboard-layout/(user-view)/products/': {
+      id: '/_dashboard-layout/(user-view)/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof DashboardLayoutuserViewProductsIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/rooms/': {
+      id: '/_dashboard-layout/(user-view)/rooms/'
+      path: '/rooms'
+      fullPath: '/rooms/'
+      preLoaderRoute: typeof DashboardLayoutuserViewRoomsIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/rooms/$roomId': {
+      id: '/_dashboard-layout/(user-view)/rooms/$roomId'
+      path: '/rooms/$roomId'
+      fullPath: '/rooms/$roomId'
+      preLoaderRoute: typeof DashboardLayoutuserViewRoomsRoomIdRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/users/': {
+      id: '/_dashboard-layout/(user-view)/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof DashboardLayoutuserViewUsersIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/users/$userId': {
+      id: '/_dashboard-layout/(user-view)/users/$userId'
+      path: '/users/$userId'
+      fullPath: '/users/$userId'
+      preLoaderRoute: typeof DashboardLayoutuserViewUsersUserIdRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/admin/properties/': {
+      id: '/_dashboard-layout/admin/properties/'
+      path: '/properties'
+      fullPath: '/admin/properties/'
+      preLoaderRoute: typeof DashboardLayoutAdminPropertiesIndexRouteImport
+      parentRoute: typeof DashboardLayoutAdminRoute
+    }
+    '/_dashboard-layout/admin/properties/$propertyId': {
+      id: '/_dashboard-layout/admin/properties/$propertyId'
+      path: '/properties/$propertyId'
+      fullPath: '/admin/properties/$propertyId'
+      preLoaderRoute: typeof DashboardLayoutAdminPropertiesPropertyIdRouteImport
+      parentRoute: typeof DashboardLayoutAdminRoute
+    }
+    '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/': {
+      id: '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
+      path: '/guest-abc'
+      fullPath: '/guest-abc/'
+      preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/(front-office)/monitoring/': {
@@ -784,11 +784,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/': {
-      id: '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
-      path: '/guest-abc'
-      fullPath: '/guest-abc/'
-      preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport
+    '/_dashboard-layout/(user-view)/(front-office)/reservations/': {
+      id: '/_dashboard-layout/(user-view)/(front-office)/reservations/'
+      path: '/reservations'
+      fullPath: '/reservations/'
+      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId': {

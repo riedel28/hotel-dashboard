@@ -20,8 +20,8 @@ steps. Run it from the repo root before the converter:
 ## Why there's a separate Vite build (do not "simplify" this away)
 
 16 of the UI components use **Lingui macros** (`@lingui/react/macro`). Macros
-only work after `@lingui/babel-plugin-lingui-macro` rewrites them. The converter
-bundles with bare esbuild and has no babel, so pointing it at `src/` makes it
+only work after the Lingui macro transform (`lingui({ macroTransform: true })`)
+rewrites them. The converter bundles with bare esbuild and has no such transform, so pointing it at `src/` makes it
 resolve the macro packages for real and pull in `@lingui/conf` → cosmiconfig →
 jiti → node builtins — 66 unresolvable imports, build dead.
 

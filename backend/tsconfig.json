@@ -9,9 +9,8 @@
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
-    "baseUrl": "..",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["../src/*"]
     },
     "types": ["vitest/globals", "node"]
   },

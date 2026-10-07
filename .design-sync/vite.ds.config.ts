@@ -2,8 +2,8 @@
  * Library build for design-sync.
  *
  * The UI components use Lingui macros (`@lingui/react/macro`), which only work
- * once `@lingui/babel-plugin-lingui-macro` has rewritten them. The converter
- * bundles with bare esbuild and has no babel, so pointing it at `src/` makes it
+ * once the Lingui macro transform has rewritten them. The converter
+ * bundles with bare esbuild and has no macro transform, so pointing it at `src/` makes it
  * resolve the macro packages for real and drag in `@lingui/conf` → cosmiconfig
  * → jiti → node builtins, which cannot bundle for a browser.
  *
@@ -21,14 +21,11 @@ import { defineConfig } from 'vite';
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
-  plugins: [
-    react({ babel: { plugins: ['@lingui/babel-plugin-lingui-macro'] } }),
-    lingui()
-  ],
+  plugins: [react(), lingui({ macroTransform: true })],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '../src'),
-      shared: path.resolve(__dirname, '../shared')
+      '@': path.resolve(import.meta.dirname, '../src'),
+      shared: path.resolve(import.meta.dirname, '../shared')
     }
   },
   define: {
@@ -39,7 +36,7 @@ export default defineConfig({
     emptyOutDir: false,
     sourcemap: false,
     lib: {
-      entry: path.resolve(__dirname, '.cache/ds-entry.ts'),
+      entry: path.resolve(import.meta.dirname, '.cache/ds-entry.ts'),
       formats: ['es'],
       fileName: () => 'index.js'
     },
