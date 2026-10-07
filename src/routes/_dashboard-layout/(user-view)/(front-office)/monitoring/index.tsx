@@ -295,7 +295,8 @@ function MonitoringPage() {
             more than half so its widest badge fits),
             then Clear filters as a full row. In between: search stretches to
             fill its row.
-            Wide screens: everything in one line, Clear filters on the right. */}
+            Wide screens: everything in one line, Clear filters right after
+            the filters. */}
         <div className="flex flex-wrap items-center gap-2">
           <SearchInput
             key={searchResetKey}
@@ -361,7 +362,7 @@ function MonitoringPage() {
             <Button
               variant="secondary"
               onClick={handleClearFilters}
-              className="w-full text-muted-foreground hover:text-foreground sm:ml-auto sm:w-auto"
+              className="w-full text-muted-foreground hover:text-foreground sm:w-auto"
             >
               <XIcon className="mr-2 h-4 w-4" />
               <Trans>Clear filters</Trans>
