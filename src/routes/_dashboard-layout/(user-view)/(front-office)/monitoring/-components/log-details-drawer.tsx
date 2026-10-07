@@ -25,6 +25,7 @@ import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
 
 const RELATED_LOGS_COUNT = 5;
+const RELATED_LOGS_SKELETON_ROWS = 3;
 
 interface LogDetailsDrawerProps {
   /** The open log; the drawer is closed while undefined. */
@@ -221,7 +222,18 @@ function LogDetails({
               <Trans>Other logs for reservation {log.booking_nr}</Trans>
             </h3>
             {relatedQuery.isPending ? (
-              <Skeleton className="h-24 w-full" />
+              // One placeholder per row, shaped like a row: status, time,
+              // type, event
+              <ul className="space-y-0.5" aria-hidden="true">
+                {Array.from({ length: RELATED_LOGS_SKELETON_ROWS }, (_, i) => (
+                  <li key={i} className="flex items-center gap-2 py-1.5">
+                    <Skeleton className="h-5 w-12" />
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-5 w-20" />
+                    <Skeleton className="h-4 w-32" />
+                  </li>
+                ))}
+              </ul>
             ) : (
               <ul className="space-y-0.5">
                 {relatedLogs.map((related) => (
@@ -250,7 +262,7 @@ function LogDetails({
             )}
             <button
               type="button"
-              className="cursor-pointer rounded-sm text-sm text-muted-foreground underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="cursor-pointer rounded-sm text-sm text-foreground underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
               onClick={() =>
                 log.booking_nr && onShowAllForBooking(log.booking_nr)
               }
