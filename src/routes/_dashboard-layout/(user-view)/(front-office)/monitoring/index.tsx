@@ -31,6 +31,7 @@ import {
   DataGridCheckboxFilterFooter
 } from '@/components/ui/data-grid-checkbox-filter';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
+import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import {
   Empty,
   EmptyContent,
@@ -39,7 +40,6 @@ import {
   EmptyTitle
 } from '@/components/ui/empty';
 import { SearchInput } from '@/components/ui/search-input';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
@@ -312,29 +312,21 @@ function MonitoringPage() {
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-          {/* Styled after the sidebar's User/Admin switch, on the surface and
-              at the height of the neighbouring filters */}
-          <Tabs
+          <DataGridSegmentedFilter
+            aria-label={t`Status`}
             value={status ?? 'all'}
-            onValueChange={(next: MonitoringStatus | 'all') =>
+            onValueChange={(next) =>
               setFilters({ status: next === 'all' ? undefined : next })
             }
-          >
-            <TabsList
-              aria-label={t`Status`}
-              className="border border-input bg-background p-1 group-data-horizontal/tabs:h-9 dark:bg-input/30"
-            >
-              {statusOptions.map((option) => (
-                <TabsTrigger
-                  key={option.value}
-                  value={option.value}
-                  className="px-2.5 font-normal data-active:bg-muted data-active:shadow-none! dark:data-active:bg-muted"
-                >
+            options={statusOptions.map((option) => ({
+              value: option.value,
+              label: (
+                <>
                   {option.dotClassName && (
                     <span
                       aria-hidden="true"
                       className={cn(
-                        'size-1.5 rounded-full',
+                        'mr-0.5 size-1.5 rounded-full',
                         option.dotClassName
                       )}
                     />
@@ -345,10 +337,10 @@ function MonitoringPage() {
                       {option.count}
                     </span>
                   )}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+                </>
+              )
+            }))}
+          />
           <DataGridCheckboxFilter
             label={<Trans>Type</Trans>}
             placeholder={<Trans>All types</Trans>}
