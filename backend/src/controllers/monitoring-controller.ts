@@ -1,31 +1,72 @@
-import { and, asc, count, desc, eq, gte, ilike, lte, or } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  getTableColumns,
+  gte,
+  ilike,
+  inArray,
+  lt,
+  lte,
+  or
+} from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
+import type {
+  FetchMonitoringLogsParams,
+  MonitoringPeriod
+} from '../../../shared/types/monitoring';
 import { db } from '../db/pool';
-import { monitoringLogs as monitoringTable } from '../db/schema';
+import {
+  monitoringLogs as monitoringTable,
+  reservations as reservationsTable
+} from '../db/schema';
 import { escapeLikePattern } from '../utils/sql';
+
+const HOUR_MS = 60 * 60 * 1000;
+const DAY_MS = 24 * HOUR_MS;
+
+const periodMs: Record<MonitoringPeriod, number> = {
+  '1h': HOUR_MS,
+  '24h': DAY_MS,
+  '7d': 7 * DAY_MS,
+  '30d': 30 * DAY_MS
+};
+
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 
 async function getMonitoringLogs(req: Request, res: Response) {
   try {
-    const { page, per_page, status, type, q, from, to, sort_by, sort_order } =
-      req.query;
+    // validateQuery has already replaced req.query with the parsed schema output
+    const {
+      page,
+      per_page,
+      status,
+      type,
+      q,
+      booking_nr,
+      period,
+      from,
+      to,
+      sort_by,
+      sort_order
+    } = req.query as FetchMonitoringLogsParams;
 
+    // Every filter except status: the status counts are taken over these
     const conditions = [];
 
-    if (status) {
-      conditions.push(
-        eq(monitoringTable.status, status as 'success' | 'error')
-      );
+    if (type && type.length > 0) {
+      conditions.push(inArray(monitoringTable.type, type));
     }
 
-    if (type) {
-      conditions.push(
-        eq(monitoringTable.type, type as 'pms' | 'door lock' | 'payment')
-      );
+    if (booking_nr) {
+      conditions.push(eq(monitoringTable.booking_nr, booking_nr));
     }
 
     if (q) {
-      const escaped = escapeLikePattern(q as string);
+      const escaped = escapeLikePattern(q);
       conditions.push(
         or(
           ilike(monitoringTable.booking_nr, `%${escaped}%`),
@@ -36,66 +77,82 @@ async function getMonitoringLogs(req: Request, res: Response) {
       );
     }
 
-    if (from) {
-      const fromDate = new Date(from as string);
-      conditions.push(gte(monitoringTable.logged_at, fromDate));
+    if (from || to) {
+      if (from) {
+        conditions.push(gte(monitoringTable.logged_at, new Date(from)));
+      }
+      if (to) {
+        // A date-only `to` means "through the end of that day"
+        conditions.push(
+          DATE_ONLY.test(to)
+            ? lt(
+                monitoringTable.logged_at,
+                new Date(new Date(to).getTime() + DAY_MS)
+              )
+            : lte(monitoringTable.logged_at, new Date(to))
+        );
+      }
+    } else if (period) {
+      conditions.push(
+        gte(monitoringTable.logged_at, new Date(Date.now() - periodMs[period]))
+      );
     }
 
-    if (to) {
-      const toDate = new Date(to as string);
-      conditions.push(lte(monitoringTable.logged_at, toDate));
-    }
-
-    const searchCondition =
-      conditions.length > 0 ? and(...conditions) : undefined;
-
-    const sortColumn = (sort_by as string) || 'logged_at';
-    const sortDirection = (sort_order as string) || 'desc';
-
-    let orderByColumn;
-    switch (sortColumn) {
-      case 'status':
-        orderByColumn = monitoringTable.status;
-        break;
-      case 'type':
-        orderByColumn = monitoringTable.type;
-        break;
-      case 'booking_nr':
-        orderByColumn = monitoringTable.booking_nr;
-        break;
-      case 'event':
-        orderByColumn = monitoringTable.event;
-        break;
-      case 'logged_at':
-      default:
-        orderByColumn = monitoringTable.logged_at;
-    }
-
+    const sortColumns = {
+      logged_at: monitoringTable.logged_at,
+      status: monitoringTable.status,
+      type: monitoringTable.type,
+      booking_nr: monitoringTable.booking_nr,
+      event: monitoringTable.event
+    };
+    const orderByColumn = sortColumns[sort_by ?? 'logged_at'];
     const orderBy =
-      sortDirection === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
+      sort_order === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
 
-    const limit = Number(per_page) || 10;
-    const offset = ((Number(page) || 1) - 1) * limit;
+    const limit = per_page ?? 50;
+    const currentPage = page ?? 1;
 
-    const logs = await db.query.monitoringLogs.findMany({
-      where: searchCondition,
-      offset,
-      limit,
-      orderBy
-    });
+    const [logs, statusCounts] = await Promise.all([
+      db
+        .select({
+          ...getTableColumns(monitoringTable),
+          reservation_id: reservationsTable.id
+        })
+        .from(monitoringTable)
+        .leftJoin(
+          reservationsTable,
+          eq(reservationsTable.booking_nr, monitoringTable.booking_nr)
+        )
+        .where(
+          and(
+            ...conditions,
+            status ? eq(monitoringTable.status, status) : undefined
+          )
+        )
+        .orderBy(orderBy, desc(monitoringTable.id))
+        .limit(limit)
+        .offset((currentPage - 1) * limit),
+      db
+        .select({ status: monitoringTable.status, count: count() })
+        .from(monitoringTable)
+        .where(and(...conditions))
+        .groupBy(monitoringTable.status)
+    ]);
 
-    const totalCountResult = await db
-      .select({ count: count() })
-      .from(monitoringTable)
-      .where(searchCondition);
-    const totalCount = totalCountResult[0]?.count ?? 0;
+    const counts = { all: 0, success: 0, error: 0 };
+    for (const row of statusCounts) {
+      counts[row.status] = row.count;
+      counts.all += row.count;
+    }
+    const total = status ? counts[status] : counts.all;
 
     res.status(200).json({
       index: logs,
-      page: Number(page) || 1,
+      page: currentPage,
       per_page: limit,
-      total: totalCount,
-      page_count: Math.ceil(totalCount / limit)
+      total,
+      counts,
+      page_count: Math.ceil(total / limit)
     });
   } catch (error) {
     console.error(error);

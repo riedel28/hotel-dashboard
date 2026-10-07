@@ -310,6 +310,7 @@ export const monitoringLogs = pgTable(
     index('monitoring_logs_status_idx').on(table.status),
     index('monitoring_logs_type_idx').on(table.type),
     index('monitoring_logs_logged_at_idx').on(table.logged_at),
+    index('monitoring_logs_booking_nr_idx').on(table.booking_nr),
     check(
       'monitoring_logs_status_check',
       sql`${table.status} IN ('success', 'error')`
