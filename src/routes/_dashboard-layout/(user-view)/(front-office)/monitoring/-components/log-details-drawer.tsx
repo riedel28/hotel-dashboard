@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
 import { ApiError } from '@/api/client';
@@ -105,21 +105,11 @@ function LogDetails({
   });
   const log = logQuery.data;
 
-  const relatedQuery = useQuery({
-    ...monitoringQueryOptions({
-      booking_nr: log?.booking_nr ?? undefined,
-      per_page: RELATED_LOGS_COUNT
-    }),
-    enabled: Boolean(log?.booking_nr)
-  });
-
   if (!log) {
     return (
       <LogUnavailable isLoading={logQuery.isPending} error={logQuery.error} />
     );
   }
-
-  const relatedLogs = relatedQuery.data?.index ?? [];
 
   return (
     <>
@@ -192,62 +182,89 @@ function LogDetails({
         </section>
 
         {log.booking_nr && (
-          <section className="space-y-2">
-            <h3 className="text-sm font-medium">
-              <Trans>Other logs for reservation {log.booking_nr}</Trans>
-            </h3>
-            {relatedQuery.isPending ? (
-              // One placeholder per row, shaped like a row: status, time,
-              // type, event
-              <ul className="space-y-0.5" aria-hidden="true">
-                {Array.from({ length: RELATED_LOGS_SKELETON_ROWS }, (_, i) => (
-                  <li key={i} className="flex items-center gap-2 py-1.5">
-                    <Skeleton className="h-5 w-12" />
-                    <Skeleton className="h-4 w-20" />
-                    <Skeleton className="h-5 w-20" />
-                    <Skeleton className="h-4 w-32" />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <ul className="space-y-0.5">
-                {relatedLogs.map((related) => (
-                  <li key={related.id}>
-                    <button
-                      type="button"
-                      aria-current={related.id === log.id}
-                      onClick={() => onSelect(related.id)}
-                      className={cn(
-                        'group/related flex w-full cursor-pointer items-center gap-2 rounded-sm py-1.5 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                        related.id === log.id && 'font-medium'
-                      )}
-                    >
-                      <StatusCell status={related.status} />
-                      <time className="text-xs text-muted-foreground tabular-nums">
-                        {dayjs(related.logged_at).format('DD.MM HH:mm')}
-                      </time>
-                      <TypeCell type={related.type} />
-                      <span className="truncate underline-offset-4 group-hover/related:underline">
-                        {related.event}
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <button
-              type="button"
-              className="cursor-pointer rounded-sm text-sm text-foreground underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              onClick={() =>
-                log.booking_nr && onShowReservationLogs(log.booking_nr)
-              }
-            >
-              <Trans>Show all</Trans>
-            </button>
-          </section>
+          <RelatedLogs
+            bookingNr={log.booking_nr}
+            currentLogId={log.id}
+            onSelect={onSelect}
+            onShowAll={onShowReservationLogs}
+          />
         )}
       </DrawerBody>
     </>
+  );
+}
+
+/** The latest logs of the same reservation, the open one marked. */
+function RelatedLogs({
+  bookingNr,
+  currentLogId,
+  onSelect,
+  onShowAll
+}: {
+  bookingNr: string;
+  currentLogId: number;
+  onSelect: (logId: number) => void;
+  onShowAll: (bookingNr: string) => void;
+}) {
+  const relatedQuery = useQuery(
+    monitoringQueryOptions({
+      booking_nr: bookingNr,
+      per_page: RELATED_LOGS_COUNT
+    })
+  );
+
+  return (
+    <section className="space-y-2">
+      <h3 className="text-sm font-medium">
+        <Trans>Other logs for reservation {bookingNr}</Trans>
+      </h3>
+      {relatedQuery.isPending ? (
+        // One placeholder per row, shaped like a row: status, time, type,
+        // event
+        <ul className="space-y-0.5" aria-hidden="true">
+          {Array.from({ length: RELATED_LOGS_SKELETON_ROWS }, (_, i) => (
+            <li key={i} className="flex items-center gap-2 py-1.5">
+              <Skeleton className="h-5 w-12" />
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-5 w-20" />
+              <Skeleton className="h-4 w-32" />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <ul className="space-y-0.5">
+          {relatedQuery.data?.index.map((related) => (
+            <li key={related.id}>
+              <button
+                type="button"
+                aria-current={related.id === currentLogId}
+                onClick={() => onSelect(related.id)}
+                className={cn(
+                  'group/related flex w-full cursor-pointer items-center gap-2 rounded-sm py-1.5 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  related.id === currentLogId && 'font-medium'
+                )}
+              >
+                <StatusCell status={related.status} />
+                <time className="text-xs text-muted-foreground tabular-nums">
+                  {dayjs(related.logged_at).format('DD.MM HH:mm')}
+                </time>
+                <TypeCell type={related.type} />
+                <span className="truncate underline-offset-4 group-hover/related:underline">
+                  {related.event}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <button
+        type="button"
+        className="cursor-pointer rounded-sm text-sm text-foreground underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        onClick={() => onShowAll(bookingNr)}
+      >
+        <Trans>Show all</Trans>
+      </button>
+    </section>
   );
 }
 
@@ -259,15 +276,39 @@ function LogUnavailable({
   isLoading: boolean;
   error: Error | null;
 }) {
-  const [title, description] = isLoading
-    ? [<Skeleton className="h-6 w-40" />, <Trans>Loading log…</Trans>]
-    : error instanceof ApiError && error.status === 404
-      ? [
-          <Trans>Log not found</Trans>,
-          <Trans>This log does not exist or was removed.</Trans>
-        ]
-      : [<Trans>Something went wrong</Trans>, error?.message];
+  if (isLoading) {
+    return (
+      <LogNotice
+        title={<Skeleton className="h-6 w-40" />}
+        description={<Trans>Loading log…</Trans>}
+      />
+    );
+  }
 
+  if (error instanceof ApiError && error.status === 404) {
+    return (
+      <LogNotice
+        title={<Trans>Log not found</Trans>}
+        description={<Trans>This log does not exist or was removed.</Trans>}
+      />
+    );
+  }
+
+  return (
+    <LogNotice
+      title={<Trans>Something went wrong</Trans>}
+      description={error?.message}
+    />
+  );
+}
+
+function LogNotice({
+  title,
+  description
+}: {
+  title: ReactNode;
+  description: ReactNode;
+}) {
   return (
     <DrawerHeader className="space-y-1 pr-14">
       <DrawerTitle>{title}</DrawerTitle>
