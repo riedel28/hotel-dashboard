@@ -1,9 +1,10 @@
 import { useLingui } from '@lingui/react/macro';
-import { Link, useLocation } from '@tanstack/react-router';
 import { ListFilterIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+import { ReservationLink } from '../reservation-link';
 
 interface BookingCellProps {
   bookingNr: string | null;
@@ -19,8 +20,6 @@ export function BookingCell({
   onToggleFilter
 }: BookingCellProps) {
   const { t } = useLingui();
-  // The reservation page links back to this exact view of the logs
-  const back = useLocation({ select: (location) => location.href });
 
   if (!bookingNr) {
     return <span className="text-muted-foreground">—</span>;
@@ -36,15 +35,11 @@ export function BookingCell({
         {reservationId === null ? (
           bookingNr
         ) : (
-          <Link
-            to="/reservations/$reservationId"
-            params={{ reservationId: String(reservationId) }}
-            search={{ back }}
+          <ReservationLink
+            reservationId={reservationId}
+            bookingNr={bookingNr}
             onClick={(event) => event.stopPropagation()}
-            className="rounded-sm text-cyan-800 underline-offset-4 hover:underline dark:text-cyan-200/85"
-          >
-            {bookingNr}
-          </Link>
+          />
         )}
       </span>
       <Button

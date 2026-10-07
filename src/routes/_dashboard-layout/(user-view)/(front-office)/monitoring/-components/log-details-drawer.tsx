@@ -1,6 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useLocation } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
@@ -23,6 +22,7 @@ import { cn } from '@/lib/utils';
 
 import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
+import { ReservationLink } from './reservation-link';
 
 const RELATED_LOGS_COUNT = 5;
 const RELATED_LOGS_SKELETON_ROWS = 3;
@@ -34,15 +34,19 @@ interface LogDetailsDrawerProps {
   pageLogs: MonitoringLog[];
   onSelect: (logId: number) => void;
   onClose: () => void;
-  onShowAllForBooking: (bookingNr: string) => void;
+  onShowReservationLogs: (bookingNr: string) => void;
 }
+
+type LogDetailsProps = Omit<LogDetailsDrawerProps, 'logId' | 'onClose'> & {
+  logId: number;
+};
 
 export function LogDetailsDrawer({
   logId,
   pageLogs,
   onSelect,
   onClose,
-  onShowAllForBooking
+  onShowReservationLogs
 }: LogDetailsDrawerProps) {
   // ↑/↓ step through the current page and stop at its ends
   useEffect(() => {
@@ -80,7 +84,7 @@ export function LogDetailsDrawer({
             logId={logId}
             pageLogs={pageLogs}
             onSelect={onSelect}
-            onShowAllForBooking={onShowAllForBooking}
+            onShowReservationLogs={onShowReservationLogs}
           />
         )}
       </DrawerContent>
@@ -92,11 +96,9 @@ function LogDetails({
   logId,
   pageLogs,
   onSelect,
-  onShowAllForBooking
-}: Required<Pick<LogDetailsDrawerProps, 'logId'>> &
-  Omit<LogDetailsDrawerProps, 'logId' | 'onClose'>) {
+  onShowReservationLogs
+}: LogDetailsProps) {
   const { t } = useLingui();
-  const back = useLocation({ select: (location) => location.href });
   const logQuery = useQuery({
     ...monitoringLogQueryOptions(logId),
     initialData: pageLogs.find((log) => log.id === logId)
@@ -112,30 +114,8 @@ function LogDetails({
   });
 
   if (!log) {
-    const isNotFound =
-      logQuery.error instanceof ApiError && logQuery.error.status === 404;
-
     return (
-      <DrawerHeader className="space-y-1 pr-14">
-        <DrawerTitle>
-          {logQuery.isPending ? (
-            <Skeleton className="h-6 w-40" />
-          ) : isNotFound ? (
-            <Trans>Log not found</Trans>
-          ) : (
-            <Trans>Something went wrong</Trans>
-          )}
-        </DrawerTitle>
-        <p className="text-sm font-normal text-muted-foreground">
-          {logQuery.isPending ? (
-            <Trans>Loading log…</Trans>
-          ) : isNotFound ? (
-            <Trans>This log does not exist or was removed.</Trans>
-          ) : (
-            logQuery.error?.message
-          )}
-        </p>
-      </DrawerHeader>
+      <LogUnavailable isLoading={logQuery.isPending} error={logQuery.error} />
     );
   }
 
@@ -170,15 +150,10 @@ function LogDetails({
                   {log.reservation_id === null ? (
                     log.booking_nr
                   ) : (
-                    <Link
-                      to="/reservations/$reservationId"
-                      params={{ reservationId: String(log.reservation_id) }}
-                      // Back from the reservation reopens this log
-                      search={{ back }}
-                      className="rounded-sm text-cyan-800 underline-offset-4 hover:underline dark:text-cyan-200/85"
-                    >
-                      {log.booking_nr}
-                    </Link>
+                    <ReservationLink
+                      reservationId={log.reservation_id}
+                      bookingNr={log.booking_nr}
+                    />
                   )}
                 </dd>
               </>
@@ -264,7 +239,7 @@ function LogDetails({
               type="button"
               className="cursor-pointer rounded-sm text-sm text-foreground underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
               onClick={() =>
-                log.booking_nr && onShowAllForBooking(log.booking_nr)
+                log.booking_nr && onShowReservationLogs(log.booking_nr)
               }
             >
               <Trans>Show all</Trans>
@@ -273,5 +248,30 @@ function LogDetails({
         )}
       </DrawerBody>
     </>
+  );
+}
+
+/** The drawer's content while the log is loading or could not be loaded. */
+function LogUnavailable({
+  isLoading,
+  error
+}: {
+  isLoading: boolean;
+  error: Error | null;
+}) {
+  const [title, description] = isLoading
+    ? [<Skeleton className="h-6 w-40" />, <Trans>Loading log…</Trans>]
+    : error instanceof ApiError && error.status === 404
+      ? [
+          <Trans>Log not found</Trans>,
+          <Trans>This log does not exist or was removed.</Trans>
+        ]
+      : [<Trans>Something went wrong</Trans>, error?.message];
+
+  return (
+    <DrawerHeader className="space-y-1 pr-14">
+      <DrawerTitle>{title}</DrawerTitle>
+      <p className="text-sm font-normal text-muted-foreground">{description}</p>
+    </DrawerHeader>
   );
 }

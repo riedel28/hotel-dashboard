@@ -1,6 +1,7 @@
 import { useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
+  type OnChangeFn,
   type PaginationState,
   type RowSelectionState,
   type SortingState,
@@ -28,55 +29,36 @@ import { TypeCell } from './cells/type-cell';
 
 interface MonitoringTableProps {
   data: MonitoringLog[];
-  isLoading?: boolean;
-  pageIndex?: number;
-  pageSize?: number;
-  totalCount?: number;
-  pageCount?: number;
-  onPaginationChange?: (
-    updaterOrValue:
-      | PaginationState
-      | ((old: PaginationState) => PaginationState)
-  ) => void;
-  sorting?: SortingState;
-  onSortingChange?: (
-    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
-  ) => void;
-  bookingFilter?: string;
-  onBookingFilterToggle: (bookingNr: string) => void;
-  emptyMessage?: ReactNode;
-  selectedLogId?: number;
+  isLoading: boolean;
+  totalCount: number;
+  pageCount: number;
+  pagination: PaginationState;
+  onPaginationChange: OnChangeFn<PaginationState>;
+  sorting: SortingState;
+  onSortingChange: OnChangeFn<SortingState>;
+  reservationFilter: string | undefined;
+  onReservationFilterToggle: (bookingNr: string) => void;
+  /** The log open in the details drawer, marked as the selected row. */
+  selectedLogId: number | undefined;
   onLogOpen: (logId: number) => void;
+  emptyMessage: ReactNode;
 }
 
 export function MonitoringTable({
   data,
-  isLoading = false,
-  pageIndex = 0,
-  pageSize = 50,
-  totalCount = 0,
-  pageCount = 0,
+  isLoading,
+  totalCount,
+  pageCount,
+  pagination,
   onPaginationChange,
-  sorting: sortingProp,
+  sorting,
   onSortingChange,
-  bookingFilter,
-  onBookingFilterToggle,
-  emptyMessage,
+  reservationFilter,
+  onReservationFilterToggle,
   selectedLogId,
-  onLogOpen
+  onLogOpen,
+  emptyMessage
 }: MonitoringTableProps) {
-  const pagination = useMemo<PaginationState>(
-    () => ({
-      pageIndex,
-      pageSize
-    }),
-    [pageIndex, pageSize]
-  );
-
-  const [internalSorting, setInternalSorting] = useState<SortingState>([
-    { id: 'logged_at', desc: true }
-  ]);
-  const sorting = sortingProp ?? internalSorting;
   const { t } = useLingui();
 
   const columns = useMemo<ColumnDef<DataGridFeatures, MonitoringLog>[]>(
@@ -187,10 +169,10 @@ export function MonitoringTable({
             bookingNr={row.original.booking_nr}
             reservationId={row.original.reservation_id}
             isFiltered={
-              bookingFilter !== undefined &&
-              bookingFilter === row.original.booking_nr
+              reservationFilter !== undefined &&
+              reservationFilter === row.original.booking_nr
             }
-            onToggleFilter={onBookingFilterToggle}
+            onToggleFilter={onReservationFilterToggle}
           />
         ),
         meta: {
@@ -232,7 +214,7 @@ export function MonitoringTable({
         enableResizing: true
       }
     ],
-    [t, bookingFilter, onBookingFilterToggle]
+    [t, reservationFilter, onReservationFilterToggle]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
@@ -247,8 +229,8 @@ export function MonitoringTable({
   const table = useTable({
     features: dataGridFeatures,
     columns,
-    data: data || [],
-    pageCount: pageCount,
+    data,
+    pageCount,
     getRowId: (row: MonitoringLog) => row.id.toString(),
     state: {
       pagination,
@@ -258,8 +240,8 @@ export function MonitoringTable({
     },
     // Selection only marks the log open in the details panel
     enableRowSelection: true,
-    onPaginationChange: onPaginationChange,
-    onSortingChange: onSortingChange ?? setInternalSorting,
+    onPaginationChange,
+    onSortingChange,
     onColumnOrderChange: setColumnOrder,
     manualPagination: true,
     manualSorting: true,

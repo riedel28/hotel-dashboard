@@ -1,23 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { type PaginationState, type SortingState } from '@tanstack/react-table';
-import dayjs from 'dayjs';
 import { ListFilterIcon, XIcon } from 'lucide-react';
-import { useCallback, useState } from 'react';
-import type {
-  FetchMonitoringLogsParams,
-  MonitoringPeriod,
-  MonitoringStatus,
-  MonitoringType
-} from 'shared/types/monitoring';
 import { z } from 'zod';
 
-import {
-  fetchMonitoringLogsParamsSchema,
-  monitoringQueryOptions
-} from '@/api/monitoring';
-import { Badge } from '@/components/ui/badge';
+import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -27,12 +13,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  DataGridCheckboxFilter,
-  DataGridCheckboxFilterClear,
-  DataGridCheckboxFilterFooter
-} from '@/components/ui/data-grid-checkbox-filter';
-import { DataGridRadioFilter } from '@/components/ui/data-grid-radio-filter';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
   Empty,
@@ -41,254 +21,30 @@ import {
   EmptyHeader,
   EmptyTitle
 } from '@/components/ui/empty';
-import { SearchInput } from '@/components/ui/search-input';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
 
-import { StatusCell } from './-components/cells/status-cell';
-import { TypeCell } from './-components/cells/type-cell';
 import { LogDetailsDrawer } from './-components/log-details-drawer';
-import { MonitoringPeriodFilter } from './-components/monitoring-period-filter';
+import { MonitoringFilters } from './-components/monitoring-filters';
 import { MonitoringTable } from './-components/monitoring-table';
+import {
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_PERIOD,
+  useMonitoringSearch
+} from './-hooks/use-monitoring-search';
 
-const DEFAULT_PERIOD: MonitoringPeriod = '24h';
-const DEFAULT_PAGE_SIZE = 50;
-
-const monitoringStatuses = ['success', 'error'] satisfies MonitoringStatus[];
-
-const monitoringTypeOptions = (
-  ['pms', 'door lock', 'payment'] satisfies MonitoringType[]
-).map((value) => ({ value, label: <TypeCell type={value} /> }));
-
-type MonitoringSearch = FetchMonitoringLogsParams;
-
-/** How many logs an option of the status filter would show. */
-function LogCount({ count }: { count: number | undefined }) {
-  if (count === undefined) {
-    return null;
-  }
-
-  return (
-    <Badge
-      variant="secondary"
-      color="gray"
-      size="xs"
-      className="px-1 py-0 leading-4 tabular-nums"
-    >
-      {count}
-    </Badge>
-  );
-}
-
-// The page's own state on top of the list filters: the log open in the panel
+// The page's own state on top of the list filters: the log open in the drawer
 const monitoringSearchSchema = fetchMonitoringLogsParamsSchema.extend({
   log: z.coerce.number().int().positive().optional()
 });
 
 function MonitoringPage() {
-  const { log: openLogId, ...search } = Route.useSearch();
-  const { page, per_page, q, status, type, booking_nr, from, to } = search;
-  const navigate = Route.useNavigate();
   const { t } = useLingui();
   useDocumentTitle(t`Monitoring`);
-  // SearchInput keeps its own text; bumping the key empties it on reset
-  const [searchResetKey, setSearchResetKey] = useState(0);
-
-  const hasCustomRange = Boolean(from || to);
-  const period = hasCustomRange ? undefined : (search.period ?? DEFAULT_PERIOD);
-  const pageSize = per_page ?? DEFAULT_PAGE_SIZE;
-
-  const monitoringQuery = useQuery(
-    monitoringQueryOptions({ ...search, period, per_page: pageSize })
-  );
-
-  // Filters replace the history entry and always return to the first page
-  const setFilters = (filters: Partial<MonitoringSearch>) => {
-    navigate({
-      search: (prev) => ({ ...prev, ...filters, page: undefined }),
-      replace: true
-    });
-  };
-
-  // Opening and closing push history entries so Back closes the panel;
-  // stepping between logs replaces the current one
-  const handleLogOpen = (logId: number) => {
-    navigate({ search: (prev) => ({ ...prev, log: logId }) });
-  };
-  const handleLogSelect = useCallback(
-    (logId: number) => {
-      navigate({ search: (prev) => ({ ...prev, log: logId }), replace: true });
-    },
-    [navigate]
-  );
-  const handleLogClose = () => {
-    navigate({ search: (prev) => ({ ...prev, log: undefined }) });
-  };
-
-  const handleBookingFilterToggle = (bookingNr: string) => {
-    setFilters({
-      booking_nr: bookingNr === booking_nr ? undefined : bookingNr
-    });
-  };
-
-  const handleClearFilters = () => {
-    setSearchResetKey((key) => key + 1);
-    setFilters({
-      q: undefined,
-      status: undefined,
-      type: undefined,
-      booking_nr: undefined,
-      period: undefined,
-      from: undefined,
-      to: undefined
-    });
-  };
-
-  const handlePaginationChange = (
-    updaterOrValue:
-      | PaginationState
-      | ((old: PaginationState) => PaginationState)
-  ) => {
-    const pagination =
-      typeof updaterOrValue === 'function'
-        ? updaterOrValue({ pageIndex: (page ?? 1) - 1, pageSize })
-        : updaterOrValue;
-
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
-      }),
-      replace: true
-    });
-  };
-
-  const sorting: SortingState = [
-    {
-      id: search.sort_by ?? 'logged_at',
-      desc: (search.sort_order ?? 'desc') === 'desc'
-    }
-  ];
-
-  const handleSortingChange = (
-    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
-  ) => {
-    const [firstSort] =
-      typeof updaterOrValue === 'function'
-        ? updaterOrValue(sorting)
-        : updaterOrValue;
-
-    setFilters({
-      sort_by: firstSort?.id as MonitoringSearch['sort_by'],
-      sort_order: firstSort?.desc === false ? 'asc' : 'desc'
-    });
-  };
-
-  const hasActiveFilters = Boolean(
-    q ||
-    status ||
-    type?.length ||
-    booking_nr ||
-    hasCustomRange ||
-    period !== DEFAULT_PERIOD
-  );
-  // Each count ignores the status filter itself, so the options show what
-  // picking them would yield
-  const counts = monitoringQuery.data?.counts;
-  const statusOptions = monitoringStatuses.map((value) => ({
-    value,
-    label: (
-      <>
-        <StatusCell status={value} />
-        {/* Only in the menu rows, pushed to their right edge; the trigger has
-            no room for it next to the selected badge */}
-        <span className="ml-auto hidden in-data-[slot=dropdown-menu-radio-item]:block">
-          <LogCount count={counts?.[value]} />
-        </span>
-      </>
-    )
-  }));
-
-  const emptyMessage = (
-    <div className="flex flex-col items-center gap-1 py-6 text-sm">
-      <p className="font-medium text-foreground">
-        {hasActiveFilters ? (
-          <Trans>Nothing found</Trans>
-        ) : (
-          <Trans>No logs in the last 24 hours</Trans>
-        )}
-      </p>
-      <p className="text-muted-foreground">
-        {hasActiveFilters ? (
-          <Trans>No logs match the current filters.</Trans>
-        ) : (
-          <Trans>Pick a longer period to see older logs.</Trans>
-        )}
-      </p>
-      {hasActiveFilters && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className="mt-2"
-          onClick={handleClearFilters}
-        >
-          <Trans>Clear filters</Trans>
-        </Button>
-      )}
-    </div>
-  );
-
-  const renderTableContent = () => {
-    if (monitoringQuery.isError) {
-      return (
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <Empty variant="destructive" className="w-md max-w-md">
-            <EmptyHeader>
-              <EmptyTitle>
-                <Trans>Something went wrong</Trans>
-              </EmptyTitle>
-              <EmptyDescription>
-                {monitoringQuery.error.message || (
-                  <Trans>
-                    An error occurred while fetching monitoring logs
-                  </Trans>
-                )}
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <DataGridRefreshButton
-                variant="destructive"
-                isRefreshing={monitoringQuery.isFetching}
-                onRefresh={() => monitoringQuery.refetch()}
-                className="w-auto sm:ml-0"
-              />
-            </EmptyContent>
-          </Empty>
-        </div>
-      );
-    }
-
-    return (
-      <MonitoringTable
-        data={monitoringQuery.data?.index ?? []}
-        isLoading={monitoringQuery.isLoading}
-        pageIndex={(page ?? 1) - 1}
-        pageSize={pageSize}
-        totalCount={monitoringQuery.data?.total ?? 0}
-        pageCount={monitoringQuery.data?.page_count ?? 0}
-        onPaginationChange={handlePaginationChange}
-        sorting={sorting}
-        onSortingChange={handleSortingChange}
-        bookingFilter={booking_nr}
-        onBookingFilterToggle={handleBookingFilterToggle}
-        emptyMessage={emptyMessage}
-        selectedLogId={openLogId}
-        onLogOpen={handleLogOpen}
-      />
-    );
-  };
+  const search = useMonitoringSearch();
+  const { logsQuery, filters } = search;
+  const logs = logsQuery.data?.index ?? [];
 
   return (
     <div className="space-y-1">
@@ -315,140 +71,176 @@ function MonitoringPage() {
       </div>
 
       <div className="space-y-2.5">
-        {/* One wrapping row. Phones: two filters to a row — status takes its
-            content width and search the rest of the row (the larger share;
-            its minimum width keeps the type filter off this row),
-            type a little more than half so its widest badge fits,
-            then Clear filters as a full row. In between: search stretches to
-            fill its row.
-            Wide screens: everything in one line, Clear filters right after
-            the filters. */}
-        <div className="flex flex-wrap items-center gap-2">
-          <SearchInput
-            key={searchResetKey}
-            value={q ?? ''}
-            onChange={(value) => setFilters({ q: value || undefined })}
-            placeholder={t`Search logs`}
-            aria-label={t`Search event, message, reservation number`}
-            className="text-sm"
-            wrapperClassName="min-w-40 flex-1 basis-0 sm:w-auto sm:min-w-56 sm:basis-auto xl:w-72 xl:flex-none"
-            debounceMs={300}
-          />
-          <DataGridRadioFilter
-            label={<Trans>Status</Trans>}
-            placeholder={
-              <span className="flex items-center gap-1.5">
-                <Trans>All logs</Trans>
-                <LogCount count={counts?.all} />
-              </span>
-            }
-            value={status}
-            onValueChange={(next) => setFilters({ status: next })}
-            options={statusOptions}
-            showFooter
-            className="flex-none sm:w-[170px]"
-          />
-          <DataGridCheckboxFilter
-            label={<Trans>Type</Trans>}
-            placeholder={<Trans>All types</Trans>}
-            options={monitoringTypeOptions}
-            value={type ?? []}
-            onValueChange={(next) =>
-              setFilters({ type: next.length > 0 ? next : undefined })
-            }
-            className="min-w-0 flex-1 basis-[calc(55%-0.25rem)] sm:w-[200px] sm:flex-none sm:basis-auto"
-          >
-            <DataGridCheckboxFilterFooter>
-              <DataGridCheckboxFilterClear>
-                <Trans>Reset</Trans>
-              </DataGridCheckboxFilterClear>
-            </DataGridCheckboxFilterFooter>
-          </DataGridCheckboxFilter>
-          <MonitoringPeriodFilter
-            period={period}
-            from={from}
-            to={to}
-            onPeriodChange={(next) =>
-              setFilters({
-                period: next,
-                from: undefined,
-                to: undefined
-              })
-            }
-            onRangeChange={(range) =>
-              setFilters({
-                period: undefined,
-                from: dayjs(range.from).format('YYYY-MM-DD'),
-                to: dayjs(range.to).format('YYYY-MM-DD')
-              })
-            }
-            className="min-w-0 flex-1 basis-[calc(45%-0.25rem)] sm:flex-none sm:basis-auto"
-          />
-          {hasActiveFilters && (
-            <Button
-              variant="secondary"
-              onClick={handleClearFilters}
-              className="w-full text-muted-foreground hover:text-foreground sm:w-auto"
-            >
-              <XIcon className="mr-2 h-4 w-4" />
-              <Trans>Clear filters</Trans>
-            </Button>
-          )}
-        </div>
+        <MonitoringFilters
+          filters={filters}
+          counts={logsQuery.data?.counts}
+          hasActiveFilters={search.hasActiveFilters}
+          setFilters={search.setFilters}
+          setPeriod={search.setPeriod}
+          setRange={search.setRange}
+          clearFilters={search.clearFilters}
+        />
 
-        {/* The reservation filter narrows the whole view, so it is announced
-            right above the table rather than as one more control in the bar */}
-        {booking_nr && (
-          <div
-            role="status"
-            className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-foreground/10 bg-sky-50 px-3 py-2 text-sm text-sky-800 dark:bg-sky-800/20 dark:text-sky-300"
-          >
-            <ListFilterIcon className="size-4 shrink-0" aria-hidden="true" />
-            <span className="min-w-0 flex-1">
-              <Trans>
-                Showing only logs for reservation{' '}
-                <strong className="font-semibold">{booking_nr}</strong>
-              </Trans>
-            </span>
-            <button
-              type="button"
-              onClick={() => setFilters({ booking_nr: undefined })}
-              className="inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <Trans>Show all logs</Trans>
-              <XIcon className="size-4" aria-hidden="true" />
-            </button>
-          </div>
+        {filters.reservation && (
+          <ReservationNotice
+            bookingNr={filters.reservation}
+            onDismiss={() => search.setFilters({ booking_nr: undefined })}
+          />
         )}
 
         <div
-          className={cn(
-            'opacity-100 transition-opacity duration-300 ease-in-out',
-            {
-              'opacity-70': monitoringQuery.isFetching
-            }
-          )}
+          className={cn('transition-opacity duration-300 ease-in-out', {
+            'opacity-70': logsQuery.isFetching
+          })}
         >
-          {renderTableContent()}
+          {logsQuery.isError ? (
+            <LoadError
+              message={logsQuery.error.message}
+              isRetrying={logsQuery.isFetching}
+              onRetry={() => logsQuery.refetch()}
+            />
+          ) : (
+            <MonitoringTable
+              data={logs}
+              isLoading={logsQuery.isLoading}
+              totalCount={logsQuery.data?.total ?? 0}
+              pageCount={logsQuery.data?.page_count ?? 0}
+              pagination={search.pagination}
+              onPaginationChange={search.onPaginationChange}
+              sorting={search.sorting}
+              onSortingChange={search.onSortingChange}
+              reservationFilter={filters.reservation}
+              onReservationFilterToggle={search.toggleReservationFilter}
+              selectedLogId={search.openLogId}
+              onLogOpen={search.openLog}
+              emptyMessage={
+                <EmptyLogs
+                  isFiltered={search.hasActiveFilters}
+                  onClearFilters={search.clearFilters}
+                />
+              }
+            />
+          )}
         </div>
       </div>
 
       <LogDetailsDrawer
-        logId={openLogId}
-        pageLogs={monitoringQuery.data?.index ?? []}
-        onSelect={handleLogSelect}
-        onClose={handleLogClose}
-        onShowAllForBooking={(bookingNr) =>
-          navigate({
-            search: (prev) => ({
-              ...prev,
-              booking_nr: bookingNr,
-              page: undefined,
-              log: undefined
-            })
-          })
-        }
+        logId={search.openLogId}
+        pageLogs={logs}
+        onSelect={search.selectLog}
+        onClose={search.closeLog}
+        onShowReservationLogs={search.showReservationLogs}
       />
+    </div>
+  );
+}
+
+/**
+ * The reservation filter narrows the whole view, so it is announced right
+ * above the table rather than as one more control among the filters.
+ */
+function ReservationNotice({
+  bookingNr,
+  onDismiss
+}: {
+  bookingNr: string;
+  onDismiss: () => void;
+}) {
+  return (
+    <div
+      role="status"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-foreground/10 bg-sky-50 px-3 py-2 text-sm text-sky-800 dark:bg-sky-800/20 dark:text-sky-300"
+    >
+      <ListFilterIcon className="size-4 shrink-0" aria-hidden="true" />
+      <span className="min-w-0 flex-1">
+        <Trans>
+          Showing only logs for reservation{' '}
+          <strong className="font-semibold">{bookingNr}</strong>
+        </Trans>
+      </span>
+      <button
+        type="button"
+        onClick={onDismiss}
+        className="inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <Trans>Show all logs</Trans>
+        <XIcon className="size-4" aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
+function EmptyLogs({
+  isFiltered,
+  onClearFilters
+}: {
+  isFiltered: boolean;
+  onClearFilters: () => void;
+}) {
+  if (!isFiltered) {
+    return (
+      <div className="flex flex-col items-center gap-1 py-6 text-sm">
+        <p className="font-medium text-foreground">
+          <Trans>No logs in the last 24 hours</Trans>
+        </p>
+        <p className="text-muted-foreground">
+          <Trans>Pick a longer period to see older logs.</Trans>
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-1 py-6 text-sm">
+      <p className="font-medium text-foreground">
+        <Trans>Nothing found</Trans>
+      </p>
+      <p className="text-muted-foreground">
+        <Trans>No logs match the current filters.</Trans>
+      </p>
+      <Button
+        variant="secondary"
+        size="sm"
+        className="mt-2"
+        onClick={onClearFilters}
+      >
+        <Trans>Clear filters</Trans>
+      </Button>
+    </div>
+  );
+}
+
+function LoadError({
+  message,
+  isRetrying,
+  onRetry
+}: {
+  message: string;
+  isRetrying: boolean;
+  onRetry: () => void;
+}) {
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <Empty variant="destructive" className="w-md max-w-md">
+        <EmptyHeader>
+          <EmptyTitle>
+            <Trans>Something went wrong</Trans>
+          </EmptyTitle>
+          <EmptyDescription>
+            {message || (
+              <Trans>An error occurred while fetching monitoring logs</Trans>
+            )}
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <DataGridRefreshButton
+            variant="destructive"
+            isRefreshing={isRetrying}
+            onRefresh={onRetry}
+            className="w-auto sm:ml-0"
+          />
+        </EmptyContent>
+      </Empty>
     </div>
   );
 }
