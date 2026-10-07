@@ -3,7 +3,7 @@ import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
 import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 
-import { type BadgeColorProps } from '@/components/ui/badge';
+import { type BadgeColorProps, badgeColors } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 // The dot of the Badge in the same color: the badge's text tint as a fill.
@@ -27,7 +27,7 @@ const ALL_VALUE = '';
 interface DataGridSegmentedFilterOption<TValue extends string> {
   value: TValue;
   label: ReactNode;
-  /** Puts a dot in the matching Badge color before the label. */
+  /** Adds a dot in the matching Badge color and tints the selected segment. */
   color?: BadgeColorProps;
   disabled?: boolean;
 }
@@ -78,9 +78,13 @@ function DataGridSegmentedFilter<TValue extends string>({
             value={segment.value}
             disabled={'disabled' in segment ? segment.disabled : undefined}
             className={cn(
-              'focus-visible:outline-offset-0.5 inline-flex h-full min-w-0 grow cursor-pointer items-center justify-center gap-1.5 rounded-md px-2.5 text-sm font-normal whitespace-nowrap transition-[color,background-color,scale] duration-150 outline-none select-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50',
+              'focus-visible:outline-offset-0.5 inline-flex h-full min-w-0 grow cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-2.5 text-sm font-normal whitespace-nowrap transition-[color,background-color,border-color] duration-150 outline-none select-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid disabled:pointer-events-none disabled:opacity-50',
               isSelected
-                ? 'bg-muted text-foreground'
+                ? color
+                  ? // A selected colored segment is the badge of that color; on
+                    // the dark theme the badge outline is dropped
+                    cn(badgeColors[color], 'dark:border-transparent')
+                  : 'bg-muted text-foreground'
                 : 'text-foreground/60 hover:text-foreground'
             )}
           >
@@ -88,7 +92,8 @@ function DataGridSegmentedFilter<TValue extends string>({
               <span
                 className={cn(
                   'mr-0.5 size-1.5 rounded-full',
-                  dotVariants[color]
+                  // Selected: the badge's own dot, its text tint as a fill
+                  isSelected ? 'bg-current/80' : dotVariants[color]
                 )}
                 aria-hidden="true"
               />
