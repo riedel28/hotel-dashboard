@@ -8,7 +8,6 @@ import { useState } from 'react';
 import type {
   FetchMonitoringLogsParams,
   MonitoringPeriod,
-  MonitoringStatus,
   MonitoringType
 } from 'shared/types/monitoring';
 
@@ -150,27 +149,17 @@ function MonitoringPage() {
     period !== DEFAULT_PERIOD
   );
   const counts = monitoringQuery.data?.counts;
-  const statusOptions: Array<{
-    value: MonitoringStatus | 'all';
-    label: string;
-    count: number | undefined;
-    // Matches the dot of the status badge in the table
-    dotClassName?: string;
-  }> = [
-    { value: 'all', label: t`All`, count: counts?.all },
-    {
-      value: 'success',
-      label: t`OK`,
-      count: counts?.success,
-      dotClassName: 'bg-emerald-800/80 dark:bg-emerald-300/80'
-    },
-    {
-      value: 'error',
-      label: t`Errors`,
-      count: counts?.error,
-      dotClassName: 'bg-rose-700/80 dark:bg-rose-300/80'
-    }
-  ];
+  // A filter label followed by how many logs it would show
+  const withCount = (label: string, count: number | undefined) => (
+    <>
+      {label}
+      {count !== undefined && (
+        <span className="ml-1.5 text-xs text-muted-foreground tabular-nums">
+          {count}
+        </span>
+      )}
+    </>
+  );
 
   const emptyMessage = (
     <div className="flex flex-col items-center gap-1 py-6 text-sm">
@@ -313,33 +302,22 @@ function MonitoringPage() {
 
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <DataGridSegmentedFilter
-            aria-label={t`Status`}
-            value={status ?? 'all'}
-            onValueChange={(next) =>
-              setFilters({ status: next === 'all' ? undefined : next })
-            }
-            options={statusOptions.map((option) => ({
-              value: option.value,
-              label: (
-                <>
-                  {option.dotClassName && (
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        'mr-0.5 size-1.5 rounded-full',
-                        option.dotClassName
-                      )}
-                    />
-                  )}
-                  {option.label}
-                  {option.count !== undefined && (
-                    <span className="text-xs text-muted-foreground tabular-nums">
-                      {option.count}
-                    </span>
-                  )}
-                </>
-              )
-            }))}
+            label={t`Status`}
+            value={status}
+            onValueChange={(next) => setFilters({ status: next })}
+            allLabel={withCount(t`All`, counts?.all)}
+            options={[
+              {
+                value: 'success',
+                label: withCount(t`OK`, counts?.success),
+                color: 'emerald'
+              },
+              {
+                value: 'error',
+                label: withCount(t`Errors`, counts?.error),
+                color: 'rose'
+              }
+            ]}
           />
           <DataGridCheckboxFilter
             label={<Trans>Type</Trans>}
