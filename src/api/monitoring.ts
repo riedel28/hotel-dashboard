@@ -1,5 +1,4 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 
 import { ApiError, client, handleApiError } from '@/api/client';
 
@@ -28,15 +27,11 @@ async function fetchMonitoringLogs(
   params: MonitoringLogsQuery
 ): Promise<FetchMonitoringLogsResponse> {
   try {
-    const { type, from, to, ...rest } =
-      fetchMonitoringLogsParamsSchema.parse(params);
+    const { type, ...rest } = fetchMonitoringLogsParamsSchema.parse(params);
     const response = await client.get('/monitoring', {
       params: {
         ...rest,
-        type: type?.length ? type.join(',') : undefined,
-        // The range is picked in whole days of the viewer's time zone
-        from: from && dayjs(from).startOf('day').toISOString(),
-        to: to && dayjs(to).endOf('day').toISOString()
+        type: type?.length ? type.join(',') : undefined
       }
     });
     return fetchMonitoringLogsResponseSchema.parse(response.data);

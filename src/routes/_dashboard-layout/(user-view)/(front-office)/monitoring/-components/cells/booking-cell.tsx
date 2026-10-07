@@ -4,22 +4,19 @@ import { ListFilterIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+import { useReservationFilter } from '../../-hooks/use-monitoring-search';
 import { ReservationLink } from '../reservation-link';
 
 interface BookingCellProps {
   bookingNr: string | null;
   reservationId: number | null;
-  isFiltered: boolean;
-  onToggleFilter: (bookingNr: string) => void;
 }
 
-export function BookingCell({
-  bookingNr,
-  reservationId,
-  isFiltered,
-  onToggleFilter
-}: BookingCellProps) {
+export function BookingCell({ bookingNr, reservationId }: BookingCellProps) {
   const { t } = useLingui();
+  const reservationFilter = useReservationFilter();
+  const isFiltered =
+    bookingNr !== null && bookingNr === reservationFilter.reservation;
 
   if (!bookingNr) {
     return <span className="text-muted-foreground">—</span>;
@@ -60,7 +57,7 @@ export function BookingCell({
         )}
         onClick={(event) => {
           event.stopPropagation();
-          onToggleFilter(bookingNr);
+          reservationFilter.toggle(bookingNr);
         }}
       >
         <ListFilterIcon className="size-3.5" />

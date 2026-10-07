@@ -7,7 +7,7 @@ import {
   type SortingState,
   useTable
 } from '@tanstack/react-table';
-import { type ReactNode, useMemo, useState } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
 import {
@@ -36,8 +36,6 @@ interface MonitoringTableProps {
   onPaginationChange: OnChangeFn<PaginationState>;
   sorting: SortingState;
   onSortingChange: OnChangeFn<SortingState>;
-  reservationFilter: string | undefined;
-  onReservationFilterToggle: (bookingNr: string) => void;
   /** The log open in the details drawer, marked as the selected row. */
   selectedLogId: number | undefined;
   onLogOpen: (logId: number) => void;
@@ -53,8 +51,6 @@ export function MonitoringTable({
   onPaginationChange,
   sorting,
   onSortingChange,
-  reservationFilter,
-  onReservationFilterToggle,
   selectedLogId,
   onLogOpen,
   emptyMessage
@@ -168,11 +164,6 @@ export function MonitoringTable({
           <BookingCell
             bookingNr={row.original.booking_nr}
             reservationId={row.original.reservation_id}
-            isFiltered={
-              reservationFilter !== undefined &&
-              reservationFilter === row.original.booking_nr
-            }
-            onToggleFilter={onReservationFilterToggle}
           />
         ),
         meta: {
@@ -214,11 +205,7 @@ export function MonitoringTable({
         enableResizing: true
       }
     ],
-    [t, reservationFilter, onReservationFilterToggle]
-  );
-
-  const [columnOrder, setColumnOrder] = useState<string[]>(
-    columns.map((column) => column.id as string)
+    [t]
   );
 
   const rowSelection = useMemo<RowSelectionState>(
@@ -235,14 +222,12 @@ export function MonitoringTable({
     state: {
       pagination,
       sorting,
-      columnOrder,
       rowSelection
     },
     // Selection only marks the log open in the details panel
     enableRowSelection: true,
     onPaginationChange,
     onSortingChange,
-    onColumnOrderChange: setColumnOrder,
     manualPagination: true,
     manualSorting: true,
     enableSortingRemoval: false

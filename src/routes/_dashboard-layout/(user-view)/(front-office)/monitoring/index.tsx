@@ -31,7 +31,8 @@ import { MonitoringTable } from './-components/monitoring-table';
 import {
   DEFAULT_PAGE_SIZE,
   DEFAULT_PERIOD,
-  useMonitoringSearch
+  useMonitoringSearch,
+  useReservationFilter
 } from './-hooks/use-monitoring-search';
 
 // The page's own state on top of the list filters: the log open in the drawer
@@ -75,18 +76,15 @@ function MonitoringPage() {
           filters={filters}
           counts={logsQuery.data?.counts}
           hasActiveFilters={search.hasActiveFilters}
-          setFilters={search.setFilters}
+          setQuery={search.setQuery}
+          setStatus={search.setStatus}
+          setTypes={search.setTypes}
           setPeriod={search.setPeriod}
           setRange={search.setRange}
           clearFilters={search.clearFilters}
         />
 
-        {filters.reservation && (
-          <ReservationNotice
-            bookingNr={filters.reservation}
-            onDismiss={() => search.setFilters({ booking_nr: undefined })}
-          />
-        )}
+        <ReservationNotice />
 
         <div
           className={cn('transition-opacity duration-300 ease-in-out', {
@@ -109,8 +107,6 @@ function MonitoringPage() {
               onPaginationChange={search.onPaginationChange}
               sorting={search.sorting}
               onSortingChange={search.onSortingChange}
-              reservationFilter={filters.reservation}
-              onReservationFilterToggle={search.toggleReservationFilter}
               selectedLogId={search.openLogId}
               onLogOpen={search.openLog}
               emptyMessage={
@@ -139,13 +135,13 @@ function MonitoringPage() {
  * The reservation filter narrows the whole view, so it is announced right
  * above the table rather than as one more control among the filters.
  */
-function ReservationNotice({
-  bookingNr,
-  onDismiss
-}: {
-  bookingNr: string;
-  onDismiss: () => void;
-}) {
+function ReservationNotice() {
+  const { reservation, clear } = useReservationFilter();
+
+  if (!reservation) {
+    return null;
+  }
+
   return (
     <div
       role="status"
@@ -155,12 +151,12 @@ function ReservationNotice({
       <span className="min-w-0 flex-1">
         <Trans>
           Showing only logs for reservation{' '}
-          <strong className="font-semibold">{bookingNr}</strong>
+          <strong className="font-semibold">{reservation}</strong>
         </Trans>
       </span>
       <button
         type="button"
-        onClick={onDismiss}
+        onClick={clear}
         className="inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Trans>Show all logs</Trans>

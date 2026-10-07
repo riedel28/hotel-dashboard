@@ -9,6 +9,8 @@ import {
 import dayjs from 'dayjs';
 import {
   type MonitoringPeriod,
+  type MonitoringStatus,
+  type MonitoringType,
   sortableMonitoringColumnsSchema
 } from 'shared/types/monitoring';
 
@@ -39,6 +41,38 @@ const filterKeys = Object.keys(clearedFilters) as Array<
   keyof typeof clearedFilters
 >;
 
+/** Writes filters: replaces the history entry and returns to the first page. */
+function useSetFilters() {
+  const navigate = routeApi.useNavigate();
+
+  return (filters: MonitoringLogsQuery) => {
+    navigate({
+      search: (prev) => ({ ...prev, ...filters, page: undefined }),
+      replace: true
+    });
+  };
+}
+
+/**
+ * The reservation the logs are narrowed to. Separate from the page hook so a
+ * table cell can read and toggle it without the page threading it through.
+ */
+function useReservationFilter() {
+  const reservation = routeApi.useSearch({
+    select: (search) => search.booking_nr
+  });
+  const setFilters = useSetFilters();
+
+  return {
+    reservation,
+    toggle: (bookingNr: string) =>
+      setFilters({
+        booking_nr: bookingNr === reservation ? undefined : bookingNr
+      }),
+    clear: () => setFilters({ booking_nr: undefined })
+  };
+}
+
 /**
  * Owns everything derived from the monitoring search params: the query they
  * produce, the shapes the filters and the table expect, and the navigations
@@ -47,20 +81,21 @@ const filterKeys = Object.keys(clearedFilters) as Array<
 function useMonitoringSearch() {
   const { log: openLogId, ...search } = routeApi.useSearch();
   const navigate = routeApi.useNavigate();
+  const setFilters = useSetFilters();
 
-  // The time window is either a custom range or a relative period, never both
+  // The time window is either a custom range or a relative period, never
+  // both. A range is picked in whole days of the viewer's time zone.
   const hasCustomRange = Boolean(search.from || search.to);
   const period = hasCustomRange ? undefined : (search.period ?? DEFAULT_PERIOD);
 
-  const logsQuery = useQuery(monitoringQueryOptions({ ...search, period }));
-
-  // Filters replace the history entry and always return to the first page
-  const setFilters = (filters: MonitoringLogsQuery) => {
-    navigate({
-      search: (prev) => ({ ...prev, ...filters, page: undefined }),
-      replace: true
-    });
-  };
+  const logsQuery = useQuery(
+    monitoringQueryOptions({
+      ...search,
+      period,
+      from: search.from && dayjs(search.from).startOf('day').toISOString(),
+      to: search.to && dayjs(search.to).endOf('day').toISOString()
+    })
+  );
 
   const hasActiveFilters = filterKeys.some((key) => {
     if (key === 'period') {
@@ -80,18 +115,20 @@ function useMonitoringSearch() {
 
   return {
     logsQuery,
+
     filters: {
-      q: search.q,
+      query: search.q,
       status: search.status,
-      type: search.type ?? [],
-      reservation: search.booking_nr,
+      types: search.type ?? [],
       period,
       from: search.from,
       to: search.to
     },
     hasActiveFilters,
-    setFilters,
-    clearFilters: () => setFilters(clearedFilters),
+    setQuery: (query: string) => setFilters({ q: query || undefined }),
+    setStatus: (status: MonitoringStatus | undefined) => setFilters({ status }),
+    setTypes: (types: MonitoringType[]) =>
+      setFilters({ type: types.length > 0 ? types : undefined }),
     setPeriod: (next: MonitoringPeriod) =>
       setFilters({ period: next, from: undefined, to: undefined }),
     setRange: (range: { from: Date; to: Date }) =>
@@ -100,10 +137,7 @@ function useMonitoringSearch() {
         from: dayjs(range.from).format('YYYY-MM-DD'),
         to: dayjs(range.to).format('YYYY-MM-DD')
       }),
-    toggleReservationFilter: (bookingNr: string) =>
-      setFilters({
-        booking_nr: bookingNr === search.booking_nr ? undefined : bookingNr
-      }),
+    clearFilters: () => setFilters(clearedFilters),
 
     pagination,
     sorting,
@@ -138,6 +172,7 @@ function useMonitoringSearch() {
       navigate({ search: (prev) => ({ ...prev, log: logId }), replace: true }),
     closeLog: () =>
       navigate({ search: (prev) => ({ ...prev, log: undefined }) }),
+    /** From the drawer: closes it and narrows the table to the reservation. */
     showReservationLogs: (bookingNr: string) =>
       navigate({
         search: (prev) => ({
@@ -156,5 +191,6 @@ export {
   DEFAULT_PAGE_SIZE,
   DEFAULT_PERIOD,
   type MonitoringSearch,
-  useMonitoringSearch
+  useMonitoringSearch,
+  useReservationFilter
 };

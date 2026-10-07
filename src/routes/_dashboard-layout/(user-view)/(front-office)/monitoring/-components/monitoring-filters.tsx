@@ -49,7 +49,9 @@ interface MonitoringFiltersProps extends Pick<
   MonitoringSearch,
   | 'filters'
   | 'hasActiveFilters'
-  | 'setFilters'
+  | 'setQuery'
+  | 'setStatus'
+  | 'setTypes'
   | 'setPeriod'
   | 'setRange'
   | 'clearFilters'
@@ -62,7 +64,9 @@ export function MonitoringFilters({
   filters,
   counts,
   hasActiveFilters,
-  setFilters,
+  setQuery,
+  setStatus,
+  setTypes,
   setPeriod,
   setRange,
   clearFilters
@@ -84,8 +88,8 @@ export function MonitoringFilters({
     <div className="grid grid-cols-[1fr_auto] gap-2 sm:flex sm:flex-wrap sm:items-center">
       <SearchInput
         key={searchResetKey}
-        value={filters.q ?? ''}
-        onChange={(value) => setFilters({ q: value || undefined })}
+        value={filters.query ?? ''}
+        onChange={setQuery}
         placeholder={t`Search logs`}
         aria-label={t`Search event, message, reservation number`}
         className="text-sm"
@@ -101,7 +105,7 @@ export function MonitoringFilters({
           </span>
         }
         value={filters.status}
-        onValueChange={(status) => setFilters({ status })}
+        onValueChange={setStatus}
         options={statusOptions}
         showFooter
         className="sm:w-[170px]"
@@ -110,10 +114,8 @@ export function MonitoringFilters({
         label={<Trans>Type</Trans>}
         placeholder={<Trans>All types</Trans>}
         options={typeOptions}
-        value={filters.type}
-        onValueChange={(type) =>
-          setFilters({ type: type.length > 0 ? type : undefined })
-        }
+        value={filters.types}
+        onValueChange={setTypes}
         className="min-w-0 sm:w-[200px]"
       >
         <DataGridCheckboxFilterFooter>
