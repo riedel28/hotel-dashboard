@@ -207,7 +207,9 @@ function LogDetails({
                 text={log.log_message}
                 copyLabel={t`Copy message`}
                 copiedLabel={t`Message copied`}
-                buttonClassName="absolute top-1.5 right-1.5"
+                // Offset by half the spare height of a one-line block: centred on
+                // a single line, pinned to the top corner on longer messages
+                buttonClassName="absolute top-2 right-2"
               />
             )}
           </div>
