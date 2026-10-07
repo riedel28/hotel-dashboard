@@ -5,9 +5,11 @@ import { Badge } from '@/components/ui/badge';
 
 interface StatusCellProps {
   status: MonitoringStatus;
+  /** How many logs have this status; shown inside the badge when given. */
+  count?: number;
 }
 
-export function StatusCell({ status }: StatusCellProps) {
+export function StatusCell({ status, count }: StatusCellProps) {
   const isSuccess = status === 'success';
 
   return (
@@ -19,6 +21,7 @@ export function StatusCell({ status }: StatusCellProps) {
     >
       <span className="mr-0.5 size-1.25 rounded-full bg-current/80"></span>
       {isSuccess ? <Trans>OK</Trans> : <Trans>Error</Trans>}
+      {count !== undefined && <span className="tabular-nums">{count}</span>}
     </Badge>
   );
 }

@@ -16,6 +16,7 @@ import {
   fetchMonitoringLogsParamsSchema,
   monitoringQueryOptions
 } from '@/api/monitoring';
+import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -52,9 +53,7 @@ import { MonitoringTable } from './-components/monitoring-table';
 const DEFAULT_PERIOD: MonitoringPeriod = '24h';
 const DEFAULT_PAGE_SIZE = 50;
 
-const monitoringStatusOptions = (
-  ['success', 'error'] satisfies MonitoringStatus[]
-).map((value) => ({ value, label: <StatusCell status={value} /> }));
+const monitoringStatuses = ['success', 'error'] satisfies MonitoringStatus[];
 
 const monitoringTypeOptions = (
   ['pms', 'door lock', 'payment'] satisfies MonitoringType[]
@@ -155,6 +154,14 @@ function MonitoringPage() {
     hasCustomRange ||
     period !== DEFAULT_PERIOD
   );
+  // Each count ignores the status filter itself, so the options show what
+  // picking them would yield
+  const counts = monitoringQuery.data?.counts;
+  const statusOptions = monitoringStatuses.map((value) => ({
+    value,
+    label: <StatusCell status={value} count={counts?.[value]} />
+  }));
+
   const emptyMessage = (
     <div className="flex flex-col items-center gap-1 py-6 text-sm">
       <p className="font-medium text-foreground">
@@ -275,10 +282,24 @@ function MonitoringPage() {
           />
           <DataGridRadioFilter
             label={<Trans>Status</Trans>}
-            placeholder={<Trans>All statuses</Trans>}
+            placeholder={
+              <span className="flex items-center gap-1.5">
+                <Trans>All logs</Trans>
+                {counts && (
+                  <Badge
+                    variant="secondary"
+                    color="gray"
+                    size="xs"
+                    className="px-1 py-0 leading-4 tabular-nums"
+                  >
+                    {counts.all}
+                  </Badge>
+                )}
+              </span>
+            }
             value={status}
             onValueChange={(next) => setFilters({ status: next })}
-            options={monitoringStatusOptions}
+            options={statusOptions}
             showFooter
             className="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:w-[170px] sm:flex-none sm:basis-auto"
           />
