@@ -16,7 +16,6 @@ import {
   fetchMonitoringLogsParamsSchema,
   monitoringQueryOptions
 } from '@/api/monitoring';
-import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -155,6 +154,7 @@ function MonitoringPage() {
     value: MonitoringStatus | 'all';
     label: string;
     count: number | undefined;
+    // Matches the dot of the status badge in the table
     dotClassName?: string;
   }> = [
     { value: 'all', label: t`All`, count: counts?.all },
@@ -162,13 +162,13 @@ function MonitoringPage() {
       value: 'success',
       label: t`OK`,
       count: counts?.success,
-      dotClassName: 'bg-emerald-500'
+      dotClassName: 'bg-emerald-800/80 dark:bg-emerald-300/80'
     },
     {
       value: 'error',
       label: t`Errors`,
       count: counts?.error,
-      dotClassName: 'bg-rose-500'
+      dotClassName: 'bg-rose-700/80 dark:bg-rose-300/80'
     }
   ];
 
@@ -341,14 +341,9 @@ function MonitoringPage() {
                   )}
                   {option.label}
                   {option.count !== undefined && (
-                    <Badge
-                      variant="secondary"
-                      color="gray"
-                      size="xs"
-                      className="px-1 py-0 leading-4 tabular-nums"
-                    >
+                    <span className="text-xs text-muted-foreground tabular-nums">
                       {option.count}
-                    </Badge>
+                    </span>
                   )}
                 </TabsTrigger>
               ))}
