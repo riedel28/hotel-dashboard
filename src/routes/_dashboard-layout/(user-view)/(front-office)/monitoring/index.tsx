@@ -328,7 +328,7 @@ function MonitoringPage() {
                 <TabsTrigger
                   key={option.value}
                   value={option.value}
-                  className="px-2.5 data-active:bg-muted data-active:shadow-none! dark:data-active:bg-muted"
+                  className="px-2.5 font-normal data-active:bg-muted data-active:shadow-none! dark:data-active:bg-muted"
                 >
                   {option.dotClassName && (
                     <span
@@ -345,7 +345,7 @@ function MonitoringPage() {
                       variant="secondary"
                       color="gray"
                       size="xs"
-                      className="px-1.5 py-0 leading-5 tabular-nums"
+                      className="px-1 py-0 leading-4 tabular-nums"
                     >
                       {option.count}
                     </Badge>
