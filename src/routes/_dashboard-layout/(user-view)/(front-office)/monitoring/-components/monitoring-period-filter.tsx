@@ -74,7 +74,7 @@ export function MonitoringPeriodFilter({
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger
         className={cn(
-          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:bg-accent hover:text-accent-foreground data-popup-open:bg-accent dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap dark:border-input dark:bg-input/30',
           className
         )}
       >
