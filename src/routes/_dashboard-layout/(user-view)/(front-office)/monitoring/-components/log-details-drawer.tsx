@@ -159,7 +159,7 @@ function LogDetails({
 
       <DrawerBody className="space-y-5">
         {(log.booking_nr || log.sub) && (
-          <dl className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2 text-sm">
+          <dl className="grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-2 text-sm">
             {log.booking_nr && (
               <>
                 <dt className="text-muted-foreground">
@@ -250,7 +250,7 @@ function LogDetails({
             )}
             <button
               type="button"
-              className="cursor-pointer rounded-sm text-sm underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="cursor-pointer rounded-sm text-sm text-muted-foreground underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
               onClick={() =>
                 log.booking_nr && onShowAllForBooking(log.booking_nr)
               }
