@@ -20,6 +20,66 @@ import {
 import { truncateAllTables } from '../db/truncate-all';
 import { hashPassword } from '../utils/password';
 
+const demoLogTemplates = [
+  {
+    type: 'pms',
+    event: 'Reservation synced',
+    sub: 'PMS Connection',
+    ok: 'Reservation updated from PMS.\n2 fields changed.',
+    fail: 'PMS did not respond.\nServer timeout after 30s.'
+  },
+  {
+    type: 'pms',
+    event: 'Night Audit',
+    sub: 'Scheduled Task',
+    ok: 'Night audit completed for all properties.',
+    fail: 'Night audit aborted: PMS returned HTTP 503.'
+  },
+  {
+    type: 'door lock',
+    event: 'Key issued',
+    sub: 'Key Card',
+    ok: 'Mobile key issued for the booked room.',
+    fail: 'Failed to issue key card.\nLock controller unreachable.'
+  },
+  {
+    type: 'door lock',
+    event: 'Checkout Booking',
+    sub: 'Key Card',
+    ok: 'Key card invalidated on checkout.',
+    fail: 'Failed to invalidate key card.\nServer timeout after 30s.'
+  },
+  {
+    type: 'payment',
+    event: 'Charge',
+    sub: 'Payment Gateway',
+    ok: 'Payment processed successfully for invoice #INV-1234.',
+    fail: 'Card declined by issuer: insufficient funds.\nProvider: Adyen, code 51, attempt 2 of 3.'
+  }
+] as const;
+
+// ~200 logs spread over the last 30 days, denser towards now, so every period
+// preset and the pagination have something to show.
+function buildDemoMonitoringLogs() {
+  const bookingNrs = ['RES-001', 'RES-002', 'RES-003', null];
+  const monthMs = 30 * 24 * 60 * 60 * 1000;
+
+  return Array.from({ length: 200 }, (_, i) => {
+    const template = demoLogTemplates[i % demoLogTemplates.length]!;
+    const failed = i % 7 === 0;
+
+    return {
+      status: failed ? ('error' as const) : ('success' as const),
+      logged_at: new Date(Date.now() - Math.round(monthMs * (i / 200) ** 2)),
+      type: template.type,
+      booking_nr: bookingNrs[i % bookingNrs.length] ?? null,
+      event: template.event,
+      sub: template.sub,
+      log_message: failed ? template.fail : template.ok
+    };
+  });
+}
+
 // The Overlook Hotel — the canonical demo property. Seeded Guest ABC content
 // attaches here, and demo users' selected property is pointed at it.
 const OVERLOOK_HOTEL_ID = 'cc198b13-4933-43aa-977e-dcd95fa30770';
@@ -437,45 +497,7 @@ async function seed() {
 
     // Step 5: Create demo monitoring logs
     console.log('Creating demo monitoring logs...');
-    await db.insert(monitoringLogs).values([
-      {
-        status: 'success',
-        logged_at: new Date(),
-        type: 'pms',
-        booking_nr: 'RES-001',
-        event: 'System Status',
-        sub: 'PMS Connection',
-        log_message:
-          'PMS connection established successfully.\nAll systems green.'
-      },
-      {
-        status: 'error',
-        logged_at: new Date(Date.now() - 3600000), // 1 hour ago
-        type: 'door lock',
-        booking_nr: 'RES-002',
-        event: 'Checkout Booking',
-        sub: 'Key Card',
-        log_message: 'Failed to invalidate key card.\nServer timeout after 30s.'
-      },
-      {
-        status: 'success',
-        logged_at: new Date(Date.now() - 7200000), // 2 hours ago
-        type: 'payment',
-        booking_nr: 'RES-003',
-        event: 'Fetch Booking',
-        sub: 'Payment Gateway',
-        log_message: 'Payment processed successfully for invoice #INV-1234.'
-      },
-      {
-        status: 'success',
-        logged_at: new Date(Date.now() - 86400000), // 1 day ago
-        type: 'pms',
-        booking_nr: null,
-        event: 'Night Audit',
-        sub: 'Scheduled Task',
-        log_message: 'Night audit completed for all properties.'
-      }
-    ]);
+    await db.insert(monitoringLogs).values(buildDemoMonitoringLogs());
 
     // Step 6: Test relational queries
     console.log('\n🔍 Testing relational queries...');
