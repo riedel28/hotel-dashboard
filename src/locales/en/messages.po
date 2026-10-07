@@ -2580,7 +2580,7 @@ msgstr "Optional JSON or certificates passed to the Adyen SDK."
 #~ msgstr "Orders"
 
 #. placeholder {0}: log.booking_nr
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:219
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:221
 msgid "Other logs for reservation {0}"
 msgstr "Other logs for reservation {0}"
 
@@ -3642,7 +3642,7 @@ msgstr "SHIP-URL is required"
 msgid "Show"
 msgstr "Show"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:256
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:258
 msgid "Show all"
 msgstr "Show all"
 

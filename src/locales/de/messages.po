@@ -2502,7 +2502,7 @@ msgstr ""
 #~ msgstr "Bestellungen"
 
 #. placeholder {0}: log.booking_nr
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:219
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:221
 msgid "Other logs for reservation {0}"
 msgstr ""
 
@@ -3523,7 +3523,7 @@ msgstr ""
 msgid "Show"
 msgstr "Anzeigen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:256
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:258
 msgid "Show all"
 msgstr ""
 
