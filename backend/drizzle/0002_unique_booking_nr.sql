@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "reservations_booking_nr_key" ON "reservations" USING btree ("booking_nr");
