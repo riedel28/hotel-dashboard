@@ -8,6 +8,7 @@ import { useState } from 'react';
 import type {
   FetchMonitoringLogsParams,
   MonitoringPeriod,
+  MonitoringStatus,
   MonitoringType
 } from 'shared/types/monitoring';
 
@@ -29,8 +30,8 @@ import {
   DataGridCheckboxFilterClear,
   DataGridCheckboxFilterFooter
 } from '@/components/ui/data-grid-checkbox-filter';
+import { DataGridRadioFilter } from '@/components/ui/data-grid-radio-filter';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
-import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import {
   Empty,
   EmptyContent,
@@ -42,12 +43,17 @@ import { SearchInput } from '@/components/ui/search-input';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
+import { StatusCell } from './-components/cells/status-cell';
 import { TypeCell } from './-components/cells/type-cell';
 import { MonitoringPeriodFilter } from './-components/monitoring-period-filter';
 import { MonitoringTable } from './-components/monitoring-table';
 
 const DEFAULT_PERIOD: MonitoringPeriod = '24h';
 const DEFAULT_PAGE_SIZE = 50;
+
+const monitoringStatusOptions = (
+  ['success', 'error'] satisfies MonitoringStatus[]
+).map((value) => ({ value, label: <StatusCell status={value} /> }));
 
 const monitoringTypeOptions = (
   ['pms', 'door lock', 'payment'] satisfies MonitoringType[]
@@ -148,18 +154,6 @@ function MonitoringPage() {
     hasCustomRange ||
     period !== DEFAULT_PERIOD
   );
-  const counts = monitoringQuery.data?.counts;
-  // A filter label followed by how many logs it would show
-  const withCount = (label: string, count: number | undefined) => (
-    <>
-      {label}
-      {count !== undefined && (
-        // Inherits the segment's color, so it follows the selected tint
-        <span className="ml-1.5 text-xs tabular-nums opacity-70">{count}</span>
-      )}
-    </>
-  );
-
   const emptyMessage = (
     <div className="flex flex-col items-center gap-1 py-6 text-sm">
       <p className="font-medium text-foreground">
@@ -262,9 +256,9 @@ function MonitoringPage() {
       </div>
 
       <div className="space-y-2.5">
-        {/* One wrapping row. Phones: search beside status, then type beside
-            period, then Clear filters as a full row. In between: search
-            stretches to fill its row.
+        {/* One wrapping row. Phones: two filters to a row (half-width basis),
+            then Clear filters as a full row. In between: search stretches to
+            fill its row.
             Wide screens: everything in one line, Clear filters on the right. */}
         <div className="flex flex-wrap items-center gap-2">
           <SearchInput
@@ -274,26 +268,17 @@ function MonitoringPage() {
             placeholder={t`Search logs`}
             aria-label={t`Search event, message, reservation number`}
             className="text-sm"
-            wrapperClassName="min-w-28 flex-1 sm:min-w-56 xl:w-72 xl:flex-none"
+            wrapperClassName="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:w-auto sm:min-w-56 sm:basis-auto xl:w-72 xl:flex-none"
             debounceMs={300}
           />
-          <DataGridSegmentedFilter
-            label={t`Status`}
+          <DataGridRadioFilter
+            label={<Trans>Status</Trans>}
+            placeholder={<Trans>All statuses</Trans>}
             value={status}
             onValueChange={(next) => setFilters({ status: next })}
-            allLabel={withCount(t`All`, counts?.all)}
-            options={[
-              {
-                value: 'success',
-                label: withCount(t`OK`, counts?.success),
-                color: 'emerald'
-              },
-              {
-                value: 'error',
-                label: withCount(t`Errors`, counts?.error),
-                color: 'rose'
-              }
-            ]}
+            options={monitoringStatusOptions}
+            showFooter
+            className="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:w-[170px] sm:flex-none sm:basis-auto"
           />
           <DataGridCheckboxFilter
             label={<Trans>Type</Trans>}
