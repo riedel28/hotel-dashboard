@@ -61,6 +61,24 @@ const monitoringTypeOptions = (
 
 type MonitoringSearch = FetchMonitoringLogsParams;
 
+/** How many logs an option of the status filter would show. */
+function LogCount({ count }: { count: number | undefined }) {
+  if (count === undefined) {
+    return null;
+  }
+
+  return (
+    <Badge
+      variant="secondary"
+      color="gray"
+      size="xs"
+      className="px-1 py-0 leading-4 tabular-nums"
+    >
+      {count}
+    </Badge>
+  );
+}
+
 function MonitoringPage() {
   const search = Route.useSearch();
   const { page, per_page, q, status, type, booking_nr, from, to } = search;
@@ -159,7 +177,16 @@ function MonitoringPage() {
   const counts = monitoringQuery.data?.counts;
   const statusOptions = monitoringStatuses.map((value) => ({
     value,
-    label: <StatusCell status={value} count={counts?.[value]} />
+    label: (
+      <>
+        <StatusCell status={value} />
+        {/* Only in the menu rows, pushed to their right edge; the trigger has
+            no room for it next to the selected badge */}
+        <span className="ml-auto hidden in-data-[slot=dropdown-menu-radio-item]:block">
+          <LogCount count={counts?.[value]} />
+        </span>
+      </>
+    )
   }));
 
   const emptyMessage = (
@@ -285,16 +312,7 @@ function MonitoringPage() {
             placeholder={
               <span className="flex items-center gap-1.5">
                 <Trans>All logs</Trans>
-                {counts && (
-                  <Badge
-                    variant="secondary"
-                    color="gray"
-                    size="xs"
-                    className="px-1 py-0 leading-4 tabular-nums"
-                  >
-                    {counts.all}
-                  </Badge>
-                )}
+                <LogCount count={counts?.all} />
               </span>
             }
             value={status}
