@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro';
-import { Link } from '@tanstack/react-router';
+import { Link, useLocation } from '@tanstack/react-router';
 import { ListFilterIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,8 @@ export function BookingCell({
   onToggleFilter
 }: BookingCellProps) {
   const { t } = useLingui();
+  // The reservation page links back to this exact view of the logs
+  const back = useLocation({ select: (location) => location.href });
 
   if (!bookingNr) {
     return <span className="text-muted-foreground">—</span>;
@@ -26,21 +28,22 @@ export function BookingCell({
 
   return (
     <div className="flex min-w-0 items-center gap-1">
-      {reservationId === null ? (
-        <span className="truncate" title={bookingNr}>
-          {bookingNr}
-        </span>
-      ) : (
-        <Link
-          to="/reservations/$reservationId"
-          params={{ reservationId: String(reservationId) }}
-          // A long number is cut with an ellipsis instead of spilling over
-          title={bookingNr}
-          className="truncate rounded-sm text-cyan-800 underline-offset-4 hover:underline dark:text-cyan-200/85"
-        >
-          {bookingNr}
-        </Link>
-      )}
+      {/* The wrapper clips a long number; clipping the link itself would
+          also cut its hover underline */}
+      <span className="min-w-0 truncate py-0.5" title={bookingNr}>
+        {reservationId === null ? (
+          bookingNr
+        ) : (
+          <Link
+            to="/reservations/$reservationId"
+            params={{ reservationId: String(reservationId) }}
+            search={{ back }}
+            className="rounded-sm text-cyan-800 underline-offset-4 hover:underline dark:text-cyan-200/85"
+          >
+            {bookingNr}
+          </Link>
+        )}
+      </span>
       <Button
         variant="ghost"
         size="icon-xs"
