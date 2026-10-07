@@ -41,6 +41,7 @@ import {
 } from '@/components/ui/empty';
 import { SearchInput } from '@/components/ui/search-input';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
 
 import { StatusCell } from './-components/cells/status-cell';
@@ -371,7 +372,8 @@ function MonitoringPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
 )({
-  validateSearch: fetchMonitoringLogsParamsSchema,
+  // A stale or hand-edited link loses its bad params, not the whole page
+  validateSearch: lenientSearch(fetchMonitoringLogsParamsSchema),
   // Keep default values out of the URL
   search: {
     middlewares: [
