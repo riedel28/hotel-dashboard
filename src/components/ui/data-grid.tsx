@@ -2,16 +2,31 @@
 
 import {
   type ColumnFiltersState,
+  columnOrderingFeature,
+  columnPinningFeature,
+  columnResizingFeature,
+  columnSizingFeature,
+  columnVisibilityFeature,
+  type ReactTable,
   type RowData,
+  rowExpandingFeature,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
   type SortingState,
-  type Table
+  tableFeatures,
+  type TableFeatures
 } from '@tanstack/react-table';
 import { createContext, type ReactNode, useContext } from 'react';
 
 import { cn } from '@/lib/utils';
 
 declare module '@tanstack/react-table' {
-  interface ColumnMeta<TData extends RowData, TValue> {
+  interface ColumnMeta<
+    TFeatures extends TableFeatures,
+    TData extends RowData,
+    TValue
+  > {
     headerTitle?: string;
     headerClassName?: string;
     cellClassName?: string;
@@ -24,6 +39,26 @@ declare module '@tanstack/react-table' {
     __valueType?: TValue;
   }
 }
+
+// Every table goes through DataGrid, so they all share one feature set.
+// Sorting and pagination are server-side, so no row-model slots are needed.
+export const dataGridFeatures = tableFeatures({
+  columnOrderingFeature,
+  columnPinningFeature,
+  columnSizingFeature,
+  columnResizingFeature,
+  columnVisibilityFeature,
+  rowExpandingFeature,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature
+});
+
+export type DataGridFeatures = typeof dataGridFeatures;
+export type DataGridTableInstance<TData extends RowData> = ReactTable<
+  DataGridFeatures,
+  TData
+>;
 
 export type DataGridApiFetchParams = {
   pageIndex: number;
@@ -42,9 +77,9 @@ export type DataGridApiResponse<T> = {
   };
 };
 
-export interface DataGridContextProps<TData extends object> {
+export interface DataGridContextProps<TData extends RowData> {
   props: DataGridProps<TData>;
-  table: Table<TData>;
+  table: DataGridTableInstance<TData>;
   recordCount: number;
   isLoading: boolean;
 }
@@ -56,9 +91,9 @@ export type DataGridRequestParams = {
   columnFilters?: ColumnFiltersState;
 };
 
-export interface DataGridProps<TData extends object> {
+export interface DataGridProps<TData extends RowData> {
   className?: string;
-  table?: Table<TData>;
+  table?: DataGridTableInstance<TData>;
   recordCount: number;
   children?: ReactNode;
   onRowClick?: (row: TData) => void;
@@ -102,7 +137,7 @@ const DataGridContext = createContext<
   DataGridContextProps<DataGridContextRow> | undefined
 >(undefined);
 
-function useDataGrid<TData extends object = DataGridContextRow>() {
+function useDataGrid<TData extends RowData = DataGridContextRow>() {
   const context = useContext(DataGridContext);
   if (!context) {
     throw new Error('useDataGrid must be used within a DataGridProvider');
@@ -110,16 +145,16 @@ function useDataGrid<TData extends object = DataGridContextRow>() {
   return context as unknown as DataGridContextProps<TData>;
 }
 
-function DataGridProvider<TData extends object>({
+function DataGridProvider<TData extends RowData>({
   children,
   table,
   ...props
-}: DataGridProps<TData> & { table: Table<TData> }) {
+}: DataGridProps<TData> & { table: DataGridTableInstance<TData> }) {
   return (
     <DataGridContext.Provider
       value={{
         props: props as unknown as DataGridProps<DataGridContextRow>,
-        table: table as unknown as Table<DataGridContextRow>,
+        table: table as unknown as DataGridTableInstance<DataGridContextRow>,
         recordCount: props.recordCount,
         isLoading: props.isLoading || false
       }}
@@ -129,7 +164,7 @@ function DataGridProvider<TData extends object>({
   );
 }
 
-function DataGrid<TData extends object>({
+function DataGrid<TData extends RowData>({
   children,
   table,
   ...props

@@ -1,16 +1,19 @@
 import { useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
-  getCoreRowModel,
-  getSortedRowModel,
   type PaginationState,
   type SortingState,
-  useReactTable
+  useTable
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import type { Room } from 'shared/types/rooms';
 
-import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
+import {
+  DataGrid,
+  DataGridContainer,
+  type DataGridFeatures,
+  dataGridFeatures
+} from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
@@ -63,7 +66,7 @@ export default function RoomsTable({
   const sorting = sortingProp ?? internalSorting;
   const { t } = useLingui();
 
-  const columns = useMemo<ColumnDef<Room>[]>(
+  const columns = useMemo<ColumnDef<DataGridFeatures, Room>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -185,7 +188,8 @@ export default function RoomsTable({
     columns.map((column) => column.id as string)
   );
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataGridFeatures,
     columns,
     data: data || [],
     pageCount: pageCount,
@@ -198,8 +202,6 @@ export default function RoomsTable({
     onPaginationChange: onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
     manualSorting: true,
     enableSortingRemoval: false

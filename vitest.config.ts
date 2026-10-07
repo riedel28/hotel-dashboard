@@ -5,14 +5,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [
-    react({
-      babel: {
-        plugins: ['@lingui/babel-plugin-lingui-macro']
-      }
-    }),
-    lingui()
-  ],
+  plugins: [react(), lingui({ macroTransform: true })],
   test: {
     globals: true,
     environment: 'happy-dom',
@@ -29,8 +22,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      shared: path.resolve(__dirname, './shared')
+      '@': path.resolve(import.meta.dirname, './src'),
+      shared: path.resolve(import.meta.dirname, './shared')
     }
   }
 });

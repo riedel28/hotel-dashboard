@@ -18,20 +18,22 @@ export default defineConfig({
       target: 'react',
       autoCodeSplitting: true
     }),
-    react({
-      babel: {
-        plugins: ['@lingui/babel-plugin-lingui-macro']
-      }
-    }),
-    lingui()
+    react(),
+    // The parser is forced to TSX because the plugin infers it from the file
+    // extension, which TanStack Router's `?tsr-split=...` ids hide. Ceiling:
+    // `<T>(x) => ...` in a .ts file that uses a Lingui macro won't parse
+    // (write `<T,>`); drop the override once the plugin strips the query.
+    lingui({
+      macroTransform: { parser: { syntax: 'typescript', tsx: true } }
+    })
   ],
   server: {
     open: true
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      shared: path.resolve(__dirname, './shared')
+      '@': path.resolve(import.meta.dirname, './src'),
+      shared: path.resolve(import.meta.dirname, './shared')
     }
   },
   define: {

@@ -1,11 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
-  getCoreRowModel,
-  getSortedRowModel,
   type PaginationState,
   type SortingState,
-  useReactTable
+  useTable
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 
@@ -13,7 +11,12 @@ import type { User } from '@/api/users';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { CountryFlag } from '@/components/ui/country-flag';
-import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
+import {
+  DataGrid,
+  DataGridContainer,
+  type DataGridFeatures,
+  dataGridFeatures
+} from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
@@ -79,7 +82,7 @@ export default function UsersTable({
   const sorting = sortingProp ?? internalSorting;
   const { i18n, t } = useLingui();
 
-  const columns = useMemo<ColumnDef<User>[]>(
+  const columns = useMemo<ColumnDef<DataGridFeatures, User>[]>(
     () => [
       {
         accessorKey: 'first_name',
@@ -286,7 +289,8 @@ export default function UsersTable({
     columns.map((column) => column.id as string)
   );
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataGridFeatures,
     columns,
     data: data || [],
     pageCount: pageCount,
@@ -299,8 +303,6 @@ export default function UsersTable({
     onPaginationChange: onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
     manualSorting: true
   });

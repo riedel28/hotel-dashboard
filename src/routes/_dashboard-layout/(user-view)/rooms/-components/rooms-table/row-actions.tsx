@@ -7,6 +7,7 @@ import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 
 import type { Room } from '@/api/rooms';
+import { type DataGridFeatures } from '@/components/ui/data-grid';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
@@ -18,7 +19,7 @@ import {
 import { DeleteDialog } from './delete-dialog';
 
 interface RowActionsProps {
-  row: Row<Room>;
+  row: Row<DataGridFeatures, Room>;
 }
 
 export function RowActions({ row }: RowActionsProps) {

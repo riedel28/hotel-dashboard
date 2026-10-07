@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import { i18n } from '@lingui/core';
 
 // Setup localStorage mock for tests

@@ -8,6 +8,7 @@ import * as React from 'react';
 import { toast } from 'sonner';
 
 import { resendInvitation, type User } from '@/api/users';
+import { type DataGridFeatures } from '@/components/ui/data-grid';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
@@ -20,7 +21,7 @@ import {
 import { DeleteDialog } from './delete-dialog';
 
 interface RowActionsProps {
-  row: Row<User>;
+  row: Row<DataGridFeatures, User>;
 }
 
 export function RowActions({ row }: RowActionsProps) {

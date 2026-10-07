@@ -3,11 +3,9 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link as RouterLink } from '@tanstack/react-router';
 import {
   type ColumnDef,
-  getCoreRowModel,
-  getSortedRowModel,
   type PaginationState,
   type SortingState,
-  useReactTable
+  useTable
 } from '@tanstack/react-table';
 import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
@@ -26,7 +24,12 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { CountryFlag } from '@/components/ui/country-flag';
-import { DataGrid, DataGridContainer } from '@/components/ui/data-grid';
+import {
+  DataGrid,
+  DataGridContainer,
+  type DataGridFeatures,
+  dataGridFeatures
+} from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
@@ -129,7 +132,7 @@ function PropertiesTable({
 
   const { i18n, t } = useLingui();
 
-  const columns = useMemo<ColumnDef<Property>[]>(
+  const columns = useMemo<ColumnDef<DataGridFeatures, Property>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -246,7 +249,8 @@ function PropertiesTable({
 
   const [, setInternalSorting] = useState<SortingState>([]);
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataGridFeatures,
     columns,
     data: data || [],
     pageCount,
@@ -259,8 +263,6 @@ function PropertiesTable({
     onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
     manualSorting: true,
     enableSortingRemoval: true
