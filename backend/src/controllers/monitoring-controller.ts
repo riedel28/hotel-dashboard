@@ -37,6 +37,20 @@ const periodMs: Record<MonitoringPeriod, number> = {
 
 const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 
+// Logs with the id of the reservation carrying the same booking number
+function selectLogs() {
+  return db
+    .select({
+      ...getTableColumns(monitoringTable),
+      reservation_id: reservationsTable.id
+    })
+    .from(monitoringTable)
+    .leftJoin(
+      reservationsTable,
+      eq(reservationsTable.booking_nr, monitoringTable.booking_nr)
+    );
+}
+
 async function getMonitoringLogs(req: Request, res: Response) {
   try {
     // validateQuery has already replaced req.query with the parsed schema output
@@ -113,16 +127,7 @@ async function getMonitoringLogs(req: Request, res: Response) {
     const currentPage = page ?? 1;
 
     const [logs, statusCounts] = await Promise.all([
-      db
-        .select({
-          ...getTableColumns(monitoringTable),
-          reservation_id: reservationsTable.id
-        })
-        .from(monitoringTable)
-        .leftJoin(
-          reservationsTable,
-          eq(reservationsTable.booking_nr, monitoringTable.booking_nr)
-        )
+      selectLogs()
         .where(
           and(
             ...conditions,
@@ -160,4 +165,21 @@ async function getMonitoringLogs(req: Request, res: Response) {
   }
 }
 
-export { getMonitoringLogs };
+async function getMonitoringLogById(req: Request, res: Response) {
+  try {
+    const [log] = await selectLogs().where(
+      eq(monitoringTable.id, Number(req.params.id))
+    );
+
+    if (!log) {
+      return res.status(404).json({ error: 'Monitoring log not found' });
+    }
+
+    res.status(200).json(log);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch monitoring log' });
+  }
+}
+
+export { getMonitoringLogById, getMonitoringLogs };

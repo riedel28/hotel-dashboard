@@ -63,6 +63,10 @@ export const fetchMonitoringLogsParamsSchema = z.object({
   sort_order: z.enum(['asc', 'desc']).default('desc').optional()
 });
 
+export const monitoringLogIdParamsSchema = z.object({
+  id: z.coerce.number().int().positive()
+});
+
 export const fetchMonitoringLogsResponseSchema = z.object({
   index: z.array(monitoringLogSchema),
   page: z.number().int().positive(),

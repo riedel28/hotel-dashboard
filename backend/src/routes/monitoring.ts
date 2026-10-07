@@ -1,9 +1,15 @@
 import { Router } from 'express';
 
-import { fetchMonitoringLogsParamsSchema } from '../../../shared/types/monitoring';
-import { getMonitoringLogs } from '../controllers/monitoring-controller';
+import {
+  fetchMonitoringLogsParamsSchema,
+  monitoringLogIdParamsSchema
+} from '../../../shared/types/monitoring';
+import {
+  getMonitoringLogById,
+  getMonitoringLogs
+} from '../controllers/monitoring-controller';
 import { authenticateToken } from '../middleware/auth';
-import { validateQuery } from '../middleware/validation';
+import { validateParams, validateQuery } from '../middleware/validation';
 
 const router = Router();
 
@@ -15,6 +21,13 @@ router.get(
   '/',
   validateQuery(fetchMonitoringLogsParamsSchema),
   getMonitoringLogs
+);
+
+// Get one monitoring log
+router.get(
+  '/:id',
+  validateParams(monitoringLogIdParamsSchema),
+  getMonitoringLogById
 );
 
 export default router;

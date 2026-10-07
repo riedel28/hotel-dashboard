@@ -216,4 +216,32 @@ describe('Monitoring API', () => {
         .expect(400);
     });
   });
+  describe('GET /api/monitoring/:id', () => {
+    test('should get a single log', async () => {
+      const [log] = await db.select().from(monitoringLogs).limit(1);
+
+      const response = await request(app)
+        .get(`/api/monitoring/${log?.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.id).toBe(log?.id);
+      expect(response.body.event).toBe(log?.event);
+      expect(response.body.reservation_id).toBeNull();
+    });
+
+    test('should return 404 for an unknown log', async () => {
+      await request(app)
+        .get('/api/monitoring/999999')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(404);
+    });
+
+    test('should return 400 for a malformed id', async () => {
+      await request(app)
+        .get('/api/monitoring/abc')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(400);
+    });
+  });
 });
