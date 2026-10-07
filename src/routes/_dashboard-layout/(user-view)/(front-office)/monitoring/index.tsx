@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { XIcon } from 'lucide-react';
+import { ListFilterIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
 import type {
   FetchMonitoringLogsParams,
@@ -154,9 +154,8 @@ function MonitoringPage() {
     <>
       {label}
       {count !== undefined && (
-        <span className="ml-1.5 text-xs text-muted-foreground tabular-nums">
-          {count}
-        </span>
+        // Inherits the segment's color, so it follows the selected tint
+        <span className="ml-1.5 text-xs tabular-nums opacity-70">{count}</span>
       )}
     </>
   );
@@ -263,44 +262,21 @@ function MonitoringPage() {
       </div>
 
       <div className="space-y-2.5">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        {/* One wrapping row. Phones: search beside status, then type beside
+            period, then Clear filters as a full row. In between: search
+            stretches to fill its row.
+            Wide screens: everything in one line, Clear filters on the right. */}
+        <div className="flex flex-wrap items-center gap-2">
           <SearchInput
             key={searchResetKey}
             value={q ?? ''}
             onChange={(value) => setFilters({ q: value || undefined })}
-            placeholder={t`Search event, message, reservation number`}
-            aria-label={t`Search logs`}
+            placeholder={t`Search logs`}
+            aria-label={t`Search event, message, reservation number`}
             className="text-sm"
-            wrapperClassName="w-full sm:max-w-md sm:flex-1"
+            wrapperClassName="min-w-28 flex-1 sm:min-w-56 xl:w-72 xl:flex-none"
             debounceMs={300}
           />
-          <MonitoringPeriodFilter
-            period={period}
-            from={from}
-            to={to}
-            onPeriodChange={(next) =>
-              setFilters({
-                period: next,
-                from: undefined,
-                to: undefined
-              })
-            }
-            onRangeChange={(range) =>
-              setFilters({
-                period: undefined,
-                from: dayjs(range.from).format('YYYY-MM-DD'),
-                to: dayjs(range.to).format('YYYY-MM-DD')
-              })
-            }
-            className="w-full sm:w-auto"
-          />
-          <DataGridRefreshButton
-            isRefreshing={monitoringQuery.isFetching}
-            onRefresh={() => monitoringQuery.refetch()}
-          />
-        </div>
-
-        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <DataGridSegmentedFilter
             label={t`Status`}
             value={status}
@@ -327,7 +303,7 @@ function MonitoringPage() {
             onValueChange={(next) =>
               setFilters({ type: next.length > 0 ? next : undefined })
             }
-            className="w-full sm:w-[170px]"
+            className="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:w-[170px] sm:flex-none sm:basis-auto"
           >
             <DataGridCheckboxFilterFooter>
               <DataGridCheckboxFilterClear>
@@ -335,16 +311,26 @@ function MonitoringPage() {
               </DataGridCheckboxFilterClear>
             </DataGridCheckboxFilterFooter>
           </DataGridCheckboxFilter>
-          {booking_nr && (
-            <Button
-              variant="secondary"
-              aria-label={t`Remove filter by reservation ${booking_nr}`}
-              onClick={() => setFilters({ booking_nr: undefined })}
-            >
-              <Trans>Reservation {booking_nr}</Trans>
-              <XIcon className="size-4" />
-            </Button>
-          )}
+          <MonitoringPeriodFilter
+            period={period}
+            from={from}
+            to={to}
+            onPeriodChange={(next) =>
+              setFilters({
+                period: next,
+                from: undefined,
+                to: undefined
+              })
+            }
+            onRangeChange={(range) =>
+              setFilters({
+                period: undefined,
+                from: dayjs(range.from).format('YYYY-MM-DD'),
+                to: dayjs(range.to).format('YYYY-MM-DD')
+              })
+            }
+            className="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:flex-none sm:basis-auto"
+          />
           {hasActiveFilters && (
             <Button
               variant="secondary"
@@ -356,6 +342,31 @@ function MonitoringPage() {
             </Button>
           )}
         </div>
+
+        {/* The reservation filter narrows the whole view, so it is announced
+            right above the table rather than as one more control in the bar */}
+        {booking_nr && (
+          <div
+            role="status"
+            className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-foreground/10 bg-sky-50 px-3 py-2 text-sm text-sky-800 dark:bg-sky-800/20 dark:text-sky-300"
+          >
+            <ListFilterIcon className="size-4 shrink-0" aria-hidden="true" />
+            <span className="min-w-0 flex-1">
+              <Trans>
+                Showing only logs for reservation{' '}
+                <strong className="font-semibold">{booking_nr}</strong>
+              </Trans>
+            </span>
+            <button
+              type="button"
+              onClick={() => setFilters({ booking_nr: undefined })}
+              className="inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Trans>Show all logs</Trans>
+              <XIcon className="size-4" aria-hidden="true" />
+            </button>
+          </div>
+        )}
 
         <div
           className={cn(
