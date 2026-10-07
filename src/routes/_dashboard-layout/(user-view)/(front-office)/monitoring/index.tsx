@@ -39,7 +39,7 @@ import {
   EmptyTitle
 } from '@/components/ui/empty';
 import { SearchInput } from '@/components/ui/search-input';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
@@ -300,35 +300,34 @@ function MonitoringPage() {
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-          <ToggleGroup
-            variant="outline"
-            aria-label={t`Status`}
-            value={[status ?? 'all']}
-            onValueChange={([next]) => {
-              // Pressing the active item again would deselect it; keep it
-              if (next) {
-                setFilters({
-                  status:
-                    next === 'all' ? undefined : (next as MonitoringStatus)
-                });
-              }
-            }}
+          {/* Styled after the sidebar's User/Admin switch, on the surface and
+              at the height of the neighbouring filters */}
+          <Tabs
+            value={status ?? 'all'}
+            onValueChange={(next: MonitoringStatus | 'all') =>
+              setFilters({ status: next === 'all' ? undefined : next })
+            }
           >
-            {statusOptions.map((option) => (
-              <ToggleGroupItem
-                key={option.value}
-                value={option.value}
-                className="gap-1.5 px-3"
-              >
-                {option.label}
-                {option.count !== undefined && (
-                  <span className="text-xs text-muted-foreground tabular-nums">
-                    {option.count}
-                  </span>
-                )}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
+            <TabsList
+              aria-label={t`Status`}
+              className="border border-input bg-background p-1 group-data-horizontal/tabs:h-9 dark:bg-input/30"
+            >
+              {statusOptions.map((option) => (
+                <TabsTrigger
+                  key={option.value}
+                  value={option.value}
+                  className="px-2.5 data-active:bg-muted data-active:shadow-none! dark:data-active:bg-muted"
+                >
+                  {option.label}
+                  {option.count !== undefined && (
+                    <span className="text-xs font-normal text-muted-foreground tabular-nums">
+                      {option.count}
+                    </span>
+                  )}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
           <DataGridCheckboxFilter
             label={<Trans>Type</Trans>}
             placeholder={<Trans>All types</Trans>}

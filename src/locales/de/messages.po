@@ -302,7 +302,7 @@ msgstr "Alle Status"
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "Alle Tests bestanden ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:334
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:333
 msgid "All types"
 msgstr "Alle Typen"
 
@@ -706,7 +706,7 @@ msgid "Clear all"
 msgstr "Alle zurücksetzen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:186
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:365
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:364
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
@@ -2992,7 +2992,7 @@ msgstr "Entfernen"
 #~ msgid "Remove filter by booking {bookingNr}"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:351
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:350
 msgid "Remove filter by reservation {booking_nr}"
 msgstr ""
 
@@ -3042,7 +3042,7 @@ msgstr "Bestätigungs-E-Mail erneut senden"
 msgid "Reservation"
 msgstr "Reservierung"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:354
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:353
 msgid "Reservation {booking_nr}"
 msgstr ""
 
@@ -3094,7 +3094,7 @@ msgid "Reservations"
 msgstr "Reservierungen"
 
 #: src/components/ui/data-grid-radio-filter.tsx:129
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:344
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:343
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:36
@@ -3604,7 +3604,7 @@ msgstr "Station"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:84
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:92
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:305
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:312
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:118
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:129
@@ -4047,7 +4047,7 @@ msgstr "Bestätigung in zwei Schritten"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:125
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:133
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:333
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:332
 msgid "Type"
 msgstr "Typ"
 
