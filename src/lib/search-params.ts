@@ -25,7 +25,7 @@ export function isInAppPath(path: string): boolean {
  */
 export function lenientSearch<TSchema extends z.ZodObject>(
   schema: TSchema
-): TSchema {
+): z.ZodType<z.output<TSchema>, z.input<TSchema>> {
   const lenient = z.preprocess((search) => {
     const result = schema.safeParse(search);
     if (result.success || typeof search !== 'object' || search === null) {
@@ -44,8 +44,8 @@ export function lenientSearch<TSchema extends z.ZodObject>(
     return blanked;
   }, schema);
 
-  // Typed as the schema it wraps: the output is identical, and the router
-  // needs the schema's input type (preprocess erases it to `unknown`) to type
-  // `navigate({ search })`.
-  return lenient as unknown as TSchema;
+  // Same output as the schema; the input is declared as the schema's too
+  // (preprocess widens it to `unknown`), which is what the router needs to
+  // type `navigate({ search })`.
+  return lenient as z.ZodType<z.output<TSchema>, z.input<TSchema>>;
 }
