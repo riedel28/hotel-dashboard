@@ -16,17 +16,14 @@ import {
 } from '@/components/ui/breadcrumb';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import { isInAppPath } from '@/lib/search-params';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
 
 // Where the visitor came from, as an in-app path: pages that link here pass it
 // so the reservation can offer a way back to exactly that view.
 const reservationSearchSchema = z.object({
-  back: z
-    .string()
-    .refine((path) => path.startsWith('/') && !path.startsWith('//'))
-    .optional()
-    .catch(undefined)
+  back: z.string().refine(isInAppPath).optional().catch(undefined)
 });
 
 function ReservationPage() {
