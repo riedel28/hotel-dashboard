@@ -1,6 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { ArrowLeftIcon } from 'lucide-react';
+import { z } from 'zod';
 
 import { reservationByIdQueryOptions } from '@/api/reservations';
 import { QueryBoundary } from '@/components/query-boundary';
@@ -17,13 +19,39 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
 
+// Where the visitor came from, as an in-app path: pages that link here pass it
+// so the reservation can offer a way back to exactly that view.
+const reservationSearchSchema = z.object({
+  back: z
+    .string()
+    .refine((path) => path.startsWith('/') && !path.startsWith('//'))
+    .optional()
+    .catch(undefined)
+});
+
 function ReservationPage() {
   const { t } = useLingui();
+  const { back } = Route.useSearch();
+  const router = useRouter();
   useDocumentTitle(t`Reservation Details`);
 
   return (
     <div className="space-y-6">
       <div className="space-y-1">
+        {back && (
+          <a
+            href={back}
+            onClick={(event) => {
+              // Stay in the app instead of reloading the page
+              event.preventDefault();
+              router.history.push(back);
+            }}
+            className="mb-2 inline-flex items-center gap-1 rounded-sm text-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ArrowLeftIcon className="size-4" aria-hidden="true" />
+            <Trans>Back</Trans>
+          </a>
+        )}
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -88,6 +116,7 @@ function ReservationForm() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
 )({
+  validateSearch: reservationSearchSchema,
   loader: ({ context: { queryClient }, params: { reservationId } }) =>
     queryClient.ensureQueryData(reservationByIdQueryOptions(reservationId)),
   component: ReservationPage
