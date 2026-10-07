@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { Link, useLocation } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
@@ -95,6 +95,7 @@ function LogDetails({
 }: Required<Pick<LogDetailsDrawerProps, 'logId'>> &
   Omit<LogDetailsDrawerProps, 'logId' | 'onClose'>) {
   const { t } = useLingui();
+  const back = useLocation({ select: (location) => location.href });
   const logQuery = useQuery({
     ...monitoringLogQueryOptions(logId),
     initialData: pageLogs.find((log) => log.id === logId)
@@ -171,6 +172,8 @@ function LogDetails({
                     <Link
                       to="/reservations/$reservationId"
                       params={{ reservationId: String(log.reservation_id) }}
+                      // Back from the reservation reopens this log
+                      search={{ back }}
                       className="rounded-sm text-cyan-800 underline-offset-4 hover:underline dark:text-cyan-200/85"
                     >
                       {log.booking_nr}
