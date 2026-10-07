@@ -291,8 +291,10 @@ function MonitoringPage() {
       </div>
 
       <div className="space-y-2.5">
-        {/* One wrapping row. Phones: two filters to a row (type gets a little
-            more than half so its widest badge fits),
+        {/* One wrapping row. Phones: two filters to a row — status takes its
+            content width and search the rest of the row (the larger share;
+            its minimum width keeps the type filter off this row),
+            type a little more than half so its widest badge fits,
             then Clear filters as a full row. In between: search stretches to
             fill its row.
             Wide screens: everything in one line, Clear filters right after
@@ -305,7 +307,7 @@ function MonitoringPage() {
             placeholder={t`Search logs`}
             aria-label={t`Search event, message, reservation number`}
             className="text-sm"
-            wrapperClassName="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:w-auto sm:min-w-56 sm:basis-auto xl:w-72 xl:flex-none"
+            wrapperClassName="min-w-40 flex-1 basis-0 sm:w-auto sm:min-w-56 sm:basis-auto xl:w-72 xl:flex-none"
             debounceMs={300}
           />
           <DataGridRadioFilter
@@ -320,7 +322,7 @@ function MonitoringPage() {
             onValueChange={(next) => setFilters({ status: next })}
             options={statusOptions}
             showFooter
-            className="min-w-0 flex-1 basis-[calc(50%-0.25rem)] sm:w-[170px] sm:flex-none sm:basis-auto"
+            className="flex-none sm:w-[170px]"
           />
           <DataGridCheckboxFilter
             label={<Trans>Type</Trans>}
