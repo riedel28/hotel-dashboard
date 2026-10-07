@@ -38,7 +38,7 @@ const badgeVariants = cva(
         fuchsia:
           'border-foreground/10 bg-fuchsia-50 text-fuchsia-800 dark:bg-fuchsia-800/20 dark:text-fuchsia-300 [a]:hover:bg-fuchsia-100 dark:[a]:hover:bg-fuchsia-800/30',
         pink: 'border-foreground/10 bg-pink-50 text-pink-800 dark:bg-pink-800/20 dark:text-pink-300 [a]:hover:bg-pink-100 dark:[a]:hover:bg-pink-800/30',
-        rose: 'border-foreground/10 bg-rose-50 text-rose-800 dark:bg-rose-800/20 dark:text-rose-300 [a]:hover:bg-rose-100 dark:[a]:hover:bg-rose-800/30'
+        rose: 'border-foreground/10 bg-rose-50 text-rose-700 dark:bg-rose-800/20 dark:text-rose-300 [a]:hover:bg-rose-100 dark:[a]:hover:bg-rose-800/30'
       },
       size: {
         xs: 'px-1.25 py-0.25 text-[11px] [&>svg]:size-2',
