@@ -211,6 +211,20 @@ describe('Customers API', () => {
       expect(response.body.index[0].last_name).toBe(lastName);
     });
 
+    test('filters by country, alone and together with a search', async () => {
+      const british = await asAdmin(
+        request(app).get('/api/customers?country_code=GB')
+      ).expect(200);
+      expect(
+        british.body.index.map((c: { last_name: string }) => c.last_name)
+      ).toEqual(['Fawlty']);
+
+      const none = await asAdmin(
+        request(app).get('/api/customers?country_code=GB&q=ullman')
+      ).expect(200);
+      expect(none.body.total).toBe(0);
+    });
+
     test('paginates', async () => {
       const response = await asAdmin(
         request(app).get('/api/customers?per_page=5&page=2')

@@ -24,6 +24,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { CountryFlag } from '@/components/ui/country-flag';
+import { CountryPicker } from '@/components/ui/country-picker';
 import {
   DataGrid,
   DataGridContainer,
@@ -51,6 +52,8 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { getCountryName } from '@/lib/countries';
 import { cn } from '@/lib/utils';
 
+import { PropertiesFilters } from '../properties/-components/properties-filters';
+import { PropertyClearFilters } from '../properties/-components/property-clear-filters';
 import { AddCustomerModal } from './-components/add-customer-modal';
 
 function RowActions({ customer }: { customer: Customer }) {
@@ -183,7 +186,7 @@ function CustomersTable({
           `${customer.first_name} ${customer.last_name}`,
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Name`}
+            title={t`Customer`}
             visibility={true}
             column={column}
           />
@@ -215,7 +218,7 @@ function CustomersTable({
         },
         meta: {
           skeleton: <Skeleton className="h-8 w-40" />,
-          headerTitle: t`Name`
+          headerTitle: t`Customer`
         },
         size: 240,
         enableSorting: true,
@@ -381,13 +384,21 @@ function CustomersTable({
 }
 
 function CustomersContent() {
-  const { page, per_page, q, sort_by, sort_order } = Route.useSearch();
+  const { page, per_page, q, country_code, sort_by, sort_order } =
+    Route.useSearch();
   const navigate = Route.useNavigate();
   const queryClient = useQueryClient();
   const { t } = useLingui();
 
   const customersQuery = useSuspenseQuery(
-    customersQueryOptions({ page, per_page, q, sort_by, sort_order })
+    customersQueryOptions({
+      page,
+      per_page,
+      q,
+      country_code,
+      sort_by,
+      sort_order
+    })
   );
 
   const sorting: SortingState = sort_by
@@ -398,6 +409,24 @@ function CustomersContent() {
     navigate({
       to: '/admin/customers',
       search: (prev) => ({ ...prev, q: searchTerm || undefined, page: 1 })
+    });
+  };
+
+  const handleCountryChange = (value: string | null) => {
+    navigate({
+      to: '/admin/customers',
+      search: (prev) => ({
+        ...prev,
+        country_code: value || undefined,
+        page: 1
+      })
+    });
+  };
+
+  const handleClearFilters = () => {
+    navigate({
+      to: '/admin/customers',
+      search: { page: 1, per_page: per_page ?? 10 }
     });
   };
 
@@ -456,7 +485,7 @@ function CustomersContent() {
         }
       )}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <PropertiesFilters>
         <SearchInput
           value={q || ''}
           onChange={handleSearchChange}
@@ -464,13 +493,23 @@ function CustomersContent() {
           wrapperClassName="w-full sm:w-[250px]"
           debounceMs={500}
         />
+        <CountryPicker
+          value={country_code}
+          onValueChange={handleCountryChange}
+          placeholder={t`All countries`}
+          className="w-full sm:w-45"
+        />
+        <PropertyClearFilters
+          hasActiveFilters={Boolean(q || country_code)}
+          onClear={handleClearFilters}
+        />
         <DataGridRefreshButton
           isRefreshing={customersQuery.isFetching}
           onRefresh={() =>
             queryClient.invalidateQueries({ queryKey: ['customers'] })
           }
         />
-      </div>
+      </PropertiesFilters>
       <CustomersTable
         data={customersQuery.data.index}
         pageIndex={(page ?? 1) - 1}

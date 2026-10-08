@@ -1,4 +1,5 @@
 import {
+  and,
   asc,
   count,
   desc,
@@ -70,18 +71,22 @@ function sortColumns(sortBy: CustomerSortableColumn) {
 
 async function getCustomers(req: Request, res: Response) {
   try {
-    const { page, per_page, q, sort_by, sort_order } = req.query;
+    const { page, per_page, q, country_code, sort_by, sort_order } = req.query;
 
     const pattern = q ? `%${escapeLikePattern(q as string)}%` : undefined;
-    const searchCondition = pattern
-      ? or(
+    const searchCondition = and(
+      country_code
+        ? eq(customersTable.country_code, country_code as string)
+        : undefined,
+      pattern &&
+        or(
           ilike(customersTable.first_name, pattern),
           ilike(customersTable.last_name, pattern),
           ilike(customersTable.company_name, pattern),
           ilike(customersTable.email, pattern),
           ilike(customersTable.city, pattern)
         )
-      : undefined;
+    );
 
     const pageNum = Number(page) || 1;
     const perPageNum = Number(per_page) || 10;

@@ -78,6 +78,7 @@ export const fetchCustomersParamsSchema = z.object({
     .default(10)
     .optional(),
   q: z.string().max(200).optional(),
+  country_code: countryCodeSchema.optional(),
   sort_by: customerSortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.optional()
 });

@@ -144,85 +144,40 @@ function PropertiesTable({
         id: 'name',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Name`}
+            title={t`Property`}
             visibility={true}
             column={column}
           />
         ),
-        cell: (info) => {
-          const name = info.getValue() as string;
+        cell: ({ row }) => {
+          const { name, country_code } = row.original;
           return (
-            <span className="line-clamp-1" title={name}>
-              {name}
-            </span>
+            <div className="min-w-0">
+              <div className="truncate font-medium" title={name}>
+                {name}
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <CountryFlag
+                  code={country_code}
+                  title={country_code}
+                  className="size-3.5 shrink-0"
+                  aria-label={country_code}
+                />
+                <span className="truncate">
+                  {getCountryName(country_code, i18n.locale)}
+                </span>
+              </div>
+            </div>
           );
         },
         meta: {
-          skeleton: <Skeleton className="h-6 w-40" />,
-          headerTitle: t`Name`
+          skeleton: <Skeleton className="h-8 w-40" />,
+          headerTitle: t`Property`
         },
         size: 300,
         enableSorting: true,
         enableHiding: false,
         enableResizing: true
-      },
-      {
-        accessorKey: 'country_code',
-        id: 'country_code',
-        header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Country`}
-            visibility={true}
-            column={column}
-          />
-        ),
-        cell: ({ row }) => {
-          const countryCode = row.original.country_code;
-          return (
-            <div className="flex items-center gap-2">
-              <CountryFlag
-                code={countryCode}
-                title={countryCode}
-                className="size-4"
-                aria-label={countryCode}
-              />
-              <span className="text-foreground">
-                {getCountryName(countryCode, i18n.locale)}
-              </span>
-            </div>
-          );
-        },
-        meta: {
-          skeleton: <Skeleton className="h-6 w-24" />,
-          headerTitle: t`Country`
-        },
-        size: 150,
-        enableSorting: true,
-        enableHiding: true,
-        enableResizing: true
-      },
-      {
-        accessorKey: 'stage',
-        id: 'stage',
-        header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Stage`}
-            visibility={true}
-            column={column}
-          />
-        ),
-        cell: ({ row }) => {
-          const stage = row.getValue('stage') as Property['stage'];
-          return <StageBadge stage={stage} size="sm" />;
-        },
-        meta: {
-          skeleton: <Skeleton className="h-6 w-20" />,
-          headerTitle: t`Stage`
-        },
-        size: 120,
-        enableSorting: true,
-        enableHiding: true,
-        enableResizing: false
       },
       {
         id: 'customer',
@@ -261,6 +216,29 @@ function PropertiesTable({
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
+      },
+      {
+        accessorKey: 'stage',
+        id: 'stage',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Stage`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => {
+          const stage = row.getValue('stage') as Property['stage'];
+          return <StageBadge stage={stage} size="sm" />;
+        },
+        meta: {
+          skeleton: <Skeleton className="h-6 w-20" />,
+          headerTitle: t`Stage`
+        },
+        size: 120,
+        enableSorting: true,
+        enableHiding: true,
+        enableResizing: false
       },
       {
         id: 'actions',
