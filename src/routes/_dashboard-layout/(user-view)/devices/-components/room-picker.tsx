@@ -17,7 +17,6 @@ import {
   ComboboxList,
   ComboboxTrigger
 } from '@/components/ui/combobox';
-import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 import {
@@ -100,26 +99,19 @@ export function RoomPicker({
           showTrigger={false}
         />
         {roomsQuery.isPending ? (
-          // Shaped like the loaded list: a floor label over three rooms, each
-          // a number and a name
-          <ComboboxEmpty className="flex-col gap-0 p-1">
+          // Three bars as tall as a room option, like the property selector's
+          // loading state
+          <ComboboxEmpty className="flex-col gap-1 p-1">
             <span className="sr-only">
               <Trans>Loading rooms…</Trans>
             </span>
-            <div aria-hidden="true">
-              <div className="flex h-7 items-center px-2">
-                <Skeleton className="h-3 w-10" />
-              </div>
-              {['w-16', 'w-20', 'w-14'].map((nameWidth) => (
-                <div
-                  key={nameWidth}
-                  className="flex h-8 items-center gap-2 pl-4"
-                >
-                  <Skeleton className="h-3.5 w-6" />
-                  <Skeleton className={cn('h-3.5', nameWidth)} />
-                </div>
-              ))}
-            </div>
+            {Array.from({ length: 3 }, (_, index) => (
+              <div
+                key={index}
+                aria-hidden="true"
+                className="h-8 w-full rounded-md bg-muted"
+              />
+            ))}
           </ComboboxEmpty>
         ) : (
           <ComboboxEmpty className="py-6">
