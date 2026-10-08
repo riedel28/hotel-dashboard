@@ -9,6 +9,7 @@ import morgan from 'morgan';
 import env from '../env';
 import { errorHandler, notFound } from './middleware/error';
 import authRouter from './routes/auth';
+import devicesRouter from './routes/devices';
 import guestAbcRouter from './routes/guest-abc';
 import monitoringRouter from './routes/monitoring';
 import productCategoriesRouter from './routes/product-categories';
@@ -76,6 +77,7 @@ if (env.NODE_ENV !== 'test') {
   app.use('/api/auth', verificationRouter);
   app.use('/api/auth', authRouter);
 }
+app.use('/api/devices', devicesRouter);
 app.use('/api/guest-abc', guestAbcRouter);
 app.use('/api/monitoring', monitoringRouter);
 app.use('/api/product-categories', productCategoriesRouter);

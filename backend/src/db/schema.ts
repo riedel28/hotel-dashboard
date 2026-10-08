@@ -206,6 +206,42 @@ export const rooms = pgTable(
 // Product categories (per-property tree via self-referencing parent_id).
 // FKs use the default NO ACTION so deleting a category that still has
 // children or products fails, while a property delete still cascades cleanly.
+// Guest devices. A device exists before any Property owns it (property_id is
+// null); claiming it with its PIN assigns it to the caller's Property.
+export const devices = pgTable(
+  'devices',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    serial_number: text('serial_number').notNull(),
+    pin_hash: text('pin_hash').notNull(),
+    property_id: uuid('property_id').references(() => properties.id, {
+      onDelete: 'set null'
+    }),
+    room_id: bigint('room_id', { mode: 'number' }).references(() => rooms.id, {
+      onDelete: 'set null'
+    }),
+    name: text('name'),
+    last_seen_at: timestamp('last_seen_at', { withTimezone: true }),
+    app_version: text('app_version'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    // Serial numbers are matched case-insensitively
+    uniqueIndex('devices_serial_number_key').on(
+      sql`lower(${table.serial_number})`
+    ),
+    index('devices_property_id_idx').on(table.property_id),
+    index('devices_room_id_idx').on(table.room_id)
+  ]
+);
+
 export const productCategories = pgTable(
   'product_categories',
   {
@@ -527,6 +563,8 @@ export const selectRoleSchema = createSelectSchema(roles);
 
 export const insertUserRoleSchema = createInsertSchema(userRoles);
 export const selectUserRoleSchema = createSelectSchema(userRoles);
+
+export type Device = typeof devices.$inferSelect;
 
 export type Role = typeof roles.$inferSelect;
 export type NewRole = typeof roles.$inferInsert;

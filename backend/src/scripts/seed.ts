@@ -7,6 +7,7 @@ import { inArray } from 'drizzle-orm';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { db } from '../db/pool';
 import {
+  devices,
   guestAbcEntries,
   guests,
   monitoringLogs,
@@ -15,6 +16,7 @@ import {
   properties,
   reservations,
   roles,
+  rooms,
   users
 } from '../db/schema';
 import { truncateAllTables } from '../db/truncate-all';
@@ -83,6 +85,8 @@ function buildDemoMonitoringLogs() {
 // The Overlook Hotel — the canonical demo property. Seeded Guest ABC content
 // attaches here, and demo users' selected property is pointed at it.
 const OVERLOOK_HOTEL_ID = 'cc198b13-4933-43aa-977e-dcd95fa30770';
+// PIN of every demo device, claimed or not
+const DEMO_DEVICE_PIN = '123412341234';
 
 type GuestAbcSeed = Record<string, { title: string; description: string }[]>;
 
@@ -494,6 +498,64 @@ async function seed() {
       .where(
         inArray(users.email, ['cool_new_user@example.com', 'john@example.com'])
       );
+
+    // Demo rooms and guest devices for The Overlook Hotel. Devices without a
+    // property are waiting to be claimed; every demo device has the same PIN.
+    console.log('Creating demo rooms and devices...');
+    const demoRooms = await db
+      .insert(rooms)
+      .values(
+        ['101', '102', '203', '204', '205', '237', '301', '302'].map(
+          (room_number) => ({
+            name: `Room ${room_number}`,
+            room_number,
+            property_id: OVERLOOK_HOTEL_ID
+          })
+        )
+      )
+      .returning();
+    const roomId = (room_number: string) =>
+      demoRooms.find((room) => room.room_number === room_number)?.id ?? null;
+    const minutesAgo = (minutes: number) =>
+      new Date(Date.now() - minutes * 60 * 1000);
+    const pin_hash = await hashPassword(DEMO_DEVICE_PIN);
+
+    const claimed = (
+      serial_number: string,
+      name: string | null,
+      room: string | null,
+      lastSignalMinutesAgo: number | null,
+      app_version: string | null
+    ) => ({
+      serial_number,
+      name,
+      room_id: room && roomId(room),
+      last_seen_at:
+        lastSignalMinutesAgo === null ? null : minutesAgo(lastSignalMinutesAgo),
+      app_version,
+      property_id: OVERLOOK_HOTEL_ID,
+      pin_hash
+    });
+    await db
+      .insert(devices)
+      .values([
+        claimed('R9KT40A18QZ', 'Tablet 204', '204', 2, '2.4.1'),
+        claimed('LG55-7731204', 'TV 204', '204', 5, '2.4.1'),
+        claimed('PX8-0042119', 'Phone 204', '204', 60, '2.3.0'),
+        claimed('R9KT40A07LB', 'Tablet 101', '101', 3 * 24 * 60, '2.3.0'),
+        claimed('R9KT40A09CD', 'Tablet 237', '237', 12, '2.4.1'),
+        claimed('LG55-7731301', 'TV 301', '301', 20 * 60, '2.4.0'),
+        claimed('R9KT40A21XM', 'Tablet (new)', null, 1, '2.4.1'),
+        claimed('PX8-0042207', null, null, null, null)
+      ]);
+    await db.insert(devices).values(
+      ['R9KT40A22MN', 'R9KT40A23PQ', 'LG55-7731302'].map((serial_number) => ({
+        serial_number,
+        pin_hash,
+        app_version: '2.4.1',
+        last_seen_at: minutesAgo(1)
+      }))
+    );
 
     // Step 5: Create demo monitoring logs
     console.log('Creating demo monitoring logs...');

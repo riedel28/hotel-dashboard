@@ -29,6 +29,13 @@
       "when": 1791358741244,
       "tag": "0003_monitoring_logs_booking_nr_idx",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791440927993,
+      "tag": "0004_devices",
+      "breakpoints": true
     }
   ]
 }
