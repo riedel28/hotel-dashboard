@@ -1,5 +1,4 @@
 import { and, asc, eq } from 'drizzle-orm';
-import type { Response } from 'express';
 
 import type {
   CreateProductCategoryData,
@@ -16,7 +15,10 @@ import {
   products
 } from '../db/schema';
 import { isForeignKeyViolation, withFailMessage } from '../middleware/error';
-import type { SelectedPropertyRequest } from '../middleware/selected-property';
+import {
+  requireSelectedProperty,
+  type SelectedPropertyRequest
+} from '../middleware/selected-property';
 import { sanitizeRichText } from '../utils/rich-text';
 
 // Property scope is resolved by attachSelectedProperty. Without a selected
@@ -35,15 +37,6 @@ async function orNotFound<T>(write: PromiseLike<T>) {
     if (isForeignKeyViolation(error)) return null;
     throw error;
   }
-}
-
-// For write handlers: the selected property id, or null after answering 400.
-function requireProperty(req: ProductsRequest, res: Response) {
-  const propertyId = req.selectedPropertyId ?? null;
-  if (!propertyId) {
-    res.status(400).json({ error: 'No property selected' });
-  }
-  return propertyId;
 }
 
 function transformCategory(category: ProductCategory) {
@@ -136,7 +129,7 @@ const getProductCategoryById = handle(
 const createProductCategory = handle(
   'Failed to create category',
   async (req, res) => {
-    const propertyId = requireProperty(req, res);
+    const propertyId = requireSelectedProperty(req, res);
     if (!propertyId) return;
 
     const { title, parent_id } = req.body as CreateProductCategoryData;
@@ -169,7 +162,7 @@ const createProductCategory = handle(
 const updateProductCategory = handle(
   'Failed to update category',
   async (req, res) => {
-    const propertyId = requireProperty(req, res);
+    const propertyId = requireSelectedProperty(req, res);
     if (!propertyId) return;
 
     const id = Number(req.params.id);
@@ -224,7 +217,7 @@ const updateProductCategory = handle(
 const deleteProductCategory = handle(
   'Failed to delete category',
   async (req, res) => {
-    const propertyId = requireProperty(req, res);
+    const propertyId = requireSelectedProperty(req, res);
     if (!propertyId) return;
 
     // The FKs reject deleting a category that still has subcategories or
@@ -302,7 +295,7 @@ const getProductById = handle('Failed to fetch product', async (req, res) => {
 });
 
 const createProduct = handle('Failed to create product', async (req, res) => {
-  const propertyId = requireProperty(req, res);
+  const propertyId = requireSelectedProperty(req, res);
   if (!propertyId) return;
 
   const { price, description, ...rest } = req.body as CreateProductData;
@@ -333,7 +326,7 @@ const createProduct = handle('Failed to create product', async (req, res) => {
 });
 
 const updateProduct = handle('Failed to update product', async (req, res) => {
-  const propertyId = requireProperty(req, res);
+  const propertyId = requireSelectedProperty(req, res);
   if (!propertyId) return;
 
   // Only the fields that were sent are written.
@@ -376,7 +369,7 @@ const updateProduct = handle('Failed to update product', async (req, res) => {
 });
 
 const deleteProduct = handle('Failed to delete product', async (req, res) => {
-  const propertyId = requireProperty(req, res);
+  const propertyId = requireSelectedProperty(req, res);
   if (!propertyId) return;
 
   const [deleted] = await db

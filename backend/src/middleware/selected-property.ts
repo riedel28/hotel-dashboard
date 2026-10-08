@@ -33,3 +33,15 @@ export async function attachSelectedProperty(
     res.status(500).json({ error: 'Failed to resolve selected property' });
   }
 }
+
+// For write handlers: the selected property id, or null after answering 400.
+export function requireSelectedProperty(
+  req: SelectedPropertyRequest,
+  res: Response
+) {
+  const propertyId = req.selectedPropertyId ?? null;
+  if (!propertyId) {
+    res.status(400).json({ error: 'No property selected' });
+  }
+  return propertyId;
+}

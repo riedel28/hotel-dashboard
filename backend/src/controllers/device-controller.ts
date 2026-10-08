@@ -1,5 +1,4 @@
 import { and, asc, eq, isNull, sql } from 'drizzle-orm';
-import type { Response } from 'express';
 
 import type {
   AssignDeviceRoomData,
@@ -9,7 +8,10 @@ import type {
 import { db } from '../db/pool';
 import { devices, rooms } from '../db/schema';
 import { withFailMessage } from '../middleware/error';
-import type { SelectedPropertyRequest } from '../middleware/selected-property';
+import {
+  requireSelectedProperty,
+  type SelectedPropertyRequest
+} from '../middleware/selected-property';
 import { comparePassword, hashPassword } from '../utils/password';
 
 // Property scope is resolved by attachSelectedProperty. Without a selected
@@ -22,15 +24,6 @@ const roomColumns = {
   name: rooms.name,
   room_number: rooms.room_number
 };
-
-// For write handlers: the selected property id, or null after answering 400.
-function requireProperty(req: DevicesRequest, res: Response) {
-  const propertyId = req.selectedPropertyId ?? null;
-  if (!propertyId) {
-    res.status(400).json({ error: 'No property selected' });
-  }
-  return propertyId;
-}
 
 // The property's devices with their rooms: all of them, or the one with
 // `deviceId`.
@@ -103,93 +96,122 @@ const getDeviceRoomOptions = handle(
   }
 );
 
-function claimError(
-  res: Response,
-  status: number,
-  code: DeviceClaimErrorCode,
-  error: string
-) {
-  return res.status(status).json({ error, code });
+function findBySerial(serialNumber: string) {
+  return db
+    .select({ id: devices.id, pin_hash: devices.pin_hash })
+    .from(devices)
+    .where(eq(sql`lower(${devices.serial_number})`, serialNumber.toLowerCase()))
+    .then(([device]) => device);
+}
+
+type KnownDevice = NonNullable<Awaited<ReturnType<typeof findBySerial>>>;
+
+// What a claim puts on the device
+interface ClaimAssignment {
+  property_id: string;
+  room_id: number | null;
+  name: string | null;
+}
+
+// How a claim ends: the id of the device now owned by the property, or the
+// code of the reason it is not.
+type ClaimOutcome = { id: number } | DeviceClaimErrorCode;
+
+const claimErrors: Record<
+  DeviceClaimErrorCode,
+  { status: number; error: string }
+> = {
+  INVALID_PIN: { status: 422, error: 'Invalid PIN' },
+  DEVICE_ALREADY_CLAIMED: {
+    status: 409,
+    error: 'Device has already been added'
+  }
+};
+
+// Takes a device that is already registered. The PIN is checked before
+// ownership, so whether the device is already claimed is only revealed to
+// someone holding its PIN.
+async function claimKnownDevice(
+  device: KnownDevice,
+  pin: string,
+  assignment: ClaimAssignment
+): Promise<ClaimOutcome> {
+  if (!(await comparePassword(pin, device.pin_hash))) {
+    return 'INVALID_PIN';
+  }
+
+  // The `property_id IS NULL` guard makes concurrent claims of one device
+  // resolve to a single winner.
+  const [claimed] = await db
+    .update(devices)
+    .set({ ...assignment, updated_at: new Date() })
+    .where(and(eq(devices.id, device.id), isNull(devices.property_id)))
+    .returning({ id: devices.id });
+  return claimed ?? 'DEVICE_ALREADY_CLAIMED';
+}
+
+// Registers a serial number nobody has yet: the device is new, and the PIN
+// entered now becomes its PIN.
+// ponytail: nothing proves the caller holds this device — a property can take
+// any unused serial number. Have devices register themselves (serial + PIN)
+// and reject unknown serials here once they can.
+async function claimNewDevice(
+  serialNumber: string,
+  pin: string,
+  assignment: ClaimAssignment
+): Promise<ClaimOutcome> {
+  const [created] = await db
+    .insert(devices)
+    .values({
+      ...assignment,
+      serial_number: serialNumber,
+      pin_hash: await hashPassword(pin)
+    })
+    .onConflictDoNothing()
+    .returning({ id: devices.id });
+  if (created) return created;
+
+  // Lost a race for the serial number: it is a known device now and goes
+  // through the same checks as one.
+  const winner = await findBySerial(serialNumber);
+  return winner
+    ? claimKnownDevice(winner, pin, assignment)
+    : 'DEVICE_ALREADY_CLAIMED';
 }
 
 const claimDevice = handle('Failed to add device', async (req, res) => {
-  const propertyId = requireProperty(req, res);
+  const propertyId = requireSelectedProperty(req, res);
   if (!propertyId) return;
 
   const { serial_number, pin, name, room_id } = req.body as ClaimDeviceData;
 
-  if (room_id != null && !(await roomExists(room_id, propertyId))) {
+  const [isRoomValid, known] = await Promise.all([
+    room_id == null || roomExists(room_id, propertyId),
+    findBySerial(serial_number)
+  ]);
+  if (!isRoomValid) {
     return res.status(400).json({ error: 'Room not found' });
   }
+
   const assignment = {
     property_id: propertyId,
     room_id: room_id ?? null,
     name: name || null
   };
-
-  const findBySerial = async () => {
-    const [found] = await db
-      .select({ id: devices.id, pin_hash: devices.pin_hash })
-      .from(devices)
-      .where(
-        eq(sql`lower(${devices.serial_number})`, serial_number.toLowerCase())
-      );
-    return found;
-  };
-
-  let device = await findBySerial();
-  let claimed: { id: number } | undefined;
-  if (!device) {
-    // A serial number nobody registered yet: the device is new, and the PIN
-    // entered now becomes its PIN.
-    // ponytail: nothing proves the caller holds this device — a property can
-    // take any unused serial number. Have devices register themselves (serial
-    // + PIN) and reject unknown serials here once they can.
-    [claimed] = await db
-      .insert(devices)
-      .values({
-        ...assignment,
-        serial_number,
-        pin_hash: await hashPassword(pin)
-      })
-      .onConflictDoNothing()
-      .returning({ id: devices.id });
-    // Lost a race for the same serial number: it is a known device now and
-    // goes through the same checks as one.
-    if (!claimed) {
-      device = await findBySerial();
-    }
-  }
-  if (!claimed && device) {
-    // The PIN is checked before ownership, so whether a known device is
-    // already claimed is only revealed to someone holding its PIN.
-    if (!(await comparePassword(pin, device.pin_hash))) {
-      return claimError(res, 422, 'INVALID_PIN', 'Invalid PIN');
-    }
-
-    // The `property_id IS NULL` guard makes concurrent claims of one device
-    // resolve to a single winner.
-    [claimed] = await db
-      .update(devices)
-      .set({ ...assignment, updated_at: new Date() })
-      .where(and(eq(devices.id, device.id), isNull(devices.property_id)))
-      .returning({ id: devices.id });
-  }
-  if (!claimed) {
-    return claimError(
-      res,
-      409,
-      'DEVICE_ALREADY_CLAIMED',
-      'Device has already been added'
-    );
+  const outcome = known
+    ? await claimKnownDevice(known, pin, assignment)
+    : await claimNewDevice(serial_number, pin, assignment);
+  if (typeof outcome === 'string') {
+    const { status, error } = claimErrors[outcome];
+    return res.status(status).json({ error, code: outcome });
   }
 
-  const [row] = await findDevices(propertyId, claimed.id);
+  const [row] = await findDevices(propertyId, outcome.id);
   res.status(201).json(transformDevice(row));
 });
 
 const assignDeviceRoom = handle('Failed to update device', async (req, res) => {
-  const propertyId = requireProperty(req, res);
+  const propertyId = requireSelectedProperty(req, res);
   if (!propertyId) return;
 
   const deviceId = Number(req.params.id);

@@ -521,57 +521,70 @@ async function seed() {
       .returning();
     const pin_hash = await hashPassword(DEMO_DEVICE_PIN);
 
-    // Spreads the devices over every connection status and two app versions
-    let deviceCount = 0;
-    const demoDevice = (
-      serial_number: string,
-      name: string | null,
-      room_id: number | null
-    ) => {
-      const index = deviceCount++;
-      const minutesAgo =
-        index % 29 === 28 // never reported
-          ? null
-          : index % 11 === 10 // offline
-            ? 3 * 24 * 60
-            : index % 7 === 6 // recently offline
-              ? 5 * 60
-              : 1 + (index % 14);
-      return {
-        serial_number,
-        name,
-        room_id,
-        last_seen_at:
-          minutesAgo === null
-            ? null
-            : new Date(Date.now() - minutesAgo * 60 * 1000),
-        app_version:
-          minutesAgo === null ? null : index % 5 === 4 ? '2.3.0' : '2.4.1',
-        property_id: OVERLOOK_HOTEL_ID,
-        pin_hash
-      };
-    };
     const serial = (prefix: string, number: number) =>
       `${prefix}${String(number).padStart(4, '0')}`;
-
-    await db.insert(devices).values([
-      ...demoRooms.map(({ id, room_number }, index) =>
-        demoDevice(serial('R9KT40A', index + 1), `Tablet ${room_number}`, id)
-      ),
+    const demoDevices: {
+      serial_number: string;
+      name: string | null;
+      room_id: number | null;
+    }[] = [
+      ...demoRooms.map(({ id, room_number }, index) => ({
+        serial_number: serial('R9KT40A', index + 1),
+        name: `Tablet ${room_number}`,
+        room_id: id
+      })),
       // The last rooms have no TV yet
-      ...demoRooms
-        .slice(0, -7)
-        .map(({ id, room_number }, index) =>
-          demoDevice(serial('LG55-773', index + 1), `TV ${room_number}`, id)
-        ),
-      demoDevice(serial('R9KT40A', 101), 'Tablet (new)', null),
-      demoDevice(serial('R9KT40A', 102), 'Tablet (spare)', null),
-      demoDevice(serial('R9KT40A', 103), null, null),
-      demoDevice(serial('LG55-773', 101), 'TV (new)', null),
-      demoDevice(serial('LG55-773', 102), null, null),
-      demoDevice(serial('PX8-0042', 1), 'Phone (front desk)', null),
-      demoDevice(serial('PX8-0042', 2), null, null)
-    ]);
+      ...demoRooms.slice(0, -7).map(({ id, room_number }, index) => ({
+        serial_number: serial('LG55-773', index + 1),
+        name: `TV ${room_number}`,
+        room_id: id
+      })),
+      ...[
+        { serial_number: serial('R9KT40A', 101), name: 'Tablet (new)' },
+        { serial_number: serial('R9KT40A', 102), name: 'Tablet (spare)' },
+        { serial_number: serial('R9KT40A', 103), name: null },
+        { serial_number: serial('LG55-773', 101), name: 'TV (new)' },
+        { serial_number: serial('LG55-773', 102), name: null },
+        { serial_number: serial('PX8-0042', 1), name: 'Phone (front desk)' },
+        { serial_number: serial('PX8-0042', 2), name: null }
+      ].map((device) => ({ ...device, room_id: null }))
+    ];
+
+    // Minutes since each device's last signal, cycled over the list: mostly
+    // online (under 15), some recently offline (hours), a few offline (days)
+    // and one that never reported (null).
+    const signalAges = [
+      1,
+      4,
+      9,
+      2,
+      5 * 60,
+      7,
+      12,
+      3,
+      3 * 24 * 60,
+      6,
+      20 * 60,
+      10,
+      null
+    ];
+    await db.insert(devices).values(
+      demoDevices.map((device, index) => {
+        const minutesAgo = signalAges[index % signalAges.length];
+        return {
+          ...device,
+          last_seen_at:
+            minutesAgo === null
+              ? null
+              : new Date(Date.now() - minutesAgo * 60 * 1000),
+          // A device that never reported has no known app version
+          app_version:
+            minutesAgo === null ? null : index % 5 === 4 ? '2.3.0' : '2.4.1',
+          property_id: OVERLOOK_HOTEL_ID,
+          pin_hash
+        };
+      })
+    );
     await db.insert(devices).values(
       ['R9KT40A22MN', 'R9KT40A23PQ', 'LG55-7731302'].map((serial_number) => ({
         serial_number,
