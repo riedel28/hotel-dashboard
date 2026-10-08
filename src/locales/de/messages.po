@@ -1559,7 +1559,7 @@ msgstr "Kategorien konnten nicht geladen werden"
 msgid "Failed to load products"
 msgstr "Produkte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:121
 msgid "Failed to load rooms"
 msgstr "Zimmer konnten nicht geladen werden"
 
@@ -1686,7 +1686,7 @@ msgid "First name is required"
 msgstr "Vorname ist erforderlich"
 
 #. placeholder {0}: group.floor
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:134
 msgid "Floor {0}"
 msgstr "Etage {0}"
 
@@ -2154,7 +2154,7 @@ msgstr ""
 msgid "Loading properties"
 msgstr "Properties werden geladen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:106
 msgid "Loading rooms…"
 msgstr "Zimmer werden geladen…"
 
@@ -2440,7 +2440,7 @@ msgstr ""
 msgid "No fellow travelers"
 msgstr "Keine Mitreisende"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:132
 msgid "No floor"
 msgstr "Ohne Etage"
 
@@ -2522,7 +2522,7 @@ msgstr "Kein Zimmer"
 msgid "No rooms available"
 msgstr "Keine Zimmer verfügbar"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:123
 msgid "No rooms found"
 msgstr "Keine Zimmer gefunden"
 
@@ -3348,7 +3348,7 @@ msgstr "Zimmerdetails"
 msgid "Room Name"
 msgstr "Zimmername"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:92
 msgid "Room number"
 msgstr "Zimmernummer"
 
@@ -3527,7 +3527,7 @@ msgstr "Nach Property-Namen suchen"
 msgid "Search reservations"
 msgstr "Reservierungen suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:92
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:93
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-search.tsx:17
 msgid "Search rooms"
 msgstr "Zimmer suchen"

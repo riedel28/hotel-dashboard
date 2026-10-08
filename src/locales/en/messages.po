@@ -1604,7 +1604,7 @@ msgstr "Failed to load categories"
 msgid "Failed to load products"
 msgstr "Failed to load products"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:121
 msgid "Failed to load rooms"
 msgstr "Failed to load rooms"
 
@@ -1736,7 +1736,7 @@ msgid "First name is required"
 msgstr "First name is required"
 
 #. placeholder {0}: group.floor
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:134
 msgid "Floor {0}"
 msgstr "Floor {0}"
 
@@ -2220,7 +2220,7 @@ msgstr "Loading log…"
 msgid "Loading properties"
 msgstr "Loading properties"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:106
 msgid "Loading rooms…"
 msgstr "Loading rooms…"
 
@@ -2517,7 +2517,7 @@ msgstr "No entries yet"
 msgid "No fellow travelers"
 msgstr "No fellow travelers"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:132
 msgid "No floor"
 msgstr "No floor"
 
@@ -2599,7 +2599,7 @@ msgstr "No room"
 msgid "No rooms available"
 msgstr "No rooms available"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:123
 msgid "No rooms found"
 msgstr "No rooms found"
 
@@ -3451,7 +3451,7 @@ msgstr "Room Details"
 msgid "Room Name"
 msgstr "Room Name"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:92
 msgid "Room number"
 msgstr "Room number"
 
@@ -3634,7 +3634,7 @@ msgstr "Search property"
 msgid "Search reservations"
 msgstr "Search reservations"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:92
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:93
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-search.tsx:17
 msgid "Search rooms"
 msgstr "Search rooms"

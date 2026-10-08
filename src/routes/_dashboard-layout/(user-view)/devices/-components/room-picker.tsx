@@ -17,6 +17,7 @@ import {
   ComboboxList,
   ComboboxTrigger
 } from '@/components/ui/combobox';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 import {
@@ -98,15 +99,31 @@ export function RoomPicker({
           }
           showTrigger={false}
         />
-        <ComboboxEmpty className="py-6">
-          {roomsQuery.isPending ? (
-            <Trans>Loading rooms…</Trans>
-          ) : roomsQuery.isError ? (
-            <Trans>Failed to load rooms</Trans>
-          ) : (
-            <Trans>No rooms found</Trans>
-          )}
-        </ComboboxEmpty>
+        {roomsQuery.isPending ? (
+          // Three rows shaped like room options while the rooms load
+          <ComboboxEmpty className="flex-col gap-0 p-1">
+            <span className="sr-only">
+              <Trans>Loading rooms…</Trans>
+            </span>
+            {['w-24', 'w-32', 'w-20'].map((width) => (
+              <div
+                key={width}
+                aria-hidden="true"
+                className="flex h-8 items-center px-2"
+              >
+                <Skeleton className={cn('h-4', width)} />
+              </div>
+            ))}
+          </ComboboxEmpty>
+        ) : (
+          <ComboboxEmpty className="py-6">
+            {roomsQuery.isError ? (
+              <Trans>Failed to load rooms</Trans>
+            ) : (
+              <Trans>No rooms found</Trans>
+            )}
+          </ComboboxEmpty>
+        )}
         <ComboboxList>
           {(group: FloorGroup) => (
             <ComboboxGroup key={group.floor ?? 'none'} items={group.items}>
