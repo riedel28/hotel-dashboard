@@ -93,6 +93,7 @@ export type DataGridRequestParams = {
 
 export interface DataGridRowProps {
   className?: string;
+  /** Not applied to draggable rows, which use the row's ref themselves. */
   ref?: Ref<HTMLTableRowElement>;
 }
 

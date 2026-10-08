@@ -11,14 +11,16 @@ import { cn } from '@/lib/utils';
 
 import { TOTP_CODE_LENGTH } from '../../shared/types/profile';
 
-interface OtpFieldProps {
+// Everything else goes to the underlying <input> as is: name, ref, onBlur,
+// required, disabled, autoFocus, aria-* and the like.
+interface OtpFieldProps extends Omit<
+  React.ComponentProps<'input'>,
+  'value' | 'onChange' | 'maxLength' | 'pattern' | 'children'
+> {
   value: string;
   onChange: (value: string) => void;
   /** Fired once every digit is present, so the user needn't press Verify. */
   onComplete?: (value: string) => void;
-  onBlur?: () => void;
-  ref?: React.Ref<HTMLInputElement>;
-  name?: string;
   /** Number of digits; an authenticator code by default. */
   length?: number;
   /**
@@ -26,17 +28,12 @@ interface OtpFieldProps {
    * digits into 4-4-4). One group by default.
    */
   groupSize?: number;
-  /** Cells share the field's width instead of keeping their fixed size. */
+  /**
+   * Cells share the field's width instead of keeping their fixed size — for
+   * a code too long to fit at that size.
+   */
   stretch?: boolean;
-  /** One glyph per empty cell; pass an empty string for none. */
-  placeholder?: string;
-  autoComplete?: string;
-  required?: boolean;
-  disabled?: boolean;
   invalid?: boolean;
-  autoFocus?: boolean;
-  'aria-describedby'?: string;
-  id?: string;
 }
 
 /**
@@ -45,25 +42,15 @@ interface OtpFieldProps {
  * cells, backspace stepping back, and a numeric keypad on touch devices.
  */
 export function OtpField({
-  value,
-  onChange,
-  onComplete,
-  onBlur,
-  ref,
-  name,
   length = TOTP_CODE_LENGTH,
   groupSize = length,
   stretch = false,
+  invalid,
   // Indexed per slot, not repeated across them — one glyph per box.
   placeholder = '○'.repeat(length),
   // Lets iOS and Android offer the code straight from the SMS/app banner.
   autoComplete = 'one-time-code',
-  required,
-  disabled,
-  invalid,
-  autoFocus,
-  id,
-  'aria-describedby': ariaDescribedby
+  ...inputProps
 }: OtpFieldProps) {
   const groups = Array.from(
     { length: Math.ceil(length / groupSize) },
@@ -76,17 +63,8 @@ export function OtpField({
 
   return (
     <InputOTP
-      id={id}
-      ref={ref}
-      name={name}
+      {...inputProps}
       maxLength={length}
-      value={value}
-      onChange={onChange}
-      onComplete={onComplete}
-      onBlur={onBlur}
-      required={required}
-      disabled={disabled}
-      autoFocus={autoFocus}
       inputMode="numeric"
       autoComplete={autoComplete}
       placeholder={placeholder}
@@ -94,7 +72,6 @@ export function OtpField({
       // A code copied with its dashes or spaces still pastes
       pasteTransformer={(text) => text.replace(/\D/g, '')}
       aria-invalid={invalid}
-      aria-describedby={ariaDescribedby}
       aria-label={undefined}
       containerClassName={stretch ? 'w-full gap-1.5' : 'justify-start gap-2'}
     >
