@@ -73,7 +73,7 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
 
   return (
     <>
-      <DrawerHeader className="space-y-2">
+      <DrawerHeader className="space-y-0.5">
         {/* Only the title row shares its line with the close button */}
         <DrawerTitle className="pr-10">
           {device.name || <Trans>Unnamed device</Trans>}
