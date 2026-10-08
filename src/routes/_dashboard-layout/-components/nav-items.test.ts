@@ -12,12 +12,13 @@ describe('userNavSections', () => {
       '/monitoring',
       '/reservations',
       '/rooms',
-      '/users',
       '/guest-abc',
       '/products',
       '/pms-provider',
       '/door-locks',
-      '/payment-provider'
+      '/payment-provider',
+      '/devices',
+      '/users'
     ]);
   });
 
@@ -34,7 +35,8 @@ describe('userNavSections', () => {
     expect(sections.map((section) => section.key)).toEqual([
       'main',
       'front-office',
-      'integrations'
+      'integrations',
+      'setup'
     ]);
   });
 });

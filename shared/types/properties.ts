@@ -26,12 +26,13 @@ export const navItemIdSchema = z.enum([
   'monitoring',
   'reservations',
   'rooms',
-  'users',
   'guest-abc',
   'products',
   'pms-provider',
   'door-locks',
-  'payment-provider'
+  'payment-provider',
+  'devices',
+  'users'
 ]);
 
 export const propertySchema = z.object({
