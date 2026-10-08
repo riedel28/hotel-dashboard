@@ -39,7 +39,6 @@ import { Input } from '@/components/ui/input';
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot
 } from '@/components/ui/input-otp';
 
@@ -226,7 +225,11 @@ export function ClaimDeviceModal({
                         {pinGroups.map((slots, group) => (
                           <div key={group} className="contents">
                             {group > 0 && (
-                              <InputOTPSeparator className="text-muted-foreground" />
+                              // A short, faint dash: the cells get the width
+                              <div
+                                role="separator"
+                                className="h-px w-2 shrink-0 bg-muted-foreground/40"
+                              />
                             )}
                             <InputOTPGroup className="min-w-0 flex-1 gap-1">
                               {slots.map((slot) => (
