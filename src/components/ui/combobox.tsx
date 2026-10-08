@@ -57,13 +57,18 @@ function ComboboxTrigger({
   return (
     <div
       data-slot="combobox-trigger-wrapper"
-      className={cn('relative w-full min-w-0', wrapperClassName)}
+      className={cn(
+        'group/combobox-trigger relative w-full min-w-0',
+        wrapperClassName
+      )}
     >
       {trigger}
+      {/* Looks like SearchInput's clear button. Shown on hover only, but also
+          for keyboard focus and on touch screens, which have no hover. */}
       <ComboboxClear
         aria-label={clearLabel}
         disabled={props.disabled}
-        className="absolute top-1/2 right-8 -translate-y-1/2"
+        className="absolute top-1/2 right-8 -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity group-focus-within/combobox-trigger:opacity-100 group-hover/combobox-trigger:opacity-100 hover:text-foreground [&_svg]:size-4 [@media(hover:none)]:opacity-100"
       />
     </div>
   );
