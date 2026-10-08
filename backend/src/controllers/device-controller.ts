@@ -1,4 +1,4 @@
-import { and, asc, eq, isNull, sql } from 'drizzle-orm';
+import { and, asc, eq, isNull, type SQL, sql } from 'drizzle-orm';
 
 import type {
   AssignDeviceRoomData,
@@ -25,9 +25,8 @@ const roomColumns = {
   room_number: rooms.room_number
 };
 
-// The property's devices with their rooms: all of them, or the one with
-// `deviceId`.
-function findDevices(propertyId: string, deviceId?: number) {
+// Devices with their rooms, narrowed by the caller's condition
+function selectDevices(where: SQL | undefined) {
   return db
     .select({
       id: devices.id,
@@ -39,16 +38,21 @@ function findDevices(propertyId: string, deviceId?: number) {
     })
     .from(devices)
     .leftJoin(rooms, eq(devices.room_id, rooms.id))
-    .where(
-      and(
-        eq(devices.property_id, propertyId),
-        deviceId === undefined ? undefined : eq(devices.id, deviceId)
-      )
-    )
-    .orderBy(asc(devices.id));
+    .where(where);
 }
 
-type DeviceRow = Awaited<ReturnType<typeof findDevices>>[number];
+const findDevices = (propertyId: string) =>
+  selectDevices(eq(devices.property_id, propertyId)).orderBy(asc(devices.id));
+
+// One device of the property, in the shape the API answers with
+async function findDevice(propertyId: string, deviceId: number) {
+  const [device] = await selectDevices(
+    and(eq(devices.property_id, propertyId), eq(devices.id, deviceId))
+  );
+  return transformDevice(device);
+}
+
+type DeviceRow = Awaited<ReturnType<typeof selectDevices>>[number];
 
 function transformDevice(device: DeviceRow) {
   return {
@@ -206,8 +210,7 @@ const claimDevice = handle('Failed to add device', async (req, res) => {
     return res.status(status).json({ error, code: outcome });
   }
 
-  const [row] = await findDevices(propertyId, outcome.id);
-  res.status(201).json(transformDevice(row));
+  res.status(201).json(await findDevice(propertyId, outcome.id));
 });
 
 const assignDeviceRoom = handle('Failed to update device', async (req, res) => {
@@ -230,8 +233,7 @@ const assignDeviceRoom = handle('Failed to update device', async (req, res) => {
     return res.status(404).json({ error: 'Device not found' });
   }
 
-  const [row] = await findDevices(propertyId, updated.id);
-  res.status(200).json(transformDevice(row));
+  res.status(200).json(await findDevice(propertyId, updated.id));
 });
 
 export { assignDeviceRoom, claimDevice, getDeviceRoomOptions, getDevices };
