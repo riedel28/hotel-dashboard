@@ -35,18 +35,30 @@ export const navItemIdSchema = z.enum([
   'users'
 ]);
 
+// The Customer that owns a Property, as much of it as a Property carries.
+// Only Administrators receive it — everyone else gets null.
+export const propertyCustomerSchema = z.object({
+  id: z.uuid(),
+  first_name: z.string(),
+  last_name: z.string(),
+  company_name: z.string().nullable()
+});
+
 export const propertySchema = z.object({
   id: z.uuid(),
   name: z.string().min(1),
   country_code: countryCodeSchema,
   stage: propertyStageSchema,
-  disabled_nav_items: z.array(navItemIdSchema)
+  disabled_nav_items: z.array(navItemIdSchema),
+  customer_id: z.uuid().nullable(),
+  customer: propertyCustomerSchema.nullable()
 });
 
 export const propertySortableColumnsSchema = z.enum([
   'name',
   'country_code',
-  'stage'
+  'stage',
+  'customer'
 ]);
 
 export const sortOrderSchema = z.enum(['asc', 'desc']);
@@ -90,11 +102,12 @@ export const fetchPropertiesResponseSchema = z.object({
 export const createPropertySchema = z.object({
   name: z.string().min(1),
   country_code: countryCodeSchema,
-  stage: propertyStageSchema
+  stage: propertyStageSchema,
+  customer_id: z.uuid().nullable().optional()
 });
 
 export const updatePropertySchema = propertySchema
-  .omit({ id: true })
+  .omit({ id: true, customer: true })
   .extend({
     disabled_nav_items: z
       .array(navItemIdSchema)
@@ -108,8 +121,12 @@ export const propertyIdParamsSchema = z.object({
 
 // Type exports
 export type PropertyStage = z.infer<typeof propertyStageSchema>;
+export type PropertySortableColumn = z.infer<
+  typeof propertySortableColumnsSchema
+>;
 export type NavItemId = z.infer<typeof navItemIdSchema>;
 export type Property = z.infer<typeof propertySchema>;
+export type PropertyCustomer = z.infer<typeof propertyCustomerSchema>;
 export type CreatePropertyData = z.infer<typeof createPropertySchema>;
 export type FetchPropertiesParams = z.infer<typeof fetchPropertiesParamsSchema>;
 export type FetchPropertiesResponse = z.infer<
