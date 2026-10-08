@@ -269,7 +269,9 @@ export function ClaimDeviceModal({
                       onValueChange={field.onChange}
                       clearLabel={<Trans>No room</Trans>}
                       onClear={() => field.onChange(null)}
-                      className="flex h-9 w-full items-center justify-between rounded-lg border border-input px-3 py-2 text-sm dark:bg-input/30"
+                      // Focused like the inputs above, also while its popup is open
+                      className="flex h-9 w-full items-center justify-between rounded-lg border border-input px-3 py-2 text-sm transition-[color,box-shadow] outline-none focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)] data-popup-open:border-primary data-popup-open:shadow-[inset_0_0_0_1px_var(--color-primary)] dark:bg-input/30"
+                      contentClassName="w-(--anchor-width) min-w-(--anchor-width)"
                     >
                       {field.value ? (
                         <span className="tabular-nums">

@@ -17,6 +17,7 @@ import {
   ComboboxList,
   ComboboxTrigger
 } from '@/components/ui/combobox';
+import { cn } from '@/lib/utils';
 
 import {
   groupRoomsByFloor,
@@ -38,6 +39,8 @@ interface RoomPickerProps {
   clearLabel?: ReactNode;
   onClear?: () => void;
   className?: string;
+  /** For the popup, e.g. to match the width of a form field. */
+  contentClassName?: string;
   id?: string;
   'aria-label'?: string;
 }
@@ -53,6 +56,7 @@ export function RoomPicker({
   clearLabel,
   onClear,
   className,
+  contentClassName,
   id,
   'aria-label': ariaLabel
 }: RoomPickerProps) {
@@ -81,7 +85,7 @@ export function RoomPicker({
       <ComboboxTrigger id={id} aria-label={ariaLabel} className={className}>
         {children}
       </ComboboxTrigger>
-      <ComboboxContent className="w-56">
+      <ComboboxContent className={cn('w-56', contentClassName)}>
         <ComboboxInput
           variant="popup"
           placeholder={t`Room number`}

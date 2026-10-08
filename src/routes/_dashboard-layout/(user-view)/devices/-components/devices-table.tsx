@@ -151,7 +151,7 @@ export function DevicesTable({
           <DataGridColumnHeader title={t`App version`} column={column} />
         ),
         cell: ({ row }) => (
-          <span className="tabular-nums">
+          <span className="text-muted-foreground tabular-nums">
             {row.original.app_version || '-'}
           </span>
         ),
