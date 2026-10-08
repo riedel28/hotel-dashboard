@@ -1,6 +1,6 @@
 # Hotel Back-office
 
-Back-office for a hotel chain: front-office staff manage reservations, rooms and content in the User View; administrators manage properties and staff accounts in the Admin View.
+Back-office for a hotel chain: front-office staff manage reservations, rooms and content in the User View; administrators manage properties, the customers that own them, and staff accounts in the Admin View.
 
 ## Language
 
@@ -12,7 +12,7 @@ _Avoid_: Account, staff member
 
 **Guest**:
 A person staying at a Property. Never signs in to the back-office. Distinct from [[user]] in every respect — the two are separate tables and separate concepts.
-_Avoid_: Customer, client
+_Avoid_: Client, and never [[customer]] — that is who owns the Property, not who stays in it
 
 **Administrator**:
 A User whose `is_admin` flag is true. **This flag is the only thing that grants elevated access anywhere in the system.**
@@ -23,8 +23,12 @@ A label attached to a User (`Administrators`, `Housekeeping Manager`, `Tester`, 
 _Avoid_: Permission, group
 
 **Property**:
-A single hotel in the chain. A User has one *selected* Property at a time, which scopes what the User View shows.
+A single hotel. A User has one *selected* Property at a time, which scopes what the User View shows. A Property belongs to at most one [[customer]]; templates and fresh demos may have none.
 _Avoid_: Hotel, site, location
+
+**Customer**:
+The person, optionally with a company, who owns one or more Properties. Never signs in to the back-office and is not a [[guest]]. Named by the company when there is one, otherwise by first and last name. Only an [[administrator]] can see or change Customers — a Property looks ownerless to everyone else. A Customer that still owns a Property cannot be deleted.
+_Avoid_: Owner, client, account
 
 **Nav item**:
 One entry of the User View navigation (`Reservations`, `Rooms`, `Door Locks`, …). An [[administrator]] can switch a Nav item off for a single [[property]]; it then disappears from the sidebar, the mobile menu and the Start page, and its page redirects to Start. **This is navigation only, not access control** — the data and API behind a switched-off Nav item stay reachable, and other pages keep using them. `Start` is not a Nav item in this sense and is always shown.
