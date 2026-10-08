@@ -228,7 +228,7 @@ export function ClaimDeviceModal({
                               // A short, faint dash: the cells get the width
                               <div
                                 role="separator"
-                                className="h-px w-2 shrink-0 bg-muted-foreground/40"
+                                className="h-px w-2 shrink-0 bg-muted-foreground/70"
                               />
                             )}
                             <InputOTPGroup className="min-w-0 flex-1 gap-1">
