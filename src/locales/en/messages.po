@@ -143,7 +143,7 @@ msgstr "401 Unauthorized — check username and password."
 msgid "401 Unauthorized — the API key was rejected."
 msgstr "401 Unauthorized — the API key was rejected."
 
-#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:50
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:50
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:51
 msgid "A customer with this email already exists"
 msgstr "A customer with this email already exists"
@@ -207,7 +207,7 @@ msgstr "Add a tablet, phone or TV with its serial number and the PIN shown on it
 msgid "Add category"
 msgstr "Add category"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:69
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:67
 msgid "Add Customer"
 msgstr "Add Customer"
 
@@ -225,6 +225,10 @@ msgstr "Add entry"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:177
 msgid "Add Guest"
 msgstr "Add Guest"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:73
+msgid "Add new customer"
+msgstr "Add new customer"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:90
 msgid "Add New Guest"
@@ -661,7 +665,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
-#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:91
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:90
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 msgid "Cancel"
@@ -1029,7 +1033,7 @@ msgstr "Country is required"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:171
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:232
-#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:97
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:96
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:215
 msgid "Create"
 msgstr "Create"
@@ -1044,8 +1048,8 @@ msgstr "Create an account to access the dashboard"
 #~ msgstr "Create and manage registration forms, track submissions, and customize check-in processes"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:76
-msgid "Create New Customer"
-msgstr "Create New Customer"
+#~ msgid "Create New Customer"
+#~ msgstr "Create New Customer"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:113
 msgid "Create New Property"
@@ -1097,7 +1101,7 @@ msgstr "Current password is required"
 msgid "Customer"
 msgstr "Customer"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:43
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:43
 msgid "Customer created successfully"
 msgstr "Customer created successfully"
 
@@ -1650,7 +1654,7 @@ msgstr "Failed to create account. Please try again."
 msgid "Failed to create category"
 msgstr "Failed to create category"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:55
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:55
 msgid "Failed to create customer"
 msgstr "Failed to create customer"
 

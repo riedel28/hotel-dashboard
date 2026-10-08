@@ -60,7 +60,7 @@ const emptyCustomer: CustomerFormValues = {
 };
 
 /**
- * The Customer form, shared by the create modal and the edit page. Pass
+ * The Customer form, shared by the create drawer and the edit page. Pass
  * `values` to keep it in step with a loaded Customer.
  */
 export function useCustomerForm(values?: CustomerFormValues) {

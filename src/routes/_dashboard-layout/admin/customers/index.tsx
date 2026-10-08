@@ -54,7 +54,7 @@ import { cn } from '@/lib/utils';
 
 import { PropertiesFilters } from '../properties/-components/properties-filters';
 import { PropertyClearFilters } from '../properties/-components/property-clear-filters';
-import { AddCustomerModal } from './-components/add-customer-modal';
+import { AddCustomerDrawer } from './-components/add-customer-drawer';
 
 function RowActions({ customer }: { customer: Customer }) {
   return (
@@ -565,7 +565,7 @@ function CustomersPage() {
         <h1 className="text-xl font-bold">
           <Trans>Customers</Trans>
         </h1>
-        <AddCustomerModal />
+        <AddCustomerDrawer />
       </div>
 
       <QueryBoundary
