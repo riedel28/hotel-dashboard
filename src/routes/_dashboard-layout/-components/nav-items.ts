@@ -12,6 +12,7 @@ import {
   LockIcon,
   ShoppingBagIcon,
   SquareActivityIcon,
+  TabletSmartphoneIcon,
   UsersIcon
 } from 'lucide-react';
 import type * as React from 'react';
@@ -31,7 +32,12 @@ export interface NavSection {
   links: NavLink[];
 }
 
-type NavGroupKey = 'main' | 'front-office' | 'content-manager' | 'integrations';
+type NavGroupKey =
+  | 'main'
+  | 'front-office'
+  | 'content-manager'
+  | 'integrations'
+  | 'setup';
 
 // Start is not a nav item: it cannot be switched off, so it is pinned to its
 // group instead of living in the catalog.
@@ -46,7 +52,8 @@ const navGroups: {
   },
   { key: 'front-office', label: msg`Front Office` },
   { key: 'content-manager', label: msg`Content Manager` },
-  { key: 'integrations', label: msg`Integrations` }
+  { key: 'integrations', label: msg`Integrations` },
+  { key: 'setup', label: msg`Setup` }
 ];
 
 // The nav item catalog: the single source for the sidebar, the mobile menu,
@@ -71,12 +78,6 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     to: '/rooms',
     icon: DoorOpenIcon,
     label: msg`Rooms`
-  },
-  users: {
-    group: 'front-office',
-    to: '/users',
-    icon: UsersIcon,
-    label: msg`Users`
   },
   'guest-abc': {
     group: 'content-manager',
@@ -107,6 +108,18 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     to: '/payment-provider',
     icon: CreditCardIcon,
     label: msg`Payment Provider`
+  },
+  devices: {
+    group: 'setup',
+    to: '/devices',
+    icon: TabletSmartphoneIcon,
+    label: msg`Devices`
+  },
+  users: {
+    group: 'setup',
+    to: '/users',
+    icon: UsersIcon,
+    label: msg`Users`
   }
 };
 

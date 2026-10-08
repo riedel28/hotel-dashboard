@@ -24,7 +24,6 @@ import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './rou
 import { Route as DashboardLayoutuserViewAnalyticsRouteImport } from './routes/_dashboard-layout/(user-view)/analytics'
 import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes/_dashboard-layout/(user-view)/checkin-page'
 import { Route as DashboardLayoutuserViewCompanyRouteImport } from './routes/_dashboard-layout/(user-view)/company'
-import { Route as DashboardLayoutuserViewDevicesRouteImport } from './routes/_dashboard-layout/(user-view)/devices'
 import { Route as DashboardLayoutuserViewDoorLocksRouteImport } from './routes/_dashboard-layout/(user-view)/door-locks'
 import { Route as DashboardLayoutuserViewEventsRouteImport } from './routes/_dashboard-layout/(user-view)/events'
 import { Route as DashboardLayoutuserViewMobileCmsRouteImport } from './routes/_dashboard-layout/(user-view)/mobile-cms'
@@ -37,6 +36,7 @@ import { Route as DashboardLayoutAdminCustomersRouteImport } from './routes/_das
 import { Route as DashboardLayoutuserViewfrontOfficeOrdersRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/orders'
 import { Route as DashboardLayoutuserViewfrontOfficePaymentsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/payments'
 import { Route as DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/registration-forms'
+import { Route as DashboardLayoutuserViewDevicesIndexRouteImport } from './routes/_dashboard-layout/(user-view)/devices/index'
 import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
 import { Route as DashboardLayoutuserViewRoomsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/index'
 import { Route as DashboardLayoutuserViewRoomsRoomIdRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/$roomId'
@@ -131,12 +131,6 @@ const DashboardLayoutuserViewCompanyRoute =
     path: '/company',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-const DashboardLayoutuserViewDevicesRoute =
-  DashboardLayoutuserViewDevicesRouteImport.update({
-    id: '/(user-view)/devices',
-    path: '/devices',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
 const DashboardLayoutuserViewDoorLocksRoute =
   DashboardLayoutuserViewDoorLocksRouteImport.update({
     id: '/(user-view)/door-locks',
@@ -207,6 +201,12 @@ const DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute =
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport.update({
     id: '/(user-view)/(front-office)/registration-forms',
     path: '/registration-forms',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewDevicesIndexRoute =
+  DashboardLayoutuserViewDevicesIndexRouteImport.update({
+    id: '/(user-view)/devices/',
+    path: '/devices/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewProductsIndexRoute =
@@ -292,7 +292,6 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
-  '/devices': typeof DashboardLayoutuserViewDevicesRoute
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/events': typeof DashboardLayoutuserViewEventsRoute
   '/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
@@ -308,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
+  '/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/products/': typeof DashboardLayoutuserViewProductsIndexRoute
   '/rooms/': typeof DashboardLayoutuserViewRoomsIndexRoute
   '/users/': typeof DashboardLayoutuserViewUsersIndexRoute
@@ -330,7 +330,6 @@ export interface FileRoutesByTo {
   '/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
-  '/devices': typeof DashboardLayoutuserViewDevicesRoute
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/events': typeof DashboardLayoutuserViewEventsRoute
   '/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
@@ -346,6 +345,7 @@ export interface FileRoutesByTo {
   '/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
+  '/devices': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/products': typeof DashboardLayoutuserViewProductsIndexRoute
   '/rooms': typeof DashboardLayoutuserViewRoomsIndexRoute
   '/users': typeof DashboardLayoutuserViewUsersIndexRoute
@@ -372,7 +372,6 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
   '/_dashboard-layout/(user-view)/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/_dashboard-layout/(user-view)/company': typeof DashboardLayoutuserViewCompanyRoute
-  '/_dashboard-layout/(user-view)/devices': typeof DashboardLayoutuserViewDevicesRoute
   '/_dashboard-layout/(user-view)/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/_dashboard-layout/(user-view)/events': typeof DashboardLayoutuserViewEventsRoute
   '/_dashboard-layout/(user-view)/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
@@ -388,6 +387,7 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/_dashboard-layout/(user-view)/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/_dashboard-layout/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
+  '/_dashboard-layout/(user-view)/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/_dashboard-layout/(user-view)/products/': typeof DashboardLayoutuserViewProductsIndexRoute
   '/_dashboard-layout/(user-view)/rooms/': typeof DashboardLayoutuserViewRoomsIndexRoute
   '/_dashboard-layout/(user-view)/users/': typeof DashboardLayoutuserViewUsersIndexRoute
@@ -413,7 +413,6 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/checkin-page'
     | '/company'
-    | '/devices'
     | '/door-locks'
     | '/events'
     | '/mobile-cms'
@@ -429,6 +428,7 @@ export interface FileRouteTypes {
     | '/rooms/$roomId'
     | '/users/$userId'
     | '/admin/properties/$propertyId'
+    | '/devices/'
     | '/products/'
     | '/rooms/'
     | '/users/'
@@ -451,7 +451,6 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/checkin-page'
     | '/company'
-    | '/devices'
     | '/door-locks'
     | '/events'
     | '/mobile-cms'
@@ -467,6 +466,7 @@ export interface FileRouteTypes {
     | '/rooms/$roomId'
     | '/users/$userId'
     | '/admin/properties/$propertyId'
+    | '/devices'
     | '/products'
     | '/rooms'
     | '/users'
@@ -492,7 +492,6 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/analytics'
     | '/_dashboard-layout/(user-view)/checkin-page'
     | '/_dashboard-layout/(user-view)/company'
-    | '/_dashboard-layout/(user-view)/devices'
     | '/_dashboard-layout/(user-view)/door-locks'
     | '/_dashboard-layout/(user-view)/events'
     | '/_dashboard-layout/(user-view)/mobile-cms'
@@ -508,6 +507,7 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/rooms/$roomId'
     | '/_dashboard-layout/(user-view)/users/$userId'
     | '/_dashboard-layout/admin/properties/$propertyId'
+    | '/_dashboard-layout/(user-view)/devices/'
     | '/_dashboard-layout/(user-view)/products/'
     | '/_dashboard-layout/(user-view)/rooms/'
     | '/_dashboard-layout/(user-view)/users/'
@@ -630,13 +630,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewCompanyRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(user-view)/devices': {
-      id: '/_dashboard-layout/(user-view)/devices'
-      path: '/devices'
-      fullPath: '/devices'
-      preLoaderRoute: typeof DashboardLayoutuserViewDevicesRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
     '/_dashboard-layout/(user-view)/door-locks': {
       id: '/_dashboard-layout/(user-view)/door-locks'
       path: '/door-locks'
@@ -719,6 +712,13 @@ declare module '@tanstack/react-router' {
       path: '/registration-forms'
       fullPath: '/registration-forms'
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/devices/': {
+      id: '/_dashboard-layout/(user-view)/devices/'
+      path: '/devices'
+      fullPath: '/devices/'
+      preLoaderRoute: typeof DashboardLayoutuserViewDevicesIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/products/': {
@@ -850,7 +850,6 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewAnalyticsRoute: typeof DashboardLayoutuserViewAnalyticsRoute
   DashboardLayoutuserViewCheckinPageRoute: typeof DashboardLayoutuserViewCheckinPageRoute
   DashboardLayoutuserViewCompanyRoute: typeof DashboardLayoutuserViewCompanyRoute
-  DashboardLayoutuserViewDevicesRoute: typeof DashboardLayoutuserViewDevicesRoute
   DashboardLayoutuserViewDoorLocksRoute: typeof DashboardLayoutuserViewDoorLocksRoute
   DashboardLayoutuserViewEventsRoute: typeof DashboardLayoutuserViewEventsRoute
   DashboardLayoutuserViewMobileCmsRoute: typeof DashboardLayoutuserViewMobileCmsRoute
@@ -863,6 +862,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   DashboardLayoutuserViewRoomsRoomIdRoute: typeof DashboardLayoutuserViewRoomsRoomIdRoute
   DashboardLayoutuserViewUsersUserIdRoute: typeof DashboardLayoutuserViewUsersUserIdRoute
+  DashboardLayoutuserViewDevicesIndexRoute: typeof DashboardLayoutuserViewDevicesIndexRoute
   DashboardLayoutuserViewProductsIndexRoute: typeof DashboardLayoutuserViewProductsIndexRoute
   DashboardLayoutuserViewRoomsIndexRoute: typeof DashboardLayoutuserViewRoomsIndexRoute
   DashboardLayoutuserViewUsersIndexRoute: typeof DashboardLayoutuserViewUsersIndexRoute
@@ -882,7 +882,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutuserViewCheckinPageRoute:
     DashboardLayoutuserViewCheckinPageRoute,
   DashboardLayoutuserViewCompanyRoute: DashboardLayoutuserViewCompanyRoute,
-  DashboardLayoutuserViewDevicesRoute: DashboardLayoutuserViewDevicesRoute,
   DashboardLayoutuserViewDoorLocksRoute: DashboardLayoutuserViewDoorLocksRoute,
   DashboardLayoutuserViewEventsRoute: DashboardLayoutuserViewEventsRoute,
   DashboardLayoutuserViewMobileCmsRoute: DashboardLayoutuserViewMobileCmsRoute,
@@ -902,6 +901,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewRoomsRoomIdRoute,
   DashboardLayoutuserViewUsersUserIdRoute:
     DashboardLayoutuserViewUsersUserIdRoute,
+  DashboardLayoutuserViewDevicesIndexRoute:
+    DashboardLayoutuserViewDevicesIndexRoute,
   DashboardLayoutuserViewProductsIndexRoute:
     DashboardLayoutuserViewProductsIndexRoute,
   DashboardLayoutuserViewRoomsIndexRoute:

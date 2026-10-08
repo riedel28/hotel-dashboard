@@ -8,7 +8,9 @@ import morgan from 'morgan';
 
 import env from '../env';
 import { errorHandler, notFound } from './middleware/error';
+import { createStrictRateLimiter } from './middleware/rate-limit';
 import authRouter from './routes/auth';
+import devicesRouter from './routes/devices';
 import guestAbcRouter from './routes/guest-abc';
 import monitoringRouter from './routes/monitoring';
 import productCategoriesRouter from './routes/product-categories';
@@ -63,19 +65,10 @@ app.get('/api/health', (_req, res) => {
 });
 
 // Stricter rate limiter for auth routes (disabled in test environment)
-if (env.NODE_ENV !== 'test') {
-  const authLimiter = rateLimit({
-    windowMs: env.AUTH_RATE_LIMIT_WINDOW_MS,
-    max: env.AUTH_RATE_LIMIT_MAX_REQUESTS,
-    standardHeaders: 'draft-8',
-    legacyHeaders: false
-  });
-  app.use('/api/auth', authLimiter, verificationRouter);
-  app.use('/api/auth', authLimiter, authRouter);
-} else {
-  app.use('/api/auth', verificationRouter);
-  app.use('/api/auth', authRouter);
-}
+const authLimiter = createStrictRateLimiter();
+app.use('/api/auth', authLimiter, verificationRouter);
+app.use('/api/auth', authLimiter, authRouter);
+app.use('/api/devices', devicesRouter);
 app.use('/api/guest-abc', guestAbcRouter);
 app.use('/api/monitoring', monitoringRouter);
 app.use('/api/product-categories', productCategoriesRouter);

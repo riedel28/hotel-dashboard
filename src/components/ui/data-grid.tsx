@@ -17,7 +17,7 @@ import {
   tableFeatures,
   type TableFeatures
 } from '@tanstack/react-table';
-import { createContext, type ReactNode, useContext } from 'react';
+import { createContext, type ReactNode, type Ref, useContext } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -91,12 +91,20 @@ export type DataGridRequestParams = {
   columnFilters?: ColumnFiltersState;
 };
 
+export interface DataGridRowProps {
+  className?: string;
+  /** Not applied to draggable rows, which use the row's ref themselves. */
+  ref?: Ref<HTMLTableRowElement>;
+}
+
 export interface DataGridProps<TData extends RowData> {
   className?: string;
   table?: DataGridTableInstance<TData>;
   recordCount: number;
   children?: ReactNode;
   onRowClick?: (row: TData) => void;
+  /** Per-row additions to the body row, e.g. to mark or scroll to one. */
+  getRowProps?: (row: TData) => DataGridRowProps | undefined;
   isLoading?: boolean;
   loadingMode?: 'skeleton' | 'spinner';
   skeletonRowCount?: number;

@@ -1,14 +1,13 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { XIcon } from 'lucide-react';
-import { useState } from 'react';
 import {
   type FetchMonitoringLogsResponse,
   monitoringStatusSchema,
   monitoringTypeSchema
 } from 'shared/types/monitoring';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { CountBadge } from '@/components/ui/count-badge';
 import {
   DataGridCheckboxFilter,
   DataGridCheckboxFilterClear,
@@ -29,20 +28,7 @@ const typeOptions = monitoringTypeSchema.options.map((value) => ({
 
 /** How many logs an option of the status filter would show. */
 function LogCount({ count }: { count: number | undefined }) {
-  if (count === undefined) {
-    return null;
-  }
-
-  return (
-    <Badge
-      variant="secondary"
-      color="gray"
-      size="xs"
-      className="px-1 py-0 leading-4 tabular-nums"
-    >
-      {count}
-    </Badge>
-  );
+  return count === undefined ? null : <CountBadge count={count} />;
 }
 
 interface MonitoringFiltersProps extends Pick<
@@ -72,8 +58,6 @@ export function MonitoringFilters({
   clearFilters
 }: MonitoringFiltersProps) {
   const { t } = useLingui();
-  // SearchInput keeps its own text; bumping the key empties it on reset
-  const [searchResetKey, setSearchResetKey] = useState(0);
 
   const statusOptions = monitoringStatusSchema.options.map((value) => ({
     value,
@@ -87,7 +71,6 @@ export function MonitoringFilters({
     // From `sm` up: one wrapping line.
     <div className="grid grid-cols-[1fr_auto] gap-2 sm:flex sm:flex-wrap sm:items-center">
       <SearchInput
-        key={searchResetKey}
         value={filters.query ?? ''}
         onChange={setQuery}
         placeholder={t`Search logs`}
@@ -134,10 +117,7 @@ export function MonitoringFilters({
       {hasActiveFilters && (
         <Button
           variant="secondary"
-          onClick={() => {
-            setSearchResetKey((key) => key + 1);
-            clearFilters();
-          }}
+          onClick={clearFilters}
           className="col-span-2 text-muted-foreground hover:text-foreground"
         >
           <XIcon className="mr-2 h-4 w-4" />

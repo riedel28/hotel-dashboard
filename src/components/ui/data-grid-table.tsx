@@ -290,10 +290,11 @@ function DataGridTableBodyRow<TData extends RowData>({
   dndStyle?: CSSProperties;
 }) {
   const { props, table } = useDataGrid<TData>();
+  const rowProps = props.getRowProps?.(row.original as TData);
 
   return (
     <tr
-      ref={dndRef}
+      ref={dndRef ?? rowProps?.ref}
       style={{ ...(dndStyle ? dndStyle : null) }}
       data-state={
         table.options.enableRowSelection && row.getIsSelected()
@@ -313,7 +314,8 @@ function DataGridTableBodyRow<TData extends RowData>({
         props.tableLayout?.stripped &&
           'odd:bg-muted/90 hover:bg-transparent odd:hover:bg-muted',
         table.options.enableRowSelection && '*:first:relative',
-        props.tableClassNames?.bodyRow
+        props.tableClassNames?.bodyRow,
+        rowProps?.className
       )}
     >
       {children}

@@ -7,6 +7,7 @@ import { inArray } from 'drizzle-orm';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { db } from '../db/pool';
 import {
+  devices,
   guestAbcEntries,
   guests,
   monitoringLogs,
@@ -15,6 +16,7 @@ import {
   properties,
   reservations,
   roles,
+  rooms,
   users
 } from '../db/schema';
 import { truncateAllTables } from '../db/truncate-all';
@@ -83,6 +85,8 @@ function buildDemoMonitoringLogs() {
 // The Overlook Hotel — the canonical demo property. Seeded Guest ABC content
 // attaches here, and demo users' selected property is pointed at it.
 const OVERLOOK_HOTEL_ID = 'cc198b13-4933-43aa-977e-dcd95fa30770';
+// PIN of every demo device, claimed or not
+const DEMO_DEVICE_PIN = '123412341234';
 
 type GuestAbcSeed = Record<string, { title: string; description: string }[]>;
 
@@ -494,6 +498,101 @@ async function seed() {
       .where(
         inArray(users.email, ['cool_new_user@example.com', 'john@example.com'])
       );
+
+    // Demo rooms and guest devices for The Overlook Hotel: four floors of
+    // twelve rooms, a tablet in every room, a TV in most, and a few devices
+    // not assigned to a room yet. Devices without a property are waiting to be
+    // claimed; every demo device has the same PIN.
+    console.log('Creating demo rooms and devices...');
+    const demoRooms = await db
+      .insert(rooms)
+      .values(
+        [1, 2, 3, 4].flatMap((floor) =>
+          Array.from({ length: 12 }, (_, index) => {
+            const room_number = `${floor}${String(index + 1).padStart(2, '0')}`;
+            return {
+              name: `Room ${room_number}`,
+              room_number,
+              property_id: OVERLOOK_HOTEL_ID
+            };
+          })
+        )
+      )
+      .returning();
+    const pin_hash = await hashPassword(DEMO_DEVICE_PIN);
+
+    const serial = (prefix: string, number: number) =>
+      `${prefix}${String(number).padStart(4, '0')}`;
+    const demoDevices: {
+      serial_number: string;
+      name: string | null;
+      room_id: number | null;
+    }[] = [
+      ...demoRooms.map(({ id, room_number }, index) => ({
+        serial_number: serial('R9KT40A', index + 1),
+        name: `Tablet ${room_number}`,
+        room_id: id
+      })),
+      // The last rooms have no TV yet
+      ...demoRooms.slice(0, -7).map(({ id, room_number }, index) => ({
+        serial_number: serial('LG55-773', index + 1),
+        name: `TV ${room_number}`,
+        room_id: id
+      })),
+      ...[
+        { serial_number: serial('R9KT40A', 101), name: 'Tablet (new)' },
+        { serial_number: serial('R9KT40A', 102), name: 'Tablet (spare)' },
+        { serial_number: serial('R9KT40A', 103), name: null },
+        { serial_number: serial('LG55-773', 101), name: 'TV (new)' },
+        { serial_number: serial('LG55-773', 102), name: null },
+        { serial_number: serial('PX8-0042', 1), name: 'Phone (front desk)' },
+        { serial_number: serial('PX8-0042', 2), name: null }
+      ].map((device) => ({ ...device, room_id: null }))
+    ];
+
+    // Minutes since each device's last signal, cycled over the list: mostly
+    // online (under 15), some recently offline (hours), a few offline (days)
+    // and one that never reported (null).
+    const signalAges = [
+      1,
+      4,
+      9,
+      2,
+      5 * 60,
+      7,
+      12,
+      3,
+      3 * 24 * 60,
+      6,
+      20 * 60,
+      10,
+      null
+    ];
+    await db.insert(devices).values(
+      demoDevices.map((device, index) => {
+        const minutesAgo = signalAges[index % signalAges.length];
+        return {
+          ...device,
+          last_seen_at:
+            minutesAgo === null
+              ? null
+              : new Date(Date.now() - minutesAgo * 60 * 1000),
+          // A device that never reported has no known app version
+          app_version:
+            minutesAgo === null ? null : index % 5 === 4 ? '2.3.0' : '2.4.1',
+          property_id: OVERLOOK_HOTEL_ID,
+          pin_hash
+        };
+      })
+    );
+    await db.insert(devices).values(
+      ['R9KT40A22MN', 'R9KT40A23PQ', 'LG55-7731302'].map((serial_number) => ({
+        serial_number,
+        pin_hash,
+        app_version: '2.4.1',
+        last_seen_at: new Date()
+      }))
+    );
 
     // Step 5: Create demo monitoring logs
     console.log('Creating demo monitoring logs...');
