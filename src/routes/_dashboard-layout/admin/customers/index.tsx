@@ -7,7 +7,7 @@ import {
   type SortingState,
   useTable
 } from '@tanstack/react-table';
-import { PenSquareIcon } from 'lucide-react';
+import { PencilIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Customer, CustomerSortableColumn } from 'shared/types/customers';
 import { fetchCustomersParamsSchema } from 'shared/types/customers';
@@ -60,7 +60,7 @@ function RowActions({ customer }: { customer: Customer }) {
   return (
     <DropdownMenu>
       <DataGridRowActions />
-      <DropdownMenuContent align="end" className="w-35">
+      <DropdownMenuContent align="end" className="w-auto min-w-0">
         <DropdownMenuItem
           render={(props) => (
             <RouterLink
@@ -69,7 +69,7 @@ function RowActions({ customer }: { customer: Customer }) {
               params={{ customerId: customer.id }}
               preload="intent"
             >
-              <PenSquareIcon className="mr-2 h-4 w-4" />
+              <PencilIcon className="mr-2 h-4 w-4" />
               <Trans>Edit</Trans>
             </RouterLink>
           )}
