@@ -1,0 +1,527 @@
+import { Trans, useLingui } from '@lingui/react/macro';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { createFileRoute, Link as RouterLink } from '@tanstack/react-router';
+import {
+  type ColumnDef,
+  type PaginationState,
+  type SortingState,
+  useTable
+} from '@tanstack/react-table';
+import { PenSquareIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import type { Customer, CustomerSortableColumn } from 'shared/types/customers';
+import { fetchCustomersParamsSchema } from 'shared/types/customers';
+
+import { customersQueryOptions } from '@/api/customers';
+import { QueryBoundary } from '@/components/query-boundary';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb';
+import { CountryFlag } from '@/components/ui/country-flag';
+import {
+  DataGrid,
+  DataGridContainer,
+  type DataGridFeatures,
+  dataGridFeatures
+} from '@/components/ui/data-grid';
+import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
+import { DataGridPagination } from '@/components/ui/data-grid-pagination';
+import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
+import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
+import { DataGridTable } from '@/components/ui/data-grid-table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@/components/ui/dropdown-menu';
+import { SearchInput } from '@/components/ui/search-input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useDocumentTitle } from '@/hooks/use-document-title';
+import { getCountryName } from '@/lib/countries';
+import { cn } from '@/lib/utils';
+
+import { AddCustomerModal } from './-components/add-customer-modal';
+
+function RowActions({ customer }: { customer: Customer }) {
+  return (
+    <DropdownMenu>
+      <DataGridRowActions />
+      <DropdownMenuContent align="end" className="w-35">
+        <DropdownMenuItem
+          render={(props) => (
+            <RouterLink
+              {...props}
+              to="/admin/customers/$customerId"
+              params={{ customerId: customer.id }}
+              preload="intent"
+            >
+              <PenSquareIcon className="mr-2 h-4 w-4" />
+              <Trans>Edit</Trans>
+            </RouterLink>
+          )}
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+interface CustomersTableProps {
+  data: Customer[];
+  isLoading?: boolean;
+  pageIndex?: number;
+  pageSize?: number;
+  totalCount?: number;
+  pageCount?: number;
+  onPaginationChange?: (
+    updaterOrValue:
+      | PaginationState
+      | ((old: PaginationState) => PaginationState)
+  ) => void;
+  sorting?: SortingState;
+  onSortingChange?: (
+    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
+  ) => void;
+}
+
+function CustomersTable({
+  data,
+  isLoading = false,
+  pageIndex = 0,
+  pageSize = 10,
+  totalCount = 0,
+  pageCount = 0,
+  onPaginationChange,
+  sorting,
+  onSortingChange
+}: CustomersTableProps) {
+  const pagination = useMemo<PaginationState>(
+    () => ({ pageIndex, pageSize }),
+    [pageIndex, pageSize]
+  );
+
+  const { i18n, t } = useLingui();
+
+  const columns = useMemo<ColumnDef<DataGridFeatures, Customer>[]>(
+    () => [
+      {
+        id: 'name',
+        accessorFn: (customer) =>
+          `${customer.first_name} ${customer.last_name}`,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Name`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row, getValue }) => {
+          const name = getValue() as string;
+          return (
+            <RouterLink
+              to="/admin/customers/$customerId"
+              params={{ customerId: row.original.id }}
+              preload="intent"
+              className="line-clamp-1 font-medium underline-offset-4 hover:underline"
+              title={name}
+            >
+              {name}
+            </RouterLink>
+          );
+        },
+        meta: {
+          skeleton: <Skeleton className="h-6 w-32" />,
+          headerTitle: t`Name`
+        },
+        size: 180,
+        enableSorting: true,
+        enableHiding: false,
+        enableResizing: true
+      },
+      {
+        accessorKey: 'company_name',
+        id: 'company_name',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Company`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => {
+          const company = row.original.company_name;
+          return company ? (
+            <span className="line-clamp-1" title={company}>
+              {company}
+            </span>
+          ) : (
+            <span className="text-muted-foreground">—</span>
+          );
+        },
+        meta: {
+          skeleton: <Skeleton className="h-6 w-36" />,
+          headerTitle: t`Company`
+        },
+        size: 200,
+        enableSorting: true,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
+        accessorKey: 'email',
+        id: 'email',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Email`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => (
+          <span className="line-clamp-1" title={row.original.email}>
+            {row.original.email}
+          </span>
+        ),
+        meta: {
+          skeleton: <Skeleton className="h-6 w-40" />,
+          headerTitle: t`Email`
+        },
+        size: 220,
+        enableSorting: true,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
+        id: 'address',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Address`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => {
+          const { address_line_1, address_line_2, zip, city } = row.original;
+          const street = [address_line_1, address_line_2]
+            .filter(Boolean)
+            .join(', ');
+          return (
+            <div className="min-w-0">
+              <div className="truncate" title={street}>
+                {street}
+              </div>
+              <div className="truncate text-xs text-muted-foreground">
+                {zip} {city}
+              </div>
+            </div>
+          );
+        },
+        meta: {
+          skeleton: <Skeleton className="h-8 w-44" />,
+          headerTitle: t`Address`
+        },
+        size: 240,
+        enableSorting: false,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
+        accessorKey: 'country_code',
+        id: 'country_code',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Country`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => {
+          const countryCode = row.original.country_code;
+          return (
+            <div className="flex items-center gap-2">
+              <CountryFlag
+                code={countryCode}
+                title={countryCode}
+                className="size-4"
+                aria-label={countryCode}
+              />
+              <span className="text-foreground">
+                {getCountryName(countryCode, i18n.locale)}
+              </span>
+            </div>
+          );
+        },
+        meta: {
+          skeleton: <Skeleton className="h-6 w-24" />,
+          headerTitle: t`Country`
+        },
+        size: 150,
+        enableSorting: true,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
+        accessorKey: 'property_count',
+        id: 'property_count',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Properties`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => (
+          <span className="tabular-nums">{row.original.property_count}</span>
+        ),
+        meta: {
+          skeleton: <Skeleton className="h-6 w-8" />,
+          headerTitle: t`Properties`
+        },
+        size: 110,
+        enableSorting: true,
+        enableHiding: true,
+        enableResizing: false
+      },
+      {
+        id: 'actions',
+        header: () => null,
+        cell: ({ row }) => (
+          <div className="flex justify-center">
+            <RowActions customer={row.original} />
+          </div>
+        ),
+        meta: {
+          skeleton: (
+            <div className="flex items-center justify-center">
+              <Skeleton className="h-6 w-6" />
+            </div>
+          )
+        },
+        size: 70,
+        enableSorting: false,
+        enableHiding: false,
+        enableResizing: false
+      }
+    ],
+    [i18n.locale, t]
+  );
+
+  const [columnOrder, setColumnOrder] = useState<string[]>(
+    columns.map((column) => column.id as string)
+  );
+
+  const [, setInternalSorting] = useState<SortingState>([]);
+
+  const table = useTable({
+    features: dataGridFeatures,
+    columns,
+    data: data || [],
+    pageCount,
+    getRowId: (row: Customer) => row.id,
+    state: {
+      pagination,
+      sorting,
+      columnOrder
+    },
+    onPaginationChange,
+    onSortingChange: onSortingChange ?? setInternalSorting,
+    onColumnOrderChange: setColumnOrder,
+    manualPagination: true,
+    manualSorting: true,
+    enableSortingRemoval: true
+  });
+
+  return (
+    <DataGrid
+      table={table}
+      recordCount={totalCount}
+      tableClassNames={{ edgeCell: 'px-5' }}
+      tableLayout={{
+        columnsPinnable: false,
+        columnsMovable: false,
+        columnsVisibility: false
+      }}
+      isLoading={isLoading}
+    >
+      <div className="w-full space-y-2.5">
+        <DataGridContainer>
+          <DataGridTable />
+        </DataGridContainer>
+        <DataGridPagination />
+      </div>
+    </DataGrid>
+  );
+}
+
+function CustomersContent() {
+  const { page, per_page, q, sort_by, sort_order } = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const queryClient = useQueryClient();
+  const { t } = useLingui();
+
+  const customersQuery = useSuspenseQuery(
+    customersQueryOptions({ page, per_page, q, sort_by, sort_order })
+  );
+
+  const sorting: SortingState = sort_by
+    ? [{ id: sort_by, desc: sort_order === 'desc' }]
+    : [];
+
+  const handleSearchChange = (searchTerm: string) => {
+    navigate({
+      to: '/admin/customers',
+      search: (prev) => ({ ...prev, q: searchTerm || undefined, page: 1 })
+    });
+  };
+
+  const handleSortingChange = (
+    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
+  ) => {
+    const [firstSort] =
+      typeof updaterOrValue === 'function'
+        ? updaterOrValue(sorting)
+        : updaterOrValue;
+
+    navigate({
+      to: '/admin/customers',
+      search: (prev) => ({
+        ...prev,
+        page: 1,
+        sort_by: firstSort?.id as CustomerSortableColumn | undefined,
+        sort_order: firstSort
+          ? firstSort.desc
+            ? ('desc' as const)
+            : ('asc' as const)
+          : undefined
+      })
+    });
+  };
+
+  const handlePaginationChange = (
+    updaterOrValue:
+      | PaginationState
+      | ((old: PaginationState) => PaginationState)
+  ) => {
+    const pagination =
+      typeof updaterOrValue === 'function'
+        ? updaterOrValue({
+            pageIndex: (page ?? 1) - 1,
+            pageSize: per_page ?? 10
+          })
+        : updaterOrValue;
+
+    navigate({
+      to: '/admin/customers',
+      search: (prev) => ({
+        ...prev,
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize
+      })
+    });
+  };
+
+  return (
+    <div
+      className={cn(
+        'flex flex-col gap-3 opacity-100 transition-opacity duration-300 ease-in-out',
+        {
+          'opacity-70': customersQuery.isFetching
+        }
+      )}
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <SearchInput
+          value={q || ''}
+          onChange={handleSearchChange}
+          placeholder={t`Search customers`}
+          wrapperClassName="w-full sm:w-[250px]"
+          debounceMs={500}
+        />
+        <DataGridRefreshButton
+          isRefreshing={customersQuery.isFetching}
+          onRefresh={() =>
+            queryClient.invalidateQueries({ queryKey: ['customers'] })
+          }
+        />
+      </div>
+      <CustomersTable
+        data={customersQuery.data.index}
+        pageIndex={(page ?? 1) - 1}
+        pageSize={per_page ?? 10}
+        totalCount={customersQuery.data.total}
+        pageCount={customersQuery.data.page_count}
+        onPaginationChange={handlePaginationChange}
+        sorting={sorting}
+        onSortingChange={handleSortingChange}
+      />
+    </div>
+  );
+}
+
+function CustomersPage() {
+  const { t } = useLingui();
+  useDocumentTitle(t`Customers`);
+
+  return (
+    <div className="space-y-1">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink to="/">
+              <Trans>Home</Trans>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink to="/admin">
+              <Trans>Admin</Trans>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              <Trans>Customers</Trans>
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-xl font-bold">
+          <Trans>Customers</Trans>
+        </h1>
+        <AddCustomerModal />
+      </div>
+
+      <QueryBoundary
+        className="min-h-[60vh] items-center justify-center"
+        message={<Trans>An error occurred while fetching customers</Trans>}
+        fallback={
+          <CustomersTable
+            data={[]}
+            isLoading={true}
+            pageIndex={0}
+            pageSize={10}
+            totalCount={0}
+            pageCount={0}
+          />
+        }
+      >
+        <CustomersContent />
+      </QueryBoundary>
+    </div>
+  );
+}
+
+export const Route = createFileRoute('/_dashboard-layout/admin/customers/')({
+  validateSearch: (search) => fetchCustomersParamsSchema.parse(search),
+  loaderDeps: ({ search }) => search,
+  loader: ({ context: { queryClient }, deps }) => {
+    return queryClient.ensureQueryData(customersQueryOptions(deps));
+  },
+  component: CustomersPage
+});
