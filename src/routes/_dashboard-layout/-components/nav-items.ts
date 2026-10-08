@@ -154,7 +154,8 @@ export const adminNavSections: NavSection[] = [
     key: 'main',
     links: [
       { to: '/admin', icon: HomeIcon, label: msg`Start`, exact: true },
-      { to: '/admin/properties', icon: BuildingIcon, label: msg`Properties` }
+      { to: '/admin/properties', icon: BuildingIcon, label: msg`Properties` },
+      { to: '/admin/customers', icon: UsersIcon, label: msg`Customers` }
     ]
   }
 ];

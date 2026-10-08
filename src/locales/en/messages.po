@@ -1113,6 +1113,7 @@ msgstr "Customer Details"
 msgid "Customer updated successfully"
 msgstr "Customer updated successfully"
 
+#: src/routes/_dashboard-layout/-components/nav-items.ts:158
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:43
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:467
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:487

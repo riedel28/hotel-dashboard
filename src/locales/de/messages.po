@@ -41,7 +41,7 @@ msgstr "(öffnet in neuem Tab)"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:125
 msgid "(optional)"
-msgstr ""
+msgstr "(optional)"
 
 #. placeholder {0}: selectedOptions.length
 #: src/components/ui/data-grid-checkbox-filter.tsx:145
@@ -143,7 +143,7 @@ msgstr ""
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:50
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:51
 msgid "A customer with this email already exists"
-msgstr ""
+msgstr "Ein Kunde mit dieser E-Mail-Adresse existiert bereits"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:82
 msgid "A second step at sign-in, from an app on your phone."
@@ -206,7 +206,7 @@ msgstr "Kategorie hinzufügen"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:69
 msgid "Add Customer"
-msgstr ""
+msgstr "Kunde hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:122
@@ -265,7 +265,7 @@ msgstr ""
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:202
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:225
 msgid "Address"
-msgstr ""
+msgstr "Adresse"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:42
 msgid "Address line"
@@ -273,12 +273,12 @@ msgstr ""
 
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:179
 msgid "Address line 1"
-msgstr ""
+msgstr "Adresszeile 1"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:69
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:188
 msgid "Address line 2"
-msgstr ""
+msgstr "Adresszeile 2"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:124
 msgid "Address line is required"
@@ -378,7 +378,7 @@ msgstr "Sie haben bereits eine? Jede TOTP-App funktioniert — scannen Sie einfa
 
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:502
 msgid "An error occurred while fetching customers"
-msgstr ""
+msgstr "Beim Abrufen der Kunden ist ein Fehler aufgetreten"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:128
 msgid "An error occurred while fetching devices"
@@ -786,7 +786,7 @@ msgstr "Kinder"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:112
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:203
 msgid "City"
-msgstr ""
+msgstr "Stadt"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:138
 msgid "City is required"
@@ -841,7 +841,7 @@ msgstr "Spalten"
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:150
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:167
 msgid "Company"
-msgstr ""
+msgstr "Firma"
 
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:310
 #~ msgid "Company data"
@@ -1022,7 +1022,7 @@ msgstr "Erstellen Sie ein Konto, um auf das Dashboard zuzugreifen"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:76
 msgid "Create New Customer"
-msgstr ""
+msgstr "Neuen Kunden erstellen"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:113
 msgid "Create New Property"
@@ -1068,21 +1068,22 @@ msgstr "Aktuelles Passwort ist erforderlich"
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:233
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:258
 msgid "Customer"
-msgstr ""
+msgstr "Kunde"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:43
 msgid "Customer created successfully"
-msgstr ""
+msgstr "Kunde erfolgreich erstellt"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:72
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:23
 msgid "Customer Details"
-msgstr ""
+msgstr "Kundendetails"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:44
 msgid "Customer updated successfully"
-msgstr ""
+msgstr "Kunde erfolgreich aktualisiert"
 
+#: src/routes/_dashboard-layout/-components/nav-items.ts:158
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:43
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:467
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:487
@@ -1279,7 +1280,7 @@ msgstr "Bearbeiten"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:49
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:59
 msgid "Edit Customer"
-msgstr ""
+msgstr "Kunde bearbeiten"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:199
 msgid "Edit guest"
@@ -1610,7 +1611,7 @@ msgstr "Kategorie konnte nicht erstellt werden"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:55
 msgid "Failed to create customer"
-msgstr ""
+msgstr "Kunde konnte nicht erstellt werden"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:89
 msgid "Failed to create property"
@@ -1698,7 +1699,7 @@ msgstr "Kategorie konnte nicht aktualisiert werden"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:56
 msgid "Failed to update customer. Please try again."
-msgstr ""
+msgstr "Kunde konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:70
 msgid "Failed to update entry. Please try again."
@@ -2518,11 +2519,11 @@ msgstr "Kein Land gefunden."
 
 #: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:82
 msgid "No customer"
-msgstr ""
+msgstr "Kein Kunde"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:99
 msgid "No customer found."
-msgstr ""
+msgstr "Kein Kunde gefunden."
 
 #: src/components/ui/data-grid-table.tsx:419
 msgid "No data available"
@@ -2602,7 +2603,7 @@ msgstr "Keine Properties gefunden"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:97
 msgid "No properties yet. Assign this customer on a property's page."
-msgstr ""
+msgstr "Noch keine Unterkünfte. Weisen Sie diesen Kunden auf der Seite einer Unterkunft zu."
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:103
 msgid "No response from Adyen."
@@ -3265,7 +3266,7 @@ msgstr "Entfernen"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:126
 msgid "Remove customer"
-msgstr ""
+msgstr "Kunde entfernen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:350
 #~ msgid "Remove filter by booking {booking_nr}"
@@ -3606,7 +3607,7 @@ msgstr "Land suchen..."
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:440
 #: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:89
 msgid "Search customers"
-msgstr ""
+msgstr "Kunden suchen"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:53
 msgid "Search devices"
@@ -3667,7 +3668,7 @@ msgstr "Benutzer suchen"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:99
 msgid "Searching..."
-msgstr ""
+msgstr "Suche läuft..."
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:126
 #~ msgid "Security"
@@ -4245,7 +4246,7 @@ msgstr "Dieses Gerät wurde bereits hinzugefügt"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:29
 msgid "This field is required"
-msgstr ""
+msgstr "Dieses Feld ist erforderlich"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:124
 msgid "This image is small, so it may look blurry once cropped."
@@ -4821,7 +4822,7 @@ msgstr "Jugendliche"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:86
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:197
 msgid "ZIP"
-msgstr ""
+msgstr "PLZ"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:639
 #~ msgid "ZIP / Postal code"
