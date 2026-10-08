@@ -32,7 +32,9 @@ function requireProperty(req: DevicesRequest, res: Response) {
   return propertyId;
 }
 
-function devicesOf(propertyId: string, deviceId?: number) {
+// The property's devices with their rooms: all of them, or the one with
+// `deviceId`.
+function findDevices(propertyId: string, deviceId?: number) {
   return db
     .select({
       id: devices.id,
@@ -53,7 +55,7 @@ function devicesOf(propertyId: string, deviceId?: number) {
     .orderBy(asc(devices.id));
 }
 
-type DeviceRow = Awaited<ReturnType<typeof devicesOf>>[number];
+type DeviceRow = Awaited<ReturnType<typeof findDevices>>[number];
 
 function transformDevice(device: DeviceRow) {
   return {
@@ -78,7 +80,7 @@ const getDevices = handle('Failed to fetch devices', async (req, res) => {
     return res.status(200).json([]);
   }
 
-  const rows = await devicesOf(propertyId);
+  const rows = await findDevices(propertyId);
   res.status(200).json(rows.map(transformDevice));
 });
 
@@ -125,13 +127,17 @@ const claimDevice = handle('Failed to add device', async (req, res) => {
     name: name || null
   };
 
-  const [device] = await db
-    .select({ id: devices.id, pin_hash: devices.pin_hash })
-    .from(devices)
-    .where(
-      eq(sql`lower(${devices.serial_number})`, serial_number.toLowerCase())
-    );
+  const findBySerial = async () => {
+    const [found] = await db
+      .select({ id: devices.id, pin_hash: devices.pin_hash })
+      .from(devices)
+      .where(
+        eq(sql`lower(${devices.serial_number})`, serial_number.toLowerCase())
+      );
+    return found;
+  };
 
+  let device = await findBySerial();
   let claimed: { id: number } | undefined;
   if (!device) {
     // A serial number nobody registered yet: the device is new, and the PIN
@@ -146,10 +152,15 @@ const claimDevice = handle('Failed to add device', async (req, res) => {
         serial_number,
         pin_hash: await hashPassword(pin)
       })
-      // Lost a race for the same serial number: reported as claimed below
       .onConflictDoNothing()
       .returning({ id: devices.id });
-  } else {
+    // Lost a race for the same serial number: it is a known device now and
+    // goes through the same checks as one.
+    if (!claimed) {
+      device = await findBySerial();
+    }
+  }
+  if (!claimed && device) {
     // The PIN is checked before ownership, so whether a known device is
     // already claimed is only revealed to someone holding its PIN.
     if (!(await comparePassword(pin, device.pin_hash))) {
@@ -173,7 +184,7 @@ const claimDevice = handle('Failed to add device', async (req, res) => {
     );
   }
 
-  const [row] = await devicesOf(propertyId, claimed.id);
+  const [row] = await findDevices(propertyId, claimed.id);
   res.status(201).json(transformDevice(row));
 });
 
@@ -197,7 +208,7 @@ const assignDeviceRoom = handle('Failed to update device', async (req, res) => {
     return res.status(404).json({ error: 'Device not found' });
   }
 
-  const [row] = await devicesOf(propertyId, updated.id);
+  const [row] = await findDevices(propertyId, updated.id);
   res.status(200).json(transformDevice(row));
 });
 

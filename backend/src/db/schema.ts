@@ -203,9 +203,6 @@ export const rooms = pgTable(
   ]
 );
 
-// Product categories (per-property tree via self-referencing parent_id).
-// FKs use the default NO ACTION so deleting a category that still has
-// children or products fails, while a property delete still cascades cleanly.
 // Guest devices. A device exists before any Property owns it (property_id is
 // null); claiming it with its PIN assigns it to the caller's Property.
 export const devices = pgTable(
@@ -242,6 +239,9 @@ export const devices = pgTable(
   ]
 );
 
+// Product categories (per-property tree via self-referencing parent_id).
+// FKs use the default NO ACTION so deleting a category that still has
+// children or products fails, while a property delete still cascades cleanly.
 export const productCategories = pgTable(
   'product_categories',
   {
@@ -563,8 +563,6 @@ export const selectRoleSchema = createSelectSchema(roles);
 
 export const insertUserRoleSchema = createInsertSchema(userRoles);
 export const selectUserRoleSchema = createSelectSchema(userRoles);
-
-export type Device = typeof devices.$inferSelect;
 
 export type Role = typeof roles.$inferSelect;
 export type NewRole = typeof roles.$inferInsert;

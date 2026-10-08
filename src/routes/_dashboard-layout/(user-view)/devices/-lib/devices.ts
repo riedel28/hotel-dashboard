@@ -5,8 +5,11 @@ import {
   type DeviceConnectionStatus,
   type DeviceRoom
 } from 'shared/types/devices';
+import { z } from 'zod';
 
-export type DeviceTab = 'assigned' | 'unassigned';
+// Which devices a tab shows; no tab means all of them
+export const deviceTabSchema = z.enum(['assigned', 'unassigned']);
+export type DeviceTab = z.infer<typeof deviceTabSchema>;
 
 export interface DeviceFilters {
   tab?: DeviceTab;
@@ -37,6 +40,12 @@ export function formatRelativeTime(date: string, locale: string, now: number) {
     return format.format(-Math.floor(minutes / 60), 'hour');
   return format.format(-Math.floor(minutes / (24 * 60)), 'day');
 }
+
+/** What a device is called in messages: its name, else its serial number. */
+export const deviceLabel = (device: Device) =>
+  device.name || device.serial_number;
+
+export const appVersionLabel = (device: Device) => device.app_version || '-';
 
 /** What a room is called in the table and the picker. */
 export const roomLabel = (room: DeviceRoom) => room.room_number || room.name;

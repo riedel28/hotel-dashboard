@@ -1,5 +1,4 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import dayjs from 'dayjs';
 import type { ReactNode } from 'react';
 import type { Device } from 'shared/types/devices';
 
@@ -11,10 +10,15 @@ import {
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
+import { formatDate } from '@/utils/date';
 
-import { connectionStatus, formatRelativeTime } from '../-lib/devices';
-import { ConnectionStatusLabel } from './connection-status';
-import { RoomCell } from './room-cell';
+import {
+  appVersionLabel,
+  connectionStatus,
+  formatRelativeTime
+} from '../-lib/devices';
+import { ConnectionStatusLabel, LastSignalTime } from './connection-status';
+import { DeviceRoomControl } from './device-room-control';
 
 interface DeviceDetailsDrawerProps {
   /** Whether a device is selected; it may still be missing from the list. */
@@ -81,9 +85,10 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
         <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
           <ConnectionStatusLabel status={status} />
           {lastSeen && (
-            <time dateTime={lastSeen}>
-              {formatRelativeTime(lastSeen, i18n.locale, now)}
-            </time>
+            <LastSignalTime
+              lastSeenAt={lastSeen}
+              format={(date) => formatRelativeTime(date, i18n.locale, now)}
+            />
           )}
         </div>
       </DrawerHeader>
@@ -102,21 +107,19 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
             />
           </Detail>
           <Detail label={<Trans>Room</Trans>}>
-            <RoomCell device={device} outlined />
+            <DeviceRoomControl device={device} outlined />
           </Detail>
           <Detail label={<Trans>Last signal</Trans>}>
-            {lastSeen ? (
-              <time dateTime={lastSeen} className="tabular-nums">
-                {dayjs(lastSeen).format('DD.MM.YYYY HH:mm:ss')}
-              </time>
-            ) : (
-              <span className="text-muted-foreground">
-                <Trans>Never</Trans>
-              </span>
-            )}
+            <LastSignalTime
+              lastSeenAt={lastSeen}
+              format={(date) =>
+                formatDate(date, { preset: 'dateTimeWithSeconds' })
+              }
+              className="tabular-nums"
+            />
           </Detail>
           <Detail label={<Trans>App version</Trans>}>
-            <span className="tabular-nums">{device.app_version || '-'}</span>
+            <span className="tabular-nums">{appVersionLabel(device)}</span>
           </Detail>
         </dl>
       </DrawerBody>

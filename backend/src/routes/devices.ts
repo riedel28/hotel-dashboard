@@ -1,12 +1,10 @@
-import { type RequestHandler, Router } from 'express';
-import rateLimit from 'express-rate-limit';
+import { Router } from 'express';
 
 import {
   assignDeviceRoomSchema,
   claimDeviceSchema,
   deviceIdParamsSchema
 } from '../../../shared/types/devices';
-import env from '../../env';
 import {
   assignDeviceRoom,
   claimDevice,
@@ -14,23 +12,14 @@ import {
   getDevices
 } from '../controllers/device-controller';
 import { authenticateToken } from '../middleware/auth';
+import { createStrictRateLimiter } from '../middleware/rate-limit';
 import { attachSelectedProperty } from '../middleware/selected-property';
 import { validateBody, validateParams } from '../middleware/validation';
 
 const router = Router();
 
-// Claiming checks a PIN, so it gets the auth routes' stricter limit against
-// guessing (disabled in test environment, like the other limiters).
-const claimLimiter: RequestHandler =
-  env.NODE_ENV === 'test'
-    ? (_req, _res, next) => next()
-    : rateLimit({
-        windowMs: env.AUTH_RATE_LIMIT_WINDOW_MS,
-        max: env.AUTH_RATE_LIMIT_MAX_REQUESTS,
-        standardHeaders: 'draft-8',
-        legacyHeaders: false,
-        message: { error: 'Too many attempts, please try again later' }
-      });
+// Claiming checks a PIN, so it gets the auth routes' stricter limit
+const claimLimiter = createStrictRateLimiter();
 
 // Authenticate, then resolve the caller's selected property onto the request.
 router.use(authenticateToken);

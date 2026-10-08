@@ -5,7 +5,6 @@ import { PlusCircleIcon, TabletSmartphoneIcon, XIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
   type Device,
-  type DeviceConnectionStatus,
   deviceConnectionStatusSchema
 } from 'shared/types/devices';
 import { z } from 'zod';
@@ -40,10 +39,14 @@ import { ClaimDeviceModal } from './-components/claim-device-modal';
 import { ConnectionStatusLabel } from './-components/connection-status';
 import { DeviceDetailsDrawer } from './-components/device-details-drawer';
 import { DevicesTable } from './-components/devices-table';
-import { type DeviceTab, filterDevices } from './-lib/devices';
+import {
+  type DeviceFilters,
+  deviceTabSchema,
+  filterDevices
+} from './-lib/devices';
 
 const devicesSearchSchema = z.object({
-  tab: z.enum(['assigned', 'unassigned']).optional(),
+  tab: deviceTabSchema.optional(),
   // A room number typed into the URL by hand arrives as a number
   q: z.union([z.string(), z.number().transform(String)]).optional(),
   status: deviceConnectionStatusSchema.optional(),
@@ -193,11 +196,7 @@ function DevicesContent({
     [devices, tab, q, status, now]
   );
 
-  const setFilters = (filters: {
-    tab?: DeviceTab;
-    q?: string;
-    status?: DeviceConnectionStatus;
-  }) =>
+  const setFilters = (filters: DeviceFilters) =>
     navigate({ search: (prev) => ({ ...prev, ...filters }), replace: true });
 
   if (devices.length === 0) {

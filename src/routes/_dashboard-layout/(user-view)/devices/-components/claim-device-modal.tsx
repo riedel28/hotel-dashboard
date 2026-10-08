@@ -8,7 +8,9 @@ import { Controller, useForm } from 'react-hook-form';
 import {
   claimDeviceSchema,
   type Device,
+  DEVICE_NAME_MAX_LENGTH,
   DEVICE_PIN_LENGTH,
+  deviceClaimErrorCodeSchema,
   deviceRoomSchema
 } from 'shared/types/devices';
 import { toast } from 'sonner';
@@ -45,8 +47,8 @@ import { roomLabel } from '../-lib/devices';
 import { RoomPicker } from './room-picker';
 
 const claimFormSchema = claimDeviceSchema
-  .pick({ serial_number: true, pin: true })
-  .extend({ name: z.string(), room: deviceRoomSchema.nullable() });
+  .pick({ serial_number: true, pin: true, name: true })
+  .extend({ room: deviceRoomSchema.nullable() });
 
 type ClaimFormData = z.infer<typeof claimFormSchema>;
 
@@ -84,12 +86,10 @@ export function ClaimDeviceModal({
     defaultValues: { serial_number: '', pin: '', name: '', room: null }
   });
 
-  const handleOpenChange = (nextOpen: boolean) => {
-    onOpenChange(nextOpen);
-    if (!nextOpen) {
-      form.reset();
-      setFormError(null);
-    }
+  const close = () => {
+    onOpenChange(false);
+    form.reset();
+    setFormError(null);
   };
 
   const claimMutation = useMutation({
@@ -99,13 +99,15 @@ export function ClaimDeviceModal({
       await queryClient.invalidateQueries({
         queryKey: devicesQueryOptions().queryKey
       });
-      handleOpenChange(false);
+      close();
       toast.success(t`Device added`);
       onClaimed(device);
     },
     // What was typed stays in the form, whatever the error
     onError: (error) => {
-      const code = error instanceof ApiError ? error.code : undefined;
+      const { data: code } = deviceClaimErrorCodeSchema.safeParse(
+        error instanceof ApiError ? error.code : undefined
+      );
       if (code === 'DEVICE_ALREADY_CLAIMED') {
         form.setError('serial_number', {
           type: 'server',
@@ -123,6 +125,16 @@ export function ClaimDeviceModal({
       }
     }
   });
+
+  // Closing waits for a claim in flight: its answer would otherwise land on
+  // a form that was already emptied, or add a device after "Cancel"
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      onOpenChange(true);
+    } else if (!claimMutation.isPending) {
+      close();
+    }
+  };
 
   const onSubmit = (data: ClaimFormData) => {
     setFormError(null);
@@ -249,7 +261,8 @@ export function ClaimDeviceModal({
                       id={field.name}
                       {...field}
                       autoComplete="off"
-                      maxLength={100}
+                      value={field.value ?? ''}
+                      maxLength={DEVICE_NAME_MAX_LENGTH}
                     />
                   </Field>
                 )}
@@ -292,6 +305,7 @@ export function ClaimDeviceModal({
             <Button
               type="button"
               variant="outline"
+              disabled={claimMutation.isPending}
               onClick={() => handleOpenChange(false)}
             >
               <Trans>Cancel</Trans>

@@ -7,6 +7,7 @@ export const DEVICE_ONLINE_THRESHOLD_MS = 15 * 60 * 1000;
 export const DEVICE_OFFLINE_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 
 export const DEVICE_PIN_LENGTH = 12;
+export const DEVICE_NAME_MAX_LENGTH = 100;
 
 export const deviceConnectionStatusSchema = z.enum([
   'online',
@@ -43,7 +44,7 @@ export const claimDeviceSchema = z.object({
       new RegExp(`^\\d{${DEVICE_PIN_LENGTH}}$`),
       `PIN must be ${DEVICE_PIN_LENGTH} digits`
     ),
-  name: z.string().trim().max(100).optional(),
+  name: z.string().trim().max(DEVICE_NAME_MAX_LENGTH).optional(),
   room_id: z.number().int().positive().nullable().optional()
 });
 

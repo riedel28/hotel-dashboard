@@ -1,7 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { type ColumnDef, useTable } from '@tanstack/react-table';
-import dayjs from 'dayjs';
-import { type ReactNode, useMemo } from 'react';
+import { type ReactNode, useEffect, useMemo, useRef } from 'react';
 import type { Device } from 'shared/types/devices';
 
 import {
@@ -19,10 +18,19 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import { formatDate } from '@/utils/date';
 
-import { connectionStatus, formatRelativeTime } from '../-lib/devices';
-import { ConnectionStatusDot, ConnectionStatusName } from './connection-status';
-import { RoomCell } from './room-cell';
+import {
+  appVersionLabel,
+  connectionStatus,
+  formatRelativeTime
+} from '../-lib/devices';
+import {
+  ConnectionStatusDot,
+  ConnectionStatusName,
+  LastSignalTime
+} from './connection-status';
+import { DeviceRoomControl } from './device-room-control';
 
 const noDevices: Device[] = [];
 
@@ -53,22 +61,17 @@ function LastSignalCell({ device, now }: { device: Device; now: number }) {
         <span className="sr-only">
           <ConnectionStatusName status={status} />,
         </span>
-        {lastSeen ? (
-          <time dateTime={lastSeen}>
-            {formatRelativeTime(lastSeen, i18n.locale, now)}
-          </time>
-        ) : (
-          <span className="text-muted-foreground">
-            <Trans>Never</Trans>
-          </span>
-        )}
+        <LastSignalTime
+          lastSeenAt={lastSeen}
+          format={(date) => formatRelativeTime(date, i18n.locale, now)}
+        />
       </TooltipTrigger>
       <TooltipContent>
         <ConnectionStatusName status={status} />
         {lastSeen && (
           <span className="tabular-nums">
             {' · '}
-            {dayjs(lastSeen).format('DD.MM.YYYY HH:mm:ss')}
+            {formatDate(lastSeen, { preset: 'dateTimeWithSeconds' })}
           </span>
         )}
       </TooltipContent>
@@ -85,6 +88,16 @@ export function DevicesTable({
   onDeviceOpen
 }: DevicesTableProps) {
   const { t } = useLingui();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // The highlighted device can be anywhere in a long list; bring it on screen
+  useEffect(() => {
+    if (highlightedId !== undefined) {
+      containerRef.current
+        ?.querySelector('[data-highlighted]')
+        ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+  }, [highlightedId]);
 
   const columns = useMemo<ColumnDef<DataGridFeatures, Device>[]>(
     () => [
@@ -144,7 +157,7 @@ export function DevicesTable({
             className="w-fit"
             onClick={(event) => event.stopPropagation()}
           >
-            <RoomCell device={row.original} />
+            <DeviceRoomControl device={row.original} />
           </div>
         ),
         meta: {
@@ -178,7 +191,7 @@ export function DevicesTable({
         ),
         cell: ({ row }) => (
           <span className="text-muted-foreground tabular-nums">
-            {row.original.app_version || '-'}
+            {appVersionLabel(row.original)}
           </span>
         ),
         meta: { skeleton: <Skeleton className="h-4 w-12" /> },
@@ -211,12 +224,14 @@ export function DevicesTable({
           'transition-colors duration-700 has-data-highlighted:bg-emerald-500/15 has-data-highlighted:hover:bg-emerald-500/15'
       }}
     >
-      <DataGridContainer>
-        <ScrollArea>
-          <DataGridTable />
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </DataGridContainer>
+      <div ref={containerRef}>
+        <DataGridContainer>
+          <ScrollArea>
+            <DataGridTable />
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </DataGridContainer>
+      </div>
     </DataGrid>
   );
 }

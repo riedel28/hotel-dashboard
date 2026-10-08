@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Device } from 'shared/types/devices';
 
 import {
@@ -14,15 +14,16 @@ import {
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { roomLabel } from '../-lib/devices';
+import { deviceLabel, roomLabel } from '../-lib/devices';
 import { RoomPicker } from './room-picker';
 import { useAssignDeviceRoom } from './use-assign-device-room';
 
 /**
  * The room of a device: "Assign" for an unassigned one, otherwise the room
  * number. Either opens the room picker; picking a room saves immediately.
+ * Used as the table's Room cell and in the details drawer.
  */
-export function RoomCell({
+export function DeviceRoomControl({
   device,
   outlined = false
 }: {
@@ -33,8 +34,11 @@ export function RoomCell({
   const { t } = useLingui();
   const assign = useAssignDeviceRoom();
   const [isConfirmingUnassign, setIsConfirmingUnassign] = useState(false);
+  // Set by the Unassign button; the change itself waits for the dialog to
+  // finish closing, so its text and its row stay put while it animates out
+  const isUnassignConfirmed = useRef(false);
   const { room } = device;
-  const name = device.name || device.serial_number;
+  const name = deviceLabel(device);
 
   return (
     <>
@@ -69,6 +73,12 @@ export function RoomCell({
       <AlertDialog
         open={isConfirmingUnassign}
         onOpenChange={setIsConfirmingUnassign}
+        onOpenChangeComplete={(open) => {
+          if (!open && isUnassignConfirmed.current) {
+            isUnassignConfirmed.current = false;
+            assign.mutate({ device, room: null });
+          }
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -93,8 +103,8 @@ export function RoomCell({
             <Button
               variant="destructive"
               onClick={() => {
+                isUnassignConfirmed.current = true;
                 setIsConfirmingUnassign(false);
-                assign.mutate({ device, room: null });
               }}
             >
               <Trans>Unassign</Trans>
