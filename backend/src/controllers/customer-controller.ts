@@ -5,6 +5,7 @@ import {
   eq,
   getTableColumns,
   ilike,
+  inArray,
   or,
   sql
 } from 'drizzle-orm';
@@ -30,8 +31,13 @@ const customerColumns = {
   property_count: propertyCount
 };
 
-function toCustomerResponse(
-  customer: typeof customersTable.$inferSelect & { property_count: number }
+type CustomerRow = typeof customersTable.$inferSelect & {
+  property_count: number;
+};
+
+function toCustomerResponse<P extends { id: string; name: string }>(
+  customer: CustomerRow,
+  properties: P[]
 ) {
   return {
     id: customer.id,
@@ -44,7 +50,8 @@ function toCustomerResponse(
     zip: customer.zip,
     city: customer.city,
     country_code: customer.country_code,
-    property_count: customer.property_count
+    property_count: customer.property_count,
+    properties
   };
 }
 
@@ -52,12 +59,10 @@ function sortColumns(sortBy: CustomerSortableColumn) {
   switch (sortBy) {
     case 'name':
       return [customersTable.last_name, customersTable.first_name];
-    case 'company_name':
-      return [customersTable.company_name];
     case 'email':
       return [customersTable.email];
-    case 'country_code':
-      return [customersTable.country_code];
+    case 'city':
+      return [customersTable.city];
     case 'property_count':
       return [propertyCount];
   }
@@ -100,8 +105,29 @@ async function getCustomers(req: Request, res: Response) {
       .from(customersTable)
       .where(searchCondition);
 
+    // One query for the whole page's Properties, not one per Customer.
+    const ids = customers.map((customer) => customer.id);
+    const owned = ids.length
+      ? await db
+          .select({
+            id: propertiesTable.id,
+            name: propertiesTable.name,
+            customer_id: propertiesTable.customer_id
+          })
+          .from(propertiesTable)
+          .where(inArray(propertiesTable.customer_id, ids))
+          .orderBy(asc(propertiesTable.name))
+      : [];
+
     res.status(200).json({
-      index: customers.map(toCustomerResponse),
+      index: customers.map((customer) =>
+        toCustomerResponse(
+          customer,
+          owned
+            .filter((property) => property.customer_id === customer.id)
+            .map(({ id, name }) => ({ id, name }))
+        )
+      ),
       page: pageNum,
       per_page: perPageNum,
       total,
@@ -121,6 +147,19 @@ async function findCustomer(id: string) {
   return customer;
 }
 
+function findProperties(customerId: string) {
+  return db
+    .select({
+      id: propertiesTable.id,
+      name: propertiesTable.name,
+      country_code: propertiesTable.country_code,
+      stage: propertiesTable.stage
+    })
+    .from(propertiesTable)
+    .where(eq(propertiesTable.customer_id, customerId))
+    .orderBy(asc(propertiesTable.name));
+}
+
 async function getCustomerById(req: Request, res: Response) {
   try {
     const { id } = req.params;
@@ -131,18 +170,9 @@ async function getCustomerById(req: Request, res: Response) {
       return res.status(404).json({ error: 'Customer not found' });
     }
 
-    const properties = await db
-      .select({
-        id: propertiesTable.id,
-        name: propertiesTable.name,
-        country_code: propertiesTable.country_code,
-        stage: propertiesTable.stage
-      })
-      .from(propertiesTable)
-      .where(eq(propertiesTable.customer_id, id))
-      .orderBy(asc(propertiesTable.name));
-
-    res.status(200).json({ ...toCustomerResponse(customer), properties });
+    res
+      .status(200)
+      .json(toCustomerResponse(customer, await findProperties(id)));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch customer' });
@@ -162,7 +192,9 @@ async function createCustomer(req: Request, res: Response) {
       .values(req.body)
       .returning();
 
-    res.status(201).json(toCustomerResponse({ ...created, property_count: 0 }));
+    res
+      .status(201)
+      .json(toCustomerResponse({ ...created, property_count: 0 }, []));
   } catch (error) {
     if (isUniqueViolation(error)) return emailTaken(res);
     console.error(error);
@@ -184,7 +216,11 @@ async function updateCustomer(req: Request, res: Response) {
       return res.status(404).json({ error: 'Customer not found' });
     }
 
-    res.status(200).json(toCustomerResponse(await findCustomer(id)));
+    res
+      .status(200)
+      .json(
+        toCustomerResponse(await findCustomer(id), await findProperties(id))
+      );
   } catch (error) {
     if (isUniqueViolation(error)) return emailTaken(res);
     console.error(error);

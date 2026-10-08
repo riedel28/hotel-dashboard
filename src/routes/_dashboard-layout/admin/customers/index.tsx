@@ -14,6 +14,7 @@ import { fetchCustomersParamsSchema } from 'shared/types/customers';
 
 import { customersQueryOptions } from '@/api/customers';
 import { QueryBoundary } from '@/components/query-boundary';
+import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -39,6 +40,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem
 } from '@/components/ui/dropdown-menu';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
 import { SearchInput } from '@/components/ui/search-input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
@@ -67,6 +73,69 @@ function RowActions({ customer }: { customer: Customer }) {
         />
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+const propertyLinkClass = 'truncate underline-offset-4 hover:underline';
+
+/** The first Property by name, and a "+N" badge that lists all of them. */
+function PropertiesCell({
+  properties
+}: {
+  properties: Customer['properties'];
+}) {
+  const { t } = useLingui();
+  const [first, ...rest] = properties;
+
+  if (!first) {
+    return <span className="text-muted-foreground">—</span>;
+  }
+
+  return (
+    <div className="flex min-w-0 items-center gap-2">
+      <RouterLink
+        to="/admin/properties/$propertyId"
+        params={{ propertyId: first.id }}
+        className={propertyLinkClass}
+        title={first.name}
+      >
+        {first.name}
+      </RouterLink>
+      {rest.length > 0 && (
+        <Popover>
+          <PopoverTrigger
+            openOnHover
+            delay={150}
+            className="shrink-0 cursor-pointer rounded-md"
+            aria-label={t`Show all ${properties.length} properties`}
+          >
+            <Badge
+              variant="secondary"
+              color="gray"
+              size="xs"
+              className="tabular-nums"
+            >
+              +{rest.length}
+            </Badge>
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-64 p-3">
+            <ul className="flex flex-col gap-1.5">
+              {properties.map((property) => (
+                <li key={property.id} className="flex min-w-0">
+                  <RouterLink
+                    to="/admin/properties/$propertyId"
+                    params={{ propertyId: property.id }}
+                    className={propertyLinkClass}
+                  >
+                    {property.name}
+                  </RouterLink>
+                </li>
+              ))}
+            </ul>
+          </PopoverContent>
+        </Popover>
+      )}
+    </div>
   );
 }
 
@@ -121,54 +190,36 @@ function CustomersTable({
         ),
         cell: ({ row, getValue }) => {
           const name = getValue() as string;
+          const company = row.original.company_name;
           return (
-            <RouterLink
-              to="/admin/customers/$customerId"
-              params={{ customerId: row.original.id }}
-              preload="intent"
-              className="line-clamp-1 font-medium underline-offset-4 hover:underline"
-              title={name}
-            >
-              {name}
-            </RouterLink>
+            <div className="min-w-0">
+              <RouterLink
+                to="/admin/customers/$customerId"
+                params={{ customerId: row.original.id }}
+                preload="intent"
+                className="block truncate font-medium underline-offset-4 hover:underline"
+                title={name}
+              >
+                {name}
+              </RouterLink>
+              {company && (
+                <div
+                  className="truncate text-xs text-muted-foreground"
+                  title={company}
+                >
+                  {company}
+                </div>
+              )}
+            </div>
           );
         },
         meta: {
-          skeleton: <Skeleton className="h-6 w-32" />,
+          skeleton: <Skeleton className="h-8 w-40" />,
           headerTitle: t`Name`
         },
-        size: 180,
+        size: 240,
         enableSorting: true,
         enableHiding: false,
-        enableResizing: true
-      },
-      {
-        accessorKey: 'company_name',
-        id: 'company_name',
-        header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Company`}
-            visibility={true}
-            column={column}
-          />
-        ),
-        cell: ({ row }) => {
-          const company = row.original.company_name;
-          return company ? (
-            <span className="line-clamp-1" title={company}>
-              {company}
-            </span>
-          ) : (
-            <span className="text-muted-foreground">—</span>
-          );
-        },
-        meta: {
-          skeleton: <Skeleton className="h-6 w-36" />,
-          headerTitle: t`Company`
-        },
-        size: 200,
-        enableSorting: true,
-        enableHiding: true,
         enableResizing: true
       },
       {
@@ -190,13 +241,15 @@ function CustomersTable({
           skeleton: <Skeleton className="h-6 w-40" />,
           headerTitle: t`Email`
         },
-        size: 220,
+        size: 240,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
       },
       {
-        id: 'address',
+        // Just where the Customer is; the street and ZIP are on its page.
+        accessorKey: 'city',
+        id: 'city',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={t`Address`}
@@ -205,61 +258,31 @@ function CustomersTable({
           />
         ),
         cell: ({ row }) => {
-          const { address_line_1, address_line_2, zip, city } = row.original;
-          const street = [address_line_1, address_line_2]
-            .filter(Boolean)
-            .join(', ');
+          const { city, country_code } = row.original;
           return (
             <div className="min-w-0">
-              <div className="truncate" title={street}>
-                {street}
+              <div className="truncate" title={city}>
+                {city}
               </div>
-              <div className="truncate text-xs text-muted-foreground">
-                {zip} {city}
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <CountryFlag
+                  code={country_code}
+                  title={country_code}
+                  className="size-3.5 shrink-0"
+                  aria-label={country_code}
+                />
+                <span className="truncate">
+                  {getCountryName(country_code, i18n.locale)}
+                </span>
               </div>
             </div>
           );
         },
         meta: {
-          skeleton: <Skeleton className="h-8 w-44" />,
+          skeleton: <Skeleton className="h-8 w-36" />,
           headerTitle: t`Address`
         },
-        size: 240,
-        enableSorting: false,
-        enableHiding: true,
-        enableResizing: true
-      },
-      {
-        accessorKey: 'country_code',
-        id: 'country_code',
-        header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Country`}
-            visibility={true}
-            column={column}
-          />
-        ),
-        cell: ({ row }) => {
-          const countryCode = row.original.country_code;
-          return (
-            <div className="flex items-center gap-2">
-              <CountryFlag
-                code={countryCode}
-                title={countryCode}
-                className="size-4"
-                aria-label={countryCode}
-              />
-              <span className="text-foreground">
-                {getCountryName(countryCode, i18n.locale)}
-              </span>
-            </div>
-          );
-        },
-        meta: {
-          skeleton: <Skeleton className="h-6 w-24" />,
-          headerTitle: t`Country`
-        },
-        size: 150,
+        size: 220,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -275,16 +298,16 @@ function CustomersTable({
           />
         ),
         cell: ({ row }) => (
-          <span className="tabular-nums">{row.original.property_count}</span>
+          <PropertiesCell properties={row.original.properties} />
         ),
         meta: {
-          skeleton: <Skeleton className="h-6 w-8" />,
+          skeleton: <Skeleton className="h-6 w-40" />,
           headerTitle: t`Properties`
         },
-        size: 110,
+        size: 260,
         enableSorting: true,
         enableHiding: true,
-        enableResizing: false
+        enableResizing: true
       },
       {
         id: 'actions',

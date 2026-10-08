@@ -35,7 +35,7 @@ test.describe('Customers', () => {
       .getByRole('row')
       .filter({ hasText: 'Hans Gruber' });
     await expect(customerRow).toContainText('Nakatomi Hotels');
-    await expect(customerRow).toContainText('90067 Los Angeles');
+    await expect(customerRow).toContainText('Los Angeles');
 
     // The same email again is refused on the field, whatever its case.
     await page.getByRole('button', { name: 'Add Customer' }).click();

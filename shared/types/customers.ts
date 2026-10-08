@@ -42,7 +42,9 @@ export const customerSchema = z.object({
   zip: z.string(),
   city: z.string(),
   country_code: z.string(),
-  property_count: z.number().int().nonnegative()
+  property_count: z.number().int().nonnegative(),
+  // Every Property the Customer owns, by name.
+  properties: z.array(z.object({ id: z.uuid(), name: z.string() }))
 });
 
 // A single Customer also carries the Properties it owns.
@@ -59,9 +61,8 @@ export const customerDetailSchema = customerSchema.extend({
 
 export const customerSortableColumnsSchema = z.enum([
   'name',
-  'company_name',
   'email',
-  'country_code',
+  'city',
   'property_count'
 ]);
 

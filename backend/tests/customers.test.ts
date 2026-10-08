@@ -79,7 +79,11 @@ describe('Customers API', () => {
         request(app).post('/api/customers').send(ullman)
       ).expect(201);
 
-      expect(response.body).toMatchObject({ ...ullman, property_count: 0 });
+      expect(response.body).toMatchObject({
+        ...ullman,
+        property_count: 0,
+        properties: []
+      });
       expect(response.body.id).toEqual(expect.any(String));
     });
 
@@ -167,6 +171,19 @@ describe('Customers API', () => {
         ['Fawlty', 0],
         ['Ullman', 2]
       ]);
+      expect(response.body.index[0].properties).toEqual([]);
+      expect(response.body.index[1].properties).toEqual([
+        { id: expect.any(String), name: 'The Dolphin Hotel' },
+        { id: expect.any(String), name: 'The Overlook Hotel' }
+      ]);
+    });
+
+    test('sorts by city', async () => {
+      const response = await asAdmin(
+        request(app).get('/api/customers?sort_by=city&sort_order=desc')
+      ).expect(200);
+
+      expect(response.body.index[0].city).toBe('Torquay');
     });
 
     test('sorts by property count', async () => {
