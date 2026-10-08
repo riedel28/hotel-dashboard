@@ -103,7 +103,7 @@ msgstr "Zimmerzuweisung von {name} aufgehoben"
 #~ msgstr "{productCount, plural, =0 {Keine Produkte in dieser Kategorie} one {# Produkt in dieser Kategorie} other {# Produkte in dieser Kategorie}}"
 
 #. placeholder {0}: room && roomLabel(room)
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:69
 msgid "<0>{name}</0> will no longer belong to room <1>{0}</1>. You can assign it again at any time."
 msgstr "<0>{name}</0> gehört dann nicht mehr zu Zimmer <1>{0}</1>. Sie können es jederzeit wieder zuweisen."
 
@@ -168,13 +168,13 @@ msgid "Activate Account"
 msgstr "Konto aktivieren"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:153
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:304
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:306
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:214
 msgid "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 msgstr "Fügen Sie ein Tablet, Telefon oder TV-Gerät mit seiner Seriennummer und der auf dem Bildschirm angezeigten PIN hinzu."
 
@@ -190,8 +190,8 @@ msgid "Add category"
 msgstr "Kategorie hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:138
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:128
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:209
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:131
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:223
 msgid "Add device"
 msgstr "Gerät hinzufügen"
 
@@ -300,7 +300,7 @@ msgid "After entering your password you'll enter a 6-digit code from an authenti
 msgstr "Nach der Eingabe Ihres Passworts geben Sie einen 6-stelligen Code aus einer Authenticator-App auf Ihrem Telefon ein. Die Einrichtung dauert etwa eine Minute."
 
 #: src/components/ui/data-grid-segmented-filter.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:237
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:251
 msgid "All"
 msgstr "Alle"
 
@@ -317,7 +317,7 @@ msgid "All stages"
 msgstr "Alle Phasen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:35
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:263
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:277
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:24
 msgid "All statuses"
 msgstr "Alle Status"
@@ -344,7 +344,7 @@ msgstr "Haben Sie bereits ein Konto?"
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Sie haben bereits eine? Jede TOTP-App funktioniert — scannen Sie einfach den QR-Code."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:137
 msgid "An error occurred while fetching devices"
 msgstr "Beim Laden der Geräte ist ein Fehler aufgetreten"
 
@@ -381,7 +381,8 @@ msgstr "Android App"
 msgid "API Key"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:151
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:172
 msgid "App version"
 msgstr "App-Version"
 
@@ -428,7 +429,7 @@ msgstr "Anreisedatum"
 msgid "Asc"
 msgstr "Aufst."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:56
 msgid "Assign"
 msgstr "Zuweisen"
 
@@ -436,7 +437,7 @@ msgstr "Zuweisen"
 msgid "Assign {name} to a room"
 msgstr "{name} einem Zimmer zuweisen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:258
 msgid "Assigned"
 msgstr "Zugewiesen"
 
@@ -590,8 +591,8 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:148
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:75
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:295
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:297
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:323
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:356
@@ -760,7 +761,7 @@ msgstr "Alle zurücksetzen"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:144
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:203
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:277
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:291
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
 #: src/routes/_dashboard-layout/admin/properties/-components/property-clear-filters.tsx:26
@@ -910,6 +911,10 @@ msgstr ""
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:134
 msgid "Copy reservation number"
 msgstr "Reservierungsnummer kopieren"
+
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:94
+msgid "Copy serial number"
+msgstr "Seriennummer kopieren"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:424
 msgid "Copy setup key"
@@ -1097,10 +1102,14 @@ msgstr "Beschreibung"
 msgid "Device added"
 msgstr "Gerät hinzugefügt"
 
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:42
+msgid "Device not found"
+msgstr "Gerät nicht gefunden"
+
 #: src/routes/_dashboard-layout/-components/nav-items.ts:116
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:77
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:116
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:127
 msgid "Devices"
 msgstr "Geräte"
 
@@ -1550,7 +1559,7 @@ msgstr "Kategorien konnten nicht geladen werden"
 msgid "Failed to load products"
 msgstr "Produkte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:105
 msgid "Failed to load rooms"
 msgstr "Zimmer konnten nicht geladen werden"
 
@@ -1677,7 +1686,7 @@ msgid "First name is required"
 msgstr "Vorname ist erforderlich"
 
 #. placeholder {0}: group.floor
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:117
 msgid "Floor {0}"
 msgstr "Etage {0}"
 
@@ -1911,7 +1920,7 @@ msgstr "Passwort ausblenden"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:32
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:32
@@ -2094,7 +2103,8 @@ msgstr "Nachname ist erforderlich"
 #~ msgid "Last sent: {lastSent}"
 #~ msgstr "Zuletzt gesendet: {lastSent}"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:161
 msgid "Last signal"
 msgstr "Letztes Signal"
 
@@ -2144,7 +2154,7 @@ msgstr ""
 msgid "Loading properties"
 msgstr "Properties werden geladen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:103
 msgid "Loading rooms…"
 msgstr "Zimmer werden geladen…"
 
@@ -2332,7 +2342,7 @@ msgstr "Mein Profil"
 #~ msgstr "N"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:246
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:95
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:84
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:114
@@ -2361,7 +2371,8 @@ msgstr "Navigationspunkte"
 #~ msgid "Network response was not ok"
 #~ msgstr "Netzwerkantwort war nicht in Ordnung"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:62
 msgid "Never"
 msgstr "Nie"
 
@@ -2414,11 +2425,11 @@ msgstr "Keine Daten verfügbar"
 #~ msgid "No device with this serial number was found"
 #~ msgstr "Es wurde kein Gerät mit dieser Seriennummer gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:286
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:300
 msgid "No devices match the filters"
 msgstr "Keine Geräte entsprechen den Filtern"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:197
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:211
 msgid "No devices yet"
 msgstr "Noch keine Geräte"
 
@@ -2430,7 +2441,7 @@ msgstr ""
 msgid "No fellow travelers"
 msgstr "Keine Mitreisende"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:111
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:115
 msgid "No floor"
 msgstr "Ohne Etage"
 
@@ -2512,7 +2523,7 @@ msgstr "Kein Zimmer"
 msgid "No rooms available"
 msgstr "Keine Zimmer verfügbar"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:107
 msgid "No rooms found"
 msgstr "Keine Zimmer gefunden"
 
@@ -2525,7 +2536,7 @@ msgstr ""
 #~ msgstr "Keine"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:169
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:280
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:282
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:161
 msgid "Not assigned"
 msgstr "Nicht zugewiesen"
@@ -3303,7 +3314,8 @@ msgstr "Rollen & Zugriff"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:171
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:135
 msgid "Room"
 msgstr "Zimmer"
 
@@ -3319,7 +3331,7 @@ msgstr "Zimmer {0} von {name}, ändern"
 #~ msgid "Room {room}"
 #~ msgstr "Zimmer {room}"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:233
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:247
 msgid "Room assignment"
 msgstr "Zimmerzuweisung"
 
@@ -3337,7 +3349,7 @@ msgstr "Zimmerdetails"
 msgid "Room Name"
 msgstr "Zimmername"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:91
 msgid "Room number"
 msgstr "Zimmernummer"
 
@@ -3468,7 +3480,7 @@ msgstr "Kategorien durchsuchen"
 msgid "Search country..."
 msgstr "Land suchen..."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:226
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:240
 msgid "Search devices"
 msgstr "Geräte suchen"
 
@@ -3495,7 +3507,7 @@ msgstr "Nach einem Gast suchen..."
 msgid "Search logs"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:227
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:241
 msgid "Search name, serial number, room"
 msgstr "Name, Seriennummer, Zimmer suchen"
 
@@ -3516,7 +3528,7 @@ msgstr "Nach Property-Namen suchen"
 msgid "Search reservations"
 msgstr "Reservierungen suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:92
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-search.tsx:17
 msgid "Search rooms"
 msgstr "Zimmer suchen"
@@ -3629,9 +3641,14 @@ msgstr "Reset-Link senden"
 #~ msgstr "Wird gesendet"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:165
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:121
 msgid "Serial number"
 msgstr "Seriennummer"
+
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:95
+msgid "Serial number copied"
+msgstr "Seriennummer kopiert"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/2fa-section.tsx:111
 #~ msgid "Set up 2FA"
@@ -3824,7 +3841,7 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:118
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:129
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:262
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:276
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:23
@@ -4086,6 +4103,10 @@ msgstr ""
 msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 msgstr ""
 
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:45
+msgid "This device does not exist or was removed."
+msgstr "Dieses Gerät existiert nicht oder wurde entfernt."
+
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:112
 msgid "This device has already been added"
 msgstr "Dieses Gerät wurde bereits hinzugefügt"
@@ -4292,7 +4313,7 @@ msgstr "Bestätigung in zwei Schritten"
 msgid "Type"
 msgstr "Typ"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:90
 msgid "Unassign"
 msgstr "Zuweisung aufheben"
 
@@ -4300,11 +4321,11 @@ msgstr "Zuweisung aufheben"
 msgid "Unassign from room"
 msgstr "Zimmerzuweisung aufheben"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-cell.tsx:66
 msgid "Unassign from room?"
 msgstr "Zimmerzuweisung aufheben?"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:253
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:267
 msgid "Unassigned"
 msgstr "Nicht zugewiesen"
 
@@ -4332,7 +4353,8 @@ msgstr "Rückgängig"
 #~ msgid "United States"
 #~ msgstr "Vereinigte Staaten"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:108
 msgid "Unnamed device"
 msgstr "Unbenanntes Gerät"
 

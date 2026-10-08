@@ -38,6 +38,7 @@ import { lenientSearch } from '@/lib/search-params';
 
 import { ClaimDeviceModal } from './-components/claim-device-modal';
 import { ConnectionStatusLabel } from './-components/connection-status';
+import { DeviceDetailsDrawer } from './-components/device-details-drawer';
 import { DevicesTable } from './-components/devices-table';
 import { type DeviceTab, filterDevices } from './-lib/devices';
 
@@ -45,7 +46,9 @@ const devicesSearchSchema = z.object({
   tab: z.enum(['assigned', 'unassigned']).optional(),
   // A room number typed into the URL by hand arrives as a number
   q: z.union([z.string(), z.number().transform(String)]).optional(),
-  status: deviceConnectionStatusSchema.optional()
+  status: deviceConnectionStatusSchema.optional(),
+  // The device whose details are open
+  device: z.number().int().positive().optional()
 });
 
 // How long a device that was just added stays tinted in the table
@@ -176,7 +179,7 @@ function DevicesContent({
   onAddDevice
 }: DevicesContentProps) {
   const { t } = useLingui();
-  const { tab, q, status } = Route.useSearch();
+  const { tab, q, status, device: openDeviceId } = Route.useSearch();
   const navigate = Route.useNavigate();
 
   // Statuses are computed for the moment the list was fetched, which the
@@ -295,6 +298,19 @@ function DevicesContent({
         now={now}
         highlightedId={highlightedId}
         emptyMessage={<Trans>No devices match the filters</Trans>}
+        // Opening and closing push history entries, so Back closes the drawer
+        onDeviceOpen={(device) =>
+          navigate({ search: (prev) => ({ ...prev, device: device.id }) })
+        }
+      />
+
+      <DeviceDetailsDrawer
+        open={openDeviceId !== undefined}
+        device={devices.find((device) => device.id === openDeviceId)}
+        now={now}
+        onClose={() =>
+          navigate({ search: (prev) => ({ ...prev, device: undefined }) })
+        }
       />
     </div>
   );

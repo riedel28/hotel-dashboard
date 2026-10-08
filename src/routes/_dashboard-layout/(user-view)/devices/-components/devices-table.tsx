@@ -34,6 +34,7 @@ interface DevicesTableProps {
   /** A device to tint for a moment, e.g. the one just added. */
   highlightedId?: number;
   emptyMessage?: ReactNode;
+  onDeviceOpen?: (device: Device) => void;
 }
 
 function LastSignalCell({ device, now }: { device: Device; now: number }) {
@@ -80,7 +81,8 @@ export function DevicesTable({
   isLoading = false,
   now = 0,
   highlightedId,
-  emptyMessage
+  emptyMessage,
+  onDeviceOpen
 }: DevicesTableProps) {
   const { t } = useLingui();
 
@@ -94,15 +96,19 @@ export function DevicesTable({
         ),
         cell: ({ row }) => (
           // The row reads this marker to tint itself, see `bodyRow` below
-          <span
+          // The click bubbles to the row, which opens the details; the button
+          // is what makes that reachable from the keyboard
+          <button
+            type="button"
             data-highlighted={row.original.id === highlightedId || undefined}
+            className="cursor-pointer rounded-sm text-left underline-offset-4 outline-none group-hover/row:underline focus-visible:ring-2 focus-visible:ring-ring"
           >
             {row.original.name || (
               <span className="text-muted-foreground">
                 <Trans>Unnamed device</Trans>
               </span>
             )}
-          </span>
+          </button>
         ),
         meta: { skeleton: <Skeleton className="h-4 w-32" /> },
         size: 220,
@@ -128,7 +134,14 @@ export function DevicesTable({
         header: ({ column }) => (
           <DataGridColumnHeader title={t`Room`} column={column} />
         ),
-        cell: ({ row }) => <RoomCell device={row.original} />,
+        cell: ({ row }) => (
+          // Picking a room is not a click on the row. React events bubble
+          // through portals, so this also covers the picker's popup.
+          // oxlint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+          <div onClick={(event) => event.stopPropagation()}>
+            <RoomCell device={row.original} />
+          </div>
+        ),
         meta: {
           // As tall as the room button, so rows keep their height once the
           // devices load
@@ -186,10 +199,11 @@ export function DevicesTable({
       isLoading={isLoading}
       skeletonRowCount={8}
       emptyMessage={emptyMessage}
+      onRowClick={onDeviceOpen}
       tableClassNames={{
         edgeCell: 'px-5',
         bodyRow:
-          'transition-colors duration-700 has-data-highlighted:bg-emerald-500/15 has-data-highlighted:hover:bg-emerald-500/15'
+          'group/row transition-colors duration-700 has-data-highlighted:bg-emerald-500/15 has-data-highlighted:hover:bg-emerald-500/15'
       }}
     >
       <DataGridContainer>
