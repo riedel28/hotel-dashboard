@@ -564,10 +564,18 @@ function CustomersPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Customers</Trans>
-        </h1>
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-xl font-bold">
+            <Trans>Customers</Trans>
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            <Trans>
+              Manage the customers that own properties and their contact
+              details.
+            </Trans>
+          </p>
+        </div>
         <AddCustomerDrawer />
       </div>
 

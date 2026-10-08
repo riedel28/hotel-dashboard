@@ -390,7 +390,7 @@ msgstr "Already have an account?"
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Already have one? Any TOTP app works — just scan the QR code."
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:576
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:584
 msgid "An error occurred while fetching customers"
 msgstr "An error occurred while fetching customers"
 
@@ -402,7 +402,7 @@ msgstr "An error occurred while fetching devices"
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:525
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:532
 msgid "An error occurred while fetching properties"
 msgstr "An error occurred while fetching properties"
 
@@ -1125,7 +1125,7 @@ msgstr "Customer updated successfully"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:42
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:541
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:561
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:569
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:570
 #: src/routes/_dashboard-layout/admin/index.tsx:25
 msgid "Customers"
 msgstr "Customers"
@@ -2380,9 +2380,17 @@ msgstr "Manage hotel properties, view details, and configure settings"
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Manage orders, track shipments, view order history, and process returns efficiently"
 
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:522
+msgid "Manage properties, their stage and the customers that own them."
+msgstr "Manage properties, their stage and the customers that own them."
+
 #: src/routes/_dashboard-layout/index.tsx:35
 msgid "Manage room inventory, availability, and room type configurations"
 msgstr "Manage room inventory, availability, and room type configurations"
+
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:573
+msgid "Manage the customers that own properties and their contact details."
+msgstr "Manage the customers that own properties and their contact details."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:90
 msgid "Manage the hotel information your guests can browse, from A to Z."
@@ -3242,7 +3250,7 @@ msgstr "Profile updated"
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:43
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:490
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:510
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:518
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:519
 msgid "Properties"
 msgstr "Properties"
 
