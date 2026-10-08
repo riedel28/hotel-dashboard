@@ -17,23 +17,40 @@ export interface DeviceFilters {
   status?: DeviceConnectionStatus;
 }
 
+/**
+ * A device with its connection worked out for one moment — the moment the
+ * list was fetched — so the filter, the table and the drawer all agree.
+ */
+export interface DeviceView extends Device {
+  status: DeviceConnectionStatus;
+  /** Milliseconds since the last signal; null if the device never reported. */
+  signalAgeMs: number | null;
+}
+
 export function connectionStatus(
-  lastSeenAt: string | null,
-  now: number
+  signalAgeMs: number | null
 ): DeviceConnectionStatus {
-  if (!lastSeenAt) return 'offline';
-  const age = now - new Date(lastSeenAt).getTime();
-  if (age < DEVICE_ONLINE_THRESHOLD_MS) return 'online';
-  return age <= DEVICE_OFFLINE_THRESHOLD_MS ? 'recently_offline' : 'offline';
+  if (signalAgeMs === null) return 'offline';
+  if (signalAgeMs < DEVICE_ONLINE_THRESHOLD_MS) return 'online';
+  return signalAgeMs <= DEVICE_OFFLINE_THRESHOLD_MS
+    ? 'recently_offline'
+    : 'offline';
+}
+
+export function withConnection(device: Device, now: number): DeviceView {
+  const signalAgeMs = device.last_seen_at
+    ? now - new Date(device.last_seen_at).getTime()
+    : null;
+  return { ...device, signalAgeMs, status: connectionStatus(signalAgeMs) };
 }
 
 /** "5 min. ago" in the given locale, in the largest unit that fits. */
-export function formatRelativeTime(date: string, locale: string, now: number) {
+export function formatRelativeTime(ageMs: number, locale: string) {
   const format = new Intl.RelativeTimeFormat(locale, {
     numeric: 'auto',
     style: 'short'
   });
-  const minutes = Math.floor((now - new Date(date).getTime()) / 60_000);
+  const minutes = Math.floor(ageMs / 60_000);
   if (minutes < 1) return format.format(0, 'second');
   if (minutes < 60) return format.format(-minutes, 'minute');
   if (minutes < 24 * 60)
@@ -44,8 +61,6 @@ export function formatRelativeTime(date: string, locale: string, now: number) {
 /** What a device is called in messages: its name, else its serial number. */
 export const deviceLabel = (device: Device) =>
   device.name || device.serial_number;
-
-export const appVersionLabel = (device: Device) => device.app_version || '-';
 
 /** What a room is called in the table and the picker. */
 export const roomLabel = (room: DeviceRoom) => room.room_number || room.name;
@@ -88,9 +103,8 @@ export function matchesRoomQuery(room: DeviceRoom, query: string) {
  * ordered by room.
  */
 export function filterDevices(
-  devices: Device[],
-  { tab, q, status }: DeviceFilters,
-  now: number
+  devices: DeviceView[],
+  { tab, q, status }: DeviceFilters
 ) {
   const query = q?.trim().toLowerCase();
 
@@ -98,9 +112,7 @@ export function filterDevices(
     .filter((device) => {
       if (tab === 'assigned' && !device.room) return false;
       if (tab === 'unassigned' && device.room) return false;
-      if (status && connectionStatus(device.last_seen_at, now) !== status) {
-        return false;
-      }
+      if (status && device.status !== status) return false;
       if (!query) return true;
       return (
         [device.name, device.serial_number].some((text) =>

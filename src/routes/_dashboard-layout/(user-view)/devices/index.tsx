@@ -1,5 +1,4 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { PlusCircleIcon, TabletSmartphoneIcon, XIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -9,9 +8,7 @@ import {
 } from 'shared/types/devices';
 import { z } from 'zod';
 
-import { devicesQueryOptions } from '@/api/devices';
 import { QueryBoundary } from '@/components/query-boundary';
-import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,6 +18,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { CountBadge } from '@/components/ui/count-badge';
 import { DataGridRadioFilter } from '@/components/ui/data-grid-radio-filter';
 import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import {
@@ -38,12 +36,14 @@ import { lenientSearch } from '@/lib/search-params';
 import { ClaimDeviceModal } from './-components/claim-device-modal';
 import { ConnectionStatusLabel } from './-components/connection-status';
 import { DeviceDetailsDrawer } from './-components/device-details-drawer';
-import { DevicesTable } from './-components/devices-table';
+import { DeviceRoomActionsProvider } from './-components/device-room-actions';
 import {
-  type DeviceFilters,
-  deviceTabSchema,
-  filterDevices
-} from './-lib/devices';
+  DevicesTable,
+  DevicesTableSkeleton
+} from './-components/devices-table';
+import { useDevices } from './-hooks/use-devices';
+import { useDevicesSearch } from './-hooks/use-devices-search';
+import { deviceTabSchema, filterDevices } from './-lib/devices';
 
 const devicesSearchSchema = z.object({
   tab: deviceTabSchema.optional(),
@@ -66,14 +66,7 @@ function TabLabel({ label, count }: { label: React.ReactNode; count: number }) {
   return (
     <span className="flex items-center gap-1.5">
       {label}
-      <Badge
-        variant="secondary"
-        color="gray"
-        size="xs"
-        className="px-1 py-0 leading-4 tabular-nums"
-      >
-        {count}
-      </Badge>
+      <CountBadge count={count} />
     </span>
   );
 }
@@ -81,25 +74,16 @@ function TabLabel({ label, count }: { label: React.ReactNode; count: number }) {
 function DevicesPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Devices`);
-  const navigate = Route.useNavigate();
+  const { clearFilters } = useDevicesSearch();
 
   const [isClaimOpen, setIsClaimOpen] = useState(false);
   const [highlightedId, setHighlightedId] = useState<number>();
-  // SearchInput keeps its own text; bumping the key empties it on reset
-  const [searchResetKey, setSearchResetKey] = useState(0);
 
   useEffect(() => {
     if (highlightedId === undefined) return;
     const timeout = setTimeout(() => setHighlightedId(undefined), HIGHLIGHT_MS);
     return () => clearTimeout(timeout);
   }, [highlightedId]);
-
-  // The search box is remounted once the URL is clean; any earlier and it
-  // would pick the old query up again.
-  const clearFilters = async () => {
-    await navigate({ search: {}, replace: true });
-    setSearchResetKey((key) => key + 1);
-  };
 
   const handleClaimed = (device: Device) => {
     // Filters could hide the new device; show it
@@ -138,12 +122,17 @@ function DevicesPage() {
       <QueryBoundary
         className="min-h-[60vh] items-center justify-center"
         message={<Trans>An error occurred while fetching devices</Trans>}
-        fallback={<DevicesLoading />}
+        fallback={
+          // The table under an empty row as tall as the filters, so it does
+          // not move when the devices arrive and the filters appear above it
+          <div className="space-y-2.5">
+            <div className="h-9" />
+            <DevicesTableSkeleton />
+          </div>
+        }
       >
         <DevicesContent
           highlightedId={highlightedId}
-          searchResetKey={searchResetKey}
-          onClearFilters={clearFilters}
           onAddDevice={() => setIsClaimOpen(true)}
         />
       </QueryBoundary>
@@ -157,47 +146,22 @@ function DevicesPage() {
   );
 }
 
-// The table under an empty row as tall as the filters, so it does not move
-// when the devices arrive and the filters appear above it.
-function DevicesLoading() {
-  return (
-    <div className="space-y-2.5">
-      <div className="h-9" />
-      <DevicesTable isLoading />
-    </div>
-  );
-}
-
 interface DevicesContentProps {
   highlightedId: number | undefined;
-  searchResetKey: number;
-  onClearFilters: () => void;
   onAddDevice: () => void;
 }
 
-function DevicesContent({
-  highlightedId,
-  searchResetKey,
-  onClearFilters,
-  onAddDevice
-}: DevicesContentProps) {
+function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
   const { t } = useLingui();
-  const { tab, q, status, device: openDeviceId } = Route.useSearch();
-  const navigate = Route.useNavigate();
-
-  // Statuses are computed for the moment the list was fetched, which the
-  // query's refetch interval keeps within a minute of now.
-  const { data: devices, dataUpdatedAt: now } = useSuspenseQuery(
-    devicesQueryOptions()
-  );
+  const devices = useDevices();
+  const search = useDevicesSearch();
+  const { setFilters } = search;
+  const { tab, q, status } = search.filters;
 
   const rows = useMemo(
-    () => filterDevices(devices, { tab, q, status }, now),
-    [devices, tab, q, status, now]
+    () => filterDevices(devices, { tab, q, status }),
+    [devices, tab, q, status]
   );
-
-  const setFilters = (filters: DeviceFilters) =>
-    navigate({ search: (prev) => ({ ...prev, ...filters }), replace: true });
 
   if (devices.length === 0) {
     return (
@@ -227,91 +191,84 @@ function DevicesContent({
   }
 
   const unassignedCount = devices.filter((device) => !device.room).length;
-  const hasActiveFilters = Boolean(tab || q || status);
 
   return (
-    <div className="space-y-2.5">
-      <div className="flex flex-wrap items-center gap-2">
-        <SearchInput
-          key={searchResetKey}
-          value={q ?? ''}
-          onChange={(value) => setFilters({ q: value || undefined })}
-          placeholder={t`Search devices`}
-          aria-label={t`Search name, serial number, room`}
-          className="text-sm"
-          wrapperClassName="min-w-56 flex-1 xl:w-72 xl:flex-none"
-          debounceMs={200}
-        />
-        <DataGridSegmentedFilter
-          label={t`Room assignment`}
-          value={tab}
-          onValueChange={(next) => setFilters({ tab: next })}
-          allLabel={
-            <TabLabel label={<Trans>All</Trans>} count={devices.length} />
-          }
-          options={[
-            {
-              value: 'assigned',
-              label: (
-                <TabLabel
-                  label={<Trans>Assigned</Trans>}
-                  count={devices.length - unassignedCount}
-                />
-              )
-            },
-            {
-              value: 'unassigned',
-              label: (
-                <TabLabel
-                  label={<Trans>Unassigned</Trans>}
-                  count={unassignedCount}
-                />
-              )
+    <DeviceRoomActionsProvider>
+      <div className="space-y-2.5">
+        <div className="flex flex-wrap items-center gap-2">
+          <SearchInput
+            value={q ?? ''}
+            onChange={(value) => setFilters({ q: value || undefined })}
+            placeholder={t`Search devices`}
+            aria-label={t`Search name, serial number, room`}
+            className="text-sm"
+            wrapperClassName="min-w-56 flex-1 xl:w-72 xl:flex-none"
+            debounceMs={200}
+          />
+          <DataGridSegmentedFilter
+            label={t`Room assignment`}
+            value={tab}
+            onValueChange={(next) => setFilters({ tab: next })}
+            allLabel={
+              <TabLabel label={<Trans>All</Trans>} count={devices.length} />
             }
-          ]}
-          className="max-w-full"
+            options={[
+              {
+                value: 'assigned',
+                label: (
+                  <TabLabel
+                    label={<Trans>Assigned</Trans>}
+                    count={devices.length - unassignedCount}
+                  />
+                )
+              },
+              {
+                value: 'unassigned',
+                label: (
+                  <TabLabel
+                    label={<Trans>Unassigned</Trans>}
+                    count={unassignedCount}
+                  />
+                )
+              }
+            ]}
+            className="max-w-full"
+          />
+          <DataGridRadioFilter
+            label={<Trans>Status</Trans>}
+            placeholder={<Trans>All statuses</Trans>}
+            value={status}
+            onValueChange={(next) => setFilters({ status: next })}
+            options={statusOptions}
+            showFooter
+            className="sm:w-[190px]"
+          />
+          {search.hasActiveFilters && (
+            <Button
+              variant="secondary"
+              onClick={search.clearFilters}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <XIcon className="mr-2 h-4 w-4" />
+              <Trans>Clear filters</Trans>
+            </Button>
+          )}
+        </div>
+
+        <DevicesTable
+          devices={rows}
+          highlightedId={highlightedId}
+          emptyMessage={<Trans>No devices match the filters</Trans>}
+          onDeviceOpen={(device) => search.openDevice(device.id)}
         />
-        <DataGridRadioFilter
-          label={<Trans>Status</Trans>}
-          placeholder={<Trans>All statuses</Trans>}
-          value={status}
-          onValueChange={(next) => setFilters({ status: next })}
-          options={statusOptions}
-          showFooter
-          className="sm:w-[190px]"
+
+        <DeviceDetailsDrawer
+          open={search.openDeviceId !== undefined}
+          device={devices.find((device) => device.id === search.openDeviceId)}
+          onClose={search.closeDevice}
         />
-        {hasActiveFilters && (
-          <Button
-            variant="secondary"
-            onClick={onClearFilters}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            <XIcon className="mr-2 h-4 w-4" />
-            <Trans>Clear filters</Trans>
-          </Button>
-        )}
       </div>
-
-      <DevicesTable
-        data={rows}
-        now={now}
-        highlightedId={highlightedId}
-        emptyMessage={<Trans>No devices match the filters</Trans>}
-        // Opening and closing push history entries, so Back closes the drawer
-        onDeviceOpen={(device) =>
-          navigate({ search: (prev) => ({ ...prev, device: device.id }) })
-        }
-      />
-
-      <DeviceDetailsDrawer
-        open={openDeviceId !== undefined}
-        device={devices.find((device) => device.id === openDeviceId)}
-        now={now}
-        onClose={() =>
-          navigate({ search: (prev) => ({ ...prev, device: undefined }) })
-        }
-      />
-    </div>
+    </DeviceRoomActionsProvider>
   );
 }
 

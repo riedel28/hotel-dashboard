@@ -1,6 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
-import type { Device } from 'shared/types/devices';
 
 import { CopyButton } from '@/components/ui/copy-button';
 import {
@@ -12,34 +11,27 @@ import {
 } from '@/components/ui/drawer';
 import { formatDate } from '@/utils/date';
 
-import {
-  appVersionLabel,
-  connectionStatus,
-  formatRelativeTime
-} from '../-lib/devices';
-import { ConnectionStatusLabel, LastSignalTime } from './connection-status';
+import { type DeviceView, formatRelativeTime } from '../-lib/devices';
+import { ConnectionStatusLabel } from './connection-status';
 import { DeviceRoomControl } from './device-room-control';
 
 interface DeviceDetailsDrawerProps {
   /** Whether a device is selected; it may still be missing from the list. */
   open: boolean;
-  device: Device | undefined;
-  /** The moment the connection status is computed for. */
-  now: number;
+  device: DeviceView | undefined;
   onClose: () => void;
 }
 
 export function DeviceDetailsDrawer({
   open,
   device,
-  now,
   onClose
 }: DeviceDetailsDrawerProps) {
   return (
     <Drawer open={open} onOpenChange={(next) => !next && onClose()}>
       <DrawerContent>
         {device ? (
-          <DeviceDetails device={device} now={now} />
+          <DeviceDetails device={device} />
         ) : (
           <DrawerHeader className="space-y-1 pr-14">
             <DrawerTitle>
@@ -70,10 +62,9 @@ function Detail({
   );
 }
 
-function DeviceDetails({ device, now }: { device: Device; now: number }) {
+function DeviceDetails({ device }: { device: DeviceView }) {
   const { t, i18n } = useLingui();
-  const status = connectionStatus(device.last_seen_at, now);
-  const lastSeen = device.last_seen_at;
+  const { signalAgeMs, last_seen_at: lastSeen } = device;
 
   return (
     <>
@@ -83,12 +74,11 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
           {device.name || <Trans>Unnamed device</Trans>}
         </DrawerTitle>
         <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
-          <ConnectionStatusLabel status={status} />
-          {lastSeen && (
-            <LastSignalTime
-              lastSeenAt={lastSeen}
-              format={(date) => formatRelativeTime(date, i18n.locale, now)}
-            />
+          <ConnectionStatusLabel status={device.status} />
+          {lastSeen && signalAgeMs !== null && (
+            <time dateTime={lastSeen}>
+              {formatRelativeTime(signalAgeMs, i18n.locale)}
+            </time>
           )}
         </div>
       </DrawerHeader>
@@ -110,16 +100,18 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
             <DeviceRoomControl device={device} outlined />
           </Detail>
           <Detail label={<Trans>Last signal</Trans>}>
-            <LastSignalTime
-              lastSeenAt={lastSeen}
-              format={(date) =>
-                formatDate(date, { preset: 'dateTimeWithSeconds' })
-              }
-              className="tabular-nums"
-            />
+            {lastSeen ? (
+              <time dateTime={lastSeen} className="tabular-nums">
+                {formatDate(lastSeen, { preset: 'dateTimeWithSeconds' })}
+              </time>
+            ) : (
+              <span className="text-muted-foreground">
+                <Trans>Never</Trans>
+              </span>
+            )}
           </Detail>
           <Detail label={<Trans>App version</Trans>}>
-            <span className="tabular-nums">{appVersionLabel(device)}</span>
+            <span className="tabular-nums">{device.app_version || '-'}</span>
           </Detail>
         </dl>
       </DrawerBody>

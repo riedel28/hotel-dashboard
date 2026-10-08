@@ -50,31 +50,3 @@ export function ConnectionStatusLabel({
     </span>
   );
 }
-
-/**
- * When a device last reported, in the format the caller picks, or "Never" for
- * one that has not reported yet.
- */
-export function LastSignalTime({
-  lastSeenAt,
-  format,
-  className
-}: {
-  lastSeenAt: string | null;
-  format: (lastSeenAt: string) => string;
-  className?: string;
-}) {
-  if (!lastSeenAt) {
-    return (
-      <span className="text-muted-foreground">
-        <Trans>Never</Trans>
-      </span>
-    );
-  }
-
-  return (
-    <time dateTime={lastSeenAt} className={className}>
-      {format(lastSeenAt)}
-    </time>
-  );
-}

@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { CircleAlertIcon, Loader2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -18,6 +17,7 @@ import { z } from 'zod';
 
 import { ApiError } from '@/api/client';
 import { claimDevice, devicesQueryOptions } from '@/api/devices';
+import { OtpField } from '@/components/otp-field';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -36,11 +36,6 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot
-} from '@/components/ui/input-otp';
 
 import { roomLabel } from '../-lib/devices';
 import { RoomPicker } from './room-picker';
@@ -53,14 +48,6 @@ type ClaimFormData = z.infer<typeof claimFormSchema>;
 
 // The PIN is shown on the device in three groups of four
 const PIN_GROUP_SIZE = 4;
-const pinGroups = Array.from(
-  { length: DEVICE_PIN_LENGTH / PIN_GROUP_SIZE },
-  (_, group) =>
-    Array.from(
-      { length: PIN_GROUP_SIZE },
-      (_, slot) => group * PIN_GROUP_SIZE + slot
-    )
-);
 
 interface ClaimDeviceModalProps {
   open: boolean;
@@ -204,45 +191,22 @@ export function ClaimDeviceModal({
                       <FieldLabel htmlFor={field.name}>
                         <Trans>PIN</Trans>
                       </FieldLabel>
-                      <InputOTP
+                      <OtpField
                         id={field.name}
                         name={field.name}
                         ref={field.ref}
                         value={field.value}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
-                        maxLength={DEVICE_PIN_LENGTH}
-                        required
-                        inputMode="numeric"
+                        length={DEVICE_PIN_LENGTH}
+                        groupSize={PIN_GROUP_SIZE}
+                        stretch
+                        placeholder=""
                         autoComplete="off"
-                        pattern={REGEXP_ONLY_DIGITS}
-                        // A code copied with its dashes or spaces still pastes
-                        pasteTransformer={(text) => text.replace(/\D/g, '')}
-                        aria-invalid={Boolean(serverError)}
+                        required
+                        invalid={Boolean(serverError)}
                         aria-describedby="device-pin-hint"
-                        containerClassName="w-full gap-1.5"
-                      >
-                        {pinGroups.map((slots, group) => (
-                          <div key={group} className="contents">
-                            {group > 0 && (
-                              // A short, faint dash: the cells get the width
-                              <div
-                                role="separator"
-                                className="h-px w-2 shrink-0 bg-muted-foreground/70"
-                              />
-                            )}
-                            <InputOTPGroup className="min-w-0 flex-1 gap-1">
-                              {slots.map((slot) => (
-                                <InputOTPSlot
-                                  key={slot}
-                                  index={slot}
-                                  className="h-11 w-auto min-w-0 flex-1 font-mono text-base"
-                                />
-                              ))}
-                            </InputOTPGroup>
-                          </div>
-                        ))}
-                      </InputOTP>
+                      />
                       <FieldDescription id="device-pin-hint">
                         <Trans>The code is shown on the device screen</Trans>
                       </FieldDescription>

@@ -91,11 +91,11 @@ msgstr "{from} - {to} of {recordCount}"
 #~ msgid "{lastName}, {firstName}"
 #~ msgstr "{lastName}, {firstName}"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/use-assign-device-room.ts:49
+#: src/routes/_dashboard-layout/(user-view)/devices/-hooks/use-assign-device-room.ts:49
 msgid "{name} assigned to room {label}"
 msgstr "{name} assigned to room {label}"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/use-assign-device-room.ts:51
+#: src/routes/_dashboard-layout/(user-view)/devices/-hooks/use-assign-device-room.ts:51
 msgid "{name} unassigned from its room"
 msgstr "{name} unassigned from its room"
 
@@ -103,10 +103,16 @@ msgstr "{name} unassigned from its room"
 #~ msgid "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 #~ msgstr "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 
+#. placeholder {0}: deviceLabel(unassigning)
+#. placeholder {1}: roomLabel(unassigning.room)
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:83
+msgid "<0>{0}</0> will no longer belong to room <1>{1}</1>. You can assign it again at any time."
+msgstr "<0>{0}</0> will no longer belong to room <1>{1}</1>. You can assign it again at any time."
+
 #. placeholder {0}: room && roomLabel(room)
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:89
-msgid "<0>{name}</0> will no longer belong to room <1>{0}</1>. You can assign it again at any time."
-msgstr "<0>{name}</0> will no longer belong to room <1>{0}</1>. You can assign it again at any time."
+#~ msgid "<0>{name}</0> will no longer belong to room <1>{0}</1>. You can assign it again at any time."
+#~ msgstr "<0>{name}</0> will no longer belong to room <1>{0}</1>. You can assign it again at any time."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:365
 #~ msgid "03.06.2026"
@@ -171,13 +177,13 @@ msgid "Activate Account"
 msgstr "Activate Account"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:153
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:328
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:292
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
 msgid "Add"
 msgstr "Add"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:213
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:177
 msgid "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 msgstr "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 
@@ -192,9 +198,9 @@ msgstr "Add a tablet, phone or TV with its serial number and the PIN shown on it
 msgid "Add category"
 msgstr "Add category"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:149
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:134
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:186
 msgid "Add device"
 msgstr "Add device"
 
@@ -307,7 +313,7 @@ msgid "After entering your password you'll enter a 6-digit code from an authenti
 msgstr "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 
 #: src/components/ui/data-grid-segmented-filter.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:250
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:213
 msgid "All"
 msgstr "All"
 
@@ -315,7 +321,7 @@ msgstr "All"
 msgid "All countries"
 msgstr "All countries"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:86
 msgid "All logs"
 msgstr "All logs"
 
@@ -324,7 +330,7 @@ msgid "All stages"
 msgstr "All stages"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:35
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:276
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:239
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:24
 msgid "All statuses"
 msgstr "All statuses"
@@ -339,7 +345,7 @@ msgstr "All statuses"
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:98
 msgid "All types"
 msgstr "All types"
 
@@ -351,7 +357,7 @@ msgstr "Already have an account?"
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Already have one? Any TOTP app works — just scan the QR code."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:124
 msgid "An error occurred while fetching devices"
 msgstr "An error occurred while fetching devices"
 
@@ -388,8 +394,8 @@ msgstr "Android App"
 msgid "API Key"
 msgstr "API Key"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:121
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:190
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:180
 msgid "App version"
 msgstr "App version"
 
@@ -437,15 +443,15 @@ msgstr "Arrival Date"
 msgid "Asc"
 msgstr "Asc"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:56
 msgid "Assign"
 msgstr "Assign"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:57
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:43
 msgid "Assign {name} to a room"
 msgstr "Assign {name} to a room"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:257
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:220
 msgid "Assigned"
 msgstr "Assigned"
 
@@ -606,8 +612,8 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:148
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:75
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:319
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:323
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:356
@@ -783,17 +789,17 @@ msgstr "City is required"
 msgid "Clear all"
 msgstr "Clear all"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:144
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:203
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:290
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
 #: src/routes/_dashboard-layout/admin/properties/-components/property-clear-filters.tsx:26
 msgid "Clear filters"
 msgstr "Clear filters"
 
-#: src/components/ui/search-input.tsx:88
+#: src/components/ui/search-input.tsx:94
 msgid "Clear search"
 msgstr "Clear search"
 
@@ -816,7 +822,7 @@ msgstr "Close"
 #~ msgid "CN"
 #~ msgstr "CN"
 
-#: src/components/otp-field.tsx:74
+#: src/components/otp-field.tsx:129
 msgid "Codes are time-based — if yours keeps failing, check that your phone's clock is set automatically."
 msgstr "Codes are time-based — if yours keeps failing, check that your phone's clock is set automatically."
 
@@ -937,7 +943,7 @@ msgstr "Copy Public Key"
 msgid "Copy reservation number"
 msgstr "Copy reservation number"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:94
 msgid "Copy serial number"
 msgstr "Copy serial number"
 
@@ -1130,18 +1136,18 @@ msgstr "Desc"
 msgid "Description"
 msgstr "Description"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:89
 msgid "Device added"
 msgstr "Device added"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:46
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:38
 msgid "Device not found"
 msgstr "Device not found"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:116
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:83
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:122
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:130
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:106
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:114
 msgid "Devices"
 msgstr "Devices"
 
@@ -1556,7 +1562,7 @@ msgstr "Failed to add product"
 msgid "Failed to change password"
 msgstr "Failed to change password"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/use-assign-device-room.ts:43
+#: src/routes/_dashboard-layout/(user-view)/devices/-hooks/use-assign-device-room.ts:43
 msgid "Failed to change the room of {name}"
 msgstr "Failed to change the room of {name}"
 
@@ -1604,7 +1610,7 @@ msgstr "Failed to load categories"
 msgid "Failed to load products"
 msgstr "Failed to load products"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:122
 msgid "Failed to load rooms"
 msgstr "Failed to load rooms"
 
@@ -1736,7 +1742,7 @@ msgid "First name is required"
 msgstr "First name is required"
 
 #. placeholder {0}: group.floor
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:135
 msgid "Floor {0}"
 msgstr "Floor {0}"
 
@@ -1980,7 +1986,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:32
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:32
@@ -2169,8 +2175,8 @@ msgstr "Last name is required"
 #~ msgid "Last sent: {lastSent}"
 #~ msgstr "Last sent: {lastSent}"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:112
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:169
 msgid "Last signal"
 msgstr "Last signal"
 
@@ -2220,11 +2226,11 @@ msgstr "Loading log…"
 msgid "Loading properties"
 msgstr "Loading properties"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:109
 msgid "Loading rooms…"
 msgstr "Loading rooms…"
 
-#: src/components/ui/data-grid-table.tsx:449
+#: src/components/ui/data-grid-table.tsx:451
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -2416,8 +2422,8 @@ msgstr "My profile"
 #~ msgid "N"
 #~ msgstr "N"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:261
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:225
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:84
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:114
@@ -2448,7 +2454,8 @@ msgstr "Nav items"
 #~ msgid "Network response was not ok"
 #~ msgstr "Network response was not ok"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/connection-status.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:109
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:58
 msgid "Never"
 msgstr "Never"
 
@@ -2493,7 +2500,7 @@ msgstr "No categories yet"
 msgid "No country found."
 msgstr "No country found."
 
-#: src/components/ui/data-grid-table.tsx:417
+#: src/components/ui/data-grid-table.tsx:419
 msgid "No data available"
 msgstr "No data available"
 
@@ -2501,11 +2508,11 @@ msgstr "No data available"
 #~ msgid "No device with this serial number was found"
 #~ msgstr "No device with this serial number was found"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:299
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:261
 msgid "No devices match the filters"
 msgstr "No devices match the filters"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:210
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:174
 msgid "No devices yet"
 msgstr "No devices yet"
 
@@ -2517,7 +2524,7 @@ msgstr "No entries yet"
 msgid "No fellow travelers"
 msgstr "No fellow travelers"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:133
 msgid "No floor"
 msgstr "No floor"
 
@@ -2590,7 +2597,7 @@ msgstr "No roles assigned. Contact your administrator if you're missing access y
 msgid "No roles available"
 msgstr "No roles available"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:291
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:255
 msgid "No room"
 msgstr "No room"
 
@@ -2599,7 +2606,7 @@ msgstr "No room"
 msgid "No rooms available"
 msgstr "No rooms available"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:124
 msgid "No rooms found"
 msgstr "No rooms found"
 
@@ -2612,7 +2619,7 @@ msgstr "No unsaved changes"
 #~ msgstr "None"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:169
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:303
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:161
 msgid "Not assigned"
 msgstr "Not assigned"
@@ -2867,7 +2874,7 @@ msgstr "Pick a date range"
 msgid "Pick a longer period to see older logs."
 msgstr "Pick a longer period to see older logs."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:192
 msgid "PIN"
 msgstr "PIN"
 
@@ -3358,7 +3365,7 @@ msgid "Reservations"
 msgstr "Reservations"
 
 #: src/components/ui/data-grid-radio-filter.tsx:134
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:123
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:106
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:36
@@ -3415,8 +3422,8 @@ msgstr "Roles & access"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:171
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:109
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:148
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:138
 msgid "Room"
 msgstr "Room"
 
@@ -3425,7 +3432,7 @@ msgstr "Room"
 #~ msgstr "Room (optional)"
 
 #. placeholder {0}: roomLabel(room)
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:56
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:42
 msgid "Room {0} of {name}, change"
 msgstr "Room {0} of {name}, change"
 
@@ -3433,11 +3440,11 @@ msgstr "Room {0} of {name}, change"
 #~ msgid "Room {room}"
 #~ msgstr "Room {room}"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:280
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:244
 msgid "Room <0>(Optional)</0>"
 msgstr "Room <0>(Optional)</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:246
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:209
 msgid "Room assignment"
 msgstr "Room assignment"
 
@@ -3455,7 +3462,7 @@ msgstr "Room Details"
 msgid "Room Name"
 msgstr "Room Name"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:92
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:94
 msgid "Room number"
 msgstr "Room number"
 
@@ -3589,7 +3596,7 @@ msgstr "Search categories"
 msgid "Search country..."
 msgstr "Search country..."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:239
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:202
 msgid "Search devices"
 msgstr "Search devices"
 
@@ -3597,7 +3604,7 @@ msgstr "Search devices"
 #~ msgid "Search event, message, booking number"
 #~ msgstr "Search event, message, booking number"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:77
 msgid "Search event, message, reservation number"
 msgstr "Search event, message, reservation number"
 
@@ -3613,11 +3620,11 @@ msgstr "Search for a guest..."
 #~ msgid "Search for property"
 #~ msgstr "Search for property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:76
 msgid "Search logs"
 msgstr "Search logs"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:240
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:203
 msgid "Search name, serial number, room"
 msgstr "Search name, serial number, room"
 
@@ -3638,7 +3645,7 @@ msgstr "Search property"
 msgid "Search reservations"
 msgstr "Search reservations"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:95
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-search.tsx:17
 msgid "Search rooms"
 msgstr "Search rooms"
@@ -3672,7 +3679,7 @@ msgid "Select a room..."
 msgstr "Select a room..."
 
 #: src/components/ui/data-grid-checkbox-filter.tsx:255
-#: src/components/ui/data-grid-table.tsx:492
+#: src/components/ui/data-grid-table.tsx:494
 msgid "Select all"
 msgstr "Select all"
 
@@ -3707,7 +3714,7 @@ msgstr "Select purpose"
 msgid "Select room"
 msgstr "Select room"
 
-#: src/components/ui/data-grid-table.tsx:473
+#: src/components/ui/data-grid-table.tsx:475
 msgid "Select row"
 msgstr "Select row"
 
@@ -3760,13 +3767,13 @@ msgstr "Send reset link"
 #~ msgid "Sending"
 #~ msgstr "Sending"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:176
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:163
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:124
 msgid "Serial number"
 msgstr "Serial number"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:95
 msgid "Serial number copied"
 msgstr "Serial number copied"
 
@@ -3958,13 +3965,13 @@ msgstr "Started"
 msgid "Station"
 msgstr "Station"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:83
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:34
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:118
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:129
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:275
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:238
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:23
@@ -4151,11 +4158,11 @@ msgstr "That sign-in attempt expired. Please start again."
 #~ msgid "The booking number can be found in your Property Management System (PMS)"
 #~ msgstr "The booking number can be found in your Property Management System (PMS)"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:247
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:211
 msgid "The code is shown on the device screen"
 msgstr "The code is shown on the device screen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:123
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:110
 msgid "The device could not be added. Please try again."
 msgstr "The device could not be added. Please try again."
 
@@ -4167,7 +4174,7 @@ msgstr "The invoice will be sent directly to the PMS"
 msgid "The merchant address shown on payment receipts."
 msgstr "The merchant address shown on payment receipts."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:105
 msgid "The PIN is incorrect"
 msgstr "The PIN is incorrect"
 
@@ -4235,11 +4242,11 @@ msgstr "This address isn't verified yet. Check your inbox for the confirmation l
 msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:41
 msgid "This device does not exist or was removed."
 msgstr "This device does not exist or was removed."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:100
 msgid "This device has already been added"
 msgstr "This device has already been added"
 
@@ -4333,7 +4340,7 @@ msgstr "Toggle details"
 msgid "Token"
 msgstr "Token"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:108
 msgid "Too many attempts. Please try again later."
 msgstr "Too many attempts. Please try again later."
 
@@ -4446,25 +4453,25 @@ msgstr "Two-factor authentication won't be enabled and your account will keep us
 msgid "Two-step verification"
 msgstr "Two-step verification"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:97
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:108
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:116
 msgid "Type"
 msgstr "Type"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:109
 msgid "Unassign"
 msgstr "Unassign"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:37
 msgid "Unassign from room"
 msgstr "Unassign from room"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:79
 msgid "Unassign from room?"
 msgstr "Unassign from room?"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:266
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:229
 msgid "Unassigned"
 msgstr "Unassigned"
 
@@ -4492,8 +4499,8 @@ msgstr "Undo"
 #~ msgid "United States"
 #~ msgstr "United States"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:83
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:74
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:111
 msgid "Unnamed device"
 msgstr "Unnamed device"
 

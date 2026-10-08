@@ -38,6 +38,8 @@ interface RoomPickerProps {
    */
   clearLabel?: ReactNode;
   onClear?: () => void;
+  /** Tints the action red on hover, for one that undoes saved state. */
+  isClearDestructive?: boolean;
   className?: string;
   /** For the popup, e.g. to match the width of a form field. */
   contentClassName?: string;
@@ -55,6 +57,7 @@ export function RoomPicker({
   children,
   clearLabel,
   onClear,
+  isClearDestructive = false,
   className,
   contentClassName,
   id,
@@ -151,8 +154,13 @@ export function RoomPicker({
           <div className="border-t border-border p-1">
             <button
               type="button"
-              // Like a 'destructive-soft' menu item: plain until hovered or focused
-              className="w-full cursor-default rounded-sm px-2 py-1.5 text-left text-sm outline-hidden hover:bg-destructive/10 hover:text-danger focus-visible:bg-destructive/10 focus-visible:text-danger"
+              className={cn(
+                'w-full cursor-default rounded-sm px-2 py-1.5 text-left text-sm outline-hidden',
+                // Either way it reads as a plain item until hovered or focused
+                isClearDestructive
+                  ? 'hover:bg-destructive/10 hover:text-danger focus-visible:bg-destructive/10 focus-visible:text-danger'
+                  : 'hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground'
+              )}
               onClick={() => {
                 setOpen(false);
                 onClear();

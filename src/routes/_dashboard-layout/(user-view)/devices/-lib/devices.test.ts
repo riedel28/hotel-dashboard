@@ -2,11 +2,11 @@ import type { Device } from 'shared/types/devices';
 import { describe, expect, test } from 'vitest';
 
 import {
-  connectionStatus,
   filterDevices,
   floorOf,
   formatRelativeTime,
-  groupRoomsByFloor
+  groupRoomsByFloor,
+  withConnection
 } from './devices';
 
 const now = Date.parse('2026-10-08T12:00:00Z');
@@ -28,22 +28,34 @@ const device = (id: number, overrides: Partial<Device> = {}): Device => ({
   ...overrides
 });
 
-describe('connectionStatus', () => {
+const minutes = (count: number) => count * 60_000;
+
+describe('withConnection', () => {
+  const statusAfter = (last_seen_at: string | null) =>
+    withConnection(device(1, { last_seen_at }), now).status;
+
   test('follows the 15 min and 24 h thresholds', () => {
-    expect(connectionStatus(ago(14), now)).toBe('online');
-    expect(connectionStatus(ago(15), now)).toBe('recently_offline');
-    expect(connectionStatus(ago(24 * 60), now)).toBe('recently_offline');
-    expect(connectionStatus(ago(24 * 60 + 1), now)).toBe('offline');
-    expect(connectionStatus(null, now)).toBe('offline');
+    expect(statusAfter(ago(14))).toBe('online');
+    expect(statusAfter(ago(15))).toBe('recently_offline');
+    expect(statusAfter(ago(24 * 60))).toBe('recently_offline');
+    expect(statusAfter(ago(24 * 60 + 1))).toBe('offline');
+    expect(statusAfter(null)).toBe('offline');
+  });
+
+  test('keeps the age of the last signal', () => {
+    const view = (last_seen_at: string | null) =>
+      withConnection(device(1, { last_seen_at }), now);
+    expect(view(ago(5)).signalAgeMs).toBe(minutes(5));
+    expect(view(null).signalAgeMs).toBeNull();
   });
 });
 
 describe('formatRelativeTime', () => {
   test('uses the largest unit that fits', () => {
-    expect(formatRelativeTime(ago(0), 'en', now)).toBe('now');
-    expect(formatRelativeTime(ago(5), 'en', now)).toBe('5 min. ago');
-    expect(formatRelativeTime(ago(90), 'en', now)).toBe('1 hr. ago');
-    expect(formatRelativeTime(ago(3 * 24 * 60), 'en', now)).toBe('3 days ago');
+    expect(formatRelativeTime(0, 'en')).toBe('now');
+    expect(formatRelativeTime(minutes(5), 'en')).toBe('5 min. ago');
+    expect(formatRelativeTime(minutes(90), 'en')).toBe('1 hr. ago');
+    expect(formatRelativeTime(minutes(3 * 24 * 60), 'en')).toBe('3 days ago');
   });
 });
 
@@ -79,9 +91,9 @@ describe('filterDevices', () => {
     device(2, { name: 'New tablet' }),
     device(3, { room: room(2, '118'), last_seen_at: ago(3 * 24 * 60) }),
     device(4, { room: room(1, '204'), last_seen_at: ago(60) })
-  ];
+  ].map((item) => withConnection(item, now));
   const ids = (filters: Parameters<typeof filterDevices>[1]) =>
-    filterDevices(devices, filters, now).map((item) => item.id);
+    filterDevices(devices, filters).map((item) => item.id);
 
   test('puts unassigned devices first, then orders by room', () => {
     expect(ids({})).toEqual([2, 3, 1, 4]);

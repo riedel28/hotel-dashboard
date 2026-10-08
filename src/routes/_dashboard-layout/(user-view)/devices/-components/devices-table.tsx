@@ -1,7 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { type ColumnDef, useTable } from '@tanstack/react-table';
-import { type ReactNode, useEffect, useMemo, useRef } from 'react';
-import type { Device } from 'shared/types/devices';
+import { type ReactNode, useMemo } from 'react';
 
 import {
   DataGrid,
@@ -20,35 +19,24 @@ import {
 } from '@/components/ui/tooltip';
 import { formatDate } from '@/utils/date';
 
-import {
-  appVersionLabel,
-  connectionStatus,
-  formatRelativeTime
-} from '../-lib/devices';
-import {
-  ConnectionStatusDot,
-  ConnectionStatusName,
-  LastSignalTime
-} from './connection-status';
+import { type DeviceView, formatRelativeTime } from '../-lib/devices';
+import { ConnectionStatusDot, ConnectionStatusName } from './connection-status';
 import { DeviceRoomControl } from './device-room-control';
 
-const noDevices: Device[] = [];
+const noDevices: DeviceView[] = [];
 
 interface DevicesTableProps {
-  data?: Device[];
+  devices: DeviceView[];
   isLoading?: boolean;
-  /** The moment the connection statuses are computed for. */
-  now?: number;
-  /** A device to tint for a moment, e.g. the one just added. */
+  /** A device to tint and scroll to for a moment, e.g. the one just added. */
   highlightedId?: number;
   emptyMessage?: ReactNode;
-  onDeviceOpen?: (device: Device) => void;
+  onDeviceOpen?: (device: DeviceView) => void;
 }
 
-function LastSignalCell({ device, now }: { device: Device; now: number }) {
+function LastSignalCell({ device }: { device: DeviceView }) {
   const { i18n } = useLingui();
-  const status = connectionStatus(device.last_seen_at, now);
-  const lastSeen = device.last_seen_at;
+  const { status, signalAgeMs, last_seen_at: lastSeen } = device;
 
   return (
     <Tooltip>
@@ -61,10 +49,15 @@ function LastSignalCell({ device, now }: { device: Device; now: number }) {
         <span className="sr-only">
           <ConnectionStatusName status={status} />,
         </span>
-        <LastSignalTime
-          lastSeenAt={lastSeen}
-          format={(date) => formatRelativeTime(date, i18n.locale, now)}
-        />
+        {lastSeen && signalAgeMs !== null ? (
+          <time dateTime={lastSeen}>
+            {formatRelativeTime(signalAgeMs, i18n.locale)}
+          </time>
+        ) : (
+          <span className="text-muted-foreground">
+            <Trans>Never</Trans>
+          </span>
+        )}
       </TooltipTrigger>
       <TooltipContent>
         <ConnectionStatusName status={status} />
@@ -79,27 +72,26 @@ function LastSignalCell({ device, now }: { device: Device; now: number }) {
   );
 }
 
+// A ref for the highlighted row: runs when that row appears, whether it was
+// already listed or only shows up once filters stop hiding it. The row can be
+// anywhere in a long list, so it is brought on screen.
+const scrollIntoView = (row: HTMLTableRowElement | null) =>
+  row?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+
+/** The table's shape while the devices load. */
+export function DevicesTableSkeleton() {
+  return <DevicesTable devices={noDevices} isLoading />;
+}
+
 export function DevicesTable({
-  data = noDevices,
+  devices,
   isLoading = false,
-  now = 0,
   highlightedId,
   emptyMessage,
   onDeviceOpen
 }: DevicesTableProps) {
   const { t } = useLingui();
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // The highlighted device can be anywhere in a long list; bring it on screen
-  useEffect(() => {
-    if (highlightedId !== undefined) {
-      containerRef.current
-        ?.querySelector('[data-highlighted]')
-        ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }
-  }, [highlightedId]);
-
-  const columns = useMemo<ColumnDef<DataGridFeatures, Device>[]>(
+  const columns = useMemo<ColumnDef<DataGridFeatures, DeviceView>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -108,12 +100,10 @@ export function DevicesTable({
           <DataGridColumnHeader title={t`Name`} column={column} />
         ),
         cell: ({ row }) => (
-          // The row reads this marker to tint itself, see `bodyRow` below
           // The click bubbles to the row, which opens the details; the button
           // is what makes that reachable from the keyboard
           <button
             type="button"
-            data-highlighted={row.original.id === highlightedId || undefined}
             className="cursor-pointer rounded-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {row.original.name || (
@@ -178,7 +168,7 @@ export function DevicesTable({
         header: ({ column }) => (
           <DataGridColumnHeader title={t`Last signal`} column={column} />
         ),
-        cell: ({ row }) => <LastSignalCell device={row.original} now={now} />,
+        cell: ({ row }) => <LastSignalCell device={row.original} />,
         meta: { skeleton: <Skeleton className="h-4 w-24" /> },
         size: 170,
         enableSorting: false
@@ -191,7 +181,7 @@ export function DevicesTable({
         ),
         cell: ({ row }) => (
           <span className="text-muted-foreground tabular-nums">
-            {appVersionLabel(row.original)}
+            {row.original.app_version || '-'}
           </span>
         ),
         meta: { skeleton: <Skeleton className="h-4 w-12" /> },
@@ -199,39 +189,45 @@ export function DevicesTable({
         enableSorting: false
       }
     ],
-    [t, now, highlightedId]
+    [t]
   );
 
   // The rows arrive filtered and ordered; the list is not paginated.
   const table = useTable({
     features: dataGridFeatures,
     columns,
-    data,
-    getRowId: (device: Device) => device.id.toString()
+    data: devices,
+    getRowId: (device: DeviceView) => device.id.toString()
   });
 
   return (
     <DataGrid
       table={table}
-      recordCount={data.length}
+      recordCount={devices.length}
       isLoading={isLoading}
       skeletonRowCount={8}
       emptyMessage={emptyMessage}
       onRowClick={onDeviceOpen}
+      getRowProps={(device) =>
+        device.id === highlightedId
+          ? {
+              ref: scrollIntoView,
+              className: 'bg-emerald-500/15 hover:bg-emerald-500/15'
+            }
+          : undefined
+      }
       tableClassNames={{
         edgeCell: 'px-5',
-        bodyRow:
-          'transition-colors duration-700 has-data-highlighted:bg-emerald-500/15 has-data-highlighted:hover:bg-emerald-500/15'
+        // The highlight fades in and out
+        bodyRow: 'transition-colors duration-700'
       }}
     >
-      <div ref={containerRef}>
-        <DataGridContainer>
-          <ScrollArea>
-            <DataGridTable />
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-        </DataGridContainer>
-      </div>
+      <DataGridContainer>
+        <ScrollArea>
+          <DataGridTable />
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </DataGridContainer>
     </DataGrid>
   );
 }
