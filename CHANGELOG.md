@@ -1,3 +1,35 @@
+# [1.19.0](https://github.com/riedel28/hotel-dashboard/compare/v1.18.0...v1.19.0) (2026-10-08)
+
+
+### Bug Fixes
+
+* **devices:** align the assigned room button with the Assign button ([b89778b](https://github.com/riedel28/hotel-dashboard/commit/b89778b7fc1d33c94e0f2c303cc757be4cd4054e))
+* **devices:** drop filter skeletons, make the unassign item red on hover only ([e55bbd4](https://github.com/riedel28/hotel-dashboard/commit/e55bbd45ab74d394558223fa7f935148335bda6e))
+* **devices:** highlight a new device in muted gray instead of green ([544d3ab](https://github.com/riedel28/hotel-dashboard/commit/544d3ab8b05b019fcd61b494a9d08e2533256706))
+* **devices:** keep the layout still while devices load ([448b34c](https://github.com/riedel28/hotel-dashboard/commit/448b34c6fb5c0dc8938e33c5497b6629d3264b09))
+* **devices:** lower bars in the room picker loading state ([32b5207](https://github.com/riedel28/hotel-dashboard/commit/32b5207732c1a8497c569f7c7c1dfd40f43013d1))
+* **devices:** make the PIN group separators a bit stronger ([c1d15aa](https://github.com/riedel28/hotel-dashboard/commit/c1d15aadd323b1b3c58034f15116abaadfb7df43))
+* **devices:** match the details drawer spacing to the monitoring drawer ([346f934](https://github.com/riedel28/hotel-dashboard/commit/346f934596fc84fdecd62f29212148b2f3cd5f66))
+* **devices:** mute app version, match room field focus and popup width in the add dialog ([bc14ea3](https://github.com/riedel28/hotel-dashboard/commit/bc14ea302b0525fde8f4235c10346c7457d9bed0))
+* **devices:** open the drawer from the empty part of the room cell ([3445d70](https://github.com/riedel28/hotel-dashboard/commit/3445d706a9ec8de5b95912bfbcb24f4900279005))
+* **devices:** room picker loads as three option-sized bars ([2220993](https://github.com/riedel28/hotel-dashboard/commit/22209933fcdcf6bf5a89feb36e987e6cd8cd6041))
+* **devices:** roomier details drawer with an outlined room picker ([53033c9](https://github.com/riedel28/hotel-dashboard/commit/53033c911cfdd05efdda5f38d02827bcb6e2bb61))
+* **devices:** shape the room picker skeleton like its options, mute (Optional) ([0aeba72](https://github.com/riedel28/hotel-dashboard/commit/0aeba72ae1be66e4a8d55371b79d6c719fb6abe8))
+* **devices:** shorter, fainter separators between PIN groups ([193b13c](https://github.com/riedel28/hotel-dashboard/commit/193b13cc28d365642dba4f5e94b190cf224ee0fd))
+* **devices:** tighten the details drawer header ([aba6ed3](https://github.com/riedel28/hotel-dashboard/commit/aba6ed3cc21308583c14720d1472aaf374a71f7e))
+* **devices:** widen the add device dialog so PIN cells are not cramped ([744faa4](https://github.com/riedel28/hotel-dashboard/commit/744faa46bacc84dafcb7d6169da14382a914ec44))
+
+
+### Features
+
+* **devices:** add devices page with room assignment and claim ([7dfa136](https://github.com/riedel28/hotel-dashboard/commit/7dfa13686be7ac194368e12e6620f432ca6147e3))
+* **devices:** add devices table, claim and room assignment API ([c6e3f3b](https://github.com/riedel28/hotel-dashboard/commit/c6e3f3baf7ad44760211147e7c0dad42787ef425))
+* **devices:** let a claim register a device with an unknown serial number ([65c1c19](https://github.com/riedel28/hotel-dashboard/commit/65c1c19e76f85090be4c99d1600571bb60fa51b5))
+* **devices:** open a details drawer from a device row ([c75f096](https://github.com/riedel28/hotel-dashboard/commit/c75f096525f9c8d0bea9a7c392fc13fe7bf8efcf))
+* **devices:** show skeleton rows while the room picker loads ([9aab12e](https://github.com/riedel28/hotel-dashboard/commit/9aab12e22a33154fc2e607c2af1a2e87c7c6a2e2))
+* **devices:** sort by column and paginate the devices table ([6bdefdd](https://github.com/riedel28/hotel-dashboard/commit/6bdefddce752891388b86091bff1a73f1157c266))
+* **nav:** add Setup group with Devices and Users ([c960347](https://github.com/riedel28/hotel-dashboard/commit/c960347382d21a88bbe058cc976ecf525e553314))
+
 # [1.18.0](https://github.com/riedel28/hotel-dashboard/compare/v1.17.0...v1.18.0) (2026-10-07)
 
 
