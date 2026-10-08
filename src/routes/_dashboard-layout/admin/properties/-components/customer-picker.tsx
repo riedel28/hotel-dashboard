@@ -1,12 +1,11 @@
 import { useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
-import { SearchIcon, XIcon } from 'lucide-react';
+import { SearchIcon } from 'lucide-react';
 import { useState } from 'react';
 import { customerLabel } from 'shared/types/customers';
 import type { PropertyCustomer } from 'shared/types/properties';
 
 import { customersQueryOptions } from '@/api/customers';
-import { Button } from '@/components/ui/button';
 import {
   Combobox,
   ComboboxContent,
@@ -45,90 +44,77 @@ export function CustomerPicker({
   const items: PickerCustomer[] = data?.index ?? [];
 
   return (
-    <div className="flex items-center gap-2">
-      <Combobox
-        items={items}
-        // The server has already filtered them.
-        filter={null}
-        value={value}
-        onValueChange={(customer: PickerCustomer | null) =>
-          onValueChange(
-            customer && {
-              id: customer.id,
-              first_name: customer.first_name,
-              last_name: customer.last_name,
-              company_name: customer.company_name
-            }
-          )
-        }
-        inputValue={search}
-        onInputValueChange={setSearch}
-        onOpenChange={(open) => {
-          if (!open) setSearch('');
-        }}
-        itemToStringLabel={(customer: PickerCustomer) =>
-          customerLabel(customer)
-        }
-        isItemEqualToValue={(a, b) => a.id === b.id}
+    <Combobox
+      items={items}
+      // The server has already filtered them.
+      filter={null}
+      value={value}
+      onValueChange={(customer: PickerCustomer | null) =>
+        onValueChange(
+          customer && {
+            id: customer.id,
+            first_name: customer.first_name,
+            last_name: customer.last_name,
+            company_name: customer.company_name
+          }
+        )
+      }
+      inputValue={search}
+      onInputValueChange={setSearch}
+      onOpenChange={(open) => {
+        if (!open) setSearch('');
+      }}
+      itemToStringLabel={(customer: PickerCustomer) => customerLabel(customer)}
+      isItemEqualToValue={(a, b) => a.id === b.id}
+    >
+      <ComboboxTrigger
+        className="flex h-9 items-center justify-between overflow-hidden rounded-lg border border-input px-3 py-2 text-sm ring-offset-background dark:bg-input/30"
+        aria-labelledby={ariaLabelledby}
+        showClear
+        clearLabel={t`Remove customer`}
       >
-        <ComboboxTrigger
-          className="flex h-9 min-w-0 flex-1 items-center justify-between overflow-hidden rounded-lg border border-input px-3 py-2 text-sm ring-offset-background dark:bg-input/30"
-          aria-labelledby={ariaLabelledby}
-        >
-          <ComboboxValue>
-            {value ? (
-              <span className="truncate">{customerLabel(value)}</span>
-            ) : (
-              <span className="text-muted-foreground">{t`No customer`}</span>
-            )}
-          </ComboboxValue>
-        </ComboboxTrigger>
-        <ComboboxContent className="w-80">
-          <ComboboxInput
-            variant="popup"
-            placeholder={t`Search customers`}
-            iconLeft={
-              <SearchIcon
-                className="h-4 w-4 shrink-0 opacity-50"
-                aria-hidden="true"
-              />
-            }
-            showTrigger={false}
-          />
-          <ComboboxEmpty className="py-8 text-center text-sm text-muted-foreground">
-            {isPending ? t`Searching...` : t`No customer found.`}
-          </ComboboxEmpty>
-          <ComboboxList>
-            {(customer: PickerCustomer) => (
-              <ComboboxItem key={customer.id} value={customer}>
-                <span className="flex min-w-0 flex-col">
-                  <span className="truncate">{customerLabel(customer)}</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    {[
-                      customer.company_name &&
-                        `${customer.first_name} ${customer.last_name}`,
-                      customer.email
-                    ]
-                      .filter(Boolean)
-                      .join(' · ')}
-                  </span>
+        <ComboboxValue>
+          {value ? (
+            <span className="truncate">{customerLabel(value)}</span>
+          ) : (
+            <span className="text-muted-foreground">{t`No customer`}</span>
+          )}
+        </ComboboxValue>
+      </ComboboxTrigger>
+      <ComboboxContent className="w-80">
+        <ComboboxInput
+          variant="popup"
+          placeholder={t`Search customers`}
+          iconLeft={
+            <SearchIcon
+              className="h-4 w-4 shrink-0 opacity-50"
+              aria-hidden="true"
+            />
+          }
+          showTrigger={false}
+        />
+        <ComboboxEmpty className="py-8 text-center text-sm text-muted-foreground">
+          {isPending ? t`Searching...` : t`No customer found.`}
+        </ComboboxEmpty>
+        <ComboboxList>
+          {(customer: PickerCustomer) => (
+            <ComboboxItem key={customer.id} value={customer}>
+              <span className="flex min-w-0 flex-col">
+                <span className="truncate">{customerLabel(customer)}</span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {[
+                    customer.company_name &&
+                      `${customer.first_name} ${customer.last_name}`,
+                    customer.email
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
                 </span>
-              </ComboboxItem>
-            )}
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
-      {value && (
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          aria-label={t`Remove customer`}
-          onClick={() => onValueChange(null)}
-        >
-          <XIcon />
-        </Button>
-      )}
-    </div>
+              </span>
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 }

@@ -22,17 +22,50 @@ function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props) {
 function ComboboxTrigger({
   className,
   children,
+  showClear = false,
+  clearLabel,
+  wrapperClassName,
   ...props
-}: ComboboxPrimitive.Trigger.Props) {
-  return (
+}: ComboboxPrimitive.Trigger.Props & {
+  /** Adds a clear button inside the trigger, left of the chevron, while a value is selected. */
+  showClear?: boolean;
+  /** Accessible name of the clear button. */
+  clearLabel?: string;
+  /** With `showClear` the trigger sits in a wrapper; this sizes it (default: full width). */
+  wrapperClassName?: string;
+}) {
+  const trigger = (
     <ComboboxPrimitive.Trigger
       data-slot="combobox-trigger"
-      className={cn("[&_svg:not([class*='size-'])]:size-4", className)}
+      className={cn(
+        "[&_svg:not([class*='size-'])]:size-4",
+        // Keeps the value from running under the clear button
+        showClear && 'w-full [&>svg:last-child]:ml-7',
+        className
+      )}
       {...props}
     >
       {children}
       <ChevronDownIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
     </ComboboxPrimitive.Trigger>
+  );
+
+  if (!showClear) return trigger;
+
+  // A sibling laid over the trigger rather than a child of it: a button
+  // cannot contain another button.
+  return (
+    <div
+      data-slot="combobox-trigger-wrapper"
+      className={cn('relative w-full min-w-0', wrapperClassName)}
+    >
+      {trigger}
+      <ComboboxClear
+        aria-label={clearLabel}
+        disabled={props.disabled}
+        className="absolute top-1/2 right-8 -translate-y-1/2"
+      />
+    </div>
   );
 }
 
