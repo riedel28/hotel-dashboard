@@ -1,0 +1,107 @@
+import {
+  type Device,
+  DEVICE_OFFLINE_THRESHOLD_MS,
+  DEVICE_ONLINE_THRESHOLD_MS,
+  type DeviceConnectionStatus,
+  type DeviceRoom
+} from 'shared/types/devices';
+
+export type DeviceTab = 'assigned' | 'unassigned';
+
+export interface DeviceFilters {
+  tab?: DeviceTab;
+  q?: string;
+  status?: DeviceConnectionStatus;
+}
+
+export function connectionStatus(
+  lastSeenAt: string | null,
+  now: number
+): DeviceConnectionStatus {
+  if (!lastSeenAt) return 'offline';
+  const age = now - new Date(lastSeenAt).getTime();
+  if (age < DEVICE_ONLINE_THRESHOLD_MS) return 'online';
+  return age <= DEVICE_OFFLINE_THRESHOLD_MS ? 'recently_offline' : 'offline';
+}
+
+/** "5 min. ago" in the given locale, in the largest unit that fits. */
+export function formatRelativeTime(date: string, locale: string, now: number) {
+  const format = new Intl.RelativeTimeFormat(locale, {
+    numeric: 'auto',
+    style: 'short'
+  });
+  const minutes = Math.floor((now - new Date(date).getTime()) / 60_000);
+  if (minutes < 1) return format.format(0, 'second');
+  if (minutes < 60) return format.format(-minutes, 'minute');
+  if (minutes < 24 * 60)
+    return format.format(-Math.floor(minutes / 60), 'hour');
+  return format.format(-Math.floor(minutes / (24 * 60)), 'day');
+}
+
+/** What a room is called in the table and the picker. */
+export const roomLabel = (room: DeviceRoom) => room.room_number || room.name;
+
+// ponytail: the floor is read off the room number — everything but its last
+// two digits (204 → 2). Numbering like "A12" lands in "no floor"; add a floor
+// column to rooms if a property needs that.
+export function floorOf(roomNumber: string | null): number | null {
+  const match = roomNumber?.trim().match(/^(\d+)\d{2}$/);
+  return match ? Number(match[1]) : null;
+}
+
+const byLabel = new Intl.Collator(undefined, { numeric: true }).compare;
+
+/** Rooms by floor, lowest first; rooms without a floor come last. */
+export function groupRoomsByFloor(rooms: DeviceRoom[]) {
+  const groups = new Map<number | null, DeviceRoom[]>();
+  for (const room of rooms) {
+    const floor = floorOf(room.room_number);
+    groups.set(floor, [...(groups.get(floor) ?? []), room]);
+  }
+  return [...groups]
+    .sort(([a], [b]) => (a ?? Infinity) - (b ?? Infinity))
+    .map(([floor, items]) => ({
+      floor,
+      items: items.sort((a, b) => byLabel(roomLabel(a), roomLabel(b)))
+    }));
+}
+
+export function matchesRoomQuery(room: DeviceRoom, query: string) {
+  const q = query.trim().toLowerCase();
+  return [room.room_number, room.name].some((text) =>
+    text?.toLowerCase().includes(q)
+  );
+}
+
+/**
+ * The rows of the table: the tab, the search (name, serial number, room) and
+ * the status filter combined. Unassigned devices come first, the rest are
+ * ordered by room.
+ */
+export function filterDevices(
+  devices: Device[],
+  { tab, q, status }: DeviceFilters,
+  now: number
+) {
+  const query = q?.trim().toLowerCase();
+
+  return devices
+    .filter((device) => {
+      if (tab === 'assigned' && !device.room) return false;
+      if (tab === 'unassigned' && device.room) return false;
+      if (status && connectionStatus(device.last_seen_at, now) !== status) {
+        return false;
+      }
+      if (!query) return true;
+      return (
+        [device.name, device.serial_number].some((text) =>
+          text?.toLowerCase().includes(query)
+        ) || Boolean(device.room && matchesRoomQuery(device.room, query))
+      );
+    })
+    .sort((a, b) => {
+      if (!a.room || !b.room)
+        return Number(Boolean(a.room)) - Number(Boolean(b.room));
+      return byLabel(roomLabel(a.room), roomLabel(b.room));
+    });
+}
