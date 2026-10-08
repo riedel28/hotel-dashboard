@@ -16,7 +16,6 @@ export const deviceConnectionStatusSchema = z.enum([
 
 // Codes of the claim errors a form field can show; anything else is general.
 export const deviceClaimErrorCodeSchema = z.enum([
-  'SERIAL_NOT_FOUND',
   'INVALID_PIN',
   'DEVICE_ALREADY_CLAIMED'
 ]);

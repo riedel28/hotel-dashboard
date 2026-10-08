@@ -106,12 +106,7 @@ export function ClaimDeviceModal({
     // What was typed stays in the form, whatever the error
     onError: (error) => {
       const code = error instanceof ApiError ? error.code : undefined;
-      if (code === 'SERIAL_NOT_FOUND') {
-        form.setError('serial_number', {
-          type: 'server',
-          message: t`No device with this serial number was found`
-        });
-      } else if (code === 'DEVICE_ALREADY_CLAIMED') {
+      if (code === 'DEVICE_ALREADY_CLAIMED') {
         form.setError('serial_number', {
           type: 'server',
           message: t`This device has already been added`

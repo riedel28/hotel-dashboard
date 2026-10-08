@@ -108,11 +108,34 @@ describe('Devices API', () => {
       expect(res.body).toMatchObject({ name: null, room: null });
     });
 
-    it('answers with a code per failure', async () => {
-      const unknown = await claim(auth, { serial_number: 'NOPE', pin: PIN });
-      expect(unknown.status).toBe(404);
-      expect(unknown.body.code).toBe('SERIAL_NOT_FOUND');
+    it('creates a device for a serial number nobody registered', async () => {
+      const created = await claim(auth, {
+        serial_number: 'BRAND-NEW-1',
+        pin: PIN,
+        room_id: roomId
+      });
+      expect(created.status).toBe(201);
+      expect(created.body).toMatchObject({
+        serial_number: 'BRAND-NEW-1',
+        room: { id: roomId },
+        last_seen_at: null
+      });
+      expect(await list(auth)).toHaveLength(1);
 
+      // From then on it is a known device like any other
+      const again = await claim(otherAuth, {
+        serial_number: 'brand-new-1',
+        pin: PIN
+      });
+      expect(again.body.code).toBe('DEVICE_ALREADY_CLAIMED');
+      const wrongPin = await claim(otherAuth, {
+        serial_number: 'BRAND-NEW-1',
+        pin: '000000000000'
+      });
+      expect(wrongPin.body.code).toBe('INVALID_PIN');
+    });
+
+    it('answers with a code per failure', async () => {
       const wrongPin = await claim(auth, {
         serial_number: 'R9KT40A22MN',
         pin: '000000000000'

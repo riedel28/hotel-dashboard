@@ -10,7 +10,7 @@ import { db } from '../db/pool';
 import { devices, rooms } from '../db/schema';
 import { withFailMessage } from '../middleware/error';
 import type { SelectedPropertyRequest } from '../middleware/selected-property';
-import { comparePassword } from '../utils/password';
+import { comparePassword, hashPassword } from '../utils/password';
 
 // Property scope is resolved by attachSelectedProperty. Without a selected
 // property, lists are empty and writes are 400.
@@ -116,42 +116,54 @@ const claimDevice = handle('Failed to add device', async (req, res) => {
 
   const { serial_number, pin, name, room_id } = req.body as ClaimDeviceData;
 
+  if (room_id != null && !(await roomExists(room_id, propertyId))) {
+    return res.status(400).json({ error: 'Room not found' });
+  }
+  const assignment = {
+    property_id: propertyId,
+    room_id: room_id ?? null,
+    name: name || null
+  };
+
   const [device] = await db
-    .select({
-      id: devices.id,
-      pin_hash: devices.pin_hash,
-      property_id: devices.property_id
-    })
+    .select({ id: devices.id, pin_hash: devices.pin_hash })
     .from(devices)
     .where(
       eq(sql`lower(${devices.serial_number})`, serial_number.toLowerCase())
     );
+
+  let claimed: { id: number } | undefined;
   if (!device) {
-    return claimError(res, 404, 'SERIAL_NOT_FOUND', 'Serial number not found');
-  }
+    // A serial number nobody registered yet: the device is new, and the PIN
+    // entered now becomes its PIN.
+    // ponytail: nothing proves the caller holds this device — a property can
+    // take any unused serial number. Have devices register themselves (serial
+    // + PIN) and reject unknown serials here once they can.
+    [claimed] = await db
+      .insert(devices)
+      .values({
+        ...assignment,
+        serial_number,
+        pin_hash: await hashPassword(pin)
+      })
+      // Lost a race for the same serial number: reported as claimed below
+      .onConflictDoNothing()
+      .returning({ id: devices.id });
+  } else {
+    // The PIN is checked before ownership, so whether a known device is
+    // already claimed is only revealed to someone holding its PIN.
+    if (!(await comparePassword(pin, device.pin_hash))) {
+      return claimError(res, 422, 'INVALID_PIN', 'Invalid PIN');
+    }
 
-  // The PIN is checked before ownership, so whether a device is already
-  // claimed is only revealed to someone holding its PIN.
-  if (!(await comparePassword(pin, device.pin_hash))) {
-    return claimError(res, 422, 'INVALID_PIN', 'Invalid PIN');
+    // The `property_id IS NULL` guard makes concurrent claims of one device
+    // resolve to a single winner.
+    [claimed] = await db
+      .update(devices)
+      .set({ ...assignment, updated_at: new Date() })
+      .where(and(eq(devices.id, device.id), isNull(devices.property_id)))
+      .returning({ id: devices.id });
   }
-
-  if (room_id != null && !(await roomExists(room_id, propertyId))) {
-    return res.status(400).json({ error: 'Room not found' });
-  }
-
-  // The `property_id IS NULL` guard makes concurrent claims of one device
-  // resolve to a single winner.
-  const [claimed] = await db
-    .update(devices)
-    .set({
-      property_id: propertyId,
-      room_id: room_id ?? null,
-      name: name || null,
-      updated_at: new Date()
-    })
-    .where(and(eq(devices.id, device.id), isNull(devices.property_id)))
-    .returning({ id: devices.id });
   if (!claimed) {
     return claimError(
       res,
