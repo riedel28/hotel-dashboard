@@ -101,7 +101,7 @@ export function DevicesTable({
           <button
             type="button"
             data-highlighted={row.original.id === highlightedId || undefined}
-            className="cursor-pointer rounded-sm text-left underline-offset-4 outline-none group-hover/row:underline focus-visible:ring-2 focus-visible:ring-ring"
+            className="cursor-pointer rounded-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {row.original.name || (
               <span className="text-muted-foreground">
@@ -138,7 +138,12 @@ export function DevicesTable({
           // Picking a room is not a click on the row. React events bubble
           // through portals, so this also covers the picker's popup.
           // oxlint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-          <div onClick={(event) => event.stopPropagation()}>
+          <div
+            // Only as wide as the button: the rest of the cell is still the
+            // row
+            className="w-fit"
+            onClick={(event) => event.stopPropagation()}
+          >
             <RoomCell device={row.original} />
           </div>
         ),
@@ -203,7 +208,7 @@ export function DevicesTable({
       tableClassNames={{
         edgeCell: 'px-5',
         bodyRow:
-          'group/row transition-colors duration-700 has-data-highlighted:bg-emerald-500/15 has-data-highlighted:hover:bg-emerald-500/15'
+          'transition-colors duration-700 has-data-highlighted:bg-emerald-500/15 has-data-highlighted:hover:bg-emerald-500/15'
       }}
     >
       <DataGridContainer>
