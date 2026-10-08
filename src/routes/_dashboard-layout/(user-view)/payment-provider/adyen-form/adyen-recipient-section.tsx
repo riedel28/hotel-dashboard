@@ -1,13 +1,13 @@
 import { Trans } from '@lingui/react/macro';
 import { type Control, Controller } from 'react-hook-form';
 
+import { SectionHeading } from '@/components/section-heading';
 import { CountryPicker } from '@/components/ui/country-picker';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 import { sectionHeadingId } from './adyen-form-toc';
 import type { AdyenFormData } from './adyen-form-types';
-import { AdyenSectionHeading } from './adyen-section-heading';
 
 interface AdyenRecipientSectionProps {
   control: Control<AdyenFormData>;
@@ -24,7 +24,7 @@ export function AdyenRecipientSection({
       aria-labelledby={sectionHeadingId('recipient')}
       className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
     >
-      <AdyenSectionHeading
+      <SectionHeading
         id={sectionHeadingId('recipient')}
         title={<Trans>Payment recipient</Trans>}
         description={

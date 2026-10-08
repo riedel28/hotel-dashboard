@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 import { type Control, Controller, useFormState } from 'react-hook-form';
 
+import { SectionHeading } from '@/components/section-heading';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
   InputGroup,
@@ -24,7 +25,6 @@ import {
   type AdyenFormData,
   type AdyenMethodId
 } from './adyen-form-types';
-import { AdyenSectionHeading } from './adyen-section-heading';
 
 interface AdyenMappingCodesSectionProps {
   control: Control<AdyenFormData>;
@@ -41,7 +41,7 @@ export function AdyenMappingCodesSection({
       aria-labelledby={sectionHeadingId('mapping')}
       className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
     >
-      <AdyenSectionHeading
+      <SectionHeading
         id={sectionHeadingId('mapping')}
         title={<Trans>Mapping codes</Trans>}
         description={

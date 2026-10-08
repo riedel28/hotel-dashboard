@@ -3,6 +3,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { UnplugIcon } from 'lucide-react';
 import { type Control, Controller } from 'react-hook-form';
 
+import { SectionHeading } from '@/components/section-heading';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
@@ -25,7 +26,6 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { sectionHeadingId } from './adyen-form-toc';
 import type { AdyenFormData } from './adyen-form-types';
-import { AdyenSectionHeading } from './adyen-section-heading';
 import type {
   AdyenEnvironment,
   AdyenTestConnectionResult
@@ -55,7 +55,7 @@ export function AdyenCredentialsSection({
       aria-labelledby={sectionHeadingId('credentials')}
       className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
     >
-      <AdyenSectionHeading
+      <SectionHeading
         id={sectionHeadingId('credentials')}
         title={<Trans>Credentials</Trans>}
         description={

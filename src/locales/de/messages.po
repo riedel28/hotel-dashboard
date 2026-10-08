@@ -141,7 +141,7 @@ msgid "401 Unauthorized — the API key was rejected."
 msgstr ""
 
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:50
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:51
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:68
 msgid "A customer with this email already exists"
 msgstr "Ein Kunde mit dieser E-Mail-Adresse existiert bereits"
 
@@ -265,7 +265,9 @@ msgstr "Hinzugefügt am {0}"
 msgid "Additional configuration"
 msgstr ""
 
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:173
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:234
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:120
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:218
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:261
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:289
 msgid "Address"
@@ -275,12 +277,12 @@ msgstr "Adresse"
 msgid "Address line"
 msgstr ""
 
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:179
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:177
 msgid "Address line 1"
 msgstr "Adresszeile 1"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:69
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:188
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:186
 msgid "Address line 2"
 msgstr "Adresszeile 2"
 
@@ -651,6 +653,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:90
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:196
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 msgid "Cancel"
@@ -789,7 +792,7 @@ msgstr "Kinder"
 #~ msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:112
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:203
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:201
 msgid "City"
 msgstr "Stadt"
 
@@ -842,7 +845,7 @@ msgstr "Codes sind zeitbasiert — wenn Ihrer immer wieder abgelehnt wird, prüf
 msgid "Columns"
 msgstr "Spalten"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:155
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:153
 msgid "Company"
 msgstr "Firma"
 
@@ -909,6 +912,11 @@ msgstr ""
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:109
 msgid "Connection timed out after 5000 ms — host unreachable."
 msgstr "Zeitüberschreitung nach 5000 ms — Host nicht erreichbar."
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:106
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:217
+msgid "Contact"
+msgstr "Kontakt"
 
 #: src/components/ui/password-strength-meter.tsx:26
 #~ msgid "Contains a lowercase letter"
@@ -990,7 +998,7 @@ msgstr "Einrichtung konnte nicht gestartet werden"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:222
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:184
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:166
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:216
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:211
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:146
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:126
 msgid "Country"
@@ -1075,12 +1083,12 @@ msgstr "Kunde"
 msgid "Customer created successfully"
 msgstr "Kunde erfolgreich erstellt"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:73
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:89
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:23
 msgid "Customer Details"
 msgstr "Kundendetails"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:44
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:61
 msgid "Customer updated successfully"
 msgstr "Kunde erfolgreich aktualisiert"
 
@@ -1329,7 +1337,7 @@ msgstr "Benutzer bearbeiten"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:115
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:141
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:164
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:162
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:236
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:248
 msgid "Email"
@@ -1698,7 +1706,7 @@ msgstr "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden. Bit
 msgid "Failed to update category"
 msgstr "Kategorie konnte nicht aktualisiert werden"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:56
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:73
 msgid "Failed to update customer. Please try again."
 msgstr "Kunde konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
@@ -1758,7 +1766,7 @@ msgid "Filter by reservation"
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:177
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:141
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:139
 msgid "First name"
 msgstr "Vorname"
 
@@ -2174,7 +2182,7 @@ msgid "Last hour"
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:197
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:147
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:145
 msgid "Last name"
 msgstr "Nachname"
 
@@ -2606,9 +2614,13 @@ msgstr "Keine Properties gefunden"
 msgid "No properties match the filters"
 msgstr "Keine Unterkünfte entsprechen den Filtern"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:141
+msgid "No properties yet."
+msgstr "Noch keine Unterkünfte."
+
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:98
-msgid "No properties yet. Assign this customer on a property's page."
-msgstr "Noch keine Unterkünfte. Weisen Sie diesen Kunden auf der Seite einer Unterkunft zu."
+#~ msgid "No properties yet. Assign this customer on a property's page."
+#~ msgstr "Noch keine Unterkünfte. Weisen Sie diesen Kunden auf der Seite einer Unterkunft zu."
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:103
 msgid "No response from Adyen."
@@ -2645,8 +2657,9 @@ msgid "No rooms found"
 msgstr "Keine Zimmer gefunden"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:312
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:185
 msgid "No unsaved changes"
-msgstr ""
+msgstr "Keine ungespeicherten Änderungen"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:213
 #~ msgid "None"
@@ -3126,7 +3139,8 @@ msgstr "Profil aktualisiert"
 #~ msgstr "Profil erfolgreich aktualisiert"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:157
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:92
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:131
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:219
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:301
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:311
 #: src/routes/_dashboard-layout/admin/index.tsx:19
@@ -3549,6 +3563,7 @@ msgstr "Speichern"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:333
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:202
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
@@ -3557,7 +3572,6 @@ msgstr "Änderungen speichern"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:452
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:209
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:296
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:85
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:219
 msgid "Save Changes"
 msgstr "Änderungen speichern"
@@ -3587,8 +3601,9 @@ msgid "Saving changes"
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:305
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:183
 msgid "Saving changes…"
-msgstr ""
+msgstr "Änderungen werden gespeichert…"
 
 #~ msgid "Saving..."
 #~ msgstr "Wird gespeichert..."
@@ -4185,9 +4200,17 @@ msgstr "Die Rechnung wird direkt an das PMS geschickt"
 msgid "The merchant address shown on payment receipts."
 msgstr ""
 
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:108
+msgid "The person we deal with, and the company they act for."
+msgstr "Die Ansprechperson und das Unternehmen, für das sie handelt."
+
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:105
 msgid "The PIN is incorrect"
 msgstr "Die PIN ist falsch"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:133
+msgid "The properties this customer owns. Change the owner on a property's page."
+msgstr "Die Unterkünfte dieses Kunden. Den Eigentümer ändern Sie auf der Seite einer Unterkunft."
 
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:41
 msgid "The property {propertyName} has been deleted"
@@ -4741,6 +4764,10 @@ msgstr "Was Sie im Back-Office tun dürfen."
 #~ msgid "WhatsApp opened"
 #~ msgstr "WhatsApp geöffnet"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:121
+msgid "Where the customer is registered."
+msgstr "Wo der Kunde gemeldet ist."
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/authenticator-apps.tsx:60
 msgid "Which authenticator app should I use?"
 msgstr "Welche Authenticator-App soll ich verwenden?"
@@ -4835,7 +4862,7 @@ msgstr "Jugendliche"
 #~ msgstr "Anzahl der Jugendlichen darf nicht negativ sein"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:86
-#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:197
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:195
 msgid "ZIP"
 msgstr "PLZ"
 
