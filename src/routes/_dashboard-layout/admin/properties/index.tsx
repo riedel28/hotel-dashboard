@@ -10,7 +10,12 @@ import {
 import { PenSquareIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import type { Property, PropertyStage } from 'shared/types/properties';
+import { customerLabel } from 'shared/types/customers';
+import type {
+  Property,
+  PropertySortableColumn,
+  PropertyStage
+} from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 
 import { propertiesQueryOptions } from '@/api/properties';
@@ -220,6 +225,44 @@ function PropertiesTable({
         enableResizing: false
       },
       {
+        id: 'customer',
+        accessorFn: (property) =>
+          property.customer ? customerLabel(property.customer) : '',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Customer`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => {
+          const customer = row.original.customer;
+          if (!customer) {
+            return <span className="text-muted-foreground">—</span>;
+          }
+          const label = customerLabel(customer);
+          return (
+            <RouterLink
+              to="/admin/customers/$customerId"
+              params={{ customerId: customer.id }}
+              preload="intent"
+              className="line-clamp-1 underline-offset-4 hover:underline"
+              title={label}
+            >
+              {label}
+            </RouterLink>
+          );
+        },
+        meta: {
+          skeleton: <Skeleton className="h-6 w-32" />,
+          headerTitle: t`Customer`
+        },
+        size: 220,
+        enableSorting: true,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
         id: 'actions',
         header: () => null,
         cell: ({ row }) => (
@@ -376,7 +419,7 @@ function PropertiesContent() {
         search: (prev) => ({
           ...prev,
           page: 1,
-          sort_by: firstSort.id as 'name' | 'country_code' | 'stage',
+          sort_by: firstSort.id as PropertySortableColumn,
           sort_order: firstSort.desc ? ('desc' as const) : ('asc' as const)
         })
       });
