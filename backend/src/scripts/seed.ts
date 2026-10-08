@@ -499,61 +499,85 @@ async function seed() {
         inArray(users.email, ['cool_new_user@example.com', 'john@example.com'])
       );
 
-    // Demo rooms and guest devices for The Overlook Hotel. Devices without a
-    // property are waiting to be claimed; every demo device has the same PIN.
+    // Demo rooms and guest devices for The Overlook Hotel: four floors of
+    // twelve rooms, a tablet in every room, a TV in most, and a few devices
+    // not assigned to a room yet. Devices without a property are waiting to be
+    // claimed; every demo device has the same PIN.
     console.log('Creating demo rooms and devices...');
     const demoRooms = await db
       .insert(rooms)
       .values(
-        ['101', '102', '203', '204', '205', '237', '301', '302'].map(
-          (room_number) => ({
-            name: `Room ${room_number}`,
-            room_number,
-            property_id: OVERLOOK_HOTEL_ID
+        [1, 2, 3, 4].flatMap((floor) =>
+          Array.from({ length: 12 }, (_, index) => {
+            const room_number = `${floor}${String(index + 1).padStart(2, '0')}`;
+            return {
+              name: `Room ${room_number}`,
+              room_number,
+              property_id: OVERLOOK_HOTEL_ID
+            };
           })
         )
       )
       .returning();
-    const roomId = (room_number: string) =>
-      demoRooms.find((room) => room.room_number === room_number)?.id ?? null;
-    const minutesAgo = (minutes: number) =>
-      new Date(Date.now() - minutes * 60 * 1000);
     const pin_hash = await hashPassword(DEMO_DEVICE_PIN);
 
-    const claimed = (
+    // Spreads the devices over every connection status and two app versions
+    let deviceCount = 0;
+    const demoDevice = (
       serial_number: string,
       name: string | null,
-      room: string | null,
-      lastSignalMinutesAgo: number | null,
-      app_version: string | null
-    ) => ({
-      serial_number,
-      name,
-      room_id: room && roomId(room),
-      last_seen_at:
-        lastSignalMinutesAgo === null ? null : minutesAgo(lastSignalMinutesAgo),
-      app_version,
-      property_id: OVERLOOK_HOTEL_ID,
-      pin_hash
-    });
-    await db
-      .insert(devices)
-      .values([
-        claimed('R9KT40A18QZ', 'Tablet 204', '204', 2, '2.4.1'),
-        claimed('LG55-7731204', 'TV 204', '204', 5, '2.4.1'),
-        claimed('PX8-0042119', 'Phone 204', '204', 60, '2.3.0'),
-        claimed('R9KT40A07LB', 'Tablet 101', '101', 3 * 24 * 60, '2.3.0'),
-        claimed('R9KT40A09CD', 'Tablet 237', '237', 12, '2.4.1'),
-        claimed('LG55-7731301', 'TV 301', '301', 20 * 60, '2.4.0'),
-        claimed('R9KT40A21XM', 'Tablet (new)', null, 1, '2.4.1'),
-        claimed('PX8-0042207', null, null, null, null)
-      ]);
+      room_id: number | null
+    ) => {
+      const index = deviceCount++;
+      const minutesAgo =
+        index % 29 === 28 // never reported
+          ? null
+          : index % 11 === 10 // offline
+            ? 3 * 24 * 60
+            : index % 7 === 6 // recently offline
+              ? 5 * 60
+              : 1 + (index % 14);
+      return {
+        serial_number,
+        name,
+        room_id,
+        last_seen_at:
+          minutesAgo === null
+            ? null
+            : new Date(Date.now() - minutesAgo * 60 * 1000),
+        app_version:
+          minutesAgo === null ? null : index % 5 === 4 ? '2.3.0' : '2.4.1',
+        property_id: OVERLOOK_HOTEL_ID,
+        pin_hash
+      };
+    };
+    const serial = (prefix: string, number: number) =>
+      `${prefix}${String(number).padStart(4, '0')}`;
+
+    await db.insert(devices).values([
+      ...demoRooms.map(({ id, room_number }, index) =>
+        demoDevice(serial('R9KT40A', index + 1), `Tablet ${room_number}`, id)
+      ),
+      // The last rooms have no TV yet
+      ...demoRooms
+        .slice(0, -7)
+        .map(({ id, room_number }, index) =>
+          demoDevice(serial('LG55-773', index + 1), `TV ${room_number}`, id)
+        ),
+      demoDevice(serial('R9KT40A', 101), 'Tablet (new)', null),
+      demoDevice(serial('R9KT40A', 102), 'Tablet (spare)', null),
+      demoDevice(serial('R9KT40A', 103), null, null),
+      demoDevice(serial('LG55-773', 101), 'TV (new)', null),
+      demoDevice(serial('LG55-773', 102), null, null),
+      demoDevice(serial('PX8-0042', 1), 'Phone (front desk)', null),
+      demoDevice(serial('PX8-0042', 2), null, null)
+    ]);
     await db.insert(devices).values(
       ['R9KT40A22MN', 'R9KT40A23PQ', 'LG55-7731302'].map((serial_number) => ({
         serial_number,
         pin_hash,
         app_version: '2.4.1',
-        last_seen_at: minutesAgo(1)
+        last_seen_at: new Date()
       }))
     );
 
