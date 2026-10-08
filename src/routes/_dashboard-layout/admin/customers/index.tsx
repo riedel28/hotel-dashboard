@@ -7,10 +7,10 @@ import {
   type SortingState,
   useTable
 } from '@tanstack/react-table';
-import { PenSquareIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Customer, CustomerSortableColumn } from 'shared/types/customers';
 import { fetchCustomersParamsSchema } from 'shared/types/customers';
+import { z } from 'zod';
 
 import { customersQueryOptions } from '@/api/customers';
 import { QueryBoundary } from '@/components/query-boundary';
@@ -34,13 +34,7 @@ import {
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
-import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import { DataGridTable } from '@/components/ui/data-grid-table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem
-} from '@/components/ui/dropdown-menu';
 import {
   Popover,
   PopoverContent,
@@ -55,29 +49,7 @@ import { cn } from '@/lib/utils';
 import { PropertiesFilters } from '../properties/-components/properties-filters';
 import { PropertyClearFilters } from '../properties/-components/property-clear-filters';
 import { AddCustomerDrawer } from './-components/add-customer-drawer';
-
-function RowActions({ customer }: { customer: Customer }) {
-  return (
-    <DropdownMenu>
-      <DataGridRowActions />
-      <DropdownMenuContent align="end" className="w-35">
-        <DropdownMenuItem
-          render={(props) => (
-            <RouterLink
-              {...props}
-              to="/admin/customers/$customerId"
-              params={{ customerId: customer.id }}
-              preload="intent"
-            >
-              <PenSquareIcon className="mr-2 h-4 w-4" />
-              <Trans>Edit</Trans>
-            </RouterLink>
-          )}
-        />
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
+import { CustomerDetailsDrawer } from './-components/customer-details-drawer';
 
 const propertyLinkClass = 'truncate underline-offset-4 hover:underline';
 
@@ -95,7 +67,13 @@ function PropertiesCell({
   }
 
   return (
-    <div className="flex min-w-0 items-center gap-2">
+    // Its links and the list (a portal, but still a React child of the row)
+    // must not also open the Customer the row belongs to.
+    // oxlint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+    <div
+      className="flex min-w-0 items-center gap-2"
+      onClick={(event) => event.stopPropagation()}
+    >
       <RouterLink
         to="/admin/properties/$propertyId"
         params={{ propertyId: first.id }}
@@ -143,6 +121,7 @@ function PropertiesCell({
 }
 
 interface CustomersTableProps {
+  onCustomerOpen?: (customer: Customer) => void;
   /** Shown in place of the rows when there are none. */
   emptyMessage?: React.ReactNode;
   data: Customer[];
@@ -163,6 +142,7 @@ interface CustomersTableProps {
 }
 
 function CustomersTable({
+  onCustomerOpen,
   emptyMessage,
   data,
   isLoading = false,
@@ -199,15 +179,15 @@ function CustomersTable({
           const company = row.original.company_name;
           return (
             <div className="min-w-0">
-              <RouterLink
-                to="/admin/customers/$customerId"
-                params={{ customerId: row.original.id }}
-                preload="intent"
-                className="block truncate font-medium underline-offset-4 hover:underline"
+              {/* The click bubbles to the row, which opens the details; the
+                  button is what makes that reachable from the keyboard */}
+              <button
+                type="button"
+                className="block max-w-full cursor-pointer truncate rounded-sm text-left font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 title={name}
               >
                 {name}
-              </RouterLink>
+              </button>
               {company && (
                 <div
                   className="truncate text-xs text-muted-foreground"
@@ -314,26 +294,6 @@ function CustomersTable({
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
-      },
-      {
-        id: 'actions',
-        header: () => null,
-        cell: ({ row }) => (
-          <div className="flex justify-center">
-            <RowActions customer={row.original} />
-          </div>
-        ),
-        meta: {
-          skeleton: (
-            <div className="flex items-center justify-center">
-              <Skeleton className="h-6 w-6" />
-            </div>
-          )
-        },
-        size: 70,
-        enableSorting: false,
-        enableHiding: false,
-        enableResizing: false
       }
     ],
     [i18n.locale, t]
@@ -375,6 +335,7 @@ function CustomersTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
+      onRowClick={onCustomerOpen}
       emptyMessage={emptyMessage}
     >
       <div className="w-full space-y-2.5">
@@ -523,6 +484,13 @@ function CustomersContent() {
         onPaginationChange={handlePaginationChange}
         sorting={sorting}
         onSortingChange={handleSortingChange}
+        onCustomerOpen={(customer) =>
+          // Pushes a history entry, so Back closes the drawer
+          navigate({
+            to: '/admin/customers',
+            search: (prev) => ({ ...prev, customer: customer.id })
+          })
+        }
         emptyMessage={
           q || country_code ? (
             <Trans>No customers match the filters</Trans>
@@ -533,9 +501,16 @@ function CustomersContent() {
   );
 }
 
+// The list's parameters plus the Customer whose drawer is open
+const customersSearchSchema = fetchCustomersParamsSchema.extend({
+  customer: z.uuid().optional().catch(undefined)
+});
+
 function CustomersPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Customers`);
+  const { customer: openCustomerId } = Route.useSearch();
+  const navigate = Route.useNavigate();
 
   return (
     <div className="space-y-1">
@@ -584,13 +559,24 @@ function CustomersPage() {
       >
         <CustomersContent />
       </QueryBoundary>
+
+      <CustomerDetailsDrawer
+        customerId={openCustomerId}
+        onClose={() =>
+          navigate({
+            to: '/admin/customers',
+            search: (prev) => ({ ...prev, customer: undefined })
+          })
+        }
+      />
     </div>
   );
 }
 
 export const Route = createFileRoute('/_dashboard-layout/admin/customers/')({
-  validateSearch: (search) => fetchCustomersParamsSchema.parse(search),
-  loaderDeps: ({ search }) => search,
+  validateSearch: (search) => customersSearchSchema.parse(search),
+  // The open Customer is not part of the list request
+  loaderDeps: ({ search: { customer: _open, ...list } }) => list,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(customersQueryOptions(deps));
   },

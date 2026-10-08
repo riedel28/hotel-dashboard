@@ -63,13 +63,21 @@ test.describe('Customers', () => {
     await page.getByRole('button', { name: 'Save Changes' }).click();
     await expect(page.getByText('Property updated successfully')).toBeVisible();
 
-    // The properties table names the customer and links to its page, which
-    // lists the property back.
+    // The properties table names the customer and links to its details,
+    // which list the property back.
     await page.goto('/admin/properties');
     await propertyRow.getByRole('link', { name: 'Nakatomi Hotels' }).click();
+    const details = page.getByRole('dialog');
     await expect(
-      page.getByRole('heading', { name: 'Nakatomi Hotels' })
+      details.getByRole('heading', { name: 'Nakatomi Hotels' })
     ).toBeVisible();
-    await expect(page.getByRole('link', { name: PROPERTY })).toBeVisible();
+    await expect(details.getByRole('link', { name: PROPERTY })).toBeVisible();
+
+    // Edit turns the details into the form, and saving returns to them.
+    await details.getByRole('button', { name: 'Edit' }).click();
+    await details.getByLabel('City').fill('Century City');
+    await details.getByRole('button', { name: 'Save Changes' }).click();
+    await expect(page.getByText('Customer updated successfully')).toBeVisible();
+    await expect(details.getByText('90067 Century City')).toBeVisible();
   });
 });

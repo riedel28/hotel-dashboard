@@ -42,7 +42,6 @@ import { Route as DashboardLayoutuserViewRoomsRoomIdRouteImport } from './routes
 import { Route as DashboardLayoutuserViewUsersIndexRouteImport } from './routes/_dashboard-layout/(user-view)/users/index'
 import { Route as DashboardLayoutuserViewUsersUserIdRouteImport } from './routes/_dashboard-layout/(user-view)/users/$userId'
 import { Route as DashboardLayoutAdminCustomersIndexRouteImport } from './routes/_dashboard-layout/admin/customers/index'
-import { Route as DashboardLayoutAdminCustomersCustomerIdRouteImport } from './routes/_dashboard-layout/admin/customers/$customerId'
 import { Route as DashboardLayoutAdminPropertiesIndexRouteImport } from './routes/_dashboard-layout/admin/properties/index'
 import { Route as DashboardLayoutAdminPropertiesPropertyIdRouteImport } from './routes/_dashboard-layout/admin/properties/$propertyId'
 import { Route as DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index'
@@ -240,12 +239,6 @@ const DashboardLayoutAdminCustomersIndexRoute =
     path: '/customers/',
     getParentRoute: () => DashboardLayoutAdminRoute,
   } as any)
-const DashboardLayoutAdminCustomersCustomerIdRoute =
-  DashboardLayoutAdminCustomersCustomerIdRouteImport.update({
-    id: '/customers/$customerId',
-    path: '/customers/$customerId',
-    getParentRoute: () => DashboardLayoutAdminRoute,
-  } as any)
 const DashboardLayoutAdminPropertiesIndexRoute =
   DashboardLayoutAdminPropertiesIndexRouteImport.update({
     id: '/properties/',
@@ -312,7 +305,6 @@ export interface FileRoutesByFullPath {
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   '/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
-  '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/products/': typeof DashboardLayoutuserViewProductsIndexRoute
@@ -351,7 +343,6 @@ export interface FileRoutesByTo {
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   '/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
-  '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/devices': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/products': typeof DashboardLayoutuserViewProductsIndexRoute
@@ -394,7 +385,6 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/(front-office)/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   '/_dashboard-layout/(user-view)/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/_dashboard-layout/(user-view)/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
-  '/_dashboard-layout/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/_dashboard-layout/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/_dashboard-layout/(user-view)/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/_dashboard-layout/(user-view)/products/': typeof DashboardLayoutuserViewProductsIndexRoute
@@ -436,7 +426,6 @@ export interface FileRouteTypes {
     | '/registration-forms'
     | '/rooms/$roomId'
     | '/users/$userId'
-    | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
     | '/devices/'
     | '/products/'
@@ -475,7 +464,6 @@ export interface FileRouteTypes {
     | '/registration-forms'
     | '/rooms/$roomId'
     | '/users/$userId'
-    | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
     | '/devices'
     | '/products'
@@ -517,7 +505,6 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
     | '/_dashboard-layout/(user-view)/rooms/$roomId'
     | '/_dashboard-layout/(user-view)/users/$userId'
-    | '/_dashboard-layout/admin/customers/$customerId'
     | '/_dashboard-layout/admin/properties/$propertyId'
     | '/_dashboard-layout/(user-view)/devices/'
     | '/_dashboard-layout/(user-view)/products/'
@@ -769,13 +756,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutAdminCustomersIndexRouteImport
       parentRoute: typeof DashboardLayoutAdminRoute
     }
-    '/_dashboard-layout/admin/customers/$customerId': {
-      id: '/_dashboard-layout/admin/customers/$customerId'
-      path: '/customers/$customerId'
-      fullPath: '/admin/customers/$customerId'
-      preLoaderRoute: typeof DashboardLayoutAdminCustomersCustomerIdRouteImport
-      parentRoute: typeof DashboardLayoutAdminRoute
-    }
     '/_dashboard-layout/admin/properties/': {
       id: '/_dashboard-layout/admin/properties/'
       path: '/properties'
@@ -845,7 +825,6 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
 
 interface DashboardLayoutAdminRouteChildren {
   DashboardLayoutAdminIndexRoute: typeof DashboardLayoutAdminIndexRoute
-  DashboardLayoutAdminCustomersCustomerIdRoute: typeof DashboardLayoutAdminCustomersCustomerIdRoute
   DashboardLayoutAdminPropertiesPropertyIdRoute: typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   DashboardLayoutAdminCustomersIndexRoute: typeof DashboardLayoutAdminCustomersIndexRoute
   DashboardLayoutAdminPropertiesIndexRoute: typeof DashboardLayoutAdminPropertiesIndexRoute
@@ -853,8 +832,6 @@ interface DashboardLayoutAdminRouteChildren {
 
 const DashboardLayoutAdminRouteChildren: DashboardLayoutAdminRouteChildren = {
   DashboardLayoutAdminIndexRoute: DashboardLayoutAdminIndexRoute,
-  DashboardLayoutAdminCustomersCustomerIdRoute:
-    DashboardLayoutAdminCustomersCustomerIdRoute,
   DashboardLayoutAdminPropertiesPropertyIdRoute:
     DashboardLayoutAdminPropertiesPropertyIdRoute,
   DashboardLayoutAdminCustomersIndexRoute:
