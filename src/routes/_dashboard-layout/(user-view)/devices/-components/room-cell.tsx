@@ -47,8 +47,10 @@ export function RoomCell({ device }: { device: Device }) {
         }
         className={cn(
           buttonVariants({ variant: room ? 'ghost' : 'outline', size: 'sm' }),
+          // Both states share one box, so the column reads as one aligned
+          // stack whichever of them a row shows
           'font-normal',
-          room && '-ml-2.5 tabular-nums'
+          room && 'tabular-nums'
         )}
       >
         {room ? roomLabel(room) : <Trans>Assign</Trans>}
