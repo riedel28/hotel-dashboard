@@ -1,7 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { customerLabel } from 'shared/types/customers';
 
 import { customerByIdQueryOptions } from '@/api/customers';
 import { QueryBoundary } from '@/components/query-boundary';
@@ -74,7 +73,9 @@ function CustomerForm() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold">{customerLabel(data)}</h1>
+      <h1 className="text-xl font-bold">
+        <Trans>Edit Customer</Trans>
+      </h1>
       <EditCustomerForm customer={data} />
     </div>
   );

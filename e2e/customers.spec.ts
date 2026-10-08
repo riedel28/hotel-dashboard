@@ -68,7 +68,10 @@ test.describe('Customers', () => {
     await page.goto('/admin/properties');
     await propertyRow.getByRole('link', { name: 'Nakatomi Hotels' }).click();
     await expect(
-      page.getByRole('heading', { name: 'Nakatomi Hotels' })
+      page.getByRole('heading', { name: 'Edit Customer' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('main').getByText('Nakatomi Hotels', { exact: true })
     ).toBeVisible();
     await expect(page.getByRole('link', { name: PROPERTY })).toBeVisible();
   });
