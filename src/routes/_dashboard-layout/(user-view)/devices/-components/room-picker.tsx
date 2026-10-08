@@ -99,7 +99,7 @@ export function RoomPicker({
           showTrigger={false}
         />
         {roomsQuery.isPending ? (
-          // Three bars as tall as a room option, like the property selector's
+          // Three bars, a little lower than a room option, like the property selector's
           // loading state
           <ComboboxEmpty className="flex-col gap-1 p-1">
             <span className="sr-only">
@@ -109,7 +109,7 @@ export function RoomPicker({
               <div
                 key={index}
                 aria-hidden="true"
-                className="h-8 w-full rounded-md bg-muted"
+                className="h-6 w-full rounded-md bg-muted"
               />
             ))}
           </ComboboxEmpty>
