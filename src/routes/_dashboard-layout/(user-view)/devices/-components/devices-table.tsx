@@ -104,7 +104,7 @@ export function DevicesTable({
             )}
           </span>
         ),
-        meta: { skeleton: <Skeleton className="h-6 w-32" /> },
+        meta: { skeleton: <Skeleton className="h-4 w-32" /> },
         size: 220,
         enableSorting: false
       },
@@ -119,7 +119,7 @@ export function DevicesTable({
             {row.original.serial_number}
           </span>
         ),
-        meta: { skeleton: <Skeleton className="h-6 w-28" /> },
+        meta: { skeleton: <Skeleton className="h-4 w-28" /> },
         size: 180,
         enableSorting: false
       },
@@ -129,7 +129,15 @@ export function DevicesTable({
           <DataGridColumnHeader title={t`Room`} column={column} />
         ),
         cell: ({ row }) => <RoomCell device={row.original} />,
-        meta: { skeleton: <Skeleton className="h-6 w-16" /> },
+        meta: {
+          // As tall as the room button, so rows keep their height once the
+          // devices load
+          skeleton: (
+            <div className="flex h-7 items-center">
+              <Skeleton className="h-4 w-16" />
+            </div>
+          )
+        },
         size: 150,
         enableSorting: false
       },
@@ -140,7 +148,7 @@ export function DevicesTable({
           <DataGridColumnHeader title={t`Last signal`} column={column} />
         ),
         cell: ({ row }) => <LastSignalCell device={row.original} now={now} />,
-        meta: { skeleton: <Skeleton className="h-6 w-24" /> },
+        meta: { skeleton: <Skeleton className="h-4 w-24" /> },
         size: 170,
         enableSorting: false
       },
@@ -155,7 +163,7 @@ export function DevicesTable({
             {row.original.app_version || '-'}
           </span>
         ),
-        meta: { skeleton: <Skeleton className="h-6 w-12" /> },
+        meta: { skeleton: <Skeleton className="h-4 w-12" /> },
         size: 120,
         enableSorting: false
       }

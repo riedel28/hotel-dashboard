@@ -33,6 +33,7 @@ import {
   EmptyTitle
 } from '@/components/ui/empty';
 import { SearchInput } from '@/components/ui/search-input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 
@@ -132,7 +133,7 @@ function DevicesPage() {
       <QueryBoundary
         className="min-h-[60vh] items-center justify-center"
         message={<Trans>An error occurred while fetching devices</Trans>}
-        fallback={<DevicesTable isLoading />}
+        fallback={<DevicesLoading />}
       >
         <DevicesContent
           highlightedId={highlightedId}
@@ -147,6 +148,21 @@ function DevicesPage() {
         onOpenChange={setIsClaimOpen}
         onClaimed={handleClaimed}
       />
+    </div>
+  );
+}
+
+// Stands in for the filters and the table, each where it will appear, so
+// nothing moves when the devices arrive.
+function DevicesLoading() {
+  return (
+    <div className="space-y-2.5">
+      <div className="flex flex-wrap items-center gap-2">
+        <Skeleton className="h-9 min-w-56 flex-1 xl:w-72 xl:flex-none" />
+        <Skeleton className="h-9 w-80 max-w-full" />
+        <Skeleton className="h-9 w-36 sm:w-[190px]" />
+      </div>
+      <DevicesTable isLoading />
     </div>
   );
 }
