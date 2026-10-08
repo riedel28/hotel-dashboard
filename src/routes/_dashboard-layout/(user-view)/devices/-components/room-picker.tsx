@@ -136,7 +136,8 @@ export function RoomPicker({
           <div className="border-t border-border p-1">
             <button
               type="button"
-              className="w-full cursor-default rounded-sm px-2 py-1.5 text-left text-sm text-danger outline-hidden hover:bg-destructive/10 focus-visible:bg-destructive/10"
+              // Like a 'destructive-soft' menu item: plain until hovered or focused
+              className="w-full cursor-default rounded-sm px-2 py-1.5 text-left text-sm outline-hidden hover:bg-destructive/10 hover:text-danger focus-visible:bg-destructive/10 focus-visible:text-danger"
               onClick={() => {
                 setOpen(false);
                 onClear();

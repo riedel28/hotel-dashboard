@@ -33,7 +33,6 @@ import {
   EmptyTitle
 } from '@/components/ui/empty';
 import { SearchInput } from '@/components/ui/search-input';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 
@@ -152,16 +151,12 @@ function DevicesPage() {
   );
 }
 
-// Stands in for the filters and the table, each where it will appear, so
-// nothing moves when the devices arrive.
+// The table under an empty row as tall as the filters, so it does not move
+// when the devices arrive and the filters appear above it.
 function DevicesLoading() {
   return (
     <div className="space-y-2.5">
-      <div className="flex flex-wrap items-center gap-2">
-        <Skeleton className="h-9 min-w-56 flex-1 xl:w-72 xl:flex-none" />
-        <Skeleton className="h-9 w-80 max-w-full" />
-        <Skeleton className="h-9 w-36 sm:w-[190px]" />
-      </div>
+      <div className="h-9" />
       <DevicesTable isLoading />
     </div>
   );
