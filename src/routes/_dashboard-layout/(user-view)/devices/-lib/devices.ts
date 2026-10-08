@@ -2,14 +2,21 @@ import {
   type Device,
   DEVICE_OFFLINE_THRESHOLD_MS,
   DEVICE_ONLINE_THRESHOLD_MS,
-  type DeviceConnectionStatus,
-  type DeviceRoom
+  type DeviceConnectionStatus
 } from 'shared/types/devices';
 import { z } from 'zod';
+
+import { byLabel, matchesRoomQuery, roomLabel } from './rooms';
 
 // Which devices a tab shows; no tab means all of them
 export const deviceTabSchema = z.enum(['assigned', 'unassigned']);
 export type DeviceTab = z.infer<typeof deviceTabSchema>;
+
+export interface DeviceFilters {
+  tab?: DeviceTab;
+  q?: string;
+  status?: DeviceConnectionStatus;
+}
 
 // The columns the table can be ordered by
 export const deviceSortColumnSchema = z.enum([
@@ -29,20 +36,14 @@ export interface DeviceSort {
 export const DEVICE_PAGE_SIZES = [10, 25, 50, 100];
 export const DEFAULT_DEVICE_PAGE_SIZE = 25;
 
-export interface DeviceFilters {
-  tab?: DeviceTab;
-  q?: string;
-  status?: DeviceConnectionStatus;
-}
-
 /**
  * A device with its connection worked out for one moment — the moment the
  * list was fetched — so the filter, the table and the drawer all agree.
  */
 export interface DeviceView extends Device {
   status: DeviceConnectionStatus;
-  /** Milliseconds since the last signal; null if the device never reported. */
-  signalAgeMs: number | null;
+  /** The last signal and how old it is; null if the device never reported. */
+  signal: { at: string; ageMs: number } | null;
 }
 
 export function connectionStatus(
@@ -56,10 +57,13 @@ export function connectionStatus(
 }
 
 export function withConnection(device: Device, now: number): DeviceView {
-  const signalAgeMs = device.last_seen_at
-    ? now - new Date(device.last_seen_at).getTime()
+  const signal = device.last_seen_at
+    ? {
+        at: device.last_seen_at,
+        ageMs: now - new Date(device.last_seen_at).getTime()
+      }
     : null;
-  return { ...device, signalAgeMs, status: connectionStatus(signalAgeMs) };
+  return { ...device, signal, status: connectionStatus(signal?.ageMs ?? null) };
 }
 
 /** "5 min. ago" in the given locale, in the largest unit that fits. */
@@ -80,48 +84,12 @@ export function formatRelativeTime(ageMs: number, locale: string) {
 export const deviceLabel = (device: Device) =>
   device.name || device.serial_number;
 
-/** What a room is called in the table and the picker. */
-export const roomLabel = (room: DeviceRoom) => room.room_number || room.name;
-
-// ponytail: the floor is read off the room number — everything but its last
-// two digits (204 → 2). Numbering like "A12" lands in "no floor"; add a floor
-// column to rooms if a property needs that.
-export function floorOf(roomNumber: string | null): number | null {
-  const match = roomNumber?.trim().match(/^(\d+)\d{2}$/);
-  return match ? Number(match[1]) : null;
-}
-
-const byLabel = new Intl.Collator(undefined, { numeric: true }).compare;
-
-/** Rooms by floor, lowest first; rooms without a floor come last. */
-export function groupRoomsByFloor(rooms: DeviceRoom[]) {
-  const groups = new Map<number | null, DeviceRoom[]>();
-  for (const room of rooms) {
-    const floor = floorOf(room.room_number);
-    groups.set(floor, [...(groups.get(floor) ?? []), room]);
-  }
-  return [...groups]
-    .sort(([a], [b]) => (a ?? Infinity) - (b ?? Infinity))
-    .map(([floor, items]) => ({
-      floor,
-      items: items.sort((a, b) => byLabel(roomLabel(a), roomLabel(b)))
-    }));
-}
-
-export function matchesRoomQuery(room: DeviceRoom, query: string) {
-  const q = query.trim().toLowerCase();
-  return [room.room_number, room.name].some((text) =>
-    text?.toLowerCase().includes(q)
-  );
-}
-
 /**
- * The devices the table lists: the tab, the search (name, serial number,
- * room) and the status filter combined. This is also the default order, used
- * until the user sorts by a column: unassigned devices first, the rest by
- * room.
+ * The devices the filters let through: the tab, the search (name, serial
+ * number, room) and the connection status combined. They come in the default
+ * order: unassigned devices first, the rest by room.
  */
-export function filterDevices(
+function filterDevices(
   devices: DeviceView[],
   { tab, q, status }: DeviceFilters
 ) {
@@ -155,15 +123,13 @@ const sortKeys: Record<
   name: (device) => device.name,
   serial_number: (device) => device.serial_number,
   room: (device) => device.room && roomLabel(device.room),
-  last_seen_at: (device) => device.signalAgeMs,
+  last_seen_at: (device) => device.signal?.ageMs ?? null,
   app_version: (device) => device.app_version
 };
 
-/**
- * The devices ordered by a column the user picked. Devices with nothing in
- * that column (no name, no room, never seen) come last in either direction.
- */
-export function sortDevices(devices: DeviceView[], { by, order }: DeviceSort) {
+// Devices with nothing in the column (no name, no room, never seen) come
+// last in either direction.
+function sortDevices(devices: DeviceView[], { by, order }: DeviceSort) {
   const key = sortKeys[by];
   const direction = order === 'desc' ? -1 : 1;
 
@@ -181,13 +147,16 @@ export function sortDevices(devices: DeviceView[], { by, order }: DeviceSort) {
   });
 }
 
-/** The rows of one page, and that page's index once it is within range. */
-export function paginate<T>(rows: T[], pageIndex: number, pageSize: number) {
-  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
-  const index = Math.min(pageIndex, pageCount - 1);
-  return {
-    pageIndex: index,
-    pageCount,
-    rows: rows.slice(index * pageSize, (index + 1) * pageSize)
-  };
+/**
+ * Every device the table lists, across all its pages, in the order it lists
+ * them: filtered, then ordered by the column the user picked, or left in the
+ * default order when none is.
+ */
+export function listDevices(
+  devices: DeviceView[],
+  filters: DeviceFilters,
+  sort: DeviceSort | undefined
+) {
+  const filtered = filterDevices(devices, filters);
+  return sort ? sortDevices(filtered, sort) : filtered;
 }

@@ -64,7 +64,7 @@ function Detail({
 
 function DeviceDetails({ device }: { device: DeviceView }) {
   const { t, i18n } = useLingui();
-  const { signalAgeMs, last_seen_at: lastSeen } = device;
+  const { signal } = device;
 
   return (
     <>
@@ -75,9 +75,9 @@ function DeviceDetails({ device }: { device: DeviceView }) {
         </DrawerTitle>
         <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
           <ConnectionStatusLabel status={device.status} />
-          {lastSeen && signalAgeMs !== null && (
-            <time dateTime={lastSeen}>
-              {formatRelativeTime(signalAgeMs, i18n.locale)}
+          {signal && (
+            <time dateTime={signal.at}>
+              {formatRelativeTime(signal.ageMs, i18n.locale)}
             </time>
           )}
         </div>
@@ -100,9 +100,9 @@ function DeviceDetails({ device }: { device: DeviceView }) {
             <DeviceRoomControl device={device} outlined />
           </Detail>
           <Detail label={<Trans>Last signal</Trans>}>
-            {lastSeen ? (
-              <time dateTime={lastSeen} className="tabular-nums">
-                {formatDate(lastSeen, { preset: 'dateTimeWithSeconds' })}
+            {signal ? (
+              <time dateTime={signal.at} className="tabular-nums">
+                {formatDate(signal.at, { preset: 'dateTimeWithSeconds' })}
               </time>
             ) : (
               <span className="text-muted-foreground">

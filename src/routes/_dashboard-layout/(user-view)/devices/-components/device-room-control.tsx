@@ -4,7 +4,8 @@ import type { Device } from 'shared/types/devices';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { deviceLabel, roomLabel } from '../-lib/devices';
+import { deviceLabel } from '../-lib/devices';
+import { roomLabel } from '../-lib/rooms';
 import { useDeviceRoomActions } from './device-room-actions';
 import { RoomPicker } from './room-picker';
 

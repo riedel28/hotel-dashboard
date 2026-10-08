@@ -19,11 +19,7 @@ import {
 } from '@/components/ui/combobox';
 import { cn } from '@/lib/utils';
 
-import {
-  groupRoomsByFloor,
-  matchesRoomQuery,
-  roomLabel
-} from '../-lib/devices';
+import { groupRoomsByFloor, matchesRoomQuery, roomLabel } from '../-lib/rooms';
 
 type FloorGroup = ReturnType<typeof groupRoomsByFloor>[number];
 

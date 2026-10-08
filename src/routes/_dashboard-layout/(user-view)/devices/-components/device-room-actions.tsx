@@ -20,7 +20,8 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { useAssignDeviceRoom } from '../-hooks/use-assign-device-room';
-import { deviceLabel, roomLabel } from '../-lib/devices';
+import { deviceLabel } from '../-lib/devices';
+import { roomLabel } from '../-lib/rooms';
 
 interface DeviceRoomActions {
   /** Saves the room right away. */

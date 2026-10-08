@@ -37,7 +37,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import { roomLabel } from '../-lib/devices';
+import { roomLabel } from '../-lib/rooms';
 import { RoomPicker } from './room-picker';
 
 const claimFormSchema = claimDeviceSchema

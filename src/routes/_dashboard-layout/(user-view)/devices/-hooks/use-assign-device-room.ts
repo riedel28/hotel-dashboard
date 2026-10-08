@@ -5,7 +5,8 @@ import { toast } from 'sonner';
 
 import { assignDeviceRoom, devicesQueryOptions } from '@/api/devices';
 
-import { deviceLabel, roomLabel } from '../-lib/devices';
+import { deviceLabel } from '../-lib/devices';
+import { roomLabel } from '../-lib/rooms';
 
 interface AssignDeviceRoom {
   device: Device;

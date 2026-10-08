@@ -2,21 +2,20 @@ import type { Device } from 'shared/types/devices';
 import { describe, expect, test } from 'vitest';
 
 import {
-  filterDevices,
-  floorOf,
+  type DeviceFilters,
+  type DeviceSort,
   formatRelativeTime,
-  groupRoomsByFloor,
-  paginate,
-  sortDevices,
+  listDevices,
   withConnection
 } from './devices';
 
 const now = Date.parse('2026-10-08T12:00:00Z');
-const ago = (minutes: number) => new Date(now - minutes * 60_000).toISOString();
+const minutes = (count: number) => count * 60_000;
+const ago = (count: number) => new Date(now - minutes(count)).toISOString();
 
-const room = (id: number, room_number: string | null, name = `Room ${id}`) => ({
+const room = (id: number, room_number: string) => ({
   id,
-  name,
+  name: `Room ${room_number}`,
   room_number
 });
 
@@ -30,25 +29,21 @@ const device = (id: number, overrides: Partial<Device> = {}): Device => ({
   ...overrides
 });
 
-const minutes = (count: number) => count * 60_000;
-
 describe('withConnection', () => {
-  const statusAfter = (last_seen_at: string | null) =>
-    withConnection(device(1, { last_seen_at }), now).status;
+  const view = (last_seen_at: string | null) =>
+    withConnection(device(1, { last_seen_at }), now);
 
   test('follows the 15 min and 24 h thresholds', () => {
-    expect(statusAfter(ago(14))).toBe('online');
-    expect(statusAfter(ago(15))).toBe('recently_offline');
-    expect(statusAfter(ago(24 * 60))).toBe('recently_offline');
-    expect(statusAfter(ago(24 * 60 + 1))).toBe('offline');
-    expect(statusAfter(null)).toBe('offline');
+    expect(view(ago(14)).status).toBe('online');
+    expect(view(ago(15)).status).toBe('recently_offline');
+    expect(view(ago(24 * 60)).status).toBe('recently_offline');
+    expect(view(ago(24 * 60 + 1)).status).toBe('offline');
+    expect(view(null).status).toBe('offline');
   });
 
-  test('keeps the age of the last signal', () => {
-    const view = (last_seen_at: string | null) =>
-      withConnection(device(1, { last_seen_at }), now);
-    expect(view(ago(5)).signalAgeMs).toBe(minutes(5));
-    expect(view(null).signalAgeMs).toBeNull();
+  test('keeps the last signal with its age, or nothing', () => {
+    expect(view(ago(5)).signal).toEqual({ at: ago(5), ageMs: minutes(5) });
+    expect(view(null).signal).toBeNull();
   });
 });
 
@@ -61,105 +56,79 @@ describe('formatRelativeTime', () => {
   });
 });
 
-describe('floors', () => {
-  test('reads the floor off the room number', () => {
-    expect(floorOf('204')).toBe(2);
-    expect(floorOf('1203')).toBe(12);
-    expect(floorOf('12')).toBeNull();
-    expect(floorOf('A12')).toBeNull();
-    expect(floorOf(null)).toBeNull();
-  });
+describe('listDevices', () => {
+  const ids = (
+    devices: Device[],
+    filters: DeviceFilters = {},
+    sort?: DeviceSort
+  ) =>
+    listDevices(
+      devices.map((item) => withConnection(item, now)),
+      filters,
+      sort
+    ).map((item) => item.id);
 
-  test('groups rooms by floor with the floorless ones last', () => {
-    const groups = groupRoomsByFloor([
-      room(1, '301'),
-      room(2, null, 'Spa'),
-      room(3, '205'),
-      room(4, '203')
-    ]);
-    expect(
-      groups.map(({ floor, items }) => [floor, items.map((item) => item.id)])
-    ).toEqual([
-      [2, [4, 3]],
-      [3, [1]],
-      [null, [2]]
-    ]);
-  });
-});
+  describe('filters', () => {
+    const devices = [
+      device(1, { room: room(1, '204'), name: 'Tablet 204' }),
+      device(2, { name: 'New tablet' }),
+      device(3, { room: room(2, '118'), last_seen_at: ago(3 * 24 * 60) }),
+      device(4, { room: room(1, '204'), last_seen_at: ago(60) })
+    ];
 
-describe('filterDevices', () => {
-  const devices = [
-    device(1, { room: room(1, '204'), name: 'Tablet 204' }),
-    device(2, { name: 'New tablet' }),
-    device(3, { room: room(2, '118'), last_seen_at: ago(3 * 24 * 60) }),
-    device(4, { room: room(1, '204'), last_seen_at: ago(60) })
-  ].map((item) => withConnection(item, now));
-  const ids = (filters: Parameters<typeof filterDevices>[1]) =>
-    filterDevices(devices, filters).map((item) => item.id);
+    test('puts unassigned devices first, then orders by room', () => {
+      expect(ids(devices)).toEqual([2, 3, 1, 4]);
+    });
 
-  test('puts unassigned devices first, then orders by room', () => {
-    expect(ids({})).toEqual([2, 3, 1, 4]);
-  });
-
-  test('combines the tab, the search and the status', () => {
-    expect(ids({ tab: 'unassigned' })).toEqual([2]);
-    expect(ids({ tab: 'assigned' })).toEqual([3, 1, 4]);
-    expect(ids({ q: '204' })).toEqual([1, 4]);
-    expect(ids({ q: 'sn-3' })).toEqual([3]);
-    expect(ids({ q: '204', status: 'recently_offline' })).toEqual([4]);
-    expect(ids({ tab: 'unassigned', status: 'offline' })).toEqual([]);
-  });
-});
-
-describe('sortDevices', () => {
-  const devices = [
-    device(1, {
-      name: 'Tablet 10',
-      room: room(1, '204'),
-      app_version: '2.4.1'
-    }),
-    device(2, { name: null, last_seen_at: null, app_version: null }),
-    device(3, {
-      name: 'Tablet 9',
-      room: room(2, '118'),
-      last_seen_at: ago(90),
-      app_version: '2.10.0'
-    })
-  ].map((item) => withConnection(item, now));
-  const ids = (sort: Parameters<typeof sortDevices>[1]) =>
-    sortDevices(devices, sort).map((item) => item.id);
-
-  test('orders text and numbers the way a person would', () => {
-    expect(ids({ by: 'name', order: 'asc' })).toEqual([3, 1, 2]);
-    expect(ids({ by: 'room', order: 'asc' })).toEqual([3, 1, 2]);
-    expect(ids({ by: 'app_version', order: 'asc' })).toEqual([1, 3, 2]);
-    expect(ids({ by: 'serial_number', order: 'desc' })).toEqual([3, 2, 1]);
-  });
-
-  test('starts "last signal" with the most recent and keeps blanks last', () => {
-    expect(ids({ by: 'last_seen_at', order: 'asc' })).toEqual([1, 3, 2]);
-    expect(ids({ by: 'last_seen_at', order: 'desc' })).toEqual([3, 1, 2]);
-    expect(ids({ by: 'name', order: 'desc' })).toEqual([1, 3, 2]);
-  });
-});
-
-describe('paginate', () => {
-  const rows = [1, 2, 3, 4, 5];
-
-  test('slices a page and counts the pages', () => {
-    expect(paginate(rows, 1, 2)).toEqual({
-      pageIndex: 1,
-      pageCount: 3,
-      rows: [3, 4]
+    test('combines the tab, the search and the status', () => {
+      expect(ids(devices, { tab: 'unassigned' })).toEqual([2]);
+      expect(ids(devices, { tab: 'assigned' })).toEqual([3, 1, 4]);
+      expect(ids(devices, { q: '204' })).toEqual([1, 4]);
+      expect(ids(devices, { q: 'sn-3' })).toEqual([3]);
+      expect(ids(devices, { q: '204', status: 'recently_offline' })).toEqual([
+        4
+      ]);
+      expect(ids(devices, { tab: 'unassigned', status: 'offline' })).toEqual(
+        []
+      );
     });
   });
 
-  test('falls back to the last page when the index is out of range', () => {
-    expect(paginate(rows, 7, 2)).toMatchObject({ pageIndex: 2, rows: [5] });
-    expect(paginate([], 3, 2)).toEqual({
-      pageIndex: 0,
-      pageCount: 1,
-      rows: []
+  describe('sorting', () => {
+    const devices = [
+      device(1, {
+        name: 'Tablet 10',
+        room: room(1, '204'),
+        app_version: '2.4.1'
+      }),
+      device(2, { name: null, last_seen_at: null, app_version: null }),
+      device(3, {
+        name: 'Tablet 9',
+        room: room(2, '118'),
+        last_seen_at: ago(90),
+        app_version: '2.10.0'
+      })
+    ];
+    const sorted = (by: DeviceSort['by'], order: DeviceSort['order']) =>
+      ids(devices, {}, { by, order });
+
+    test('orders text and numbers the way a person would', () => {
+      expect(sorted('name', 'asc')).toEqual([3, 1, 2]);
+      expect(sorted('room', 'asc')).toEqual([3, 1, 2]);
+      expect(sorted('app_version', 'asc')).toEqual([1, 3, 2]);
+      expect(sorted('serial_number', 'desc')).toEqual([3, 2, 1]);
+    });
+
+    test('starts "last signal" with the most recent and keeps blanks last', () => {
+      expect(sorted('last_seen_at', 'asc')).toEqual([1, 3, 2]);
+      expect(sorted('last_seen_at', 'desc')).toEqual([3, 1, 2]);
+      expect(sorted('name', 'desc')).toEqual([1, 3, 2]);
+    });
+
+    test('applies to what the filters let through', () => {
+      expect(
+        ids(devices, { tab: 'assigned' }, { by: 'name', order: 'desc' })
+      ).toEqual([1, 3]);
     });
   });
 });

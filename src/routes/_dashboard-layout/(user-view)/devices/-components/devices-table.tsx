@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
-  type OnChangeFn,
+  functionalUpdate,
   type PaginationState,
   type SortingState,
   useTable
@@ -24,32 +24,29 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import { type Page, paginate } from '@/lib/paginate';
 import { formatDate } from '@/utils/date';
 
 import {
   DEVICE_PAGE_SIZES,
+  type DeviceSort,
+  deviceSortColumnSchema,
   type DeviceView,
   formatRelativeTime
 } from '../-lib/devices';
 import { ConnectionStatusDot, ConnectionStatusName } from './connection-status';
 import { DeviceRoomControl } from './device-room-control';
 
-const noDevices: DeviceView[] = [];
-const noSorting: SortingState = [];
-// The loading table shows this many placeholder rows
-const skeletonPagination: PaginationState = { pageIndex: 0, pageSize: 10 };
-const ignore = () => {};
+// What the table shows while the devices load: ten placeholder rows
+const loadingPage = paginate<DeviceView>([], 0, 10);
 
 interface DevicesTableProps {
-  /** The rows of the current page, already filtered and ordered. */
-  devices: DeviceView[];
-  /** How many devices there are across all pages. */
-  totalCount: number;
-  pageCount: number;
-  pagination: PaginationState;
-  onPaginationChange: OnChangeFn<PaginationState>;
-  sorting: SortingState;
-  onSortingChange: OnChangeFn<SortingState>;
+  /** One page of the devices, already filtered and ordered. */
+  page: Page<DeviceView>;
+  /** The column the list is ordered by; none means the default order. */
+  sort?: DeviceSort;
+  onSortChange?: (sort: DeviceSort | undefined) => void;
+  onPageChange?: (pageIndex: number, pageSize: number) => void;
   isLoading?: boolean;
   /** A device to tint and scroll to for a moment, e.g. the one just added. */
   highlightedId?: number;
@@ -59,7 +56,7 @@ interface DevicesTableProps {
 
 function LastSignalCell({ device }: { device: DeviceView }) {
   const { i18n } = useLingui();
-  const { status, signalAgeMs, last_seen_at: lastSeen } = device;
+  const { status, signal } = device;
 
   return (
     <Tooltip>
@@ -72,9 +69,9 @@ function LastSignalCell({ device }: { device: DeviceView }) {
         <span className="sr-only">
           <ConnectionStatusName status={status} />,
         </span>
-        {lastSeen && signalAgeMs !== null ? (
-          <time dateTime={lastSeen}>
-            {formatRelativeTime(signalAgeMs, i18n.locale)}
+        {signal ? (
+          <time dateTime={signal.at}>
+            {formatRelativeTime(signal.ageMs, i18n.locale)}
           </time>
         ) : (
           <span className="text-muted-foreground">
@@ -84,10 +81,10 @@ function LastSignalCell({ device }: { device: DeviceView }) {
       </TooltipTrigger>
       <TooltipContent>
         <ConnectionStatusName status={status} />
-        {lastSeen && (
+        {signal && (
           <span className="tabular-nums">
             {' · '}
-            {formatDate(lastSeen, { preset: 'dateTimeWithSeconds' })}
+            {formatDate(signal.at, { preset: 'dateTimeWithSeconds' })}
           </span>
         )}
       </TooltipContent>
@@ -103,34 +100,31 @@ const scrollIntoView = (row: HTMLTableRowElement | null) =>
 
 /** The table's shape while the devices load. */
 export function DevicesTableSkeleton() {
-  return (
-    <DevicesTable
-      devices={noDevices}
-      totalCount={0}
-      pageCount={0}
-      pagination={skeletonPagination}
-      onPaginationChange={ignore}
-      sorting={noSorting}
-      onSortingChange={ignore}
-      isLoading
-    />
-  );
+  return <DevicesTable page={loadingPage} isLoading />;
 }
 
 export function DevicesTable({
-  devices,
-  totalCount,
-  pageCount,
-  pagination,
-  onPaginationChange,
-  sorting,
-  onSortingChange,
+  page,
+  sort,
+  onSortChange,
+  onPageChange,
   isLoading = false,
   highlightedId,
   emptyMessage,
   onDeviceOpen
 }: DevicesTableProps) {
   const { t } = useLingui();
+
+  // The table library's shapes for what the page keeps as a sort and a page
+  const sorting = useMemo<SortingState>(
+    () => (sort ? [{ id: sort.by, desc: sort.order === 'desc' }] : []),
+    [sort]
+  );
+  const pagination = useMemo<PaginationState>(
+    () => ({ pageIndex: page.pageIndex, pageSize: page.pageSize }),
+    [page.pageIndex, page.pageSize]
+  );
+
   const columns = useMemo<ColumnDef<DataGridFeatures, DeviceView>[]>(
     () => [
       {
@@ -239,12 +233,25 @@ export function DevicesTable({
   const table = useTable({
     features: dataGridFeatures,
     columns,
-    data: devices,
-    pageCount,
+    data: page.rows,
+    pageCount: page.pageCount,
     getRowId: (device: DeviceView) => device.id.toString(),
     state: { pagination, sorting },
-    onPaginationChange,
-    onSortingChange,
+    onPaginationChange: (updater) => {
+      const next = functionalUpdate(updater, pagination);
+      onPageChange?.(next.pageIndex, next.pageSize);
+    },
+    onSortingChange: (updater) => {
+      // Sorting cleared, or by a column the list cannot be ordered by:
+      // back to the default order
+      const [first] = functionalUpdate(updater, sorting);
+      const column = deviceSortColumnSchema.safeParse(first?.id);
+      onSortChange?.(
+        column.success
+          ? { by: column.data, order: first?.desc ? 'desc' : 'asc' }
+          : undefined
+      );
+    },
     manualPagination: true,
     manualSorting: true
   });
@@ -252,16 +259,13 @@ export function DevicesTable({
   return (
     <DataGrid
       table={table}
-      recordCount={totalCount}
+      recordCount={page.totalCount}
       isLoading={isLoading}
       emptyMessage={emptyMessage}
       onRowClick={onDeviceOpen}
       getRowProps={(device) =>
         device.id === highlightedId
-          ? {
-              ref: scrollIntoView,
-              className: 'bg-muted hover:bg-muted'
-            }
+          ? { ref: scrollIntoView, className: 'bg-muted hover:bg-muted' }
           : undefined
       }
       tableClassNames={{
