@@ -6,6 +6,8 @@ import {
   floorOf,
   formatRelativeTime,
   groupRoomsByFloor,
+  paginate,
+  sortDevices,
   withConnection
 } from './devices';
 
@@ -106,5 +108,58 @@ describe('filterDevices', () => {
     expect(ids({ q: 'sn-3' })).toEqual([3]);
     expect(ids({ q: '204', status: 'recently_offline' })).toEqual([4]);
     expect(ids({ tab: 'unassigned', status: 'offline' })).toEqual([]);
+  });
+});
+
+describe('sortDevices', () => {
+  const devices = [
+    device(1, {
+      name: 'Tablet 10',
+      room: room(1, '204'),
+      app_version: '2.4.1'
+    }),
+    device(2, { name: null, last_seen_at: null, app_version: null }),
+    device(3, {
+      name: 'Tablet 9',
+      room: room(2, '118'),
+      last_seen_at: ago(90),
+      app_version: '2.10.0'
+    })
+  ].map((item) => withConnection(item, now));
+  const ids = (sort: Parameters<typeof sortDevices>[1]) =>
+    sortDevices(devices, sort).map((item) => item.id);
+
+  test('orders text and numbers the way a person would', () => {
+    expect(ids({ by: 'name', order: 'asc' })).toEqual([3, 1, 2]);
+    expect(ids({ by: 'room', order: 'asc' })).toEqual([3, 1, 2]);
+    expect(ids({ by: 'app_version', order: 'asc' })).toEqual([1, 3, 2]);
+    expect(ids({ by: 'serial_number', order: 'desc' })).toEqual([3, 2, 1]);
+  });
+
+  test('starts "last signal" with the most recent and keeps blanks last', () => {
+    expect(ids({ by: 'last_seen_at', order: 'asc' })).toEqual([1, 3, 2]);
+    expect(ids({ by: 'last_seen_at', order: 'desc' })).toEqual([3, 1, 2]);
+    expect(ids({ by: 'name', order: 'desc' })).toEqual([1, 3, 2]);
+  });
+});
+
+describe('paginate', () => {
+  const rows = [1, 2, 3, 4, 5];
+
+  test('slices a page and counts the pages', () => {
+    expect(paginate(rows, 1, 2)).toEqual({
+      pageIndex: 1,
+      pageCount: 3,
+      rows: [3, 4]
+    });
+  });
+
+  test('falls back to the last page when the index is out of range', () => {
+    expect(paginate(rows, 7, 2)).toMatchObject({ pageIndex: 2, rows: [5] });
+    expect(paginate([], 3, 2)).toEqual({
+      pageIndex: 0,
+      pageCount: 1,
+      rows: []
+    });
   });
 });

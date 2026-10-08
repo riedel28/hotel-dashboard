@@ -11,6 +11,24 @@ import { z } from 'zod';
 export const deviceTabSchema = z.enum(['assigned', 'unassigned']);
 export type DeviceTab = z.infer<typeof deviceTabSchema>;
 
+// The columns the table can be ordered by
+export const deviceSortColumnSchema = z.enum([
+  'name',
+  'serial_number',
+  'room',
+  'last_seen_at',
+  'app_version'
+]);
+export type DeviceSortColumn = z.infer<typeof deviceSortColumnSchema>;
+
+export interface DeviceSort {
+  by: DeviceSortColumn;
+  order: 'asc' | 'desc';
+}
+
+export const DEVICE_PAGE_SIZES = [10, 25, 50, 100];
+export const DEFAULT_DEVICE_PAGE_SIZE = 25;
+
 export interface DeviceFilters {
   tab?: DeviceTab;
   q?: string;
@@ -98,9 +116,10 @@ export function matchesRoomQuery(room: DeviceRoom, query: string) {
 }
 
 /**
- * The rows of the table: the tab, the search (name, serial number, room) and
- * the status filter combined. Unassigned devices come first, the rest are
- * ordered by room.
+ * The devices the table lists: the tab, the search (name, serial number,
+ * room) and the status filter combined. This is also the default order, used
+ * until the user sorts by a column: unassigned devices first, the rest by
+ * room.
  */
 export function filterDevices(
   devices: DeviceView[],
@@ -125,4 +144,50 @@ export function filterDevices(
         return Number(Boolean(a.room)) - Number(Boolean(b.room));
       return byLabel(roomLabel(a.room), roomLabel(b.room));
     });
+}
+
+// What each column is ordered by. "Last signal" goes by the age of the
+// signal, so ascending starts with the devices heard from most recently.
+const sortKeys: Record<
+  DeviceSortColumn,
+  (device: DeviceView) => string | number | null
+> = {
+  name: (device) => device.name,
+  serial_number: (device) => device.serial_number,
+  room: (device) => device.room && roomLabel(device.room),
+  last_seen_at: (device) => device.signalAgeMs,
+  app_version: (device) => device.app_version
+};
+
+/**
+ * The devices ordered by a column the user picked. Devices with nothing in
+ * that column (no name, no room, never seen) come last in either direction.
+ */
+export function sortDevices(devices: DeviceView[], { by, order }: DeviceSort) {
+  const key = sortKeys[by];
+  const direction = order === 'desc' ? -1 : 1;
+
+  return devices.toSorted((first, second) => {
+    const a = key(first);
+    const b = key(second);
+    if (a === null || b === null) {
+      return Number(a === null) - Number(b === null);
+    }
+    const result =
+      typeof a === 'number' && typeof b === 'number'
+        ? a - b
+        : byLabel(String(a), String(b));
+    return result * direction;
+  });
+}
+
+/** The rows of one page, and that page's index once it is within range. */
+export function paginate<T>(rows: T[], pageIndex: number, pageSize: number) {
+  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
+  const index = Math.min(pageIndex, pageCount - 1);
+  return {
+    pageIndex: index,
+    pageCount,
+    rows: rows.slice(index * pageSize, (index + 1) * pageSize)
+  };
 }

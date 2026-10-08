@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { PlusCircleIcon, TabletSmartphoneIcon, XIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -43,7 +43,15 @@ import {
 } from './-components/devices-table';
 import { useDevices } from './-hooks/use-devices';
 import { useDevicesSearch } from './-hooks/use-devices-search';
-import { deviceTabSchema, filterDevices } from './-lib/devices';
+import {
+  DEFAULT_DEVICE_PAGE_SIZE,
+  DEVICE_PAGE_SIZES,
+  deviceSortColumnSchema,
+  deviceTabSchema,
+  filterDevices,
+  paginate,
+  sortDevices
+} from './-lib/devices';
 
 const devicesSearchSchema = z.object({
   tab: deviceTabSchema.optional(),
@@ -51,7 +59,15 @@ const devicesSearchSchema = z.object({
   q: z.union([z.string(), z.number().transform(String)]).optional(),
   status: deviceConnectionStatusSchema.optional(),
   // The device whose details are open
-  device: z.number().int().positive().optional()
+  device: z.number().int().positive().optional(),
+  page: z.number().int().positive().default(1),
+  per_page: z
+    .number()
+    .refine((size) => DEVICE_PAGE_SIZES.includes(size))
+    .default(DEFAULT_DEVICE_PAGE_SIZE),
+  // Absent means the default order: unassigned devices first, then by room
+  sort_by: deviceSortColumnSchema.optional(),
+  sort_order: z.enum(['asc', 'desc']).default('asc')
 });
 
 // How long a device that was just added stays tinted in the table
@@ -158,10 +174,36 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
   const { setFilters } = search;
   const { tab, q, status } = search.filters;
 
-  const rows = useMemo(
-    () => filterDevices(devices, { tab, q, status }),
-    [devices, tab, q, status]
+  const { sort, pagination } = search;
+
+  const matching = useMemo(() => {
+    const filtered = filterDevices(devices, { tab, q, status });
+    return sort ? sortDevices(filtered, sort) : filtered;
+    // `sort` is a new object on every render; its fields are what matter
+  }, [devices, tab, q, status, sort?.by, sort?.order]);
+  const page = paginate(matching, pagination.pageIndex, pagination.pageSize);
+
+  // A device that was just added may sit on another page; go to it
+  const highlightedIndex = matching.findIndex(
+    (device) => device.id === highlightedId
   );
+  const highlightedPageIndex =
+    highlightedIndex === -1
+      ? undefined
+      : Math.floor(highlightedIndex / pagination.pageSize);
+  const { onPaginationChange } = search;
+  useEffect(() => {
+    if (
+      highlightedPageIndex !== undefined &&
+      highlightedPageIndex !== page.pageIndex
+    ) {
+      onPaginationChange((current) => ({
+        ...current,
+        pageIndex: highlightedPageIndex
+      }));
+    }
+    // Only when the highlight lands on a page, not on every page change
+  }, [highlightedPageIndex]);
 
   if (devices.length === 0) {
     return (
@@ -256,7 +298,13 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
         </div>
 
         <DevicesTable
-          devices={rows}
+          devices={page.rows}
+          totalCount={matching.length}
+          pageCount={page.pageCount}
+          pagination={{ ...pagination, pageIndex: page.pageIndex }}
+          onPaginationChange={search.onPaginationChange}
+          sorting={search.sorting}
+          onSortingChange={search.onSortingChange}
           highlightedId={highlightedId}
           emptyMessage={<Trans>No devices match the filters</Trans>}
           onDeviceOpen={(device) => search.openDevice(device.id)}
@@ -276,6 +324,16 @@ export const Route = createFileRoute('/_dashboard-layout/(user-view)/devices/')(
   {
     // A stale or hand-edited link loses its bad params, not the whole page
     validateSearch: lenientSearch(devicesSearchSchema),
+    // Keep default values out of the URL
+    search: {
+      middlewares: [
+        stripSearchParams({
+          page: 1,
+          per_page: DEFAULT_DEVICE_PAGE_SIZE,
+          sort_order: 'asc'
+        })
+      ]
+    },
     component: DevicesPage
   }
 );

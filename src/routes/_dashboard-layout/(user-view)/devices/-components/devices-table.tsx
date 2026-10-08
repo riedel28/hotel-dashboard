@@ -1,5 +1,11 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { type ColumnDef, useTable } from '@tanstack/react-table';
+import {
+  type ColumnDef,
+  type OnChangeFn,
+  type PaginationState,
+  type SortingState,
+  useTable
+} from '@tanstack/react-table';
 import { type ReactNode, useMemo } from 'react';
 
 import {
@@ -9,6 +15,7 @@ import {
   dataGridFeatures
 } from '@/components/ui/data-grid';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
+import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -19,14 +26,30 @@ import {
 } from '@/components/ui/tooltip';
 import { formatDate } from '@/utils/date';
 
-import { type DeviceView, formatRelativeTime } from '../-lib/devices';
+import {
+  DEVICE_PAGE_SIZES,
+  type DeviceView,
+  formatRelativeTime
+} from '../-lib/devices';
 import { ConnectionStatusDot, ConnectionStatusName } from './connection-status';
 import { DeviceRoomControl } from './device-room-control';
 
 const noDevices: DeviceView[] = [];
+const noSorting: SortingState = [];
+// The loading table shows this many placeholder rows
+const skeletonPagination: PaginationState = { pageIndex: 0, pageSize: 10 };
+const ignore = () => {};
 
 interface DevicesTableProps {
+  /** The rows of the current page, already filtered and ordered. */
   devices: DeviceView[];
+  /** How many devices there are across all pages. */
+  totalCount: number;
+  pageCount: number;
+  pagination: PaginationState;
+  onPaginationChange: OnChangeFn<PaginationState>;
+  sorting: SortingState;
+  onSortingChange: OnChangeFn<SortingState>;
   isLoading?: boolean;
   /** A device to tint and scroll to for a moment, e.g. the one just added. */
   highlightedId?: number;
@@ -80,11 +103,28 @@ const scrollIntoView = (row: HTMLTableRowElement | null) =>
 
 /** The table's shape while the devices load. */
 export function DevicesTableSkeleton() {
-  return <DevicesTable devices={noDevices} isLoading />;
+  return (
+    <DevicesTable
+      devices={noDevices}
+      totalCount={0}
+      pageCount={0}
+      pagination={skeletonPagination}
+      onPaginationChange={ignore}
+      sorting={noSorting}
+      onSortingChange={ignore}
+      isLoading
+    />
+  );
 }
 
 export function DevicesTable({
   devices,
+  totalCount,
+  pageCount,
+  pagination,
+  onPaginationChange,
+  sorting,
+  onSortingChange,
   isLoading = false,
   highlightedId,
   emptyMessage,
@@ -115,7 +155,7 @@ export function DevicesTable({
         ),
         meta: { skeleton: <Skeleton className="h-4 w-32" /> },
         size: 220,
-        enableSorting: false
+        enableSorting: true
       },
       {
         accessorKey: 'serial_number',
@@ -130,9 +170,11 @@ export function DevicesTable({
         ),
         meta: { skeleton: <Skeleton className="h-4 w-28" /> },
         size: 180,
-        enableSorting: false
+        enableSorting: true
       },
       {
+        // An accessor is what makes the column sortable
+        accessorKey: 'room',
         id: 'room',
         header: ({ column }) => (
           <DataGridColumnHeader title={t`Room`} column={column} />
@@ -160,7 +202,7 @@ export function DevicesTable({
           )
         },
         size: 150,
-        enableSorting: false
+        enableSorting: true
       },
       {
         accessorKey: 'last_seen_at',
@@ -171,7 +213,7 @@ export function DevicesTable({
         cell: ({ row }) => <LastSignalCell device={row.original} />,
         meta: { skeleton: <Skeleton className="h-4 w-24" /> },
         size: 170,
-        enableSorting: false
+        enableSorting: true
       },
       {
         accessorKey: 'app_version',
@@ -186,26 +228,32 @@ export function DevicesTable({
         ),
         meta: { skeleton: <Skeleton className="h-4 w-12" /> },
         size: 120,
-        enableSorting: false
+        enableSorting: true
       }
     ],
     [t]
   );
 
-  // The rows arrive filtered and ordered; the list is not paginated.
+  // The whole list is in memory, so the page computes the rows of one page
+  // itself; the table only shows them and reports what the user asks for.
   const table = useTable({
     features: dataGridFeatures,
     columns,
     data: devices,
-    getRowId: (device: DeviceView) => device.id.toString()
+    pageCount,
+    getRowId: (device: DeviceView) => device.id.toString(),
+    state: { pagination, sorting },
+    onPaginationChange,
+    onSortingChange,
+    manualPagination: true,
+    manualSorting: true
   });
 
   return (
     <DataGrid
       table={table}
-      recordCount={devices.length}
+      recordCount={totalCount}
       isLoading={isLoading}
-      skeletonRowCount={8}
       emptyMessage={emptyMessage}
       onRowClick={onDeviceOpen}
       getRowProps={(device) =>
@@ -222,12 +270,15 @@ export function DevicesTable({
         bodyRow: 'transition-colors duration-700'
       }}
     >
-      <DataGridContainer>
-        <ScrollArea>
-          <DataGridTable />
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </DataGridContainer>
+      <div className="w-full space-y-2.5">
+        <DataGridContainer>
+          <ScrollArea>
+            <DataGridTable />
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </DataGridContainer>
+        <DataGridPagination sizes={DEVICE_PAGE_SIZES} />
+      </div>
     </DataGrid>
   );
 }
