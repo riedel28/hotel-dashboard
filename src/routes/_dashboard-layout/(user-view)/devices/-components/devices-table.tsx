@@ -260,7 +260,7 @@ export function DevicesTable({
         device.id === highlightedId
           ? {
               ref: scrollIntoView,
-              className: 'bg-emerald-500/15 hover:bg-emerald-500/15'
+              className: 'bg-muted hover:bg-muted'
             }
           : undefined
       }
