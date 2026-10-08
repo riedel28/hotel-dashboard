@@ -1,9 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import type { ReactNode } from 'react';
-import type { Device, DeviceConnectionStatus } from 'shared/types/devices';
+import type { Device } from 'shared/types/devices';
 
-import { Badge, type BadgeColorProps } from '@/components/ui/badge';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
   Drawer,
@@ -12,17 +11,10 @@ import {
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
-import { cn } from '@/lib/utils';
 
 import { connectionStatus, formatRelativeTime } from '../-lib/devices';
-import { ConnectionStatusName } from './connection-status';
+import { ConnectionStatusLabel } from './connection-status';
 import { RoomCell } from './room-cell';
-
-const statusColors: Record<DeviceConnectionStatus, BadgeColorProps> = {
-  online: 'emerald',
-  recently_offline: 'yellow',
-  offline: 'gray'
-};
 
 interface DeviceDetailsDrawerProps {
   /** Whether a device is selected; it may still be missing from the list. */
@@ -69,7 +61,7 @@ function Detail({
   return (
     <>
       <dt className="text-muted-foreground">{label}</dt>
-      <dd className="flex items-center">{children}</dd>
+      <dd className="flex min-h-7 items-center">{children}</dd>
     </>
   );
 }
@@ -87,15 +79,7 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
           {device.name || <Trans>Unnamed device</Trans>}
         </DrawerTitle>
         <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
-          <Badge
-            size="sm"
-            variant="outline"
-            color={statusColors[status]}
-            className="rounded-md"
-          >
-            <span className="mr-0.5 size-1.25 rounded-full bg-current/80"></span>
-            <ConnectionStatusName status={status} />
-          </Badge>
+          <ConnectionStatusLabel status={status} />
           {lastSeen && (
             <time dateTime={lastSeen}>
               {formatRelativeTime(lastSeen, i18n.locale, now)}
@@ -105,7 +89,7 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
       </DrawerHeader>
 
       <DrawerBody>
-        <dl className="grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-2 text-sm">
+        <dl className="grid grid-cols-[auto_1fr] items-center gap-x-10 gap-y-3 text-sm">
           <Detail label={<Trans>Serial number</Trans>}>
             <span className="font-mono text-[13px]">
               {device.serial_number}
@@ -114,15 +98,11 @@ function DeviceDetails({ device, now }: { device: Device; now: number }) {
               text={device.serial_number}
               copyLabel={t`Copy serial number`}
               copiedLabel={t`Serial number copied`}
-              // Negative margins: the controls of a row do not make it taller
-              // than the plain rows
-              buttonClassName="-my-1 ml-1"
+              buttonClassName="ml-1"
             />
           </Detail>
           <Detail label={<Trans>Room</Trans>}>
-            <div className={cn('-my-1', device.room && '-ml-2.5')}>
-              <RoomCell device={device} />
-            </div>
+            <RoomCell device={device} outlined />
           </Detail>
           <Detail label={<Trans>Last signal</Trans>}>
             {lastSeen ? (

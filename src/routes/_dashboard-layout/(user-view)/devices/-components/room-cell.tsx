@@ -22,7 +22,14 @@ import { useAssignDeviceRoom } from './use-assign-device-room';
  * The room of a device: "Assign" for an unassigned one, otherwise the room
  * number. Either opens the room picker; picking a room saves immediately.
  */
-export function RoomCell({ device }: { device: Device }) {
+export function RoomCell({
+  device,
+  outlined = false
+}: {
+  device: Device;
+  /** Keeps the border once a room is assigned, for use outside the table. */
+  outlined?: boolean;
+}) {
   const { t } = useLingui();
   const assign = useAssignDeviceRoom();
   const [isConfirmingUnassign, setIsConfirmingUnassign] = useState(false);
@@ -46,7 +53,10 @@ export function RoomCell({ device }: { device: Device }) {
             : t`Assign ${name} to a room`
         }
         className={cn(
-          buttonVariants({ variant: room ? 'ghost' : 'outline', size: 'sm' }),
+          buttonVariants({
+            variant: room && !outlined ? 'ghost' : 'outline',
+            size: 'sm'
+          }),
           // Both states share one box, so the column reads as one aligned
           // stack whichever of them a row shows
           'font-normal',
