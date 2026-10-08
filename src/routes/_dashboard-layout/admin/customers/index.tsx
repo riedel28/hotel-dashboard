@@ -70,7 +70,7 @@ function RowActions({ customer }: { customer: Customer }) {
               preload="intent"
             >
               <PencilIcon className="mr-2 h-4 w-4" />
-              <Trans>Edit</Trans>
+              <Trans>Edit Customer</Trans>
             </RouterLink>
           )}
         />

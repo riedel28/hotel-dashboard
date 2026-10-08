@@ -270,10 +270,10 @@ msgid "Additional configuration"
 msgstr "Additional configuration"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:234
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:118
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:216
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:261
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:289
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:127
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:225
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:264
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:292
 msgid "Address"
 msgstr "Address"
 
@@ -296,7 +296,7 @@ msgstr "Address line is required"
 
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:36
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:36
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:552
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:555
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:37
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:504
 msgid "Admin"
@@ -349,7 +349,7 @@ msgstr "After entering your password you'll enter a 6-digit code from an authent
 msgid "All"
 msgstr "All"
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:503
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:506
 #: src/routes/_dashboard-layout/admin/properties/-components/property-country-filter.tsx:20
 msgid "All countries"
 msgstr "All countries"
@@ -390,7 +390,7 @@ msgstr "Already have an account?"
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Already have one? Any TOTP app works — just scan the QR code."
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:573
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:576
 msgid "An error occurred while fetching customers"
 msgstr "An error occurred while fetching customers"
 
@@ -668,7 +668,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:90
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:194
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:203
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 msgid "Cancel"
@@ -938,8 +938,8 @@ msgstr "Connection successful"
 msgid "Connection timed out after 5000 ms — host unreachable."
 msgstr "Connection timed out after 5000 ms — host unreachable."
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:104
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:215
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:113
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:224
 msgid "Contact"
 msgstr "Contact"
 
@@ -1100,8 +1100,8 @@ msgstr "Current password is required"
 #~ msgid "Current View: {currentView}"
 #~ msgstr "Current View: {currentView}"
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:192
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:224
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:201
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:227
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:193
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:192
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:191
@@ -1123,9 +1123,9 @@ msgstr "Customer updated successfully"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:158
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:42
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:538
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:558
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:566
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:541
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:561
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:569
 #: src/routes/_dashboard-layout/admin/index.tsx:25
 msgid "Customers"
 msgstr "Customers"
@@ -1162,7 +1162,6 @@ msgstr "Date"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:90
 msgid "Delete"
 msgstr "Delete"
 
@@ -1185,6 +1184,10 @@ msgstr "Delete product"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:36
 msgid "Delete product?"
 msgstr "Delete product?"
+
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:90
+msgid "Delete Property"
+msgstr "Delete Property"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:53
 msgid "Delete property?"
@@ -1307,8 +1310,6 @@ msgstr "Each code works once"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:44
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:73
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:80
 msgid "Edit"
 msgstr "Edit"
 
@@ -1320,6 +1321,7 @@ msgstr "Edit"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:48
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:58
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:77
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:73
 msgid "Edit Customer"
 msgstr "Edit Customer"
 
@@ -1339,6 +1341,7 @@ msgstr "Edit product"
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:49
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:55
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:80
 msgid "Edit Property"
 msgstr "Edit Property"
 
@@ -1371,8 +1374,8 @@ msgstr "Edit user"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:141
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:162
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:236
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:248
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:239
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:251
 msgid "Email"
 msgstr "Email"
 
@@ -2094,7 +2097,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:30
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:546
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:549
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:31
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:498
 msgid "Home"
@@ -2607,7 +2610,7 @@ msgstr "No customer"
 msgid "No customer found."
 msgstr "No customer found."
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:528
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:531
 msgid "No customers match the filters"
 msgstr "No customers match the filters"
 
@@ -2691,7 +2694,7 @@ msgstr "No properties found"
 msgid "No properties match the filters"
 msgstr "No properties match the filters"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:139
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:148
 msgid "No properties yet."
 msgstr "No properties yet."
 
@@ -2734,7 +2737,7 @@ msgid "No rooms found"
 msgstr "No rooms found"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:312
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:183
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:192
 msgid "No unsaved changes"
 msgstr "No unsaved changes"
 
@@ -3231,10 +3234,10 @@ msgstr "Profile updated"
 #~ msgstr "Profile updated successfully"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:157
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:129
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:217
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:301
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:311
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:138
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:226
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:304
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:314
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:43
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:490
@@ -3668,7 +3671,7 @@ msgstr "Save"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:333
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:200
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:209
 msgid "Save changes"
 msgstr "Save changes"
 
@@ -3706,7 +3709,7 @@ msgid "Saving changes"
 msgstr "Saving changes"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:305
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:181
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:190
 msgid "Saving changes…"
 msgstr "Saving changes…"
 
@@ -3735,7 +3738,7 @@ msgstr "Search categories"
 msgid "Search country..."
 msgstr "Search country..."
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:496
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:499
 #: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:89
 msgid "Search customers"
 msgstr "Search customers"
@@ -4327,7 +4330,7 @@ msgstr "The invoice will be sent directly to the PMS"
 msgid "The merchant address shown on payment receipts."
 msgstr "The merchant address shown on payment receipts."
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:106
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:115
 msgid "The person we deal with, and the company they act for."
 msgstr "The person we deal with, and the company they act for."
 
@@ -4335,7 +4338,7 @@ msgstr "The person we deal with, and the company they act for."
 msgid "The PIN is incorrect"
 msgstr "The PIN is incorrect"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:131
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:140
 msgid "The properties this customer owns. Change the owner on a property's page."
 msgstr "The properties this customer owns. Change the owner on a property's page."
 
@@ -4910,7 +4913,7 @@ msgstr "What you're allowed to do in the back-office."
 #~ msgid "WhatsApp opened"
 #~ msgstr "WhatsApp opened"
 
-#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:119
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:128
 msgid "Where the customer is registered."
 msgstr "Where the customer is registered."
 

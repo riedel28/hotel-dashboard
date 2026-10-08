@@ -77,7 +77,7 @@ function RowActions({ row }: { row: { original: Property } }) {
                 preload="intent"
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
-                <Trans>Edit</Trans>
+                <Trans>Edit Property</Trans>
               </RouterLink>
             )}
           />
@@ -87,7 +87,7 @@ function RowActions({ row }: { row: { original: Property } }) {
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash2Icon className="mr-2 h-4 w-4" />
-            <Trans>Delete</Trans>
+            <Trans>Delete Property</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
