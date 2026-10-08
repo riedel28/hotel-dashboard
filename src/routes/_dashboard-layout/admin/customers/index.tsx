@@ -208,15 +208,9 @@ function CustomersTable({
           const company = row.original.company_name;
           return (
             <div className="min-w-0">
-              <RouterLink
-                to="/admin/customers/$customerId"
-                params={{ customerId: row.original.id }}
-                preload="intent"
-                className="block truncate font-medium underline-offset-4 hover:underline"
-                title={name}
-              >
+              <div className="truncate font-medium" title={name}>
                 {name}
-              </RouterLink>
+              </div>
               {company && (
                 <div
                   className="truncate text-xs text-muted-foreground"
