@@ -277,7 +277,12 @@ export function ClaimDeviceModal({
                 render={({ field }) => (
                   <Field className="gap-2">
                     <FieldLabel htmlFor={field.name}>
-                      <Trans>Room (optional)</Trans>
+                      <Trans>
+                        Room{' '}
+                        <span className="font-normal text-muted-foreground">
+                          (Optional)
+                        </span>
+                      </Trans>
                     </FieldLabel>
                     <RoomPicker
                       id={field.name}

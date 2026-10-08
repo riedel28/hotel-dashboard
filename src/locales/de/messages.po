@@ -168,7 +168,7 @@ msgid "Activate Account"
 msgstr "Konto aktivieren"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:153
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:320
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:328
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
 msgid "Add"
@@ -189,7 +189,7 @@ msgstr "Fügen Sie ein Tablet, Telefon oder TV-Gerät mit seiner Seriennummer un
 msgid "Add category"
 msgstr "Kategorie hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:149
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:222
 msgid "Add device"
@@ -591,7 +591,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-modal.tsx:148
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:75
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:311
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:319
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:323
@@ -1098,7 +1098,7 @@ msgstr "Abst."
 msgid "Description"
 msgstr "Beschreibung"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:102
 msgid "Device added"
 msgstr "Gerät hinzugefügt"
 
@@ -1559,7 +1559,7 @@ msgstr "Kategorien konnten nicht geladen werden"
 msgid "Failed to load products"
 msgstr "Produkte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:127
 msgid "Failed to load rooms"
 msgstr "Zimmer konnten nicht geladen werden"
 
@@ -1686,7 +1686,7 @@ msgid "First name is required"
 msgstr "Vorname ist erforderlich"
 
 #. placeholder {0}: group.floor
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:140
 msgid "Floor {0}"
 msgstr "Etage {0}"
 
@@ -2154,7 +2154,7 @@ msgstr ""
 msgid "Loading properties"
 msgstr "Properties werden geladen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:106
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:107
 msgid "Loading rooms…"
 msgstr "Zimmer werden geladen…"
 
@@ -2341,7 +2341,7 @@ msgstr "Mein Profil"
 #~ msgid "N"
 #~ msgstr "N"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:258
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:261
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:108
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:84
@@ -2440,7 +2440,7 @@ msgstr ""
 msgid "No fellow travelers"
 msgstr "Keine Mitreisende"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:132
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:138
 msgid "No floor"
 msgstr "Ohne Etage"
 
@@ -2513,7 +2513,7 @@ msgstr "Keine Rollen zugewiesen. Wenden Sie sich an Ihren Administrator, wenn Ih
 msgid "No roles available"
 msgstr "Keine Rollen verfügbar"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:291
 msgid "No room"
 msgstr "Kein Zimmer"
 
@@ -2522,7 +2522,7 @@ msgstr "Kein Zimmer"
 msgid "No rooms available"
 msgstr "Keine Zimmer verfügbar"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:123
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:129
 msgid "No rooms found"
 msgstr "Keine Zimmer gefunden"
 
@@ -2535,7 +2535,7 @@ msgstr ""
 #~ msgstr "Keine"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:169
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:295
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:303
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:161
 msgid "Not assigned"
 msgstr "Nicht zugewiesen"
@@ -2784,7 +2784,7 @@ msgstr "Datumsbereich auswählen"
 msgid "Pick a longer period to see older logs."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:205
 msgid "PIN"
 msgstr "PIN"
 
@@ -3319,8 +3319,8 @@ msgid "Room"
 msgstr "Zimmer"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:277
-msgid "Room (optional)"
-msgstr "Zimmer (optional)"
+#~ msgid "Room (optional)"
+#~ msgstr "Zimmer (optional)"
 
 #. placeholder {0}: roomLabel(room)
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:56
@@ -3329,6 +3329,10 @@ msgstr "Zimmer {0} von {name}, ändern"
 
 #~ msgid "Room {room}"
 #~ msgstr "Zimmer {room}"
+
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:280
+msgid "Room <0>(Optional)</0>"
+msgstr "Zimmer <0>(Optional)</0>"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:246
 msgid "Room assignment"
@@ -3639,7 +3643,7 @@ msgstr "Reset-Link senden"
 #~ msgid "Sending"
 #~ msgstr "Wird gesendet"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:134
 msgid "Serial number"
@@ -4020,11 +4024,11 @@ msgstr "Dieser Anmeldeversuch ist abgelaufen. Bitte beginnen Sie erneut."
 #~ msgid "The booking number can be found in your Property Management System (PMS)"
 #~ msgstr "Die Buchungsnummer finden Sie in Ihrem Property-Management-System (PMS)"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:247
 msgid "The code is shown on the device screen"
 msgstr "Der Code wird auf dem Bildschirm des Geräts angezeigt"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:123
 msgid "The device could not be added. Please try again."
 msgstr "Das Gerät konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut."
 
@@ -4036,7 +4040,7 @@ msgstr "Die Rechnung wird direkt an das PMS geschickt"
 msgid "The merchant address shown on payment receipts."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:118
 msgid "The PIN is incorrect"
 msgstr "Die PIN ist falsch"
 
@@ -4106,7 +4110,7 @@ msgstr ""
 msgid "This device does not exist or was removed."
 msgstr "Dieses Gerät existiert nicht oder wurde entfernt."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:113
 msgid "This device has already been added"
 msgstr "Dieses Gerät wurde bereits hinzugefügt"
 
@@ -4196,7 +4200,7 @@ msgstr "Details ein-/ausblenden"
 msgid "Token"
 msgstr "Token"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:122
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:121
 msgid "Too many attempts. Please try again later."
 msgstr "Zu viele Versuche. Bitte versuchen Sie es später erneut."
 

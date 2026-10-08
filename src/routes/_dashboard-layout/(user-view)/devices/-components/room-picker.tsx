@@ -100,20 +100,26 @@ export function RoomPicker({
           showTrigger={false}
         />
         {roomsQuery.isPending ? (
-          // Three rows shaped like room options while the rooms load
+          // Shaped like the loaded list: a floor label over three rooms, each
+          // a number and a name
           <ComboboxEmpty className="flex-col gap-0 p-1">
             <span className="sr-only">
               <Trans>Loading rooms…</Trans>
             </span>
-            {['w-24', 'w-32', 'w-20'].map((width) => (
-              <div
-                key={width}
-                aria-hidden="true"
-                className="flex h-8 items-center px-2"
-              >
-                <Skeleton className={cn('h-4', width)} />
+            <div aria-hidden="true">
+              <div className="flex h-7 items-center px-2">
+                <Skeleton className="h-3 w-10" />
               </div>
-            ))}
+              {['w-16', 'w-20', 'w-14'].map((nameWidth) => (
+                <div
+                  key={nameWidth}
+                  className="flex h-8 items-center gap-2 pl-4"
+                >
+                  <Skeleton className="h-3.5 w-6" />
+                  <Skeleton className={cn('h-3.5', nameWidth)} />
+                </div>
+              ))}
+            </div>
           </ComboboxEmpty>
         ) : (
           <ComboboxEmpty className="py-6">
