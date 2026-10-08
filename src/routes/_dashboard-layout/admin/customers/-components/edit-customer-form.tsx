@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { Loader2Icon } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { type CustomerDetail, customerLabel } from 'shared/types/customers';
+import type { CustomerDetail } from 'shared/types/customers';
 import { toast } from 'sonner';
 
 import { updateCustomerById } from '@/api/customers';
@@ -85,7 +85,16 @@ export function EditCustomerForm({ customer }: { customer: CustomerDetail }) {
 
       <Card className="relative max-w-4xl min-w-0 flex-1 overflow-visible">
         <CardHeader>
-          <CardTitle>{customerLabel(customer)}</CardTitle>
+          <div className="flex items-start justify-between gap-4">
+            <CardTitle className="min-w-0 truncate">
+              {customer.first_name} {customer.last_name}
+            </CardTitle>
+            {customer.company_name && (
+              <div className="min-w-0 truncate text-sm font-medium text-muted-foreground">
+                {customer.company_name}
+              </div>
+            )}
+          </div>
         </CardHeader>
 
         <CardContent>

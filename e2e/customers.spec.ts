@@ -71,7 +71,7 @@ test.describe('Customers', () => {
       page.getByRole('heading', { name: 'Edit Customer' })
     ).toBeVisible();
     await expect(
-      page.getByRole('main').getByText('Nakatomi Hotels', { exact: true })
+      page.getByRole('main').getByText('Hans Gruber', { exact: true })
     ).toBeVisible();
     await expect(page.getByRole('link', { name: PROPERTY })).toBeVisible();
   });
