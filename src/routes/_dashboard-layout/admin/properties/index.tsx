@@ -201,8 +201,8 @@ function PropertiesTable({
           const label = customerLabel(customer);
           return (
             <RouterLink
-              to="/admin/customers"
-              search={{ customer: customer.id }}
+              to="/admin/customers/$customerId"
+              params={{ customerId: customer.id }}
               preload="intent"
               className="line-clamp-1 underline-offset-4 hover:underline"
               title={label}
