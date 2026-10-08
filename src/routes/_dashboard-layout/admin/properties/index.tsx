@@ -102,6 +102,8 @@ function RowActions({ row }: { row: { original: Property } }) {
 }
 
 interface PropertiesTableProps {
+  /** Shown in place of the rows when there are none. */
+  emptyMessage?: React.ReactNode;
   data: Property[];
   isLoading?: boolean;
   pageIndex?: number;
@@ -120,6 +122,7 @@ interface PropertiesTableProps {
 }
 
 function PropertiesTable({
+  emptyMessage,
   data,
   isLoading = false,
   pageIndex = 0,
@@ -300,6 +303,7 @@ function PropertiesTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
+      emptyMessage={emptyMessage}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer>
@@ -471,6 +475,11 @@ function PropertiesContent() {
         onPaginationChange={handlePaginationChange}
         sorting={sorting}
         onSortingChange={handleSortingChange}
+        emptyMessage={
+          hasActiveFilters ? (
+            <Trans>No properties match the filters</Trans>
+          ) : undefined
+        }
       />
     </div>
   );

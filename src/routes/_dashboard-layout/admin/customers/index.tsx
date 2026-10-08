@@ -143,6 +143,8 @@ function PropertiesCell({
 }
 
 interface CustomersTableProps {
+  /** Shown in place of the rows when there are none. */
+  emptyMessage?: React.ReactNode;
   data: Customer[];
   isLoading?: boolean;
   pageIndex?: number;
@@ -161,6 +163,7 @@ interface CustomersTableProps {
 }
 
 function CustomersTable({
+  emptyMessage,
   data,
   isLoading = false,
   pageIndex = 0,
@@ -372,6 +375,7 @@ function CustomersTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
+      emptyMessage={emptyMessage}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer>
@@ -519,6 +523,11 @@ function CustomersContent() {
         onPaginationChange={handlePaginationChange}
         sorting={sorting}
         onSortingChange={handleSortingChange}
+        emptyMessage={
+          q || country_code ? (
+            <Trans>No customers match the filters</Trans>
+          ) : undefined
+        }
       />
     </div>
   );
