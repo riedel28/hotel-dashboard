@@ -44,7 +44,9 @@ export const customerSchema = z.object({
   country_code: z.string(),
   property_count: z.number().int().nonnegative(),
   // Every Property the Customer owns, by name.
-  properties: z.array(z.object({ id: z.uuid(), name: z.string() }))
+  properties: z.array(
+    z.object({ id: z.uuid(), name: z.string(), country_code: z.string() })
+  )
 });
 
 // A single Customer also carries the Properties it owns.

@@ -117,6 +117,7 @@ async function getCustomers(req: Request, res: Response) {
           .select({
             id: propertiesTable.id,
             name: propertiesTable.name,
+            country_code: propertiesTable.country_code,
             customer_id: propertiesTable.customer_id
           })
           .from(propertiesTable)
@@ -130,7 +131,7 @@ async function getCustomers(req: Request, res: Response) {
           customer,
           owned
             .filter((property) => property.customer_id === customer.id)
-            .map(({ id, name }) => ({ id, name }))
+            .map(({ customer_id: _owner, ...property }) => property)
         )
       ),
       page: pageNum,

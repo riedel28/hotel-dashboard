@@ -124,7 +124,16 @@ function PropertiesCell({
           <PopoverContent align="start" className="w-auto max-w-72 p-3">
             <ul className="flex flex-col gap-1.5">
               {properties.map((property) => (
-                <li key={property.id} className="flex min-w-0">
+                <li
+                  key={property.id}
+                  className="flex min-w-0 items-center gap-2"
+                >
+                  <CountryFlag
+                    code={property.country_code}
+                    title={property.country_code}
+                    className="size-4 shrink-0"
+                    aria-label={property.country_code}
+                  />
                   <RouterLink
                     to="/admin/properties/$propertyId"
                     params={{ propertyId: property.id }}

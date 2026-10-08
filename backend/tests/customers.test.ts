@@ -173,8 +173,16 @@ describe('Customers API', () => {
       ]);
       expect(response.body.index[0].properties).toEqual([]);
       expect(response.body.index[1].properties).toEqual([
-        { id: expect.any(String), name: 'The Dolphin Hotel' },
-        { id: expect.any(String), name: 'The Overlook Hotel' }
+        {
+          id: expect.any(String),
+          name: 'The Dolphin Hotel',
+          country_code: 'DE'
+        },
+        {
+          id: expect.any(String),
+          name: 'The Overlook Hotel',
+          country_code: 'DE'
+        }
       ]);
     });
 
