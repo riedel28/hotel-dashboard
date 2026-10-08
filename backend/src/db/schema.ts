@@ -139,6 +139,33 @@ export const users = pgTable(
   ]
 );
 
+// Customers own Properties: one Customer, many Properties.
+export const customers = pgTable(
+  'customers',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    first_name: text('first_name').notNull(),
+    last_name: text('last_name').notNull(),
+    company_name: text('company_name'),
+    email: text('email').notNull(),
+    address_line_1: text('address_line_1').notNull(),
+    address_line_2: text('address_line_2'),
+    zip: text('zip').notNull(),
+    city: text('city').notNull(),
+    country_code: text('country_code').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    // Emails are matched case-insensitively
+    uniqueIndex('customers_email_key').on(sql`lower(${table.email})`)
+  ]
+);
+
 // Properties table
 export const properties = pgTable(
   'properties',
@@ -155,11 +182,17 @@ export const properties = pgTable(
       .array()
       .notNull()
       .default(sql`'{}'::text[]`),
+    // Null for a Property nobody owns yet (templates, fresh demos). RESTRICT:
+    // a Customer that still owns Properties cannot be deleted.
+    customer_id: uuid('customer_id').references(() => customers.id, {
+      onDelete: 'restrict'
+    }),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow()
   },
   (table) => [
+    index('properties_customer_id_idx').on(table.customer_id),
     check(
       'properties_stage_check',
       sql`${table.stage} IN ('demo', 'production', 'staging', 'template')`
@@ -528,11 +561,20 @@ export const roomsRelations = relations(rooms, ({ one }) => ({
 }));
 
 // Properties relations
-export const propertiesRelations = relations(properties, ({ many }) => ({
+export const propertiesRelations = relations(properties, ({ many, one }) => ({
+  customer: one(customers, {
+    fields: [properties.customer_id],
+    references: [customers.id]
+  }),
   rooms: many(rooms),
   guestAbcEntries: many(guestAbcEntries),
   productCategories: many(productCategories),
   products: many(products)
+}));
+
+// Customers relations
+export const customersRelations = relations(customers, ({ many }) => ({
+  properties: many(properties)
 }));
 
 // Guest ABC entries relations
