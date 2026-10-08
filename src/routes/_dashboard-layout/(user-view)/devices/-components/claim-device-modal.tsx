@@ -136,7 +136,8 @@ export function ClaimDeviceModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
+      {/* Wider than the default: twelve PIN cells need the room */}
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>
             <Trans>Add device</Trans>
@@ -225,7 +226,7 @@ export function ClaimDeviceModal({
                                 <InputOTPSlot
                                   key={slot}
                                   index={slot}
-                                  className="h-10 w-auto min-w-0 flex-1 font-mono"
+                                  className="h-11 w-auto min-w-0 flex-1 font-mono text-base"
                                 />
                               ))}
                             </InputOTPGroup>
