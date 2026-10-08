@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro';
 import { SearchIcon, XIcon } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import {
   InputGroup,
@@ -36,33 +36,39 @@ export function SearchInput({
   const { t } = useLingui();
   const [inputValue, setInputValue] = useState(value);
 
-  // Create debounced onChange callback
-  const debouncedOnChange = useDebouncedCallback(
-    (newValue: string) => onChange?.(newValue),
-    debounceMs || 0
-  );
+  // The text is local so typing stays instant while `onChange` is debounced.
+  // It follows `value` only when that changes from outside (a filter reset,
+  // Back/Forward): a value that is just our own change coming back must not
+  // overwrite what was typed since.
+  const [lastEmitted, setLastEmitted] = useState(value);
+  const [seenValue, setSeenValue] = useState(value);
+  if (value !== seenValue) {
+    setSeenValue(value);
+    if (value !== lastEmitted) {
+      setInputValue(value);
+    }
+  }
 
-  // Create immediate onChange callback
-  const immediateOnChange = useCallback(
-    (newValue: string) => onChange?.(newValue),
-    [onChange]
-  );
+  const emit = (newValue: string) => {
+    setLastEmitted(newValue);
+    onChange?.(newValue);
+  };
+  const debouncedEmit = useDebouncedCallback(emit, debounceMs || 0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
 
-    // Use debounced or immediate callback based on debounceMs
     if (debounceMs) {
-      debouncedOnChange(newValue);
+      debouncedEmit(newValue);
     } else {
-      immediateOnChange(newValue);
+      emit(newValue);
     }
   };
 
   const handleClear = () => {
     setInputValue('');
-    onChange?.('');
+    emit('');
     onClear?.();
   };
 

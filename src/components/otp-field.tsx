@@ -1,4 +1,5 @@
 import { Trans } from '@lingui/react/macro';
+import { Fragment } from 'react';
 import type * as React from 'react';
 
 import {
@@ -6,14 +7,31 @@ import {
   InputOTPGroup,
   InputOTPSlot
 } from '@/components/ui/input-otp';
+import { cn } from '@/lib/utils';
 
 import { TOTP_CODE_LENGTH } from '../../shared/types/profile';
 
 interface OtpFieldProps {
   value: string;
   onChange: (value: string) => void;
-  /** Fired once all six digits are present, so the user needn't press Verify. */
+  /** Fired once every digit is present, so the user needn't press Verify. */
   onComplete?: (value: string) => void;
+  onBlur?: () => void;
+  ref?: React.Ref<HTMLInputElement>;
+  name?: string;
+  /** Number of digits; an authenticator code by default. */
+  length?: number;
+  /**
+   * Digits per visual group, with a dash between groups (4 turns twelve
+   * digits into 4-4-4). One group by default.
+   */
+  groupSize?: number;
+  /** Cells share the field's width instead of keeping their fixed size. */
+  stretch?: boolean;
+  /** One glyph per empty cell; pass an empty string for none. */
+  placeholder?: string;
+  autoComplete?: string;
+  required?: boolean;
   disabled?: boolean;
   invalid?: boolean;
   autoFocus?: boolean;
@@ -22,48 +40,85 @@ interface OtpFieldProps {
 }
 
 /**
- * Six segmented digits, split 3+3 the way authenticator apps display them.
- * `input-otp` handles the fiddly parts for us: paste spreading across cells,
- * backspace stepping back, and a numeric keypad on touch devices.
+ * Segmented digits for a code shown elsewhere: an authenticator code, a device
+ * PIN. `input-otp` handles the fiddly parts for us: paste spreading across
+ * cells, backspace stepping back, and a numeric keypad on touch devices.
  */
 export function OtpField({
   value,
   onChange,
   onComplete,
+  onBlur,
+  ref,
+  name,
+  length = TOTP_CODE_LENGTH,
+  groupSize = length,
+  stretch = false,
+  // Indexed per slot, not repeated across them — one glyph per box.
+  placeholder = '○'.repeat(length),
+  // Lets iOS and Android offer the code straight from the SMS/app banner.
+  autoComplete = 'one-time-code',
+  required,
   disabled,
   invalid,
   autoFocus,
   id,
   'aria-describedby': ariaDescribedby
 }: OtpFieldProps) {
+  const groups = Array.from(
+    { length: Math.ceil(length / groupSize) },
+    (_, group) =>
+      Array.from(
+        { length: Math.min(groupSize, length - group * groupSize) },
+        (_, slot) => group * groupSize + slot
+      )
+  );
+
   return (
     <InputOTP
       id={id}
-      maxLength={TOTP_CODE_LENGTH}
+      ref={ref}
+      name={name}
+      maxLength={length}
       value={value}
       onChange={onChange}
       onComplete={onComplete}
+      onBlur={onBlur}
+      required={required}
       disabled={disabled}
       autoFocus={autoFocus}
       inputMode="numeric"
-      // Lets iOS and Android offer the code straight from the SMS/app banner.
-      autoComplete="one-time-code"
-      // Indexed per slot, not repeated across them — one glyph per box.
-      placeholder={'○'.repeat(TOTP_CODE_LENGTH)}
+      autoComplete={autoComplete}
+      placeholder={placeholder}
       pattern="[0-9]*"
+      // A code copied with its dashes or spaces still pastes
+      pasteTransformer={(text) => text.replace(/\D/g, '')}
       aria-invalid={invalid}
       aria-describedby={ariaDescribedby}
       aria-label={undefined}
-      containerClassName="justify-start"
+      containerClassName={stretch ? 'w-full gap-1.5' : 'justify-start gap-2'}
     >
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
-      </InputOTPGroup>
+      {groups.map((slots, group) => (
+        <Fragment key={group}>
+          {group > 0 && (
+            <div
+              role="separator"
+              className="h-px w-2 shrink-0 bg-muted-foreground/70"
+            />
+          )}
+          <InputOTPGroup className={cn(stretch && 'min-w-0 flex-1 gap-1')}>
+            {slots.map((slot) => (
+              <InputOTPSlot
+                key={slot}
+                index={slot}
+                className={cn(
+                  stretch && 'h-11 w-auto min-w-0 flex-1 font-mono text-base'
+                )}
+              />
+            ))}
+          </InputOTPGroup>
+        </Fragment>
+      ))}
     </InputOTP>
   );
 }
