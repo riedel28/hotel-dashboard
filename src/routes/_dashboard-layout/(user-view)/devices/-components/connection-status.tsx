@@ -17,7 +17,7 @@ export function ConnectionStatusDot({
   return (
     <span
       aria-hidden="true"
-      className={cn('size-2 shrink-0 rounded-full', dotColors[status])}
+      className={cn('size-1.5 shrink-0 rounded-full', dotColors[status])}
     />
   );
 }

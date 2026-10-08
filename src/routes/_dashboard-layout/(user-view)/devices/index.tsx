@@ -219,6 +219,16 @@ function DevicesContent({
   return (
     <div className="space-y-2.5">
       <div className="flex flex-wrap items-center gap-2">
+        <SearchInput
+          key={searchResetKey}
+          value={q ?? ''}
+          onChange={(value) => setFilters({ q: value || undefined })}
+          placeholder={t`Search devices`}
+          aria-label={t`Search name, serial number, room`}
+          className="text-sm"
+          wrapperClassName="min-w-56 flex-1 xl:w-72 xl:flex-none"
+          debounceMs={200}
+        />
         <DataGridSegmentedFilter
           label={t`Room assignment`}
           value={tab}
@@ -243,22 +253,10 @@ function DevicesContent({
                   label={<Trans>Unassigned</Trans>}
                   count={unassignedCount}
                 />
-              ),
-              // Devices waiting for a room flag their tab
-              color: unassignedCount > 0 ? 'orange' : undefined
+              )
             }
           ]}
           className="max-w-full"
-        />
-        <SearchInput
-          key={searchResetKey}
-          value={q ?? ''}
-          onChange={(value) => setFilters({ q: value || undefined })}
-          placeholder={t`Search devices`}
-          aria-label={t`Search name, serial number, room`}
-          className="text-sm"
-          wrapperClassName="min-w-56 flex-1 xl:w-72 xl:flex-none"
-          debounceMs={200}
         />
         <DataGridRadioFilter
           label={<Trans>Status</Trans>}
