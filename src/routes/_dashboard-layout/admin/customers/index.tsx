@@ -118,7 +118,7 @@ function PropertiesCell({
               +{rest.length}
             </Badge>
           </PopoverTrigger>
-          <PopoverContent align="start" className="w-64 p-3">
+          <PopoverContent align="start" className="w-auto max-w-72 p-3">
             <ul className="flex flex-col gap-1.5">
               {properties.map((property) => (
                 <li key={property.id} className="flex min-w-0">
