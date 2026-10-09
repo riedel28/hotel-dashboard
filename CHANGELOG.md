@@ -1,3 +1,35 @@
+# [1.20.0](https://github.com/riedel28/hotel-dashboard/compare/v1.19.0...v1.20.0) (2026-10-09)
+
+
+### Bug Fixes
+
+* **admin:** name the entity in row actions (Edit Property, Delete Property, Edit Customer) ([fcedd72](https://github.com/riedel28/hotel-dashboard/commit/fcedd720a9ae592aabba2994687cafa5c9f83d01))
+* **admin:** pencil icon for Edit and content-width row action menus ([54e676f](https://github.com/riedel28/hotel-dashboard/commit/54e676f47056876a66ba8f41c523bde4add369c3))
+* **combobox:** clear button styled like SearchInput's and shown on hover ([c41fbcb](https://github.com/riedel28/hotel-dashboard/commit/c41fbcb6991c1ac0100215bfa8898453c951c860))
+* **customers:** customer name as the card title, company in the corner ([4408e95](https://github.com/riedel28/hotel-dashboard/commit/4408e95ef5fb9072f8991faddc4e8f6260be6c86))
+* **customers:** customer name in the table is plain text, not a link ([55607d2](https://github.com/riedel28/hotel-dashboard/commit/55607d2c076b7070e460304af73cb44c01482193))
+* **customers:** size the properties popover to its content ([87fc5a5](https://github.com/riedel28/hotel-dashboard/commit/87fc5a51270768004423caa9e5fa0ed7d6f9e4fb))
+* **customers:** title the edit page Edit Customer and name the customer on the card ([74f240e](https://github.com/riedel28/hotel-dashboard/commit/74f240e9fc0026f52fdb7d24a3d2db296ef8512f))
+
+
+### Features
+
+* **admin:** country under the property name, customer column second, country filter for customers ([f4fd82e](https://github.com/riedel28/hotel-dashboard/commit/f4fd82e127519860f035df993f22c40711789215))
+* **admin:** say when filters match no customers or properties ([3920540](https://github.com/riedel28/hotel-dashboard/commit/3920540e3371a792bb361a412a3093fcc2ca9a0d))
+* **admin:** subtitles on the Properties and Customers pages ([9239bc0](https://github.com/riedel28/hotel-dashboard/commit/9239bc0fd40973f2484ba7708a62d885f8f703d4))
+* **api:** customers CRUD and customer on properties ([c615638](https://github.com/riedel28/hotel-dashboard/commit/c61563831be70251d17ef953e6707fc35cd339d5))
+* **combobox:** optional clear button inside the trigger; use it in the customer picker ([97db8bf](https://github.com/riedel28/hotel-dashboard/commit/97db8bfe482d0cfe6c8078731e3df7a2768d630c))
+* **customers:** back to an edit page, details and properties side by side ([3f98457](https://github.com/riedel28/hotel-dashboard/commit/3f98457c9e444f9aae07ff0272005c940aff285d))
+* **customers:** company under the name, city and country, properties with a +N list ([39c77d3](https://github.com/riedel28/hotel-dashboard/commit/39c77d38dac3edf9918aeb11762a7f0fad597ef2))
+* **customers:** create a customer in a drawer ([56d5579](https://github.com/riedel28/hotel-dashboard/commit/56d5579abacc65facfbb2477e92d4dc2918e2cfb))
+* **customers:** customers overview, create modal and edit page ([5a12649](https://github.com/riedel28/hotel-dashboard/commit/5a126496272f7544dd66b5e18a857d5e2194cd89))
+* **customers:** edit page as one sectioned card with a section nav and sticky footer ([7448650](https://github.com/riedel28/hotel-dashboard/commit/74486506e0a4938d803c638e4bb00335c8be3e2e))
+* **customers:** flag each property in the +N list with its country ([631e43d](https://github.com/riedel28/hotel-dashboard/commit/631e43dca316c284eba5b71d1752a6099eec8dcc))
+* **customers:** open a customer in a drawer, read-only until Edit ([0f661ea](https://github.com/riedel28/hotel-dashboard/commit/0f661eaff991588bcabe399748c98b7189055748))
+* **db:** add customers table and properties.customer_id ([b7eefe9](https://github.com/riedel28/hotel-dashboard/commit/b7eefe95b4485674691d1fe7e0ed14e438283625))
+* **properties:** assign a customer and show it in the table ([6e6784f](https://github.com/riedel28/hotel-dashboard/commit/6e6784f4d0876faf43fc5da694d89485e6e2ba5b))
+* **sidebar:** add Customers to the admin nav; translate customer strings to German ([f98fba8](https://github.com/riedel28/hotel-dashboard/commit/f98fba8fed48bf210900eef6a2b9e26f80175b0d))
+
 # [1.19.0](https://github.com/riedel28/hotel-dashboard/compare/v1.18.0...v1.19.0) (2026-10-08)
 
 
