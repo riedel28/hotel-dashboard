@@ -46,6 +46,7 @@ interface WorklogMessageFormProps {
   onSubmit: (message: string) => Promise<unknown>;
   onCancel?: () => void;
   autoFocus?: boolean;
+  textareaClassName?: string;
 }
 
 /** The one-textarea form behind both adding an entry and editing one. */
@@ -55,7 +56,8 @@ export function WorklogMessageForm({
   submitLabel,
   onSubmit,
   onCancel,
-  autoFocus
+  autoFocus,
+  textareaClassName
 }: WorklogMessageFormProps) {
   const { t } = useLingui();
   const [value, setValue] = useState(initial);
@@ -100,7 +102,7 @@ export function WorklogMessageForm({
         onFocus={({ currentTarget }) =>
           currentTarget.setSelectionRange(value.length, value.length)
         }
-        rows={3}
+        className={textareaClassName}
         maxLength={MAX_LENGTH}
         placeholder={placeholder}
         aria-label={t`Message`}

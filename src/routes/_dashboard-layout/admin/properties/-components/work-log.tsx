@@ -48,7 +48,7 @@ function DayHeading({ day }: { day: string }) {
         render={
           <time
             dateTime={day}
-            className="text-sm font-semibold text-muted-foreground"
+            className="text-[15px] font-semibold text-muted-foreground"
           />
         }
       >
@@ -78,11 +78,12 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
   });
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-[620px] space-y-8 pt-2">
       <WorklogMessageForm
         placeholder={t`Write a note about this property…`}
         submitLabel={<Trans>Add entry</Trans>}
         onSubmit={createMutation.mutateAsync}
+        textareaClassName="min-h-21"
       />
 
       {worklogs.length === 0 ? (
@@ -103,7 +104,7 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
         </Empty>
       ) : (
         groupByDay(worklogs).map(([day, entries]) => (
-          <section key={day} className="space-y-2">
+          <section key={day} className="space-y-3">
             <h2>
               <DayHeading day={day} />
             </h2>
@@ -119,9 +120,9 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
 
 export function WorkLogSkeleton() {
   return (
-    <div className="max-w-2xl space-y-6">
-      <Skeleton className="h-28 w-full" />
-      <div className="space-y-2">
+    <div className="max-w-2xl space-y-8 pt-2">
+      <Skeleton className="h-33 w-full" />
+      <div className="space-y-3">
         <Skeleton className="h-5 w-20" />
         {[0, 1, 2].map((key) => (
           <Item
