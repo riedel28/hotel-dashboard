@@ -26,6 +26,11 @@ import {
 import { WorklogCard, WorklogMessageForm } from './worklog-card';
 import { dayKind, groupByDay } from './worklog-days';
 
+const HEADING = 'text-[14px] font-semibold text-muted-foreground';
+// Inset like the Details card's content. `box-content` keeps the 620px for
+// the entries themselves, with the padding outside it.
+const WRAP = 'box-content max-w-[620px] space-y-8 px-4 pt-2';
+
 function DayHeading({ day }: { day: string }) {
   const { t, i18n } = useLingui();
   const kind = dayKind(day);
@@ -44,14 +49,7 @@ function DayHeading({ day }: { day: string }) {
 
   return (
     <Tooltip>
-      <TooltipTrigger
-        render={
-          <time
-            dateTime={day}
-            className="text-[15px] font-semibold text-muted-foreground"
-          />
-        }
-      >
+      <TooltipTrigger render={<time dateTime={day} className={HEADING} />}>
         {label}
       </TooltipTrigger>
       <TooltipContent>
@@ -78,7 +76,7 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
   });
 
   return (
-    <div className="max-w-[620px] space-y-8 pt-2">
+    <div className={WRAP}>
       <WorklogMessageForm
         placeholder={t`Write a note about this property…`}
         submitLabel={<Trans>Add entry</Trans>}
@@ -120,7 +118,7 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
 
 export function WorkLogSkeleton() {
   return (
-    <div className="max-w-2xl space-y-8 pt-2">
+    <div className={WRAP}>
       <Skeleton className="h-33 w-full" />
       <div className="space-y-3">
         <Skeleton className="h-5 w-20" />
