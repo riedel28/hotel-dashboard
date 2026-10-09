@@ -58,7 +58,7 @@ describe('Property worklogs API', () => {
     expect(body[0].updated_by).toBeNull();
   });
 
-  test('validates the message and the property', async () => {
+  test('validates the message', async () => {
     await request(app)
       .post(url())
       .set(as(admin.token))
@@ -69,8 +69,14 @@ describe('Property worklogs API', () => {
       .set(as(admin.token))
       .send({ message: 'x'.repeat(2001) })
       .expect(400);
+  });
+
+  test('an unknown property is a 404 for reading and writing alike', async () => {
+    const unknown =
+      '/api/properties/00000000-0000-4000-8000-000000000000/worklogs';
+    await request(app).get(unknown).set(as(admin.token)).expect(404);
     await request(app)
-      .post('/api/properties/00000000-0000-4000-8000-000000000000/worklogs')
+      .post(unknown)
       .set(as(admin.token))
       .send({ message: 'hi' })
       .expect(404);
