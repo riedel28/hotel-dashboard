@@ -157,3 +157,48 @@
     @apply bg-background text-foreground;
   }
 }
+
+/*
+ * Fades a vertical scroller's edges where more content lies beyond them: both
+ * while mid-scroll, neither when everything fits. Driven by the element's own
+ * scroll position, so it needs no script; browsers without scroll-driven
+ * animations simply show no fade.
+ */
+@property --scroll-fade-top {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --scroll-fade-bottom {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes scroll-fade-y {
+  0% {
+    --scroll-fade-top: 0px;
+    --scroll-fade-bottom: 0.5rem;
+  }
+  10%,
+  90% {
+    --scroll-fade-top: 0.5rem;
+    --scroll-fade-bottom: 0.5rem;
+  }
+  100% {
+    --scroll-fade-top: 0.5rem;
+    --scroll-fade-bottom: 0px;
+  }
+}
+@utility scroll-fade-y {
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black var(--scroll-fade-top),
+      black calc(100% - var(--scroll-fade-bottom)),
+      transparent
+    );
+    animation: scroll-fade-y linear both;
+    animation-timeline: scroll(self);
+  }
+}

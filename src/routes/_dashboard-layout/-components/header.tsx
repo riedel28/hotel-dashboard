@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { TextAlignJustifyIcon } from 'lucide-react';
 import * as React from 'react';
@@ -6,13 +6,18 @@ import * as React from 'react';
 import { propertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
 import { Button } from '@/components/ui/button';
-import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
+import { useCurrentView } from '@/hooks/use-current-view';
 import { MobileMenu } from '@/routes/_dashboard-layout/-components/mobile-menu';
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
 
 export default function Header() {
-  const { properties } = DashboardLayoutRoute.useLoaderData();
+  // The layout's loader has already fetched the list; reading the query rather
+  // than the loader data keeps the selector live when it refetches on open.
+  const { data: properties, refetch: refetchProperties } = useSuspenseQuery(
+    propertiesQueryOptions()
+  );
+  const view = useCurrentView();
   const { user, updateSelectedProperty } = useAuth();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -36,16 +41,6 @@ export default function Header() {
     void queryClient.invalidateQueries();
     void router.invalidate();
   }, [selectedPropertyId, queryClient, router]);
-
-  const handleReloadProperties = async () => {
-    // Remove the list and the selected Property from cache to force a fresh
-    // fetch of both — the latter carries the nav items.
-    queryClient.removeQueries({ queryKey: ['properties'] });
-    // Fetch fresh data and update cache
-    await queryClient.fetchQuery(propertiesQueryOptions());
-    // Invalidate the router to trigger loader refetch with fresh data
-    await router.invalidate();
-  };
 
   const handlePropertyChange = async (propertyId: string) => {
     setOptimisticPropertyId(propertyId);
@@ -74,14 +69,19 @@ export default function Header() {
             <TextAlignJustifyIcon className="size-4" />
           </Button>
           <div className="min-w-0">
-            <PropertySelector
-              properties={properties.index}
-              value={
-                optimisticPropertyId ?? user?.selected_property_id ?? undefined
-              }
-              onValueChange={handlePropertyChange}
-              onReload={handleReloadProperties}
-            />
+            {/* The admin area is not about any one Property. */}
+            {view === 'user' && (
+              <PropertySelector
+                properties={properties.index}
+                value={
+                  optimisticPropertyId ??
+                  user?.selected_property_id ??
+                  undefined
+                }
+                onValueChange={handlePropertyChange}
+                onOpen={() => void refetchProperties()}
+              />
+            )}
           </div>
           {/* Right side */}
           <div className="flex items-center gap-2">

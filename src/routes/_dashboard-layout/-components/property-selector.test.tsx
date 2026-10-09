@@ -28,12 +28,6 @@ const mockToast = {
   warning: mockToastWarning
 };
 
-// Helper function to create a mock onReload function
-const createMockOnReload = () =>
-  vi.fn<() => Promise<void>>(async () => {
-    // Mock reload function
-  });
-
 describe('PropertySelector', () => {
   beforeEach(() => {
     mockToast.info.mockClear();
@@ -44,28 +38,18 @@ describe('PropertySelector', () => {
 
   describe('Rendering', () => {
     test('renders with empty properties list', () => {
-      render(
-        <PropertySelector properties={[]} onReload={createMockOnReload()} />
-      );
+      render(<PropertySelector properties={[]} />);
       expect(screen.getByLabelText(/select property/i)).toBeInTheDocument();
     });
 
     test('renders placeholder when no property is selected', () => {
-      render(
-        <PropertySelector properties={[]} onReload={createMockOnReload()} />
-      );
+      render(<PropertySelector properties={[]} />);
       expect(screen.getByText(/select property/i)).toBeInTheDocument();
     });
 
     test('renders selected property name', () => {
       const properties = [createMockProperty('1', 'Test Hotel', 'production')];
-      render(
-        <PropertySelector
-          properties={properties}
-          value="1"
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} value="1" />);
       expect(screen.getByText('Test Hotel')).toBeInTheDocument();
     });
 
@@ -75,12 +59,7 @@ describe('PropertySelector', () => {
         createMockProperty('2', 'Hotel B', 'staging'),
         createMockProperty('3', 'Hotel C', 'demo')
       ];
-      render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} />);
       expect(screen.getByLabelText(/select property/i)).toBeInTheDocument();
     });
   });
@@ -98,7 +77,6 @@ describe('PropertySelector', () => {
         <PropertySelector
           properties={properties}
           onValueChange={handleValueChange}
-          onReload={createMockOnReload()}
         />
       );
 
@@ -122,12 +100,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      const { rerender } = render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      const { rerender } = render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -140,12 +113,7 @@ describe('PropertySelector', () => {
       await user.click(hotelA);
 
       // Rerender to see the updated state
-      rerender(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      rerender(<PropertySelector properties={properties} />);
 
       await waitFor(() => {
         expect(screen.getByText('Hotel A')).toBeInTheDocument();
@@ -157,11 +125,7 @@ describe('PropertySelector', () => {
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
       render(
-        <PropertySelector
-          properties={properties}
-          onValueChange={vi.fn()}
-          onReload={createMockOnReload()}
-        />
+        <PropertySelector properties={properties} onValueChange={vi.fn()} />
       );
 
       const trigger = screen.getByLabelText(/select property/i);
@@ -185,13 +149,7 @@ describe('PropertySelector', () => {
       const longName = 'A'.repeat(50);
       const properties = [createMockProperty('1', longName, 'production')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          value="1"
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} value="1" />);
 
       // The component truncates to 40 characters, so we should see "A" repeated 40 times + "..."
       const expectedTruncated = `${'A'.repeat(40)}...`;
@@ -205,13 +163,7 @@ describe('PropertySelector', () => {
       const shortName = 'Hotel A';
       const properties = [createMockProperty('1', shortName, 'production')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          value="1"
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} value="1" />);
 
       expect(screen.getByText(shortName)).toBeInTheDocument();
     });
@@ -222,12 +174,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -242,12 +189,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'staging')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -262,12 +204,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'demo')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -282,12 +219,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'template')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -299,150 +231,34 @@ describe('PropertySelector', () => {
     });
   });
 
-  describe('Reload Functionality', () => {
-    test('renders reload button', async () => {
+  describe('Opening', () => {
+    test('calls onOpen each time the list opens', async () => {
+      const user = userEvent.setup();
+      const handleOpen = vi.fn<() => void>();
+      render(<PropertySelector properties={[]} onOpen={handleOpen} />);
+
+      await user.click(screen.getByLabelText(/select property/i));
+
+      await waitFor(() => {
+        expect(handleOpen).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    test('shows how many properties there are', async () => {
       const user = userEvent.setup();
       render(
-        <PropertySelector properties={[]} onReload={createMockOnReload()} />
+        <PropertySelector
+          properties={[
+            createMockProperty('1', 'Hotel One', 'production'),
+            createMockProperty('2', 'Hotel Two', 'staging')
+          ]}
+        />
       );
 
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-    });
-
-    test('calls onReload when reload button is clicked', async () => {
-      const user = userEvent.setup();
-      const handleReload = vi.fn<() => Promise<void>>(async () => {
-        // Reload handler
-      });
-
-      render(<PropertySelector properties={[]} onReload={handleReload} />);
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-
-      const reloadButton = screen.getByLabelText(/reload properties/i);
-      await user.click(reloadButton);
+      await user.click(screen.getByLabelText(/select property/i));
 
       await waitFor(() => {
-        expect(handleReload).toHaveBeenCalled();
-      });
-    });
-
-    test('shows loading state during reload', async () => {
-      const user = userEvent.setup();
-      const handleReload = vi.fn<() => Promise<void>>(
-        () => new Promise<void>((resolve) => setTimeout(resolve, 100))
-      );
-
-      render(<PropertySelector properties={[]} onReload={handleReload} />);
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-
-      const reloadButton = screen.getByLabelText(/reload properties/i);
-      await user.click(reloadButton);
-
-      // Check for loading state
-      await waitFor(() => {
-        expect(screen.getByText(/loading properties/i)).toBeInTheDocument();
-      });
-    });
-
-    test('disables reload button during loading', async () => {
-      const user = userEvent.setup();
-      const handleReload = vi.fn<() => Promise<void>>(
-        () => new Promise<void>((resolve) => setTimeout(resolve, 100))
-      );
-
-      render(<PropertySelector properties={[]} onReload={handleReload} />);
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-
-      const reloadButton = screen.getByLabelText(/reload properties/i);
-      await user.click(reloadButton);
-
-      await waitFor(() => {
-        expect(reloadButton).toBeDisabled();
-      });
-    });
-
-    test('shows toast on reload completion', async () => {
-      const user = userEvent.setup();
-      const handleReload = vi.fn<() => Promise<void>>(async () => {
-        // Reload handler
-      });
-
-      render(<PropertySelector properties={[]} onReload={handleReload} />);
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-
-      const reloadButton = screen.getByLabelText(/reload properties/i);
-      await user.click(reloadButton);
-
-      // Wait for reload to complete and toast to be called
-      await waitFor(
-        () => {
-          expect(handleReload).toHaveBeenCalled();
-          expect(mockToast.info).toHaveBeenCalled();
-        },
-        { timeout: 3000 }
-      );
-
-      // Verify the toast was called with the correct message
-      expect(mockToast.info).toHaveBeenCalledWith(
-        expect.stringContaining('Properties updated')
-      );
-    });
-
-    test('shows error toast when reload fails', async () => {
-      const user = userEvent.setup();
-      const handleReload = vi.fn(async () => {
-        throw new Error('Reload failed');
-      });
-
-      render(<PropertySelector properties={[]} onReload={handleReload} />);
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-
-      const reloadButton = screen.getByLabelText(/reload properties/i);
-      await user.click(reloadButton);
-
-      await waitFor(() => {
-        expect(mockToast.error).toHaveBeenCalled();
+        expect(screen.getByText('2 properties')).toBeInTheDocument();
       });
     });
   });
@@ -455,22 +271,12 @@ describe('PropertySelector', () => {
       ];
 
       const { rerender } = render(
-        <PropertySelector
-          properties={properties}
-          value="1"
-          onReload={createMockOnReload()}
-        />
+        <PropertySelector properties={properties} value="1" />
       );
 
       expect(screen.getByText('Hotel A')).toBeInTheDocument();
 
-      rerender(
-        <PropertySelector
-          properties={properties}
-          value="2"
-          onReload={createMockOnReload()}
-        />
-      );
+      rerender(<PropertySelector properties={properties} value="2" />);
 
       expect(screen.getByText('Hotel B')).toBeInTheDocument();
     });
@@ -479,12 +285,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -508,12 +309,7 @@ describe('PropertySelector', () => {
       const user = userEvent.setup();
       const properties = [createMockProperty('1', 'Hotel A', 'production')];
 
-      render(
-        <PropertySelector
-          properties={properties}
-          onReload={createMockOnReload()}
-        />
-      );
+      render(<PropertySelector properties={properties} />);
 
       const trigger = screen.getByLabelText(/select property/i);
       await user.click(trigger);
@@ -534,51 +330,8 @@ describe('PropertySelector', () => {
 
   describe('Accessibility', () => {
     test('has proper aria-label on trigger', () => {
-      render(
-        <PropertySelector properties={[]} onReload={createMockOnReload()} />
-      );
+      render(<PropertySelector properties={[]} />);
       expect(screen.getByLabelText(/select property/i)).toBeInTheDocument();
-    });
-
-    test('has proper aria-label on reload button', async () => {
-      const user = userEvent.setup();
-      render(
-        <PropertySelector properties={[]} onReload={createMockOnReload()} />
-      );
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-    });
-
-    test('has proper aria-live region for loading state', async () => {
-      const user = userEvent.setup();
-      const handleReload = vi.fn<() => Promise<void>>(
-        () => new Promise<void>((resolve) => setTimeout(resolve, 100))
-      );
-
-      render(<PropertySelector properties={[]} onReload={handleReload} />);
-
-      const trigger = screen.getByLabelText(/select property/i);
-      await user.click(trigger);
-
-      // Wait for combobox to open
-      await waitFor(() => {
-        expect(screen.getByLabelText(/reload properties/i)).toBeInTheDocument();
-      });
-
-      const reloadButton = screen.getByLabelText(/reload properties/i);
-      await user.click(reloadButton);
-
-      await waitFor(() => {
-        const liveRegion = screen.getByText(/loading properties/i);
-        expect(liveRegion).toHaveAttribute('aria-live', 'polite');
-        expect(liveRegion).toHaveAttribute('aria-atomic', 'true');
-      });
     });
   });
 });
