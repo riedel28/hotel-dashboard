@@ -218,6 +218,7 @@ msgstr "Add device"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:88
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:56
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:84
 msgid "Add entry"
 msgstr "Add entry"
 
@@ -296,7 +297,7 @@ msgstr "Address line is required"
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:36
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:36
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:129
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:57
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:56
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:547
 msgid "Admin"
 msgstr "Admin"
@@ -675,6 +676,8 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:409
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:119
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:284
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -761,8 +764,8 @@ msgstr "Change profile picture"
 #~ msgstr "Changed"
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:111
-msgid "Changes made to this property will be listed here once the work log is available."
-msgstr "Changes made to this property will be listed here once the work log is available."
+#~ msgid "Changes made to this property will be listed here once the work log is available."
+#~ msgstr "Changes made to this property will be listed here once the work log is available."
 
 #: src/routes/_auth-layout/auth/sign-up.tsx:74
 msgid "Check your email"
@@ -1176,6 +1179,8 @@ msgstr "Date"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:244
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:294
 msgid "Delete"
 msgstr "Delete"
 
@@ -1188,6 +1193,7 @@ msgid "Delete category?"
 msgstr "Delete category?"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:58
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:270
 msgid "Delete entry?"
 msgstr "Delete entry?"
 
@@ -1206,6 +1212,10 @@ msgstr "Delete Property"
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:53
 msgid "Delete property?"
 msgstr "Delete property?"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:171
+msgid "Deleted user"
+msgstr "Deleted user"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:222
@@ -1324,6 +1334,7 @@ msgstr "Each code works once"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:44
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:237
 msgid "Edit"
 msgstr "Edit"
 
@@ -1375,6 +1386,14 @@ msgstr "Edit room"
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:49
 msgid "Edit user"
 msgstr "Edit user"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:226
+msgid "edited {editedAt}"
+msgstr "edited {editedAt}"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:222
+msgid "edited {editedAt} by {editorName}"
+msgstr "edited {editedAt} by {editorName}"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:123
 #: src/routes/_auth-layout/auth/login.tsx:183
@@ -1584,6 +1603,10 @@ msgstr "Entry <0>{0}</0> was updated"
 msgid "Entry <0>{entryTitle}</0> was deleted"
 msgstr "Entry <0>{entryTitle}</0> was deleted"
 
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:162
+msgid "Entry was deleted"
+msgstr "Entry was deleted"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:66
 msgid "Environment"
 msgstr "Environment"
@@ -1662,6 +1685,7 @@ msgid "Failed to activate account. The link may have expired."
 msgstr "Failed to activate account. The link may have expired."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:75
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:76
 msgid "Failed to add entry. Please try again."
 msgstr "Failed to add entry. Please try again."
 
@@ -1710,6 +1734,7 @@ msgid "Failed to delete category"
 msgstr "Failed to delete category"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:49
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:165
 msgid "Failed to delete entry. Please try again."
 msgstr "Failed to delete entry. Please try again."
 
@@ -1783,6 +1808,7 @@ msgid "Failed to update customer. Please try again."
 msgstr "Failed to update customer. Please try again."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:70
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:153
 msgid "Failed to update entry. Please try again."
 msgstr "Failed to update entry. Please try again."
 
@@ -2123,7 +2149,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:30
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:123
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:50
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:541
 msgid "Home"
 msgstr "Home"
@@ -2489,6 +2515,7 @@ msgstr "Merchant ID is required"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:164
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:200
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:106
 msgid "Message"
 msgstr "Message"
 
@@ -2689,7 +2716,7 @@ msgid "No devices yet"
 msgstr "No devices yet"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:113
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:108
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:95
 msgid "No entries yet"
 msgstr "No entries yet"
 
@@ -2822,6 +2849,10 @@ msgstr "Not provided"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:311
 msgid "Not verified yet."
 msgstr "Not verified yet."
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:98
+msgid "Notes your team adds about this property will be listed here."
+msgstr "Notes your team adds about this property will be listed here."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:192
 msgid "Nothing found"
@@ -3299,7 +3330,7 @@ msgstr "Profile updated"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:120
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:205
 #: src/routes/_dashboard-layout/admin/index.tsx:19
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:63
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:62
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:533
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:553
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:562
@@ -3314,7 +3345,7 @@ msgstr "Properties"
 msgid "Properties updated"
 msgstr "Properties updated"
 
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:41
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:40
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:152
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:173
 msgid "Property"
@@ -3577,7 +3608,7 @@ msgstr "Reservations"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:106
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
-#: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:37
+#: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:36
 msgid "Reset"
 msgstr "Reset"
@@ -4010,7 +4041,7 @@ msgstr "Serial number copied"
 msgid "Set your password to activate your account"
 msgstr "Set your password to activate your account"
 
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:89
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:88
 msgid "Settings"
 msgstr "Settings"
 
@@ -4536,6 +4567,10 @@ msgstr "This verification link is invalid."
 msgid "This will permanently delete <0>{entryTitle}</0>. This action cannot be undone."
 msgstr "This will permanently delete <0>{entryTitle}</0>. This action cannot be undone."
 
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:273
+msgid "This will permanently delete the entry by <0>{authorName}</0>. This action cannot be undone."
+msgstr "This will permanently delete the entry by <0>{authorName}</0>. This action cannot be undone."
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:429
 msgid "Time-based (TOTP) · 6 digits · 30 seconds"
 msgstr "Time-based (TOTP) · 6 digits · 30 seconds"
@@ -4566,6 +4601,10 @@ msgstr "To change your email, contact your administrator."
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:136
 msgid "To change your roles, contact your account administrator."
 msgstr "To change your roles, contact your account administrator."
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:36
+msgid "Today"
+msgstr "Today"
 
 #: src/components/ui/data-grid-column-visibility.tsx:28
 msgid "Toggle Columns"
@@ -4773,6 +4812,7 @@ msgstr "Unsaved changes"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:254
 msgid "Update"
 msgstr "Update"
 
@@ -5023,9 +5063,17 @@ msgstr "Which authenticator app should I use?"
 msgid "Who owns this property."
 msgstr "Who owns this property."
 
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:92
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:91
 msgid "Work log"
 msgstr "Work log"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:83
+msgid "Write a note about this property…"
+msgstr "Write a note about this property…"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:38
+msgid "Yesterday"
+msgstr "Yesterday"
 
 #: src/routes/_dashboard-layout/-components/view-aware-content.tsx:33
 #~ msgid "You are viewing the admin interface. This shows full functionality for administrators."

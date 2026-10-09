@@ -215,8 +215,9 @@ msgstr "Gerät hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:88
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:56
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:84
 msgid "Add entry"
-msgstr ""
+msgstr "Eintrag hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:177
 msgid "Add Guest"
@@ -292,7 +293,7 @@ msgstr ""
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:36
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:36
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:129
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:57
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:56
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:547
 msgid "Admin"
 msgstr "Admin"
@@ -660,6 +661,8 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:409
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:119
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:284
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -743,8 +746,8 @@ msgstr "Profilbild ändern"
 #~ msgstr ""
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:111
-msgid "Changes made to this property will be listed here once the work log is available."
-msgstr "Änderungen an dieser Unterkunft werden hier aufgelistet, sobald das Arbeitsprotokoll verfügbar ist."
+#~ msgid "Changes made to this property will be listed here once the work log is available."
+#~ msgstr "Änderungen an dieser Unterkunft werden hier aufgelistet, sobald das Arbeitsprotokoll verfügbar ist."
 
 #: src/routes/_auth-layout/auth/sign-up.tsx:74
 msgid "Check your email"
@@ -1144,6 +1147,8 @@ msgstr "Datum"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:244
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:294
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1156,8 +1161,9 @@ msgid "Delete category?"
 msgstr "Kategorie löschen?"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:58
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:270
 msgid "Delete entry?"
-msgstr ""
+msgstr "Eintrag löschen?"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:93
 msgid "Delete product"
@@ -1174,6 +1180,10 @@ msgstr "Unterkunft löschen"
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:53
 msgid "Delete property?"
 msgstr "Objekt löschen?"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:171
+msgid "Deleted user"
+msgstr "Gelöschter Benutzer"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:222
@@ -1292,6 +1302,7 @@ msgstr ""
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:44
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:237
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -1342,6 +1353,14 @@ msgstr "Zimmer bearbeiten"
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:49
 msgid "Edit user"
 msgstr "Benutzer bearbeiten"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:226
+msgid "edited {editedAt}"
+msgstr "bearbeitet {editedAt}"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:222
+msgid "edited {editedAt} by {editorName}"
+msgstr "bearbeitet {editedAt} von {editorName}"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:123
 #: src/routes/_auth-layout/auth/login.tsx:183
@@ -1547,6 +1566,10 @@ msgstr ""
 msgid "Entry <0>{entryTitle}</0> was deleted"
 msgstr ""
 
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:162
+msgid "Entry was deleted"
+msgstr "Eintrag wurde gelöscht"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:66
 msgid "Environment"
 msgstr ""
@@ -1618,8 +1641,9 @@ msgid "Failed to activate account. The link may have expired."
 msgstr "Konto konnte nicht aktiviert werden. Der Link ist möglicherweise abgelaufen."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:75
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:76
 msgid "Failed to add entry. Please try again."
-msgstr ""
+msgstr "Eintrag konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut."
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/use-product-mutations.ts:43
 msgid "Failed to add product"
@@ -1665,8 +1689,9 @@ msgid "Failed to delete category"
 msgstr "Kategorie konnte nicht gelöscht werden"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:49
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:165
 msgid "Failed to delete entry. Please try again."
-msgstr ""
+msgstr "Eintrag konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/use-product-mutations.ts:70
 msgid "Failed to delete product"
@@ -1734,8 +1759,9 @@ msgid "Failed to update customer. Please try again."
 msgstr "Kunde konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:70
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:153
 msgid "Failed to update entry. Please try again."
-msgstr ""
+msgstr "Eintrag konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
 #~ msgid "Failed to update guest. Please try again."
 #~ msgstr "Gast konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
@@ -2063,7 +2089,7 @@ msgstr "Passwort ausblenden"
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:30
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:123
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:50
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:541
 msgid "Home"
 msgstr "Start"
@@ -2417,6 +2443,7 @@ msgstr ""
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:164
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:200
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:106
 msgid "Message"
 msgstr "Nachricht"
 
@@ -2612,9 +2639,9 @@ msgid "No devices yet"
 msgstr "Noch keine Geräte"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:113
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:108
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:95
 msgid "No entries yet"
-msgstr ""
+msgstr "Noch keine Einträge"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details.tsx:192
 msgid "No fellow travelers"
@@ -2745,6 +2772,10 @@ msgstr "Nicht angegeben"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:311
 msgid "Not verified yet."
 msgstr ""
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:98
+msgid "Notes your team adds about this property will be listed here."
+msgstr "Notizen Ihres Teams zu dieser Unterkunft werden hier aufgelistet."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:192
 msgid "Nothing found"
@@ -3207,7 +3238,7 @@ msgstr "Profil aktualisiert"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:120
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:205
 #: src/routes/_dashboard-layout/admin/index.tsx:19
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:63
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:62
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:533
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:553
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:562
@@ -3221,7 +3252,7 @@ msgstr "Properties"
 msgid "Properties updated"
 msgstr "Properties aktualisiert"
 
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:41
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:40
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:152
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:173
 msgid "Property"
@@ -3478,7 +3509,7 @@ msgstr "Reservierungen"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:106
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
-#: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:37
+#: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:36
 msgid "Reset"
 msgstr "Zurücksetzen"
@@ -3893,7 +3924,7 @@ msgstr "Seriennummer kopiert"
 msgid "Set your password to activate your account"
 msgstr "Legen Sie Ihr Passwort fest, um Ihr Konto zu aktivieren"
 
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:89
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:88
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -4407,6 +4438,10 @@ msgstr "Dieser Bestätigungslink ist ungültig."
 msgid "This will permanently delete <0>{entryTitle}</0>. This action cannot be undone."
 msgstr ""
 
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:273
+msgid "This will permanently delete the entry by <0>{authorName}</0>. This action cannot be undone."
+msgstr "Der Eintrag von <0>{authorName}</0> wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden."
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:429
 msgid "Time-based (TOTP) · 6 digits · 30 seconds"
 msgstr "Zeitbasiert (TOTP) · 6 Ziffern · 30 Sekunden"
@@ -4437,6 +4472,10 @@ msgstr "Wenden Sie sich an Ihren Administrator, um Ihre E-Mail-Adresse zu änder
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:136
 msgid "To change your roles, contact your account administrator."
 msgstr "Wenden Sie sich an Ihren Kontoadministrator, um Ihre Rollen zu ändern."
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:36
+msgid "Today"
+msgstr "Heute"
 
 #: src/components/ui/data-grid-column-visibility.tsx:28
 msgid "Toggle Columns"
@@ -4637,6 +4676,7 @@ msgstr "Nicht gespeicherte Änderungen"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:254
 msgid "Update"
 msgstr "Aktualisieren"
 
@@ -4877,9 +4917,17 @@ msgstr "Welche Authenticator-App soll ich verwenden?"
 msgid "Who owns this property."
 msgstr "Wem diese Unterkunft gehört."
 
-#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:92
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:91
 msgid "Work log"
-msgstr "Arbeitsprotokoll"
+msgstr "Worklog"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:83
+msgid "Write a note about this property…"
+msgstr "Notiz zu dieser Unterkunft schreiben…"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:38
+msgid "Yesterday"
+msgstr "Gestern"
 
 #~ msgid "You are viewing the admin interface. This shows full functionality for administrators."
 #~ msgstr "Sie sehen die Administrator-Oberfläche. Dies zeigt vollständige Funktionalität für Administratoren."
