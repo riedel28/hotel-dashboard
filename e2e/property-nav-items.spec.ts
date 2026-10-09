@@ -83,7 +83,7 @@ test.describe('Property nav items', () => {
     await expect(page.getByText('No entries yet')).toBeVisible();
     await expect(roomsCheckbox).toBeHidden();
 
-    await page.getByRole('tab', { name: 'Settings' }).click();
+    await page.getByRole('tab', { name: 'Details' }).click();
     await expect(page).not.toHaveURL(/tab=/);
     await expect(roomsCheckbox).not.toBeChecked();
   });

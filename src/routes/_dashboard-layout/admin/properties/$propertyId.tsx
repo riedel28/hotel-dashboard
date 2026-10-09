@@ -85,7 +85,7 @@ function PropertyPage() {
       >
         <TabsList variant="pills">
           <TabsTrigger value="settings">
-            <Trans>Settings</Trans>
+            <Trans>Details</Trans>
           </TabsTrigger>
           <TabsTrigger value="work-log">
             <Trans>Work log</Trans>
