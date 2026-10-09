@@ -42,15 +42,7 @@ export const customerSchema = z.object({
   zip: z.string(),
   city: z.string(),
   country_code: z.string(),
-  property_count: z.number().int().nonnegative(),
   // Every Property the Customer owns, by name.
-  properties: z.array(
-    z.object({ id: z.uuid(), name: z.string(), country_code: z.string() })
-  )
-});
-
-// A single Customer also carries the Properties it owns.
-export const customerDetailSchema = customerSchema.extend({
   properties: z.array(
     z.object({
       id: z.uuid(),
@@ -112,7 +104,6 @@ export type CustomerSortableColumn = z.infer<
   typeof customerSortableColumnsSchema
 >;
 export type Customer = z.infer<typeof customerSchema>;
-export type CustomerDetail = z.infer<typeof customerDetailSchema>;
 export type CustomerInput = z.input<typeof customerInputSchema>;
 export type CreateCustomerData = z.infer<typeof createCustomerSchema>;
 export type UpdateCustomerData = z.infer<typeof updateCustomerSchema>;

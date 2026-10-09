@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { Loader2Icon } from 'lucide-react';
 import type { ReactNode } from 'react';
-import type { CustomerDetail } from 'shared/types/customers';
+import type { Customer } from 'shared/types/customers';
 import { toast } from 'sonner';
 
 import { updateCustomerById } from '@/api/customers';
@@ -33,7 +33,7 @@ import {
   useCustomerForm
 } from './customer-fields';
 
-export function EditCustomerForm({ customer }: { customer: CustomerDetail }) {
+export function EditCustomerForm({ customer }: { customer: Customer }) {
   const queryClient = useQueryClient();
   const { t } = useLingui();
 

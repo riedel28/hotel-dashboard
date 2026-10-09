@@ -79,11 +79,7 @@ describe('Customers API', () => {
         request(app).post('/api/customers').send(ullman)
       ).expect(201);
 
-      expect(response.body).toMatchObject({
-        ...ullman,
-        property_count: 0,
-        properties: []
-      });
+      expect(response.body).toMatchObject({ ...ullman, properties: [] });
       expect(response.body.id).toEqual(expect.any(String));
     });
 
@@ -162,9 +158,9 @@ describe('Customers API', () => {
       });
       expect(
         response.body.index.map(
-          (c: { last_name: string; property_count: number }) => [
+          (c: { last_name: string; properties: unknown[] }) => [
             c.last_name,
-            c.property_count
+            c.properties.length
           ]
         )
       ).toEqual([
@@ -176,12 +172,14 @@ describe('Customers API', () => {
         {
           id: expect.any(String),
           name: 'The Dolphin Hotel',
-          country_code: 'DE'
+          country_code: 'DE',
+          stage: 'template'
         },
         {
           id: expect.any(String),
           name: 'The Overlook Hotel',
-          country_code: 'DE'
+          country_code: 'DE',
+          stage: 'production'
         }
       ]);
     });
@@ -266,7 +264,7 @@ describe('Customers API', () => {
         request(app).get(`/api/customers/${owner.id}`)
       ).expect(200);
 
-      expect(response.body).toMatchObject({ ...ullman, property_count: 1 });
+      expect(response.body).toMatchObject(ullman);
       expect(response.body.properties).toEqual([
         {
           id: expect.any(String),

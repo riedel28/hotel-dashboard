@@ -3,8 +3,6 @@ import {
   type CreateCustomerData,
   createCustomerSchema,
   type Customer,
-  type CustomerDetail,
-  customerDetailSchema,
   customerSchema,
   type FetchCustomersParams,
   fetchCustomersResponseSchema,
@@ -38,10 +36,10 @@ function customerByIdQueryOptions(id: string) {
   });
 }
 
-async function fetchCustomerById(id: string): Promise<CustomerDetail> {
+async function fetchCustomerById(id: string): Promise<Customer> {
   try {
     const response = await client.get(`/customers/${id}`);
-    return customerDetailSchema.parse(response.data);
+    return customerSchema.parse(response.data);
   } catch (err) {
     handleApiError(err, 'fetchCustomerById');
   }

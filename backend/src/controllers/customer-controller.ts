@@ -4,7 +4,6 @@ import {
   count,
   desc,
   eq,
-  getTableColumns,
   ilike,
   inArray,
   or,
@@ -20,40 +19,49 @@ import {
 } from '../db/schema';
 import { escapeLikePattern, isUniqueViolation } from '../utils/sql';
 
-// Table-qualified by hand: Drizzle drops the table name from a column inside
-// a single-table select, which would compare properties.customer_id to its own id.
+// How many Properties a Customer owns. Only something to sort by: the response
+// carries the Properties themselves. Table-qualified by hand, because Drizzle
+// drops the table name from a column inside a single-table select, which would
+// compare properties.customer_id to its own id.
 const propertyCount = sql<number>`(
   select count(*)::int from ${propertiesTable}
   where ${propertiesTable}.customer_id = ${customersTable}.id
 )`;
 
-const customerColumns = {
-  ...getTableColumns(customersTable),
-  property_count: propertyCount
-};
-
-type CustomerRow = typeof customersTable.$inferSelect & {
-  property_count: number;
-};
-
-function toCustomerResponse<P extends { id: string; name: string }>(
-  customer: CustomerRow,
-  properties: P[]
+/**
+ * The API shape of the given Customers: each with the Properties it owns, by
+ * name. One query for all of them, not one per Customer.
+ */
+async function toCustomerResponses(
+  customers: (typeof customersTable.$inferSelect)[]
 ) {
-  return {
-    id: customer.id,
-    first_name: customer.first_name,
-    last_name: customer.last_name,
-    company_name: customer.company_name,
-    email: customer.email,
-    address_line_1: customer.address_line_1,
-    address_line_2: customer.address_line_2,
-    zip: customer.zip,
-    city: customer.city,
-    country_code: customer.country_code,
-    property_count: customer.property_count,
-    properties
-  };
+  const owned = customers.length
+    ? await db
+        .select({
+          id: propertiesTable.id,
+          name: propertiesTable.name,
+          country_code: propertiesTable.country_code,
+          stage: propertiesTable.stage,
+          customer_id: propertiesTable.customer_id
+        })
+        .from(propertiesTable)
+        .where(
+          inArray(
+            propertiesTable.customer_id,
+            customers.map((customer) => customer.id)
+          )
+        )
+        .orderBy(asc(propertiesTable.name))
+    : [];
+
+  return customers.map(
+    ({ created_at: _created, updated_at: _updated, ...customer }) => ({
+      ...customer,
+      properties: owned
+        .filter((property) => property.customer_id === customer.id)
+        .map(({ customer_id: _owner, ...property }) => property)
+    })
+  );
 }
 
 function sortColumns(sortBy: CustomerSortableColumn) {
@@ -98,7 +106,7 @@ async function getCustomers(req: Request, res: Response) {
       : [desc(customersTable.created_at)];
 
     const customers = await db
-      .select(customerColumns)
+      .select()
       .from(customersTable)
       .where(searchCondition)
       .orderBy(...orderBy, asc(customersTable.id))
@@ -110,30 +118,8 @@ async function getCustomers(req: Request, res: Response) {
       .from(customersTable)
       .where(searchCondition);
 
-    // One query for the whole page's Properties, not one per Customer.
-    const ids = customers.map((customer) => customer.id);
-    const owned = ids.length
-      ? await db
-          .select({
-            id: propertiesTable.id,
-            name: propertiesTable.name,
-            country_code: propertiesTable.country_code,
-            customer_id: propertiesTable.customer_id
-          })
-          .from(propertiesTable)
-          .where(inArray(propertiesTable.customer_id, ids))
-          .orderBy(asc(propertiesTable.name))
-      : [];
-
     res.status(200).json({
-      index: customers.map((customer) =>
-        toCustomerResponse(
-          customer,
-          owned
-            .filter((property) => property.customer_id === customer.id)
-            .map(({ customer_id: _owner, ...property }) => property)
-        )
-      ),
+      index: await toCustomerResponses(customers),
       page: pageNum,
       per_page: perPageNum,
       total,
@@ -145,40 +131,20 @@ async function getCustomers(req: Request, res: Response) {
   }
 }
 
-async function findCustomer(id: string) {
-  const [customer] = await db
-    .select(customerColumns)
-    .from(customersTable)
-    .where(eq(customersTable.id, id));
-  return customer;
-}
-
-function findProperties(customerId: string) {
-  return db
-    .select({
-      id: propertiesTable.id,
-      name: propertiesTable.name,
-      country_code: propertiesTable.country_code,
-      stage: propertiesTable.stage
-    })
-    .from(propertiesTable)
-    .where(eq(propertiesTable.customer_id, customerId))
-    .orderBy(asc(propertiesTable.name));
-}
-
 async function getCustomerById(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const customers = await db
+      .select()
+      .from(customersTable)
+      .where(eq(customersTable.id, req.params.id));
 
-    const customer = await findCustomer(id);
+    const [customer] = await toCustomerResponses(customers);
 
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' });
     }
 
-    res
-      .status(200)
-      .json(toCustomerResponse(customer, await findProperties(id)));
+    res.status(200).json(customer);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch customer' });
@@ -193,14 +159,14 @@ function emailTaken(res: Response) {
 
 async function createCustomer(req: Request, res: Response) {
   try {
-    const [created] = await db
+    const created = await db
       .insert(customersTable)
       .values(req.body)
       .returning();
 
-    res
-      .status(201)
-      .json(toCustomerResponse({ ...created, property_count: 0 }, []));
+    const [customer] = await toCustomerResponses(created);
+
+    res.status(201).json(customer);
   } catch (error) {
     if (isUniqueViolation(error)) return emailTaken(res);
     console.error(error);
@@ -210,23 +176,19 @@ async function createCustomer(req: Request, res: Response) {
 
 async function updateCustomer(req: Request, res: Response) {
   try {
-    const { id } = req.params;
-
-    const [updated] = await db
+    const updated = await db
       .update(customersTable)
       .set({ ...req.body, updated_at: new Date() })
-      .where(eq(customersTable.id, id))
-      .returning({ id: customersTable.id });
+      .where(eq(customersTable.id, req.params.id))
+      .returning();
 
-    if (!updated) {
+    const [customer] = await toCustomerResponses(updated);
+
+    if (!customer) {
       return res.status(404).json({ error: 'Customer not found' });
     }
 
-    res
-      .status(200)
-      .json(
-        toCustomerResponse(await findCustomer(id), await findProperties(id))
-      );
+    res.status(200).json(customer);
   } catch (error) {
     if (isUniqueViolation(error)) return emailTaken(res);
     console.error(error);
