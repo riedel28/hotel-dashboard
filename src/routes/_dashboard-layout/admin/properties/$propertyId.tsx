@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { propertyByIdQueryOptions } from '@/api/properties';
@@ -19,7 +19,11 @@ import { EditPropertyForm } from './-components/edit-property-form';
 
 function PropertyPage() {
   const { t } = useLingui();
-  useDocumentTitle(t`Property Details`);
+  const { propertyId } = Route.useParams();
+  // The loader has already fetched it; the fallback only shows on an error.
+  const { data } = useQuery(propertyByIdQueryOptions(propertyId));
+  const name = data?.name ?? t`Property`;
+  useDocumentTitle(name);
 
   return (
     <div className="space-y-6">
@@ -45,15 +49,11 @@ function PropertyPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>
-                <Trans>Edit Property</Trans>
-              </BreadcrumbPage>
+              <BreadcrumbPage>{name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="text-xl font-bold">
-          <Trans>Edit Property</Trans>
-        </h1>
+        <h1 className="truncate text-xl font-bold">{name}</h1>
       </div>
 
       <div>
