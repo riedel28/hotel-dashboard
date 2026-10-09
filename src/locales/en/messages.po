@@ -48,7 +48,7 @@ msgid "{0, plural, one {# selected} other {# selected}}"
 msgstr "{0, plural, one {# selected} other {# selected}}"
 
 #. placeholder {0}: themeLabels[currentTheme]
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:169
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:170
 msgid "{0}"
 msgstr "{0}"
 
@@ -218,7 +218,7 @@ msgstr "Add device"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:88
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:56
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:84
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:91
 msgid "Add entry"
 msgstr "Add entry"
 
@@ -675,9 +675,9 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:182
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
+#: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:71
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:409
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:119
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:284
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:102
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -1151,7 +1151,7 @@ msgstr "Customers"
 #~ msgid "Czech Republic"
 #~ msgstr "Czech Republic"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:184
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:185
 msgid "Dark"
 msgstr "Dark"
 
@@ -1179,8 +1179,8 @@ msgstr "Date"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:244
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:294
+#: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:81
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:126
 msgid "Delete"
 msgstr "Delete"
 
@@ -1193,7 +1193,7 @@ msgid "Delete category?"
 msgstr "Delete category?"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:58
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:270
+#: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:57
 msgid "Delete entry?"
 msgstr "Delete entry?"
 
@@ -1213,7 +1213,7 @@ msgstr "Delete Property"
 msgid "Delete property?"
 msgstr "Delete property?"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:171
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:56
 msgid "Deleted user"
 msgstr "Deleted user"
 
@@ -1338,7 +1338,7 @@ msgstr "Each code works once"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:44
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:237
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:119
 msgid "Edit"
 msgstr "Edit"
 
@@ -1391,11 +1391,11 @@ msgstr "Edit room"
 msgid "Edit user"
 msgstr "Edit user"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:226
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:108
 msgid "edited {editedAt}"
 msgstr "edited {editedAt}"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:222
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:104
 msgid "edited {editedAt} by {editorName}"
 msgstr "edited {editedAt} by {editorName}"
 
@@ -1607,7 +1607,7 @@ msgstr "Entry <0>{0}</0> was updated"
 msgid "Entry <0>{entryTitle}</0> was deleted"
 msgstr "Entry <0>{entryTitle}</0> was deleted"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:162
+#: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:45
 msgid "Entry was deleted"
 msgstr "Entry was deleted"
 
@@ -1689,7 +1689,7 @@ msgid "Failed to activate account. The link may have expired."
 msgstr "Failed to activate account. The link may have expired."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:75
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:76
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:81
 msgid "Failed to add entry. Please try again."
 msgstr "Failed to add entry. Please try again."
 
@@ -1738,7 +1738,7 @@ msgid "Failed to delete category"
 msgstr "Failed to delete category"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:49
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:165
+#: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:48
 msgid "Failed to delete entry. Please try again."
 msgstr "Failed to delete entry. Please try again."
 
@@ -1812,7 +1812,7 @@ msgid "Failed to update customer. Please try again."
 msgstr "Failed to update customer. Please try again."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:70
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:153
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:50
 msgid "Failed to update entry. Please try again."
 msgstr "Failed to update entry. Please try again."
 
@@ -2283,7 +2283,7 @@ msgstr "Keep my changes"
 msgid "Keep setting up"
 msgstr "Keep setting up"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:90
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:91
 msgid "Language"
 msgstr "Language"
 
@@ -2357,7 +2357,7 @@ msgstr "Last used {0}"
 #~ msgid "Letter"
 #~ msgstr "Letter"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:180
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:181
 msgid "Light"
 msgstr "Light"
 
@@ -2402,7 +2402,7 @@ msgid "Log not found"
 msgstr "Log not found"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:74
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:205
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:206
 msgid "Log out"
 msgstr "Log out"
 
@@ -2519,7 +2519,7 @@ msgstr "Merchant ID is required"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:164
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:200
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:106
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:84
 msgid "Message"
 msgstr "Message"
 
@@ -2720,7 +2720,7 @@ msgid "No devices yet"
 msgstr "No devices yet"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:113
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:95
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:104
 msgid "No entries yet"
 msgstr "No entries yet"
 
@@ -2854,7 +2854,7 @@ msgstr "Not provided"
 msgid "Not verified yet."
 msgstr "Not verified yet."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:98
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:107
 msgid "Notes your team adds about this property will be listed here."
 msgstr "Notes your team adds about this property will be listed here."
 
@@ -3272,7 +3272,7 @@ msgstr "Products"
 #~ msgid "Products in {categoryTitle}"
 #~ msgstr "Products in {categoryTitle}"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:282
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:270
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:60
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:154
@@ -4340,7 +4340,7 @@ msgstr "Switched to {0}"
 #~ msgid "Switzerland"
 #~ msgstr "Switzerland"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:188
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:189
 msgid "System"
 msgstr "System"
 
@@ -4499,7 +4499,7 @@ msgstr "The user {userName} has been deleted"
 msgid "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 msgstr "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:163
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:164
 msgid "Theme"
 msgstr "Theme"
 
@@ -4571,7 +4571,7 @@ msgstr "This verification link is invalid."
 msgid "This will permanently delete <0>{entryTitle}</0>. This action cannot be undone."
 msgstr "This will permanently delete <0>{entryTitle}</0>. This action cannot be undone."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:273
+#: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:60
 msgid "This will permanently delete the entry by <0>{authorName}</0>. This action cannot be undone."
 msgstr "This will permanently delete the entry by <0>{authorName}</0>. This action cannot be undone."
 
@@ -4606,7 +4606,7 @@ msgstr "To change your email, contact your administrator."
 msgid "To change your roles, contact your account administrator."
 msgstr "To change your roles, contact your account administrator."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:36
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:41
 msgid "Today"
 msgstr "Today"
 
@@ -4816,7 +4816,7 @@ msgstr "Unsaved changes"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:254
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:136
 msgid "Update"
 msgstr "Update"
 
@@ -4891,7 +4891,7 @@ msgstr "User Details"
 #~ msgid "User features: View reservations, make payments, access basic settings"
 #~ msgstr "User features: View reservations, make payments, access basic settings"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:256
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:244
 msgid "User menu"
 msgstr "User menu"
 
@@ -4928,7 +4928,7 @@ msgstr "Username is required"
 msgid "Users"
 msgstr "Users"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:207
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:208
 msgid "v{version}"
 msgstr "v{version}"
 
@@ -5071,11 +5071,11 @@ msgstr "Who owns this property."
 msgid "Work log"
 msgstr "Work log"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:83
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:90
 msgid "Write a note about this property…"
 msgstr "Write a note about this property…"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:38
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:43
 msgid "Yesterday"
 msgstr "Yesterday"
 
