@@ -16,6 +16,7 @@ import {
   productCategories,
   products,
   properties,
+  propertyWorklogs,
   reservations,
   roles,
   rooms,
@@ -119,7 +120,7 @@ async function seed() {
     console.log('Creating demo users...');
     const hashedPassword = await hashPassword('very_cool_password');
 
-    await db
+    const [coolUser] = await db
       .insert(users)
       .values({
         email: 'cool_new_user@example.com',
@@ -143,7 +144,7 @@ async function seed() {
         { name: 'Tester' }
       ]);
 
-    await db
+    const [john] = await db
       .insert(users)
       .values({
         email: 'john@example.com',
@@ -461,6 +462,55 @@ async function seed() {
     if (guestAbcRows.length > 0) {
       await db.insert(guestAbcEntries).values(guestAbcRows);
     }
+
+    // Step 4b-2: Seed a work log for The Overlook Hotel covering every card
+    // state: today, yesterday, older, last year, edited by the author, edited
+    // by someone else, and an entry whose author is gone.
+    console.log('Creating demo worklogs...');
+    const daysAgo = (days: number, hour: number) => {
+      const date = new Date();
+      date.setDate(date.getDate() - days);
+      date.setHours(hour, 15, 0, 0);
+      return date;
+    };
+    await db.insert(propertyWorklogs).values([
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message: 'Kiosk in the lobby is back online after the router swap.',
+        created_by: john?.id,
+        created_at: daysAgo(0, 9)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message:
+          'Called the customer about the PWA domain.\nDNS change is scheduled for Thursday, they will confirm by mail.',
+        created_by: coolUser?.id,
+        created_at: daysAgo(0, 8),
+        updated_by: john?.id,
+        updated_at: daysAgo(0, 9)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message:
+          'Enabled WhatsApp messaging, templates still pending approval.',
+        created_by: john?.id,
+        created_at: daysAgo(1, 16),
+        updated_by: john?.id,
+        updated_at: daysAgo(1, 17)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message: 'Door lock integration tested on rooms 237 and 217.',
+        created_by: john?.id,
+        created_at: daysAgo(6, 11)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message: 'Property moved from staging to production.',
+        created_by: null,
+        created_at: daysAgo(400, 14)
+      }
+    ]);
 
     // Step 4c: Seed a product catalog for The Overlook Hotel — three levels
     // deep, with a free item and multi-line descriptions.
