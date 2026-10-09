@@ -7,7 +7,7 @@ interface FiltersBarProps {
 /** The row of filters above a table; put the refresh button last. */
 export function FiltersBar({ children }: FiltersBarProps) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
       {children}
     </div>
   );

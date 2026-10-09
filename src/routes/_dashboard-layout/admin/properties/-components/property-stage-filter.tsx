@@ -29,7 +29,7 @@ export function PropertyStageFilter({
       }))}
       value={value}
       onValueChange={onChange}
-      className="w-full sm:w-[170px]"
+      className="w-full min-w-0 sm:w-[170px]"
     >
       <DataGridCheckboxFilterFooter>
         <DataGridCheckboxFilterClear>

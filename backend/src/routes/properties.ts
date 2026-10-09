@@ -20,6 +20,7 @@ import {
   validateParams,
   validateQuery
 } from '../middleware/validation';
+import worklogsRouter from './worklogs';
 
 const router = Router();
 
@@ -55,6 +56,14 @@ router.delete(
   requireAdmin,
   validateParams(propertyIdParamsSchema),
   deleteProperty
+);
+
+// Work log of a property (admin only)
+router.use(
+  '/:id/worklogs',
+  requireAdmin,
+  validateParams(propertyIdParamsSchema),
+  worklogsRouter
 );
 
 export default router;

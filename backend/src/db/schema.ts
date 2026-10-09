@@ -182,6 +182,13 @@ export const properties = pgTable(
       .array()
       .notNull()
       .default(sql`'{}'::text[]`),
+    // Solutions the Property has booked, see propertyOptionSchema.
+    options: text('options')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
+    // Set exactly when `options` has mobile_app_pwa.
+    pwa_domain: text('pwa_domain'),
     // Null for a Property nobody owns yet (templates, fresh demos). RESTRICT:
     // a Customer that still owns Properties cannot be deleted.
     customer_id: uuid('customer_id').references(() => customers.id, {
@@ -359,6 +366,40 @@ export const guestAbcEntries = pgTable(
   ]
 );
 
+// Notes Administrators keep about a property, shown as its work log
+export const propertyWorklogs = pgTable(
+  'property_worklogs',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    message: text('message').notNull(),
+    // Entries outlive their author: the user reference is nulled on delete
+    created_by: bigint('created_by', { mode: 'number' }).references(
+      () => users.id,
+      { onDelete: 'set null' }
+    ),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    // Both null until the first edit — unlike the other tables' updated_at
+    updated_by: bigint('updated_by', { mode: 'number' }).references(
+      () => users.id,
+      { onDelete: 'set null' }
+    ),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+  },
+  (table) => [
+    index('property_worklogs_property_id_created_at_idx').on(
+      table.property_id,
+      table.created_at
+    )
+  ]
+);
+
 export const monitoringLogs = pgTable(
   'monitoring_logs',
   {
@@ -436,6 +477,8 @@ export type NewRoom = typeof rooms.$inferInsert;
 
 export type GuestAbcEntry = typeof guestAbcEntries.$inferSelect;
 export type NewGuestAbcEntry = typeof guestAbcEntries.$inferInsert;
+
+export type PropertyWorklog = typeof propertyWorklogs.$inferSelect;
 
 export type ProductCategory = typeof productCategories.$inferSelect;
 export type NewProductCategory = typeof productCategories.$inferInsert;

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { inArray } from 'drizzle-orm';
 
 import { deriveLetter } from '../../../shared/types/guest-abc';
+import { propertyOptionSchema } from '../../../shared/types/properties';
 import { db } from '../db/pool';
 import {
   customers,
@@ -15,6 +16,7 @@ import {
   productCategories,
   products,
   properties,
+  propertyWorklogs,
   reservations,
   roles,
   rooms,
@@ -118,7 +120,7 @@ async function seed() {
     console.log('Creating demo users...');
     const hashedPassword = await hashPassword('very_cool_password');
 
-    await db
+    const [coolUser] = await db
       .insert(users)
       .values({
         email: 'cool_new_user@example.com',
@@ -142,7 +144,7 @@ async function seed() {
         { name: 'Tester' }
       ]);
 
-    await db
+    const [john] = await db
       .insert(users)
       .values({
         email: 'john@example.com',
@@ -342,7 +344,8 @@ async function seed() {
       }
     ]);
 
-    // Step 4a: Create demo properties (famous fictional hotels)
+    // Step 4a: Create demo properties (famous fictional hotels). Their options
+    // run from none (Fawlty Towers, The Dolphin Hotel) to all of them.
     console.log('Creating demo properties...');
     await db.insert(properties).values([
       {
@@ -350,21 +353,32 @@ async function seed() {
         name: 'The Overlook Hotel',
         country_code: 'US',
         stage: 'production',
-        customer_id: CUSTOMER_IDS.ullman
+        customer_id: CUSTOMER_IDS.ullman,
+        options: [...propertyOptionSchema.options],
+        pwa_domain: 'app.overlook-hotel.example.com'
       },
       {
         id: 'cc198b13-4933-43aa-977e-dcd95fa30771',
         name: 'The Grand Budapest Hotel',
         country_code: 'HU',
         stage: 'production',
-        customer_id: CUSTOMER_IDS.scott
+        customer_id: CUSTOMER_IDS.scott,
+        options: [...propertyOptionSchema.options],
+        pwa_domain: 'app.grand-budapest.example.com'
       },
       {
         id: '3d5552bd-389e-477d-9e9c-5016ac02632b',
         name: 'The Continental',
         country_code: 'US',
         stage: 'production',
-        customer_id: CUSTOMER_IDS.scott
+        customer_id: CUSTOMER_IDS.scott,
+        options: [
+          'mobile_app_native',
+          'checkin_kiosk_app',
+          'rsx_api',
+          'messaging_email',
+          'messaging_sms'
+        ]
       },
       {
         id: '9971ceb1-708e-4bd1-a35c-f164d4ce75c2',
@@ -378,28 +392,44 @@ async function seed() {
         name: 'Bates Motel',
         country_code: 'US',
         stage: 'production',
-        customer_id: CUSTOMER_IDS.bates
+        customer_id: CUSTOMER_IDS.bates,
+        options: [
+          'mobile_app_pwa',
+          'checkin_kiosk_app',
+          'rsx_api',
+          'messaging_whatsapp'
+        ],
+        pwa_domain: 'app.bates-motel.example.com'
       },
       {
         id: '85e7ebb9-3ae6-4aaf-9ab0-f3b08defa220',
         name: 'Hotel Transylvania',
         country_code: 'RO',
         stage: 'demo',
-        customer_id: CUSTOMER_IDS.bates
+        customer_id: CUSTOMER_IDS.bates,
+        options: ['tv_guest_directory', 'messaging_email']
       },
       {
         id: '30c9c7cd-8946-4079-8449-bf8ca69a226a',
         name: 'The White Lotus',
         country_code: 'IT',
         stage: 'staging',
-        customer_id: CUSTOMER_IDS.scott
+        customer_id: CUSTOMER_IDS.scott,
+        options: [
+          'mobile_app_pwa',
+          'tv_guest_directory',
+          'messaging_email',
+          'messaging_whatsapp'
+        ],
+        pwa_domain: 'app.white-lotus.example.com'
       },
       {
         id: '8f4eb429-a9df-434a-977b-eb6c1f2a72e1',
         name: "Bertram's Hotel",
         country_code: 'GB',
         stage: 'staging',
-        customer_id: CUSTOMER_IDS.fawlty
+        customer_id: CUSTOMER_IDS.fawlty,
+        options: ['meldeschein_app', 'messaging_email']
       },
       {
         id: '800fec46-58b6-4878-9c79-3adfeaac714e',
@@ -413,7 +443,8 @@ async function seed() {
         name: "Kellerman's Resort",
         country_code: 'US',
         stage: 'demo',
-        customer_id: CUSTOMER_IDS.fawlty
+        customer_id: CUSTOMER_IDS.fawlty,
+        options: ['mobile_app_native', 'messaging_sms', 'messaging_whatsapp']
       }
     ]);
 
@@ -431,6 +462,55 @@ async function seed() {
     if (guestAbcRows.length > 0) {
       await db.insert(guestAbcEntries).values(guestAbcRows);
     }
+
+    // Step 4b-2: Seed a work log for The Overlook Hotel covering every card
+    // state: today, yesterday, older, last year, edited by the author, edited
+    // by someone else, and an entry whose author is gone.
+    console.log('Creating demo worklogs...');
+    const daysAgo = (days: number, hour: number) => {
+      const date = new Date();
+      date.setDate(date.getDate() - days);
+      date.setHours(hour, 15, 0, 0);
+      return date;
+    };
+    await db.insert(propertyWorklogs).values([
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message: 'Kiosk in the lobby is back online after the router swap.',
+        created_by: john?.id,
+        created_at: daysAgo(0, 9)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message:
+          'Called the customer about the PWA domain.\nDNS change is scheduled for Thursday, they will confirm by mail.',
+        created_by: coolUser?.id,
+        created_at: daysAgo(0, 8),
+        updated_by: john?.id,
+        updated_at: daysAgo(0, 9)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message:
+          'Enabled WhatsApp messaging, templates still pending approval.',
+        created_by: john?.id,
+        created_at: daysAgo(1, 16),
+        updated_by: john?.id,
+        updated_at: daysAgo(1, 17)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message: 'Door lock integration tested on rooms 237 and 217.',
+        created_by: john?.id,
+        created_at: daysAgo(6, 11)
+      },
+      {
+        property_id: OVERLOOK_HOTEL_ID,
+        message: 'Property moved from staging to production.',
+        created_by: null,
+        created_at: daysAgo(400, 14)
+      }
+    ]);
 
     // Step 4c: Seed a product catalog for The Overlook Hotel — three levels
     // deep, with a free item and multi-line descriptions.

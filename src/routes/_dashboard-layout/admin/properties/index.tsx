@@ -13,6 +13,7 @@ import { useMemo, useState } from 'react';
 import { customerLabel } from 'shared/types/customers';
 import type {
   Property,
+  PropertyOption,
   PropertySortableColumn,
   PropertyStage
 } from 'shared/types/properties';
@@ -56,6 +57,8 @@ import { cn } from '@/lib/utils';
 import { AddPropertyModal } from './-components/add-property-modal';
 import { DeletePropertyDialog } from './-components/delete-property-dialog';
 import { PropertyCountryFilter } from './-components/property-country-filter';
+import { PropertyOptionsCell } from './-components/property-options-cell';
+import { PropertyOptionsFilter } from './-components/property-options-filter';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
 
@@ -236,6 +239,28 @@ function PropertiesTable({
         enableResizing: false
       },
       {
+        accessorKey: 'options',
+        id: 'options',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Solutions`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => (
+          <PropertyOptionsCell options={row.original.options} />
+        ),
+        meta: {
+          skeleton: <Skeleton className="h-6 w-48" />,
+          headerTitle: t`Solutions`
+        },
+        size: 340,
+        enableSorting: false,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
         id: 'actions',
         header: () => null,
         cell: ({ row }) => (
@@ -308,8 +333,16 @@ function PropertiesTable({
 }
 
 function PropertiesContent() {
-  const { page, per_page, q, stage, country_code, sort_by, sort_order } =
-    Route.useSearch();
+  const {
+    page,
+    per_page,
+    q,
+    stage,
+    country_code,
+    options,
+    sort_by,
+    sort_order
+  } = Route.useSearch();
   const navigate = Route.useNavigate();
   const queryClient = useQueryClient();
 
@@ -320,6 +353,7 @@ function PropertiesContent() {
       q,
       stage,
       country_code,
+      options,
       sort_by,
       sort_order
     })
@@ -329,7 +363,9 @@ function PropertiesContent() {
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
     : [];
 
-  const hasActiveFilters = Boolean(q || stage?.length || country_code);
+  const hasActiveFilters = Boolean(
+    q || stage?.length || country_code || options?.length
+  );
 
   const handleSearchChange = (searchTerm: string) => {
     navigate({
@@ -348,6 +384,17 @@ function PropertiesContent() {
       search: (prev) => ({
         ...prev,
         stage: stages.length > 0 ? stages : undefined,
+        page: 1
+      })
+    });
+  };
+
+  const handleOptionsChange = (selected: PropertyOption[]) => {
+    navigate({
+      to: '/admin/properties',
+      search: (prev) => ({
+        ...prev,
+        options: selected.length > 0 ? selected : undefined,
         page: 1
       })
     });
@@ -444,10 +491,14 @@ function PropertiesContent() {
     >
       <FiltersBar>
         <PropertySearch value={q} onChange={handleSearchChange} />
-        <PropertyStageFilter value={stage ?? []} onChange={handleStageChange} />
         <PropertyCountryFilter
           value={country_code}
           onChange={handleCountryChange}
+        />
+        <PropertyStageFilter value={stage ?? []} onChange={handleStageChange} />
+        <PropertyOptionsFilter
+          value={options ?? []}
+          onChange={handleOptionsChange}
         />
         <ClearFiltersButton
           hasActiveFilters={hasActiveFilters}

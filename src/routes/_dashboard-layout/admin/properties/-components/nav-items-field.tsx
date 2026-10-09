@@ -1,20 +1,8 @@
-import { Trans, useLingui } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import type { NavItemId } from 'shared/types/properties';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Field,
-  FieldLabel,
-  FieldLegend,
-  FieldSet
-} from '@/components/ui/field';
+import { Field, FieldLabel } from '@/components/ui/field';
 import {
   navItemGroups,
   navItems
@@ -29,54 +17,70 @@ interface NavItemsFieldProps {
 export function NavItemsField({ disabled, onChange }: NavItemsFieldProps) {
   const { t } = useLingui();
 
-  const setShown = (id: NavItemId, shown: boolean) =>
-    onChange(
-      shown ? disabled.filter((other) => other !== id) : [...disabled, id]
-    );
+  const setShown = (ids: NavItemId[], shown: boolean) => {
+    const others = disabled.filter((id) => !ids.includes(id));
+    onChange(shown ? others : [...others, ...ids]);
+  };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          <Trans>Nav items</Trans>
-        </CardTitle>
-        <CardDescription>
-          <Trans>
-            Unchecked nav items are hidden from the navigation and the Start
-            page for this property.
-          </Trans>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-5">
-        {navItemGroups.map((group) => (
-          <FieldSet key={group.key} className="gap-3">
-            {group.label && (
-              <FieldLegend variant="label">{t(group.label)}</FieldLegend>
-            )}
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {group.ids.map((id) => (
-                <Field
-                  key={id}
-                  orientation="horizontal"
-                  className="gap-3 rounded-md border bg-muted/20 p-3"
+    <div className="flex flex-col gap-5">
+      {navItemGroups.map((group) => {
+        const shownCount = group.ids.filter(
+          (id) => !disabled.includes(id)
+        ).length;
+
+        const items = (
+          <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+            {group.ids.map((id) => (
+              <Field key={id} orientation="horizontal" className="gap-2">
+                <Checkbox
+                  id={`nav-item-${id}`}
+                  checked={!disabled.includes(id)}
+                  onCheckedChange={(shown) => setShown([id], shown)}
+                />
+                <FieldLabel
+                  htmlFor={`nav-item-${id}`}
+                  className="cursor-pointer text-sm font-normal"
                 >
-                  <Checkbox
-                    id={`nav-item-${id}`}
-                    checked={!disabled.includes(id)}
-                    onCheckedChange={(shown) => setShown(id, shown)}
-                  />
-                  <FieldLabel
-                    htmlFor={`nav-item-${id}`}
-                    className="cursor-pointer text-sm font-normal"
-                  >
-                    {t(navItems[id].label)}
-                  </FieldLabel>
-                </Field>
-              ))}
-            </div>
-          </FieldSet>
-        ))}
-      </CardContent>
-    </Card>
+                  {t(navItems[id].label)}
+                </FieldLabel>
+              </Field>
+            ))}
+          </div>
+        );
+
+        // A group without a heading has nothing to hang a "whole group"
+        // checkbox on: its items stand on their own.
+        if (!group.label) return <div key={group.key}>{items}</div>;
+
+        const groupId = `nav-group-${group.key}`;
+
+        return (
+          <div
+            key={group.key}
+            role="group"
+            aria-labelledby={`${groupId}-label`}
+            className="flex flex-col gap-3"
+          >
+            <Field orientation="horizontal" className="gap-2">
+              <Checkbox
+                id={groupId}
+                checked={shownCount === group.ids.length}
+                indeterminate={shownCount > 0 && shownCount < group.ids.length}
+                onCheckedChange={(shown) => setShown(group.ids, shown)}
+              />
+              <FieldLabel
+                id={`${groupId}-label`}
+                htmlFor={groupId}
+                className="cursor-pointer text-sm font-medium"
+              >
+                {t(group.label)}
+              </FieldLabel>
+            </Field>
+            <div className="pl-6">{items}</div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
