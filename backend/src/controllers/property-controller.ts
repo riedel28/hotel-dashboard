@@ -33,12 +33,9 @@ type PropertyRow = typeof propertiesTable.$inferSelect & {
 
 // Customers are an Administrator concern: everyone else sees a Property as
 // if it had none.
-function canSeeCustomer(req: Request) {
-  return (req as AuthenticatedRequest).user?.is_admin === true;
-}
-
-function toPropertyResponse(property: PropertyRow, withCustomer: boolean) {
-  const customer = withCustomer ? property.customer : null;
+function toPropertyResponse(req: Request, property: PropertyRow) {
+  const isAdmin = (req as AuthenticatedRequest).user?.is_admin === true;
+  const customer = isAdmin ? property.customer : null;
   return {
     id: property.id,
     name: property.name,
@@ -154,9 +151,8 @@ async function getProperties(req: Request, res: Response) {
     const totalCount = total;
 
     // Transform database records to match API schema (id as string)
-    const withCustomer = canSeeCustomer(req);
     const transformedProperties = properties.map((property) =>
-      toPropertyResponse(property, withCustomer)
+      toPropertyResponse(req, property)
     );
 
     res.status(200).json({
@@ -182,7 +178,7 @@ async function getPropertyById(req: Request, res: Response) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    res.status(200).json(toPropertyResponse(property, canSeeCustomer(req)));
+    res.status(200).json(toPropertyResponse(req, property));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch property' });
@@ -218,9 +214,7 @@ async function updateProperty(req: Request, res: Response) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    res
-      .status(200)
-      .json(toPropertyResponse(updatedProperty, canSeeCustomer(req)));
+    res.status(200).json(toPropertyResponse(req, updatedProperty));
   } catch (error) {
     if (isForeignKeyViolation(error)) {
       return res.status(400).json({ error: 'Customer not found' });
@@ -262,7 +256,7 @@ async function createProperty(req: Request, res: Response) {
 
     const property = await findProperty(created.id);
 
-    res.status(201).json(toPropertyResponse(property!, canSeeCustomer(req)));
+    res.status(201).json(toPropertyResponse(req, property!));
   } catch (error) {
     if (isForeignKeyViolation(error)) {
       return res.status(400).json({ error: 'Customer not found' });
