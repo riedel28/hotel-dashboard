@@ -40,7 +40,7 @@ test.describe('Property nav items', () => {
     const roomsCheckbox = page.getByRole('checkbox', { name: 'Rooms' });
     await expect(roomsCheckbox).toBeChecked();
     await roomsCheckbox.click();
-    await page.getByRole('button', { name: 'Save Changes' }).click();
+    await page.getByRole('button', { name: 'Update Property' }).click();
     await expect(page.getByText('Property updated successfully')).toBeVisible();
 
     // The item and its Start page card are gone; its page redirects to Start.

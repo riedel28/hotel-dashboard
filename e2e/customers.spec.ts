@@ -63,7 +63,7 @@ test.describe('Customers', () => {
     await page.getByRole('combobox', { name: 'Customer' }).click();
     await page.getByPlaceholder('Search customers').fill('nakatomi');
     await page.getByRole('option', { name: /Nakatomi Hotels/ }).click();
-    await page.getByRole('button', { name: 'Save Changes' }).click();
+    await page.getByRole('button', { name: 'Update Property' }).click();
     await expect(page.getByText('Property updated successfully')).toBeVisible();
 
     // The properties table names the customer and links to its page, which
