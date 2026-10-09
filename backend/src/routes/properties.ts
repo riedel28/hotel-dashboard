@@ -7,12 +7,22 @@ import {
   updatePropertySchema
 } from '../../../shared/types/properties';
 import {
+  worklogMessageSchema,
+  worklogParamsSchema
+} from '../../../shared/types/worklogs';
+import {
   createProperty,
   deleteProperty,
   getProperties,
   getPropertyById,
   updateProperty
 } from '../controllers/property-controller';
+import {
+  createWorklog,
+  deleteWorklog,
+  getWorklogs,
+  updateWorklog
+} from '../controllers/worklog-controller';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/authorization';
 import {
@@ -55,6 +65,37 @@ router.delete(
   requireAdmin,
   validateParams(propertyIdParamsSchema),
   deleteProperty
+);
+
+// Work log of a property (admin only)
+router.get(
+  '/:id/worklogs',
+  requireAdmin,
+  validateParams(propertyIdParamsSchema),
+  getWorklogs
+);
+
+router.post(
+  '/:id/worklogs',
+  requireAdmin,
+  validateParams(propertyIdParamsSchema),
+  validateBody(worklogMessageSchema),
+  createWorklog
+);
+
+router.patch(
+  '/:id/worklogs/:worklogId',
+  requireAdmin,
+  validateParams(worklogParamsSchema),
+  validateBody(worklogMessageSchema),
+  updateWorklog
+);
+
+router.delete(
+  '/:id/worklogs/:worklogId',
+  requireAdmin,
+  validateParams(worklogParamsSchema),
+  deleteWorklog
 );
 
 export default router;
