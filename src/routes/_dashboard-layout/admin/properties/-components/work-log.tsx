@@ -4,7 +4,9 @@ import {
   useQueryClient,
   useSuspenseQuery
 } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { HistoryIcon } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { createWorklog, worklogsQueryOptions } from '@/api/worklogs';
@@ -23,40 +25,41 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 
-import { WorklogCard, WorklogMessageForm } from './worklog-card';
+import { WorklogCard } from './worklog-card';
 import { dayKind, groupByDay } from './worklog-days';
+import { WorklogMessageForm } from './worklog-message-form';
 
-const HEADING = 'text-[14px] font-semibold text-muted-foreground';
 // Inset like the Details card's content. `box-content` keeps the 620px for
 // the entries themselves, with the padding outside it.
 const WRAP = 'box-content max-w-[620px] space-y-8 px-4 pt-2';
 
-function DayHeading({ day }: { day: string }) {
+function DayHeading({ date }: { date: Date }) {
   const { t, i18n } = useLingui();
-  const kind = dayKind(day);
-  // `day` is a local YYYY-MM-DD; parse it as local, not as UTC midnight.
-  const date = new Date(`${day}T00:00`);
+  const kind = dayKind(date);
   const label =
     kind === 'today'
       ? t`Today`
       : kind === 'yesterday'
         ? t`Yesterday`
-        : new Intl.DateTimeFormat(i18n.locale, {
+        : i18n.date(date, {
             day: 'numeric',
             month: 'long',
             year: kind === 'older' ? 'numeric' : undefined
-          }).format(date);
+          });
 
   return (
     <Tooltip>
-      <TooltipTrigger render={<time dateTime={day} className={HEADING} />}>
+      <TooltipTrigger
+        render={
+          <time
+            dateTime={dayjs(date).format('YYYY-MM-DD')}
+            className="text-sm font-semibold text-muted-foreground"
+          />
+        }
+      >
         {label}
       </TooltipTrigger>
-      <TooltipContent>
-        {new Intl.DateTimeFormat(i18n.locale, { dateStyle: 'full' }).format(
-          date
-        )}
-      </TooltipContent>
+      <TooltipContent>{i18n.date(date, { dateStyle: 'full' })}</TooltipContent>
     </Tooltip>
   );
 }
@@ -66,10 +69,14 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
   const queryClient = useQueryClient();
   const { data: worklogs } = useSuspenseQuery(worklogsQueryOptions(propertyId));
 
+  const [formKey, setFormKey] = useState(0);
+
   const createMutation = useMutation({
     mutationFn: (message: string) => createWorklog(propertyId, { message }),
-    onSuccess: () =>
-      queryClient.invalidateQueries(worklogsQueryOptions(propertyId)),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(worklogsQueryOptions(propertyId));
+      setFormKey((key) => key + 1);
+    },
     onError: () => {
       toast.error(t`Failed to add entry. Please try again.`);
     }
@@ -78,9 +85,12 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
   return (
     <div className={WRAP}>
       <WorklogMessageForm
+        // Remounted after each save, which clears the draft.
+        key={formKey}
         placeholder={t`Write a note about this property…`}
         submitLabel={<Trans>Add entry</Trans>}
-        onSubmit={createMutation.mutateAsync}
+        isPending={createMutation.isPending}
+        onSubmit={createMutation.mutate}
         textareaClassName="min-h-21"
       />
 
@@ -101,10 +111,10 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
           </EmptyHeader>
         </Empty>
       ) : (
-        groupByDay(worklogs).map(([day, entries]) => (
-          <section key={day} className="space-y-3">
+        groupByDay(worklogs).map(({ date, entries }) => (
+          <section key={date.getTime()} className="space-y-3">
             <h2>
-              <DayHeading day={day} />
+              <DayHeading date={date} />
             </h2>
             {entries.map((worklog) => (
               <WorklogCard key={worklog.id} worklog={worklog} />

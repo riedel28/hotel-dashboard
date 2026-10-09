@@ -1,27 +1,16 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Loader2Icon, PencilIcon, Trash2Icon } from 'lucide-react';
-import { type KeyboardEvent, type ReactNode, useState } from 'react';
+import { PencilIcon, Trash2Icon } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import {
-  deleteWorklog,
   updateWorklog,
   type Worklog,
   worklogsQueryOptions,
   type WorklogUser
 } from '@/api/worklogs';
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
@@ -29,126 +18,32 @@ import {
   DropdownMenuItem
 } from '@/components/ui/dropdown-menu';
 import { Item } from '@/components/ui/item';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import { getFullName, getInitials } from '@/utils/user';
 
-const MAX_LENGTH = 2000;
+import { DeleteWorklogDialog } from './delete-worklog-dialog';
+import { WorklogMessageForm } from './worklog-message-form';
 
-interface WorklogMessageFormProps {
-  initial?: string;
-  placeholder?: string;
-  submitLabel: ReactNode;
-  /** Resolves once the message is saved; the form then resets to `initial`. */
-  onSubmit: (message: string) => Promise<unknown>;
-  onCancel?: () => void;
-  autoFocus?: boolean;
-  textareaClassName?: string;
-}
-
-/** The one-textarea form behind both adding an entry and editing one. */
-export function WorklogMessageForm({
-  initial = '',
-  placeholder,
-  submitLabel,
-  onSubmit,
-  onCancel,
-  autoFocus,
-  textareaClassName
-}: WorklogMessageFormProps) {
-  const { t } = useLingui();
-  const [value, setValue] = useState(initial);
-  const [isPending, setIsPending] = useState(false);
-  const message = value.trim();
-  // Saving the text as it was is not an edit.
-  const canSubmit = message !== '' && message !== initial && !isPending;
-
-  const submit = async () => {
-    if (!canSubmit) return;
-    setIsPending(true);
-    try {
-      await onSubmit(message);
-      setValue(initial);
-    } catch {
-      // The caller's mutation reports the failure; keep the text for a retry.
-    } finally {
-      setIsPending(false);
-    }
-  };
-
-  const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
-      event.preventDefault();
-      void submit();
-    }
-  };
-
-  return (
-    <form
-      className="grid gap-3"
-      onSubmit={(event) => {
-        event.preventDefault();
-        void submit();
-      }}
-    >
-      <Textarea
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        onKeyDown={onKeyDown}
-        // Autofocus lands the caret at the start; editing continues at the end.
-        onFocus={({ currentTarget }) =>
-          currentTarget.setSelectionRange(value.length, value.length)
-        }
-        className={textareaClassName}
-        maxLength={MAX_LENGTH}
-        placeholder={placeholder}
-        aria-label={t`Message`}
-        disabled={isPending}
-        autoFocus={autoFocus}
-      />
-      <div className="flex justify-end gap-2">
-        {onCancel && (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={onCancel}
-            disabled={isPending}
-          >
-            <Trans>Cancel</Trans>
-          </Button>
-        )}
-        <Button type="submit" size="sm" disabled={!canSubmit}>
-          {isPending && <Loader2Icon className="animate-spin" />}
-          {submitLabel}
-        </Button>
-      </div>
-    </form>
-  );
-}
-
-const fullName = (user: WorklogUser) =>
-  [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email;
-
-const initials = (user: WorklogUser) =>
-  `${user.first_name?.trim().charAt(0) ?? ''}${user.last_name?.trim().charAt(0) ?? ''}`.toUpperCase() ||
-  user.email.charAt(0).toUpperCase();
+// A user without a name goes by their email.
+const displayName = (user: WorklogUser) => getFullName(user) || user.email;
 
 export function WorklogCard({ worklog }: { worklog: Worklog }) {
   const { t, i18n } = useLingui();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const listQuery = worklogsQueryOptions(worklog.property_id);
 
   const updateMutation = useMutation({
     mutationFn: (message: string) =>
       updateWorklog(worklog.property_id, worklog.id, { message }),
     onSuccess: async () => {
-      await queryClient.invalidateQueries(listQuery);
+      await queryClient.invalidateQueries(
+        worklogsQueryOptions(worklog.property_id)
+      );
       setIsEditing(false);
     },
     onError: () => {
@@ -156,32 +51,15 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
     }
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: () => deleteWorklog(worklog.property_id, worklog.id),
-    onSuccess: async () => {
-      setDeleteOpen(false);
-      await queryClient.invalidateQueries(listQuery);
-      toast.success(t`Entry was deleted`);
-    },
-    onError: () => {
-      toast.error(t`Failed to delete entry. Please try again.`);
-    }
-  });
-
   const author = worklog.created_by;
   const editor = worklog.updated_by;
-  const authorName = author ? fullName(author) : t`Deleted user`;
-  const createdAt = new Date(worklog.created_at);
-  const dateTime = new Intl.DateTimeFormat(i18n.locale, {
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  });
-  const editedAt = worklog.updated_at
-    ? dateTime.format(new Date(worklog.updated_at))
-    : null;
+  const authorName = author ? displayName(author) : t`Deleted user`;
+  const editedAt =
+    worklog.updated_at &&
+    i18n.date(worklog.updated_at, { dateStyle: 'medium', timeStyle: 'short' });
   // Named only when it adds something: an edit by the author goes without.
   const editorName =
-    editor && editor.id !== author?.id ? fullName(editor) : null;
+    editor && editor.id !== author?.id ? displayName(editor) : null;
 
   return (
     <>
@@ -194,7 +72,11 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
             {author?.avatar_url && (
               <AvatarImage src={author.avatar_url} alt="" />
             )}
-            <AvatarFallback>{author ? initials(author) : '?'}</AvatarFallback>
+            <AvatarFallback>
+              {author
+                ? getInitials(author) || author.email.charAt(0).toUpperCase()
+                : '?'}
+            </AvatarFallback>
           </Avatar>
           <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2">
             <span className="truncate text-sm font-medium">{authorName}</span>
@@ -207,15 +89,13 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
                   />
                 }
               >
-                {new Intl.DateTimeFormat(i18n.locale, {
-                  timeStyle: 'short'
-                }).format(createdAt)}
+                {i18n.date(worklog.created_at, { timeStyle: 'short' })}
               </TooltipTrigger>
               <TooltipContent>
-                {new Intl.DateTimeFormat(i18n.locale, {
+                {i18n.date(worklog.created_at, {
                   dateStyle: 'full',
                   timeStyle: 'short'
-                }).format(createdAt)}
+                })}
               </TooltipContent>
             </Tooltip>
             {editedAt && (
@@ -252,11 +132,11 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
 
         {isEditing ? (
           <WorklogMessageForm
-            initial={worklog.message}
+            message={worklog.message}
             submitLabel={<Trans>Update</Trans>}
-            onSubmit={updateMutation.mutateAsync}
+            isPending={updateMutation.isPending}
+            onSubmit={updateMutation.mutate}
             onCancel={() => setIsEditing(false)}
-            autoFocus
           />
         ) : (
           <p className="text-[13px] wrap-break-word whitespace-pre-wrap">
@@ -265,39 +145,12 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
         )}
       </Item>
 
-      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              <Trans>Delete entry?</Trans>
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              <Trans>
-                This will permanently delete the entry by{' '}
-                <span className="font-semibold text-foreground">
-                  {authorName}
-                </span>
-                . This action cannot be undone.
-              </Trans>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>
-              <Trans>Cancel</Trans>
-            </AlertDialogCancel>
-            <Button
-              variant="destructive"
-              onClick={() => deleteMutation.mutate()}
-              disabled={deleteMutation.isPending}
-            >
-              {deleteMutation.isPending && (
-                <Loader2Icon className="animate-spin" />
-              )}
-              <Trans>Delete</Trans>
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteWorklogDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        worklog={worklog}
+        authorName={authorName}
+      />
     </>
   );
 }

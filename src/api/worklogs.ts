@@ -74,6 +74,8 @@ export {
   createWorklog,
   deleteWorklog,
   updateWorklog,
+  type WorklogMessageData,
+  worklogMessageSchema,
   type Worklog,
   type WorklogUser
 };

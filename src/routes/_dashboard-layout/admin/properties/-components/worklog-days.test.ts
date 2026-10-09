@@ -36,11 +36,11 @@ describe('groupByDay', () => {
     ]);
 
     expect(
-      groups.map(([day, entries]) => [day, entries.map((e) => e.id)])
+      groups.map(({ date, entries }) => [date, entries.map((e) => e.id)])
     ).toEqual([
-      ['2026-03-10', [1, 2]],
-      ['2026-03-09', [3]],
-      ['2025-12-01', [4]]
+      [at(2026, 3, 10, 0), [1, 2]],
+      [at(2026, 3, 9, 0), [3]],
+      [at(2025, 12, 1, 0), [4]]
     ]);
   });
 });
