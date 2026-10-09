@@ -19,6 +19,9 @@ import type {
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 
 import { propertiesQueryOptions } from '@/api/properties';
+import { ClearFiltersButton } from '@/components/clear-filters-button';
+import { CountryName } from '@/components/country-name';
+import { FiltersBar } from '@/components/filters-bar';
 import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
@@ -28,7 +31,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { CountryFlag } from '@/components/ui/country-flag';
 import {
   DataGrid,
   DataGridContainer,
@@ -49,13 +51,10 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { StageBadge } from '@/components/ui/stage-badge';
 import { useDocumentTitle } from '@/hooks/use-document-title';
-import { getCountryName } from '@/lib/countries';
 import { cn } from '@/lib/utils';
 
 import { AddPropertyModal } from './-components/add-property-modal';
 import { DeletePropertyDialog } from './-components/delete-property-dialog';
-import { PropertiesFilters } from './-components/properties-filters';
-import { PropertyClearFilters } from './-components/property-clear-filters';
 import { PropertyCountryFilter } from './-components/property-country-filter';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
@@ -159,17 +158,10 @@ function PropertiesTable({
               <div className="truncate font-medium" title={name}>
                 {name}
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <CountryFlag
-                  code={country_code}
-                  title={country_code}
-                  className="size-3.5 shrink-0"
-                  aria-label={country_code}
-                />
-                <span className="truncate">
-                  {getCountryName(country_code, i18n.locale)}
-                </span>
-              </div>
+              <CountryName
+                code={country_code}
+                className="text-xs text-muted-foreground"
+              />
             </div>
           );
         },
@@ -450,14 +442,14 @@ function PropertiesContent() {
         }
       )}
     >
-      <PropertiesFilters>
+      <FiltersBar>
         <PropertySearch value={q} onChange={handleSearchChange} />
         <PropertyStageFilter value={stage ?? []} onChange={handleStageChange} />
         <PropertyCountryFilter
           value={country_code}
           onChange={handleCountryChange}
         />
-        <PropertyClearFilters
+        <ClearFiltersButton
           hasActiveFilters={hasActiveFilters}
           onClear={handleClearFilters}
         />
@@ -465,7 +457,7 @@ function PropertiesContent() {
           isRefreshing={propertiesQuery.isFetching}
           onRefresh={handleRefresh}
         />
-      </PropertiesFilters>
+      </FiltersBar>
       <PropertiesTable
         data={propertiesQuery.data.index}
         pageIndex={(page ?? 1) - 1}
