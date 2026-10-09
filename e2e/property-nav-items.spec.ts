@@ -65,4 +65,26 @@ test.describe('Property nav items', () => {
     await expect(page).toHaveURL('/');
     await expect(roomsLink).toHaveCount(0);
   });
+
+  test('unsaved edits survive a visit to the work log tab', async ({
+    page
+  }) => {
+    await page.goto('/admin/properties');
+    const row = page.getByRole('row').filter({ hasText: FULL_PROPERTY });
+    await row.getByRole('button', { name: 'Open menu' }).click();
+    await page.getByRole('menuitem', { name: 'Edit' }).click();
+
+    const roomsCheckbox = page.getByRole('checkbox', { name: 'Rooms' });
+    await expect(roomsCheckbox).toBeChecked();
+    await roomsCheckbox.click();
+
+    await page.getByRole('tab', { name: 'Work log' }).click();
+    await expect(page).toHaveURL(/tab=work-log/);
+    await expect(page.getByText('No entries yet')).toBeVisible();
+    await expect(roomsCheckbox).toBeHidden();
+
+    await page.getByRole('tab', { name: 'Settings' }).click();
+    await expect(page).not.toHaveURL(/tab=/);
+    await expect(roomsCheckbox).not.toBeChecked();
+  });
 });
