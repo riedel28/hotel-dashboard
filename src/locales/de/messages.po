@@ -43,6 +43,11 @@ msgstr "(öffnet in neuem Tab)"
 msgid "(optional)"
 msgstr "(optional)"
 
+#. placeholder {0}: properties.length
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:156
+msgid "{0, plural, one {# property} other {# properties}}"
+msgstr "{0, plural, one {# Unterkunft} other {# Unterkünfte}}"
+
 #. placeholder {0}: selectedOptions.length
 #: src/components/ui/data-grid-checkbox-filter.tsx:145
 msgid "{0, plural, one {# selected} other {# selected}}"
@@ -1724,8 +1729,8 @@ msgstr "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
 #~ msgstr "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut."
 
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:126
-msgid "Failed to reload properties"
-msgstr "Properties konnten nicht neu geladen werden"
+#~ msgid "Failed to reload properties"
+#~ msgstr "Properties konnten nicht neu geladen werden"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:36
 msgid "Failed to resend invitation"
@@ -2112,7 +2117,7 @@ msgstr ""
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:97
 msgid "Hotel ID"
 msgstr "Hotel ID"
 
@@ -2316,8 +2321,8 @@ msgid "Loading log…"
 msgstr ""
 
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:171
-msgid "Loading properties"
-msgstr "Properties werden geladen"
+#~ msgid "Loading properties"
+#~ msgstr "Properties werden geladen"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/room-picker.tsx:105
 msgid "Loading rooms…"
@@ -2489,7 +2494,7 @@ msgstr "Mobile App (Native)"
 msgid "Mobile App (PWA)"
 msgstr "Mobile App (PWA)"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:155
 msgid "Mock code"
 msgstr "Mock code"
 
@@ -2695,7 +2700,7 @@ msgstr "Keine Produkte in dieser Kategorie"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "Keine Produkte in dieser Kategorie. Fügen Sie Produkte zu dieser Kategorie hinzu, indem Sie unten auf die Schaltfläche klicken."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:179
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:133
 msgid "No properties found"
 msgstr "Keine Properties gefunden"
 
@@ -3253,8 +3258,8 @@ msgstr "Properties"
 #~ msgstr "Objekte neu geladen"
 
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:123
-msgid "Properties updated"
-msgstr "Properties aktualisiert"
+#~ msgid "Properties updated"
+#~ msgstr "Properties aktualisiert"
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:40
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:152
@@ -3368,14 +3373,13 @@ msgstr "Neu erzeugen"
 #~ msgid "Registration Forms"
 #~ msgstr "Meldescheine"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:198
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:218
 msgid "Reload"
 msgstr "Aktualisieren"
 
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:191
-msgid "Reload properties"
-msgstr "Properties aktualisieren"
+#~ msgid "Reload properties"
+#~ msgstr "Properties aktualisieren"
 
 #~ msgid "Reloading properties"
 #~ msgstr "Objekte werden neu geladen"
@@ -3786,7 +3790,7 @@ msgstr "Produkte durchsuchen"
 msgid "Search properties"
 msgstr "Unterkünfte suchen"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:160
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:123
 msgid "Search property"
 msgstr "Nach Property-Namen suchen"
 
@@ -3852,8 +3856,8 @@ msgstr "Eine oder mehrere Rollen zum Zuweisen auswählen"
 #~ msgid "Select one or more roles to assign."
 #~ msgstr "Wählen Sie eine oder mehrere Rollen aus."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:138
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:151
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:94
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:110
 msgid "Select property"
 msgstr "Objekt auswählen"
 
@@ -3893,7 +3897,7 @@ msgstr "Status auswählen"
 msgid "Send Invitation"
 msgstr "Einladung senden"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:133
 msgid "Send invoice via PMS"
 msgstr "Rechnung über PMS senden"
 
@@ -4197,7 +4201,7 @@ msgstr "Ansicht wechseln"
 #~ msgstr "Gewechselt zu \"{propertyName}\""
 
 #. placeholder {0}: truncatePropertyName(property.name)
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:114
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:84
 msgid "Switched to {0}"
 msgstr "Gewechselt zu {0}"
 
@@ -4312,7 +4316,7 @@ msgstr "Der Code wird auf dem Bildschirm des Geräts angezeigt"
 msgid "The device could not be added. Please try again."
 msgstr "Das Gerät konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:130
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:136
 msgid "The invoice will be sent directly to the PMS"
 msgstr "Die Rechnung wird direkt an das PMS geschickt"
 
@@ -4414,7 +4418,7 @@ msgstr "Dieses Bild ist klein und könnte nach dem Zuschneiden unscharf wirken."
 msgid "This invitation link is invalid."
 msgstr "Dieser Einladungslink ist ungültig."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:170
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr ""
 
@@ -4496,7 +4500,7 @@ msgstr "Details ein-/ausblenden"
 #~ msgid "Toggle theme"
 #~ msgstr "Design wechseln"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:109
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:115
 msgid "Token"
 msgstr "Token"
 
@@ -4685,7 +4689,7 @@ msgid "Update"
 msgstr "Aktualisieren"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:457
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:183
 msgid "Update config"
 msgstr "Konfig aktualisieren"
 
