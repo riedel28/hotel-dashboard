@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 import { type Control, Controller, useFormState } from 'react-hook-form';
 
+import { FormSection } from '@/components/form-section';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
   InputGroup,
@@ -18,13 +19,11 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-import { sectionHeadingId } from './adyen-form-toc';
 import {
   ADYEN_PAYMENT_METHODS,
   type AdyenFormData,
   type AdyenMethodId
 } from './adyen-form-types';
-import { AdyenSectionHeading } from './adyen-section-heading';
 
 interface AdyenMappingCodesSectionProps {
   control: Control<AdyenFormData>;
@@ -36,22 +35,15 @@ export function AdyenMappingCodesSection({
   const { dirtyFields, isDirty } = useFormState({ control });
 
   return (
-    <section
+    <FormSection
       id="mapping"
-      aria-labelledby={sectionHeadingId('mapping')}
-      className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
+      title={<Trans>Mapping codes</Trans>}
+      description={
+        <Trans>
+          Accounting codes reported to your PMS per payment method and channel.
+        </Trans>
+      }
     >
-      <AdyenSectionHeading
-        id={sectionHeadingId('mapping')}
-        title={<Trans>Mapping codes</Trans>}
-        description={
-          <Trans>
-            Accounting codes reported to your PMS per payment method and
-            channel.
-          </Trans>
-        }
-      />
-
       {/* Real table on desktop; rows collapse to stacked cards on
         mobile via display overrides (single set of inputs, no dupes). */}
       <Table borderless className="max-md:block">
@@ -109,7 +101,7 @@ export function AdyenMappingCodesSection({
           </p>
         )}
       </Table>
-    </section>
+    </FormSection>
   );
 }
 

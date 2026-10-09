@@ -7,6 +7,7 @@ import { inArray } from 'drizzle-orm';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { db } from '../db/pool';
 import {
+  customers,
   devices,
   guestAbcEntries,
   guests,
@@ -85,6 +86,14 @@ function buildDemoMonitoringLogs() {
 // The Overlook Hotel — the canonical demo property. Seeded Guest ABC content
 // attaches here, and demo users' selected property is pointed at it.
 const OVERLOOK_HOTEL_ID = 'cc198b13-4933-43aa-977e-dcd95fa30770';
+
+// Fixed ids, so links to a demo Customer survive a re-seed.
+const CUSTOMER_IDS = {
+  ullman: '5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a01',
+  scott: '5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a02',
+  fawlty: '5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a03',
+  bates: '5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a04'
+};
 // PIN of every demo device, claimed or not
 const DEMO_DEVICE_PIN = '123412341234';
 
@@ -283,68 +292,128 @@ async function seed() {
       }
     ]);
 
-    // Step 4: Create demo properties (famous fictional hotels)
+    // Step 4: Create demo customers — fewer than there are properties, so
+    // some own several.
+    console.log('Creating demo customers...');
+    await db.insert(customers).values([
+      {
+        id: CUSTOMER_IDS.ullman,
+        first_name: 'Stuart',
+        last_name: 'Ullman',
+        company_name: 'Overlook Hospitality Inc.',
+        email: 'stuart.ullman@example.com',
+        address_line_1: '333 Wonderview Avenue',
+        zip: '80517',
+        city: 'Estes Park',
+        country_code: 'US'
+      },
+      {
+        id: CUSTOMER_IDS.scott,
+        first_name: 'Winston',
+        last_name: 'Scott',
+        company_name: 'Continental Hotels Ltd.',
+        email: 'winston.scott@example.com',
+        address_line_1: '1 Wall Street Court',
+        address_line_2: 'Penthouse',
+        zip: '10005',
+        city: 'New York',
+        country_code: 'US'
+      },
+      {
+        id: CUSTOMER_IDS.fawlty,
+        first_name: 'Basil',
+        last_name: 'Fawlty',
+        email: 'basil.fawlty@example.com',
+        address_line_1: '16 Elwood Avenue',
+        zip: 'TQ1 2DA',
+        city: 'Torquay',
+        country_code: 'GB'
+      },
+      {
+        id: CUSTOMER_IDS.bates,
+        first_name: 'Norman',
+        last_name: 'Bates',
+        email: 'norman.bates@example.com',
+        address_line_1: '2211 Old Highway 10',
+        address_line_2: 'The house on the hill',
+        zip: '96020',
+        city: 'Fairvale',
+        country_code: 'US'
+      }
+    ]);
+
+    // Step 4a: Create demo properties (famous fictional hotels)
     console.log('Creating demo properties...');
     await db.insert(properties).values([
       {
         id: 'cc198b13-4933-43aa-977e-dcd95fa30770',
         name: 'The Overlook Hotel',
         country_code: 'US',
-        stage: 'production'
+        stage: 'production',
+        customer_id: CUSTOMER_IDS.ullman
       },
       {
         id: 'cc198b13-4933-43aa-977e-dcd95fa30771',
         name: 'The Grand Budapest Hotel',
         country_code: 'HU',
-        stage: 'production'
+        stage: 'production',
+        customer_id: CUSTOMER_IDS.scott
       },
       {
         id: '3d5552bd-389e-477d-9e9c-5016ac02632b',
         name: 'The Continental',
         country_code: 'US',
-        stage: 'production'
+        stage: 'production',
+        customer_id: CUSTOMER_IDS.scott
       },
       {
         id: '9971ceb1-708e-4bd1-a35c-f164d4ce75c2',
         name: 'Fawlty Towers',
         country_code: 'GB',
-        stage: 'production'
+        stage: 'production',
+        customer_id: CUSTOMER_IDS.fawlty
       },
       {
         id: '2fa9cbfe-c150-4edb-9feb-325e32e80da8',
         name: 'Bates Motel',
         country_code: 'US',
-        stage: 'production'
+        stage: 'production',
+        customer_id: CUSTOMER_IDS.bates
       },
       {
         id: '85e7ebb9-3ae6-4aaf-9ab0-f3b08defa220',
         name: 'Hotel Transylvania',
         country_code: 'RO',
-        stage: 'demo'
+        stage: 'demo',
+        customer_id: CUSTOMER_IDS.bates
       },
       {
         id: '30c9c7cd-8946-4079-8449-bf8ca69a226a',
         name: 'The White Lotus',
         country_code: 'IT',
-        stage: 'staging'
+        stage: 'staging',
+        customer_id: CUSTOMER_IDS.scott
       },
       {
         id: '8f4eb429-a9df-434a-977b-eb6c1f2a72e1',
         name: "Bertram's Hotel",
         country_code: 'GB',
-        stage: 'staging'
+        stage: 'staging',
+        customer_id: CUSTOMER_IDS.fawlty
       },
       {
         id: '800fec46-58b6-4878-9c79-3adfeaac714e',
         name: 'The Dolphin Hotel',
         country_code: 'US',
-        stage: 'template'
+        stage: 'template',
+        customer_id: CUSTOMER_IDS.ullman
       },
       {
         id: 'dc77fb2b-1d87-42f3-8b0b-9e1cf4b8f4a7',
         name: "Kellerman's Resort",
         country_code: 'US',
-        stage: 'demo'
+        stage: 'demo',
+        customer_id: CUSTOMER_IDS.fawlty
       }
     ]);
 

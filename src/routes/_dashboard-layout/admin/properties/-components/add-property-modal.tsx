@@ -7,7 +7,8 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   type CreatePropertyData,
-  createPropertySchema
+  createPropertySchema,
+  type PropertyCustomer
 } from 'shared/types/properties';
 import { toast } from 'sonner';
 
@@ -38,6 +39,8 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
+import { CustomerPicker } from './customer-picker';
+
 const stageValues = ['demo', 'production', 'staging', 'template'] as const;
 
 function getStageLabel(stage: string) {
@@ -53,6 +56,9 @@ function getStageLabel(stage: string) {
 export function AddPropertyModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
+  // Held beside the form: the picker works with the whole Customer, the
+  // request only sends its id.
+  const [customer, setCustomer] = React.useState<PropertyCustomer | null>(null);
 
   const form = useForm<CreatePropertyData>({
     resolver: zodResolver(createPropertySchema),
@@ -67,6 +73,7 @@ export function AddPropertyModal() {
     setIsOpen(open);
     if (!open) {
       form.reset();
+      setCustomer(null);
     }
   };
 
@@ -74,6 +81,7 @@ export function AddPropertyModal() {
     mutationFn: createProperty,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
       handleOpenChange(false);
       toast.success(t`Property created successfully`);
     },
@@ -83,7 +91,10 @@ export function AddPropertyModal() {
   });
 
   const onSubmit = (data: CreatePropertyData) => {
-    createPropertyMutation.mutate(data);
+    createPropertyMutation.mutate({
+      ...data,
+      customer_id: customer?.id ?? null
+    });
   };
 
   return (
@@ -176,6 +187,17 @@ export function AddPropertyModal() {
                   </Field>
                 )}
               />
+
+              <Field className="gap-2">
+                <FieldLabel id="new-property-customer-label">
+                  <Trans>Customer</Trans>
+                </FieldLabel>
+                <CustomerPicker
+                  value={customer}
+                  onValueChange={setCustomer}
+                  aria-labelledby="new-property-customer-label"
+                />
+              </Field>
             </FieldGroup>
           </FieldSet>
           <DialogFooter>

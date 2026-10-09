@@ -38,6 +38,10 @@ msgstr "..."
 msgid "(opens in new tab)"
 msgstr "(opens in new tab)"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:128
+msgid "(optional)"
+msgstr "(optional)"
+
 #. placeholder {0}: selectedOptions.length
 #: src/components/ui/data-grid-checkbox-filter.tsx:145
 msgid "{0, plural, one {# selected} other {# selected}}"
@@ -139,6 +143,10 @@ msgstr "401 Unauthorized — check username and password."
 msgid "401 Unauthorized — the API key was rejected."
 msgstr "401 Unauthorized — the API key was rejected."
 
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:85
+msgid "A customer with this email already exists"
+msgstr "A customer with this email already exists"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:82
 msgid "A second step at sign-in, from an app on your phone."
 msgstr "A second step at sign-in, from an app on your phone."
@@ -164,7 +172,7 @@ msgstr "Account activated!"
 #~ msgid "Account settings"
 #~ msgstr "Account settings"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:42
 msgid "Accounting codes reported to your PMS per payment method and channel."
 msgstr "Accounting codes reported to your PMS per payment method and channel."
 
@@ -198,6 +206,10 @@ msgstr "Add a tablet, phone or TV with its serial number and the PIN shown on it
 msgid "Add category"
 msgstr "Add category"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:59
+msgid "Add Customer"
+msgstr "Add Customer"
+
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:122
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:173
@@ -213,6 +225,10 @@ msgstr "Add entry"
 msgid "Add Guest"
 msgstr "Add Guest"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:65
+msgid "Add new customer"
+msgstr "Add new customer"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:90
 msgid "Add New Guest"
 msgstr "Add New Guest"
@@ -222,7 +238,7 @@ msgstr "Add New Guest"
 msgid "Add product"
 msgstr "Add product"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:95
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:106
 msgid "Add Property"
 msgstr "Add Property"
 
@@ -248,25 +264,40 @@ msgstr "Add subcategory"
 msgid "Added on {0}"
 msgstr "Added on {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:243
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:236
 msgid "Additional configuration"
 msgstr "Additional configuration"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:42
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:237
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:255
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:276
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:109
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:204
+msgid "Address"
+msgstr "Address"
+
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:35
 msgid "Address line"
 msgstr "Address line"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:69
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:180
+msgid "Address line 1"
+msgstr "Address line 1"
+
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:62
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:189
 msgid "Address line 2"
 msgstr "Address line 2"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:119
 msgid "Address line is required"
 msgstr "Address line is required"
 
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:36
+#: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:36
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:129
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:37
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:474
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:496
 msgid "Admin"
 msgstr "Admin"
 
@@ -300,7 +331,7 @@ msgstr "Administrator"
 msgid "Adults"
 msgstr "Adults"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:223
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:218
 msgid "Adyen"
 msgstr "Adyen"
 
@@ -317,6 +348,7 @@ msgstr "After entering your password you'll enter a 6-digit code from an authent
 msgid "All"
 msgstr "All"
 
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:66
 #: src/routes/_dashboard-layout/admin/properties/-components/property-country-filter.tsx:20
 msgid "All countries"
 msgstr "All countries"
@@ -357,6 +389,10 @@ msgstr "Already have an account?"
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Already have one? Any TOTP app works — just scan the QR code."
 
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:158
+msgid "An error occurred while fetching customers"
+msgstr "An error occurred while fetching customers"
+
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:128
 msgid "An error occurred while fetching devices"
 msgstr "An error occurred while fetching devices"
@@ -365,7 +401,7 @@ msgstr "An error occurred while fetching devices"
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:495
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:524
 msgid "An error occurred while fetching properties"
 msgstr "An error occurred while fetching properties"
 
@@ -390,7 +426,7 @@ msgstr "An unexpected error occurred"
 msgid "Android App"
 msgstr "Android App"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:143
 msgid "API Key"
 msgstr "API Key"
 
@@ -615,8 +651,8 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:283
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:323
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:356
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:315
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:348
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
@@ -630,7 +666,9 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:187
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:82
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:182
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 msgid "Cancel"
 msgstr "Cancel"
@@ -777,11 +815,12 @@ msgstr "Children"
 #~ msgid "Choose how this property connects to its door locks"
 #~ msgstr "Choose how this property connects to its door locks"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:112
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:105
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:204
 msgid "City"
 msgstr "City"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:133
 msgid "City is required"
 msgstr "City is required"
 
@@ -789,13 +828,13 @@ msgstr "City is required"
 msgid "Clear all"
 msgstr "Clear all"
 
+#: src/components/clear-filters-button.tsx:27
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:203
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
-#: src/routes/_dashboard-layout/admin/properties/-components/property-clear-filters.tsx:26
 msgid "Clear filters"
 msgstr "Clear filters"
 
@@ -803,11 +842,11 @@ msgstr "Clear filters"
 msgid "Clear search"
 msgstr "Clear search"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:172
 msgid "Client Key"
 msgstr "Client Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:112
 msgid "Client Key is required"
 msgstr "Client Key is required"
 
@@ -830,6 +869,10 @@ msgstr "Codes are time-based — if yours keeps failing, check that your phone's
 msgid "Columns"
 msgstr "Columns"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:156
+msgid "Company"
+msgstr "Company"
+
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:310
 #~ msgid "Company data"
 #~ msgstr "Company data"
@@ -843,7 +886,7 @@ msgstr "Completed At"
 msgid "Config updated"
 msgstr "Config updated"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:182
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:177
 msgid "Configuration updated"
 msgstr "Configuration updated"
 
@@ -878,7 +921,7 @@ msgstr "Confirm your password"
 #~ msgid "Connected"
 #~ msgstr "Connected"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:289
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:282
 msgid "Connection failed"
 msgstr "Connection failed"
 
@@ -886,13 +929,18 @@ msgstr "Connection failed"
 #~ msgid "Connection method"
 #~ msgstr "Connection method"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:287
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:280
 msgid "Connection successful"
 msgstr "Connection successful"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:109
 msgid "Connection timed out after 5000 ms — host unreachable."
 msgstr "Connection timed out after 5000 ms — host unreachable."
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:95
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:203
+msgid "Contact"
+msgstr "Contact"
 
 #: src/components/ui/password-strength-meter.tsx:26
 #~ msgid "Contains a lowercase letter"
@@ -927,7 +975,7 @@ msgstr "Copied reservation number"
 msgid "Copy"
 msgstr "Copy"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:196
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:189
 msgid "Copy Client Key"
 msgstr "Copy Client Key"
 
@@ -935,7 +983,7 @@ msgstr "Copy Client Key"
 msgid "Copy message"
 msgstr "Copy message"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:229
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:222
 msgid "Copy Public Key"
 msgstr "Copy Public Key"
 
@@ -971,14 +1019,13 @@ msgstr "Couldn't send the email. Try again."
 msgid "Couldn't start setup"
 msgstr "Couldn't start setup"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:133
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:222
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:184
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:166
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:135
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:114
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:169
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:192
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:214
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:146
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:126
 msgid "Country"
 msgstr "Country"
 
@@ -987,13 +1034,14 @@ msgstr "Country"
 #~ msgid "Country code"
 #~ msgstr "Country code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:140
 msgid "Country is required"
 msgstr "Country is required"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:171
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:232
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:193
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:88
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:215
 msgid "Create"
 msgstr "Create"
 
@@ -1006,7 +1054,11 @@ msgstr "Create an account to access the dashboard"
 #~ msgid "Create and manage registration forms, track submissions, and customize check-in processes"
 #~ msgstr "Create and manage registration forms, track submissions, and customize check-in processes"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:102
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-modal.tsx:76
+#~ msgid "Create New Customer"
+#~ msgstr "Create New Customer"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:113
 msgid "Create New Property"
 msgstr "Create New Property"
 
@@ -1026,7 +1078,7 @@ msgstr "Create New Room"
 msgid "Create the first category to start adding products."
 msgstr "Create the first category to start adding products."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:54
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form-toc.tsx:13
 msgid "Credentials"
 msgstr "Credentials"
@@ -1047,7 +1099,32 @@ msgstr "Current password is required"
 #~ msgid "Current View: {currentView}"
 #~ msgstr "Current View: {currentView}"
 
-#: src/routes/_dashboard-layout/admin/customers.tsx:12
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:192
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:218
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:193
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:192
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:183
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:208
+msgid "Customer"
+msgstr "Customer"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:43
+msgid "Customer created successfully"
+msgstr "Customer created successfully"
+
+#: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:22
+msgid "Customer Details"
+msgstr "Customer Details"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:51
+msgid "Customer updated successfully"
+msgstr "Customer updated successfully"
+
+#: src/routes/_dashboard-layout/-components/nav-items.ts:158
+#: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:42
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:115
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:135
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:144
 #: src/routes/_dashboard-layout/admin/index.tsx:25
 msgid "Customers"
 msgstr "Customers"
@@ -1084,7 +1161,6 @@ msgstr "Date"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:85
 msgid "Delete"
 msgstr "Delete"
 
@@ -1108,12 +1184,16 @@ msgstr "Delete product"
 msgid "Delete product?"
 msgstr "Delete product?"
 
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:89
+msgid "Delete Property"
+msgstr "Delete Property"
+
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:53
 msgid "Delete property?"
 msgstr "Delete property?"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:45
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:160
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:172
 msgid "Demo"
 msgstr "Demo"
 
@@ -1151,7 +1231,7 @@ msgstr "Device not found"
 msgid "Devices"
 msgstr "Devices"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:156
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:151
 msgid "Digits only (max 12)"
 msgstr "Digits only (max 12)"
 
@@ -1209,8 +1289,8 @@ msgstr "Drag to move, pinch or use the slider to zoom."
 msgid "Drop an image here or choose one. It's resized automatically, so any size is fine."
 msgstr "Drop an image here or choose one. It's resized automatically, so any size is fine."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:64
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:56
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:80
 msgid "E-com"
 msgstr "E-com"
 
@@ -1229,7 +1309,6 @@ msgstr "Each code works once"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:44
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:75
 msgid "Edit"
 msgstr "Edit"
 
@@ -1237,6 +1316,13 @@ msgstr "Edit"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/edit-category-modal.tsx:60
 #~ msgid "Edit category"
 #~ msgstr "Edit category"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:63
+#: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:48
+#: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:58
+#: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:77
+msgid "Edit Customer"
+msgstr "Edit Customer"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:199
 msgid "Edit guest"
@@ -1254,6 +1340,7 @@ msgstr "Edit product"
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:49
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:55
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:79
 msgid "Edit Property"
 msgstr "Edit Property"
 
@@ -1285,6 +1372,9 @@ msgstr "Edit user"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:115
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:141
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:165
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:230
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:242
 msgid "Email"
 msgstr "Email"
 
@@ -1365,8 +1455,8 @@ msgstr "Enter one of your unused recovery codes."
 #~ msgid "Enter page URL"
 #~ msgstr "Enter page URL"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:120
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:98
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:131
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:110
 msgid "Enter property name"
 msgstr "Enter property name"
 
@@ -1409,11 +1499,11 @@ msgstr "Enter the current code from your authenticator app"
 #~ msgid "Enter the current code from your authenticator app."
 #~ msgstr "Enter the current code from your authenticator app."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:105
 msgid "Enter the new API key"
 msgstr "Enter the new API key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:155
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:148
 msgid "Enter your API Key"
 msgstr "Enter your API Key"
 
@@ -1473,7 +1563,7 @@ msgstr "Entry <0>{0}</0> was updated"
 msgid "Entry <0>{entryTitle}</0> was deleted"
 msgstr "Entry <0>{entryTitle}</0> was deleted"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:73
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:66
 msgid "Environment"
 msgstr "Environment"
 
@@ -1574,7 +1664,11 @@ msgstr "Failed to create account. Please try again."
 msgid "Failed to create category"
 msgstr "Failed to create category"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:81
+#: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:47
+msgid "Failed to create customer"
+msgstr "Failed to create customer"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:89
 msgid "Failed to create property"
 msgstr "Failed to create property"
 
@@ -1663,6 +1757,10 @@ msgstr "Failed to send password reset email. Please try again."
 msgid "Failed to update category"
 msgstr "Failed to update category"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:55
+msgid "Failed to update customer. Please try again."
+msgstr "Failed to update customer. Please try again."
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:70
 msgid "Failed to update entry. Please try again."
 msgstr "Failed to update entry. Please try again."
@@ -1679,7 +1777,7 @@ msgstr "Failed to update product"
 msgid "Failed to update profile"
 msgstr "Failed to update profile"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:68
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:80
 msgid "Failed to update property. Please try again."
 msgstr "Failed to update property. Please try again."
 
@@ -1720,6 +1818,7 @@ msgid "Filter by reservation"
 msgstr "Filter by reservation"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:177
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:142
 msgid "First name"
 msgstr "First name"
 
@@ -1898,8 +1997,8 @@ msgid "Hello \"/_dashboard-layout/access-provider\"!"
 msgstr "Hello \"/_dashboard-layout/access-provider\"!"
 
 #: src/routes/_dashboard-layout/admin/customers.tsx:16
-msgid "Hello \"/_dashboard-layout/admin/customers\"!"
-msgstr "Hello \"/_dashboard-layout/admin/customers\"!"
+#~ msgid "Hello \"/_dashboard-layout/admin/customers\"!"
+#~ msgstr "Hello \"/_dashboard-layout/admin/customers\"!"
 
 #: src/routes/_dashboard-layout/admin/properties.tsx:16
 #~ msgid "Hello \"/_dashboard-layout/admin/properties\"!"
@@ -1996,8 +2095,10 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
+#: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:30
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:123
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:31
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:468
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:490
 msgid "Home"
 msgstr "Home"
 
@@ -2060,7 +2161,7 @@ msgstr "Infants"
 #~ msgstr "Info"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:187
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:249
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:67
 msgid "Integration Guide"
 msgstr "Integration Guide"
@@ -2074,6 +2175,7 @@ msgstr "Integrations"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-guest-modal.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:30
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:37
 msgid "Invalid email address"
 msgstr "Invalid email address"
 
@@ -2146,6 +2248,7 @@ msgid "Last hour"
 msgstr "Last hour"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:197
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:148
 msgid "Last name"
 msgstr "Last name"
 
@@ -2185,7 +2288,7 @@ msgstr "Last signal"
 #~ msgstr "Last tested at {0}"
 
 #. placeholder {0}: i18n.date(lastSavedAt, { timeStyle: 'short' })
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:307
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:299
 msgid "Last updated at {0}"
 msgstr "Last updated at {0}"
 
@@ -2206,15 +2309,15 @@ msgstr "Light"
 msgid "Link"
 msgstr "Link"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:100
 msgid "Live"
 msgstr "Live"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:231
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:226
 msgid "Live environment"
 msgstr "Live environment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:348
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:340
 msgid "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 msgstr "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 
@@ -2276,9 +2379,17 @@ msgstr "Manage hotel properties, view details, and configure settings"
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Manage orders, track shipments, view order history, and process returns efficiently"
 
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:514
+msgid "Manage properties, their stage and the customers that own them."
+msgstr "Manage properties, their stage and the customers that own them."
+
 #: src/routes/_dashboard-layout/index.tsx:35
 msgid "Manage room inventory, availability, and room type configurations"
 msgstr "Manage room inventory, availability, and room type configurations"
+
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:147
+msgid "Manage the customers that own properties and their contact details."
+msgstr "Manage the customers that own properties and their contact details."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:90
 msgid "Manage the hotel information your guests can browse, from A to Z."
@@ -2321,7 +2432,7 @@ msgstr "Manage your personal details, security and access rights."
 #~ msgstr "Manage your user roles and permissions"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form-toc.tsx:15
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:46
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:40
 msgid "Mapping codes"
 msgstr "Mapping codes"
 
@@ -2337,11 +2448,11 @@ msgstr "Mapping codes"
 msgid "Merchant account not found — check the Merchant ID."
 msgstr "Merchant account not found — check the Merchant ID."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:120
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:113
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:98
 msgid "Merchant ID is required"
 msgstr "Merchant ID is required"
 
@@ -2426,10 +2537,8 @@ msgstr "My profile"
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:84
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:114
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:93
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:142
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:157
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:125
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:105
 msgid "Name"
 msgstr "Name"
 
@@ -2499,6 +2608,18 @@ msgstr "No categories yet"
 #: src/components/ui/country-picker.tsx:129
 msgid "No country found."
 msgstr "No country found."
+
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:80
+msgid "No customer"
+msgstr "No customer"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:97
+msgid "No customer found."
+msgstr "No customer found."
+
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:105
+msgid "No customers match the filters"
+msgstr "No customers match the filters"
 
 #: src/components/ui/data-grid-table.tsx:419
 msgid "No data available"
@@ -2576,6 +2697,18 @@ msgstr "No properties found"
 #~ msgid "No properties found."
 #~ msgstr "No properties found."
 
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:472
+msgid "No properties match the filters"
+msgstr "No properties match the filters"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:130
+msgid "No properties yet."
+msgstr "No properties yet."
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:98
+#~ msgid "No properties yet. Assign this customer on a property's page."
+#~ msgstr "No properties yet. Assign this customer on a property's page."
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:103
 msgid "No response from Adyen."
 msgstr "No response from Adyen."
@@ -2610,7 +2743,8 @@ msgstr "No rooms available"
 msgid "No rooms found"
 msgstr "No rooms found"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:312
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:304
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:171
 msgid "No unsaved changes"
 msgstr "No unsaved changes"
 
@@ -2699,13 +2833,13 @@ msgstr "Open your authenticator app and scan the code below."
 #~ msgid "Opening"
 #~ msgstr "Opening"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:245
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:238
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:118
 msgid "Optional"
 msgstr "Optional"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:256
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:249
 msgid "Optional JSON or certificates passed to the Adyen SDK."
 msgstr "Optional JSON or certificates passed to the Adyen SDK."
 
@@ -2811,7 +2945,7 @@ msgstr "Passwords don't match"
 msgid "Payment"
 msgstr "Payment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:53
 msgid "Payment method"
 msgstr "Payment method"
 
@@ -2823,7 +2957,7 @@ msgid "Payment Provider"
 msgstr "Payment Provider"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form-toc.tsx:14
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:29
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:23
 msgid "Payment recipient"
 msgstr "Payment recipient"
 
@@ -2969,8 +3103,8 @@ msgstr "Port"
 msgid "Port is required"
 msgstr "Port is required"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:67
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:89
 msgid "POS"
 msgstr "POS"
 
@@ -3033,8 +3167,8 @@ msgstr "Product actions"
 msgid "Product categories"
 msgstr "Product categories"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:46
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:154
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:49
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:166
 msgid "Production"
 msgstr "Production"
 
@@ -3107,11 +3241,15 @@ msgstr "Profile updated"
 #~ msgstr "Profile updated successfully"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:157
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:288
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:298
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:120
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:205
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:43
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:460
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:480
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:488
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:482
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:502
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:511
 msgid "Properties"
 msgstr "Properties"
 
@@ -3123,16 +3261,21 @@ msgstr "Properties"
 msgid "Properties updated"
 msgstr "Properties updated"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:78
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:149
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:170
+msgid "Property"
+msgstr "Property"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:86
 msgid "Property created successfully"
 msgstr "Property created successfully"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:81
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:93
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:22
 msgid "Property Details"
 msgstr "Property Details"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:64
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:76
 msgid "Property updated successfully"
 msgstr "Property updated successfully"
 
@@ -3140,7 +3283,7 @@ msgstr "Property updated successfully"
 msgid "Protect your account with a second step"
 msgstr "Protect your account with a second step"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:216
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:209
 msgid "Public Key"
 msgstr "Public Key"
 
@@ -3248,6 +3391,10 @@ msgstr "Remove"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:49
 #~ msgid "Remove booking filter"
 #~ msgstr "Remove booking filter"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:74
+msgid "Remove customer"
+msgstr "Remove customer"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:350
 #~ msgid "Remove filter by booking {booking_nr}"
@@ -3529,8 +3676,9 @@ msgstr "SALTO"
 msgid "Save"
 msgstr "Save"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:333
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:325
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:188
 msgid "Save changes"
 msgstr "Save changes"
 
@@ -3539,7 +3687,7 @@ msgstr "Save changes"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:452
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:209
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:296
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:190
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:219
 msgid "Save Changes"
 msgstr "Save Changes"
 
@@ -3563,11 +3711,12 @@ msgstr "Save your recovery codes. You'll need them if you lose your phone, and e
 #~ msgid "Saved only when you save changes."
 #~ msgstr "Saved only when you save changes."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:331
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:323
 msgid "Saving changes"
 msgstr "Saving changes"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:305
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:297
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:169
 msgid "Saving changes…"
 msgstr "Saving changes…"
 
@@ -3595,6 +3744,11 @@ msgstr "Search categories"
 #: src/components/ui/country-picker.tsx:119
 msgid "Search country..."
 msgstr "Search country..."
+
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:57
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:87
+msgid "Search customers"
+msgstr "Search customers"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:53
 msgid "Search devices"
@@ -3653,6 +3807,10 @@ msgstr "Search rooms"
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:224
 msgid "Search users"
 msgstr "Search users"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:97
+msgid "Searching..."
+msgstr "Searching..."
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:126
 #~ msgid "Security"
@@ -3718,7 +3876,7 @@ msgstr "Select room"
 msgid "Select row"
 msgstr "Select row"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:146
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:158
 msgid "Select stage"
 msgstr "Select stage"
 
@@ -3838,6 +3996,11 @@ msgstr "Show"
 msgid "Show all"
 msgstr "Show all"
 
+#. placeholder {0}: properties.length
+#: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:103
+msgid "Show all {0} properties"
+msgstr "Show all {0} properties"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:162
 msgid "Show all logs"
 msgstr "Show all logs"
@@ -3939,16 +4102,16 @@ msgstr "Source"
 #~ msgid "Spain"
 #~ msgstr "Spain"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:154
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:133
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:165
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:145
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:24
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:204
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:215
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:220
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:231
 msgid "Stage"
 msgstr "Stage"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:47
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:157
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:50
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:169
 msgid "Staging"
 msgstr "Staging"
 
@@ -4026,11 +4189,11 @@ msgstr "Successfully logged in!"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Supported formats: JPG, PNG, GIF (max 5MB)"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:365
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:357
 msgid "Switch to Live"
 msgstr "Switch to Live"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:345
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:337
 msgid "Switch to the Live environment?"
 msgstr "Switch to the Live environment?"
 
@@ -4077,25 +4240,25 @@ msgstr "System"
 msgid "TCP connection"
 msgstr "TCP connection"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:56
 msgid "Technical connection details for your Adyen account."
 msgstr "Technical connection details for your Adyen account."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:163
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:51
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:175
 msgid "Template"
 msgstr "Template"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:96
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:89
 msgid "Test"
 msgstr "Test"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:453
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:272
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:265
 msgid "Test connection"
 msgstr "Test connection"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:233
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:228
 msgid "Test environment"
 msgstr "Test environment"
 
@@ -4107,7 +4270,7 @@ msgstr "Test provider configuration"
 #. placeholder {0}: i18n.date(lastTestResult.finishedAt, { timeStyle: 'short' })
 #. placeholder {0}: i18n.date(lastTestResult.finishedAt, { timeStyle: 'short' })
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:438
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:294
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:287
 msgid "Tested at {0}"
 msgstr "Tested at {0}"
 
@@ -4170,13 +4333,21 @@ msgstr "The device could not be added. Please try again."
 msgid "The invoice will be sent directly to the PMS"
 msgstr "The invoice will be sent directly to the PMS"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:31
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:25
 msgid "The merchant address shown on payment receipts."
 msgstr "The merchant address shown on payment receipts."
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:97
+msgid "The person we deal with, and the company they act for."
+msgstr "The person we deal with, and the company they act for."
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:105
 msgid "The PIN is incorrect"
 msgstr "The PIN is incorrect"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:122
+msgid "The properties this customer owns. Change the owner on a property's page."
+msgstr "The properties this customer owns. Change the owner on a property's page."
 
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:41
 msgid "The property {propertyName} has been deleted"
@@ -4249,6 +4420,10 @@ msgstr "This device does not exist or was removed."
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:100
 msgid "This device has already been added"
 msgstr "This device has already been added"
+
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:29
+msgid "This field is required"
+msgstr "This field is required"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:124
 msgid "This image is small, so it may look blurry once cropped."
@@ -4508,7 +4683,7 @@ msgstr "Unnamed device"
 msgid "Unpin {title} column"
 msgstr "Unpin {title} column"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:244
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
@@ -4745,6 +4920,10 @@ msgstr "What you're allowed to do in the back-office."
 #~ msgid "WhatsApp opened"
 #~ msgstr "WhatsApp opened"
 
+#: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:110
+msgid "Where the customer is registered."
+msgstr "Where the customer is registered."
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/authenticator-apps.tsx:60
 msgid "Which authenticator app should I use?"
 msgstr "Which authenticator app should I use?"
@@ -4841,7 +5020,8 @@ msgstr "Youth"
 #~ msgid "Youth count cannot be negative"
 #~ msgstr "Youth count cannot be negative"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:79
+#: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:198
 msgid "ZIP"
 msgstr "ZIP"
 
@@ -4849,7 +5029,7 @@ msgstr "ZIP"
 #~ msgid "ZIP / Postal code"
 #~ msgstr "ZIP / Postal code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:131
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:126
 msgid "ZIP / Postal code is required"
 msgstr "ZIP / Postal code is required"
 

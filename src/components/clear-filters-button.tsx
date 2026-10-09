@@ -3,15 +3,16 @@ import { XIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-interface PropertyClearFiltersProps {
+interface ClearFiltersButtonProps {
   hasActiveFilters: boolean;
   onClear: () => void;
 }
 
-export function PropertyClearFilters({
+/** Resets a table's filters; renders nothing while none is set. */
+export function ClearFiltersButton({
   hasActiveFilters,
   onClear
-}: PropertyClearFiltersProps) {
+}: ClearFiltersButtonProps) {
   if (!hasActiveFilters) {
     return null;
   }

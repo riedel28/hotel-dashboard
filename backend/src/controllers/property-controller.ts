@@ -1,15 +1,41 @@
-import { and, asc, count, desc, eq, ilike, inArray } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  getTableColumns,
+  ilike,
+  inArray,
+  sql
+} from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import {
   navItemIdSchema,
+  type PropertySortableColumn,
   type PropertyStage
 } from '../../../shared/types/properties';
 import { db } from '../db/pool';
-import { properties as propertiesTable } from '../db/schema';
-import { escapeLikePattern } from '../utils/sql';
+import {
+  customers as customersTable,
+  properties as propertiesTable
+} from '../db/schema';
+import type { AuthenticatedRequest } from '../middleware/auth';
+import { escapeLikePattern, isForeignKeyViolation } from '../utils/sql';
 
-function toPropertyResponse(property: typeof propertiesTable.$inferSelect) {
+type PropertyRow = typeof propertiesTable.$inferSelect & {
+  customer: Pick<
+    typeof customersTable.$inferSelect,
+    'id' | 'first_name' | 'last_name' | 'company_name'
+  > | null;
+};
+
+// Customers are an Administrator concern: everyone else sees a Property as
+// if it had none.
+function toPropertyResponse(req: Request, property: PropertyRow) {
+  const isAdmin = (req as AuthenticatedRequest).user?.is_admin === true;
+  const customer = isAdmin ? property.customer : null;
   return {
     id: property.id,
     name: property.name,
@@ -19,8 +45,22 @@ function toPropertyResponse(property: typeof propertiesTable.$inferSelect) {
     // the client parses the response strictly.
     disabled_nav_items: navItemIdSchema.options.filter((id) =>
       property.disabled_nav_items.includes(id)
-    )
+    ),
+    customer_id: customer?.id ?? null,
+    customer: customer && {
+      id: customer.id,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      company_name: customer.company_name
+    }
   };
+}
+
+function findProperty(id: string) {
+  return db.query.properties.findFirst({
+    where: eq(propertiesTable.id, id),
+    with: { customer: true }
+  });
 }
 
 async function getProperties(req: Request, res: Response) {
@@ -54,7 +94,7 @@ async function getProperties(req: Request, res: Response) {
     const offset = (pageNum - 1) * perPageNum;
 
     // Build dynamic orderBy clause
-    const sortColumn = sort_by as 'name' | 'country_code' | 'stage' | undefined;
+    const sortColumn = sort_by as PropertySortableColumn | undefined;
     const sortDirection = sort_order as 'asc' | 'desc' | undefined;
 
     let orderByClause;
@@ -70,6 +110,10 @@ async function getProperties(req: Request, res: Response) {
         case 'stage':
           orderByColumn = propertiesTable.stage;
           break;
+        case 'customer':
+          // Same text as customerLabel(); Properties without one sort last.
+          orderByColumn = sql`coalesce(${customersTable.company_name}, ${customersTable.first_name} || ' ' || ${customersTable.last_name})`;
+          break;
       }
       orderByClause =
         sortDirection === 'desc' ? desc(orderByColumn) : asc(orderByColumn);
@@ -77,8 +121,20 @@ async function getProperties(req: Request, res: Response) {
 
     // Get paginated properties
     const query = db
-      .select()
+      .select({
+        ...getTableColumns(propertiesTable),
+        customer: {
+          id: customersTable.id,
+          first_name: customersTable.first_name,
+          last_name: customersTable.last_name,
+          company_name: customersTable.company_name
+        }
+      })
       .from(propertiesTable)
+      .leftJoin(
+        customersTable,
+        eq(propertiesTable.customer_id, customersTable.id)
+      )
       .where(searchCondition)
       .limit(perPageNum)
       .offset(offset);
@@ -95,7 +151,9 @@ async function getProperties(req: Request, res: Response) {
     const totalCount = total;
 
     // Transform database records to match API schema (id as string)
-    const transformedProperties = properties.map(toPropertyResponse);
+    const transformedProperties = properties.map((property) =>
+      toPropertyResponse(req, property)
+    );
 
     res.status(200).json({
       index: transformedProperties,
@@ -114,15 +172,13 @@ async function getPropertyById(req: Request, res: Response) {
   try {
     const { id } = req.params;
 
-    const property = await db.query.properties.findFirst({
-      where: eq(propertiesTable.id, id)
-    });
+    const property = await findProperty(id);
 
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    res.status(200).json(toPropertyResponse(property));
+    res.status(200).json(toPropertyResponse(req, property));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch property' });
@@ -132,26 +188,37 @@ async function getPropertyById(req: Request, res: Response) {
 async function updateProperty(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const { name, country_code, stage, disabled_nav_items } = req.body ?? {};
+    const { name, country_code, stage, disabled_nav_items, customer_id } =
+      req.body ?? {};
 
+    // customer_id: null unassigns the Customer, so only undefined is dropped.
     const updates = Object.fromEntries(
-      Object.entries({ name, country_code, stage, disabled_nav_items }).filter(
-        ([, v]) => v !== undefined
-      )
+      Object.entries({
+        name,
+        country_code,
+        stage,
+        disabled_nav_items,
+        customer_id
+      }).filter(([, v]) => v !== undefined)
     );
 
-    const [updatedProperty] = await db
+    const [updated] = await db
       .update(propertiesTable)
       .set(updates)
       .where(eq(propertiesTable.id, id))
-      .returning();
+      .returning({ id: propertiesTable.id });
+
+    const updatedProperty = updated && (await findProperty(updated.id));
 
     if (!updatedProperty) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    res.status(200).json(toPropertyResponse(updatedProperty));
+    res.status(200).json(toPropertyResponse(req, updatedProperty));
   } catch (error) {
+    if (isForeignKeyViolation(error)) {
+      return res.status(400).json({ error: 'Customer not found' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Failed to update property' });
   }
@@ -180,15 +247,20 @@ async function deleteProperty(req: Request, res: Response) {
 
 async function createProperty(req: Request, res: Response) {
   try {
-    const { name, country_code, stage } = req.body;
+    const { name, country_code, stage, customer_id } = req.body;
 
     const [created] = await db
       .insert(propertiesTable)
-      .values({ name, country_code, stage })
-      .returning();
+      .values({ name, country_code, stage, customer_id })
+      .returning({ id: propertiesTable.id });
 
-    res.status(201).json(toPropertyResponse(created));
+    const property = await findProperty(created.id);
+
+    res.status(201).json(toPropertyResponse(req, property!));
   } catch (error) {
+    if (isForeignKeyViolation(error)) {
+      return res.status(400).json({ error: 'Customer not found' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Failed to create property' });
   }

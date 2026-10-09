@@ -2,7 +2,11 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import type { NavItemId, Property } from 'shared/types/properties';
+import type {
+  NavItemId,
+  Property,
+  PropertyCustomer
+} from 'shared/types/properties';
 import { toast } from 'sonner';
 
 import { updatePropertyById } from '@/api/properties';
@@ -25,6 +29,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
+import { CustomerPicker } from './customer-picker';
 import { NavItemsField } from './nav-items-field';
 
 interface EditPropertyFormData {
@@ -32,6 +37,7 @@ interface EditPropertyFormData {
   country_code: string;
   stage: Property['stage'];
   disabled_nav_items: NavItemId[];
+  customer: PropertyCustomer | null;
 }
 
 interface EditPropertyFormProps {
@@ -51,16 +57,22 @@ export function EditPropertyForm({
       name: propertyData.name,
       country_code: propertyData.country_code,
       stage: propertyData.stage,
-      disabled_nav_items: propertyData.disabled_nav_items
+      disabled_nav_items: propertyData.disabled_nav_items,
+      customer: propertyData.customer
     }
   });
 
   const updatePropertyMutation = useMutation({
-    mutationFn: (data: EditPropertyFormData) =>
-      updatePropertyById(propertyId, data),
+    mutationFn: ({ customer, ...data }: EditPropertyFormData) =>
+      updatePropertyById(propertyId, {
+        ...data,
+        customer_id: customer?.id ?? null
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
       queryClient.invalidateQueries({ queryKey: ['properties', propertyId] });
+      // Their property counts and lists changed too.
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
       toast.success(t`Property updated successfully`);
     },
     onError: (error) => {
@@ -167,6 +179,23 @@ export function EditPropertyForm({
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
+                name="customer"
+                render={({ field }) => (
+                  <Field className="gap-2">
+                    <FieldLabel id="property-customer-label">
+                      <Trans>Customer</Trans>
+                    </FieldLabel>
+                    <CustomerPicker
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      aria-labelledby="property-customer-label"
+                    />
                   </Field>
                 )}
               />

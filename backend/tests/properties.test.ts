@@ -1,8 +1,12 @@
+import { eq } from 'drizzle-orm';
 import request from 'supertest';
 
 import app from '../src/app';
 import { db } from '../src/db/pool';
-import { properties as propertiesTable } from '../src/db/schema';
+import {
+  customers as customersTable,
+  properties as propertiesTable
+} from '../src/db/schema';
 import { createTestUser } from './helpers/db-helpers';
 
 describe('Properties API', () => {
@@ -234,6 +238,136 @@ describe('Properties API', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({ disabled_nav_items: ['rooms'] })
         .expect(403);
+    });
+  });
+
+  describe('customer of a property', () => {
+    async function setup() {
+      const { token } = await createTestUser({ is_admin: true });
+      const [customer] = await db
+        .insert(customersTable)
+        .values({
+          first_name: 'Winston',
+          last_name: 'Scott',
+          company_name: 'Continental Hotels Ltd.',
+          email: 'winston@example.com',
+          address_line_1: '1 Wall Street Court',
+          zip: '10005',
+          city: 'New York',
+          country_code: 'US'
+        })
+        .returning();
+      const [property] = await db.select().from(propertiesTable).limit(1);
+      return { token, customer, property };
+    }
+
+    test('assigns and unassigns a customer', async () => {
+      const { token, customer, property } = await setup();
+
+      const assigned = await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ customer_id: customer.id })
+        .expect(200);
+
+      expect(assigned.body.customer_id).toBe(customer.id);
+      expect(assigned.body.customer).toEqual({
+        id: customer.id,
+        first_name: 'Winston',
+        last_name: 'Scott',
+        company_name: 'Continental Hotels Ltd.'
+      });
+
+      const unassigned = await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ customer_id: null })
+        .expect(200);
+
+      expect(unassigned.body.customer_id).toBeNull();
+      expect(unassigned.body.customer).toBeNull();
+    });
+
+    test('leaves the customer alone when another field is updated', async () => {
+      const { token, customer, property } = await setup();
+      await db.update(propertiesTable).set({ customer_id: customer.id });
+
+      const response = await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ name: 'Renamed' })
+        .expect(200);
+
+      expect(response.body.customer_id).toBe(customer.id);
+    });
+
+    test('creates a property with a customer', async () => {
+      const { token, customer } = await setup();
+
+      const response = await request(app)
+        .post('/api/properties')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'The Continental',
+          country_code: 'US',
+          stage: 'production',
+          customer_id: customer.id
+        })
+        .expect(201);
+
+      expect(response.body.customer_id).toBe(customer.id);
+    });
+
+    test('rejects a customer that does not exist', async () => {
+      const { token, property } = await setup();
+
+      await request(app)
+        .patch(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ customer_id: 'cc198b13-4933-43aa-977e-dcd95fa30770' })
+        .expect(400);
+    });
+
+    test('lists the customer for an admin and sorts by it', async () => {
+      const { token, customer, property } = await setup();
+      await db
+        .update(propertiesTable)
+        .set({ customer_id: customer.id })
+        .where(eq(propertiesTable.id, property.id));
+
+      const response = await request(app)
+        .get('/api/properties?sort_by=customer')
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      expect(response.body.index[0].id).toBe(property.id);
+      expect(response.body.index[0].customer.company_name).toBe(
+        'Continental Hotels Ltd.'
+      );
+      expect(response.body.index[1].customer).toBeNull();
+    });
+
+    test('hides the customer from a non-admin', async () => {
+      const { customer, property } = await setup();
+      await db.update(propertiesTable).set({ customer_id: customer.id });
+
+      const one = await request(app)
+        .get(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      expect(one.body.customer_id).toBeNull();
+      expect(one.body.customer).toBeNull();
+
+      const list = await request(app)
+        .get('/api/properties')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      expect(
+        list.body.index.every(
+          (p: { customer: unknown; customer_id: unknown }) =>
+            p.customer === null && p.customer_id === null
+        )
+      ).toBe(true);
     });
   });
 });

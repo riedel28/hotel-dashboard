@@ -7,13 +7,21 @@ import {
   type SortingState,
   useTable
 } from '@tanstack/react-table';
-import { PenSquareIcon, Trash2Icon } from 'lucide-react';
+import { PencilIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import type { Property, PropertyStage } from 'shared/types/properties';
+import { customerLabel } from 'shared/types/customers';
+import type {
+  Property,
+  PropertySortableColumn,
+  PropertyStage
+} from 'shared/types/properties';
 import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 
 import { propertiesQueryOptions } from '@/api/properties';
+import { ClearFiltersButton } from '@/components/clear-filters-button';
+import { CountryName } from '@/components/country-name';
+import { FiltersBar } from '@/components/filters-bar';
 import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
@@ -23,7 +31,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { CountryFlag } from '@/components/ui/country-flag';
 import {
   DataGrid,
   DataGridContainer,
@@ -44,13 +51,10 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { StageBadge } from '@/components/ui/stage-badge';
 import { useDocumentTitle } from '@/hooks/use-document-title';
-import { getCountryName } from '@/lib/countries';
 import { cn } from '@/lib/utils';
 
 import { AddPropertyModal } from './-components/add-property-modal';
 import { DeletePropertyDialog } from './-components/delete-property-dialog';
-import { PropertiesFilters } from './-components/properties-filters';
-import { PropertyClearFilters } from './-components/property-clear-filters';
 import { PropertyCountryFilter } from './-components/property-country-filter';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
@@ -62,7 +66,7 @@ function RowActions({ row }: { row: { original: Property } }) {
     <>
       <DropdownMenu>
         <DataGridRowActions />
-        <DropdownMenuContent align="end" className="w-35">
+        <DropdownMenuContent align="end" className="w-auto min-w-0">
           <DropdownMenuItem
             render={(props) => (
               <RouterLink
@@ -71,8 +75,8 @@ function RowActions({ row }: { row: { original: Property } }) {
                 params={{ propertyId: row.original.id }}
                 preload="intent"
               >
-                <PenSquareIcon className="mr-2 h-4 w-4" />
-                <Trans>Edit</Trans>
+                <PencilIcon className="mr-2 h-4 w-4" />
+                <Trans>Edit Property</Trans>
               </RouterLink>
             )}
           />
@@ -82,7 +86,7 @@ function RowActions({ row }: { row: { original: Property } }) {
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash2Icon className="mr-2 h-4 w-4" />
-            <Trans>Delete</Trans>
+            <Trans>Delete Property</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -97,6 +101,8 @@ function RowActions({ row }: { row: { original: Property } }) {
 }
 
 interface PropertiesTableProps {
+  /** Shown in place of the rows when there are none. */
+  emptyMessage?: React.ReactNode;
   data: Property[];
   isLoading?: boolean;
   pageIndex?: number;
@@ -115,6 +121,7 @@ interface PropertiesTableProps {
 }
 
 function PropertiesTable({
+  emptyMessage,
   data,
   isLoading = false,
   pageIndex = 0,
@@ -139,22 +146,28 @@ function PropertiesTable({
         id: 'name',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Name`}
+            title={t`Property`}
             visibility={true}
             column={column}
           />
         ),
-        cell: (info) => {
-          const name = info.getValue() as string;
+        cell: ({ row }) => {
+          const { name, country_code } = row.original;
           return (
-            <span className="line-clamp-1" title={name}>
-              {name}
-            </span>
+            <div className="min-w-0">
+              <div className="truncate font-medium" title={name}>
+                {name}
+              </div>
+              <CountryName
+                code={country_code}
+                className="text-xs text-muted-foreground"
+              />
+            </div>
           );
         },
         meta: {
-          skeleton: <Skeleton className="h-6 w-40" />,
-          headerTitle: t`Name`
+          skeleton: <Skeleton className="h-8 w-40" />,
+          headerTitle: t`Property`
         },
         size: 300,
         enableSorting: true,
@@ -162,36 +175,39 @@ function PropertiesTable({
         enableResizing: true
       },
       {
-        accessorKey: 'country_code',
-        id: 'country_code',
+        id: 'customer',
+        accessorFn: (property) =>
+          property.customer ? customerLabel(property.customer) : '',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Country`}
+            title={t`Customer`}
             visibility={true}
             column={column}
           />
         ),
         cell: ({ row }) => {
-          const countryCode = row.original.country_code;
+          const customer = row.original.customer;
+          if (!customer) {
+            return <span className="text-muted-foreground">—</span>;
+          }
+          const label = customerLabel(customer);
           return (
-            <div className="flex items-center gap-2">
-              <CountryFlag
-                code={countryCode}
-                title={countryCode}
-                className="size-4"
-                aria-label={countryCode}
-              />
-              <span className="text-foreground">
-                {getCountryName(countryCode, i18n.locale)}
-              </span>
-            </div>
+            <RouterLink
+              to="/admin/customers/$customerId"
+              params={{ customerId: customer.id }}
+              preload="intent"
+              className="line-clamp-1 underline-offset-4 hover:underline"
+              title={label}
+            >
+              {label}
+            </RouterLink>
           );
         },
         meta: {
-          skeleton: <Skeleton className="h-6 w-24" />,
-          headerTitle: t`Country`
+          skeleton: <Skeleton className="h-6 w-32" />,
+          headerTitle: t`Customer`
         },
-        size: 150,
+        size: 220,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -279,6 +295,7 @@ function PropertiesTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
+      emptyMessage={emptyMessage}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer>
@@ -376,7 +393,7 @@ function PropertiesContent() {
         search: (prev) => ({
           ...prev,
           page: 1,
-          sort_by: firstSort.id as 'name' | 'country_code' | 'stage',
+          sort_by: firstSort.id as PropertySortableColumn,
           sort_order: firstSort.desc ? ('desc' as const) : ('asc' as const)
         })
       });
@@ -425,14 +442,14 @@ function PropertiesContent() {
         }
       )}
     >
-      <PropertiesFilters>
+      <FiltersBar>
         <PropertySearch value={q} onChange={handleSearchChange} />
         <PropertyStageFilter value={stage ?? []} onChange={handleStageChange} />
         <PropertyCountryFilter
           value={country_code}
           onChange={handleCountryChange}
         />
-        <PropertyClearFilters
+        <ClearFiltersButton
           hasActiveFilters={hasActiveFilters}
           onClear={handleClearFilters}
         />
@@ -440,7 +457,7 @@ function PropertiesContent() {
           isRefreshing={propertiesQuery.isFetching}
           onRefresh={handleRefresh}
         />
-      </PropertiesFilters>
+      </FiltersBar>
       <PropertiesTable
         data={propertiesQuery.data.index}
         pageIndex={(page ?? 1) - 1}
@@ -450,6 +467,11 @@ function PropertiesContent() {
         onPaginationChange={handlePaginationChange}
         sorting={sorting}
         onSortingChange={handleSortingChange}
+        emptyMessage={
+          hasActiveFilters ? (
+            <Trans>No properties match the filters</Trans>
+          ) : undefined
+        }
       />
     </div>
   );
@@ -483,10 +505,17 @@ function PropertiesPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Properties</Trans>
-        </h1>
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-xl font-bold">
+            <Trans>Properties</Trans>
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            <Trans>
+              Manage properties, their stage and the customers that own them.
+            </Trans>
+          </p>
+        </div>
         <AddPropertyModal />
       </div>
 
