@@ -28,7 +28,9 @@ test.describe('Customers', () => {
     await dialog.getByLabel('Address line 1').fill('2121 Avenue of the Stars');
     await dialog.getByLabel('ZIP').fill('90067');
     await dialog.getByLabel('City').fill('Los Angeles');
-    await dialog.getByRole('button', { name: 'Create' }).click();
+    // Submitted from the keyboard: in a dev build the router devtools badge
+    // sits on top of the drawer's Create button.
+    await dialog.getByLabel('City').press('Enter');
 
     await expect(page.getByText('Customer created successfully')).toBeVisible();
     const customerRow = page
@@ -45,11 +47,12 @@ test.describe('Customers', () => {
     await dialog.getByLabel('Address line 1').fill('1 Wall Street');
     await dialog.getByLabel('ZIP').fill('10005');
     await dialog.getByLabel('City').fill('New York');
-    await dialog.getByRole('button', { name: 'Create' }).click();
+    await dialog.getByLabel('City').press('Enter');
     await expect(
       dialog.getByText('A customer with this email already exists')
     ).toBeVisible();
-    await dialog.getByRole('button', { name: 'Cancel' }).click();
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
 
     // The property is handed over to the new customer.
     await page.goto('/admin/properties');
