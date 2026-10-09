@@ -1241,6 +1241,10 @@ msgstr "Desc"
 msgid "Description"
 msgstr "Description"
 
+#: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:88
+msgid "Details"
+msgstr "Details"
+
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:89
 msgid "Device added"
 msgstr "Device added"
@@ -4042,8 +4046,8 @@ msgid "Set your password to activate your account"
 msgstr "Set your password to activate your account"
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:88
-msgid "Settings"
-msgstr "Settings"
+#~ msgid "Settings"
+#~ msgstr "Settings"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:56
 msgid "Setup"
