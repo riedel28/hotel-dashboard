@@ -1,5 +1,6 @@
 import {
   and,
+  arrayOverlaps,
   asc,
   count,
   desc,
@@ -13,6 +14,8 @@ import type { Request, Response } from 'express';
 
 import {
   navItemIdSchema,
+  type PropertyOption,
+  propertyOptionSchema,
   type PropertySortableColumn,
   type PropertyStage
 } from '../../../shared/types/properties';
@@ -46,6 +49,10 @@ function toPropertyResponse(req: Request, property: PropertyRow) {
     disabled_nav_items: navItemIdSchema.options.filter((id) =>
       property.disabled_nav_items.includes(id)
     ),
+    options: propertyOptionSchema.options.filter((id) =>
+      property.options.includes(id)
+    ),
+    pwa_domain: property.pwa_domain,
     customer_id: customer?.id ?? null,
     customer: customer && {
       id: customer.id,
@@ -65,8 +72,16 @@ function findProperty(id: string) {
 
 async function getProperties(req: Request, res: Response) {
   try {
-    const { page, per_page, q, stage, country_code, sort_by, sort_order } =
-      req.query;
+    const {
+      page,
+      per_page,
+      q,
+      stage,
+      country_code,
+      options,
+      sort_by,
+      sort_order
+    } = req.query;
 
     const conditions = [];
 
@@ -84,6 +99,11 @@ async function getProperties(req: Request, res: Response) {
 
     if (country_code) {
       conditions.push(eq(propertiesTable.country_code, country_code as string));
+    }
+
+    const selectedOptions = (options ?? []) as PropertyOption[];
+    if (selectedOptions.length > 0) {
+      conditions.push(arrayOverlaps(propertiesTable.options, selectedOptions));
     }
 
     const searchCondition =
@@ -188,8 +208,19 @@ async function getPropertyById(req: Request, res: Response) {
 async function updateProperty(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const { name, country_code, stage, disabled_nav_items, customer_id } =
-      req.body ?? {};
+    const {
+      name,
+      country_code,
+      stage,
+      disabled_nav_items,
+      options,
+      customer_id
+    } = req.body ?? {};
+    // No PWA, no domain: it is dropped along with the option.
+    const pwa_domain =
+      options && !options.includes('mobile_app_pwa')
+        ? null
+        : req.body?.pwa_domain;
 
     // customer_id: null unassigns the Customer, so only undefined is dropped.
     const updates = Object.fromEntries(
@@ -198,6 +229,8 @@ async function updateProperty(req: Request, res: Response) {
         country_code,
         stage,
         disabled_nav_items,
+        options,
+        pwa_domain,
         customer_id
       }).filter(([, v]) => v !== undefined)
     );

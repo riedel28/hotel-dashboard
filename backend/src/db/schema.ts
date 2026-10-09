@@ -182,6 +182,13 @@ export const properties = pgTable(
       .array()
       .notNull()
       .default(sql`'{}'::text[]`),
+    // Solutions the Property has booked, see propertyOptionSchema.
+    options: text('options')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
+    // Set exactly when `options` has mobile_app_pwa.
+    pwa_domain: text('pwa_domain'),
     // Null for a Property nobody owns yet (templates, fresh demos). RESTRICT:
     // a Customer that still owns Properties cannot be deleted.
     customer_id: uuid('customer_id').references(() => customers.id, {

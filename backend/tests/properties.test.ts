@@ -241,6 +241,126 @@ describe('Properties API', () => {
     });
   });
 
+  describe('options of a property', () => {
+    async function setup() {
+      const { token } = await createTestUser({ is_admin: true });
+      const [property, other] = await db
+        .select()
+        .from(propertiesTable)
+        .limit(2);
+      const patch = (body: object, id = property.id) =>
+        request(app)
+          .patch(`/api/properties/${id}`)
+          .set('Authorization', `Bearer ${token}`)
+          .send(body);
+      return { property, other, patch };
+    }
+
+    test('defaults to no options and no PWA domain', async () => {
+      const { property } = await setup();
+
+      const response = await request(app)
+        .get(`/api/properties/${property.id}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.options).toEqual([]);
+      expect(response.body.pwa_domain).toBeNull();
+    });
+
+    test('saves options', async () => {
+      const { patch } = await setup();
+
+      const response = await patch({
+        options: ['rsx_api', 'messaging_sms', 'rsx_api']
+      }).expect(200);
+
+      expect(response.body.options).toEqual(['rsx_api', 'messaging_sms']);
+    });
+
+    test('rejects an unknown option', async () => {
+      const { patch } = await setup();
+      await patch({ options: ['rsx_api', 'not-an-option'] }).expect(400);
+    });
+
+    test('requires a PWA domain with Mobile App (PWA)', async () => {
+      const { patch } = await setup();
+
+      await patch({ options: ['mobile_app_pwa'] }).expect(400);
+      await patch({ options: ['mobile_app_pwa'], pwa_domain: null }).expect(
+        400
+      );
+      await patch({
+        options: ['mobile_app_pwa'],
+        pwa_domain: 'https://app.example.com/start'
+      }).expect(400);
+
+      const response = await patch({
+        options: ['mobile_app_pwa'],
+        pwa_domain: '  App.Example.com '
+      }).expect(200);
+      expect(response.body.pwa_domain).toBe('app.example.com');
+    });
+
+    test('rejects a PWA domain sent without options', async () => {
+      const { patch } = await setup();
+      await patch({ pwa_domain: 'app.example.com' }).expect(400);
+    });
+
+    test('drops the PWA domain when Mobile App (PWA) is switched off', async () => {
+      const { patch } = await setup();
+      await patch({
+        options: ['mobile_app_pwa', 'rsx_api'],
+        pwa_domain: 'app.example.com'
+      }).expect(200);
+
+      // Even when the client still sends the domain along.
+      const response = await patch({
+        options: ['rsx_api'],
+        pwa_domain: 'app.example.com'
+      }).expect(200);
+
+      expect(response.body.options).toEqual(['rsx_api']);
+      expect(response.body.pwa_domain).toBeNull();
+    });
+
+    test('keeps the PWA domain when another field is updated', async () => {
+      const { patch } = await setup();
+      await patch({
+        options: ['mobile_app_pwa'],
+        pwa_domain: 'app.example.com'
+      }).expect(200);
+
+      const response = await patch({ name: 'Renamed' }).expect(200);
+
+      expect(response.body.options).toEqual(['mobile_app_pwa']);
+      expect(response.body.pwa_domain).toBe('app.example.com');
+    });
+
+    test('filters by any of the given options', async () => {
+      const { property, other, patch } = await setup();
+      await patch({ options: ['rsx_api', 'messaging_sms'] }).expect(200);
+      await patch({ options: ['messaging_whatsapp'] }, other.id).expect(200);
+
+      const list = (options: string) =>
+        request(app)
+          .get(`/api/properties?options=${options}`)
+          .set('Authorization', `Bearer ${authToken}`);
+
+      const one = await list('rsx_api').expect(200);
+      expect(one.body.total).toBe(1);
+      expect(one.body.index[0].id).toBe(property.id);
+
+      const either = await list('messaging_sms,messaging_whatsapp').expect(200);
+      expect(either.body.total).toBe(2);
+
+      const none = await list('tv_guest_directory').expect(200);
+      expect(none.body.total).toBe(0);
+
+      await list('not-an-option').expect(400);
+    });
+  });
+
   describe('customer of a property', () => {
     async function setup() {
       const { token } = await createTestUser({ is_admin: true });

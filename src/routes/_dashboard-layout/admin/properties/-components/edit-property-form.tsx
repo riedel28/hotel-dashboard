@@ -2,10 +2,12 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import type {
-  NavItemId,
-  Property,
-  PropertyCustomer
+import {
+  type NavItemId,
+  type Property,
+  type PropertyCustomer,
+  type PropertyOption,
+  pwaDomainSchema
 } from 'shared/types/properties';
 import { toast } from 'sonner';
 
@@ -15,6 +17,7 @@ import { type NavSection, SectionNav } from '@/components/section-nav';
 import { StickyCardFooter } from '@/components/sticky-card-footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Field,
@@ -23,6 +26,12 @@ import {
   FieldLabel
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText
+} from '@/components/ui/input-group';
 import {
   Select,
   SelectContent,
@@ -34,12 +43,15 @@ import { Separator } from '@/components/ui/separator';
 
 import { CustomerPicker } from './customer-picker';
 import { NavItemsField } from './nav-items-field';
+import { propertyOptionLabels, propertyOptions } from './property-options';
 
 interface EditPropertyFormData {
   name: string;
   country_code: string;
   stage: Property['stage'];
   disabled_nav_items: NavItemId[];
+  options: PropertyOption[];
+  pwa_domain: string;
   customer: PropertyCustomer | null;
 }
 
@@ -61,14 +73,18 @@ export function EditPropertyForm({
       country_code: propertyData.country_code,
       stage: propertyData.stage,
       disabled_nav_items: propertyData.disabled_nav_items,
+      options: propertyData.options,
+      pwa_domain: propertyData.pwa_domain ?? '',
       customer: propertyData.customer
     }
   });
 
   const updatePropertyMutation = useMutation({
-    mutationFn: ({ customer, ...data }: EditPropertyFormData) =>
+    mutationFn: ({ customer, pwa_domain, ...data }: EditPropertyFormData) =>
       updatePropertyById(propertyId, {
         ...data,
+        // The field keeps its text while PWA is unchecked, the server doesn't.
+        pwa_domain: data.options.includes('mobile_app_pwa') ? pwa_domain : null,
         customer_id: customer?.id ?? null
       }),
     onSuccess: () => {
@@ -84,6 +100,7 @@ export function EditPropertyForm({
     }
   });
 
+  const hasPwa = form.watch('options').includes('mobile_app_pwa');
   const isDirty = form.formState.isDirty;
   const isSaving = updatePropertyMutation.isPending;
 
@@ -246,6 +263,104 @@ export function EditPropertyForm({
               <Separator />
 
               <FormSection
+                id="solutions"
+                title={<Trans>Solutions</Trans>}
+                description={<Trans>What this property has booked.</Trans>}
+              >
+                <FieldGroup className="gap-4">
+                  <Controller
+                    control={form.control}
+                    name="options"
+                    render={({ field }) => (
+                      <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+                        {propertyOptions.map((option) => (
+                          <Field
+                            key={option}
+                            orientation="horizontal"
+                            className="gap-2"
+                          >
+                            <Checkbox
+                              id={`option-${option}`}
+                              checked={field.value.includes(option)}
+                              onCheckedChange={(checked) =>
+                                field.onChange(
+                                  // Catalog order, whatever the click order.
+                                  propertyOptions.filter((id) =>
+                                    id === option
+                                      ? checked
+                                      : field.value.includes(id)
+                                  )
+                                )
+                              }
+                            />
+                            <FieldLabel
+                              htmlFor={`option-${option}`}
+                              className="cursor-pointer text-sm font-normal"
+                            >
+                              {t(propertyOptionLabels[option])}
+                            </FieldLabel>
+                          </Field>
+                        ))}
+                      </div>
+                    )}
+                  />
+
+                  {hasPwa && (
+                    <Controller
+                      control={form.control}
+                      name="pwa_domain"
+                      rules={{
+                        validate: (value) =>
+                          !value.trim()
+                            ? t`PWA domain is required`
+                            : pwaDomainSchema.safeParse(value).success ||
+                              t`Enter a domain without a path, e.g. app.example.com`
+                      }}
+                      render={({ field, fieldState }) => (
+                        <Field
+                          data-invalid={fieldState.invalid}
+                          className="gap-2"
+                        >
+                          <FieldLabel htmlFor={field.name}>
+                            <Trans>PWA Domain</Trans>
+                          </FieldLabel>
+                          <InputGroup>
+                            <InputGroupAddon>
+                              <InputGroupText>https://</InputGroupText>
+                            </InputGroupAddon>
+                            <InputGroupInput
+                              {...field}
+                              // The protocol is already shown: drop a pasted one.
+                              onChange={(event) =>
+                                field.onChange(
+                                  event.target.value.replace(
+                                    /^https?:\/\//i,
+                                    ''
+                                  )
+                                )
+                              }
+                              id={field.name}
+                              placeholder="app.example.com"
+                              inputMode="url"
+                              autoCapitalize="none"
+                              spellCheck={false}
+                              required
+                              aria-invalid={fieldState.invalid}
+                            />
+                          </InputGroup>
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      )}
+                    />
+                  )}
+                </FieldGroup>
+              </FormSection>
+
+              <Separator />
+
+              <FormSection
                 id="nav-items"
                 title={<Trans>Nav items</Trans>}
                 description={
@@ -314,5 +429,6 @@ export function EditPropertyForm({
 const PROPERTY_FORM_SECTIONS: NavSection[] = [
   { id: 'general', label: <Trans>General</Trans> },
   { id: 'customer', label: <Trans>Customer</Trans> },
+  { id: 'solutions', label: <Trans>Solutions</Trans> },
   { id: 'nav-items', label: <Trans>Nav items</Trans> }
 ];

@@ -35,6 +35,29 @@ export const navItemIdSchema = z.enum([
   'users'
 ]);
 
+// Solutions a Property has booked. Listed in display order.
+export const propertyOptionSchema = z.enum([
+  'mobile_app_native',
+  'mobile_app_pwa',
+  'checkin_kiosk_app',
+  'tv_guest_directory',
+  'meldeschein_app',
+  'rsx_api',
+  'messaging_email',
+  'messaging_sms',
+  'messaging_whatsapp'
+]);
+
+// A bare host: no protocol, port or path.
+export const pwaDomainSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .max(253)
+  .regex(/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/, {
+    message: 'Invalid domain'
+  });
+
 // The Customer that owns a Property, as much of it as a Property carries.
 // Only Administrators receive it — everyone else gets null.
 export const propertyCustomerSchema = z.object({
@@ -50,6 +73,9 @@ export const propertySchema = z.object({
   country_code: countryCodeSchema,
   stage: propertyStageSchema,
   disabled_nav_items: z.array(navItemIdSchema),
+  options: z.array(propertyOptionSchema),
+  // Set exactly when `options` has mobile_app_pwa.
+  pwa_domain: z.string().nullable(),
   customer_id: z.uuid().nullable(),
   customer: propertyCustomerSchema.nullable()
 });
@@ -87,6 +113,11 @@ export const fetchPropertiesParamsSchema = z.object({
     z.array(propertyStageSchema).optional()
   ),
   country_code: countryCodeSchema.optional(),
+  // Same wire format as `stage`. Matches Properties with any of them.
+  options: z.preprocess(
+    (value) => (typeof value === 'string' ? value.split(',') : value),
+    z.array(propertyOptionSchema).optional()
+  ),
   sort_by: propertySortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.optional()
 });
@@ -111,9 +142,31 @@ export const updatePropertySchema = propertySchema
   .extend({
     disabled_nav_items: z
       .array(navItemIdSchema)
-      .transform((ids) => [...new Set(ids)])
+      .transform((ids) => [...new Set(ids)]),
+    options: z
+      .array(propertyOptionSchema)
+      .transform((ids) => [...new Set(ids)]),
+    pwa_domain: pwaDomainSchema.nullable()
   })
-  .partial();
+  .partial()
+  // The two travel together, so a request can be checked without the stored
+  // row: the domain is required with mobile_app_pwa and never sent alone.
+  .superRefine((data, ctx) => {
+    if (data.options?.includes('mobile_app_pwa') && !data.pwa_domain) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['pwa_domain'],
+        message: 'PWA domain is required for Mobile App (PWA)'
+      });
+    }
+    if (data.pwa_domain !== undefined && !data.options) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['pwa_domain'],
+        message: 'pwa_domain must be sent together with options'
+      });
+    }
+  });
 
 export const propertyIdParamsSchema = z.object({
   id: z.uuid()
@@ -125,6 +178,7 @@ export type PropertySortableColumn = z.infer<
   typeof propertySortableColumnsSchema
 >;
 export type NavItemId = z.infer<typeof navItemIdSchema>;
+export type PropertyOption = z.infer<typeof propertyOptionSchema>;
 export type Property = z.infer<typeof propertySchema>;
 export type PropertyCustomer = z.infer<typeof propertyCustomerSchema>;
 export type CreatePropertyData = z.infer<typeof createPropertySchema>;
