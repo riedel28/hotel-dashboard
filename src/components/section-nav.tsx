@@ -86,8 +86,12 @@ export function useActiveSection(sections: NavSection[]) {
 /**
  * Scrolls to a section and moves focus there, so the jump lands for keyboard
  * and screen-reader users too rather than only shifting pixels.
+ *
+ * `toTop` scrolls the container all the way up instead of to the section's own
+ * edge — for the page's first section, so what sits above it (the page header,
+ * the card's top) comes back into view with it.
  */
-export function scrollToSection(id: string) {
+export function scrollToSection(id: string, toTop = false) {
   const target = document.getElementById(id);
   if (!target) return false;
 
@@ -107,7 +111,10 @@ export function scrollToSection(id: string) {
       target.getBoundingClientRect().top - root.getBoundingClientRect().top;
     const scrollMargin =
       Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-    root.scrollTo({ top: root.scrollTop + offset - scrollMargin, behavior });
+    root.scrollTo({
+      top: toTop ? 0 : root.scrollTop + offset - scrollMargin,
+      behavior
+    });
   } else {
     target.scrollIntoView({ behavior, block: 'start' });
   }
@@ -206,16 +213,20 @@ export function SectionNav({
   ) => {
     if (!document.getElementById(id)) return;
     event.preventDefault();
-    scrollToSection(id);
+    scrollToSection(id, id === sections[0]?.id);
     // Through the router rather than `history.replaceState`: the router keeps
     // its own copy of the location and only watches `popstate`, so writing the
     // hash behind its back leaves `router.state.location` stale, and the next
     // navigation would rebuild the URL from that stale copy.
     // `search` is carried over explicitly: the router treats search params as
     // opt-in, so omitting it would strip them from any page that has them.
+    // `hashScrollIntoView` is off because the scroll above is the one that
+    // counts: left on, the router scrolls the section itself to the top edge
+    // once the hash lands, undoing the jump to the very top for the first one.
     void navigate({
       to: '.',
       hash: id,
+      hashScrollIntoView: false,
       search: (prev: Record<string, unknown>) => prev,
       replace: true
     });
