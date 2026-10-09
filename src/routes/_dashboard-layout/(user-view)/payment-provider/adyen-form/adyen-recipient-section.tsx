@@ -1,12 +1,11 @@
 import { Trans } from '@lingui/react/macro';
 import { type Control, Controller } from 'react-hook-form';
 
-import { SectionHeading } from '@/components/section-heading';
+import { FormSection } from '@/components/form-section';
 import { CountryPicker } from '@/components/ui/country-picker';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import { sectionHeadingId } from './adyen-form-toc';
 import type { AdyenFormData } from './adyen-form-types';
 
 interface AdyenRecipientSectionProps {
@@ -19,19 +18,13 @@ export function AdyenRecipientSection({
   disabled = false
 }: AdyenRecipientSectionProps) {
   return (
-    <section
+    <FormSection
       id="recipient"
-      aria-labelledby={sectionHeadingId('recipient')}
-      className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
+      title={<Trans>Payment recipient</Trans>}
+      description={
+        <Trans>The merchant address shown on payment receipts.</Trans>
+      }
     >
-      <SectionHeading
-        id={sectionHeadingId('recipient')}
-        title={<Trans>Payment recipient</Trans>}
-        description={
-          <Trans>The merchant address shown on payment receipts.</Trans>
-        }
-      />
-
       <div className="flex flex-col gap-5">
         <Controller
           control={control}
@@ -160,6 +153,6 @@ export function AdyenRecipientSection({
           )}
         />
       </div>
-    </section>
+    </FormSection>
   );
 }

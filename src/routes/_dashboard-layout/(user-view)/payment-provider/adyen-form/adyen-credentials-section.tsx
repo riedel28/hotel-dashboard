@@ -3,7 +3,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { UnplugIcon } from 'lucide-react';
 import { type Control, Controller } from 'react-hook-form';
 
-import { SectionHeading } from '@/components/section-heading';
+import { FormSection } from '@/components/form-section';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
@@ -24,7 +24,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
 
-import { sectionHeadingId } from './adyen-form-toc';
 import type { AdyenFormData } from './adyen-form-types';
 import type {
   AdyenEnvironment,
@@ -50,19 +49,13 @@ export function AdyenCredentialsSection({
   const { i18n } = useLingui();
 
   return (
-    <section
+    <FormSection
       id="credentials"
-      aria-labelledby={sectionHeadingId('credentials')}
-      className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
+      title={<Trans>Credentials</Trans>}
+      description={
+        <Trans>Technical connection details for your Adyen account.</Trans>
+      }
     >
-      <SectionHeading
-        id={sectionHeadingId('credentials')}
-        title={<Trans>Credentials</Trans>}
-        description={
-          <Trans>Technical connection details for your Adyen account.</Trans>
-        }
-      />
-
       <div className="flex flex-col gap-5">
         <Controller
           control={control}
@@ -302,6 +295,6 @@ export function AdyenCredentialsSection({
           )}
         </div>
       </div>
-    </section>
+    </FormSection>
   );
 }

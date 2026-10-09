@@ -77,11 +77,14 @@ export function useCustomerForm(values?: CustomerFormValues) {
  */
 export function showEmailTakenError(
   form: UseFormReturn<CustomerFormValues>,
-  error: unknown,
-  message: string
+  error: unknown
 ) {
   if (!(error instanceof ApiError && error.status === 409)) return false;
-  form.setError('email', { message }, { shouldFocus: true });
+  form.setError(
+    'email',
+    { message: t`A customer with this email already exists` },
+    { shouldFocus: true }
+  );
   return true;
 }
 

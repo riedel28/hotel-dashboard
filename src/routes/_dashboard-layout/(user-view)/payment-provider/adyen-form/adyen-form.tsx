@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { SectionNav } from '@/components/section-nav';
+import { StickyCardFooter } from '@/components/sticky-card-footer';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,13 +21,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 import { AdyenCredentialsSection } from './adyen-credentials-section';
@@ -291,10 +286,7 @@ export function AdyenForm() {
           </form>
         </CardContent>
 
-        {/* Sticky action bar. The negative bottom offset matches the scroll
-          container's bottom padding (main: pb-4 / md:pb-8) so the bar sits
-          flush against the very bottom of the viewport, not above the padding. */}
-        <CardFooter className="sticky -bottom-4 z-10 -mb-6 rounded-b-xl border-t border-border/60 bg-card/80 py-4! backdrop-blur md:-bottom-8">
+        <StickyCardFooter>
           <div className="flex w-full flex-wrap items-center justify-end gap-3">
             <div
               className="mr-auto min-w-0 text-xs text-muted-foreground"
@@ -336,7 +328,7 @@ export function AdyenForm() {
               </Button>
             </div>
           </div>
-        </CardFooter>
+        </StickyCardFooter>
 
         <AlertDialog open={confirmLiveOpen} onOpenChange={setConfirmLiveOpen}>
           <AlertDialogContent>

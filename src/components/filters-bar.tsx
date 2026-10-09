@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 
-interface PropertiesFiltersProps {
+interface FiltersBarProps {
   children: ReactNode;
 }
 
-export function PropertiesFilters({ children }: PropertiesFiltersProps) {
+/** The row of filters above a table; put the refresh button last. */
+export function FiltersBar({ children }: FiltersBarProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       {children}

@@ -2,25 +2,15 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { Loader2Icon } from 'lucide-react';
-import type { ReactNode } from 'react';
 import type { Customer } from 'shared/types/customers';
 import { toast } from 'sonner';
 
 import { updateCustomerById } from '@/api/customers';
-import { SectionHeading } from '@/components/section-heading';
-import {
-  type NavSection,
-  sectionHeadingId,
-  SectionNav
-} from '@/components/section-nav';
+import { FormSection } from '@/components/form-section';
+import { type NavSection, SectionNav } from '@/components/section-nav';
+import { StickyCardFooter } from '@/components/sticky-card-footer';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CountryFlag } from '@/components/ui/country-flag';
 import { Separator } from '@/components/ui/separator';
 import { StageBadge } from '@/components/ui/stage-badge';
@@ -61,15 +51,7 @@ export function EditCustomerForm({ customer }: { customer: Customer }) {
       toast.success(t`Customer updated successfully`);
     },
     onError: (error) => {
-      if (
-        showEmailTakenError(
-          form,
-          error,
-          t`A customer with this email already exists`
-        )
-      ) {
-        return;
-      }
+      if (showEmailTakenError(form, error)) return;
       toast.error(t`Failed to update customer. Please try again.`);
     }
   });
@@ -176,10 +158,7 @@ export function EditCustomerForm({ customer }: { customer: Customer }) {
           </form>
         </CardContent>
 
-        {/* Sticky action bar. The negative bottom offset matches the scroll
-          container's bottom padding (main: pb-4 / md:pb-8) so the bar sits
-          flush against the very bottom of the viewport, not above the padding. */}
-        <CardFooter className="sticky -bottom-4 z-10 -mb-6 rounded-b-xl border-t border-border/60 bg-card/80 py-4! backdrop-blur md:-bottom-8">
+        <StickyCardFooter>
           <div className="flex w-full flex-wrap items-center justify-end gap-3">
             <div
               className="mr-auto min-w-0 text-xs text-muted-foreground"
@@ -210,7 +189,7 @@ export function EditCustomerForm({ customer }: { customer: Customer }) {
               </Button>
             </div>
           </div>
-        </CardFooter>
+        </StickyCardFooter>
       </Card>
     </div>
   );
@@ -225,30 +204,3 @@ const CUSTOMER_FORM_SECTIONS: NavSection[] = [
   { id: 'address', label: <Trans>Address</Trans> },
   { id: 'properties', label: <Trans>Properties</Trans> }
 ];
-
-function FormSection({
-  id,
-  title,
-  description,
-  children
-}: {
-  id: string;
-  title: ReactNode;
-  description: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <section
-      id={id}
-      aria-labelledby={sectionHeadingId(id)}
-      className="grid scroll-mt-4 grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]"
-    >
-      <SectionHeading
-        id={sectionHeadingId(id)}
-        title={title}
-        description={description}
-      />
-      <div>{children}</div>
-    </section>
-  );
-}

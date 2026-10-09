@@ -43,15 +43,7 @@ export function AddCustomerDrawer() {
       toast.success(t`Customer created successfully`);
     },
     onError: (error) => {
-      if (
-        showEmailTakenError(
-          form,
-          error,
-          t`A customer with this email already exists`
-        )
-      ) {
-        return;
-      }
+      if (showEmailTakenError(form, error)) return;
       toast.error(t`Failed to create customer`);
     }
   });
