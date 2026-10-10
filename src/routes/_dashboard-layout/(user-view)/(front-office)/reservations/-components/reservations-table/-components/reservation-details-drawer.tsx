@@ -1,7 +1,21 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import type { ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  GlobeIcon,
+  MessageSquareDotIcon,
+  MonitorIcon,
+  PencilIcon,
+  Trash2Icon,
+  TvIcon
+} from 'lucide-react';
+import { type ReactNode, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import type { CheckinMethod, Guest, Reservation } from '@/api/reservations';
+import { AndroidIcon, AppleIcon } from '@/components/ui/brand-icons';
+import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
@@ -9,31 +23,87 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { getCountryName } from '@/lib/countries';
 import { formatDate } from '@/utils/date';
 
+import { DeleteDialog } from '../delete-dialog';
 import { StatusCell } from './cells/status-cell';
 
 interface ReservationDetailsDrawerProps {
-  /** The open reservation; the drawer is closed while undefined. */
-  reservation?: Reservation;
+  /** The open reservation; the drawer is closed while it is not on the page. */
+  reservationId?: number;
+  /** Reservations of the current table page: the content and ↑/↓ navigation. */
+  pageReservations: Reservation[];
+  onSelect: (reservationId: number) => void;
   onClose: () => void;
 }
 
 export function ReservationDetailsDrawer({
-  reservation,
+  reservationId,
+  pageReservations,
+  onSelect,
   onClose
 }: ReservationDetailsDrawerProps) {
+  const index = pageReservations.findIndex(
+    (reservation) => reservation.id === reservationId
+  );
+  const reservation = pageReservations[index];
+  // Stepping stops at the ends of the current page
+  const previousId = pageReservations[index - 1]?.id;
+  const nextId = pageReservations[index + 1]?.id;
+
+  useEffect(() => {
+    if (!reservation) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // An open menu or confirmation keeps the arrow keys to itself
+      if (document.querySelector('[role="menu"], [role="alertdialog"]')) {
+        return;
+      }
+      const targetId =
+        event.key === 'ArrowUp'
+          ? previousId
+          : event.key === 'ArrowDown'
+            ? nextId
+            : undefined;
+      if (targetId !== undefined) {
+        event.preventDefault();
+        onSelect(targetId);
+      }
+    };
+
+    // Capture phase: the open dialog stops arrow keys from bubbling this far
+    document.addEventListener('keydown', handleKeyDown, true);
+    return () => document.removeEventListener('keydown', handleKeyDown, true);
+  }, [reservation, previousId, nextId, onSelect]);
+
   return (
     <Drawer
       open={reservation !== undefined}
       onOpenChange={(open) => !open && onClose()}
     >
       <DrawerContent>
-        {reservation && <ReservationDetails reservation={reservation} />}
+        {reservation && (
+          <ReservationDetails
+            reservation={reservation}
+            onPrevious={
+              previousId === undefined ? undefined : () => onSelect(previousId)
+            }
+            onNext={nextId === undefined ? undefined : () => onSelect(nextId)}
+          />
+        )}
       </DrawerContent>
     </Drawer>
   );
@@ -80,13 +150,17 @@ function GuestLine({ guest, locale }: { guest: Guest; locale: string }) {
   const countryName = getCountryName(guest.nationality_code, locale);
 
   return (
-    <div className="flex min-w-0 items-center gap-2">
-      <CountryFlag
-        code={guest.nationality_code}
-        title={countryName}
-        className="size-4"
-        aria-label={countryName}
-      />
+    <div className="flex min-w-0 items-start gap-2">
+      {/* As tall as one text line, so the flag sits on the first line of a
+          name that wraps */}
+      <span className="flex h-5 shrink-0 items-center">
+        <CountryFlag
+          code={guest.nationality_code}
+          title={countryName}
+          className="size-4"
+          aria-label={countryName}
+        />
+      </span>
       <span className="min-w-0 wrap-break-word">
         {guest.last_name}, {guest.first_name}
       </span>
@@ -95,34 +169,48 @@ function GuestLine({ guest, locale }: { guest: Guest; locale: string }) {
 }
 
 function CheckinMethodLabel({ method }: { method: CheckinMethod | null }) {
-  switch (method) {
-    case null:
-      return (
-        <EmptyValue>
-          <Trans>Not yet</Trans>
-        </EmptyValue>
-      );
-    case 'android':
-      return <Trans>Android App</Trans>;
-    case 'ios':
-      return <Trans>iOS App</Trans>;
-    case 'tv':
-      return <Trans>TV App</Trans>;
-    case 'station':
-      return <Trans>Station</Trans>;
-    case 'web':
-      return <Trans>Web App</Trans>;
+  if (method === null) {
+    return (
+      <EmptyValue>
+        <Trans>Not yet</Trans>
+      </EmptyValue>
+    );
   }
+
+  const { Icon, label } = {
+    android: { Icon: AndroidIcon, label: <Trans>Android App</Trans> },
+    ios: { Icon: AppleIcon, label: <Trans>iOS App</Trans> },
+    tv: { Icon: TvIcon, label: <Trans>TV App</Trans> },
+    station: { Icon: MonitorIcon, label: <Trans>Station</Trans> },
+    web: { Icon: GlobeIcon, label: <Trans>Web App</Trans> }
+  }[method];
+
+  return (
+    <span className="flex items-center gap-2">
+      <Icon className="size-4 shrink-0 text-muted-foreground" />
+      {label}
+    </span>
+  );
 }
 
-function ReservationDetails({ reservation }: { reservation: Reservation }) {
+function ReservationDetails({
+  reservation,
+  onPrevious,
+  onNext
+}: {
+  reservation: Reservation;
+  /** Undefined at the ends of the page. */
+  onPrevious?: () => void;
+  onNext?: () => void;
+}) {
   const { i18n, t } = useLingui();
   const locale = i18n.locale;
   const [primaryGuest, ...fellowTravelers] = reservation.guests;
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
     <>
-      <DrawerHeader className="space-y-2">
+      <DrawerHeader className="space-y-2 py-3">
         {/* Only the title row shares its line with the close button */}
         <div className="flex items-center gap-2 pr-10">
           <DrawerTitle className="min-w-0 truncate">
@@ -137,11 +225,54 @@ function ReservationDetails({ reservation }: { reservation: Reservation }) {
         <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
           <StatusCell status={reservation.state} />
           {reservation.room_name && <span>{reservation.room_name}</span>}
+          {/* Split button: the main part edits, the arrow holds the rest */}
+          <div className="ml-auto flex shrink-0 text-foreground">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 rounded-r-none"
+              nativeButton={false}
+              render={
+                <Link
+                  to="/reservations/$reservationId"
+                  params={{ reservationId: String(reservation.id) }}
+                  preload="intent"
+                />
+              }
+            >
+              <PencilIcon className="size-3" />
+              <Trans>Edit</Trans>
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    className="-ml-px rounded-l-none"
+                    aria-label={t`More actions`}
+                    title={t`More actions`}
+                  />
+                }
+              >
+                <ChevronDownIcon />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-auto min-w-40">
+                <DropdownMenuItem
+                  variant="destructive-soft"
+                  onClick={() => setShowDeleteDialog(true)}
+                >
+                  <Trash2Icon className="mr-1 h-4 w-4" />
+                  <Trans>Delete</Trans>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </DrawerHeader>
 
       <DrawerBody className="space-y-5">
-        <DetailSection title={<Trans>Booking</Trans>}>
+        <DetailSection title={<Trans>Reservation</Trans>}>
           <DetailRow label={<Trans>Guest Email</Trans>}>
             {reservation.guest_email || (
               <EmptyValue>
@@ -229,6 +360,45 @@ function ReservationDetails({ reservation }: { reservation: Reservation }) {
           </DetailRow>
         </DetailSection>
       </DrawerBody>
+
+      <DrawerFooter className="flex-row items-center justify-between py-3 sm:justify-between">
+        <div className="flex gap-1">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            disabled={!onPrevious}
+            onClick={onPrevious}
+            aria-label={t`Previous reservation`}
+            title={t`Previous reservation`}
+          >
+            <ChevronUpIcon />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            disabled={!onNext}
+            onClick={onNext}
+            aria-label={t`Next reservation`}
+            title={t`Next reservation`}
+          >
+            <ChevronDownIcon />
+          </Button>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.info(t`Pushed to device`)}
+        >
+          <MessageSquareDotIcon />
+          <Trans>Push to device</Trans>
+        </Button>
+      </DrawerFooter>
+      <DeleteDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        reservationNr={reservation.booking_nr}
+        reservationId={reservation.id}
+      />
     </>
   );
 }

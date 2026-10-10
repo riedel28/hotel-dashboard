@@ -17,7 +17,7 @@ const routeApi = getRouteApi(
 
 type SortBy = NonNullable<FetchReservationsParams['sort_by']>;
 
-const defaultPageSize = 10;
+const defaultPageSize = 25;
 const defaultSorting: SortingState = [{ id: 'received_at', desc: true }];
 
 const toDate = (value: string | undefined) =>
@@ -128,6 +128,13 @@ function useReservationsSearch() {
       navigate({
         to: '/reservations',
         search: (prev) => ({ ...prev, reservation: reservationId })
+      }),
+    // Stepping between reservations replaces the current entry
+    selectReservation: (reservationId: number) =>
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({ ...prev, reservation: reservationId }),
+        replace: true
       }),
     closeReservation: () =>
       navigate({

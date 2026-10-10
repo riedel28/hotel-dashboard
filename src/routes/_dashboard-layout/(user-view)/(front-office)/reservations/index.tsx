@@ -22,7 +22,6 @@ import { cn } from '@/lib/utils';
 import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
 import { ReservationClearFilters } from '../reservations/-components/reservation-clear-filters';
 import { ReservationSearch } from '../reservations/-components/reservation-search';
-import { ReservationSearchResults } from '../reservations/-components/reservation-search-results';
 import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
 import { ReservationsFilters } from '../reservations/-components/reservations-filters';
 import { ReservationDetailsDrawer } from '../reservations/-components/reservations-table/-components/reservation-details-drawer';
@@ -73,7 +72,7 @@ function ReservationsPage() {
             data={[]}
             isLoading={true}
             pageIndex={0}
-            pageSize={10}
+            pageSize={25}
             totalCount={0}
             pageCount={0}
           />
@@ -97,6 +96,7 @@ function ReservationsContent() {
     hasActiveFilters,
     openReservationId,
     openReservation,
+    selectReservation,
     closeReservation,
     setSearchTerm,
     setStatuses,
@@ -133,8 +133,6 @@ function ReservationsContent() {
         />
       </ReservationsFilters>
 
-      <ReservationSearchResults searchQuery={searchTerm} />
-
       <div
         className={cn(
           'opacity-100 transition-opacity duration-300 ease-in-out',
@@ -158,9 +156,9 @@ function ReservationsContent() {
       </div>
 
       <ReservationDetailsDrawer
-        reservation={reservationsQuery.data.index.find(
-          (reservation) => reservation.id === openReservationId
-        )}
+        reservationId={openReservationId}
+        pageReservations={reservationsQuery.data.index}
+        onSelect={selectReservation}
         onClose={closeReservation}
       />
     </div>
