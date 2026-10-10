@@ -123,7 +123,7 @@ export const fetchReservationsParamsSchema = z.object({
     .refine((val) => [5, 10, 25, 50, 100].includes(val), {
       message: 'per_page must be one of: 5, 10, 25, 50, 100'
     })
-    .default(10)
+    .default(25)
     .optional(),
   q: z.string().max(200).optional(),
   // An unknown status (e.g. a bookmark from before the states were renamed)
