@@ -1,16 +1,26 @@
 import { Trans } from '@lingui/react/macro';
 
-import type { ReservationState } from '@/api/reservations';
+import {
+  type ReservationState,
+  reservationStateSchema
+} from '@/api/reservations';
 import type { DataGridCheckboxFilterOption } from '@/components/ui/data-grid-checkbox-filter';
 import {
   DataGridCheckboxFilter,
   DataGridCheckboxFilterClear,
-  DataGridCheckboxFilterFooter
+  DataGridCheckboxFilterFooter,
+  DataGridCheckboxFilterPreset
 } from '@/components/ui/data-grid-checkbox-filter';
 
 import { StatusCell } from './reservations-table/-components/cells/status-cell';
 
-const reservationStatuses: ReservationState[] = ['pending', 'started', 'done'];
+const reservationStatuses = reservationStateSchema.options;
+
+// Everything that has not checked out yet. A filter-only preset: it is never
+// stored, the URL just carries the states it expands to.
+const activeStatuses = reservationStatuses.filter(
+  (status) => status !== 'checked_out'
+);
 
 interface ReservationStatusFilterProps {
   value: ReservationState[];
@@ -29,6 +39,10 @@ function ReservationStatusFilter({
       label: <StatusCell status={status} />
     }));
 
+  const isActiveSelected =
+    value.length === activeStatuses.length &&
+    activeStatuses.every((status) => value.includes(status));
+
   return (
     <DataGridCheckboxFilter
       label={<Trans>Status</Trans>}
@@ -37,6 +51,16 @@ function ReservationStatusFilter({
       value={value}
       onValueChange={onValueChange}
       className={className}
+      header={
+        <DataGridCheckboxFilterPreset
+          checked={isActiveSelected}
+          onCheckedChange={(checked) =>
+            onValueChange(checked ? activeStatuses : [])
+          }
+        >
+          <Trans>Active</Trans>
+        </DataGridCheckboxFilterPreset>
+      }
     >
       <DataGridCheckboxFilterFooter>
         <DataGridCheckboxFilterClear>

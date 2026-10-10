@@ -1,35 +1,21 @@
-import { t } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react/macro';
 
-import type { ReservationStatus } from '@/api/reservations';
+import type { ReservationState } from '@/api/reservations';
 import { Badge } from '@/components/ui/badge';
 
-import { getReservationStatusStyle } from '../../../reservation-status';
+import { reservationStatusDisplay } from '../../../reservation-status';
 
 interface StatusCellProps {
-  status: ReservationStatus;
-}
-
-function getStatusLabel(status: ReservationStatus): string {
-  switch (status) {
-    case 'done':
-      return t`Done`;
-    case 'pending':
-      return t`Pending`;
-    case 'started':
-      return t`Started`;
-    default:
-      return status;
-  }
+  status: ReservationState;
 }
 
 export function StatusCell({ status }: StatusCellProps) {
+  const { t } = useLingui();
+  const { label, badgeColor } = reservationStatusDisplay[status];
+
   return (
-    <Badge
-      size="sm"
-      variant="outline"
-      color={getReservationStatusStyle(status).badgeColor}
-    >
-      {getStatusLabel(status)}
+    <Badge size="sm" variant="outline" color={badgeColor}>
+      {t(label)}
     </Badge>
   );
 }

@@ -17,13 +17,18 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
+import {
+  type ReservationState,
+  reservationStateSchema
+} from '../../../shared/types/reservations';
+
 export const reservations = pgTable(
   'reservations',
   {
     id: bigint('id', { mode: 'number' })
       .primaryKey()
       .generatedAlwaysAsIdentity(),
-    state: text('state').notNull().$type<'pending' | 'started' | 'done'>(),
+    state: text('state').notNull().$type<ReservationState>(),
     booking_nr: text('booking_nr').notNull(),
     guest_email: text('guest_email'),
     primary_guest_name: text('primary_guest_name'),
@@ -61,7 +66,9 @@ export const reservations = pgTable(
     index('reservations_booking_to_idx').on(table.booking_to),
     check(
       'reservations_state_check',
-      sql`${table.state} IN ('pending', 'started', 'done')`
+      sql`${table.state} IN (${sql.raw(
+        reservationStateSchema.options.map((state) => `'${state}'`).join(', ')
+      )})`
     ),
     check(
       'reservations_check_in_via_check',

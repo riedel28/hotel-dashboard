@@ -97,6 +97,23 @@ function GuestLine({ guest, locale }: { guest: Guest; locale: string }) {
   );
 }
 
+/** `null` until the guest has actually checked in / out. */
+function CheckinMethodValue({ method }: { method: CheckinMethod | null }) {
+  if (!method) {
+    return (
+      <EmptyValue>
+        <Trans>Not yet</Trans>
+      </EmptyValue>
+    );
+  }
+
+  return (
+    <DetailValue>
+      <CheckinMethodLabel method={method} />
+    </DetailValue>
+  );
+}
+
 function CheckinMethodLabel({ method }: { method: CheckinMethod }) {
   switch (method) {
     case 'android':
@@ -218,15 +235,11 @@ export function ReservationDetails({ reservation }: ReservationDetailsProps) {
           </DetailRow>
 
           <DetailRow label={<Trans>Check-in via</Trans>}>
-            <DetailValue>
-              <CheckinMethodLabel method={reservation.check_in_via} />
-            </DetailValue>
+            <CheckinMethodValue method={reservation.check_in_via} />
           </DetailRow>
 
           <DetailRow label={<Trans>Check-out via</Trans>}>
-            <DetailValue>
-              <CheckinMethodLabel method={reservation.check_out_via} />
-            </DetailValue>
+            <CheckinMethodValue method={reservation.check_out_via} />
           </DetailRow>
         </DetailSection>
 

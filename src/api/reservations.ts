@@ -19,8 +19,6 @@ import {
   reservationSchema,
   type ReservationState,
   reservationStateSchema,
-  type ReservationStatus,
-  reservationStatusSchema,
   toReservationStates,
   type UpdateReservationData
 } from '../../shared/types/reservations';
@@ -168,11 +166,9 @@ export {
   guestSearchResultSchema,
   type Reservation,
   type ReservationState,
-  type ReservationStatus,
   reservationByIdQueryOptions,
   reservationSchema,
   reservationStateSchema,
-  reservationStatusSchema,
   reservationsQueryOptions,
   searchGuests,
   toReservationStates,

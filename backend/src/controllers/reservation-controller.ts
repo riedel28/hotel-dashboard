@@ -14,6 +14,10 @@ import {
 } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
+import {
+  type FetchReservationsParams,
+  toReservationStates
+} from '../../../shared/types/reservations';
 import { db } from '../db/pool';
 import {
   guests as guestsTable,
@@ -22,103 +26,57 @@ import {
 } from '../db/schema';
 import { escapeLikePattern, isUniqueViolation } from '../utils/sql';
 
-const reservationStates = ['pending', 'started', 'done'] as const;
-
-type ReservationState = (typeof reservationStates)[number];
-
-function normalizeStatusFilter(status: unknown): ReservationState[] {
-  const statusValues = Array.isArray(status)
-    ? status.flatMap((item) => String(item).split(','))
-    : typeof status === 'string'
-      ? status.split(',')
-      : [];
-
-  return statusValues.filter((item): item is ReservationState =>
-    reservationStates.includes(item as ReservationState)
-  );
-}
-
 async function getReservations(req: Request, res: Response) {
   try {
-    const { page, per_page, status, q, from, to, sort_by, sort_order } =
-      req.query;
+    // validateQuery has already replaced req.query with the parsed schema output
+    const {
+      page = 1,
+      per_page = 10,
+      status,
+      q,
+      from,
+      to,
+      sort_by = 'received_at',
+      sort_order
+    } = req.query as FetchReservationsParams;
 
     const conditions = [];
-    const statusValues = normalizeStatusFilter(status);
+    const states = toReservationStates(status);
 
-    if (statusValues.length === 1) {
-      conditions.push(eq(reservationsTable.state, statusValues[0]));
-    } else if (statusValues.length > 1) {
-      conditions.push(inArray(reservationsTable.state, statusValues));
+    if (states.length > 0) {
+      conditions.push(inArray(reservationsTable.state, states));
     }
 
     if (q) {
-      const escaped = escapeLikePattern(q as string);
+      const escaped = escapeLikePattern(q);
       conditions.push(ilike(reservationsTable.booking_nr, `%${escaped}%`));
     }
 
     if (from) {
-      const fromDate = new Date((from as string) + 'T00:00:00.000Z');
+      const fromDate = new Date(from + 'T00:00:00.000Z');
       conditions.push(gte(reservationsTable.booking_to, fromDate));
     }
 
     if (to) {
-      const toDate = new Date((to as string) + 'T23:59:59.999Z');
+      const toDate = new Date(to + 'T23:59:59.999Z');
       conditions.push(lte(reservationsTable.booking_from, toDate));
     }
 
     const searchCondition =
       conditions.length > 0 ? and(...conditions) : undefined;
 
-    // Build dynamic orderBy clause
-    const sortColumn = sort_by as
-      | 'state'
-      | 'booking_nr'
-      | 'room_name'
-      | 'booking_from'
-      | 'booking_to'
-      | 'balance'
-      | 'received_at'
-      | undefined;
-    const sortDirection = sort_order as 'asc' | 'desc' | undefined;
-
-    let orderByColumn;
-    switch (sortColumn) {
-      case 'state':
-        orderByColumn = reservationsTable.state;
-        break;
-      case 'booking_nr':
-        orderByColumn = reservationsTable.booking_nr;
-        break;
-      case 'room_name':
-        orderByColumn = reservationsTable.room_name;
-        break;
-      case 'booking_from':
-        orderByColumn = reservationsTable.booking_from;
-        break;
-      case 'booking_to':
-        orderByColumn = reservationsTable.booking_to;
-        break;
-      case 'balance':
-        orderByColumn = reservationsTable.balance;
-        break;
-      case 'received_at':
-        orderByColumn = reservationsTable.received_at;
-        break;
-      default:
-        orderByColumn = reservationsTable.received_at;
-    }
-
+    // Every sortable column is named after its table column.
+    const orderByColumn = reservationsTable[sort_by];
     const orderBy =
-      sortDirection === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
+      sort_order === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
 
     const reservations = await db.query.reservations.findMany({
       where: searchCondition,
       with: {
         guests: true
       },
-      offset: ((Number(page) || 1) - 1) * (Number(per_page) || 10),
-      limit: Number(per_page) || 10,
+      offset: (page - 1) * per_page,
+      limit: per_page,
       orderBy
     });
 
@@ -131,10 +89,10 @@ async function getReservations(req: Request, res: Response) {
 
     res.status(200).json({
       index: reservations,
-      page: Number(page) || 1,
-      per_page: Number(per_page) || 10,
+      page,
+      per_page,
       total: totalCount,
-      page_count: Math.ceil(totalCount / (Number(per_page) || 10))
+      page_count: Math.ceil(totalCount / per_page)
     });
   } catch (error) {
     console.error(error);
