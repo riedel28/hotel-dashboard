@@ -6,19 +6,20 @@ import type { ReactNode } from 'react';
 import { type BadgeColorProps, badgeColors } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-// The dot of the Badge in the same color: the badge's text tint as a fill.
+// The dot of a colored segment: the saturated mid-tone of its Badge color, so
+// it reads at a glance on the neutral segment.
 const dotVariants: Record<BadgeColorProps, string> = {
-  gray: 'bg-gray-800/80 dark:bg-gray-300/80',
-  red: 'bg-red-800/80 dark:bg-red-300/80',
-  yellow: 'bg-yellow-800/80 dark:bg-yellow-300/80',
-  emerald: 'bg-emerald-800/80 dark:bg-emerald-300/80',
-  sky: 'bg-sky-800/80 dark:bg-sky-300/80',
-  indigo: 'bg-indigo-800/80 dark:bg-indigo-300/80',
-  orange: 'bg-orange-800/80 dark:bg-orange-300/80',
-  teal: 'bg-teal-800/80 dark:bg-teal-300/80',
-  fuchsia: 'bg-fuchsia-800/80 dark:bg-fuchsia-300/80',
-  pink: 'bg-pink-800/80 dark:bg-pink-300/80',
-  rose: 'bg-rose-700/80 dark:bg-rose-300/80'
+  gray: 'bg-gray-500 dark:bg-gray-400',
+  red: 'bg-red-500 dark:bg-red-400',
+  yellow: 'bg-yellow-500 dark:bg-yellow-400',
+  emerald: 'bg-emerald-500 dark:bg-emerald-400',
+  sky: 'bg-sky-500 dark:bg-sky-400',
+  indigo: 'bg-indigo-500 dark:bg-indigo-400',
+  orange: 'bg-orange-500 dark:bg-orange-400',
+  teal: 'bg-teal-500 dark:bg-teal-400',
+  fuchsia: 'bg-fuchsia-500 dark:bg-fuchsia-400',
+  pink: 'bg-pink-500 dark:bg-pink-400',
+  rose: 'bg-rose-500 dark:bg-rose-400'
 };
 
 // The empty string stands in for "no filter" — Base UI needs a value per item.
@@ -39,6 +40,11 @@ interface DataGridSegmentedFilterProps<TValue extends string> {
   /** Accessible name of the group, e.g. t`Status`. */
   label: string;
   allLabel?: ReactNode;
+  /**
+   * Whether a selected colored segment becomes the badge of its color
+   * (default). When false the color shows in the dot alone.
+   */
+  tintSelected?: boolean;
   className?: string;
 }
 
@@ -48,6 +54,7 @@ function DataGridSegmentedFilter<TValue extends string>({
   onValueChange,
   label,
   allLabel,
+  tintSelected = true,
   className
 }: DataGridSegmentedFilterProps<TValue>) {
   const segments = [
@@ -71,6 +78,7 @@ function DataGridSegmentedFilter<TValue extends string>({
       {segments.map((segment) => {
         const color = 'color' in segment ? segment.color : undefined;
         const isSelected = segment.value === (value ?? ALL_VALUE);
+        const isTinted = isSelected && tintSelected && color !== undefined;
 
         return (
           <RadioPrimitive.Root
@@ -79,21 +87,21 @@ function DataGridSegmentedFilter<TValue extends string>({
             disabled={'disabled' in segment ? segment.disabled : undefined}
             className={cn(
               'focus-visible:outline-offset-0.5 inline-flex h-full min-w-0 grow cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-2.5 text-sm font-normal whitespace-nowrap transition-[color,background-color,border-color] duration-150 outline-none select-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid disabled:pointer-events-none disabled:opacity-50',
-              isSelected
-                ? color
-                  ? // A selected colored segment is the badge of that color; on
-                    // the dark theme the badge outline is dropped
-                    cn(badgeColors[color], 'dark:border-transparent')
-                  : 'bg-muted text-foreground'
-                : 'text-foreground/60 hover:text-foreground'
+              isTinted
+                ? // A tinted segment is the badge of that color; on the dark
+                  // theme the badge outline is dropped
+                  cn(badgeColors[color], 'dark:border-transparent')
+                : isSelected
+                  ? 'bg-muted text-foreground'
+                  : 'text-foreground/60 hover:text-foreground'
             )}
           >
             {color && (
               <span
                 className={cn(
                   'mr-0.5 size-1.5 rounded-full',
-                  // Selected: the badge's own dot, its text tint as a fill
-                  isSelected ? 'bg-current/80' : dotVariants[color]
+                  // Tinted: the badge's own dot, its text tint as a fill
+                  isTinted ? 'bg-current/80' : dotVariants[color]
                 )}
                 aria-hidden="true"
               />
