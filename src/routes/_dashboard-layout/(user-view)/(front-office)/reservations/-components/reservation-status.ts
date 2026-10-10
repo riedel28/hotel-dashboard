@@ -1,30 +1,27 @@
-import type { ReservationStatus } from '@/api/reservations';
+import type { MessageDescriptor } from '@lingui/core';
+import { msg } from '@lingui/core/macro';
+
+import type { ReservationState } from '@/api/reservations';
 import type { BadgeProps } from '@/components/ui/badge';
 
-interface ReservationStatusStyle {
+interface ReservationStatusDisplay {
+  label: MessageDescriptor;
   badgeColor: BadgeProps['color'];
 }
 
-const fallbackStyle: ReservationStatusStyle = { badgeColor: 'gray' };
-
-const reservationStatusStyles: Record<
-  ReservationStatus,
-  ReservationStatusStyle
-> = {
-  pending: { badgeColor: 'yellow' },
-  started: { badgeColor: 'sky' },
-  done: { badgeColor: 'emerald' },
-  all: fallbackStyle
-};
-
 /**
- * Single source of truth for how a reservation status is colored, so the table
+ * Single source of truth for how a reservation status is shown, so the table
  * cell and the status filter cannot drift apart.
  */
-function getReservationStatusStyle(
-  status: ReservationStatus
-): ReservationStatusStyle {
-  return reservationStatusStyles[status] ?? fallbackStyle;
-}
+const reservationStatusDisplay: Record<
+  ReservationState,
+  ReservationStatusDisplay
+> = {
+  pending: { label: msg`Pending`, badgeColor: 'yellow' },
+  ready_in: { label: msg`Ready in`, badgeColor: 'indigo' },
+  checked_in: { label: msg`Checked in`, badgeColor: 'sky' },
+  ready_out: { label: msg`Ready out`, badgeColor: 'orange' },
+  checked_out: { label: msg`Checked out`, badgeColor: 'emerald' }
+};
 
-export { getReservationStatusStyle, type ReservationStatusStyle };
+export { reservationStatusDisplay };
