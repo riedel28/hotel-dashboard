@@ -204,22 +204,32 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
 function ComboboxItem({
   className,
   children,
-  showIndicator = true,
+  indicator = 'end',
   ...props
 }: ComboboxPrimitive.Item.Props & {
-  showIndicator?: boolean;
+  /** Which side the selected item's check mark sits on. */
+  indicator?: 'start' | 'end';
 }) {
   return (
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+        "relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+        indicator === 'end' ? 'pr-8 pl-2' : 'px-2',
         className
       )}
       {...props}
     >
+      {indicator === 'start' && (
+        // A fixed slot, so labels line up whether or not the item is selected.
+        <span className="flex size-4 shrink-0 items-center justify-center">
+          <ComboboxPrimitive.ItemIndicator>
+            <CheckIcon className="pointer-events-none" />
+          </ComboboxPrimitive.ItemIndicator>
+        </span>
+      )}
       {children}
-      {showIndicator && (
+      {indicator === 'end' && (
         <ComboboxPrimitive.ItemIndicator
           render={
             <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
