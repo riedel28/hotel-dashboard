@@ -1,5 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 
 import {
   fetchReservationsParamsSchema,
@@ -24,9 +25,16 @@ import { ReservationSearch } from '../reservations/-components/reservation-searc
 import { ReservationSearchResults } from '../reservations/-components/reservation-search-results';
 import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
 import { ReservationsFilters } from '../reservations/-components/reservations-filters';
+import { ReservationDetailsDrawer } from '../reservations/-components/reservations-table/-components/reservation-details-drawer';
 import { ReservationDateFilter } from '../reservations/-components/reservations-table/reservation-date-filter';
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
 import { useReservationsSearch } from '../reservations/-hooks/use-reservations-search';
+
+// The page's own state on top of the list filters: the reservation open in
+// the drawer
+const reservationsSearchSchema = fetchReservationsParamsSchema.extend({
+  reservation: z.coerce.number().int().positive().optional()
+});
 
 function ReservationsPage() {
   const { t } = useLingui();
@@ -87,6 +95,9 @@ function ReservationsContent() {
     pageIndex,
     pageSize,
     hasActiveFilters,
+    openReservationId,
+    openReservation,
+    closeReservation,
     setSearchTerm,
     setStatuses,
     setDateRange,
@@ -141,8 +152,17 @@ function ReservationsContent() {
           onPaginationChange={setPagination}
           sorting={sorting}
           onSortingChange={setSorting}
+          selectedReservationId={openReservationId}
+          onReservationOpen={openReservation}
         />
       </div>
+
+      <ReservationDetailsDrawer
+        reservation={reservationsQuery.data.index.find(
+          (reservation) => reservation.id === openReservationId
+        )}
+        onClose={closeReservation}
+      />
     </div>
   );
 }
@@ -150,8 +170,9 @@ function ReservationsContent() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(front-office)/reservations/'
 )({
-  validateSearch: (search) => fetchReservationsParamsSchema.parse(search),
-  loaderDeps: ({ search }) => search,
+  validateSearch: (search) => reservationsSearchSchema.parse(search),
+  // Opening the drawer is not a reason to rerun the loader
+  loaderDeps: ({ search: { reservation: _reservation, ...deps } }) => deps,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(reservationsQueryOptions(deps));
   },

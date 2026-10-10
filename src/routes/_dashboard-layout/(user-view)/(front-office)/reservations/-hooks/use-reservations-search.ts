@@ -32,7 +32,7 @@ const toDateParam = (value: Date | undefined) =>
  * navigations that write them back. The page stays pure composition.
  */
 function useReservationsSearch() {
-  const search = routeApi.useSearch();
+  const { reservation: openReservationId, ...search } = routeApi.useSearch();
   const navigate = routeApi.useNavigate();
   const queryClient = useQueryClient();
 
@@ -120,6 +120,19 @@ function useReservationsSearch() {
           sort_by: undefined,
           sort_order: undefined
         }
+      }),
+
+    // Opening and closing push history entries, so Back closes the drawer
+    openReservationId,
+    openReservation: (reservationId: number) =>
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({ ...prev, reservation: reservationId })
+      }),
+    closeReservation: () =>
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({ ...prev, reservation: undefined })
       }),
 
     refresh: () =>
