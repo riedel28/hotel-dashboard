@@ -51,6 +51,9 @@ export function DeviceRoomControl({
         // Both states share one box, so the column reads as one aligned
         // stack whichever of them a row shows
         'font-normal',
+        // In the table, no taller than the other cells' content, so the rows
+        // match the other data grids
+        !outlined && 'h-6',
         room && 'tabular-nums'
       )}
     >
