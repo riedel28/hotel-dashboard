@@ -9,6 +9,9 @@ async function navigateToReservationEdit(page: Page, bookingNr: string) {
     page.getByRole('heading', { name: 'Reservations' })
   ).toBeVisible();
 
+  // Search rather than rely on the reservation being on the first page
+  await page.getByPlaceholder('Search reservations').fill(bookingNr);
+
   // Open row actions for the target reservation and click Edit
   const row = page.getByRole('row').filter({ hasText: bookingNr });
   await row.getByRole('button', { name: 'Open menu' }).click();
