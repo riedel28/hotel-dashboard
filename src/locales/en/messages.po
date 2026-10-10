@@ -44,8 +44,8 @@ msgstr "(optional)"
 
 #. placeholder {0}: properties.length
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:156
-msgid "{0, plural, one {# property} other {# properties}}"
-msgstr "{0, plural, one {# property} other {# properties}}"
+#~ msgid "{0, plural, one {# property} other {# properties}}"
+#~ msgstr "{0, plural, one {# property} other {# properties}}"
 
 #. placeholder {0}: selectedOptions.length
 #: src/components/ui/data-grid-checkbox-filter.tsx:145
@@ -111,6 +111,10 @@ msgstr "{name} unassigned from its room"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-tree-editor.tsx:287
 #~ msgid "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 #~ msgstr "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
+
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:116
+msgid "{total, plural, one {# property} other {# properties}}"
+msgstr "{total, plural, one {# property} other {# properties}}"
 
 #. placeholder {0}: deviceLabel(unassigning)
 #. placeholder {1}: roomLabel(unassigning.room)
@@ -1808,6 +1812,11 @@ msgstr "Failed to send password reset email. Please try again."
 #~ msgid "Failed to send SMS"
 #~ msgstr "Failed to send SMS"
 
+#. placeholder {0}: property.name
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:46
+msgid "Failed to switch to {0}"
+msgstr "Failed to switch to {0}"
+
 #: src/routes/_dashboard-layout/(user-view)/products/-components/use-category-mutations.ts:67
 msgid "Failed to update category"
 msgstr "Failed to update category"
@@ -1872,6 +1881,11 @@ msgstr "Fetch merchant account"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:60
 msgid "Filter by reservation"
 msgstr "Filter by reservation"
+
+#. placeholder {0}: properties.length
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:112
+msgid "First {0} of {total} properties"
+msgstr "First {0} of {total} properties"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:177
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:142
@@ -2171,8 +2185,8 @@ msgstr "Host"
 msgid "Host is required"
 msgstr "Host is required"
 
-#: src/routes/_dashboard-layout.tsx:37
-#: src/routes/_dashboard-layout.tsx:136
+#: src/routes/_dashboard-layout.tsx:38
+#: src/routes/_dashboard-layout.tsx:138
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:52
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -2422,7 +2436,7 @@ msgstr "Login"
 #~ msgid "Login into account"
 #~ msgstr "Login into account"
 
-#: src/routes/_dashboard-layout.tsx:55
+#: src/routes/_dashboard-layout.tsx:56
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -2777,7 +2791,7 @@ msgstr "No products in this category"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "No products in this category. Add products to this category by clicking the button below."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:133
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:90
 msgid "No properties found"
 msgstr "No properties found"
 
@@ -3897,7 +3911,7 @@ msgstr "Search products"
 msgid "Search properties"
 msgstr "Search properties"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:123
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:80
 msgid "Search property"
 msgstr "Search property"
 
@@ -3965,8 +3979,8 @@ msgstr "Select one or more roles to assign"
 #~ msgid "Select one or more roles to assign."
 #~ msgstr "Select one or more roles to assign."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:94
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:110
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:65
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:71
 msgid "Select property"
 msgstr "Select property"
 
@@ -4170,7 +4184,7 @@ msgid "Sign Up"
 msgstr "Sign Up"
 
 #: src/routes/_auth-layout.tsx:17
-#: src/routes/_dashboard-layout.tsx:70
+#: src/routes/_dashboard-layout.tsx:71
 msgid "Skip to main content"
 msgstr "Skip to main content"
 
@@ -4323,8 +4337,8 @@ msgstr "Switch view"
 #~ msgid "Switched to \"{propertyName}\""
 #~ msgstr "Switched to \"{propertyName}\""
 
-#. placeholder {0}: truncatePropertyName(property.name)
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:84
+#. placeholder {0}: property.name
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:44
 msgid "Switched to {0}"
 msgstr "Switched to {0}"
 
