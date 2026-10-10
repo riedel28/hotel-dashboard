@@ -94,8 +94,14 @@ function GuestLine({ guest, locale }: { guest: Guest; locale: string }) {
   );
 }
 
-function CheckinMethodLabel({ method }: { method: CheckinMethod }) {
+function CheckinMethodLabel({ method }: { method: CheckinMethod | null }) {
   switch (method) {
+    case null:
+      return (
+        <EmptyValue>
+          <Trans>Not yet</Trans>
+        </EmptyValue>
+      );
     case 'android':
       return <Trans>Android App</Trans>;
     case 'ios':
