@@ -191,7 +191,7 @@ function CheckinMethodLabel({ method }: { method: CheckinMethod | null }) {
 
   return (
     <span className="flex items-center gap-2">
-      <Icon className="size-4 shrink-0 text-muted-foreground" />
+      <Icon className="size-3 shrink-0 text-muted-foreground" />
       {label}
     </span>
   );
@@ -214,7 +214,7 @@ function ReservationDetails({
 
   return (
     <>
-      <DrawerHeader className="space-y-2 py-3">
+      <DrawerHeader className="space-y-1 py-3">
         {/* Only the title row shares its line with the close button */}
         <div className="flex items-center gap-2 pr-10">
           <DrawerTitle className="min-w-0 truncate">
@@ -226,7 +226,7 @@ function ReservationDetails({
             copiedLabel={t`Copied reservation number`}
           />
         </div>
-        <div className="flex items-center gap-2 text-sm font-normal text-muted-foreground">
+        <div className="flex items-baseline gap-2 text-sm font-normal text-muted-foreground">
           <StatusCell status={reservation.state} />
           {reservation.room_name && (
             // A long room name gives way to the actions; the full name is in
