@@ -224,6 +224,42 @@ async function createReservation(req: Request, res: Response) {
   }
 }
 
+/** Guest rows to insert for a reservation; only the first primary flag counts. */
+function sanitizeGuests(
+  guestPayload: Record<string, unknown>[],
+  reservationId: number
+) {
+  let hasPrimary = false;
+
+  return guestPayload.flatMap((guest) => {
+    const firstName =
+      (guest.first_name as string | undefined) ??
+      (guest.firstName as string | undefined);
+    const lastName =
+      (guest.last_name as string | undefined) ??
+      (guest.lastName as string | undefined);
+
+    if (!firstName || !lastName) {
+      return [];
+    }
+
+    const isPrimary = guest.is_primary === true && !hasPrimary;
+    hasPrimary ||= isPrimary;
+
+    return [
+      {
+        reservation_id: reservationId,
+        first_name: firstName,
+        last_name: lastName,
+        email: (guest.email as string | null | undefined) || null,
+        nationality_code:
+          (guest.nationality_code as string | undefined) ?? 'DE',
+        is_primary: isPrimary
+      }
+    ];
+  });
+}
+
 async function updateReservation(req: Request, res: Response) {
   const { id } = req.params;
   const body = req.body ?? {};
@@ -270,18 +306,31 @@ async function updateReservation(req: Request, res: Response) {
         }
       }
 
+      // The guest list is replaced wholesale, so work out the rows first: the
+      // reservation mirrors the primary guest's name and email.
+      const sanitizedGuests = Array.isArray(guestPayload)
+        ? sanitizeGuests(guestPayload, reservationId)
+        : null;
+      const primaryGuest = sanitizedGuests?.find((guest) => guest.is_primary);
+
       const reservationUpdates = Object.fromEntries(
         Object.entries({
           state,
           booking_nr,
-          guest_email,
+          guest_email: sanitizedGuests
+            ? (primaryGuest?.email ?? null)
+            : guest_email,
           booking_id,
           room_name: resolvedRoomName,
           booking_from,
           booking_to,
           check_in_via,
           check_out_via,
-          primary_guest_name,
+          primary_guest_name: sanitizedGuests
+            ? primaryGuest
+              ? `${primaryGuest.first_name} ${primaryGuest.last_name}`
+              : ''
+            : primary_guest_name,
           last_opened_at,
           received_at,
           completed_at,
@@ -306,42 +355,10 @@ async function updateReservation(req: Request, res: Response) {
         return null;
       }
 
-      if (Array.isArray(guestPayload)) {
+      if (sanitizedGuests) {
         await tx
           .delete(guestsTable)
           .where(eq(guestsTable.reservation_id, reservationId));
-
-        const sanitizedGuests = guestPayload
-          .map((guest: Record<string, unknown>) => {
-            const firstName =
-              (guest.first_name as string | undefined) ??
-              (guest.firstName as string | undefined);
-            const lastName =
-              (guest.last_name as string | undefined) ??
-              (guest.lastName as string | undefined);
-
-            if (!firstName || !lastName) {
-              return null;
-            }
-
-            const nationality =
-              (guest.nationality_code as string | undefined) ?? 'DE';
-
-            return {
-              reservation_id: reservationId,
-              first_name: firstName,
-              last_name: lastName,
-              email: (guest.email as string | null | undefined) ?? null,
-              nationality_code: nationality
-            };
-          })
-          .filter(Boolean) as Array<{
-          reservation_id: number;
-          first_name: string;
-          last_name: string;
-          email: string | null;
-          nationality_code: string;
-        }>;
 
         if (sanitizedGuests.length > 0) {
           await tx.insert(guestsTable).values(sanitizedGuests);

@@ -70,6 +70,8 @@ export const guestSchema = z.object({
   last_name: z.string(),
   email: z.union([z.string(), z.null()]).optional(),
   nationality_code: countryCodeSchema,
+  // At most one per reservation; the reservation mirrors their name and email.
+  is_primary: z.boolean().default(false),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date().nullable()
 });
@@ -160,28 +162,29 @@ export const updateReservationSchema = reservationSchema
   })
   .partial();
 
-// Guest schema for forms (only editable fields)
-export const guestFormSchema = z.object({
-  id: z.number(),
-  reservation_id: z.number(),
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  email: z.union([z.string(), z.null()]).optional(),
-  nationality_code: countryCodeSchema,
-  created_at: z.date(),
-  updated_at: z.date().nullable()
+// What the primary guest section edits; all blank means "no primary guest".
+export const primaryGuestFormSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  email: z.string(),
+  nationality_code: z.string()
 });
 
 // Form schema for editing reservations (subset of fields that are editable)
 export const reservationFormSchema = z.object({
   booking_nr: z.string().min(1),
-  guests: z.array(guestFormSchema),
+  // The reservation refers to its room by name, as the list and the add dialog do.
+  room_name: z.string().min(1),
+  purpose: z.enum(['private', 'business']),
+  booking_from: z.date(),
+  booking_to: z.date(),
   adults: z.coerce.number().int().min(1),
   youth: z.coerce.number().int().min(0),
   children: z.coerce.number().int().min(0),
   infants: z.coerce.number().int().min(0),
-  purpose: z.enum(['private', 'business']),
-  room: z.string().min(1)
+  primary_guest: primaryGuestFormSchema,
+  // Fellow travelers only; the primary guest is edited separately.
+  guests: z.array(guestSchema)
 });
 
 // Guest search

@@ -64,6 +64,13 @@
       "when": 1791614868674,
       "tag": "0008_reservation_states",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791659035924,
+      "tag": "0009_guest_is_primary",
+      "breakpoints": true
     }
   ]
 }

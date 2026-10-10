@@ -98,12 +98,18 @@ export const guests = pgTable(
     last_name: text('last_name').notNull(),
     email: text('email'),
     nationality_code: text('nationality_code').notNull(),
+    is_primary: boolean('is_primary').default(false).notNull(),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
     updated_at: timestamp('updated_at', { withTimezone: true })
   },
-  (table) => [index('guests_reservation_id_idx').on(table.reservation_id)]
+  (table) => [
+    index('guests_reservation_id_idx').on(table.reservation_id),
+    uniqueIndex('guests_one_primary_key')
+      .on(table.reservation_id)
+      .where(sql`${table.is_primary}`)
+  ]
 );
 
 // Users table

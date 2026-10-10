@@ -291,6 +291,44 @@ describe('Reservations API', () => {
       expect(response.body.updated_at).toBeTruthy();
     });
 
+    test('should mirror the primary guest onto the reservation', async () => {
+      const guest = (first_name: string, is_primary: boolean) => ({
+        id: 0,
+        reservation_id: reservationId,
+        first_name,
+        last_name: 'Doe',
+        email: `${first_name.toLowerCase()}@example.com`,
+        nationality_code: 'DE',
+        is_primary,
+        created_at: new Date(),
+        updated_at: null
+      });
+
+      const response = await request(app)
+        .patch(`/api/reservations/${reservationId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ guests: [guest('Jane', false), guest('John', true)] })
+        .expect(200);
+
+      expect(response.body.primary_guest_name).toBe('John Doe');
+      expect(response.body.guest_email).toBe('john@example.com');
+      expect(
+        response.body.guests
+          .filter((g: { is_primary: boolean }) => g.is_primary)
+          .map((g: { first_name: string }) => g.first_name)
+      ).toEqual(['John']);
+
+      // Dropping the primary guest clears the mirrored columns.
+      const cleared = await request(app)
+        .patch(`/api/reservations/${reservationId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ guests: [guest('Jane', false)] })
+        .expect(200);
+
+      expect(cleared.body.primary_guest_name).toBe('');
+      expect(cleared.body.guest_email).toBeNull();
+    });
+
     test('should return 404 for non-existent reservation', async () => {
       const updateData = {
         state: 'checked_in'

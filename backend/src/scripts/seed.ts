@@ -158,8 +158,9 @@ async function seedReservations() {
     inserted.map(({ id, booking_nr }) => [booking_nr, id])
   );
   const guestRows = seeds.flatMap((seed) =>
-    seed.guests.map((guest) => ({
+    seed.guests.map((guest, index) => ({
       ...guest,
+      is_primary: index === 0,
       reservation_id: idByBookingNr.get(seed.booking_nr)!,
       email: guestEmail(guest)
     }))
