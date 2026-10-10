@@ -26,6 +26,16 @@ export function propertiesQueryOptions(params?: FetchPropertiesParams) {
   });
 }
 
+/**
+ * The list behind the property selector: every Property rather than one page
+ * of the admin table.
+ */
+export function selectablePropertiesQueryOptions() {
+  // ponytail: the API's largest page; paginate or search server-side once
+  // there are more than 100 Properties.
+  return propertiesQueryOptions({ per_page: 100 });
+}
+
 async function fetchProperties(params?: FetchPropertiesParams) {
   try {
     const response = await client.get('/properties', {

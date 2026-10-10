@@ -6,7 +6,7 @@ import { LoaderCircleIcon, MessageCircleIcon } from 'lucide-react';
 
 import {
   fetchDisabledNavItems,
-  propertiesQueryOptions
+  selectablePropertiesQueryOptions
 } from '@/api/properties';
 import {
   Sidebar,
@@ -18,6 +18,7 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
+import { viewOf } from '@/hooks/use-current-view';
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
 import { DashboardNav } from '@/routes/_dashboard-layout/-components/sidebar-nav';
@@ -115,11 +116,12 @@ export const Route = createFileRoute('/_dashboard-layout')({
   },
   // No auth check here: `beforeLoad` above always runs first, and its redirect
   // throws, so an unauthenticated request never reaches this loader.
-  loader: async ({ context: { queryClient } }) => {
-    const properties = await queryClient.ensureQueryData(
-      propertiesQueryOptions()
-    );
-    return { properties };
+  loader: async ({ context: { queryClient }, location }) => {
+    // Warms the property selector's list so the header renders with it. The
+    // admin area has no selector, so it does not wait for one.
+    if (viewOf(location.pathname) === 'user') {
+      await queryClient.ensureQueryData(selectablePropertiesQueryOptions());
+    }
   },
   pendingComponent: DashboardPending,
   component: DashboardLayout

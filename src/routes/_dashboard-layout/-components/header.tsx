@@ -3,7 +3,7 @@ import { useRouter } from '@tanstack/react-router';
 import { TextAlignJustifyIcon } from 'lucide-react';
 import * as React from 'react';
 
-import { propertiesQueryOptions } from '@/api/properties';
+import { selectablePropertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
 import { Button } from '@/components/ui/button';
 import { useCurrentView } from '@/hooks/use-current-view';
@@ -11,20 +11,45 @@ import { MobileMenu } from '@/routes/_dashboard-layout/-components/mobile-menu';
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
 
-export default function Header() {
-  // The layout's loader has already fetched the list; reading the query rather
-  // than the loader data keeps the selector live when it refetches on open.
-  const { data: properties, refetch: refetchProperties } = useSuspenseQuery(
-    propertiesQueryOptions()
+/** The selector wired to its data and to the signed-in user's selection. */
+function HeaderPropertySelector() {
+  // The layout's loader has already fetched the list for the user view.
+  const { data: properties, refetch } = useSuspenseQuery(
+    selectablePropertiesQueryOptions()
   );
-  const view = useCurrentView();
   const { user, updateSelectedProperty } = useAuth();
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [optimisticPropertyId, setOptimisticPropertyId] = React.useState<
     string | undefined
   >();
+
+  const handlePropertyChange = async (propertyId: string) => {
+    setOptimisticPropertyId(propertyId);
+    try {
+      await updateSelectedProperty(propertyId);
+    } finally {
+      // On failure this reverts the selector: user.selected_property_id is
+      // unchanged. The error goes on to the selector, which reports it.
+      setOptimisticPropertyId(undefined);
+    }
+  };
+
+  return (
+    <PropertySelector
+      properties={properties.index}
+      total={properties.total}
+      value={optimisticPropertyId ?? user?.selected_property_id ?? undefined}
+      onValueChange={handlePropertyChange}
+      onOpen={() => void refetch()}
+    />
+  );
+}
+
+export default function Header() {
+  const view = useCurrentView();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   // Everything that follows a change of selected Property, in one place. An
   // effect rather than the change handler, because the router context only
@@ -41,16 +66,6 @@ export default function Header() {
     void queryClient.invalidateQueries();
     void router.invalidate();
   }, [selectedPropertyId, queryClient, router]);
-
-  const handlePropertyChange = async (propertyId: string) => {
-    setOptimisticPropertyId(propertyId);
-    try {
-      await updateSelectedProperty(propertyId);
-    } catch {
-      // Revert on failure — user.selected_property_id is unchanged
-    }
-    setOptimisticPropertyId(undefined);
-  };
 
   return (
     <>
@@ -69,18 +84,14 @@ export default function Header() {
             <TextAlignJustifyIcon className="size-4" />
           </Button>
           <div className="min-w-0">
-            {/* The admin area is not about any one Property. */}
+            {/*
+              The admin area is not about any one Property. Coming from there,
+              the list may not be loaded yet — the selector appears once it is.
+            */}
             {view === 'user' && (
-              <PropertySelector
-                properties={properties.index}
-                value={
-                  optimisticPropertyId ??
-                  user?.selected_property_id ??
-                  undefined
-                }
-                onValueChange={handlePropertyChange}
-                onOpen={() => void refetchProperties()}
-              />
+              <React.Suspense fallback={null}>
+                <HeaderPropertySelector />
+              </React.Suspense>
             )}
           </div>
           {/* Right side */}
