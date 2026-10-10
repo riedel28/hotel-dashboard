@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/riedel28/hotel-dashboard/compare/v1.21.0...v1.22.0) (2026-10-10)
+
+
+### Features
+
+* **property-selector:** taller list with faded edges, a check mark and a count ([f3a5880](https://github.com/riedel28/hotel-dashboard/commit/f3a5880bc63be25b3baf5b0dec43d6de7a692db0))
+
 # [1.21.0](https://github.com/riedel28/hotel-dashboard/compare/v1.20.0...v1.21.0) (2026-10-09)
 
 
