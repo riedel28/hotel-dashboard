@@ -1,3 +1,21 @@
+# [1.24.0](https://github.com/riedel28/hotel-dashboard/compare/v1.23.0...v1.24.0) (2026-10-10)
+
+
+### Bug Fixes
+
+* **country-flag:** keep the flag's 3:2 ratio and stop it from shrinking ([a50cc46](https://github.com/riedel28/hotel-dashboard/commit/a50cc469eb3b3bc030dc70bb16857c70406a7450))
+* **reservations:** polish the details drawer ([3384d6b](https://github.com/riedel28/hotel-dashboard/commit/3384d6b1794a347a9017f80f6637fe93fc763ee4))
+* **reservations:** search by guest name, list 25 per page by default ([e70c555](https://github.com/riedel28/hotel-dashboard/commit/e70c55537055d189bf6c6da1702116d2da65d73e))
+* **reservations:** show a missing check-in method in the details drawer ([d74c50c](https://github.com/riedel28/hotel-dashboard/commit/d74c50cf34915b891982c14ec853c80b085a47f3))
+* **search:** cancel a pending debounced call on unmount ([6f93bda](https://github.com/riedel28/hotel-dashboard/commit/6f93bdaf176f0b7259eff0e6fe8823e7de4d3f83))
+
+
+### Features
+
+* **reservations:** drawer actions, navigation between reservations and method icons ([42e47d9](https://github.com/riedel28/hotel-dashboard/commit/42e47d9f5492c6b845893de1859ef5ba4be6fb67))
+* **reservations:** guests column and a table that fits a laptop ([8b64f85](https://github.com/riedel28/hotel-dashboard/commit/8b64f852029630f1e13a3a2d4fba89b59ee955fa))
+* **reservations:** open the row in a details drawer instead of expanding it ([fec095a](https://github.com/riedel28/hotel-dashboard/commit/fec095aa0c58e6ea3c1fa4268ed2820089d6e282))
+
 # [1.23.0](https://github.com/riedel28/hotel-dashboard/compare/v1.22.0...v1.23.0) (2026-10-10)
 
 
