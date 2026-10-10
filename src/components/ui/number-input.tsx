@@ -5,7 +5,9 @@ import { useId } from 'react';
 import { cn } from '@/lib/utils';
 
 const stepperClassName =
-  'flex h-full w-9 shrink-0 items-center justify-center text-muted-foreground transition-colors outline-none first:border-r last:border-l border-input hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground disabled:pointer-events-none disabled:opacity-50';
+  // Inset from the field's border, so the hover reads as a button inside it
+  // A translucent tint, not bg-muted: on the field's dark-theme fill muted is all but invisible
+  'mx-0.75 flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors outline-none hover:bg-foreground/10 hover:text-foreground focus-visible:bg-foreground/10 focus-visible:text-foreground active:translate-y-px active:bg-foreground/15 disabled:pointer-events-none disabled:opacity-50';
 
 function NumberInput({
   className,
