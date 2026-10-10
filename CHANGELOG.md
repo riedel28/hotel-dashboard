@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/riedel28/hotel-dashboard/compare/v1.22.0...v1.23.0) (2026-10-10)
+
+
+### Features
+
+* **reservations:** replace states with the check-in lifecycle and add an Active filter preset ([39664e1](https://github.com/riedel28/hotel-dashboard/commit/39664e164702f50cd4659e9be7165f30941fad00))
+
 # [1.22.0](https://github.com/riedel28/hotel-dashboard/compare/v1.21.0...v1.22.0) (2026-10-10)
 
 
