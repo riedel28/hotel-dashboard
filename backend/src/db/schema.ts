@@ -17,13 +17,18 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
+import {
+  type ReservationState,
+  reservationStateSchema
+} from '../../../shared/types/reservations';
+
 export const reservations = pgTable(
   'reservations',
   {
     id: bigint('id', { mode: 'number' })
       .primaryKey()
       .generatedAlwaysAsIdentity(),
-    state: text('state').notNull().$type<'pending' | 'started' | 'done'>(),
+    state: text('state').notNull().$type<ReservationState>(),
     booking_nr: text('booking_nr').notNull(),
     guest_email: text('guest_email'),
     primary_guest_name: text('primary_guest_name'),
@@ -61,7 +66,9 @@ export const reservations = pgTable(
     index('reservations_booking_to_idx').on(table.booking_to),
     check(
       'reservations_state_check',
-      sql`${table.state} IN ('pending', 'started', 'done')`
+      sql`${table.state} IN (${sql.raw(
+        reservationStateSchema.options.map((state) => `'${state}'`).join(', ')
+      )})`
     ),
     check(
       'reservations_check_in_via_check',
@@ -366,6 +373,40 @@ export const guestAbcEntries = pgTable(
   ]
 );
 
+// Notes Administrators keep about a property, shown as its work log
+export const propertyWorklogs = pgTable(
+  'property_worklogs',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    message: text('message').notNull(),
+    // Entries outlive their author: the user reference is nulled on delete
+    created_by: bigint('created_by', { mode: 'number' }).references(
+      () => users.id,
+      { onDelete: 'set null' }
+    ),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    // Both null until the first edit — unlike the other tables' updated_at
+    updated_by: bigint('updated_by', { mode: 'number' }).references(
+      () => users.id,
+      { onDelete: 'set null' }
+    ),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+  },
+  (table) => [
+    index('property_worklogs_property_id_created_at_idx').on(
+      table.property_id,
+      table.created_at
+    )
+  ]
+);
+
 export const monitoringLogs = pgTable(
   'monitoring_logs',
   {
@@ -443,6 +484,8 @@ export type NewRoom = typeof rooms.$inferInsert;
 
 export type GuestAbcEntry = typeof guestAbcEntries.$inferSelect;
 export type NewGuestAbcEntry = typeof guestAbcEntries.$inferInsert;
+
+export type PropertyWorklog = typeof propertyWorklogs.$inferSelect;
 
 export type ProductCategory = typeof productCategories.$inferSelect;
 export type NewProductCategory = typeof productCategories.$inferInsert;

@@ -234,7 +234,7 @@ describe('Reservations API', () => {
 
     test('should update reservation successfully', async () => {
       const updateData = {
-        state: 'started',
+        state: 'checked_in',
         primary_guest_name: 'John Doe',
         guest_email: 'john@example.com'
       };
@@ -246,7 +246,7 @@ describe('Reservations API', () => {
         .expect(200);
 
       expect(response.body.id).toBe(reservationId);
-      expect(response.body.state).toBe('started');
+      expect(response.body.state).toBe('checked_in');
       expect(response.body.primary_guest_name).toBe('John Doe');
       expect(response.body.guest_email).toBe('john@example.com');
       expect(response.body.updated_at).toBeTruthy();
@@ -254,7 +254,7 @@ describe('Reservations API', () => {
 
     test('should return 404 for non-existent reservation', async () => {
       const updateData = {
-        state: 'started'
+        state: 'checked_in'
       };
 
       await request(app)
@@ -266,7 +266,7 @@ describe('Reservations API', () => {
 
     test('should return 401 without authentication', async () => {
       const updateData = {
-        state: 'started'
+        state: 'checked_in'
       };
 
       await request(app)

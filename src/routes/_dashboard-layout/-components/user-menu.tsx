@@ -33,6 +33,7 @@ import { loadCatalog } from '@/i18n';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
 import { getPackageVersion } from '@/utils/package-info';
+import { getInitials } from '@/utils/user';
 
 interface Language {
   code: 'en' | 'de';
@@ -221,20 +222,7 @@ export default function UserMenu() {
 
   const currentLanguage = languages.find((l) => l.code === locale);
   const version = getPackageVersion();
-  const avatarFallback = getAvatarFallback(
-    auth.user?.first_name,
-    auth.user?.last_name
-  );
-
-  function getAvatarFallback(
-    firstName?: string | null,
-    lastName?: string | null
-  ) {
-    const firstInitial = firstName?.trim().charAt(0).toUpperCase() ?? '';
-    const lastInitial = lastName?.trim().charAt(0).toUpperCase() ?? '';
-
-    return `${firstInitial}${lastInitial}` || '?';
-  }
+  const avatarFallback = (auth.user && getInitials(auth.user)) || '?';
 
   const handleChangeLocale = (value: string) => {
     loadCatalog(value);

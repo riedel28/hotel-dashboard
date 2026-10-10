@@ -50,6 +50,20 @@
       "when": 1791537763235,
       "tag": "0006_property_options",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791539578797,
+      "tag": "0007_property_worklogs",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791614868674,
+      "tag": "0008_reservation_states",
+      "breakpoints": true
     }
   ]
 }

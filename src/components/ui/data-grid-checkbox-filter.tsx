@@ -58,6 +58,8 @@ interface DataGridCheckboxFilterProps<TValue extends string> extends Omit<
   onValueChange: (value: TValue[]) => void;
   label: ReactNode;
   placeholder?: ReactNode;
+  /** Menu items rendered above the options, e.g. presets. */
+  header?: ReactNode;
   /** Footer parts rendered below the options, e.g. clear / select all. */
   children?: ReactNode;
 }
@@ -68,6 +70,8 @@ const triggerClassName =
 const footerActionClassName =
   'h-7 flex-1 justify-center px-2 font-normal whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground';
 
+const itemClassName = 'py-1.5 pl-9';
+
 const chevron = <ChevronDownIcon className="size-4 shrink-0 opacity-50" />;
 
 function DataGridCheckboxFilter<TValue extends string>({
@@ -76,6 +80,7 @@ function DataGridCheckboxFilter<TValue extends string>({
   onValueChange,
   label,
   placeholder,
+  header,
   children,
   className,
   ...props
@@ -168,13 +173,14 @@ function DataGridCheckboxFilter<TValue extends string>({
         align="start"
         className="w-auto min-w-(--anchor-width)"
       >
+        {header}
         {options.map((option) => (
           <DropdownMenuCheckboxItem
             key={option.value}
             checked={selectedValues.has(option.value)}
             disabled={option.disabled}
             onCheckedChange={(checked) => toggleValue(option.value, checked)}
-            className="py-1.5 pl-9"
+            className={itemClassName}
           >
             <span className="flex min-w-0 items-center gap-2">
               {option.icon}
@@ -187,6 +193,33 @@ function DataGridCheckboxFilter<TValue extends string>({
         </DataGridCheckboxFilterContext>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+/**
+ * A shortcut above the options that sets several of them at once. Rendered via
+ * the `header` prop; the caller decides what counts as checked.
+ */
+function DataGridCheckboxFilterPreset({
+  checked,
+  onCheckedChange,
+  children
+}: {
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+  children: ReactNode;
+}) {
+  return (
+    <>
+      <DropdownMenuCheckboxItem
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        className={itemClassName}
+      >
+        {children}
+      </DropdownMenuCheckboxItem>
+      <DropdownMenuSeparator />
+    </>
   );
 }
 
@@ -263,6 +296,7 @@ export {
   DataGridCheckboxFilterFooter,
   DataGridCheckboxFilterFooterSeparator,
   type DataGridCheckboxFilterOption,
+  DataGridCheckboxFilterPreset,
   type DataGridCheckboxFilterProps,
   DataGridCheckboxFilterSelectAll
 };

@@ -2,14 +2,14 @@ import { z } from 'zod';
 
 import { countryCodeSchema } from './properties';
 
-export const reservationStatusSchema = z.enum([
+// In lifecycle order.
+export const reservationStateSchema = z.enum([
   'pending',
-  'started',
-  'done',
-  'all'
+  'ready_in',
+  'checked_in',
+  'ready_out',
+  'checked_out'
 ]);
-
-export const reservationStateSchema = z.enum(['pending', 'started', 'done']);
 
 const reservationStatusFilterSchema = z.preprocess(
   (value) => {
@@ -76,7 +76,7 @@ export const guestSchema = z.object({
 
 export const reservationSchema = z.object({
   id: z.number(),
-  state: reservationStatusSchema,
+  state: reservationStateSchema,
   booking_nr: z.string(),
   guest_email: z.union([z.email(), z.literal(''), z.null()]),
   guests: z.array(guestSchema),
@@ -84,8 +84,8 @@ export const reservationSchema = z.object({
   room_name: z.string(),
   booking_from: z.coerce.date(),
   booking_to: z.coerce.date(),
-  check_in_via: checkinMethodSchema,
-  check_out_via: checkinMethodSchema,
+  check_in_via: checkinMethodSchema.nullable(),
+  check_out_via: checkinMethodSchema.nullable(),
   primary_guest_name: z.union([z.string(), z.literal(''), z.null()]),
   last_opened_at: z.coerce.date().nullable(),
   received_at: z.coerce.date(),
@@ -99,7 +99,7 @@ export const reservationSchema = z.object({
   children: z.coerce.number().int().nonnegative().optional(),
   infants: z.coerce.number().int().nonnegative().optional(),
   purpose: z.enum(['private', 'business']).optional(),
-  room: z.string().optional()
+  room: z.string().nullish()
 });
 
 export const sortableColumnsSchema = z.enum([
@@ -126,7 +126,9 @@ export const fetchReservationsParamsSchema = z.object({
     .default(10)
     .optional(),
   q: z.string().max(200).optional(),
-  status: reservationStatusFilterSchema.default('all').optional(),
+  // An unknown status (e.g. a bookmark from before the states were renamed)
+  // means no filter rather than a failed parse.
+  status: reservationStatusFilterSchema.default('all').catch('all').optional(),
   from: z.iso.date().optional(),
   to: z.iso.date().optional(),
   sort_by: sortableColumnsSchema.optional(),
@@ -199,7 +201,6 @@ export type GuestSearchResult = z.infer<typeof guestSearchResultSchema>;
 // Type exports
 export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
 export type ReservationState = z.infer<typeof reservationStateSchema>;
-export type ReservationStatus = z.infer<typeof reservationStatusSchema>;
 export type Reservation = z.infer<typeof reservationSchema>;
 export type Guest = z.infer<typeof guestSchema>;
 export type FetchReservationsParams = z.infer<
