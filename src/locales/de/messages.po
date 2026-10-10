@@ -60,8 +60,8 @@ msgstr "{0}"
 
 #. placeholder {0}: guests.length
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/guests-cell.tsx:55
-msgid "{0} guests total"
-msgstr "{0} Gäste insgesamt"
+#~ msgid "{0} guests total"
+#~ msgstr "{0} Gäste insgesamt"
 
 #. placeholder {0}: status.recovery_codes_remaining
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:154
@@ -80,12 +80,12 @@ msgstr "{0} Rollen insgesamt"
 #. placeholder {0}: guest.last_name
 #. placeholder {1}: guest.first_name
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/guests-cell.tsx:25
-msgid "{0}, {1}"
-msgstr "{0}, {1}"
+#~ msgid "{0}, {1}"
+#~ msgstr "{0}, {1}"
 
 #. placeholder {0}: steps.length
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:302
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:287
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:287
 msgid "{failedCount} of {0} tests failed"
 msgstr "{failedCount} von {0} Tests fehlgeschlagen"
 
@@ -145,7 +145,7 @@ msgstr ""
 msgid "401 Unauthorized — check username and password."
 msgstr "401 Unauthorized — Benutzername und Passwort prüfen."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:97
 msgid "401 Unauthorized — the API key was rejected."
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr "Konto aktiviert!"
 #~ msgid "Account settings"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:42
 msgid "Accounting codes reported to your PMS per payment method and channel."
 msgstr ""
 
@@ -274,7 +274,7 @@ msgstr "Unterkategorie hinzufügen"
 msgid "Added on {0}"
 msgstr "Hinzugefügt am {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:236
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:236
 msgid "Additional configuration"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr ""
 msgid "Address"
 msgstr "Adresse"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:35
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:35
 msgid "Address line"
 msgstr ""
 
@@ -294,12 +294,12 @@ msgstr ""
 msgid "Address line 1"
 msgstr "Adresszeile 1"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:62
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:189
 msgid "Address line 2"
 msgstr "Adresszeile 2"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:119
 msgid "Address line is required"
 msgstr ""
 
@@ -338,7 +338,7 @@ msgstr "Administrator"
 msgid "Adults"
 msgstr "Erwachsene"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:218
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:218
 msgid "Adyen"
 msgstr ""
 
@@ -384,7 +384,7 @@ msgstr "Alle Status"
 
 #. placeholder {0}: steps.length
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:298
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:283
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "Alle Tests bestanden ({passedCount}/{0})"
 
@@ -408,7 +408,7 @@ msgstr "Beim Abrufen der Kunden ist ein Fehler aufgetreten"
 msgid "An error occurred while fetching devices"
 msgstr "Beim Laden der Geräte ist ein Fehler aufgetreten"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:227
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:228
 msgid "An error occurred while fetching monitoring logs"
 msgstr "Es ist ein Fehler beim Abrufen der Monitoring-Protokolle aufgetreten"
 
@@ -416,7 +416,7 @@ msgstr "Es ist ein Fehler beim Abrufen der Monitoring-Protokolle aufgetreten"
 msgid "An error occurred while fetching properties"
 msgstr "Beim Abrufen der Unterkünfte ist ein Fehler aufgetreten"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:69
 msgid "An error occurred while fetching reservations"
 msgstr "Es ist ein Fehler beim Abrufen der Reservierungen aufgetreten"
 
@@ -433,11 +433,11 @@ msgstr "Es ist ein Fehler beim Abrufen der Benutzer aufgetreten"
 msgid "An unexpected error occurred"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:106
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:181
 msgid "Android App"
 msgstr "Android App"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:143
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:143
 msgid "API Key"
 msgstr ""
 
@@ -476,12 +476,12 @@ msgstr "Sind Sie sicher, dass Sie sich abmelden möchten?"
 msgid "Are you sure?"
 msgstr "Sind Sie sicher?"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:164
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:204
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:212
 msgid "Arrival"
 msgstr "Anreise"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:189
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:320
 msgid "Arrival Date"
 msgstr "Anreisedatum"
 
@@ -531,7 +531,7 @@ msgstr "Mindestens ein Sonderzeichen"
 #~ msgid "Austria"
 #~ msgstr "Österreich"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:85
 msgid "Authenticate credentials"
 msgstr ""
 
@@ -600,9 +600,9 @@ msgstr "Zurück zur Anmeldung"
 msgid "Back to sign in"
 msgstr "Zurück zur Anmeldung"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:207
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:215
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:230
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:338
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:245
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:260
 msgid "Balance"
 msgstr "Betrag"
 
@@ -611,8 +611,8 @@ msgid "Bold"
 msgstr "Fett"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:144
-msgid "Booking"
-msgstr "Buchung"
+#~ msgid "Booking"
+#~ msgstr "Buchung"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:353
 #~ msgid "Booking {booking_nr}"
@@ -620,8 +620,8 @@ msgstr "Buchung"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:133
-msgid "Booking #"
-msgstr "Res.-Nr."
+#~ msgid "Booking #"
+#~ msgstr "Res.-Nr."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:115
 msgid "Booking Information"
@@ -654,8 +654,8 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:283
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:317
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:315
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:348
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:315
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:348
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
@@ -788,11 +788,11 @@ msgstr "Check-in-Kiosk-App"
 #~ msgid "Check-in URL"
 #~ msgstr "Check-in URL"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:197
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:328
 msgid "Check-in via"
 msgstr "Check-in über"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:201
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:332
 msgid "Check-out via"
 msgstr "Check-out über"
 
@@ -808,7 +808,7 @@ msgstr "Checked out"
 #~ msgid "Checkin Page"
 #~ msgstr "Checkin-Seite"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:186
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:186
 msgid "Checks the connection to Adyen using the current form values."
 msgstr ""
 
@@ -827,12 +827,12 @@ msgstr "Kinder"
 #~ msgid "Choose how this property connects to its door locks"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:105
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:204
 msgid "City"
 msgstr "Stadt"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:133
 msgid "City is required"
 msgstr ""
 
@@ -842,7 +842,7 @@ msgstr "Alle zurücksetzen"
 
 #: src/components/clear-filters-button.tsx:27
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:124
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:204
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
@@ -854,18 +854,18 @@ msgstr "Filter löschen"
 msgid "Clear search"
 msgstr "Suche löschen"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:172
 msgid "Client Key"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:112
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:112
 msgid "Client Key is required"
 msgstr ""
 
 #: src/components/ui/drawer.tsx:55
 #: src/components/ui/sheet.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:326
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:311
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:311
 msgid "Close"
 msgstr "Schließen"
 
@@ -889,7 +889,7 @@ msgstr "Firma"
 #~ msgid "Company data"
 #~ msgstr "Firmendaten"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:221
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:352
 msgid "Completed At"
 msgstr "Abgeschlossen am"
 
@@ -898,7 +898,7 @@ msgstr "Abgeschlossen am"
 msgid "Config updated"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:177
 msgid "Configuration updated"
 msgstr ""
 
@@ -933,7 +933,7 @@ msgstr "Bestätigen Sie Ihr Passwort"
 #~ msgid "Connected"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:282
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:282
 msgid "Connection failed"
 msgstr ""
 
@@ -941,7 +941,7 @@ msgstr ""
 #~ msgid "Connection method"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:280
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:280
 msgid "Connection successful"
 msgstr ""
 
@@ -979,7 +979,7 @@ msgstr "Content Manager"
 msgid "Continue"
 msgstr "Weiter"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:222
 msgid "Copied reservation number"
 msgstr "Reservierungsnummer kopiert"
 
@@ -987,7 +987,7 @@ msgstr "Reservierungsnummer kopiert"
 msgid "Copy"
 msgstr "Kopieren"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:189
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:189
 msgid "Copy Client Key"
 msgstr ""
 
@@ -995,11 +995,11 @@ msgstr ""
 msgid "Copy message"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:222
 msgid "Copy Public Key"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:221
 msgid "Copy reservation number"
 msgstr "Reservierungsnummer kopieren"
 
@@ -1014,7 +1014,7 @@ msgstr "Einrichtungsschlüssel kopieren"
 #~ msgid "Copy to clipboard"
 #~ msgstr "In Zwischenablage kopieren"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:95
 msgid "Could not reach the Adyen API — request timed out after 5000 ms."
 msgstr ""
 
@@ -1030,7 +1030,7 @@ msgstr "E-Mail konnte nicht gesendet werden. Bitte erneut versuchen."
 msgid "Couldn't start setup"
 msgstr "Einrichtung konnte nicht gestartet werden"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:133
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:222
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:184
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:166
@@ -1043,7 +1043,7 @@ msgstr "Land"
 #~ msgid "Country code"
 #~ msgstr "Ländervorwahl"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:140
 msgid "Country is required"
 msgstr ""
 
@@ -1086,8 +1086,8 @@ msgstr "Neues Zimmer erstellen"
 msgid "Create the first category to start adding products."
 msgstr "Lege die erste Kategorie an, um Produkte hinzuzufügen."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form-toc.tsx:13
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-toc.tsx:13
 msgid "Credentials"
 msgstr ""
 
@@ -1159,8 +1159,9 @@ msgstr "Datum"
 #~ msgstr "DE +49"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:266
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:85
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:65
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:86
@@ -1211,12 +1212,12 @@ msgstr "Gelöschter Benutzer"
 msgid "Demo"
 msgstr "Demo"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:189
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:224
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:232
 msgid "Departure"
 msgstr "Abreise"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:193
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:324
 msgid "Departure Date"
 msgstr "Abreisedatum"
 
@@ -1249,7 +1250,7 @@ msgstr "Gerät nicht gefunden"
 msgid "Devices"
 msgstr "Geräte"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:151
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:151
 msgid "Digits only (max 12)"
 msgstr ""
 
@@ -1306,8 +1307,8 @@ msgstr "Zum Verschieben ziehen, zum Zoomen den Regler oder zwei Finger verwenden
 msgid "Drop an image here or choose one. It's resized automatically, so any size is fine."
 msgstr "Bild hierher ziehen oder auswählen. Die Größe wird automatisch angepasst, jede Auflösung ist in Ordnung."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:56
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:56
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:80
 msgid "E-com"
 msgstr ""
 
@@ -1323,7 +1324,8 @@ msgstr ""
 #~ msgid "Each code works once."
 #~ msgstr "Jeder Code funktioniert einmal."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:55
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:44
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:119
@@ -1526,11 +1528,11 @@ msgstr ""
 #~ msgid "Enter the current code from your authenticator app."
 #~ msgstr "Geben Sie den aktuellen Code aus Ihrer Authenticator-App ein."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:105
 msgid "Enter the new API key"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:148
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:148
 msgid "Enter your API Key"
 msgstr ""
 
@@ -1594,11 +1596,11 @@ msgstr ""
 msgid "Entry was deleted"
 msgstr "Eintrag wurde gelöscht"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:66
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:66
 msgid "Environment"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:99
 msgid "Environment mismatch — these credentials belong to a different environment."
 msgstr ""
 
@@ -1823,11 +1825,11 @@ msgstr "Fehler beim Aktualisieren des Benutzers"
 msgid "Fair"
 msgstr "Mittel"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:173
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:304
 msgid "Fellow travelers"
 msgstr "Mitreisende"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:87
 msgid "Fetch merchant account"
 msgstr ""
 
@@ -1982,7 +1984,7 @@ msgstr ""
 msgid "Guest ABC entries help guests find hotel information from A to Z. Add your first entry to get started."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:276
 msgid "Guest Email"
 msgstr "Gast-E-Mail"
 
@@ -1996,7 +1998,9 @@ msgstr "Gast-E-Mail"
 #~ msgstr "gast@example.com"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:150
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:162
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:293
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:159
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:167
 msgid "Guests"
 msgstr "Gäste"
 
@@ -2109,7 +2113,7 @@ msgstr "Passwort ausblenden"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:56
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
@@ -2183,7 +2187,7 @@ msgstr "Säuglinge"
 #~ msgstr "Info"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:187
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:67
 msgid "Integration Guide"
 msgstr ""
@@ -2220,7 +2224,7 @@ msgstr "Einladung erfolgreich gesendet"
 msgid "Invite User"
 msgstr "Benutzer einladen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:182
 msgid "iOS App"
 msgstr "iOS App"
 
@@ -2308,7 +2312,7 @@ msgstr "Letztes Signal"
 #~ msgstr "Zuletzt getestet um {0}"
 
 #. placeholder {0}: i18n.date(lastSavedAt, { timeStyle: 'short' })
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:299
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:299
 msgid "Last updated at {0}"
 msgstr ""
 
@@ -2329,15 +2333,15 @@ msgstr "Hell"
 msgid "Link"
 msgstr "Link"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:100
 msgid "Live"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:226
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:226
 msgid "Live environment"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:340
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:340
 msgid "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 msgstr ""
 
@@ -2449,8 +2453,8 @@ msgstr "Verwalten Sie Ihre persönlichen Daten, Sicherheit und Zugriffsrechte."
 #~ msgid "Manage your user roles and permissions"
 #~ msgstr "Verwalten Sie Ihre Benutzerrollen und Berechtigungen"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form-toc.tsx:15
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:40
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-toc.tsx:15
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:40
 msgid "Mapping codes"
 msgstr ""
 
@@ -2462,15 +2466,15 @@ msgstr ""
 msgid "Meldeschein App (iPad)"
 msgstr "Meldeschein-App (iPad)"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:101
 msgid "Merchant account not found — check the Merchant ID."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:113
 msgid "Merchant ID"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:98
 msgid "Merchant ID is required"
 msgstr ""
 
@@ -2533,13 +2537,18 @@ msgstr "Tägliche Abläufe überwachen, Belegung verfolgen und Rezeptionstätigk
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:71
 msgid "Monitoring Logs"
 msgstr "Monitoring-Protokolle"
 
 #: src/components/ui/breadcrumb.tsx:93
 msgid "More"
 msgstr "Mehr"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:253
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:254
+msgid "More actions"
+msgstr ""
 
 #: src/components/ui/pagination.tsx:124
 msgid "More pages"
@@ -2624,6 +2633,11 @@ msgstr "Das neue Passwort muss sich vom aktuellen unterscheiden"
 msgid "Next"
 msgstr "Weiter"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:381
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:382
+msgid "Next reservation"
+msgstr ""
+
 #: src/components/ui/carousel.tsx:234
 #~ msgid "Next slide"
 #~ msgstr "Nächste Folie"
@@ -2677,7 +2691,7 @@ msgstr "Noch keine Geräte"
 msgid "No entries yet"
 msgstr "Noch keine Einträge"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:176
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:307
 msgid "No fellow travelers"
 msgstr "Keine Mitreisende"
 
@@ -2686,8 +2700,8 @@ msgid "No floor"
 msgstr "Ohne Etage"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/cells/guests-cell.tsx:36
-msgid "No guests"
-msgstr "Keine Gäste"
+#~ msgid "No guests"
+#~ msgstr "Keine Gäste"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:168
 msgid "No guests added yet"
@@ -2697,11 +2711,11 @@ msgstr "Noch keine Gäste hinzugefügt"
 msgid "No guests found"
 msgstr "Keine Gäste gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:180
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:181
 msgid "No logs in the last 24 hours"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:195
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:196
 msgid "No logs match the current filters."
 msgstr ""
 
@@ -2709,7 +2723,7 @@ msgstr ""
 msgid "No name"
 msgstr "Kein Name"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:299
 msgid "No primary guest"
 msgstr "Kein Hauptgast"
 
@@ -2745,7 +2759,7 @@ msgstr "Noch keine Unterkünfte."
 #~ msgid "No properties yet. Assign this customer on a property's page."
 #~ msgstr "Noch keine Unterkünfte. Weisen Sie diesen Kunden auf der Seite einer Unterkunft zu."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:103
 msgid "No response from Adyen."
 msgstr ""
 
@@ -2779,7 +2793,7 @@ msgstr "Keine Zimmer verfügbar"
 msgid "No rooms found"
 msgstr "Keine Zimmer gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:304
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:304
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:171
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:398
 msgid "No unsaved changes"
@@ -2789,17 +2803,17 @@ msgstr "Keine ungespeicherten Änderungen"
 #~ msgid "None"
 #~ msgstr "Keine"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:156
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:287
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:161
 msgid "Not assigned"
 msgstr "Nicht zugewiesen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:226
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:357
 msgid "Not completed"
 msgstr "Nicht abgeschlossen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:148
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:279
 msgid "Not provided"
 msgstr "Nicht angegeben"
 
@@ -2807,7 +2821,7 @@ msgstr "Nicht angegeben"
 msgid "Not verified yet."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:175
 msgid "Not yet"
 msgstr "Noch nicht"
 
@@ -2815,7 +2829,7 @@ msgstr "Noch nicht"
 msgid "Notes your team adds about this property will be listed here."
 msgstr "Notizen Ihres Teams zu dieser Unterkunft werden hier aufgelistet."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:192
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:193
 msgid "Nothing found"
 msgstr ""
 
@@ -2877,13 +2891,13 @@ msgstr "Öffnen Sie Ihre Authenticator-App und scannen Sie den Code unten."
 #~ msgid "Opening"
 #~ msgstr "Wird geöffnet"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:238
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:238
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:118
 msgid "Optional"
 msgstr "Optional"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:249
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:249
 msgid "Optional JSON or certificates passed to the Adyen SDK."
 msgstr ""
 
@@ -2900,7 +2914,7 @@ msgstr ""
 msgid "Other logs for reservation {bookingNr}"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:196
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:196
 msgid "Our server"
 msgstr ""
 
@@ -2982,11 +2996,11 @@ msgstr "Passwort aktualisiert"
 msgid "Passwords don't match"
 msgstr "Passwörter stimmen nicht überein"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:337
 msgid "Payment"
 msgstr "Zahlung"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:53
 msgid "Payment method"
 msgstr ""
 
@@ -2997,8 +3011,8 @@ msgstr ""
 msgid "Payment Provider"
 msgstr "Payment Provider"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form-toc.tsx:14
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:23
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-toc.tsx:14
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:23
 msgid "Payment recipient"
 msgstr ""
 
@@ -3043,7 +3057,7 @@ msgstr "Foto aktualisiert"
 msgid "Pick a date range"
 msgstr "Datumsbereich auswählen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:184
 msgid "Pick a longer period to see older logs."
 msgstr ""
 
@@ -3135,8 +3149,8 @@ msgstr ""
 msgid "Port is required"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:59
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:89
 msgid "POS"
 msgstr ""
 
@@ -3147,6 +3161,11 @@ msgstr "Foto ausrichten"
 #: src/components/ui/pagination.tsx:84
 msgid "Previous"
 msgstr "Zurück"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:371
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:372
+msgid "Previous reservation"
+msgstr ""
 
 #: src/components/ui/carousel.tsx:202
 #~ msgid "Previous slide"
@@ -3160,7 +3179,7 @@ msgstr "Preis"
 msgid "Price (€)"
 msgstr "Preis (€)"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:163
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:294
 msgid "Primary Guest"
 msgstr "Hauptgast"
 
@@ -3313,7 +3332,7 @@ msgstr "Unterkunft erfolgreich aktualisiert"
 msgid "Protect your account with a second step"
 msgstr "Schützen Sie Ihr Konto mit einem zweiten Schritt"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:209
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:209
 msgid "Public Key"
 msgstr ""
 
@@ -3321,11 +3340,13 @@ msgstr ""
 msgid "Purpose of Stay"
 msgstr "Anlass des Aufenthalts"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:393
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:43
 msgid "Push to device"
 msgstr "An Gerät senden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:390
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:39
 msgid "Pushed to device"
 msgstr "An Gerät gesendet"
 
@@ -3350,7 +3371,7 @@ msgstr "QR-Code zur Einrichtung der Zwei-Faktor-Authentifizierung"
 msgid "Quantity"
 msgstr "Menge"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:84
 msgid "Reach Adyen API"
 msgstr ""
 
@@ -3370,7 +3391,7 @@ msgstr "Ready in"
 msgid "Ready out"
 msgstr "Ready out"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:217
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:348
 msgid "Received At"
 msgstr "Erhalten am"
 
@@ -3496,6 +3517,9 @@ msgstr "Bestätigungs-E-Mail erneut senden"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:137
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:158
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:171
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:275
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:147
 msgid "Reservation"
 msgstr "Reservierung"
 
@@ -3544,9 +3568,9 @@ msgstr "Reservierung erfolgreich aktualisiert"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:74
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:62
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:41
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:55
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:63
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:40
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:62
 msgid "Reservations"
 msgstr "Reservierungen"
 
@@ -3603,9 +3627,9 @@ msgstr "Rollen & Zugriff"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:111
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:391
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:153
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:144
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:284
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:174
 msgid "Room"
@@ -3694,13 +3718,13 @@ msgid "RSX API"
 msgstr "RSX API"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:323
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:308
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:308
 msgid "Run again"
 msgstr "Erneut ausführen"
 
 #. placeholder {0}: steps.length
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:294
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:279
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:279
 msgid "Running tests… ({passedCount}/{0})"
 msgstr "Tests laufen… ({passedCount}/{0})"
 
@@ -3714,7 +3738,7 @@ msgstr ""
 msgid "Save"
 msgstr "Speichern"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:325
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:325
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:188
 msgid "Save changes"
@@ -3748,11 +3772,11 @@ msgstr "Speichern Sie Ihre Wiederherstellungscodes. Sie brauchen sie, falls Sie 
 #~ msgid "Saved only when you save changes."
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:323
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:323
 msgid "Saving changes"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:297
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:297
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:169
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:396
 msgid "Saving changes…"
@@ -4025,7 +4049,7 @@ msgstr ""
 msgid "Show all {0} properties"
 msgstr "Alle {0} Unterkünfte anzeigen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:162
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:163
 msgid "Show all logs"
 msgstr ""
 
@@ -4058,8 +4082,8 @@ msgid "Show results for: <0>\"{q}\"</0>"
 msgstr "Ergebnisse für: <0>\"{q}\"</0>"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-search-results.tsx:16
-msgid "Show results for: <0>\"{searchQuery}\"</0>"
-msgstr "Ergebnisse für: <0>\"{searchQuery}\"</0>"
+#~ msgid "Show results for: <0>\"{searchQuery}\"</0>"
+#~ msgstr "Ergebnisse für: <0>\"{searchQuery}\"</0>"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:405
 #~ msgid "Showing only logs for reservation <0>{booking_nr}</0>"
@@ -4069,7 +4093,7 @@ msgstr "Ergebnisse für: <0>\"{searchQuery}\"</0>"
 #~ msgid "Showing only logs for reservation <0>{bookingNr}</0>"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:153
 msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr ""
 
@@ -4093,7 +4117,7 @@ msgid "Skip to main content"
 msgstr "Zum Hauptinhalt springen"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:253
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:236
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:236
 msgid "Skipped"
 msgstr "Übersprungen"
 
@@ -4115,7 +4139,7 @@ msgstr "Jemand — vermutlich ein Administrator — hat Ihren Datensatz geänder
 #: src/components/error-state.tsx:64
 #: src/routes/__root.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:299
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:223
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:224
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:162
 msgid "Something went wrong"
 msgstr "Etwas ist schiefgelaufen"
@@ -4155,7 +4179,7 @@ msgstr "Start"
 #~ msgid "Started"
 #~ msgstr "Gestartet"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:112
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:184
 msgid "Station"
 msgstr "Station"
 
@@ -4163,8 +4187,8 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:48
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:90
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:115
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:89
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:157
@@ -4174,7 +4198,7 @@ msgstr "Station"
 msgid "Status"
 msgstr "Status"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:188
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:319
 msgid "Stay"
 msgstr "Aufenthalt"
 
@@ -4184,7 +4208,7 @@ msgstr "Aufenthalt"
 msgid "Step {0} of {1}"
 msgstr "Schritt {0} von {1}"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:302
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:302
 msgid "Stop test"
 msgstr ""
 
@@ -4219,11 +4243,11 @@ msgstr "Erfolgreich angemeldet!"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Unterstützte Formate: JPG, PNG, GIF (max. 5MB)"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:357
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:357
 msgid "Switch to Live"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:337
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:337
 msgid "Switch to the Live environment?"
 msgstr ""
 
@@ -4266,7 +4290,7 @@ msgstr "System"
 msgid "TCP connection"
 msgstr "TCP-Verbindung"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:56
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:56
 msgid "Technical connection details for your Adyen account."
 msgstr ""
 
@@ -4275,28 +4299,28 @@ msgstr ""
 msgid "Template"
 msgstr "Template"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:89
 msgid "Test"
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:453
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:265
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:265
 msgid "Test connection"
 msgstr "Verbindung testen"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:228
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:228
 msgid "Test environment"
 msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:197
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:183
 msgid "Test provider configuration"
 msgstr "Provider-Konfiguration testen"
 
 #. placeholder {0}: i18n.date(lastTestResult.finishedAt, { timeStyle: 'short' })
 #. placeholder {0}: i18n.date(lastTestResult.finishedAt, { timeStyle: 'short' })
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:438
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-credentials-section.tsx:287
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:287
 msgid "Tested at {0}"
 msgstr "Getestet um {0}"
 
@@ -4357,7 +4381,7 @@ msgstr "Das Gerät konnte nicht hinzugefügt werden. Bitte versuchen Sie es erne
 msgid "The invoice will be sent directly to the PMS"
 msgstr "Die Rechnung wird direkt an das PMS geschickt"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:25
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:25
 msgid "The merchant address shown on payment receipts."
 msgstr ""
 
@@ -4578,7 +4602,7 @@ msgstr "Zwei-Faktor-Authentifizierung deaktivieren?"
 #~ msgid "Turn on two-factor authentication for better account security"
 #~ msgstr "Schalten Sie die Zwei-Faktor-Authentifizierung ein für bessere Kontosicherheit"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:183
 msgid "TV App"
 msgstr "TV App"
 
@@ -4710,7 +4734,7 @@ msgstr "Unbenanntes Gerät"
 msgid "Unpin {title} column"
 msgstr "Spalte {title} lösen"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-mapping-codes-section.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:244
 msgid "Unsaved changes"
 msgstr "Nicht gespeicherte Änderungen"
@@ -4860,7 +4884,7 @@ msgstr "Bestätigen"
 msgid "Verify Email"
 msgstr "E-Mail verifizieren"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-test-connection-dialog.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:86
 msgid "Verify environment"
 msgstr ""
 
@@ -4917,7 +4941,7 @@ msgstr "Schwach"
 #~ msgid "Weak password"
 #~ msgstr "Schwaches Passwort"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:185
 msgid "Web App"
 msgstr "Web App"
 
@@ -5063,7 +5087,7 @@ msgstr "Jugendliche"
 #~ msgid "Youth count cannot be negative"
 #~ msgstr "Anzahl der Jugendlichen darf nicht negativ sein"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-recipient-section.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:79
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:198
 msgid "ZIP"
 msgstr "PLZ"
@@ -5072,7 +5096,7 @@ msgstr "PLZ"
 #~ msgid "ZIP / Postal code"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/adyen-form/adyen-form.tsx:126
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:126
 msgid "ZIP / Postal code is required"
 msgstr ""
 
