@@ -1,5 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { ChevronLeftIcon } from 'lucide-react';
 import { z } from 'zod';
@@ -19,6 +19,7 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { isInAppPath } from '@/lib/search-params';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
+import { StatusCell } from '../reservations/-components/reservations-table/-components/cells/status-cell';
 
 // Where the visitor came from, as an in-app path: pages that link here pass it
 // so the reservation can offer a way back to exactly that view.
@@ -30,7 +31,11 @@ function ReservationPage() {
   const { t } = useLingui();
   const { back } = Route.useSearch();
   const router = useRouter();
-  useDocumentTitle(t`Reservation Details`);
+  const { reservationId } = Route.useParams();
+  // The loader has already fetched it; the fallback only shows on an error.
+  const { data } = useQuery(reservationByIdQueryOptions(reservationId));
+  const bookingNr = data?.booking_nr ?? t`Reservation`;
+  useDocumentTitle(bookingNr);
 
   return (
     <div className="space-y-6">
@@ -64,15 +69,15 @@ function ReservationPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>
-                <Trans>Edit reservation</Trans>
-              </BreadcrumbPage>
+              <BreadcrumbPage>{bookingNr}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="text-xl font-bold">
-          <Trans>Edit reservation</Trans>
-        </h1>
+        <div className="flex items-center gap-2">
+          <h1 className="truncate text-xl font-bold">{bookingNr}</h1>
+          {/* Set by the reservation's lifecycle, so shown rather than edited */}
+          {data && <StatusCell status={data.state} />}
+        </div>
       </div>
 
       <div>
@@ -91,15 +96,24 @@ function ReservationForm() {
   );
 
   const data = reservationQuery.data;
+  const primaryGuest = data.guests.find((guest) => guest.is_primary);
   const reservationData = {
     booking_nr: data.booking_nr,
-    guests: data.guests,
+    room_name: data.room_name,
+    purpose: data.purpose ?? 'private',
+    booking_from: data.booking_from,
+    booking_to: data.booking_to,
     adults: data.adults ?? 1,
     youth: data.youth ?? 0,
     children: data.children ?? 0,
     infants: data.infants ?? 0,
-    purpose: data.purpose ?? 'private',
-    room: data.room ?? data.room_name
+    primary_guest: {
+      first_name: primaryGuest?.first_name ?? '',
+      last_name: primaryGuest?.last_name ?? '',
+      email: primaryGuest?.email ?? '',
+      nationality_code: primaryGuest?.nationality_code ?? ''
+    },
+    guests: data.guests.filter((guest) => !guest.is_primary)
   };
 
   return (

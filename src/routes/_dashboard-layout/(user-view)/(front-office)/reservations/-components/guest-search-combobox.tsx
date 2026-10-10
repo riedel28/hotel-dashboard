@@ -84,6 +84,7 @@ export function GuestSearchCombobox({
           last_name: selected.last_name,
           email: selected.email,
           nationality_code: selected.nationality_code,
+          is_primary: false,
           created_at: new Date(),
           updated_at: null
         };

@@ -60,6 +60,7 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
       last_name: data.lastName,
       email: data.email,
       nationality_code: 'DE',
+      is_primary: false,
       created_at: new Date(),
       updated_at: null
     };
