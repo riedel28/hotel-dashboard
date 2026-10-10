@@ -1,3 +1,29 @@
+# [1.22.0](https://github.com/riedel28/hotel-dashboard/compare/v1.21.0...v1.22.0) (2026-10-10)
+
+
+### Features
+
+* **property-selector:** taller list with faded edges, a check mark and a count ([f3a5880](https://github.com/riedel28/hotel-dashboard/commit/f3a5880bc63be25b3baf5b0dec43d6de7a692db0))
+
+# [1.21.0](https://github.com/riedel28/hotel-dashboard/compare/v1.20.0...v1.21.0) (2026-10-09)
+
+
+### Bug Fixes
+
+* **section-nav:** the first section scrolls the page all the way to the top ([6dd0195](https://github.com/riedel28/hotel-dashboard/commit/6dd0195ed563ff138fec186ded825ebbbc31b1c4))
+
+
+### Features
+
+* **checkbox:** show a minus icon when indeterminate ([cf3f201](https://github.com/riedel28/hotel-dashboard/commit/cf3f2016436193c021100a3aea597516344c68aa))
+* **properties:** a group checkbox switches a whole nav item group; the field drops its own card ([041b85c](https://github.com/riedel28/hotel-dashboard/commit/041b85c7766c71c122b14f6f431225ca8300738a))
+* **properties:** edit form as one sectioned card with a section nav and sticky footer ([8d24328](https://github.com/riedel28/hotel-dashboard/commit/8d243285fbd42ca67e5c33555957814ad571b6eb))
+* **properties:** name the property in the edit page title and breadcrumb ([ac6a445](https://github.com/riedel28/hotel-dashboard/commit/ac6a4451ca7e6d03ffaaf32e18a8a9465c5f2f03))
+* **properties:** Settings and Work log tabs on the edit page, work log empty for now ([ecbd019](https://github.com/riedel28/hotel-dashboard/commit/ecbd0195c4f07972ce97b54af24e973be9d455bd))
+* **properties:** solutions per property with a PWA domain, filter and column ([029cb9e](https://github.com/riedel28/hotel-dashboard/commit/029cb9eb5c948dacfe2ae6d7aa2eed8e98cf5951))
+* **properties:** work log with entries admins can add, edit and delete ([413e8ac](https://github.com/riedel28/hotel-dashboard/commit/413e8ac6aa0102522e26f2cce3b69da4120f62e8))
+* **tabs:** pills variant for the tab list ([4ec8b10](https://github.com/riedel28/hotel-dashboard/commit/4ec8b10928b01b69ae5ab8a1c00bf03760d54b8a))
+
 # [1.20.0](https://github.com/riedel28/hotel-dashboard/compare/v1.19.0...v1.20.0) (2026-10-09)
 
 

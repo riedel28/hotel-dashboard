@@ -1,6 +1,6 @@
 {
-  "id": "24254f9f-0850-44b6-9f53-128300fa0dab",
-  "prevId": "329cc7a3-bc89-434e-898a-a05b2b3e1bc7",
+  "id": "dc804601-9228-42a0-b35b-d420dcec862d",
+  "prevId": "24254f9f-0850-44b6-9f53-128300fa0dab",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1452,7 +1452,7 @@
       "checkConstraints": {
         "reservations_state_check": {
           "name": "reservations_state_check",
-          "value": "\"reservations\".\"state\" IN ('pending', 'started', 'done')"
+          "value": "\"reservations\".\"state\" IN ('pending', 'ready_in', 'checked_in', 'ready_out', 'checked_out')"
         },
         "reservations_check_in_via_check": {
           "name": "reservations_check_in_via_check",

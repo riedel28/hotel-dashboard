@@ -147,12 +147,17 @@ test.describe('Property Selector', () => {
     );
   });
 
-  test('should reload properties list', async ({ page }) => {
+  test('should refresh the list each time it opens', async ({ page }) => {
+    const refreshed = page.waitForResponse(
+      (resp) =>
+        resp.url().includes('/api/properties?per_page=100') &&
+        resp.request().method() === 'GET' &&
+        resp.status() === 200
+    );
     await openPropertySelector(page);
+    await refreshed;
 
-    await page.getByRole('button', { name: 'Reload properties' }).click();
-
-    await expect(page.getByText('Properties updated')).toBeVisible();
+    await expect(page.getByText(/^\d+ properties$/)).toBeVisible();
   });
 
   test('should select a property via search and selection', async ({
