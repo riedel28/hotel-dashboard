@@ -10,7 +10,8 @@ import {
   ilike,
   inArray,
   lte,
-  or
+  or,
+  sql
 } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
@@ -31,7 +32,7 @@ async function getReservations(req: Request, res: Response) {
     // validateQuery has already replaced req.query with the parsed schema output
     const {
       page = 1,
-      per_page = 10,
+      per_page = 25,
       status,
       q,
       from,
@@ -48,8 +49,31 @@ async function getReservations(req: Request, res: Response) {
     }
 
     if (q) {
-      const escaped = escapeLikePattern(q);
-      conditions.push(ilike(reservationsTable.booking_nr, `%${escaped}%`));
+      const pattern = `%${escapeLikePattern(q)}%`;
+      // A guest matches by either name or by a full name in both spellings
+      const reservationsOfMatchingGuests = db
+        .select({ id: guestsTable.reservation_id })
+        .from(guestsTable)
+        .where(
+          or(
+            ilike(guestsTable.first_name, pattern),
+            ilike(guestsTable.last_name, pattern),
+            ilike(
+              sql`${guestsTable.first_name} || ' ' || ${guestsTable.last_name}`,
+              pattern
+            ),
+            ilike(
+              sql`${guestsTable.last_name} || ', ' || ${guestsTable.first_name}`,
+              pattern
+            )
+          )
+        );
+      conditions.push(
+        or(
+          ilike(reservationsTable.booking_nr, pattern),
+          inArray(reservationsTable.id, reservationsOfMatchingGuests)
+        )
+      );
     }
 
     if (from) {

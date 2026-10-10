@@ -65,7 +65,8 @@ function MonitoringPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
+      {/* As tall as the same row on pages that have an action button in it */}
+      <div className="mb-6 flex min-h-9 justify-between">
         <h1 className="text-xl font-bold">
           <Trans>Monitoring Logs</Trans>
         </h1>

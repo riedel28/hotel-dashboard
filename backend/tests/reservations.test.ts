@@ -1,6 +1,8 @@
 import request from 'supertest';
 
 import app from '../src/app';
+import { db } from '../src/db/pool';
+import { guests as guestsTable } from '../src/db/schema';
 import {
   createTestProperty,
   createTestRoom,
@@ -163,6 +165,43 @@ describe('Reservations API', () => {
           r.booking_nr.includes('BK123')
         )
       ).toBe(true);
+    });
+
+    test('should search reservations by guest name', async () => {
+      const created = await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ room_name: 'Room 102' })
+        .expect(201);
+      await db.insert(guestsTable).values([
+        {
+          reservation_id: created.body.id,
+          first_name: 'Jane',
+          last_name: 'Smith',
+          nationality_code: 'DE'
+        },
+        {
+          reservation_id: created.body.id,
+          first_name: 'Alex',
+          last_name: 'Zimmermann',
+          nationality_code: 'DE'
+        }
+      ]);
+
+      // Last name, a fellow traveler, both spellings of a full name
+      for (const q of ['smith', 'zimmer', 'Jane Smith', 'Smith, Jane']) {
+        const response = await request(app)
+          .get('/api/reservations')
+          .query({ q })
+          .set('Authorization', `Bearer ${authToken}`)
+          .expect(200);
+
+        expect(
+          response.body.index.map((r: { id: number }) => r.id),
+          q
+        ).toEqual([created.body.id]);
+        expect(response.body.total, q).toBe(1);
+      }
     });
 
     test('should return 401 without authentication', async () => {

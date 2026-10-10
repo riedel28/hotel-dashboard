@@ -1,0 +1,69 @@
+[
+  {
+    "title": "Mini-bar",
+    "children": [
+      {
+        "title": "Drinks",
+        "products": [
+          {
+            "title": "Still water 0.5 L",
+            "price": 3,
+            "quantity": 24,
+            "description": "Local spring water, served chilled."
+          },
+          { "title": "Cola 0.33 L", "price": 4, "quantity": 12 }
+        ]
+      },
+      {
+        "title": "Snacks",
+        "products": [
+          {
+            "title": "Salted nuts",
+            "price": 5,
+            "quantity": 8,
+            "description": "Roasted almonds and cashews.\nContains nuts."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Room service",
+    "children": [
+      {
+        "title": "Breakfast",
+        "products": [
+          {
+            "title": "Continental breakfast",
+            "price": 18,
+            "quantity": 40,
+            "description": "Croissant, butter and jam, seasonal fruit, coffee or tea.\nServed 6:30–11:00."
+          }
+        ]
+      },
+      {
+        "title": "Dinner",
+        "products": [
+          { "title": "Overlook burger", "price": 22, "quantity": 15 }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Spa",
+    "products": [
+      {
+        "title": "Massage 60 min",
+        "price": 80,
+        "quantity": 6,
+        "description": "Full-body relaxing massage. Book at the front desk."
+      },
+      {
+        "title": "Sauna",
+        "price": 0,
+        "quantity": 0,
+        "description": "Free for hotel guests, 7:00–22:00."
+      }
+    ]
+  }
+]

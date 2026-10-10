@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
-import { AdyenForm } from './payment-provider/adyen-form/adyen-form';
+import { AdyenForm } from './payment-provider/-components/adyen-form/adyen-form';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/payment-provider'

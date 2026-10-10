@@ -2,15 +2,14 @@ import { useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
   type PaginationState,
+  type RowSelectionState,
   type SortingState,
   useTable
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import type { Reservation } from '@/api/reservations';
-import { Button } from '@/components/ui/button';
 import {
   DataGrid,
   DataGridContainer,
@@ -21,16 +20,29 @@ import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { formatDate } from '@/utils/date';
 
 import { BalanceCell } from './-components/cells/balance-cell';
+import { GuestsCell } from './-components/cells/guests-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { StatusCell } from './-components/cells/status-cell';
-import { ReservationDetails } from './-components/reservation-details';
 import { RowActions } from './row-actions';
 
-const formatReservationDate = (date: Date | string) =>
-  dayjs(date).format('DD.MM.YYYY HH:mm');
+/** A stay date on one line: the year only when it is not the current one. */
+function StayDateCell({ date }: { date: Date | string }) {
+  const value = dayjs(date);
+  const isCurrentYear = value.year() === dayjs().year();
+
+  return (
+    <time
+      dateTime={value.toISOString()}
+      title={value.format('DD.MM.YYYY HH:mm')}
+      className="text-[13px] whitespace-nowrap tabular-nums"
+    >
+      {value.format(isCurrentYear ? 'DD.MM' : 'DD.MM.YYYY')}{' '}
+      <span className="text-muted-foreground">{value.format('HH:mm')}</span>
+    </time>
+  );
+}
 
 interface ReservationsTableProps {
   data: Reservation[];
@@ -48,6 +60,9 @@ interface ReservationsTableProps {
   onSortingChange?: (
     updaterOrValue: SortingState | ((old: SortingState) => SortingState)
   ) => void;
+  /** The reservation open in the details drawer, marked as the selected row. */
+  selectedReservationId?: number;
+  onReservationOpen?: (reservationId: number) => void;
 }
 
 export default function ReservationsTable({
@@ -59,7 +74,9 @@ export default function ReservationsTable({
   pageCount = 0,
   onPaginationChange,
   sorting: sortingProp,
-  onSortingChange
+  onSortingChange,
+  selectedReservationId,
+  onReservationOpen
 }: ReservationsTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -78,37 +95,6 @@ export default function ReservationsTable({
 
   const columns = useMemo<ColumnDef<DataGridFeatures, Reservation>[]>(
     () => [
-      {
-        id: 'id',
-        header: () => null,
-        cell: ({ row }) => {
-          return row.getCanExpand() ? (
-            <Button
-              {...{
-                className: 'size-7 text-muted-foreground',
-                onClick: row.getToggleExpandedHandler(),
-                size: 'icon',
-                variant: 'ghost'
-              }}
-              aria-expanded={row.getIsExpanded()}
-              aria-controls={`reservation-details-${row.id}`}
-              aria-label={t`Toggle details`}
-              title={t`Toggle details`}
-            >
-              {row.getIsExpanded() ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            </Button>
-          ) : null;
-        },
-        size: 12,
-        meta: {
-          skeleton: <Skeleton className="h-6 w-6 rounded" />,
-          expandedContent: (row) => (
-            <div id={`reservation-details-${row.id}`}>
-              <ReservationDetails reservation={row} />
-            </div>
-          )
-        }
-      },
       {
         accessorKey: 'state',
         id: 'state',
@@ -138,20 +124,50 @@ export default function ReservationsTable({
         id: 'booking_nr',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Booking #`}
+            title={t`Reservation`}
             visibility={true}
             column={column}
           />
         ),
         cell: ({ row }) => {
           const reservationNr = row.getValue('booking_nr') as string;
-          return <ReservationNrCell reservationNr={reservationNr} />;
+          return (
+            // The keyboard way into the details; a mouse click anywhere on
+            // the row bubbles to the same handler
+            <button
+              type="button"
+              className="rounded-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <ReservationNrCell reservationNr={reservationNr} />
+            </button>
+          );
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-12" />,
-          headerTitle: t`Booking #`
+          headerTitle: t`Reservation`
         },
+        size: 120,
         enableSorting: true,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
+        accessorKey: 'guests',
+        id: 'guests',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Guests`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => <GuestsCell guests={row.original.guests} />,
+        meta: {
+          skeleton: <Skeleton className="h-6 w-32" />,
+          headerTitle: t`Guests`
+        },
+        size: 180,
+        enableSorting: false,
         enableHiding: true,
         enableResizing: true
       },
@@ -165,11 +181,16 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: (info) => <span>{info.getValue() as string}</span>,
+        cell: ({ row }) => (
+          <span className="block truncate" title={row.original.room_name}>
+            {row.original.room_name}
+          </span>
+        ),
         meta: {
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Room`
         },
+        size: 132,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -185,17 +206,12 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: ({ row }) => {
-          return (
-            <span className="text-[13px]">
-              {formatDate(row.original.booking_from, { preset: 'dateTime' })}
-            </span>
-          );
-        },
+        cell: ({ row }) => <StayDateCell date={row.original.booking_from} />,
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Arrival`
         },
+        size: 136,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -210,17 +226,12 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: ({ row }) => {
-          return (
-            <span className="text-[13px]">
-              {formatReservationDate(row.original.booking_to)}
-            </span>
-          );
-        },
+        cell: ({ row }) => <StayDateCell date={row.original.booking_to} />,
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Departure`
         },
+        size: 136,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -248,6 +259,7 @@ export default function ReservationsTable({
           ),
           headerTitle: t`Balance`
         },
+        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -259,7 +271,11 @@ export default function ReservationsTable({
         header: () => null,
         cell: ({ row }) => {
           return (
-            <div className="flex justify-center">
+            // The menu and its dialog keep their clicks from opening the row
+            <div
+              className="flex justify-center"
+              onClick={(event) => event.stopPropagation()}
+            >
               <RowActions row={row} />
             </div>
           );
@@ -271,7 +287,7 @@ export default function ReservationsTable({
             </div>
           )
         },
-        size: 70,
+        size: 56,
         enableSorting: false,
         enableHiding: false,
         enableResizing: false
@@ -284,18 +300,28 @@ export default function ReservationsTable({
     columns.map((column) => column.id as string)
   );
 
+  const rowSelection = useMemo<RowSelectionState>(
+    () =>
+      selectedReservationId === undefined
+        ? {}
+        : { [selectedReservationId]: true },
+    [selectedReservationId]
+  );
+
   const table = useTable({
     features: dataGridFeatures,
     columns,
     data: data || [],
     pageCount: pageCount, // Calculate from backend values
     getRowId: (row: Reservation) => row.id.toString(),
-    getRowCanExpand: (row) => Boolean(row.original.id),
     state: {
       pagination,
       sorting,
-      columnOrder
+      columnOrder,
+      rowSelection
     },
+    // Selection only marks the reservation open in the details drawer
+    enableRowSelection: true,
     onPaginationChange: onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
@@ -308,6 +334,7 @@ export default function ReservationsTable({
     <DataGrid
       table={table}
       recordCount={totalCount}
+      onRowClick={(reservation) => onReservationOpen?.(reservation.id)}
       tableClassNames={{
         edgeCell: 'px-5'
       }}

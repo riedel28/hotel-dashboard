@@ -17,7 +17,7 @@ const routeApi = getRouteApi(
 
 type SortBy = NonNullable<FetchReservationsParams['sort_by']>;
 
-const defaultPageSize = 10;
+const defaultPageSize = 25;
 const defaultSorting: SortingState = [{ id: 'received_at', desc: true }];
 
 const toDate = (value: string | undefined) =>
@@ -32,7 +32,7 @@ const toDateParam = (value: Date | undefined) =>
  * navigations that write them back. The page stays pure composition.
  */
 function useReservationsSearch() {
-  const search = routeApi.useSearch();
+  const { reservation: openReservationId, ...search } = routeApi.useSearch();
   const navigate = routeApi.useNavigate();
   const queryClient = useQueryClient();
 
@@ -120,6 +120,26 @@ function useReservationsSearch() {
           sort_by: undefined,
           sort_order: undefined
         }
+      }),
+
+    // Opening and closing push history entries, so Back closes the drawer
+    openReservationId,
+    openReservation: (reservationId: number) =>
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({ ...prev, reservation: reservationId })
+      }),
+    // Stepping between reservations replaces the current entry
+    selectReservation: (reservationId: number) =>
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({ ...prev, reservation: reservationId }),
+        replace: true
+      }),
+    closeReservation: () =>
+      navigate({
+        to: '/reservations',
+        search: (prev) => ({ ...prev, reservation: undefined })
       }),
 
     refresh: () =>

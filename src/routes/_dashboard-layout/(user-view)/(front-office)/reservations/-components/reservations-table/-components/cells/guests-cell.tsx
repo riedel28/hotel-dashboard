@@ -1,66 +1,67 @@
-import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 
 import { type Guest } from '@/api/reservations';
+import { badgeVariants } from '@/components/ui/badge';
 import { CountryFlag } from '@/components/ui/country-flag';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
+import { getCountryName } from '@/lib/countries';
+import { cn } from '@/lib/utils';
 
-interface GuestsCellProps {
-  guests: Guest[];
-}
+const guestName = (guest: Guest) => `${guest.last_name}, ${guest.first_name}`;
 
-function GuestName({ guest }: { guest: Guest }) {
+function GuestLine({ guest }: { guest: Guest }) {
+  const { i18n } = useLingui();
+  const countryName = getCountryName(guest.nationality_code, i18n.locale);
+
   return (
-    <div className="flex items-center gap-2 text-nowrap">
+    <span className="flex min-w-0 items-center gap-2">
       <CountryFlag
         code={guest.nationality_code}
-        title={guest.nationality_code}
-        className="size-4"
-        aria-label={guest.nationality_code}
+        title={countryName}
+        className="size-4 shrink-0"
+        aria-label={countryName}
       />
-      <Trans>
-        {guest.last_name}, {guest.first_name}
-      </Trans>
-    </div>
+      <span className="truncate" title={guestName(guest)}>
+        {guestName(guest)}
+      </span>
+    </span>
   );
 }
 
-export function GuestsCell({ guests }: GuestsCellProps) {
-  if (guests.length === 0) {
-    return (
-      <span className="text-muted-foreground">
-        <Trans>No guests</Trans>
-      </span>
-    );
+/** The primary guest, the fellow travelers behind a "+N" tooltip. */
+export function GuestsCell({ guests }: { guests: Guest[] }) {
+  const [primaryGuest, ...fellowTravelers] = guests;
+
+  if (!primaryGuest) {
+    return <span className="text-muted-foreground">—</span>;
   }
 
-  // Safe: guarded by early return above
-  const firstGuest = guests[0]!;
-  const rest = guests.slice(1);
-
   return (
-    <div className="flex items-center gap-1.5">
-      <GuestName guest={firstGuest} />
-      {rest.length > 0 && (
-        <Popover>
-          <PopoverTrigger className="rounded-md bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted/80">
-            +{rest.length}
-          </PopoverTrigger>
-          <PopoverContent align="start" className="w-auto min-w-48 p-3">
-            <p className="mb-2 text-xs font-medium text-muted-foreground">
-              {t`${guests.length} guests total`}
-            </p>
-            <div className="space-y-1.5">
-              {guests.map((guest) => (
-                <GuestName key={guest.id} guest={guest} />
+    <div className="flex min-w-0 items-center gap-1.5">
+      <GuestLine guest={primaryGuest} />
+      {fellowTravelers.length > 0 && (
+        <Tooltip>
+          <TooltipTrigger
+            type="button"
+            aria-label={fellowTravelers.map(guestName).join('; ')}
+            className={cn(badgeVariants({ color: 'gray', size: 'sm' }))}
+          >
+            +{fellowTravelers.length}
+          </TooltipTrigger>
+          <TooltipContent>
+            <ul className="space-y-1">
+              {fellowTravelers.map((guest) => (
+                <li key={guest.id}>
+                  <GuestLine guest={guest} />
+                </li>
               ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+            </ul>
+          </TooltipContent>
+        </Tooltip>
       )}
     </div>
   );

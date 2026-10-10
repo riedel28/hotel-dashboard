@@ -1,0 +1,37 @@
+[
+  {
+    "type": "pms",
+    "event": "Reservation synced",
+    "sub": "PMS Connection",
+    "ok": "Reservation updated from PMS.\n2 fields changed.",
+    "fail": "PMS did not respond.\nServer timeout after 30s."
+  },
+  {
+    "type": "pms",
+    "event": "Night Audit",
+    "sub": "Scheduled Task",
+    "ok": "Night audit completed for all properties.",
+    "fail": "Night audit aborted: PMS returned HTTP 503."
+  },
+  {
+    "type": "door lock",
+    "event": "Key issued",
+    "sub": "Key Card",
+    "ok": "Mobile key issued for the booked room.",
+    "fail": "Failed to issue key card.\nLock controller unreachable."
+  },
+  {
+    "type": "door lock",
+    "event": "Checkout Booking",
+    "sub": "Key Card",
+    "ok": "Key card invalidated on checkout.",
+    "fail": "Failed to invalidate key card.\nServer timeout after 30s."
+  },
+  {
+    "type": "payment",
+    "event": "Charge",
+    "sub": "Payment Gateway",
+    "ok": "Payment processed successfully for invoice #INV-1234.",
+    "fail": "Card declined by issuer: insufficient funds.\nProvider: Adyen, code 51, attempt 2 of 3."
+  }
+]
