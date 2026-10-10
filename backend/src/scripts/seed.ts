@@ -186,7 +186,7 @@ async function seed() {
     const [reservation2] = await db
       .insert(reservations)
       .values({
-        state: 'started',
+        state: 'checked_in',
         booking_nr: 'RES-002',
         guest_email: 'jane.smith@example.com',
         primary_guest_name: 'Jane Smith',
@@ -212,7 +212,7 @@ async function seed() {
     const [reservation3] = await db
       .insert(reservations)
       .values({
-        state: 'done',
+        state: 'checked_out',
         booking_nr: 'RES-003',
         guest_email: 'mike.wilson@example.com',
         primary_guest_name: 'Mike Wilson',
@@ -235,6 +235,120 @@ async function seed() {
         room: 'economy-room-310'
       })
       .returning();
+
+    // A few more per state so the status filter and badges have data to show.
+    // `from` / `to` are day offsets from today, so the demo never goes stale.
+    const daysFromNow = (days: number) =>
+      new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    const extraReservations = (
+      [
+        {
+          state: 'pending',
+          guest: 'Anna Keller',
+          room_name: 'Standard Room',
+          from: 3,
+          to: 6
+        },
+        {
+          state: 'pending',
+          guest: 'Tom Becker',
+          room_name: 'Deluxe Suite',
+          from: 5,
+          to: 7
+        },
+        {
+          state: 'ready_in',
+          guest: 'Laura Fischer',
+          room_name: 'Deluxe Suite',
+          from: 0,
+          to: 3
+        },
+        {
+          state: 'ready_in',
+          guest: 'Paul Wagner',
+          room_name: 'Economy Room',
+          from: 0,
+          to: 2
+        },
+        {
+          state: 'ready_in',
+          guest: 'Sofia Rossi',
+          room_name: 'Standard Room',
+          from: 1,
+          to: 4
+        },
+        {
+          state: 'checked_in',
+          guest: 'Emma Schmidt',
+          room_name: 'Standard Room',
+          from: -1,
+          to: 2
+        },
+        {
+          state: 'checked_in',
+          guest: 'Lucas Meyer',
+          room_name: 'Deluxe Suite',
+          from: -2,
+          to: 1
+        },
+        {
+          state: 'ready_out',
+          guest: 'Nina Hoffmann',
+          room_name: 'Economy Room',
+          from: -3,
+          to: 0
+        },
+        {
+          state: 'ready_out',
+          guest: 'Felix Braun',
+          room_name: 'Standard Room',
+          from: -2,
+          to: 0
+        },
+        {
+          state: 'ready_out',
+          guest: 'Olivia Martin',
+          room_name: 'Deluxe Suite',
+          from: -4,
+          to: 0
+        },
+        {
+          state: 'checked_out',
+          guest: 'Jonas Weber',
+          room_name: 'Economy Room',
+          from: -6,
+          to: -3
+        },
+        {
+          state: 'checked_out',
+          guest: 'Mia Schulz',
+          room_name: 'Standard Room',
+          from: -5,
+          to: -1
+        }
+      ] as const
+    ).map(({ state, guest, room_name, from, to }, index) => {
+      const hasCheckedIn = state !== 'pending' && state !== 'ready_in';
+      const hasCheckedOut = state === 'checked_out';
+
+      return {
+        state,
+        booking_nr: `RES-${String(index + 4).padStart(3, '0')}`,
+        guest_email: `${guest.toLowerCase().replace(' ', '.')}@example.com`,
+        primary_guest_name: guest,
+        room_name,
+        booking_from: daysFromNow(from),
+        booking_to: daysFromNow(to),
+        check_in_via: hasCheckedIn ? ('web' as const) : null,
+        check_out_via: hasCheckedOut ? ('web' as const) : null,
+        received_at: daysFromNow(from - 7),
+        completed_at: hasCheckedOut ? daysFromNow(to) : null,
+        balance: hasCheckedOut ? '0.00' : '320.00',
+        adults: 2
+      };
+    });
+
+    await db.insert(reservations).values(extraReservations);
 
     // Step 3: Create guests for each reservation
     console.log('Creating demo guests...');
