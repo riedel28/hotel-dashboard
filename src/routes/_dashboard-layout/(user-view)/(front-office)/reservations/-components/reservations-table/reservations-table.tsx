@@ -20,15 +20,29 @@ import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { formatDate } from '@/utils/date';
 
 import { BalanceCell } from './-components/cells/balance-cell';
+import { GuestsCell } from './-components/cells/guests-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { StatusCell } from './-components/cells/status-cell';
 import { RowActions } from './row-actions';
 
-const formatReservationDate = (date: Date | string) =>
-  dayjs(date).format('DD.MM.YYYY HH:mm');
+/** A stay date on one line: the year only when it is not the current one. */
+function StayDateCell({ date }: { date: Date | string }) {
+  const value = dayjs(date);
+  const isCurrentYear = value.year() === dayjs().year();
+
+  return (
+    <time
+      dateTime={value.toISOString()}
+      title={value.format('DD.MM.YYYY HH:mm')}
+      className="text-[13px] whitespace-nowrap tabular-nums"
+    >
+      {value.format(isCurrentYear ? 'DD.MM' : 'DD.MM.YYYY')}{' '}
+      <span className="text-muted-foreground">{value.format('HH:mm')}</span>
+    </time>
+  );
+}
 
 interface ReservationsTableProps {
   data: Reservation[];
@@ -110,7 +124,7 @@ export default function ReservationsTable({
         id: 'booking_nr',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={t`Booking #`}
+            title={t`Reservation`}
             visibility={true}
             column={column}
           />
@@ -130,9 +144,30 @@ export default function ReservationsTable({
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-12" />,
-          headerTitle: t`Booking #`
+          headerTitle: t`Reservation`
         },
+        size: 120,
         enableSorting: true,
+        enableHiding: true,
+        enableResizing: true
+      },
+      {
+        accessorKey: 'guests',
+        id: 'guests',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={t`Guests`}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => <GuestsCell guests={row.original.guests} />,
+        meta: {
+          skeleton: <Skeleton className="h-6 w-32" />,
+          headerTitle: t`Guests`
+        },
+        size: 180,
+        enableSorting: false,
         enableHiding: true,
         enableResizing: true
       },
@@ -146,11 +181,16 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: (info) => <span>{info.getValue() as string}</span>,
+        cell: ({ row }) => (
+          <span className="block truncate" title={row.original.room_name}>
+            {row.original.room_name}
+          </span>
+        ),
         meta: {
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Room`
         },
+        size: 132,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -166,17 +206,12 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: ({ row }) => {
-          return (
-            <span className="text-[13px]">
-              {formatDate(row.original.booking_from, { preset: 'dateTime' })}
-            </span>
-          );
-        },
+        cell: ({ row }) => <StayDateCell date={row.original.booking_from} />,
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Arrival`
         },
+        size: 136,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -191,17 +226,12 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: ({ row }) => {
-          return (
-            <span className="text-[13px]">
-              {formatReservationDate(row.original.booking_to)}
-            </span>
-          );
-        },
+        cell: ({ row }) => <StayDateCell date={row.original.booking_to} />,
         meta: {
           skeleton: <Skeleton className="h-6 w-24" />,
           headerTitle: t`Departure`
         },
+        size: 136,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -229,6 +259,7 @@ export default function ReservationsTable({
           ),
           headerTitle: t`Balance`
         },
+        size: 100,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -256,7 +287,7 @@ export default function ReservationsTable({
             </div>
           )
         },
-        size: 70,
+        size: 56,
         enableSorting: false,
         enableHiding: false,
         enableResizing: false

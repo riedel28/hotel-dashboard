@@ -31,7 +31,8 @@ export function RowActions({ row }: RowActionsProps) {
   return (
     <>
       <DropdownMenu>
-        <DataGridRowActions />
+        {/* 24px keeps the row as low as its text cells allow */}
+        <DataGridRowActions className="size-6" />
         <DropdownMenuContent align="end" className="w-auto min-w-40">
           <DropdownMenuItem
             onClick={() => {
