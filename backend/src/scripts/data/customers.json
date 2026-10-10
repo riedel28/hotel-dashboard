@@ -1,0 +1,46 @@
+[
+  {
+    "id": "5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a01",
+    "first_name": "Stuart",
+    "last_name": "Ullman",
+    "company_name": "Overlook Hospitality Inc.",
+    "email": "stuart.ullman@example.com",
+    "address_line_1": "333 Wonderview Avenue",
+    "zip": "80517",
+    "city": "Estes Park",
+    "country_code": "US"
+  },
+  {
+    "id": "5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a02",
+    "first_name": "Winston",
+    "last_name": "Scott",
+    "company_name": "Continental Hotels Ltd.",
+    "email": "winston.scott@example.com",
+    "address_line_1": "1 Wall Street Court",
+    "address_line_2": "Penthouse",
+    "zip": "10005",
+    "city": "New York",
+    "country_code": "US"
+  },
+  {
+    "id": "5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a03",
+    "first_name": "Basil",
+    "last_name": "Fawlty",
+    "email": "basil.fawlty@example.com",
+    "address_line_1": "16 Elwood Avenue",
+    "zip": "TQ1 2DA",
+    "city": "Torquay",
+    "country_code": "GB"
+  },
+  {
+    "id": "5b0f6b52-6f0b-4f5e-9d0e-3a0c2f1e7a04",
+    "first_name": "Norman",
+    "last_name": "Bates",
+    "email": "norman.bates@example.com",
+    "address_line_1": "2211 Old Highway 10",
+    "address_line_2": "The house on the hill",
+    "zip": "96020",
+    "city": "Fairvale",
+    "country_code": "US"
+  }
+]

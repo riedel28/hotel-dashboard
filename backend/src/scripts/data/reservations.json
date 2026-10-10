@@ -1,0 +1,327 @@
+[
+  {
+    "booking_nr": "RES-001",
+    "state": "pending",
+    "room_name": "Deluxe Suite",
+    "from": "2024-03-15",
+    "to": "2024-03-18",
+    "check_in_via": "web",
+    "check_out_via": "web",
+    "balance": "450.00",
+    "booking_id": "BK-12345",
+    "page_url": "https://booking.example.com/res-001",
+    "adults": 2,
+    "children": 1,
+    "purpose": "private",
+    "room": "deluxe-suite-101",
+    "guests": [
+      { "first_name": "John", "last_name": "Doe", "nationality_code": "US" },
+      { "first_name": "Sarah", "last_name": "Doe", "nationality_code": "US" },
+      { "first_name": "Emma", "last_name": "Doe", "nationality_code": "US" }
+    ]
+  },
+  {
+    "booking_nr": "RES-002",
+    "state": "checked_in",
+    "room_name": "Standard Room",
+    "from": "2024-03-20",
+    "to": "2024-03-22",
+    "check_in_via": "android",
+    "check_out_via": "web",
+    "balance": "280.00",
+    "booking_id": "BK-67890",
+    "page_url": "https://booking.example.com/res-002",
+    "adults": 1,
+    "youth": 1,
+    "purpose": "business",
+    "room": "standard-room-205",
+    "guests": [
+      { "first_name": "Jane", "last_name": "Smith", "nationality_code": "DE" },
+      { "first_name": "Alex", "last_name": "Smith", "nationality_code": "DE" }
+    ]
+  },
+  {
+    "booking_nr": "RES-003",
+    "state": "checked_out",
+    "room_name": "Economy Room",
+    "from": "2024-03-10",
+    "to": "2024-03-12",
+    "received": "2024-03-08",
+    "check_in_via": "station",
+    "check_out_via": "station",
+    "balance": "0.00",
+    "booking_id": "BK-11111",
+    "page_url": "https://booking.example.com/res-003",
+    "purpose": "private",
+    "room": "economy-room-310",
+    "guests": [
+      { "first_name": "Mike", "last_name": "Wilson", "nationality_code": "AT" }
+    ]
+  },
+  {
+    "booking_nr": "RES-004",
+    "state": "pending",
+    "room_name": "Standard Room",
+    "from": 3,
+    "to": 6,
+    "check_in_via": null,
+    "check_out_via": null,
+    "balance": "320.00",
+    "guests": [
+      { "first_name": "Anna", "last_name": "Keller", "nationality_code": "CH" }
+    ]
+  },
+  {
+    "booking_nr": "RES-005",
+    "state": "pending",
+    "room_name": "Presidential Panorama Suite with Private Rooftop Terrace and Lake View",
+    "from": 5,
+    "to": 12,
+    "check_in_via": null,
+    "check_out_via": null,
+    "balance": "4890.00",
+    "guests": [
+      {
+        "first_name": "Maximilian-Alexander",
+        "last_name": "Freiherr von Hohenberg-Lichtenstein",
+        "nationality_code": "AT"
+      },
+      {
+        "first_name": "Katharina-Sophie",
+        "last_name": "Freifrau von Hohenberg-Lichtenstein",
+        "nationality_code": "AT"
+      }
+    ]
+  },
+  {
+    "booking_nr": "RES-006",
+    "state": "pending",
+    "room_name": "Economy Room",
+    "from": 9,
+    "to": 10,
+    "check_in_via": null,
+    "check_out_via": null,
+    "balance": "89.00",
+    "guests": []
+  },
+  {
+    "booking_nr": "RES-007",
+    "state": "ready_in",
+    "room_name": "Deluxe Suite",
+    "from": 0,
+    "to": 3,
+    "check_in_via": null,
+    "check_out_via": null,
+    "balance": "540.00",
+    "guests": [
+      {
+        "first_name": "Laura",
+        "last_name": "Fischer",
+        "nationality_code": "DE"
+      },
+      { "first_name": "Ben", "last_name": "Fischer", "nationality_code": "DE" }
+    ]
+  },
+  {
+    "booking_nr": "RES-008",
+    "state": "ready_in",
+    "room_name": "Economy Room",
+    "from": 0,
+    "to": 2,
+    "check_in_via": null,
+    "check_out_via": null,
+    "balance": "-45.50",
+    "guests": [
+      { "first_name": "Paul", "last_name": "Wagner", "nationality_code": "DE" }
+    ]
+  },
+  {
+    "booking_nr": "RES-009",
+    "state": "ready_in",
+    "room_name": "Standard Room",
+    "from": 1,
+    "to": 4,
+    "check_in_via": null,
+    "check_out_via": null,
+    "balance": "310.00",
+    "guests": [
+      { "first_name": "Sofia", "last_name": "Rossi", "nationality_code": "IT" },
+      { "first_name": "Marco", "last_name": "Rossi", "nationality_code": "IT" },
+      {
+        "first_name": "Giulia",
+        "last_name": "Rossi",
+        "nationality_code": "IT"
+      },
+      { "first_name": "Luca", "last_name": "Rossi", "nationality_code": "IT" }
+    ]
+  },
+  {
+    "booking_nr": "RES-010",
+    "state": "checked_in",
+    "room_name": "Standard Room",
+    "from": -1,
+    "to": 2,
+    "check_in_via": "ios",
+    "check_out_via": null,
+    "balance": "320.00",
+    "guests": [
+      { "first_name": "Emma", "last_name": "Schmidt", "nationality_code": "DE" }
+    ]
+  },
+  {
+    "booking_nr": "RES-011",
+    "state": "checked_in",
+    "room_name": "Family Connecting Room – Garden Wing, Ground Floor (Accessible)",
+    "from": -2,
+    "to": 1,
+    "check_in_via": "tv",
+    "check_out_via": null,
+    "balance": "1275.40",
+    "guests": [
+      {
+        "first_name": "María de los Ángeles",
+        "last_name": "Fernández-Villaverde y Gutiérrez de la Concha",
+        "nationality_code": "ES"
+      },
+      {
+        "first_name": "Lucía",
+        "last_name": "Fernández",
+        "nationality_code": "ES"
+      },
+      {
+        "first_name": "Mateo",
+        "last_name": "Fernández",
+        "nationality_code": "ES"
+      }
+    ]
+  },
+  {
+    "booking_nr": "RES-012",
+    "state": "checked_in",
+    "room_name": "Deluxe Suite",
+    "from": -2,
+    "to": 1,
+    "check_in_via": "station",
+    "check_out_via": null,
+    "balance": "-120.00",
+    "guests": [
+      { "first_name": "Lucas", "last_name": "Meyer", "nationality_code": "NL" },
+      {
+        "first_name": "Sanne",
+        "last_name": "de Vries",
+        "nationality_code": "NL"
+      }
+    ]
+  },
+  {
+    "booking_nr": "RES-013",
+    "state": "checked_in",
+    "room_name": "Standard Room",
+    "from": -1,
+    "to": 5,
+    "check_in_via": "android",
+    "check_out_via": null,
+    "balance": "760.00",
+    "guests": [
+      { "first_name": "Yuki", "last_name": "Tanaka", "nationality_code": "JP" }
+    ]
+  },
+  {
+    "booking_nr": "RES-014",
+    "state": "ready_out",
+    "room_name": "Economy Room",
+    "from": -3,
+    "to": 0,
+    "check_in_via": "web",
+    "check_out_via": null,
+    "balance": "64.90",
+    "guests": [
+      {
+        "first_name": "Nina",
+        "last_name": "Hoffmann",
+        "nationality_code": "DE"
+      }
+    ]
+  },
+  {
+    "booking_nr": "RES-015",
+    "state": "ready_out",
+    "room_name": "Standard Room",
+    "from": -2,
+    "to": 0,
+    "check_in_via": "ios",
+    "check_out_via": null,
+    "balance": "0.00",
+    "guests": [
+      { "first_name": "Felix", "last_name": "Braun", "nationality_code": "AT" },
+      { "first_name": "Clara", "last_name": "Braun", "nationality_code": "AT" }
+    ]
+  },
+  {
+    "booking_nr": "RES-016",
+    "state": "ready_out",
+    "room_name": "Deluxe Suite",
+    "from": -4,
+    "to": 0,
+    "check_in_via": "tv",
+    "check_out_via": null,
+    "balance": "-12.00",
+    "guests": [
+      {
+        "first_name": "Olivia",
+        "last_name": "Martin",
+        "nationality_code": "FR"
+      },
+      { "first_name": "Hugo", "last_name": "Martin", "nationality_code": "FR" },
+      { "first_name": "Chloé", "last_name": "Martin", "nationality_code": "FR" }
+    ]
+  },
+  {
+    "booking_nr": "RES-017",
+    "state": "checked_out",
+    "room_name": "Economy Room",
+    "from": -6,
+    "to": -3,
+    "check_in_via": "android",
+    "check_out_via": "android",
+    "balance": "0.00",
+    "guests": [
+      { "first_name": "Jonas", "last_name": "Weber", "nationality_code": "DE" }
+    ]
+  },
+  {
+    "booking_nr": "RES-018",
+    "state": "checked_out",
+    "room_name": "Standard Room",
+    "from": -5,
+    "to": -1,
+    "check_in_via": "ios",
+    "check_out_via": "tv",
+    "balance": "0.00",
+    "guests": [
+      { "first_name": "Mia", "last_name": "Schulz", "nationality_code": "DE" },
+      {
+        "first_name": "Oliver",
+        "last_name": "Bennett",
+        "nationality_code": "GB"
+      }
+    ]
+  },
+  {
+    "booking_nr": "RES-019",
+    "state": "checked_out",
+    "room_name": "Deluxe Suite",
+    "from": -9,
+    "to": -4,
+    "check_in_via": "web",
+    "check_out_via": "station",
+    "balance": "-230.75",
+    "guests": [
+      {
+        "first_name": "Ingrid",
+        "last_name": "Johansson",
+        "nationality_code": "SE"
+      }
+    ]
+  }
+]
