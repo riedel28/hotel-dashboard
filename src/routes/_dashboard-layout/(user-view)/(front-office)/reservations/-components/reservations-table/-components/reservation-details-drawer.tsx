@@ -10,7 +10,7 @@ import {
   Trash2Icon,
   TvIcon
 } from 'lucide-react';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import type { CheckinMethod, Guest, Reservation } from '@/api/reservations';
@@ -34,6 +34,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { getCountryName } from '@/lib/countries';
+import { cn } from '@/lib/utils';
 import { formatDate } from '@/utils/date';
 
 import { DeleteDialog } from '../delete-dialog';
@@ -58,6 +59,7 @@ export function ReservationDetailsDrawer({
     (reservation) => reservation.id === reservationId
   );
   const reservation = pageReservations[index];
+  const popupRef = useRef<HTMLDivElement>(null);
   // Stepping stops at the ends of the current page
   const previousId = pageReservations[index - 1]?.id;
   const nextId = pageReservations[index + 1]?.id;
@@ -94,7 +96,9 @@ export function ReservationDetailsDrawer({
       open={reservation !== undefined}
       onOpenChange={(open) => !open && onClose()}
     >
-      <DrawerContent>
+      {/* Focus lands on the panel, not on its first button: opened from a link
+          that button would show a focus ring nobody asked for */}
+      <DrawerContent ref={popupRef} initialFocus={popupRef}>
         {reservation && (
           <ReservationDetails
             reservation={reservation}
@@ -222,9 +226,15 @@ function ReservationDetails({
             copiedLabel={t`Copied reservation number`}
           />
         </div>
-        <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm font-normal text-muted-foreground">
           <StatusCell status={reservation.state} />
-          {reservation.room_name && <span>{reservation.room_name}</span>}
+          {reservation.room_name && (
+            // A long room name gives way to the actions; the full name is in
+            // the body
+            <span className="min-w-0 truncate" title={reservation.room_name}>
+              {reservation.room_name}
+            </span>
+          )}
           {/* Split button: the main part edits, the arrow holds the rest */}
           <div className="ml-auto flex shrink-0 text-foreground">
             <Button
@@ -241,7 +251,7 @@ function ReservationDetails({
               }
             >
               <PencilIcon className="size-3" />
-              <Trans>Edit</Trans>
+              <Trans>Edit reservation</Trans>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger
@@ -263,7 +273,7 @@ function ReservationDetails({
                   onClick={() => setShowDeleteDialog(true)}
                 >
                   <Trash2Icon className="mr-1 h-4 w-4" />
-                  <Trans>Delete</Trans>
+                  <Trans>Delete reservation</Trans>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -336,12 +346,14 @@ function ReservationDetails({
 
         <DetailSection title={<Trans>Payment</Trans>}>
           <DetailRow label={<Trans>Balance</Trans>}>
-            <span className="tabular-nums">
-              <CurrencyFormatter
-                value={reservation.balance}
-                currency="EUR"
-                locale={locale}
-              />
+            {/* Formatted and coloured as in the table's balance column */}
+            <span
+              className={cn(
+                'tabular-nums',
+                reservation.balance < 0 && 'text-danger'
+              )}
+            >
+              <CurrencyFormatter value={reservation.balance} currency="EUR" />
             </span>
           </DetailRow>
 
