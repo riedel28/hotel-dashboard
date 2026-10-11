@@ -1,14 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { ArrowUpRightIcon, Loader2Icon } from 'lucide-react';
+import { ArrowUpRightIcon } from 'lucide-react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { SectionNav } from '@/components/section-nav';
-import { StickyCardFooter } from '@/components/sticky-card-footer';
+import { SectionedFormShell } from '@/components/sectioned-form';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +20,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 import { AdyenCredentialsSection } from './adyen-credentials-section';
@@ -203,172 +202,137 @@ export function AdyenForm() {
   };
 
   return (
-    <div className="flex flex-row gap-8">
-      <SectionNav
+    <>
+      <SectionedFormShell
+        form={form}
         sections={ADYEN_FORM_SECTIONS}
-        className="order-2 hidden xl:block"
-      />
+        onSubmit={onSubmit}
+        isSaving={isSubmitting}
+        submitLabel={<Trans>Save changes</Trans>}
+        header={
+          <CardHeader>
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center-safe gap-2">
+                  <CardTitle>
+                    <Trans>Adyen</Trans>
+                  </CardTitle>
 
-      <Card className="relative max-w-4xl min-w-0 flex-1 overflow-visible">
-        <CardHeader>
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center-safe gap-2">
-                <CardTitle>
-                  <Trans>Adyen</Trans>
-                </CardTitle>
+                  <Badge
+                    color={environment === 'live' ? 'orange' : 'sky'}
+                    size="sm"
+                  >
+                    {environment === 'live' ? (
+                      <Trans>Live environment</Trans>
+                    ) : (
+                      <Trans>Test environment</Trans>
+                    )}
+                  </Badge>
 
-                <Badge
-                  color={environment === 'live' ? 'orange' : 'sky'}
-                  size="sm"
-                >
-                  {environment === 'live' ? (
-                    <Trans>Live environment</Trans>
-                  ) : (
-                    <Trans>Test environment</Trans>
-                  )}
-                </Badge>
-
-                <Badge
-                  variant="outline"
-                  size="sm"
-                  className="cursor-pointer rounded-md bg-accent text-[11px] text-accent-foreground"
-                  render={
-                    <a
-                      href="https://docs.adyen.com/development-resources/api-credentials/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    />
-                  }
-                >
-                  <Trans>Integration Guide</Trans>
-                  <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
-                </Badge>
+                  <Badge
+                    variant="outline"
+                    size="sm"
+                    className="cursor-pointer rounded-md bg-accent text-[11px] text-accent-foreground"
+                    render={
+                      <a
+                        href="https://docs.adyen.com/development-resources/api-credentials/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                  >
+                    <Trans>Integration Guide</Trans>
+                    <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
+                  </Badge>
+                </div>
+              </div>
+              <div className="flex h-8 w-24 shrink-0 items-center justify-end">
+                <img
+                  src="/adyen-logo.svg"
+                  alt="Adyen"
+                  className="max-h-7 max-w-full object-contain"
+                />
               </div>
             </div>
-            <div className="flex h-8 w-24 shrink-0 items-center justify-end">
-              <img
-                src="/adyen-logo.svg"
-                alt="Adyen"
-                className="max-h-7 max-w-full object-contain"
-              />
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent>
-          <form
-            id="adyen-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-            aria-busy={isSubmitting}
-            className="flex flex-col gap-6 md:gap-8"
+          </CardHeader>
+        }
+        status={
+          isSubmitting ? (
+            <Trans>Saving changes…</Trans>
+          ) : isDirty ? null : lastSavedAt ? (
+            <Trans>
+              Last updated at {i18n.date(lastSavedAt, { timeStyle: 'short' })}
+            </Trans>
+          ) : (
+            <Trans>No unsaved changes</Trans>
+          )
+        }
+        secondaryAction={
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCancel}
+            disabled={!isDirty || isSubmitting}
           >
-            <fieldset disabled={isSubmitting} className="contents">
-              <AdyenCredentialsSection
-                control={form.control}
-                onRequestLiveConfirm={handleRequestLiveConfirm}
-                onTestConnection={handleTestConnection}
-                lastTestResult={lastTestResult}
-                disabled={isSubmitting}
-              />
+            <Trans>Cancel</Trans>
+          </Button>
+        }
+      >
+        <AdyenCredentialsSection
+          control={form.control}
+          onRequestLiveConfirm={handleRequestLiveConfirm}
+          onTestConnection={handleTestConnection}
+          lastTestResult={lastTestResult}
+          disabled={isSubmitting}
+        />
 
-              <Separator />
+        <Separator />
 
-              <AdyenRecipientSection
-                control={form.control}
-                disabled={isSubmitting}
-              />
+        <AdyenRecipientSection control={form.control} disabled={isSubmitting} />
 
-              <Separator />
+        <Separator />
 
-              <AdyenMappingCodesSection control={form.control} />
-            </fieldset>
-          </form>
-        </CardContent>
+        <AdyenMappingCodesSection control={form.control} />
+      </SectionedFormShell>
 
-        <StickyCardFooter>
-          <div className="flex w-full flex-wrap items-center justify-end gap-3">
-            <div
-              className="mr-auto min-w-0 text-xs text-muted-foreground"
-              role="status"
-              aria-live="polite"
+      <AlertDialog open={confirmLiveOpen} onOpenChange={setConfirmLiveOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <Trans>Switch to the Live environment?</Trans>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              <Trans>
+                Live mode processes real payments with real cards. Make sure
+                your credentials are production credentials before switching.
+              </Trans>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              <Trans>Cancel</Trans>
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                confirmLiveRef.current?.();
+                confirmLiveRef.current = null;
+                setConfirmLiveOpen(false);
+              }}
             >
-              {isSubmitting ? (
-                <Trans>Saving changes…</Trans>
-              ) : isDirty ? null : lastSavedAt ? (
-                <Trans>
-                  Last updated at{' '}
-                  {i18n.date(lastSavedAt, { timeStyle: 'short' })}
-                </Trans>
-              ) : (
-                <Trans>No unsaved changes</Trans>
-              )}
-            </div>
+              <Trans>Switch to Live</Trans>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCancel}
-                disabled={!isDirty || isSubmitting}
-              >
-                <Trans>Cancel</Trans>
-              </Button>
-              <Button type="submit" form="adyen-form" disabled={isSubmitting}>
-                {isSubmitting && (
-                  <Loader2Icon className="animate-spin" aria-hidden="true" />
-                )}
-                <span>
-                  {isSubmitting ? (
-                    <Trans>Saving changes</Trans>
-                  ) : (
-                    <Trans>Save changes</Trans>
-                  )}
-                </span>
-              </Button>
-            </div>
-          </div>
-        </StickyCardFooter>
-
-        <AlertDialog open={confirmLiveOpen} onOpenChange={setConfirmLiveOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                <Trans>Switch to the Live environment?</Trans>
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                <Trans>
-                  Live mode processes real payments with real cards. Make sure
-                  your credentials are production credentials before switching.
-                </Trans>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>
-                <Trans>Cancel</Trans>
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => {
-                  confirmLiveRef.current?.();
-                  confirmLiveRef.current = null;
-                  setConfirmLiveOpen(false);
-                }}
-              >
-                <Trans>Switch to Live</Trans>
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
-        {testConfig && (
-          <AdyenTestConnectionDialog
-            open={testDialogOpen}
-            onOpenChange={setTestDialogOpen}
-            config={testConfig}
-            onFinished={setLastTestResult}
-          />
-        )}
-      </Card>
-    </div>
+      {testConfig && (
+        <AdyenTestConnectionDialog
+          open={testDialogOpen}
+          onOpenChange={setTestDialogOpen}
+          config={testConfig}
+          onFinished={setLastTestResult}
+        />
+      )}
+    </>
   );
 }

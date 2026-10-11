@@ -3,7 +3,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { InfoIcon, Loader2Icon } from 'lucide-react';
+import { InfoIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import {
   type ReservationFormData,
@@ -13,16 +13,16 @@ import { toast } from 'sonner';
 
 import { createReservation } from '@/api/reservations';
 import { scrollPageToTop } from '@/components/section-nav';
+import {
+  type FormSectionDef,
+  SectionedForm
+} from '@/components/sectioned-form';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
 
+import { GUESTS_SECTION } from './guests-section';
 import { PurposeField, RoomField, StayFields } from './reservation-fields';
-import {
-  GUESTS_SECTION,
-  ReservationFormLayout,
-  type ReservationFormSection
-} from './reservation-form-layout';
 
 export function AddReservationForm() {
   const queryClient = useQueryClient();
@@ -67,36 +67,28 @@ export function AddReservationForm() {
     createReservationMutation.isPending || createReservationMutation.isSuccess;
 
   return (
-    <ReservationFormLayout
+    <SectionedForm
       form={form}
       sections={SECTIONS}
       onSubmit={(data) => createReservationMutation.mutate(data)}
       isSaving={isSaving}
-      status={isSaving && <Trans>Creating reservation…</Trans>}
-    >
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => void navigate({ to: '/reservations' })}
-        disabled={isSaving}
-      >
-        <Trans>Cancel</Trans>
-      </Button>
-      <Button
-        type="submit"
-        form={ReservationFormLayout.formId}
-        disabled={isSaving}
-      >
-        {isSaving && (
-          <Loader2Icon className="animate-spin" aria-hidden="true" />
-        )}
-        <Trans>Create reservation</Trans>
-      </Button>
-    </ReservationFormLayout>
+      submitLabel={<Trans>Create reservation</Trans>}
+      status={isSaving ? <Trans>Creating reservation…</Trans> : null}
+      secondaryAction={
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => void navigate({ to: '/reservations' })}
+          disabled={isSaving}
+        >
+          <Trans>Cancel</Trans>
+        </Button>
+      }
+    />
   );
 }
 
-const SECTIONS: ReservationFormSection[] = [
+const SECTIONS: FormSectionDef<ReservationFormData>[] = [
   {
     id: 'stay',
     label: <Trans>Stay</Trans>,

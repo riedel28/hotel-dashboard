@@ -10,7 +10,26 @@ export { sectionHeadingId } from '@/components/section-nav';
  * table of contents links to them by id.
  */
 export const ADYEN_FORM_SECTIONS: NavSection[] = [
-  { id: 'credentials', label: <Trans>Credentials</Trans> },
-  { id: 'recipient', label: <Trans>Payment recipient</Trans> },
-  { id: 'mapping', label: <Trans>Mapping codes</Trans> }
+  {
+    id: 'credentials',
+    label: <Trans>Credentials</Trans>,
+    fields: [
+      'environment',
+      'merchantId',
+      'apiKey',
+      'clientKey',
+      'publicKey',
+      'additionalConfig'
+    ]
+  },
+  {
+    id: 'recipient',
+    label: <Trans>Payment recipient</Trans>,
+    fields: ['addressLine1', 'addressLine2', 'zip', 'city', 'country']
+  },
+  {
+    id: 'mapping',
+    label: <Trans>Mapping codes</Trans>,
+    fields: ['mappings']
+  }
 ];

@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Loader2Icon } from 'lucide-react';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -11,7 +10,10 @@ import {
 import { toast } from 'sonner';
 
 import { updateReservationById } from '@/api/reservations';
-import { Button } from '@/components/ui/button';
+import {
+  type FormSectionDef,
+  SectionedForm
+} from '@/components/sectioned-form';
 import { CopyButton } from '@/components/ui/copy-button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import {
@@ -20,12 +22,8 @@ import {
   InputGroupInput
 } from '@/components/ui/input-group';
 
+import { GUESTS_SECTION } from './guests-section';
 import { PurposeField, RoomField, StayFields } from './reservation-fields';
-import {
-  GUESTS_SECTION,
-  ReservationFormLayout,
-  type ReservationFormSection
-} from './reservation-form-layout';
 
 interface EditReservationFormProps {
   reservationId: string;
@@ -60,42 +58,15 @@ export function EditReservationForm({
   });
 
   const sections = useMemo(() => editSections(bookingNr), [bookingNr]);
-  const isDirty = form.formState.isDirty;
-  const isSaving = updateReservationMutation.isPending;
 
   return (
-    <ReservationFormLayout
+    <SectionedForm
       form={form}
       sections={sections}
       onSubmit={(data) => updateReservationMutation.mutate(data)}
-      isSaving={isSaving}
-      status={
-        isSaving ? (
-          <Trans>Saving changes…</Trans>
-        ) : isDirty ? null : (
-          <Trans>No unsaved changes</Trans>
-        )
-      }
-    >
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => form.reset()}
-        disabled={!isDirty || isSaving}
-      >
-        <Trans>Cancel</Trans>
-      </Button>
-      <Button
-        type="submit"
-        form={ReservationFormLayout.formId}
-        disabled={isSaving}
-      >
-        {isSaving && (
-          <Loader2Icon className="animate-spin" aria-hidden="true" />
-        )}
-        <Trans>Update Reservation</Trans>
-      </Button>
-    </ReservationFormLayout>
+      isSaving={updateReservationMutation.isPending}
+      submitLabel={<Trans>Update Reservation</Trans>}
+    />
   );
 }
 
@@ -129,7 +100,9 @@ function ReservationNumber({ bookingNr }: { bookingNr: string }) {
   );
 }
 
-const editSections = (bookingNr: string): ReservationFormSection[] => [
+const editSections = (
+  bookingNr: string
+): FormSectionDef<ReservationFormData>[] => [
   {
     id: 'reservation',
     label: <Trans>Reservation</Trans>,
