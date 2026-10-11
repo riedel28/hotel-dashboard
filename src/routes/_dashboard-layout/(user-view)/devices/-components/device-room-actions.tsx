@@ -18,10 +18,10 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { roomLabel } from '@/lib/rooms';
 
 import { useAssignDeviceRoom } from '../-hooks/use-assign-device-room';
 import { deviceLabel } from '../-lib/devices';
-import { roomLabel } from '../-lib/rooms';
 
 interface DeviceRoomActions {
   /** Saves the room right away. */

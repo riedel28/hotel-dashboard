@@ -17,9 +17,8 @@ import {
   ComboboxList,
   ComboboxTrigger
 } from '@/components/ui/combobox';
+import { groupRoomsByFloor, matchesRoomQuery, roomLabel } from '@/lib/rooms';
 import { cn } from '@/lib/utils';
-
-import { groupRoomsByFloor, matchesRoomQuery, roomLabel } from '../-lib/rooms';
 
 type FloorGroup = ReturnType<typeof groupRoomsByFloor>[number];
 

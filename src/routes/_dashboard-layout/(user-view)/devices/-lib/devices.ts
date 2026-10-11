@@ -6,7 +6,7 @@ import {
 } from 'shared/types/devices';
 import { z } from 'zod';
 
-import { byLabel, matchesRoomQuery, roomLabel } from './rooms';
+import { byLabel, matchesRoomQuery, roomLabel } from '@/lib/rooms';
 
 // Which devices a tab shows; no tab means all of them
 export const deviceTabSchema = z.enum(['assigned', 'unassigned']);
