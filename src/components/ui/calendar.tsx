@@ -7,16 +7,32 @@ import { DayPicker } from 'react-day-picker';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+/**
+ * For a single date picked from a form field: the grid stretches to the
+ * popup's width with square days centred in their columns, and the selected
+ * day is marked in grey rather than the primary colour.
+ */
+const fieldClassNames = {
+  month_grid: 'w-full',
+  weekday: 'h-8 p-0 text-xs font-medium text-muted-foreground/80',
+  day: 'group h-8 px-0 py-px text-sm',
+  day_button:
+    'relative mx-auto flex size-8 cursor-pointer items-center justify-center rounded-md p-0 text-foreground outline-none group-data-disabled:pointer-events-none group-data-disabled:text-foreground/30 group-data-outside:text-foreground/30 group-data-selected:bg-foreground/10 group-data-selected:font-medium hover:bg-accent focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50'
+};
+
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  appearance = 'default',
   ...props
-}: React.ComponentProps<typeof DayPicker>) {
+}: React.ComponentProps<typeof DayPicker> & {
+  appearance?: 'default' | 'field';
+}) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn('p-2', className)}
+      className={cn('p-2', appearance === 'field' && 'w-full', className)}
       classNames={{
         months: 'relative flex flex-col sm:flex-row gap-4',
         month: 'w-full',
@@ -45,6 +61,7 @@ function Calendar({
           'text-muted-foreground data-selected:bg-accent/50 data-selected:text-muted-foreground',
         hidden: 'invisible',
         week_number: 'size-8 p-0 text-xs font-medium text-muted-foreground/80',
+        ...(appearance === 'field' && fieldClassNames),
         ...classNames
       }}
       components={{

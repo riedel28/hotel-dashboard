@@ -21,10 +21,10 @@ import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { ReservationStatusBadge } from '../reservation-status-badge';
 import { BalanceCell } from './-components/cells/balance-cell';
 import { GuestsCell } from './-components/cells/guests-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
-import { StatusCell } from './-components/cells/status-cell';
 import { RowActions } from './row-actions';
 
 /** A stay date on one line: the year only when it is not the current one. */
@@ -108,7 +108,7 @@ export default function ReservationsTable({
         ),
         cell: ({ row }) => {
           const status = row.getValue('state') as Reservation['state'];
-          return <StatusCell status={status} />;
+          return <ReservationStatusBadge status={status} />;
         },
         meta: {
           skeleton: <Skeleton className="h-6 w-16" />,

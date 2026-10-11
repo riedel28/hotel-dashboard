@@ -106,7 +106,7 @@ export function InviteUserModal() {
           </Button>
         }
       />
-      <DialogContent className="max-h-[90vh] max-w-xl! overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-lg! overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             <Trans>Invite User</Trans>
@@ -190,12 +190,12 @@ export function InviteUserModal() {
                   <Field
                     data-invalid={fieldState.invalid}
                     orientation="horizontal"
-                    className="items-center gap-3 rounded-md border p-3"
+                    className="my-1 items-center gap-3 rounded-lg border p-3 dark:bg-input/30"
                   >
                     <FieldContent>
                       <FieldLabel
                         htmlFor={field.name}
-                        className="cursor-pointer text-sm font-normal"
+                        className="cursor-pointer"
                       >
                         <Trans>Admin User</Trans>
                       </FieldLabel>
@@ -227,7 +227,7 @@ export function InviteUserModal() {
                     className="gap-3"
                   >
                     <FieldContent>
-                      <FieldLabel className="text-base font-medium">
+                      <FieldLabel>
                         <Trans>Roles</Trans>
                       </FieldLabel>
                       <FieldDescription>
@@ -242,7 +242,7 @@ export function InviteUserModal() {
                             <Field
                               key={role.id}
                               orientation="horizontal"
-                              className="gap-3 rounded-md border bg-muted/20 p-3"
+                              className="gap-3 rounded-md border p-3 dark:bg-input/30"
                             >
                               <Checkbox
                                 id={`role-${role.id}`}

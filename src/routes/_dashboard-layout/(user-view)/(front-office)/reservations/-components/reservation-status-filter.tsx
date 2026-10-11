@@ -12,7 +12,7 @@ import {
   DataGridCheckboxFilterPreset
 } from '@/components/ui/data-grid-checkbox-filter';
 
-import { StatusCell } from './reservations-table/-components/cells/status-cell';
+import { ReservationStatusBadge } from './reservation-status-badge';
 
 const reservationStatuses = reservationStateSchema.options;
 
@@ -36,7 +36,7 @@ function ReservationStatusFilter({
   const options: DataGridCheckboxFilterOption<ReservationState>[] =
     reservationStatuses.map((status) => ({
       value: status,
-      label: <StatusCell status={status} />
+      label: <ReservationStatusBadge status={status} />
     }));
 
   const isActiveSelected =

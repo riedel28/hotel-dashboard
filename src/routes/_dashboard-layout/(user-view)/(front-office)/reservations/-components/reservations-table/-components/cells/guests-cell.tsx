@@ -41,7 +41,7 @@ export function GuestsCell({ guests }: { guests: Guest[] }) {
   }
 
   return (
-    <div className="flex min-w-0 items-center gap-1.5">
+    <div className="flex min-w-0 items-baseline gap-1.5">
       <GuestLine guest={primaryGuest} />
       {fellowTravelers.length > 0 && (
         <Tooltip>

@@ -3,7 +3,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
-import { MessageSquareDot, PenSquare, Trash } from 'lucide-react';
+import { MessageSquareDotIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -14,8 +14,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
 
 import { DeleteDialog } from './delete-dialog';
@@ -39,7 +38,7 @@ export function RowActions({ row }: RowActionsProps) {
               toast.info(t`Pushed to device`);
             }}
           >
-            <MessageSquareDot className="mr-1 h-4 w-4" />
+            <MessageSquareDotIcon className="mr-1 h-4 w-4" />
             <Trans>Push to device</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -52,8 +51,8 @@ export function RowActions({ row }: RowActionsProps) {
                 }}
                 preload="intent"
               >
-                <PenSquare className="mr-1 h-4 w-4" />
-                <Trans>Edit</Trans>
+                <PencilIcon className="mr-1 h-4 w-4" />
+                <Trans>Edit Reservation</Trans>
               </RouterLink>
             )}
           />
@@ -62,9 +61,8 @@ export function RowActions({ row }: RowActionsProps) {
             variant="destructive-soft"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <Trash className="mr-1 h-4 w-4" />
+            <TrashIcon className="mr-1 h-4 w-4" />
             <Trans>Delete</Trans>
-            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -13,6 +13,7 @@ import {
   ComboboxValue
 } from '@/components/ui/combobox';
 import { CountryFlag } from '@/components/ui/country-flag';
+import { fieldTriggerClassName } from '@/components/ui/input';
 import {
   type Country,
   getCountries,
@@ -84,10 +85,7 @@ export function CountryPicker({
       disabled={disabled}
     >
       <ComboboxTrigger
-        className={cn(
-          'flex h-9 w-full items-center justify-between overflow-hidden rounded-lg border border-input px-3 py-2 text-sm ring-offset-background dark:bg-input/30',
-          className
-        )}
+        className={cn(fieldTriggerClassName, className)}
         aria-label={
           ariaLabelledby ? undefined : (placeholder ?? t`Select country`)
         }

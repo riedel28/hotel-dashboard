@@ -1,53 +1,44 @@
-import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { Plural, Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Edit2Icon, Loader2Icon, Trash2Icon, UserIcon } from 'lucide-react';
-import { useState } from 'react';
+import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import type { Guest, ReservationFormData } from 'shared/types/reservations';
+import type { ReservationFormData } from 'shared/types/reservations';
 import { toast } from 'sonner';
 
+import { deviceRoomOptionsQueryOptions } from '@/api/devices';
 import { updateReservationById } from '@/api/reservations';
-import { roomsQueryOptions } from '@/api/rooms';
+import { FormSection } from '@/components/form-section';
+import { RoomPicker } from '@/components/room-picker';
+import { type NavSection, SectionNav } from '@/components/section-nav';
+import { StickyCardFooter } from '@/components/sticky-card-footer';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator
-} from '@/components/ui/dropdown-menu';
+import { Card, CardContent } from '@/components/ui/card';
+import { CopyButton } from '@/components/ui/copy-button';
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
-  FieldLabel,
-  FieldSet
+  FieldLabel
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { NumberInput } from '@/components/ui/number-input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { fieldTriggerClassName } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput
+} from '@/components/ui/input-group';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
+import { roomLabel } from '@/lib/rooms';
 
-import { AddGuestModal } from './add-guest-modal';
-import { EditGuestForm } from './edit-guest-form';
-import { GuestSearchCombobox } from './guest-search-combobox';
+import { countNights } from '../-lib/stay';
+import { DateTimeField } from './date-time-field';
+import { GuestsSection } from './guests-section';
 
 interface EditReservationFormProps {
   reservationId: string;
   reservationData: ReservationFormData;
-}
-
-async function updateReservation(id: string, data: ReservationFormData) {
-  return updateReservationById(id, data);
 }
 
 export function EditReservationForm({
@@ -55,15 +46,14 @@ export function EditReservationForm({
   reservationData
 }: EditReservationFormProps) {
   const queryClient = useQueryClient();
-  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
-
+  const { t } = useLingui();
   const form = useForm<ReservationFormData>({
     values: reservationData
   });
 
   const updateReservationMutation = useMutation({
     mutationFn: (data: ReservationFormData) =>
-      updateReservation(reservationId, data),
+      updateReservationById(reservationId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
       toast.success(t`Reservation updated successfully`);
@@ -74,396 +64,319 @@ export function EditReservationForm({
     }
   });
 
-  const handleRemoveGuest = (guestId: number) => {
-    const currentGuests = form.getValues('guests');
-    form.setValue(
-      'guests',
-      currentGuests.filter((guest) => guest.id !== guestId)
-    );
-  };
+  // The picker's own list, so the selected room is shown the way it is offered
+  const { data: rooms = [] } = useQuery(deviceRoomOptionsQueryOptions());
 
-  const handleEditGuest = (updatedGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
-    form.setValue(
-      'guests',
-      currentGuests.map((g) => (g.id === updatedGuest.id ? updatedGuest : g))
-    );
-    setEditingGuest(null);
-  };
-
-  const handleAddGuest = (newGuest: Guest) => {
-    const currentGuests = form.getValues('guests');
-    form.setValue('guests', [...currentGuests, newGuest]);
-  };
-
-  const { data: roomsData } = useQuery(roomsQueryOptions({ per_page: 100 }));
-  const rooms = roomsData?.index ?? [];
-
-  const onSubmit = (data: ReservationFormData) => {
-    updateReservationMutation.mutate(data);
-  };
+  const [bookingFrom, bookingTo] = form.watch(['booking_from', 'booking_to']);
+  const nights = countNights(bookingFrom, bookingTo);
+  const isDirty = form.formState.isDirty;
+  const isSaving = updateReservationMutation.isPending;
 
   return (
     <>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-xl space-y-6"
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              <Trans>Booking Information</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <FieldSet className="gap-4">
-              <FieldGroup className="gap-4">
-                <Controller
-                  control={form.control}
-                  name="booking_nr"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Reservation No.</Trans>
-                      </FieldLabel>
-                      <Input
-                        {...field}
-                        id={field.name}
-                        readOnly
-                        className="cursor-not-allowed bg-muted"
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </CardContent>
-        </Card>
+      <div className="flex flex-row gap-8">
+        <SectionNav
+          sections={RESERVATION_FORM_SECTIONS}
+          className="order-2 hidden xl:block"
+        />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              <Trans>Guests</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <GuestSearchCombobox
-              currentGuests={form.watch('guests')}
-              onSelectGuest={handleAddGuest}
-            />
-            <FieldSet className="gap-4">
-              <FieldGroup className="gap-4">
-                <Controller
-                  control={form.control}
-                  name="guests"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <div className="space-y-2">
-                        {field.value.length === 0 ? (
-                          <div className="flex h-10 items-center justify-center text-sm text-muted-foreground">
-                            <Trans>No guests added yet</Trans>
-                          </div>
-                        ) : (
-                          field.value.map((guest) => (
-                            <div
-                              key={guest.id}
-                              className="flex items-center justify-between rounded-md border px-2 py-1"
+        <Card className="relative max-w-4xl min-w-0 flex-1 overflow-visible">
+          <CardContent>
+            <form
+              id="reservation-form"
+              onSubmit={form.handleSubmit((data) =>
+                updateReservationMutation.mutate(data)
+              )}
+              aria-busy={isSaving}
+              className="flex flex-col gap-6 md:gap-8"
+              noValidate
+            >
+              <fieldset disabled={isSaving} className="contents">
+                <FormSection
+                  id="reservation"
+                  title={<Trans>Reservation</Trans>}
+                  description={
+                    <Trans>
+                      The booking number, the room and the purpose of the stay.
+                    </Trans>
+                  }
+                >
+                  <FieldGroup className="gap-4">
+                    <Controller
+                      control={form.control}
+                      name="booking_nr"
+                      render={({ field }) => (
+                        <Field className="gap-2">
+                          <FieldLabel htmlFor={field.name}>
+                            <Trans>Reservation No.</Trans>
+                          </FieldLabel>
+                          <InputGroup>
+                            {/* Not editable, so it takes no focus; the copy button does */}
+                            <InputGroupInput
+                              id={field.name}
+                              value={field.value}
+                              readOnly
+                              tabIndex={-1}
+                              className="pointer-events-none"
+                            />
+                            <InputGroupAddon align="inline-end">
+                              <CopyButton
+                                text={field.value}
+                                size="icon-xs"
+                                copyLabel={t`Copy reservation number`}
+                                copiedLabel={t`Copied to clipboard`}
+                              />
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </Field>
+                      )}
+                    />
+
+                    <Controller
+                      control={form.control}
+                      name="room_name"
+                      render={({ field, fieldState }) => {
+                        const selectedRoom = rooms.find(
+                          (room) => room.name === field.value
+                        );
+
+                        return (
+                          <Field
+                            data-invalid={fieldState.invalid}
+                            className="gap-2"
+                          >
+                            <FieldLabel htmlFor={field.name}>
+                              <Trans>Room</Trans>
+                            </FieldLabel>
+                            <RoomPicker
+                              id={field.name}
+                              value={selectedRoom ?? null}
+                              onValueChange={(room) =>
+                                field.onChange(room.name)
+                              }
+                              className={fieldTriggerClassName}
+                              contentClassName="w-(--anchor-width) min-w-(--anchor-width)"
                             >
-                              <div className="flex items-center gap-2">
-                                <UserIcon className="h-4 w-4 text-muted-foreground" />
-                                <span className="max-w-md truncate text-sm">
-                                  {guest.first_name} {guest.last_name}
-                                </span>
-                              </div>
-                              <DropdownMenu>
-                                <DataGridRowActions
-                                  label={<Trans>Open guest menu</Trans>}
-                                />
-                                <DropdownMenuContent
-                                  align="end"
-                                  className="w-[180px]"
-                                >
-                                  <DropdownMenuItem
-                                    onClick={() => {
-                                      // Delay to allow dropdown to close first
-                                      requestAnimationFrame(() => {
-                                        setEditingGuest(guest);
-                                      });
-                                    }}
-                                  >
-                                    <Edit2Icon className="mr-2 h-4 w-4" />
-                                    <Trans>Edit guest</Trans>
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    variant="destructive-soft"
-                                    onClick={() => handleRemoveGuest(guest.id)}
-                                  >
-                                    <Trash2Icon className="mr-2 h-4 w-4" />
-                                    <Trans>Remove</Trans>
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-                          ))
-                        )}
-                      </div>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-            <div className="flex justify-end">
-              <AddGuestModal onAddGuest={handleAddGuest} />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              <Trans>Number of People</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <FieldSet>
-              <FieldGroup className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                <Controller
-                  control={form.control}
-                  name="adults"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Adults</Trans>
-                      </FieldLabel>
-                      <NumberInput
-                        {...field}
-                        id={field.name}
-                        value={field.value}
-                        min={1}
-                        onValueChange={(value) => field.onChange(value ?? 0)}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="youth"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Youth</Trans>
-                      </FieldLabel>
-                      <NumberInput
-                        {...field}
-                        id={field.name}
-                        value={field.value}
-                        min={0}
-                        onValueChange={(value) => field.onChange(value ?? 0)}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="children"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Children</Trans>
-                      </FieldLabel>
-                      <NumberInput
-                        {...field}
-                        id={field.name}
-                        value={field.value}
-                        min={0}
-                        onValueChange={(value) => field.onChange(value ?? 0)}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="infants"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor={field.name}>
-                        <Trans>Infants</Trans>
-                      </FieldLabel>
-                      <NumberInput
-                        {...field}
-                        id={field.name}
-                        value={field.value}
-                        min={0}
-                        onValueChange={(value) => field.onChange(value ?? 0)}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              <Trans>Purpose of Stay</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <FieldSet>
-              <FieldGroup className="gap-4">
-                <Controller
-                  control={form.control}
-                  name="purpose"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel>
-                        <Trans>Select purpose</Trans>
-                      </FieldLabel>
-                      <RadioGroup
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        className="grid gap-2 sm:grid-cols-2"
-                      >
-                        <Label
-                          htmlFor="purpose-private"
-                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-3 text-left text-sm font-medium transition hover:bg-accent data-[state=checked]:border-primary data-[state=checked]:bg-primary/5"
-                        >
-                          <RadioGroupItem
-                            value="private"
-                            id="purpose-private"
-                          />
-                          <span className="leading-none">
-                            <Trans>Private</Trans>
-                          </span>
-                        </Label>
-                        <Label
-                          htmlFor="purpose-business"
-                          className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-3 text-left text-sm font-medium transition hover:bg-accent data-[state=checked]:border-primary data-[state=checked]:bg-primary/5"
-                        >
-                          <RadioGroupItem
-                            value="business"
-                            id="purpose-business"
-                          />
-                          <span className="leading-none">
-                            <Trans>Business</Trans>
-                          </span>
-                        </Label>
-                      </RadioGroup>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              <Trans>Room</Trans>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <FieldSet>
-              <FieldGroup className="gap-4">
-                <Controller
-                  control={form.control}
-                  name="room"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel>
-                        <Trans>Select room</Trans>
-                      </FieldLabel>
-                      <Select
-                        value={field.value || undefined}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue>
-                            {rooms.find(
-                              (room) => String(room.id) === field.value
-                            )?.name ?? t`Select a room...`}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                          {rooms.length === 0 ? (
-                            <div className="py-6 text-center text-sm text-muted-foreground">
-                              <Trans>No rooms available</Trans>
-                            </div>
-                          ) : (
-                            rooms.map((room) => (
-                              <SelectItem key={room.id} value={String(room.id)}>
-                                {room.name}
-                                {room.room_number && (
+                              <span className="flex min-w-0 items-center gap-2">
+                                {selectedRoom ? (
+                                  <>
+                                    <span className="tabular-nums">
+                                      {roomLabel(selectedRoom)}
+                                    </span>
+                                    {selectedRoom.room_number &&
+                                      selectedRoom.name !==
+                                        selectedRoom.room_number && (
+                                        <span className="truncate text-muted-foreground">
+                                          {selectedRoom.name}
+                                        </span>
+                                      )}
+                                  </>
+                                ) : field.value ? (
+                                  // Kept as stored: it names no room of the property.
+                                  <span className="truncate">
+                                    {field.value}
+                                  </span>
+                                ) : (
                                   <span className="text-muted-foreground">
-                                    {` (${room.room_number}`}
-                                    {room.room_type && ` · ${room.room_type}`}
-                                    {')'}
+                                    <Trans>Select a room</Trans>
                                   </span>
                                 )}
-                              </SelectItem>
-                            ))
+                              </span>
+                            </RoomPicker>
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        );
+                      }}
+                    />
+
+                    <Controller
+                      control={form.control}
+                      name="purpose"
+                      render={({ field, fieldState }) => (
+                        <Field
+                          data-invalid={fieldState.invalid}
+                          className="gap-2"
+                        >
+                          <FieldLabel>
+                            <Trans>Purpose of stay</Trans>
+                          </FieldLabel>
+                          <RadioGroup
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            className="grid gap-2 sm:grid-cols-2"
+                          >
+                            <Label
+                              htmlFor="purpose-private"
+                              className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-input px-2.5 text-left text-sm font-normal transition-colors hover:bg-accent dark:bg-input/30"
+                            >
+                              <RadioGroupItem
+                                value="private"
+                                id="purpose-private"
+                              />
+                              <span className="leading-none">
+                                <Trans>Private</Trans>
+                              </span>
+                            </Label>
+                            <Label
+                              htmlFor="purpose-business"
+                              className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-input px-2.5 text-left text-sm font-normal transition-colors hover:bg-accent dark:bg-input/30"
+                            >
+                              <RadioGroupItem
+                                value="business"
+                                id="purpose-business"
+                              />
+                              <span className="leading-none">
+                                <Trans>Business</Trans>
+                              </span>
+                            </Label>
+                          </RadioGroup>
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
                           )}
-                        </SelectContent>
-                      </Select>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
+                        </Field>
                       )}
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
+                    />
+                  </FieldGroup>
+                </FormSection>
+
+                <Separator />
+
+                <FormSection
+                  id="stay"
+                  title={<Trans>Stay</Trans>}
+                  description={
+                    <Trans>When the guests arrive and when they leave.</Trans>
+                  }
+                >
+                  <FieldGroup className="gap-4">
+                    <Controller
+                      control={form.control}
+                      name="booking_from"
+                      rules={{ deps: ['booking_to'] }}
+                      render={({ field }) => (
+                        <Field className="gap-2">
+                          <FieldLabel htmlFor={field.name}>
+                            <Trans>Arrival</Trans>
+                          </FieldLabel>
+                          <DateTimeField
+                            id={field.name}
+                            label={t`Arrival`}
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </Field>
+                      )}
+                    />
+
+                    <Controller
+                      control={form.control}
+                      name="booking_to"
+                      rules={{
+                        validate: (value, values) =>
+                          value > values.booking_from ||
+                          t`Departure must be after arrival`
+                      }}
+                      render={({ field, fieldState }) => (
+                        <Field
+                          data-invalid={fieldState.invalid}
+                          className="gap-2"
+                        >
+                          <FieldLabel htmlFor={field.name}>
+                            <Trans>Departure</Trans>
+                          </FieldLabel>
+                          <DateTimeField
+                            id={field.name}
+                            label={t`Departure`}
+                            value={field.value}
+                            onChange={field.onChange}
+                            invalid={fieldState.invalid}
+                          />
+                          {fieldState.invalid ? (
+                            <FieldError errors={[fieldState.error]} />
+                          ) : (
+                            <FieldDescription aria-live="polite">
+                              <Plural
+                                value={Math.max(nights, 0)}
+                                one="# night"
+                                other="# nights"
+                              />
+                            </FieldDescription>
+                          )}
+                        </Field>
+                      )}
+                    />
+                  </FieldGroup>
+                </FormSection>
+
+                <Separator />
+
+                <FormSection
+                  id="guests"
+                  title={<Trans>Guests</Trans>}
+                  description={
+                    <Trans>
+                      How many people are staying, by age group, and who they
+                      are. The primary guest is the one the reservation is
+                      booked under.
+                    </Trans>
+                  }
+                >
+                  <GuestsSection form={form} />
+                </FormSection>
+              </fieldset>
+            </form>
           </CardContent>
+
+          <StickyCardFooter>
+            <div className="flex w-full flex-wrap items-center justify-end gap-3">
+              <div
+                className="mr-auto min-w-0 text-xs text-muted-foreground"
+                role="status"
+                aria-live="polite"
+              >
+                {isSaving ? (
+                  <Trans>Saving changes…</Trans>
+                ) : isDirty ? null : (
+                  <Trans>No unsaved changes</Trans>
+                )}
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => form.reset()}
+                  disabled={!isDirty || isSaving}
+                >
+                  <Trans>Cancel</Trans>
+                </Button>
+                <Button
+                  type="submit"
+                  form="reservation-form"
+                  disabled={isSaving}
+                >
+                  {isSaving && (
+                    <Loader2Icon className="animate-spin" aria-hidden="true" />
+                  )}
+                  <Trans>Save Changes</Trans>
+                </Button>
+              </div>
+            </div>
+          </StickyCardFooter>
         </Card>
-
-        <Button type="submit" disabled={updateReservationMutation.isPending}>
-          {updateReservationMutation.isPending && (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-          )}
-          <Trans>Save Changes</Trans>
-        </Button>
-      </form>
-
-      {editingGuest && (
-        <EditGuestForm
-          key={editingGuest.id}
-          guest={editingGuest}
-          open={true}
-          onOpenChange={(open) => {
-            if (!open) setEditingGuest(null);
-          }}
-          onSave={handleEditGuest}
-        />
-      )}
+      </div>
     </>
   );
 }
+
+/**
+ * Single source of truth for the page's sections: the form renders one
+ * `<section>` per entry and the table of contents links to them by id.
+ */
+const RESERVATION_FORM_SECTIONS: NavSection[] = [
+  { id: 'reservation', label: <Trans>Reservation</Trans> },
+  { id: 'stay', label: <Trans>Stay</Trans> },
+  { id: 'guests', label: <Trans>Guests</Trans> }
+];

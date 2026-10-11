@@ -1,0 +1,2 @@
+ALTER TABLE "guests" ADD COLUMN "age_group" text DEFAULT 'adult' NOT NULL;--> statement-breakpoint
+ALTER TABLE "guests" ADD CONSTRAINT "guests_age_group_check" CHECK ("guests"."age_group" IN ('adult', 'youth', 'child', 'infant'));

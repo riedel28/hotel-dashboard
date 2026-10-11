@@ -17,7 +17,9 @@ import type { Request, Response } from 'express';
 
 import {
   type FetchReservationsParams,
-  toReservationStates
+  type GuestInput,
+  toReservationStates,
+  type UpdateReservationData
 } from '../../../shared/types/reservations';
 import { db } from '../db/pool';
 import {
@@ -97,7 +99,7 @@ async function getReservations(req: Request, res: Response) {
     const reservations = await db.query.reservations.findMany({
       where: searchCondition,
       with: {
-        guests: true
+        guests: guestsInOrder
       },
       offset: (page - 1) * per_page,
       limit: per_page,
@@ -131,7 +133,7 @@ async function getReservationById(req: Request, res: Response) {
     const reservation = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, Number(id)),
       with: {
-        guests: true
+        guests: guestsInOrder
       }
     });
 
@@ -207,7 +209,7 @@ async function createReservation(req: Request, res: Response) {
     const reservationWithGuests = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, newReservation.id),
       with: {
-        guests: true
+        guests: guestsInOrder
       }
     });
 
@@ -224,9 +226,42 @@ async function createReservation(req: Request, res: Response) {
   }
 }
 
+/**
+ * The primary guest first, then the order guests were added in: the list and
+ * the details drawer read the first guest as the primary one.
+ */
+const guestsInOrder = {
+  orderBy: (guest: typeof guestsTable) => [
+    desc(guest.is_primary),
+    asc(guest.id)
+  ]
+};
+
+/**
+ * Guest rows to insert for a reservation. One guest is the primary one: the
+ * first flagged, or the first on the list when nobody is.
+ */
+function toGuestRows(guests: GuestInput[], reservationId: number) {
+  const primaryIndex = Math.max(
+    guests.findIndex((guest) => guest.is_primary),
+    0
+  );
+
+  return guests.map((guest, index) => ({
+    reservation_id: reservationId,
+    first_name: guest.first_name,
+    last_name: guest.last_name,
+    email: guest.email || null,
+    nationality_code: guest.nationality_code,
+    age_group: guest.age_group,
+    is_primary: index === primaryIndex
+  }));
+}
+
 async function updateReservation(req: Request, res: Response) {
   const { id } = req.params;
-  const body = req.body ?? {};
+  // Parsed by validateBody(updateReservationSchema)
+  const body: UpdateReservationData = req.body ?? {};
   const reservationId = Number(id);
 
   try {
@@ -270,18 +305,28 @@ async function updateReservation(req: Request, res: Response) {
         }
       }
 
+      // The guest list is replaced wholesale, so work out the rows first: the
+      // reservation mirrors the primary guest's name and email.
+      const guestRows =
+        guestPayload && toGuestRows(guestPayload, reservationId);
+      const primaryGuest = guestRows?.find((guest) => guest.is_primary);
+
       const reservationUpdates = Object.fromEntries(
         Object.entries({
           state,
           booking_nr,
-          guest_email,
+          guest_email: guestRows ? (primaryGuest?.email ?? null) : guest_email,
           booking_id,
           room_name: resolvedRoomName,
           booking_from,
           booking_to,
           check_in_via,
           check_out_via,
-          primary_guest_name,
+          primary_guest_name: guestRows
+            ? primaryGuest
+              ? `${primaryGuest.first_name} ${primaryGuest.last_name}`
+              : ''
+            : primary_guest_name,
           last_opened_at,
           received_at,
           completed_at,
@@ -306,52 +351,20 @@ async function updateReservation(req: Request, res: Response) {
         return null;
       }
 
-      if (Array.isArray(guestPayload)) {
+      if (guestRows) {
         await tx
           .delete(guestsTable)
           .where(eq(guestsTable.reservation_id, reservationId));
 
-        const sanitizedGuests = guestPayload
-          .map((guest: Record<string, unknown>) => {
-            const firstName =
-              (guest.first_name as string | undefined) ??
-              (guest.firstName as string | undefined);
-            const lastName =
-              (guest.last_name as string | undefined) ??
-              (guest.lastName as string | undefined);
-
-            if (!firstName || !lastName) {
-              return null;
-            }
-
-            const nationality =
-              (guest.nationality_code as string | undefined) ?? 'DE';
-
-            return {
-              reservation_id: reservationId,
-              first_name: firstName,
-              last_name: lastName,
-              email: (guest.email as string | null | undefined) ?? null,
-              nationality_code: nationality
-            };
-          })
-          .filter(Boolean) as Array<{
-          reservation_id: number;
-          first_name: string;
-          last_name: string;
-          email: string | null;
-          nationality_code: string;
-        }>;
-
-        if (sanitizedGuests.length > 0) {
-          await tx.insert(guestsTable).values(sanitizedGuests);
+        if (guestRows.length > 0) {
+          await tx.insert(guestsTable).values(guestRows);
         }
       }
 
       return tx.query.reservations.findFirst({
         where: eq(reservationsTable.id, reservationId),
         with: {
-          guests: true
+          guests: guestsInOrder
         }
       });
     });
@@ -377,7 +390,7 @@ async function deleteReservation(req: Request, res: Response) {
     const deletedReservations = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, Number(id)),
       with: {
-        guests: true
+        guests: guestsInOrder
       }
     });
 

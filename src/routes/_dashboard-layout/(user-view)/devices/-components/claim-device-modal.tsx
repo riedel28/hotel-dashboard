@@ -18,6 +18,7 @@ import { z } from 'zod';
 import { ApiError } from '@/api/client';
 import { claimDevice, devicesQueryOptions } from '@/api/devices';
 import { OtpField } from '@/components/otp-field';
+import { RoomPicker } from '@/components/room-picker';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,10 +36,8 @@ import {
   FieldLabel,
   FieldSet
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-
-import { roomLabel } from '../-lib/rooms';
-import { RoomPicker } from './room-picker';
+import { fieldTriggerClassName, Input } from '@/components/ui/input';
+import { roomLabel } from '@/lib/rooms';
 
 const claimFormSchema = claimDeviceSchema
   .pick({ serial_number: true, pin: true, name: true })
@@ -254,8 +253,7 @@ export function ClaimDeviceModal({
                       onValueChange={field.onChange}
                       clearLabel={<Trans>No room</Trans>}
                       onClear={() => field.onChange(null)}
-                      // Focused like the inputs above, also while its popup is open
-                      className="flex h-9 w-full items-center justify-between rounded-lg border border-input px-3 py-2 text-sm transition-[color,box-shadow] outline-none focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)] data-popup-open:border-primary data-popup-open:shadow-[inset_0_0_0_1px_var(--color-primary)] dark:bg-input/30"
+                      className={fieldTriggerClassName}
                       contentClassName="w-(--anchor-width) min-w-(--anchor-width)"
                     >
                       {field.value ? (

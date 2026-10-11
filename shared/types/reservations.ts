@@ -63,6 +63,14 @@ export const checkinMethodSchema = z.enum([
   'web'
 ]);
 
+// Mirrors the reservation's head counts: adults, youth, children, infants.
+export const guestAgeGroupSchema = z.enum([
+  'adult',
+  'youth',
+  'child',
+  'infant'
+]);
+
 export const guestSchema = z.object({
   id: z.number(),
   reservation_id: z.number(),
@@ -70,8 +78,24 @@ export const guestSchema = z.object({
   last_name: z.string(),
   email: z.union([z.string(), z.null()]).optional(),
   nationality_code: countryCodeSchema,
+  // At most one per reservation; the reservation mirrors their name and email.
+  is_primary: z.boolean().default(false),
+  age_group: guestAgeGroupSchema.default('adult'),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date().nullable()
+});
+
+/**
+ * A guest as written with a reservation: the server owns ids and timestamps,
+ * and replaces the whole list on save.
+ */
+export const guestInputSchema = z.object({
+  first_name: z.string().trim().min(1),
+  last_name: z.string().trim().min(1),
+  email: z.union([z.string(), z.null()]).optional(),
+  nationality_code: countryCodeSchema,
+  is_primary: z.boolean().default(false),
+  age_group: guestAgeGroupSchema.default('adult')
 });
 
 export const reservationSchema = z.object({
@@ -158,30 +182,23 @@ export const updateReservationSchema = reservationSchema
     id: true,
     updated_at: true
   })
+  .extend({ guests: z.array(guestInputSchema) })
   .partial();
-
-// Guest schema for forms (only editable fields)
-export const guestFormSchema = z.object({
-  id: z.number(),
-  reservation_id: z.number(),
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
-  email: z.union([z.string(), z.null()]).optional(),
-  nationality_code: countryCodeSchema,
-  created_at: z.date(),
-  updated_at: z.date().nullable()
-});
 
 // Form schema for editing reservations (subset of fields that are editable)
 export const reservationFormSchema = z.object({
   booking_nr: z.string().min(1),
-  guests: z.array(guestFormSchema),
+  // The reservation refers to its room by name, as the list and the add dialog do.
+  room_name: z.string().min(1),
+  purpose: z.enum(['private', 'business']),
+  booking_from: z.date(),
+  booking_to: z.date(),
   adults: z.coerce.number().int().min(1),
   youth: z.coerce.number().int().min(0),
   children: z.coerce.number().int().min(0),
   infants: z.coerce.number().int().min(0),
-  purpose: z.enum(['private', 'business']),
-  room: z.string().min(1)
+  // Everyone on the reservation; the primary guest is the flagged one.
+  guests: z.array(guestInputSchema)
 });
 
 // Guest search
@@ -203,6 +220,8 @@ export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
 export type ReservationState = z.infer<typeof reservationStateSchema>;
 export type Reservation = z.infer<typeof reservationSchema>;
 export type Guest = z.infer<typeof guestSchema>;
+export type GuestInput = z.infer<typeof guestInputSchema>;
+export type GuestAgeGroup = z.infer<typeof guestAgeGroupSchema>;
 export type FetchReservationsParams = z.infer<
   typeof fetchReservationsParamsSchema
 >;
