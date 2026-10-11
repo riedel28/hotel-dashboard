@@ -1,3 +1,17 @@
+# [1.26.0](https://github.com/riedel28/hotel-dashboard/compare/v1.25.0...v1.26.0) (2026-10-11)
+
+
+### Bug Fixes
+
+* **payment-provider:** move unsaved-changes hint out of the mapping table ([c3a11be](https://github.com/riedel28/hotel-dashboard/commit/c3a11be305d1b0c526940cbf6fa30f2f97d5353e))
+* **reservations:** keep table rows on one line and show the room number ([7c5af63](https://github.com/riedel28/hotel-dashboard/commit/7c5af63bdcec32ffb7577c9a6d492c145268dd43))
+
+
+### Features
+
+* **reservations:** create a reservation on its own page ([786d600](https://github.com/riedel28/hotel-dashboard/commit/786d600c0c166f15b7a7a9706a3f0ee6c2d6ac86))
+* **reservations:** name the reservation in the delete dialog ([e44d5a7](https://github.com/riedel28/hotel-dashboard/commit/e44d5a727eda31d23bb4c31d6e093acc4cb92994))
+
 # [1.25.0](https://github.com/riedel28/hotel-dashboard/compare/v1.24.0...v1.25.0) (2026-10-11)
 
 
