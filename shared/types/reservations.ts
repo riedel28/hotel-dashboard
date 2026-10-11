@@ -63,6 +63,14 @@ export const checkinMethodSchema = z.enum([
   'web'
 ]);
 
+// Mirrors the reservation's head counts: adults, youth, children, infants.
+export const guestAgeGroupSchema = z.enum([
+  'adult',
+  'youth',
+  'child',
+  'infant'
+]);
+
 export const guestSchema = z.object({
   id: z.number(),
   reservation_id: z.number(),
@@ -72,6 +80,7 @@ export const guestSchema = z.object({
   nationality_code: countryCodeSchema,
   // At most one per reservation; the reservation mirrors their name and email.
   is_primary: z.boolean().default(false),
+  age_group: guestAgeGroupSchema.default('adult'),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date().nullable()
 });
@@ -162,14 +171,6 @@ export const updateReservationSchema = reservationSchema
   })
   .partial();
 
-// What the primary guest section edits; all blank means "no primary guest".
-export const primaryGuestFormSchema = z.object({
-  first_name: z.string(),
-  last_name: z.string(),
-  email: z.string(),
-  nationality_code: z.string()
-});
-
 // Form schema for editing reservations (subset of fields that are editable)
 export const reservationFormSchema = z.object({
   booking_nr: z.string().min(1),
@@ -182,8 +183,7 @@ export const reservationFormSchema = z.object({
   youth: z.coerce.number().int().min(0),
   children: z.coerce.number().int().min(0),
   infants: z.coerce.number().int().min(0),
-  primary_guest: primaryGuestFormSchema,
-  // Fellow travelers only; the primary guest is edited separately.
+  // Everyone on the reservation; the primary guest is the flagged one.
   guests: z.array(guestSchema)
 });
 
@@ -206,6 +206,7 @@ export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
 export type ReservationState = z.infer<typeof reservationStateSchema>;
 export type Reservation = z.infer<typeof reservationSchema>;
 export type Guest = z.infer<typeof guestSchema>;
+export type GuestAgeGroup = z.infer<typeof guestAgeGroupSchema>;
 export type FetchReservationsParams = z.infer<
   typeof fetchReservationsParamsSchema
 >;

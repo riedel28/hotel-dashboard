@@ -17,6 +17,7 @@ import type { Request, Response } from 'express';
 
 import {
   type FetchReservationsParams,
+  type GuestAgeGroup,
   toReservationStates
 } from '../../../shared/types/reservations';
 import { db } from '../db/pool';
@@ -97,7 +98,7 @@ async function getReservations(req: Request, res: Response) {
     const reservations = await db.query.reservations.findMany({
       where: searchCondition,
       with: {
-        guests: true
+        guests: guestsInOrder
       },
       offset: (page - 1) * per_page,
       limit: per_page,
@@ -131,7 +132,7 @@ async function getReservationById(req: Request, res: Response) {
     const reservation = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, Number(id)),
       with: {
-        guests: true
+        guests: guestsInOrder
       }
     });
 
@@ -207,7 +208,7 @@ async function createReservation(req: Request, res: Response) {
     const reservationWithGuests = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, newReservation.id),
       with: {
-        guests: true
+        guests: guestsInOrder
       }
     });
 
@@ -224,14 +225,28 @@ async function createReservation(req: Request, res: Response) {
   }
 }
 
-/** Guest rows to insert for a reservation; only the first primary flag counts. */
+/**
+ * The primary guest first, then the order guests were added in: the list and
+ * the details drawer read the first guest as the primary one.
+ */
+const guestsInOrder = {
+  orderBy: (guest: typeof guestsTable) => [
+    desc(guest.is_primary),
+    asc(guest.id)
+  ]
+};
+
+/**
+ * Guest rows to insert for a reservation. Only the first primary flag counts,
+ * and a list nobody is flagged in gets its first guest as the primary one.
+ */
 function sanitizeGuests(
   guestPayload: Record<string, unknown>[],
   reservationId: number
 ) {
   let hasPrimary = false;
 
-  return guestPayload.flatMap((guest) => {
+  const rows = guestPayload.flatMap((guest) => {
     const firstName =
       (guest.first_name as string | undefined) ??
       (guest.firstName as string | undefined);
@@ -254,10 +269,18 @@ function sanitizeGuests(
         email: (guest.email as string | null | undefined) || null,
         nationality_code:
           (guest.nationality_code as string | undefined) ?? 'DE',
-        is_primary: isPrimary
+        is_primary: isPrimary,
+        // Already validated against the enum by the request schema
+        age_group: (guest.age_group as GuestAgeGroup | undefined) ?? 'adult'
       }
     ];
   });
+
+  if (!hasPrimary && rows[0]) {
+    rows[0].is_primary = true;
+  }
+
+  return rows;
 }
 
 async function updateReservation(req: Request, res: Response) {
@@ -368,7 +391,7 @@ async function updateReservation(req: Request, res: Response) {
       return tx.query.reservations.findFirst({
         where: eq(reservationsTable.id, reservationId),
         with: {
-          guests: true
+          guests: guestsInOrder
         }
       });
     });
@@ -394,7 +417,7 @@ async function deleteReservation(req: Request, res: Response) {
     const deletedReservations = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, Number(id)),
       with: {
-        guests: true
+        guests: guestsInOrder
       }
     });
 

@@ -18,6 +18,8 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import {
+  type GuestAgeGroup,
+  guestAgeGroupSchema,
   type ReservationState,
   reservationStateSchema
 } from '../../../shared/types/reservations';
@@ -99,6 +101,10 @@ export const guests = pgTable(
     email: text('email'),
     nationality_code: text('nationality_code').notNull(),
     is_primary: boolean('is_primary').default(false).notNull(),
+    age_group: text('age_group')
+      .default('adult')
+      .notNull()
+      .$type<GuestAgeGroup>(),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -108,7 +114,13 @@ export const guests = pgTable(
     index('guests_reservation_id_idx').on(table.reservation_id),
     uniqueIndex('guests_one_primary_key')
       .on(table.reservation_id)
-      .where(sql`${table.is_primary}`)
+      .where(sql`${table.is_primary}`),
+    check(
+      'guests_age_group_check',
+      sql`${table.age_group} IN (${sql.raw(
+        guestAgeGroupSchema.options.map((group) => `'${group}'`).join(', ')
+      )})`
+    )
   ]
 );
 

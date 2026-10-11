@@ -293,6 +293,7 @@ describe('Reservations API', () => {
 
     test('should mirror the primary guest onto the reservation', async () => {
       const guest = (first_name: string, is_primary: boolean) => ({
+        age_group: is_primary ? 'adult' : 'child',
         id: 0,
         reservation_id: reservationId,
         first_name,
@@ -317,12 +318,30 @@ describe('Reservations API', () => {
           .filter((g: { is_primary: boolean }) => g.is_primary)
           .map((g: { first_name: string }) => g.first_name)
       ).toEqual(['John']);
+      expect(
+        response.body.guests.find(
+          (g: { first_name: string }) => g.first_name === 'Jane'
+        ).age_group
+      ).toBe('child');
 
-      // Dropping the primary guest clears the mirrored columns.
-      const cleared = await request(app)
+      // The primary guest comes first, whatever order they were sent in.
+      expect(response.body.guests[0].first_name).toBe('John');
+
+      // A list nobody is flagged in gets its first guest as the primary one.
+      const promoted = await request(app)
         .patch(`/api/reservations/${reservationId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .send({ guests: [guest('Jane', false)] })
+        .expect(200);
+
+      expect(promoted.body.primary_guest_name).toBe('Jane Doe');
+      expect(promoted.body.guests[0].is_primary).toBe(true);
+
+      // An empty list clears the mirrored columns.
+      const cleared = await request(app)
+        .patch(`/api/reservations/${reservationId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ guests: [] })
         .expect(200);
 
       expect(cleared.body.primary_guest_name).toBe('');
