@@ -15,10 +15,11 @@ async function navigateToReservationEdit(page: Page, bookingNr: string) {
   // Open row actions for the target reservation and click Edit
   const row = page.getByRole('row').filter({ hasText: bookingNr });
   await row.getByRole('button', { name: 'Open menu' }).click();
-  await page.getByRole('menuitem', { name: 'Edit' }).click();
+  await page.getByRole('menuitem', { name: 'Edit Reservation' }).click();
 
+  // The edit page is titled with the booking number
   await expect(
-    page.getByRole('heading', { name: 'Edit reservation' })
+    page.getByRole('heading', { name: bookingNr, level: 1 })
   ).toBeVisible();
 }
 
@@ -38,13 +39,8 @@ test.describe('Edit Guest', () => {
   test('should update all guest fields via the edit guest modal', async ({
     page
   }) => {
-    // Open the guest dropdown menu and click "Edit guest"
-    const guestRow = page
-      .locator('div')
-      .filter({ hasText: /Mike Wilson/ })
-      .filter({ has: page.getByRole('button', { name: 'Open guest menu' }) });
-    await guestRow.getByRole('button', { name: 'Open guest menu' }).click();
-    await page.getByRole('menuitem', { name: 'Edit guest' }).click();
+    // The guest's card is one button that opens the edit dialog
+    await page.getByRole('button', { name: /Mike Wilson/ }).click();
 
     // Verify the Edit Guest dialog opens with pre-populated values
     const dialog = page.getByRole('dialog', { name: 'Edit Guest' });
@@ -71,7 +67,7 @@ test.describe('Edit Guest', () => {
     await page.getByRole('option', { name: /France/ }).click();
 
     // Submit the form
-    await dialog.getByRole('button', { name: 'Save Changes' }).click();
+    await dialog.getByRole('button', { name: 'Update' }).click();
 
     // Dialog should close
     await expect(dialog).not.toBeVisible();
@@ -88,21 +84,14 @@ test.describe('Edit Guest', () => {
     // Reload the page and verify changes persisted
     await page.reload();
     await expect(
-      page.getByRole('heading', { name: 'Edit reservation' })
+      page.getByRole('heading', { name: 'RES-003', level: 1 })
     ).toBeVisible();
 
     // The updated guest name should still be there
     await expect(page.getByText('Carlos Rivera')).toBeVisible();
 
     // Open the edit guest modal again to verify all fields persisted
-    const updatedGuestRow = page
-      .locator('div')
-      .filter({ hasText: /Carlos Rivera/ })
-      .filter({ has: page.getByRole('button', { name: 'Open guest menu' }) });
-    await updatedGuestRow
-      .getByRole('button', { name: 'Open guest menu' })
-      .click();
-    await page.getByRole('menuitem', { name: 'Edit guest' }).click();
+    await page.getByRole('button', { name: /Carlos Rivera/ }).click();
 
     const verifyDialog = page.getByRole('dialog', { name: 'Edit Guest' });
     await expect(verifyDialog).toBeVisible();
