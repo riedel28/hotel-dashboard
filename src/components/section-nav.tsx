@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useNavigate } from '@tanstack/react-router';
 import * as React from 'react';
 
@@ -174,8 +174,21 @@ export function useHashSectionJump() {
   }, []);
 }
 
+/** Marks a section that holds invalid fields. */
+function ErrorDot() {
+  return (
+    <span className="size-1.5 shrink-0 rounded-full bg-danger">
+      <span className="sr-only">
+        <Trans>Has errors</Trans>
+      </span>
+    </span>
+  );
+}
+
 interface SectionNavProps {
   sections: NavSection[];
+  /** Ids of the sections holding invalid fields; each gets a red dot. */
+  errorIds?: string[];
   className?: string;
   /**
    * `rail` is the sticky vertical list used on wide screens; `chips` is the
@@ -186,6 +199,7 @@ interface SectionNavProps {
 
 export function SectionNav({
   sections,
+  errorIds = [],
   className,
   orientation = 'rail'
 }: SectionNavProps) {
@@ -266,6 +280,7 @@ export function SectionNav({
                   )}
                 >
                   {label}
+                  {errorIds.includes(id) && <ErrorDot />}
                   {attention && (
                     <span
                       aria-hidden="true"
@@ -301,6 +316,7 @@ export function SectionNav({
                 )}
               >
                 <span className="min-w-0 flex-1 truncate">{label}</span>
+                {errorIds.includes(id) && <ErrorDot />}
                 {attention && (
                   <span
                     aria-hidden="true"

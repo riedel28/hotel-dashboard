@@ -1,40 +1,28 @@
-import { Plural, Trans, useLingui } from '@lingui/react/macro';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Trans, useLingui } from '@lingui/react/macro';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import type { ReservationFormData } from 'shared/types/reservations';
 import { toast } from 'sonner';
 
-import { deviceRoomOptionsQueryOptions } from '@/api/devices';
 import { updateReservationById } from '@/api/reservations';
 import { FormSection } from '@/components/form-section';
-import { RoomPicker } from '@/components/room-picker';
 import { type NavSection, SectionNav } from '@/components/section-nav';
 import { StickyCardFooter } from '@/components/sticky-card-footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CopyButton } from '@/components/ui/copy-button';
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel
-} from '@/components/ui/field';
-import { fieldTriggerClassName } from '@/components/ui/input';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput
 } from '@/components/ui/input-group';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { roomLabel } from '@/lib/rooms';
 
-import { countNights } from '../-lib/stay';
-import { DateTimeField } from './date-time-field';
+import { revealFirstError, sectionsWithErrors } from '../-lib/section-errors';
 import { GuestsSection } from './guests-section';
+import { PurposeField, RoomField, StayFields } from './reservation-fields';
 
 interface EditReservationFormProps {
   reservationId: string;
@@ -64,11 +52,6 @@ export function EditReservationForm({
     }
   });
 
-  // The picker's own list, so the selected room is shown the way it is offered
-  const { data: rooms = [] } = useQuery(deviceRoomOptionsQueryOptions());
-
-  const [bookingFrom, bookingTo] = form.watch(['booking_from', 'booking_to']);
-  const nights = countNights(bookingFrom, bookingTo);
   const isDirty = form.formState.isDirty;
   const isSaving = updateReservationMutation.isPending;
 
@@ -77,6 +60,7 @@ export function EditReservationForm({
       <div className="flex flex-row gap-8">
         <SectionNav
           sections={RESERVATION_FORM_SECTIONS}
+          errorIds={sectionsWithErrors(form.formState.errors, SECTION_FIELDS)}
           className="order-2 hidden xl:block"
         />
 
@@ -84,8 +68,9 @@ export function EditReservationForm({
           <CardContent>
             <form
               id="reservation-form"
-              onSubmit={form.handleSubmit((data) =>
-                updateReservationMutation.mutate(data)
+              onSubmit={form.handleSubmit(
+                (data) => updateReservationMutation.mutate(data),
+                (errors) => revealFirstError(errors, SECTION_FIELDS)
               )}
               aria-busy={isSaving}
               className="flex flex-col gap-6 md:gap-8"
@@ -132,112 +117,8 @@ export function EditReservationForm({
                       )}
                     />
 
-                    <Controller
-                      control={form.control}
-                      name="room_name"
-                      render={({ field, fieldState }) => {
-                        const selectedRoom = rooms.find(
-                          (room) => room.name === field.value
-                        );
-
-                        return (
-                          <Field
-                            data-invalid={fieldState.invalid}
-                            className="gap-2"
-                          >
-                            <FieldLabel htmlFor={field.name}>
-                              <Trans>Room</Trans>
-                            </FieldLabel>
-                            <RoomPicker
-                              id={field.name}
-                              value={selectedRoom ?? null}
-                              onValueChange={(room) =>
-                                field.onChange(room.name)
-                              }
-                              className={fieldTriggerClassName}
-                              contentClassName="w-(--anchor-width) min-w-(--anchor-width)"
-                            >
-                              <span className="flex min-w-0 items-center gap-2">
-                                {selectedRoom ? (
-                                  <>
-                                    <span className="tabular-nums">
-                                      {roomLabel(selectedRoom)}
-                                    </span>
-                                    {selectedRoom.room_number &&
-                                      selectedRoom.name !==
-                                        selectedRoom.room_number && (
-                                        <span className="truncate text-muted-foreground">
-                                          {selectedRoom.name}
-                                        </span>
-                                      )}
-                                  </>
-                                ) : field.value ? (
-                                  // Kept as stored: it names no room of the property.
-                                  <span className="truncate">
-                                    {field.value}
-                                  </span>
-                                ) : (
-                                  <span className="text-muted-foreground">
-                                    <Trans>Select a room</Trans>
-                                  </span>
-                                )}
-                              </span>
-                            </RoomPicker>
-                            {fieldState.invalid && (
-                              <FieldError errors={[fieldState.error]} />
-                            )}
-                          </Field>
-                        );
-                      }}
-                    />
-
-                    <Controller
-                      control={form.control}
-                      name="purpose"
-                      render={({ field, fieldState }) => (
-                        <Field
-                          data-invalid={fieldState.invalid}
-                          className="gap-2"
-                        >
-                          <FieldLabel>
-                            <Trans>Purpose of stay</Trans>
-                          </FieldLabel>
-                          <RadioGroup
-                            value={field.value}
-                            onValueChange={field.onChange}
-                            className="grid gap-2 sm:grid-cols-2"
-                          >
-                            <Label
-                              htmlFor="purpose-private"
-                              className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-input px-2.5 text-left text-sm font-normal transition-colors hover:bg-accent dark:bg-input/30"
-                            >
-                              <RadioGroupItem
-                                value="private"
-                                id="purpose-private"
-                              />
-                              <span className="leading-none">
-                                <Trans>Private</Trans>
-                              </span>
-                            </Label>
-                            <Label
-                              htmlFor="purpose-business"
-                              className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-input px-2.5 text-left text-sm font-normal transition-colors hover:bg-accent dark:bg-input/30"
-                            >
-                              <RadioGroupItem
-                                value="business"
-                                id="purpose-business"
-                              />
-                              <span className="leading-none">
-                                <Trans>Business</Trans>
-                              </span>
-                            </Label>
-                          </RadioGroup>
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
-                    />
+                    <RoomField form={form} />
+                    <PurposeField form={form} />
                   </FieldGroup>
                 </FormSection>
 
@@ -251,62 +132,7 @@ export function EditReservationForm({
                   }
                 >
                   <FieldGroup className="gap-4">
-                    <Controller
-                      control={form.control}
-                      name="booking_from"
-                      rules={{ deps: ['booking_to'] }}
-                      render={({ field }) => (
-                        <Field className="gap-2">
-                          <FieldLabel htmlFor={field.name}>
-                            <Trans>Arrival</Trans>
-                          </FieldLabel>
-                          <DateTimeField
-                            id={field.name}
-                            label={t`Arrival`}
-                            value={field.value}
-                            onChange={field.onChange}
-                          />
-                        </Field>
-                      )}
-                    />
-
-                    <Controller
-                      control={form.control}
-                      name="booking_to"
-                      rules={{
-                        validate: (value, values) =>
-                          value > values.booking_from ||
-                          t`Departure must be after arrival`
-                      }}
-                      render={({ field, fieldState }) => (
-                        <Field
-                          data-invalid={fieldState.invalid}
-                          className="gap-2"
-                        >
-                          <FieldLabel htmlFor={field.name}>
-                            <Trans>Departure</Trans>
-                          </FieldLabel>
-                          <DateTimeField
-                            id={field.name}
-                            label={t`Departure`}
-                            value={field.value}
-                            onChange={field.onChange}
-                            invalid={fieldState.invalid}
-                          />
-                          {fieldState.invalid ? (
-                            <FieldError errors={[fieldState.error]} />
-                          ) : (
-                            <FieldDescription aria-live="polite">
-                              <Plural
-                                value={Math.max(nights, 0)}
-                                one="# night"
-                                other="# nights"
-                              />
-                            </FieldDescription>
-                          )}
-                        </Field>
-                      )}
-                    />
+                    <StayFields form={form} />
                   </FieldGroup>
                 </FormSection>
 
@@ -380,3 +206,10 @@ const RESERVATION_FORM_SECTIONS: NavSection[] = [
   { id: 'stay', label: <Trans>Stay</Trans> },
   { id: 'guests', label: <Trans>Guests</Trans> }
 ];
+
+/** Which section each field sits in, for the error dots in the navigation. */
+const SECTION_FIELDS = {
+  reservation: ['room_name', 'purpose'],
+  stay: ['booking_from', 'booking_to'],
+  guests: ['adults', 'youth', 'children', 'infants', 'guests']
+};

@@ -16,6 +16,7 @@ import {
 import type { Request, Response } from 'express';
 
 import {
+  type CreateReservationData,
   type FetchReservationsParams,
   type GuestInput,
   toReservationStates,
@@ -151,7 +152,9 @@ async function getReservationById(req: Request, res: Response) {
 const MAX_BOOKING_NR_ATTEMPTS = 3;
 
 async function createReservation(req: Request, res: Response) {
-  const { room_name } = req.body;
+  // Parsed by validateBody(createReservationSchema)
+  const { guests, ...fields }: CreateReservationData = req.body;
+  const primaryGuest = toGuestRows(guests, 0).find((guest) => guest.is_primary);
 
   // booking_nr is unique in the database; two requests in the same
   // millisecond would collide, so a retry adds a random suffix.
@@ -167,33 +170,40 @@ async function createReservation(req: Request, res: Response) {
           : `${baseBookingNr}-${randomBytes(2).toString('hex').toUpperCase()}`;
 
       try {
-        [newReservation] = await db
-          .insert(reservationsTable)
-          .values({
-            state: 'pending',
-            booking_nr,
-            guest_email: null,
-            primary_guest_name: '',
-            booking_id: '',
-            room_name,
-            booking_from: new Date(),
-            booking_to: new Date(),
-            check_in_via: 'web',
-            check_out_via: 'web',
-            last_opened_at: null,
-            received_at: new Date(),
-            completed_at: null,
-            updated_at: null,
-            page_url: null,
-            balance: '0',
-            adults: 1,
-            youth: 0,
-            children: 0,
-            infants: 0,
-            purpose: 'private',
-            room: room_name
-          })
-          .returning();
+        // The reservation and its guests land together or not at all
+        newReservation = await db.transaction(async (tx) => {
+          const [created] = await tx
+            .insert(reservationsTable)
+            .values({
+              ...fields,
+              state: 'pending',
+              booking_nr,
+              // The reservation mirrors the primary guest's name and email
+              guest_email: primaryGuest?.email ?? null,
+              primary_guest_name: primaryGuest
+                ? `${primaryGuest.first_name} ${primaryGuest.last_name}`
+                : '',
+              booking_id: '',
+              check_in_via: 'web',
+              check_out_via: 'web',
+              last_opened_at: null,
+              received_at: new Date(),
+              completed_at: null,
+              updated_at: null,
+              page_url: null,
+              balance: '0',
+              room: fields.room_name
+            })
+            .returning();
+
+          if (created && guests.length > 0) {
+            await tx
+              .insert(guestsTable)
+              .values(toGuestRows(guests, created.id));
+          }
+
+          return created;
+        });
         break;
       } catch (error) {
         if (!isUniqueViolation(error) || attempt === MAX_BOOKING_NR_ATTEMPTS) {

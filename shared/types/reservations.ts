@@ -173,10 +173,6 @@ export const reservationIdParamsSchema = z.object({
 
 export const fetchReservationByIdSchema = reservationIdParamsSchema;
 
-export const createReservationSchema = z.object({
-  room_name: z.string().min(1)
-});
-
 export const updateReservationSchema = reservationSchema
   .omit({
     id: true,
@@ -200,6 +196,19 @@ export const reservationFormSchema = z.object({
   // Everyone on the reservation; the primary guest is the flagged one.
   guests: z.array(guestInputSchema)
 });
+
+// A new reservation is the editable fields minus the number, which the server
+// assigns. Dates arrive as JSON strings, hence the coercion.
+export const createReservationSchema = reservationFormSchema
+  .omit({ booking_nr: true })
+  .extend({
+    booking_from: z.coerce.date(),
+    booking_to: z.coerce.date()
+  })
+  .refine((data) => data.booking_to > data.booking_from, {
+    path: ['booking_to'],
+    message: 'Departure must be after arrival'
+  });
 
 // Guest search
 export const searchGuestsParamsSchema = z.object({
