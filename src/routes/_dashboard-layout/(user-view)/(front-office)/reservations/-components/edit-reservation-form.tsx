@@ -1,26 +1,19 @@
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChevronRightIcon, Loader2Icon, PlusIcon } from 'lucide-react';
-import { useState } from 'react';
+import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import {
-  type Guest,
-  type GuestAgeGroup,
-  guestAgeGroupSchema,
-  type ReservationFormData
-} from 'shared/types/reservations';
+import type { ReservationFormData } from 'shared/types/reservations';
 import { toast } from 'sonner';
 
+import { deviceRoomOptionsQueryOptions } from '@/api/devices';
 import { updateReservationById } from '@/api/reservations';
-import { roomsQueryOptions } from '@/api/rooms';
 import { FormSection } from '@/components/form-section';
+import { RoomPicker } from '@/components/room-picker';
 import { type NavSection, SectionNav } from '@/components/section-nav';
 import { StickyCardFooter } from '@/components/sticky-card-footer';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CopyButton } from '@/components/ui/copy-button';
-import { CountryFlag } from '@/components/ui/country-flag';
 import {
   Field,
   FieldDescription,
@@ -28,43 +21,24 @@ import {
   FieldGroup,
   FieldLabel
 } from '@/components/ui/field';
+import { fieldTriggerClassName } from '@/components/ui/input';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput
 } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
-import { NumberInput } from '@/components/ui/number-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { RoomPicker } from '@/routes/_dashboard-layout/(user-view)/devices/-components/room-picker';
-import { roomLabel } from '@/routes/_dashboard-layout/(user-view)/devices/-lib/rooms';
+import { roomLabel } from '@/lib/rooms';
 
-import { AddGuestModal } from './add-guest-modal';
-import { countNights, DateTimeField } from './date-time-field';
-import { EditGuestForm } from './edit-guest-form';
-import { guestAgeGroupLabels } from './guest-age-group';
-import { GuestSearchCombobox } from './guest-search-combobox';
+import { countNights } from '../-lib/stay';
+import { DateTimeField } from './date-time-field';
+import { GuestsSection } from './guests-section';
 
 interface EditReservationFormProps {
   reservationId: string;
   reservationData: ReservationFormData;
-}
-
-/** The head-count field each age group is planned in. */
-const COUNT_FIELD = {
-  adult: 'adults',
-  youth: 'youth',
-  child: 'children',
-  infant: 'infants'
-} as const satisfies Record<GuestAgeGroup, keyof ReservationFormData>;
-
-/** With guests on the list one of them is the primary one: the first, failing a flag. */
-function withPrimary(guests: Guest[]): Guest[] {
-  if (guests.length === 0 || guests.some((guest) => guest.is_primary)) {
-    return guests;
-  }
-  return guests.map((guest, index) => ({ ...guest, is_primary: index === 0 }));
 }
 
 export function EditReservationForm({
@@ -73,12 +47,6 @@ export function EditReservationForm({
 }: EditReservationFormProps) {
   const queryClient = useQueryClient();
   const { t } = useLingui();
-  const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
-  // The age group of the place a new guest is being added to
-  const [addingToGroup, setAddingToGroup] = useState<GuestAgeGroup | null>(
-    null
-  );
-
   const form = useForm<ReservationFormData>({
     values: reservationData
   });
@@ -96,80 +64,13 @@ export function EditReservationForm({
     }
   });
 
-  const guests = form.watch('guests');
-  const counts = form.watch(['adults', 'youth', 'children', 'infants']);
-
-  /** Guests named in each age group against the places planned for it. */
-  const places = guestAgeGroupSchema.options.map((group, index) => {
-    const named = guests.filter((guest) => guest.age_group === group).length;
-    return { group, named, free: Math.max((counts[index] ?? 0) - named, 0) };
-  });
-  const plannedTotal = places.reduce(
-    (total, { named, free }) => total + named + free,
-    0
-  );
-
-  const setGuests = (next: Guest[]) => {
-    form.setValue('guests', withPrimary(next), { shouldDirty: true });
-
-    // A named guest is firmer than a number: the head counts grow to fit the
-    // list, but never shrink — a guest who leaves frees their place.
-    for (const group of guestAgeGroupSchema.options) {
-      const named = next.filter((guest) => guest.age_group === group).length;
-      if (named > form.getValues(COUNT_FIELD[group])) {
-        form.setValue(COUNT_FIELD[group], named, { shouldDirty: true });
-      }
-    }
-  };
-
-  const handleRemoveGuest = (guestId: number) => {
-    setGuests(guests.filter((guest) => guest.id !== guestId));
-  };
-
-  const handleEditGuest = (updatedGuest: Guest) => {
-    setGuests(guests.map((g) => (g.id === updatedGuest.id ? updatedGuest : g)));
-    setEditingGuest(null);
-  };
-
-  const handleMakePrimary = (guestId: number) => {
-    setGuests(
-      guests.map((guest) => ({ ...guest, is_primary: guest.id === guestId }))
-    );
-  };
-
-  const handleAddGuest = (newGuest: Guest) => {
-    setGuests([...guests, newGuest]);
-  };
-
-  // The search knows guests by name only: one found there takes the group
-  // that still has places when there is just one such group.
-  const handleAddFoundGuest = (found: Guest) => {
-    const open = places.filter(({ free }) => free > 0);
-    handleAddGuest({
-      ...found,
-      age_group: open.length === 1 && open[0] ? open[0].group : 'adult'
-    });
-  };
-
-  // The primary guest leads the list
-  const guestsInOrder = [...guests].sort(
-    (a, b) => Number(b.is_primary) - Number(a.is_primary)
-  );
-
-  const { data: roomsData } = useQuery(roomsQueryOptions({ per_page: 100 }));
-  const rooms = roomsData?.index ?? [];
+  // The picker's own list, so the selected room is shown the way it is offered
+  const { data: rooms = [] } = useQuery(deviceRoomOptionsQueryOptions());
 
   const [bookingFrom, bookingTo] = form.watch(['booking_from', 'booking_to']);
   const nights = countNights(bookingFrom, bookingTo);
   const isDirty = form.formState.isDirty;
   const isSaving = updateReservationMutation.isPending;
-
-  const peopleFields = [
-    { name: 'adults', group: 'adult', label: t`Adults`, min: 1 },
-    { name: 'youth', group: 'youth', label: t`Youth`, min: 0 },
-    { name: 'children', group: 'child', label: t`Children`, min: 0 },
-    { name: 'infants', group: 'infant', label: t`Infants`, min: 0 }
-  ] as const;
 
   return (
     <>
@@ -253,8 +154,7 @@ export function EditReservationForm({
                               onValueChange={(room) =>
                                 field.onChange(room.name)
                               }
-                              // Focused like the inputs, also while its popup is open
-                              className="flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-input px-3 py-2 text-sm transition-[color,box-shadow] outline-none focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)] data-popup-open:border-primary data-popup-open:shadow-[inset_0_0_0_1px_var(--color-primary)] dark:bg-input/30"
+                              className={fieldTriggerClassName}
                               contentClassName="w-(--anchor-width) min-w-(--anchor-width)"
                             >
                               <span className="flex min-w-0 items-center gap-2">
@@ -423,149 +323,7 @@ export function EditReservationForm({
                     </Trans>
                   }
                 >
-                  <div className="flex flex-col gap-6">
-                    <FieldGroup className="grid grid-cols-2 gap-4 2xl:grid-cols-4">
-                      {peopleFields.map(({ name, group, label, min }) => (
-                        <Controller
-                          key={name}
-                          control={form.control}
-                          name={name}
-                          render={({ field, fieldState }) => (
-                            <Field
-                              data-invalid={fieldState.invalid}
-                              className="gap-2"
-                            >
-                              <FieldLabel htmlFor={field.name}>
-                                {label}
-                              </FieldLabel>
-                              <NumberInput
-                                {...field}
-                                id={field.name}
-                                value={field.value}
-                                // Never below the guests already named in the group
-                                min={Math.max(
-                                  min,
-                                  places.find((p) => p.group === group)
-                                    ?.named ?? 0
-                                )}
-                                onValueChange={(value) =>
-                                  field.onChange(value ?? 0)
-                                }
-                              />
-                              {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                              )}
-                            </Field>
-                          )}
-                        />
-                      ))}
-                    </FieldGroup>
-
-                    <div className="flex flex-col gap-2">
-                      <div
-                        className="text-sm text-muted-foreground"
-                        aria-live="polite"
-                      >
-                        <Trans>
-                          {guests.length} of {plannedTotal} guests registered
-                        </Trans>
-                      </div>
-
-                      {/* Two ways to add a guest: find a known one or enter a new one */}
-                      <div className="flex gap-2">
-                        <div className="min-w-0 flex-1">
-                          <GuestSearchCombobox
-                            currentGuests={guests}
-                            onSelectGuest={handleAddFoundGuest}
-                          />
-                        </div>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="shrink-0"
-                          onClick={() => setAddingToGroup('adult')}
-                        >
-                          <PlusIcon aria-hidden="true" />
-                          <Trans>New Guest</Trans>
-                        </Button>
-                      </div>
-
-                      {guestsInOrder.map((guest) => (
-                        <button
-                          key={guest.id}
-                          type="button"
-                          // The whole card opens the guest for editing
-                          className="group flex w-full cursor-pointer items-start gap-2.5 rounded-lg border border-input py-2 pr-3 pl-3 text-left transition-colors outline-none hover:border-foreground/5 hover:bg-accent focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)] dark:bg-input/30 dark:hover:bg-input/60"
-                          onClick={() => setEditingGuest(guest)}
-                        >
-                          {/* As tall as the name's first line, so the flag centres on it */}
-                          <span className="flex h-5 shrink-0 items-center">
-                            <CountryFlag
-                              code={guest.nationality_code}
-                              className="size-4"
-                            />
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="flex items-start gap-2">
-                              <span className="line-clamp-2 text-sm wrap-anywhere">
-                                {guest.first_name} {guest.last_name}
-                              </span>
-                              {guest.is_primary && (
-                                <Badge
-                                  size="xs"
-                                  variant="outline"
-                                  color="sky"
-                                  className="mt-0.5 h-4 rounded-sm px-1 py-0"
-                                >
-                                  <Trans>Primary</Trans>
-                                </Badge>
-                              )}
-                            </span>
-                            {/* The email tells apart guests who share a name */}
-                            <span className="line-clamp-2 text-xs wrap-anywhere text-muted-foreground">
-                              {t(guestAgeGroupLabels[guest.age_group])}
-                              {guest.email && ` · ${guest.email}`}
-                            </span>
-                          </span>
-                          {/* Only while hovered or focused: where the click leads */}
-                          <ChevronRightIcon
-                            className="size-4 shrink-0 self-center text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
-                            aria-hidden="true"
-                          />
-                          <span className="sr-only">
-                            <Trans>Edit guest</Trans>
-                          </span>
-                        </button>
-                      ))}
-
-                      {/* Places planned in the head counts that nobody is named for yet */}
-                      {peopleFields.map(({ group, label }) => {
-                        const free =
-                          places.find((p) => p.group === group)?.free ?? 0;
-                        if (free === 0) return null;
-
-                        return (
-                          <button
-                            key={group}
-                            type="button"
-                            className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg border border-dashed border-input px-3 py-2 text-left text-sm text-muted-foreground transition-colors outline-none hover:border-transparent hover:bg-foreground/5 hover:text-foreground focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)]"
-                            onClick={() => setAddingToGroup(group)}
-                          >
-                            <PlusIcon
-                              className="size-4 shrink-0"
-                              aria-hidden="true"
-                            />
-                            <span className="min-w-0 flex-1 truncate">
-                              {label} · <Trans>{free} not registered</Trans>
-                            </span>
-                            <span className="sr-only">
-                              <Trans>Add guest</Trans>
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <GuestsSection form={form} />
                 </FormSection>
               </fieldset>
             </form>
@@ -609,31 +367,6 @@ export function EditReservationForm({
           </StickyCardFooter>
         </Card>
       </div>
-
-      {editingGuest && (
-        <EditGuestForm
-          key={editingGuest.id}
-          guest={editingGuest}
-          open={true}
-          onOpenChange={(open) => {
-            if (!open) setEditingGuest(null);
-          }}
-          onSave={handleEditGuest}
-          onRemove={() => handleRemoveGuest(editingGuest.id)}
-          onMakePrimary={() => handleMakePrimary(editingGuest.id)}
-        />
-      )}
-
-      {addingToGroup && (
-        <AddGuestModal
-          open={true}
-          onOpenChange={(open) => {
-            if (!open) setAddingToGroup(null);
-          }}
-          defaultAgeGroup={addingToGroup}
-          onAddGuest={handleAddGuest}
-        />
-      )}
     </>
   );
 }

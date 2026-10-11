@@ -37,8 +37,8 @@ import { getCountryName } from '@/lib/countries';
 import { cn } from '@/lib/utils';
 import { formatDate } from '@/utils/date';
 
+import { ReservationStatusBadge } from '../../reservation-status-badge';
 import { DeleteDialog } from '../delete-dialog';
-import { StatusCell } from './cells/status-cell';
 
 interface ReservationDetailsDrawerProps {
   /** The open reservation; the drawer is closed while it is not on the page. */
@@ -227,7 +227,7 @@ function ReservationDetails({
           />
         </div>
         <div className="flex items-baseline gap-2 text-sm font-normal text-muted-foreground">
-          <StatusCell status={reservation.state} />
+          <ReservationStatusBadge status={reservation.state} />
           {reservation.room_name && (
             // A long room name gives way to the actions; the full name is in
             // the body

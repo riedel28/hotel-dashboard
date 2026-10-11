@@ -2,7 +2,6 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { ChevronLeftIcon } from 'lucide-react';
-import type { GuestAgeGroup } from 'shared/types/reservations';
 import { z } from 'zod';
 
 import { reservationByIdQueryOptions } from '@/api/reservations';
@@ -20,7 +19,8 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { isInAppPath } from '@/lib/search-params';
 
 import { EditReservationForm } from '../reservations/-components/edit-reservation-form';
-import { StatusCell } from '../reservations/-components/reservations-table/-components/cells/status-cell';
+import { ReservationStatusBadge } from '../reservations/-components/reservation-status-badge';
+import { normalizeOccupancy } from '../reservations/-lib/occupancy';
 
 // Where the visitor came from, as an in-app path: pages that link here pass it
 // so the reservation can offer a way back to exactly that view.
@@ -77,7 +77,7 @@ function ReservationPage() {
         <div className="flex items-center gap-2">
           <h1 className="truncate text-xl font-bold">{bookingNr}</h1>
           {/* Set by the reservation's lifecycle, so shown rather than edited */}
-          {data && <StatusCell status={data.state} />}
+          {data && <ReservationStatusBadge status={data.state} />}
         </div>
       </div>
 
@@ -97,21 +97,18 @@ function ReservationForm() {
   );
 
   const data = reservationQuery.data;
-  const named = (group: GuestAgeGroup) =>
-    data.guests.filter((guest) => guest.age_group === group).length;
-  const reservationData = {
+  const reservationData = normalizeOccupancy({
     booking_nr: data.booking_nr,
     room_name: data.room_name,
     purpose: data.purpose ?? 'private',
     booking_from: data.booking_from,
     booking_to: data.booking_to,
-    // A head count is never below the guests already named in its group
-    adults: Math.max(data.adults ?? 1, named('adult')),
-    youth: Math.max(data.youth ?? 0, named('youth')),
-    children: Math.max(data.children ?? 0, named('child')),
-    infants: Math.max(data.infants ?? 0, named('infant')),
+    adults: data.adults ?? 1,
+    youth: data.youth ?? 0,
+    children: data.children ?? 0,
+    infants: data.infants ?? 0,
     guests: data.guests
-  };
+  });
 
   return (
     <EditReservationForm

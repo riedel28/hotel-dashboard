@@ -3,7 +3,7 @@ import { Trans } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { Loader2Icon, SearchIcon } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
-import type { Guest } from 'shared/types/reservations';
+import type { GuestInput, GuestSearchResult } from 'shared/types/reservations';
 
 import { guestSearchQueryOptions } from '@/api/reservations';
 import {
@@ -17,8 +17,8 @@ import {
 import { useDebouncedCallback } from '@/hooks';
 
 interface GuestSearchComboboxProps {
-  currentGuests: Guest[];
-  onSelectGuest: (guest: Guest) => void;
+  currentGuests: GuestInput[];
+  onSelectGuest: (guest: GuestSearchResult) => void;
 }
 
 interface GuestOption {
@@ -77,20 +77,12 @@ export function GuestSearchCombobox({
     if (eventDetails.reason === 'item-press') {
       const selected = items.find((item) => item.label === value);
       if (selected) {
-        const newGuest: Guest = {
-          id: Date.now(),
-          reservation_id: 0,
+        onSelectGuest({
           first_name: selected.first_name,
           last_name: selected.last_name,
           email: selected.email,
-          nationality_code: selected.nationality_code,
-          is_primary: false,
-          // The search knows guests by name only
-          age_group: 'adult',
-          created_at: new Date(),
-          updated_at: null
-        };
-        onSelectGuest(newGuest);
+          nationality_code: selected.nationality_code
+        });
       }
       setInputValue('');
       setDebouncedTerm('');
