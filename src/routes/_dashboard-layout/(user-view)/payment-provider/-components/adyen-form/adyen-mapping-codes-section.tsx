@@ -44,55 +44,57 @@ export function AdyenMappingCodesSection({
         </Trans>
       }
     >
-      {/* Real table on desktop; rows collapse to stacked cards on
-        mobile via display overrides (single set of inputs, no dupes). */}
-      <Table borderless className="max-md:block">
-        <TableHeader className="max-md:hidden">
-          <TableRow className="hover:bg-transparent">
-            <TableHead className="w-1/2 text-[13px]">
-              <Trans>Payment method</Trans>
-            </TableHead>
-            <TableHead className="w-1/4 text-[13px]">
-              <Trans>E-com</Trans>
-            </TableHead>
-            <TableHead className="w-1/4 text-[13px]">
-              <Trans>POS</Trans>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="max-md:block">
-          {ADYEN_PAYMENT_METHODS.map(({ id, name }) => (
-            <TableRow
-              key={id}
-              className="hover:bg-transparent max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4 md:h-12"
-            >
-              <TableCell className="max-md:col-span-2 max-md:p-0">
-                <div className="flex items-center gap-2.5 md:h-8">
-                  <BrandMark brand={id} />
-                  <span className="text-sm">{name}</span>
-                </div>
-              </TableCell>
-              <TableCell className="max-md:p-0">
-                <MappingCell
-                  control={control}
-                  method={id}
-                  kind="ecom"
-                  label={<Trans>E-com</Trans>}
-                  dirty={Boolean(dirtyFields.mappings?.[id]?.ecom)}
-                />
-              </TableCell>
-              <TableCell className="max-md:p-0">
-                <MappingCell
-                  control={control}
-                  method={id}
-                  kind="pos"
-                  label={<Trans>POS</Trans>}
-                  dirty={Boolean(dirtyFields.mappings?.[id]?.pos)}
-                />
-              </TableCell>
+      <div>
+        {/* Real table on desktop; rows collapse to stacked cards on
+          mobile via display overrides (single set of inputs, no dupes). */}
+        <Table borderless className="max-md:block">
+          <TableHeader className="max-md:hidden">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-1/2 text-[13px]">
+                <Trans>Payment method</Trans>
+              </TableHead>
+              <TableHead className="w-1/4 text-[13px]">
+                <Trans>E-com</Trans>
+              </TableHead>
+              <TableHead className="w-1/4 text-[13px]">
+                <Trans>POS</Trans>
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
+          </TableHeader>
+          <TableBody className="max-md:block">
+            {ADYEN_PAYMENT_METHODS.map(({ id, name }) => (
+              <TableRow
+                key={id}
+                className="hover:bg-transparent max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4 md:h-12"
+              >
+                <TableCell className="max-md:col-span-2 max-md:p-0">
+                  <div className="flex items-center gap-2.5 md:h-8">
+                    <BrandMark brand={id} />
+                    <span className="text-sm">{name}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="max-md:p-0">
+                  <MappingCell
+                    control={control}
+                    method={id}
+                    kind="ecom"
+                    label={<Trans>E-com</Trans>}
+                    dirty={Boolean(dirtyFields.mappings?.[id]?.ecom)}
+                  />
+                </TableCell>
+                <TableCell className="max-md:p-0">
+                  <MappingCell
+                    control={control}
+                    method={id}
+                    kind="pos"
+                    label={<Trans>POS</Trans>}
+                    dirty={Boolean(dirtyFields.mappings?.[id]?.pos)}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
         {isDirty && (
           <p className="mt-1.5 flex items-center gap-2 px-4 text-xs text-muted-foreground transition-all">
@@ -100,7 +102,7 @@ export function AdyenMappingCodesSection({
             <Trans>Unsaved changes</Trans>
           </p>
         )}
-      </Table>
+      </div>
     </FormSection>
   );
 }

@@ -6,6 +6,16 @@ export const byLabel = new Intl.Collator(undefined, { numeric: true }).compare;
 /** What a room is called in the table and the picker. */
 export const roomLabel = (room: DeviceRoom) => room.room_number || room.name;
 
+/**
+ * The same for a reservation, which names its room instead of holding it: the
+ * number of the room it names, or the name where that is no room of the
+ * property.
+ */
+export const reservationRoomLabel = (reservation: {
+  room_number?: string | null;
+  room_name: string;
+}) => reservation.room_number || reservation.room_name;
+
 // ponytail: the floor is read off the room number — everything but its last
 // two digits (204 → 2). Numbering like "A12" lands in "no floor"; add a floor
 // column to rooms if a property needs that.

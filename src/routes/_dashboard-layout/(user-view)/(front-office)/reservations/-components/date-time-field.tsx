@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro';
 import dayjs from 'dayjs';
 import { CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
+import { type Ref, useState } from 'react';
 
 import { Calendar } from '@/components/ui/calendar';
 import { fieldTriggerClassName } from '@/components/ui/input';
@@ -21,6 +21,8 @@ interface DateTimeFieldProps {
   value: Date;
   onChange: (value: Date) => void;
   invalid?: boolean;
+  /** The date button, for a form to focus the field when it is invalid. */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 /** A date (calendar popover) and a time side by side, editing one `Date`. */
@@ -29,7 +31,8 @@ export function DateTimeField({
   label,
   value,
   onChange,
-  invalid
+  invalid,
+  ref
 }: DateTimeFieldProps) {
   const { t } = useLingui();
   const [open, setOpen] = useState(false);
@@ -38,6 +41,7 @@ export function DateTimeField({
     <div className="flex gap-2">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
+          ref={ref}
           id={id}
           type="button"
           aria-invalid={invalid}

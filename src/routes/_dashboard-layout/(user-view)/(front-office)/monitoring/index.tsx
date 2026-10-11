@@ -4,6 +4,7 @@ import { ListFilterIcon, XIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -144,26 +145,25 @@ function ReservationNotice() {
   }
 
   return (
-    <div
-      role="status"
-      className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-foreground/10 bg-sky-50 px-3 py-2 text-sm text-sky-800 dark:bg-sky-800/20 dark:text-sky-300"
-    >
-      <ListFilterIcon className="size-4 shrink-0" aria-hidden="true" />
-      <span className="min-w-0 flex-1">
-        <Trans>
-          Showing only logs for reservation{' '}
-          <strong className="font-semibold">{reservation}</strong>
-        </Trans>
-      </span>
-      <button
-        type="button"
-        onClick={clear}
-        className="inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <Trans>Show all logs</Trans>
-        <XIcon className="size-4" aria-hidden="true" />
-      </button>
-    </div>
+    <Alert variant="info" role="status">
+      <ListFilterIcon aria-hidden="true" />
+      <AlertDescription className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span className="min-w-0 flex-1">
+          <Trans>
+            Showing only logs for reservation{' '}
+            <strong className="font-semibold">{reservation}</strong>
+          </Trans>
+        </span>
+        <button
+          type="button"
+          onClick={clear}
+          className="inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Trans>Show all logs</Trans>
+          <XIcon className="size-4" aria-hidden="true" />
+        </button>
+      </AlertDescription>
+    </Alert>
   );
 }
 

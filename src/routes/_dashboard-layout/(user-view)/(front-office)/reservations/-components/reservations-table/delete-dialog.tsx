@@ -1,6 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
+import type { Reservation } from 'shared/types/reservations';
 import { toast } from 'sonner';
 
 import { client } from '@/api/client';
@@ -14,26 +15,44 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { reservationRoomLabel } from '@/lib/rooms';
+import { formatDate } from '@/utils/date';
 
 interface DeleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  reservationNr: string;
-  reservationId: number;
+  reservation: Reservation;
 }
 
 async function deleteReservation(reservationId: number) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   return client.delete(`/reservations/${reservationId}`);
+}
+
+/**
+ * Enough to tell the reservation apart from its neighbours in the list. Its
+ * own component so that only an open dialog works it out: there is a dialog
+ * for every row.
+ */
+function ReservationSummary({ reservation }: { reservation: Reservation }) {
+  const { t } = useLingui();
+  const room = reservationRoomLabel(reservation);
+
+  // Guest, room and stay, leaving out what the reservation does not have
+  const details = [
+    reservation.primary_guest_name,
+    room && t`Room ${room}`,
+    `${formatDate(reservation.booking_from, {})} – ${formatDate(reservation.booking_to, {})}`
+  ].filter(Boolean);
+
+  return <p className="text-sm wrap-anywhere">{details.join(' · ')}</p>;
 }
 
 export function DeleteDialog({
   open,
   onOpenChange,
-  reservationNr,
-  reservationId
+  reservation
 }: DeleteDialogProps) {
+  const { id: reservationId, booking_nr: reservationNr } = reservation;
   const { t } = useLingui();
   const queryClient = useQueryClient();
 
@@ -58,18 +77,15 @@ export function DeleteDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            <Trans>Are you sure?</Trans>
+            <Trans>Delete reservation {reservationNr}?</Trans>
           </AlertDialogTitle>
-          <AlertDialogDescription className="py-4">
-            <Trans>
-              The reservation&nbsp;
-              <span className="font-medium text-foreground">
-                {reservationNr}
-              </span>
-              &nbsp;will be deleted. This action cannot be undone.
-            </Trans>
-          </AlertDialogDescription>
         </AlertDialogHeader>
+        <div className="flex flex-col gap-1">
+          <ReservationSummary reservation={reservation} />
+          <AlertDialogDescription>
+            <Trans>This action cannot be undone.</Trans>
+          </AlertDialogDescription>
+        </div>
         <AlertDialogFooter>
           <AlertDialogCancel>
             <Trans>Cancel</Trans>

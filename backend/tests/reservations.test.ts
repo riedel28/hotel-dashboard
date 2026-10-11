@@ -9,6 +9,18 @@ import {
   createTestUser
 } from './helpers/db-helpers';
 
+// What a new reservation needs besides its room
+const stay = {
+  purpose: 'private',
+  booking_from: '2026-03-01T15:00:00.000Z',
+  booking_to: '2026-03-03T11:00:00.000Z',
+  adults: 1,
+  youth: 0,
+  children: 0,
+  infants: 0,
+  guests: []
+};
+
 describe('Reservations API', () => {
   let authToken: string;
   let adminToken: string;
@@ -29,6 +41,7 @@ describe('Reservations API', () => {
   describe('POST /api/reservations', () => {
     test('should create a new reservation successfully', async () => {
       const reservationData = {
+        ...stay,
         room_name: 'Room 101'
       };
 
@@ -46,8 +59,104 @@ describe('Reservations API', () => {
       expect(response.body.adults).toBe(1);
     });
 
+    test('should create the reservation with its stay and guests', async () => {
+      const response = await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          ...stay,
+          room_name: 'Room 101',
+          purpose: 'business',
+          adults: 2,
+          guests: [
+            {
+              first_name: 'Ada',
+              last_name: 'Lovelace',
+              email: 'ada@example.com',
+              nationality_code: 'GB',
+              is_primary: false,
+              age_group: 'adult'
+            },
+            {
+              first_name: 'Charles',
+              last_name: 'Babbage',
+              email: null,
+              nationality_code: 'GB',
+              is_primary: true,
+              age_group: 'adult'
+            }
+          ]
+        })
+        .expect(201);
+
+      expect(response.body.booking_from).toBe(stay.booking_from);
+      expect(response.body.booking_to).toBe(stay.booking_to);
+      expect(response.body.purpose).toBe('business');
+      expect(response.body.adults).toBe(2);
+      expect(response.body.guests).toHaveLength(2);
+      // The reservation mirrors its primary guest
+      expect(response.body.primary_guest_name).toBe('Charles Babbage');
+      expect(response.body.guest_email).toBeNull();
+    });
+
+    test('should report the number of the room the reservation names', async () => {
+      const property = await createTestProperty();
+      await createTestRoom({
+        property_id: property.id,
+        name: 'Seaside',
+        room_number: '204'
+      });
+
+      const named = await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ ...stay, room_name: 'Seaside' })
+        .expect(201);
+      const unknown = await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ ...stay, room_name: 'No such room' })
+        .expect(201);
+
+      expect(named.body.room_number).toBe('204');
+      expect(unknown.body.room_number).toBeNull();
+
+      // Sorted by what the list shows: the number, failing that the name
+      const list = await request(app)
+        .get('/api/reservations?sort_by=room_name&sort_order=asc')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      expect(
+        list.body.index.map(
+          (reservation: { room_number: string | null }) =>
+            reservation.room_number
+        )
+      ).toEqual(['204', null]);
+    });
+
+    test('should reject a departure that is not after the arrival', async () => {
+      await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          ...stay,
+          room_name: 'Room 101',
+          booking_to: stay.booking_from
+        })
+        .expect(400);
+    });
+
+    test('should reject an empty room', async () => {
+      await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ ...stay, room_name: '' })
+        .expect(400);
+    });
+
     test('should return 401 without authentication', async () => {
       const reservationData = {
+        ...stay,
         room_name: 'Room 101'
       };
 
@@ -77,7 +186,7 @@ describe('Reservations API', () => {
       request(app)
         .post('/api/reservations')
         .set('Authorization', `Bearer ${authToken}`)
-        .send({ room_name: 'Room 101' });
+        .send({ ...stay, room_name: 'Room 101' });
 
     test('should retry with a new booking number on collision', async () => {
       const now = Date.now();
@@ -107,6 +216,7 @@ describe('Reservations API', () => {
   describe('GET /api/reservations', () => {
     beforeEach(async () => {
       const reservationData = {
+        ...stay,
         room_name: 'Room 101'
       };
 
@@ -171,7 +281,7 @@ describe('Reservations API', () => {
       const created = await request(app)
         .post('/api/reservations')
         .set('Authorization', `Bearer ${authToken}`)
-        .send({ room_name: 'Room 102' })
+        .send({ ...stay, room_name: 'Room 102' })
         .expect(201);
       await db.insert(guestsTable).values([
         {
@@ -214,6 +324,7 @@ describe('Reservations API', () => {
 
     beforeEach(async () => {
       const reservationData = {
+        ...stay,
         room_name: 'Room 101'
       };
 
@@ -260,6 +371,7 @@ describe('Reservations API', () => {
 
     beforeEach(async () => {
       const reservationData = {
+        ...stay,
         room_name: 'Room 101'
       };
 
@@ -348,6 +460,17 @@ describe('Reservations API', () => {
       expect(cleared.body.guest_email).toBeNull();
     });
 
+    test('should reject a departure that is not after the arrival', async () => {
+      await request(app)
+        .patch(`/api/reservations/${reservationId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          booking_from: stay.booking_to,
+          booking_to: stay.booking_from
+        })
+        .expect(400);
+    });
+
     test('should return 404 for non-existent reservation', async () => {
       const updateData = {
         state: 'checked_in'
@@ -406,6 +529,7 @@ describe('Reservations API', () => {
 
     beforeEach(async () => {
       const reservationData = {
+        ...stay,
         room_name: 'Room 101'
       };
 
@@ -449,6 +573,7 @@ describe('Reservations API', () => {
   describe('Edge Cases', () => {
     test('should handle date range filtering', async () => {
       const reservationData = {
+        ...stay,
         room_name: 'Room 101'
       };
 

@@ -3,14 +3,10 @@ interface ReservationNrCellProps {
 }
 
 export function ReservationNrCell({ reservationNr }: ReservationNrCellProps) {
-  const displayText =
-    reservationNr.length > 20
-      ? `${reservationNr.substring(0, 20)}...`
-      : reservationNr;
-
   return (
-    <span className="font-medium" title={reservationNr}>
-      {displayText}
+    // One line whatever the column's width: the number is cut off, never wrapped
+    <span className="block truncate font-medium" title={reservationNr}>
+      {reservationNr}
     </span>
   );
 }

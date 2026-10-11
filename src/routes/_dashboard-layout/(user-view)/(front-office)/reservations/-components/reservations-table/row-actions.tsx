@@ -62,15 +62,14 @@ export function RowActions({ row }: RowActionsProps) {
             onClick={() => setShowDeleteDialog(true)}
           >
             <TrashIcon className="mr-1 h-4 w-4" />
-            <Trans>Delete</Trans>
+            <Trans>Delete Reservation</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DeleteDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        reservationNr={row.original.booking_nr}
-        reservationId={row.original.id}
+        reservation={row.original}
       />
     </>
   );

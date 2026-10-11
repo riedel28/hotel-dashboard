@@ -20,6 +20,7 @@ import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { reservationRoomLabel } from '@/lib/rooms';
 
 import { ReservationStatusBadge } from '../reservation-status-badge';
 import { BalanceCell } from './-components/cells/balance-cell';
@@ -136,7 +137,7 @@ export default function ReservationsTable({
             // the row bubbles to the same handler
             <button
               type="button"
-              className="rounded-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="block max-w-full rounded-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ReservationNrCell reservationNr={reservationNr} />
             </button>
@@ -146,7 +147,8 @@ export default function ReservationsTable({
           skeleton: <Skeleton className="h-6 w-12" />,
           headerTitle: t`Reservation`
         },
-        size: 120,
+        // Fits a generated number (RES-XXXXXXXX) on one line
+        size: 150,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -182,8 +184,11 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => (
-          <span className="block truncate" title={row.original.room_name}>
-            {row.original.room_name}
+          <span
+            className="block truncate tabular-nums"
+            title={row.original.room_name}
+          >
+            {reservationRoomLabel(row.original)}
           </span>
         ),
         meta: {

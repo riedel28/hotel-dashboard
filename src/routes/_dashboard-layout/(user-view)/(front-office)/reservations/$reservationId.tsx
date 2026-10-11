@@ -98,7 +98,6 @@ function ReservationForm() {
 
   const data = reservationQuery.data;
   const reservationData = normalizeOccupancy({
-    booking_nr: data.booking_nr,
     room_name: data.room_name,
     purpose: data.purpose ?? 'private',
     booking_from: data.booking_from,
@@ -113,6 +112,7 @@ function ReservationForm() {
   return (
     <EditReservationForm
       reservationId={reservationId}
+      bookingNr={data.booking_nr}
       reservationData={reservationData}
     />
   );

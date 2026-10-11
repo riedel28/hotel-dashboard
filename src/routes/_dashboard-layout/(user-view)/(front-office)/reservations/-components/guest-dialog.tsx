@@ -284,9 +284,10 @@ export function GuestDialog({
               // Nothing to promote, so removing is the only action here
               <Button
                 type="button"
-                variant="outline"
-                // An ordinary button until hovered, then tinted like a soft destructive one
-                className="hover:border-destructive/20 hover:bg-destructive/10 hover:text-danger focus-visible:border-destructive/20 focus-visible:bg-destructive/10 focus-visible:text-danger dark:hover:border-destructive/20 dark:hover:bg-destructive/20"
+                variant="ghost"
+                // Bare until hovered, then tinted like a soft destructive one;
+                // the border takes the fill's tint, so no outline shows
+                className="hover:border-destructive/10 hover:bg-destructive/10 hover:text-danger focus-visible:border-destructive/10 focus-visible:bg-destructive/10 focus-visible:text-danger dark:hover:border-destructive/20 dark:hover:bg-destructive/20 dark:focus-visible:border-destructive/20 dark:focus-visible:bg-destructive/20"
                 onClick={closeAfter(onRemove)}
               >
                 {removeItem}

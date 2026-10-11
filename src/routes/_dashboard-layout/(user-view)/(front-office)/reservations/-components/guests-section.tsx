@@ -8,6 +8,7 @@ import type {
   ReservationFormData
 } from 'shared/types/reservations';
 
+import type { FormSectionDef } from '@/components/sectioned-form';
 import { Button } from '@/components/ui/button';
 import { CountryFlag } from '@/components/ui/country-flag';
 import {
@@ -264,3 +265,17 @@ export function GuestsSection({ form }: GuestsSectionProps) {
     </div>
   );
 }
+
+/** Who is staying: the same section in the add and the edit form. */
+export const GUESTS_SECTION: FormSectionDef<ReservationFormData> = {
+  id: 'guests',
+  label: <Trans>Guests</Trans>,
+  description: (
+    <Trans>
+      How many people are staying, by age group, and who they are. The primary
+      guest is the one the reservation is booked under.
+    </Trans>
+  ),
+  fields: ['adults', 'youth', 'children', 'infants', 'guests'],
+  render: (form) => <GuestsSection form={form} />
+};

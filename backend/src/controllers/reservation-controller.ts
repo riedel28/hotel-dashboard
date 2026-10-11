@@ -16,6 +16,7 @@ import {
 import type { Request, Response } from 'express';
 
 import {
+  type CreateReservationData,
   type FetchReservationsParams,
   type GuestInput,
   toReservationStates,
@@ -91,16 +92,19 @@ async function getReservations(req: Request, res: Response) {
     const searchCondition =
       conditions.length > 0 ? and(...conditions) : undefined;
 
-    // Every sortable column is named after its table column.
-    const orderByColumn = reservationsTable[sort_by];
-    const orderBy =
-      sort_order === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
+    // Every sortable column is named after its table column; the room sorts
+    // by what the list shows for it: its number, failing that its name.
+    const orderBy = (reservation: typeof reservationsTable) => {
+      const column =
+        sort_by === 'room_name'
+          ? sql`coalesce(${roomNumberOf(reservation)}, ${reservation.room_name})`
+          : reservation[sort_by];
+      return sort_order === 'asc' ? asc(column) : desc(column);
+    };
 
     const reservations = await db.query.reservations.findMany({
       where: searchCondition,
-      with: {
-        guests: guestsInOrder
-      },
+      ...reservationDetails,
       offset: (page - 1) * per_page,
       limit: per_page,
       orderBy
@@ -132,9 +136,7 @@ async function getReservationById(req: Request, res: Response) {
   try {
     const reservation = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, Number(id)),
-      with: {
-        guests: guestsInOrder
-      }
+      ...reservationDetails
     });
 
     if (!reservation) {
@@ -150,76 +152,71 @@ async function getReservationById(req: Request, res: Response) {
 
 const MAX_BOOKING_NR_ATTEMPTS = 3;
 
-async function createReservation(req: Request, res: Response) {
-  const { room_name } = req.body;
+/**
+ * Runs an insert under a fresh booking number. booking_nr is unique in the
+ * database and two requests in the same millisecond would collide, so a
+ * collision is retried with a random suffix.
+ */
+async function withUniqueBookingNr<T>(
+  insert: (booking_nr: string) => Promise<T>
+): Promise<T> {
+  const base = `RES-${Date.now().toString(36).toUpperCase()}`;
 
-  // booking_nr is unique in the database; two requests in the same
-  // millisecond would collide, so a retry adds a random suffix.
-  const baseBookingNr = `RES-${Date.now().toString(36).toUpperCase()}`;
+  for (let attempt = 1; ; attempt++) {
+    const booking_nr =
+      attempt === 1
+        ? base
+        : `${base}-${randomBytes(2).toString('hex').toUpperCase()}`;
+
+    try {
+      return await insert(booking_nr);
+    } catch (error) {
+      if (!isUniqueViolation(error) || attempt === MAX_BOOKING_NR_ATTEMPTS) {
+        throw error;
+      }
+    }
+  }
+}
+
+async function createReservation(req: Request, res: Response) {
+  // Parsed by validateBody(createReservationSchema)
+  const { guests, ...fields }: CreateReservationData = req.body;
 
   try {
-    let newReservation: typeof reservationsTable.$inferSelect | undefined;
-
-    for (let attempt = 1; !newReservation; attempt++) {
-      const booking_nr =
-        attempt === 1
-          ? baseBookingNr
-          : `${baseBookingNr}-${randomBytes(2).toString('hex').toUpperCase()}`;
-
-      try {
-        [newReservation] = await db
+    // The reservation and its guests land together or not at all
+    const reservation = await withUniqueBookingNr((booking_nr) =>
+      db.transaction(async (tx) => {
+        const [created] = await tx
           .insert(reservationsTable)
           .values({
+            ...fields,
+            ...primaryGuestMirror(guests),
             state: 'pending',
             booking_nr,
-            guest_email: null,
-            primary_guest_name: '',
             booking_id: '',
-            room_name,
-            booking_from: new Date(),
-            booking_to: new Date(),
             check_in_via: 'web',
             check_out_via: 'web',
-            last_opened_at: null,
             received_at: new Date(),
-            completed_at: null,
-            updated_at: null,
-            page_url: null,
-            balance: '0',
-            adults: 1,
-            youth: 0,
-            children: 0,
-            infants: 0,
-            purpose: 'private',
-            room: room_name
+            balance: '0'
           })
-          .returning();
-        break;
-      } catch (error) {
-        if (!isUniqueViolation(error) || attempt === MAX_BOOKING_NR_ATTEMPTS) {
-          throw error;
+          .returning({ id: reservationsTable.id });
+
+        if (!created) {
+          throw new Error('The reservation was not inserted');
         }
-      }
-    }
 
-    if (!newReservation) {
-      return res.status(500).json({ error: 'Failed to create reservation' });
-    }
+        if (guests.length > 0) {
+          await tx.insert(guestsTable).values(toGuestRows(guests, created.id));
+        }
 
-    const reservationWithGuests = await db.query.reservations.findFirst({
-      where: eq(reservationsTable.id, newReservation.id),
-      with: {
-        guests: guestsInOrder
-      }
-    });
+        return tx.query.reservations.findFirst({
+          where: eq(reservationsTable.id, created.id),
+          ...reservationDetails
+        });
+      })
+    );
 
-    if (!reservationWithGuests) {
-      return res
-        .status(500)
-        .json({ error: 'Failed to fetch created reservation' });
-    }
-
-    res.status(201).json(reservationWithGuests);
+    res.status(201).json(reservation);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create reservation' });
@@ -236,6 +233,40 @@ const guestsInOrder = {
     asc(guest.id)
   ]
 };
+
+/**
+ * The number of the room a reservation names. A reservation knows its room by
+ * name only, so this is a lookup rather than a join: a name shared by two
+ * rooms must not double the reservation.
+ */
+const roomNumberOf = (reservation: typeof reservationsTable) =>
+  // The rooms table is spelled out: inside a relational query drizzle
+  // qualifies every interpolated column with the outer table's alias.
+  sql<string | null>`(
+    select room.room_number from rooms room
+    where room.name = ${reservation.room_name}
+    limit 1
+  )`;
+
+/** How every endpoint reads a reservation: with its guests and room number. */
+const reservationDetails = {
+  with: { guests: guestsInOrder },
+  extras: (reservation: typeof reservationsTable) => ({
+    room_number: roomNumberOf(reservation).as('room_number')
+  })
+};
+
+/** What a reservation mirrors of its primary guest, for the list to read. */
+function primaryGuestMirror(guests: GuestInput[]) {
+  // The first guest, failing a flag: the same choice toGuestRows makes
+  const primary = guests.find((guest) => guest.is_primary) ?? guests[0];
+  return {
+    guest_email: primary?.email || null,
+    primary_guest_name: primary
+      ? `${primary.first_name} ${primary.last_name}`
+      : ''
+  };
+}
 
 /**
  * Guest rows to insert for a reservation. One guest is the primary one: the
@@ -305,28 +336,23 @@ async function updateReservation(req: Request, res: Response) {
         }
       }
 
-      // The guest list is replaced wholesale, so work out the rows first: the
-      // reservation mirrors the primary guest's name and email.
+      // The guest list is replaced wholesale
       const guestRows =
         guestPayload && toGuestRows(guestPayload, reservationId);
-      const primaryGuest = guestRows?.find((guest) => guest.is_primary);
 
       const reservationUpdates = Object.fromEntries(
         Object.entries({
           state,
           booking_nr,
-          guest_email: guestRows ? (primaryGuest?.email ?? null) : guest_email,
+          guest_email,
           booking_id,
           room_name: resolvedRoomName,
           booking_from,
           booking_to,
           check_in_via,
           check_out_via,
-          primary_guest_name: guestRows
-            ? primaryGuest
-              ? `${primaryGuest.first_name} ${primaryGuest.last_name}`
-              : ''
-            : primary_guest_name,
+          primary_guest_name,
+          ...(guestPayload && primaryGuestMirror(guestPayload)),
           last_opened_at,
           received_at,
           completed_at,
@@ -363,9 +389,7 @@ async function updateReservation(req: Request, res: Response) {
 
       return tx.query.reservations.findFirst({
         where: eq(reservationsTable.id, reservationId),
-        with: {
-          guests: guestsInOrder
-        }
+        ...reservationDetails
       });
     });
 
@@ -389,9 +413,7 @@ async function deleteReservation(req: Request, res: Response) {
   try {
     const deletedReservations = await db.query.reservations.findFirst({
       where: eq(reservationsTable.id, Number(id)),
-      with: {
-        guests: guestsInOrder
-      }
+      ...reservationDetails
     });
 
     if (!deletedReservations) {

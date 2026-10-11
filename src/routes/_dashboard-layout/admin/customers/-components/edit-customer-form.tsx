@@ -1,18 +1,17 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link as RouterLink } from '@tanstack/react-router';
-import { Loader2Icon } from 'lucide-react';
+import { useMemo } from 'react';
 import type { Customer } from 'shared/types/customers';
 import { toast } from 'sonner';
 
 import { updateCustomerById } from '@/api/customers';
-import { FormSection } from '@/components/form-section';
-import { type NavSection, SectionNav } from '@/components/section-nav';
-import { StickyCardFooter } from '@/components/sticky-card-footer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  type FormSectionDef,
+  SectionedForm
+} from '@/components/sectioned-form';
+import { CardHeader, CardTitle } from '@/components/ui/card';
 import { CountryFlag } from '@/components/ui/country-flag';
-import { Separator } from '@/components/ui/separator';
 import { StageBadge } from '@/components/ui/stage-badge';
 
 import {
@@ -39,8 +38,6 @@ export function EditCustomerForm({ customer }: { customer: Customer }) {
     country_code: customer.country_code
   });
 
-  const isDirty = form.formState.isDirty;
-
   const updateCustomerMutation = useMutation({
     mutationFn: (data: CustomerFormValues) =>
       updateCustomerById(customer.id, data),
@@ -56,16 +53,16 @@ export function EditCustomerForm({ customer }: { customer: Customer }) {
     }
   });
 
-  const isSaving = updateCustomerMutation.isPending;
+  const sections = useMemo(() => customerSections(customer), [customer]);
 
   return (
-    <div className="flex flex-row gap-8">
-      <SectionNav
-        sections={CUSTOMER_FORM_SECTIONS}
-        className="order-2 hidden xl:block"
-      />
-
-      <Card className="relative max-w-4xl min-w-0 flex-1 overflow-visible">
+    <SectionedForm
+      form={form}
+      sections={sections}
+      onSubmit={(data) => updateCustomerMutation.mutate(data)}
+      isSaving={updateCustomerMutation.isPending}
+      submitLabel={<Trans>Save changes</Trans>}
+      header={
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <CardTitle className="min-w-0 truncate">
@@ -78,129 +75,72 @@ export function EditCustomerForm({ customer }: { customer: Customer }) {
             )}
           </div>
         </CardHeader>
-
-        <CardContent>
-          <form
-            id="customer-form"
-            onSubmit={form.handleSubmit((data) =>
-              updateCustomerMutation.mutate(data)
-            )}
-            aria-busy={isSaving}
-            className="flex flex-col gap-6 md:gap-8"
-            noValidate
-          >
-            <fieldset disabled={isSaving} className="contents">
-              <FormSection
-                id="contact"
-                title={<Trans>Contact</Trans>}
-                description={
-                  <Trans>
-                    The person we deal with, and the company they act for.
-                  </Trans>
-                }
-              >
-                <CustomerContactFields control={form.control} />
-              </FormSection>
-
-              <Separator />
-
-              <FormSection
-                id="address"
-                title={<Trans>Address</Trans>}
-                description={<Trans>Where the customer is registered.</Trans>}
-              >
-                <CustomerAddressFields control={form.control} />
-              </FormSection>
-            </fieldset>
-
-            <Separator />
-
-            <FormSection
-              id="properties"
-              title={<Trans>Properties</Trans>}
-              description={
-                <Trans>
-                  The properties this customer owns. Change the owner on a
-                  property's page.
-                </Trans>
-              }
-            >
-              {customer.properties.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  <Trans>No properties yet.</Trans>
-                </p>
-              ) : (
-                <ul className="divide-y divide-border">
-                  {customer.properties.map((property) => (
-                    <li
-                      key={property.id}
-                      className="flex items-center gap-3 py-2 first:pt-0 last:pb-0"
-                    >
-                      <CountryFlag
-                        code={property.country_code}
-                        title={property.country_code}
-                        className="size-4 shrink-0"
-                        aria-label={property.country_code}
-                      />
-                      <RouterLink
-                        to="/admin/properties/$propertyId"
-                        params={{ propertyId: property.id }}
-                        className="min-w-0 flex-1 truncate font-medium underline-offset-4 hover:underline"
-                      >
-                        {property.name}
-                      </RouterLink>
-                      <StageBadge stage={property.stage} size="sm" />
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </FormSection>
-          </form>
-        </CardContent>
-
-        <StickyCardFooter>
-          <div className="flex w-full flex-wrap items-center justify-end gap-3">
-            <div
-              className="mr-auto min-w-0 text-xs text-muted-foreground"
-              role="status"
-              aria-live="polite"
-            >
-              {isSaving ? (
-                <Trans>Saving changes…</Trans>
-              ) : isDirty ? null : (
-                <Trans>No unsaved changes</Trans>
-              )}
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => form.reset()}
-                disabled={!isDirty || isSaving}
-              >
-                <Trans>Cancel</Trans>
-              </Button>
-              <Button type="submit" form="customer-form" disabled={isSaving}>
-                {isSaving && (
-                  <Loader2Icon className="animate-spin" aria-hidden="true" />
-                )}
-                <Trans>Save changes</Trans>
-              </Button>
-            </div>
-          </div>
-        </StickyCardFooter>
-      </Card>
-    </div>
+      }
+    />
   );
 }
 
-/**
- * Single source of truth for the page's sections: the form renders one
- * `<section>` per entry and the table of contents links to them by id.
- */
-const CUSTOMER_FORM_SECTIONS: NavSection[] = [
-  { id: 'contact', label: <Trans>Contact</Trans> },
-  { id: 'address', label: <Trans>Address</Trans> },
-  { id: 'properties', label: <Trans>Properties</Trans> }
+/** The properties a customer owns, each linking to its page. */
+function CustomerProperties({ customer }: { customer: Customer }) {
+  return customer.properties.length === 0 ? (
+    <p className="text-sm text-muted-foreground">
+      <Trans>No properties yet.</Trans>
+    </p>
+  ) : (
+    <ul className="divide-y divide-border">
+      {customer.properties.map((property) => (
+        <li
+          key={property.id}
+          className="flex items-center gap-3 py-2 first:pt-0 last:pb-0"
+        >
+          <CountryFlag
+            code={property.country_code}
+            title={property.country_code}
+            className="size-4 shrink-0"
+            aria-label={property.country_code}
+          />
+          <RouterLink
+            to="/admin/properties/$propertyId"
+            params={{ propertyId: property.id }}
+            className="min-w-0 flex-1 truncate font-medium underline-offset-4 hover:underline"
+          >
+            {property.name}
+          </RouterLink>
+          <StageBadge stage={property.stage} size="sm" />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const customerSections = (
+  customer: Customer
+): FormSectionDef<CustomerFormValues>[] => [
+  {
+    id: 'contact',
+    label: <Trans>Contact</Trans>,
+    description: (
+      <Trans>The person we deal with, and the company they act for.</Trans>
+    ),
+    fields: ['first_name', 'last_name', 'company_name', 'email'],
+    render: (form) => <CustomerContactFields control={form.control} />
+  },
+  {
+    id: 'address',
+    label: <Trans>Address</Trans>,
+    description: <Trans>Where the customer is registered.</Trans>,
+    fields: ['address_line_1', 'address_line_2', 'zip', 'city', 'country_code'],
+    render: (form) => <CustomerAddressFields control={form.control} />
+  },
+  {
+    id: 'properties',
+    label: <Trans>Properties</Trans>,
+    description: (
+      <Trans>
+        The properties this customer owns. Change the owner on a property's
+        page.
+      </Trans>
+    ),
+    render: () => <CustomerProperties customer={customer} />
+  }
 ];

@@ -1,5 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { PlusIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import {
@@ -15,11 +16,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
-import { AddReservationModal } from '../reservations/-components/add-reservation-modal';
 import { ReservationClearFilters } from '../reservations/-components/reservation-clear-filters';
 import { ReservationSearch } from '../reservations/-components/reservation-search';
 import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
@@ -37,6 +38,7 @@ const reservationsSearchSchema = fetchReservationsParamsSchema.extend({
 
 function ReservationsPage() {
   const { t } = useLingui();
+  const navigate = useNavigate();
   useDocumentTitle(t`Reservations`);
 
   return (
@@ -61,7 +63,10 @@ function ReservationsPage() {
         <h1 className="text-xl font-bold">
           <Trans>Reservations</Trans>
         </h1>
-        <AddReservationModal />
+        <Button onClick={() => void navigate({ to: '/reservations/new' })}>
+          <PlusIcon aria-hidden="true" />
+          <Trans>Add Reservation</Trans>
+        </Button>
       </div>
 
       <QueryBoundary

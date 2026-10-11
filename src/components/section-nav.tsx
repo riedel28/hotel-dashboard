@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useNavigate } from '@tanstack/react-router';
 import * as React from 'react';
 
@@ -8,8 +8,16 @@ export interface NavSection {
   /** DOM id of the matching <section> on the page. */
   id: string;
   label: React.ReactNode;
-  /** Draws a warning dot — used to surface a section that needs the user. */
-  attention?: boolean;
+  /** The form fields the section holds, by name: an invalid one marks it. */
+  fields?: string[];
+}
+
+/** A form's errors by field name, as react-hook-form reports them. */
+type FormErrors = Record<string, unknown>;
+
+/** Whether one of the section's fields is invalid. */
+export function sectionHasError(section: NavSection, errors: FormErrors) {
+  return section.fields?.some((field) => field in errors) ?? false;
 }
 
 /** Id of the heading that names a section, used for `aria-labelledby`. */
@@ -19,6 +27,14 @@ export function sectionHeadingId(sectionId: string) {
 
 /** The scroll container sections live in (see _dashboard-layout `<main>`). */
 const SCROLL_ROOT_ID = 'main-content';
+
+/**
+ * Back to the top of the page. The scroll container outlives a navigation, so
+ * a page reached from the bottom of a long one would open scrolled down.
+ */
+export function scrollPageToTop() {
+  document.getElementById(SCROLL_ROOT_ID)?.scrollTo({ top: 0 });
+}
 
 /**
  * Tracks which section is currently in view within the scroll container so the
@@ -174,8 +190,22 @@ export function useHashSectionJump() {
   }, []);
 }
 
+/** Marks a section that holds invalid fields. */
+function ErrorDot() {
+  return (
+    // Plain red rather than the muted danger tone: it has to catch the eye
+    <span className="size-1.5 shrink-0 rounded-full bg-red-500">
+      <span className="sr-only">
+        <Trans>Has errors</Trans>
+      </span>
+    </span>
+  );
+}
+
 interface SectionNavProps {
   sections: NavSection[];
+  /** The form's errors: a section holding an invalid field gets a red dot. */
+  errors?: FormErrors;
   className?: string;
   /**
    * `rail` is the sticky vertical list used on wide screens; `chips` is the
@@ -186,6 +216,7 @@ interface SectionNavProps {
 
 export function SectionNav({
   sections,
+  errors = {},
   className,
   orientation = 'rail'
 }: SectionNavProps) {
@@ -247,7 +278,8 @@ export function SectionNav({
         )}
       >
         <ul className="flex snap-x snap-mandatory scrollbar-none gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {sections.map(({ id, label, attention }) => {
+          {sections.map((section) => {
+            const { id, label } = section;
             const isActive = id === activeId;
             return (
               <li key={id} className="snap-start">
@@ -266,12 +298,7 @@ export function SectionNav({
                   )}
                 >
                   {label}
-                  {attention && (
-                    <span
-                      aria-hidden="true"
-                      className="size-1.5 shrink-0 rounded-full bg-amber-500"
-                    />
-                  )}
+                  {sectionHasError(section, errors) && <ErrorDot />}
                 </a>
               </li>
             );
@@ -287,7 +314,8 @@ export function SectionNav({
       className={cn('sticky top-2 h-fit w-50 self-start text-sm', className)}
     >
       <ul className="flex flex-col">
-        {sections.map(({ id, label, attention }) => {
+        {sections.map((section) => {
+          const { id, label } = section;
           const isActive = id === activeId;
           return (
             <li key={id}>
@@ -301,12 +329,7 @@ export function SectionNav({
                 )}
               >
                 <span className="min-w-0 flex-1 truncate">{label}</span>
-                {attention && (
-                  <span
-                    aria-hidden="true"
-                    className="size-1.5 shrink-0 rounded-full bg-amber-500"
-                  />
-                )}
+                {sectionHasError(section, errors) && <ErrorDot />}
               </a>
             </li>
           );
