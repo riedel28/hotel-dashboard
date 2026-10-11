@@ -1,3 +1,21 @@
+# [1.25.0](https://github.com/riedel28/hotel-dashboard/compare/v1.24.0...v1.25.0) (2026-10-11)
+
+
+### Bug Fixes
+
+* **country-flag:** outline the flag so a mostly white one keeps its shape ([0f68e32](https://github.com/riedel28/hotel-dashboard/commit/0f68e32be1ab3b423a3591ef49e7f5caa67ecbb4))
+* **country-picker:** match the input's focus, error and disabled states ([a28daac](https://github.com/riedel28/hotel-dashboard/commit/a28daac91a4ac0dee7735f5af077fb415338327f))
+
+
+### Features
+
+* **monitoring:** switch the status filter to a segmented control ([9c2c149](https://github.com/riedel28/hotel-dashboard/commit/9c2c149ba5f2b73bb0cfa71009f9482ddaa69f36))
+* **reservations:** flag the primary guest on the guest list ([cb21acd](https://github.com/riedel28/hotel-dashboard/commit/cb21acd8f526e630dc08bab6726c52396b1d9fc0))
+* **reservations:** give guests an age group and a stable order ([c550150](https://github.com/riedel28/hotel-dashboard/commit/c55015000cc9576ec0a73878b9e9e358212ccdbf))
+* **reservations:** merge the guest sections into one list ([d1a9482](https://github.com/riedel28/hotel-dashboard/commit/d1a94822497aaf37869d45aa59c1d6091e1fe3a2))
+* **reservations:** rebuild the edit page on the sectioned form layout ([b9ce9c7](https://github.com/riedel28/hotel-dashboard/commit/b9ce9c74f3e0b802b1cc2b9eec28dcd0cd6dc39a))
+* **time-input:** add a 24-hour time field with quarter-hour suggestions ([5ad0b39](https://github.com/riedel28/hotel-dashboard/commit/5ad0b3916ec030810379e8f7bce372154bbf92c3))
+
 # [1.24.0](https://github.com/riedel28/hotel-dashboard/compare/v1.23.0...v1.24.0) (2026-10-10)
 
 
