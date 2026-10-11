@@ -85,6 +85,19 @@ export const guestSchema = z.object({
   updated_at: z.coerce.date().nullable()
 });
 
+/**
+ * A guest as written with a reservation: the server owns ids and timestamps,
+ * and replaces the whole list on save.
+ */
+export const guestInputSchema = z.object({
+  first_name: z.string().trim().min(1),
+  last_name: z.string().trim().min(1),
+  email: z.union([z.string(), z.null()]).optional(),
+  nationality_code: countryCodeSchema,
+  is_primary: z.boolean().default(false),
+  age_group: guestAgeGroupSchema.default('adult')
+});
+
 export const reservationSchema = z.object({
   id: z.number(),
   state: reservationStateSchema,
@@ -169,6 +182,7 @@ export const updateReservationSchema = reservationSchema
     id: true,
     updated_at: true
   })
+  .extend({ guests: z.array(guestInputSchema) })
   .partial();
 
 // Form schema for editing reservations (subset of fields that are editable)
@@ -184,7 +198,7 @@ export const reservationFormSchema = z.object({
   children: z.coerce.number().int().min(0),
   infants: z.coerce.number().int().min(0),
   // Everyone on the reservation; the primary guest is the flagged one.
-  guests: z.array(guestSchema)
+  guests: z.array(guestInputSchema)
 });
 
 // Guest search
@@ -206,6 +220,7 @@ export type CheckinMethod = z.infer<typeof checkinMethodSchema>;
 export type ReservationState = z.infer<typeof reservationStateSchema>;
 export type Reservation = z.infer<typeof reservationSchema>;
 export type Guest = z.infer<typeof guestSchema>;
+export type GuestInput = z.infer<typeof guestInputSchema>;
 export type GuestAgeGroup = z.infer<typeof guestAgeGroupSchema>;
 export type FetchReservationsParams = z.infer<
   typeof fetchReservationsParamsSchema
