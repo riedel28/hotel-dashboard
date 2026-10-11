@@ -99,6 +99,41 @@ describe('Reservations API', () => {
       expect(response.body.guest_email).toBeNull();
     });
 
+    test('should report the number of the room the reservation names', async () => {
+      const property = await createTestProperty();
+      await createTestRoom({
+        property_id: property.id,
+        name: 'Seaside',
+        room_number: '204'
+      });
+
+      const named = await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ ...stay, room_name: 'Seaside' })
+        .expect(201);
+      const unknown = await request(app)
+        .post('/api/reservations')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ ...stay, room_name: 'No such room' })
+        .expect(201);
+
+      expect(named.body.room_number).toBe('204');
+      expect(unknown.body.room_number).toBeNull();
+
+      // Sorted by what the list shows: the number, failing that the name
+      const list = await request(app)
+        .get('/api/reservations?sort_by=room_name&sort_order=asc')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      expect(
+        list.body.index.map(
+          (reservation: { room_number: string | null }) =>
+            reservation.room_number
+        )
+      ).toEqual(['204', null]);
+    });
+
     test('should reject a departure that is not after the arrival', async () => {
       await request(app)
         .post('/api/reservations')
@@ -423,6 +458,17 @@ describe('Reservations API', () => {
 
       expect(cleared.body.primary_guest_name).toBe('');
       expect(cleared.body.guest_email).toBeNull();
+    });
+
+    test('should reject a departure that is not after the arrival', async () => {
+      await request(app)
+        .patch(`/api/reservations/${reservationId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          booking_from: stay.booking_to,
+          booking_to: stay.booking_from
+        })
+        .expect(400);
     });
 
     test('should return 404 for non-existent reservation', async () => {

@@ -1,16 +1,17 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { Controller, useForm } from 'react-hook-form';
-import type { ReservationFormData } from 'shared/types/reservations';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  type ReservationFormData,
+  reservationFormSchema
+} from 'shared/types/reservations';
 import { toast } from 'sonner';
 
 import { updateReservationById } from '@/api/reservations';
-import { FormSection } from '@/components/form-section';
-import { type NavSection, SectionNav } from '@/components/section-nav';
-import { StickyCardFooter } from '@/components/sticky-card-footer';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { CopyButton } from '@/components/ui/copy-button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import {
@@ -18,24 +19,30 @@ import {
   InputGroupAddon,
   InputGroupInput
 } from '@/components/ui/input-group';
-import { Separator } from '@/components/ui/separator';
 
-import { revealFirstError, sectionsWithErrors } from '../-lib/section-errors';
-import { GuestsSection } from './guests-section';
 import { PurposeField, RoomField, StayFields } from './reservation-fields';
+import {
+  GUESTS_SECTION,
+  ReservationFormLayout,
+  type ReservationFormSection
+} from './reservation-form-layout';
 
 interface EditReservationFormProps {
   reservationId: string;
+  /** Shown, not edited: the server assigned it. */
+  bookingNr: string;
   reservationData: ReservationFormData;
 }
 
 export function EditReservationForm({
   reservationId,
+  bookingNr,
   reservationData
 }: EditReservationFormProps) {
   const queryClient = useQueryClient();
   const { t } = useLingui();
   const form = useForm<ReservationFormData>({
+    resolver: zodResolver(reservationFormSchema),
     values: reservationData
   });
 
@@ -52,164 +59,102 @@ export function EditReservationForm({
     }
   });
 
+  const sections = useMemo(() => editSections(bookingNr), [bookingNr]);
   const isDirty = form.formState.isDirty;
   const isSaving = updateReservationMutation.isPending;
 
   return (
-    <>
-      <div className="flex flex-row gap-8">
-        <SectionNav
-          sections={RESERVATION_FORM_SECTIONS}
-          errorIds={sectionsWithErrors(form.formState.errors, SECTION_FIELDS)}
-          className="order-2 hidden xl:block"
-        />
-
-        <Card className="relative max-w-4xl min-w-0 flex-1 overflow-visible">
-          <CardContent>
-            <form
-              id="reservation-form"
-              onSubmit={form.handleSubmit(
-                (data) => updateReservationMutation.mutate(data),
-                (errors) => revealFirstError(errors, SECTION_FIELDS)
-              )}
-              aria-busy={isSaving}
-              className="flex flex-col gap-6 md:gap-8"
-              noValidate
-            >
-              <fieldset disabled={isSaving} className="contents">
-                <FormSection
-                  id="reservation"
-                  title={<Trans>Reservation</Trans>}
-                  description={
-                    <Trans>
-                      The booking number, the room and the purpose of the stay.
-                    </Trans>
-                  }
-                >
-                  <FieldGroup className="gap-4">
-                    <Controller
-                      control={form.control}
-                      name="booking_nr"
-                      render={({ field }) => (
-                        <Field className="gap-2">
-                          <FieldLabel htmlFor={field.name}>
-                            <Trans>Reservation No.</Trans>
-                          </FieldLabel>
-                          <InputGroup>
-                            {/* Not editable, so it takes no focus; the copy button does */}
-                            <InputGroupInput
-                              id={field.name}
-                              value={field.value}
-                              readOnly
-                              tabIndex={-1}
-                              className="pointer-events-none"
-                            />
-                            <InputGroupAddon align="inline-end">
-                              <CopyButton
-                                text={field.value}
-                                size="icon-xs"
-                                copyLabel={t`Copy reservation number`}
-                                copiedLabel={t`Copied to clipboard`}
-                              />
-                            </InputGroupAddon>
-                          </InputGroup>
-                        </Field>
-                      )}
-                    />
-
-                    <RoomField form={form} />
-                    <PurposeField form={form} />
-                  </FieldGroup>
-                </FormSection>
-
-                <Separator />
-
-                <FormSection
-                  id="stay"
-                  title={<Trans>Stay</Trans>}
-                  description={
-                    <Trans>When the guests arrive and when they leave.</Trans>
-                  }
-                >
-                  <FieldGroup className="gap-4">
-                    <StayFields form={form} />
-                  </FieldGroup>
-                </FormSection>
-
-                <Separator />
-
-                <FormSection
-                  id="guests"
-                  title={<Trans>Guests</Trans>}
-                  description={
-                    <Trans>
-                      How many people are staying, by age group, and who they
-                      are. The primary guest is the one the reservation is
-                      booked under.
-                    </Trans>
-                  }
-                >
-                  <GuestsSection form={form} />
-                </FormSection>
-              </fieldset>
-            </form>
-          </CardContent>
-
-          <StickyCardFooter>
-            <div className="flex w-full flex-wrap items-center justify-end gap-3">
-              <div
-                className="mr-auto min-w-0 text-xs text-muted-foreground"
-                role="status"
-                aria-live="polite"
-              >
-                {isSaving ? (
-                  <Trans>Saving changes…</Trans>
-                ) : isDirty ? null : (
-                  <Trans>No unsaved changes</Trans>
-                )}
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => form.reset()}
-                  disabled={!isDirty || isSaving}
-                >
-                  <Trans>Cancel</Trans>
-                </Button>
-                <Button
-                  type="submit"
-                  form="reservation-form"
-                  disabled={isSaving}
-                >
-                  {isSaving && (
-                    <Loader2Icon className="animate-spin" aria-hidden="true" />
-                  )}
-                  <Trans>Save Changes</Trans>
-                </Button>
-              </div>
-            </div>
-          </StickyCardFooter>
-        </Card>
-      </div>
-    </>
+    <ReservationFormLayout
+      form={form}
+      sections={sections}
+      onSubmit={(data) => updateReservationMutation.mutate(data)}
+      isSaving={isSaving}
+      status={
+        isSaving ? (
+          <Trans>Saving changes…</Trans>
+        ) : isDirty ? null : (
+          <Trans>No unsaved changes</Trans>
+        )
+      }
+    >
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => form.reset()}
+        disabled={!isDirty || isSaving}
+      >
+        <Trans>Cancel</Trans>
+      </Button>
+      <Button
+        type="submit"
+        form={ReservationFormLayout.formId}
+        disabled={isSaving}
+      >
+        {isSaving && (
+          <Loader2Icon className="animate-spin" aria-hidden="true" />
+        )}
+        <Trans>Update Reservation</Trans>
+      </Button>
+    </ReservationFormLayout>
   );
 }
 
-/**
- * Single source of truth for the page's sections: the form renders one
- * `<section>` per entry and the table of contents links to them by id.
- */
-const RESERVATION_FORM_SECTIONS: NavSection[] = [
-  { id: 'reservation', label: <Trans>Reservation</Trans> },
-  { id: 'stay', label: <Trans>Stay</Trans> },
-  { id: 'guests', label: <Trans>Guests</Trans> }
-];
+function ReservationNumber({ bookingNr }: { bookingNr: string }) {
+  const { t } = useLingui();
 
-/** Which section each field sits in, for the error dots in the navigation. */
-const SECTION_FIELDS = {
-  reservation: ['room_name', 'purpose'],
-  stay: ['booking_from', 'booking_to'],
-  guests: ['adults', 'youth', 'children', 'infants', 'guests']
-};
+  return (
+    <Field className="gap-2">
+      <FieldLabel htmlFor="booking_nr">
+        <Trans>Reservation No.</Trans>
+      </FieldLabel>
+      <InputGroup>
+        {/* Not editable, so it takes no focus; the copy button does */}
+        <InputGroupInput
+          id="booking_nr"
+          value={bookingNr}
+          readOnly
+          tabIndex={-1}
+          className="pointer-events-none"
+        />
+        <InputGroupAddon align="inline-end">
+          <CopyButton
+            text={bookingNr}
+            size="icon-xs"
+            copyLabel={t`Copy reservation number`}
+            copiedLabel={t`Copied to clipboard`}
+          />
+        </InputGroupAddon>
+      </InputGroup>
+    </Field>
+  );
+}
+
+const editSections = (bookingNr: string): ReservationFormSection[] => [
+  {
+    id: 'reservation',
+    label: <Trans>Reservation</Trans>,
+    description: (
+      <Trans>The booking number, the room and the purpose of the stay.</Trans>
+    ),
+    fields: ['room_name', 'purpose'],
+    render: (form) => (
+      <FieldGroup className="gap-4">
+        <ReservationNumber bookingNr={bookingNr} />
+        <RoomField form={form} />
+        <PurposeField form={form} />
+      </FieldGroup>
+    )
+  },
+  {
+    id: 'stay',
+    label: <Trans>Stay</Trans>,
+    description: <Trans>When the guests arrive and when they leave.</Trans>,
+    fields: ['booking_from', 'booking_to'],
+    render: (form) => (
+      <FieldGroup className="gap-4">
+        <StayFields form={form} />
+      </FieldGroup>
+    )
+  },
+  GUESTS_SECTION
+];

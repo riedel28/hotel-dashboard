@@ -25,7 +25,6 @@ import { ReservationStatusBadge } from '../reservation-status-badge';
 import { BalanceCell } from './-components/cells/balance-cell';
 import { GuestsCell } from './-components/cells/guests-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
-import { RoomCell } from './-components/cells/room-cell';
 import { RowActions } from './row-actions';
 
 /** A stay date on one line: the year only when it is not the current one. */
@@ -183,7 +182,16 @@ export default function ReservationsTable({
             column={column}
           />
         ),
-        cell: ({ row }) => <RoomCell roomName={row.original.room_name} />,
+        cell: ({ row }) => (
+          // The room's number; a room the property does not have keeps the
+          // name it was stored with
+          <span
+            className="block truncate tabular-nums"
+            title={row.original.room_name}
+          >
+            {row.original.room_number || row.original.room_name}
+          </span>
+        ),
         meta: {
           skeleton: <Skeleton className="h-6 w-16" />,
           headerTitle: t`Room`

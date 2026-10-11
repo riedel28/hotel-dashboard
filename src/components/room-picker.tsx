@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { SearchIcon } from 'lucide-react';
-import { type ReactNode, useMemo, useState } from 'react';
+import { type ReactNode, type Ref, useMemo, useState } from 'react';
 import type { DeviceRoom } from 'shared/types/devices';
 
 import { deviceRoomOptionsQueryOptions } from '@/api/devices';
@@ -40,6 +40,8 @@ interface RoomPickerProps {
   contentClassName?: string;
   id?: string;
   'aria-label'?: string;
+  /** The trigger, e.g. for a form to focus the field when it is invalid. */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 /**
@@ -56,7 +58,8 @@ export function RoomPicker({
   className,
   contentClassName,
   id,
-  'aria-label': ariaLabel
+  'aria-label': ariaLabel,
+  ref
 }: RoomPickerProps) {
   const { t } = useLingui();
   const [open, setOpen] = useState(false);
@@ -80,7 +83,12 @@ export function RoomPicker({
       itemToStringLabel={roomLabel}
       filter={matchesRoomQuery}
     >
-      <ComboboxTrigger id={id} aria-label={ariaLabel} className={className}>
+      <ComboboxTrigger
+        ref={ref}
+        id={id}
+        aria-label={ariaLabel}
+        className={className}
+      >
         {children}
       </ComboboxTrigger>
       <ComboboxContent className={cn('w-56', contentClassName)}>

@@ -20,8 +20,8 @@ import { countNights } from '../-lib/stay';
 import { DateTimeField } from './date-time-field';
 
 /**
- * The fields the add and the edit form share. Each takes its id from the
- * field's name, which is how a rejected submit finds the one to focus.
+ * The fields the add and the edit form share. The form's schema decides what
+ * is valid; a field with a single rule words its own, translated, message.
  */
 interface ReservationFieldProps {
   form: UseFormReturn<ReservationFormData>;
@@ -36,7 +36,6 @@ export function RoomField({ form }: ReservationFieldProps) {
     <Controller
       control={form.control}
       name="room_name"
-      rules={{ required: t`Room selection is required` }}
       render={({ field, fieldState }) => {
         const selectedRoom = rooms.find((room) => room.name === field.value);
 
@@ -46,6 +45,7 @@ export function RoomField({ form }: ReservationFieldProps) {
               <Trans>Room</Trans>
             </FieldLabel>
             <RoomPicker
+              ref={field.ref}
               id={field.name}
               value={selectedRoom ?? null}
               onValueChange={(room) => field.onChange(room.name)}
@@ -75,7 +75,9 @@ export function RoomField({ form }: ReservationFieldProps) {
                 )}
               </span>
             </RoomPicker>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            {fieldState.invalid && (
+              <FieldError>{t`Room selection is required`}</FieldError>
+            )}
           </Field>
         );
       }}
@@ -154,16 +156,13 @@ export function StayFields({ form }: ReservationFieldProps) {
       <Controller
         control={form.control}
         name="booking_to"
-        rules={{
-          validate: (value, values) =>
-            value > values.booking_from || t`Departure must be after arrival`
-        }}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-2">
             <FieldLabel htmlFor={field.name}>
               <Trans>Departure</Trans>
             </FieldLabel>
             <DateTimeField
+              ref={field.ref}
               id={field.name}
               label={t`Departure`}
               value={field.value}
@@ -171,7 +170,7 @@ export function StayFields({ form }: ReservationFieldProps) {
               invalid={fieldState.invalid}
             />
             {fieldState.invalid ? (
-              <FieldError errors={[fieldState.error]} />
+              <FieldError>{t`Departure must be after arrival`}</FieldError>
             ) : (
               <FieldDescription aria-live="polite">
                 <Plural
