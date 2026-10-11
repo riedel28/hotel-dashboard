@@ -85,6 +85,8 @@ export function GuestSearchCombobox({
           email: selected.email,
           nationality_code: selected.nationality_code,
           is_primary: false,
+          // The search knows guests by name only
+          age_group: 'adult',
           created_at: new Date(),
           updated_at: null
         };

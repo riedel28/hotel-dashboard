@@ -1,19 +1,23 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
-import { PlusCircle } from 'lucide-react';
-import { useState } from 'react';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Controller, useForm } from 'react-hook-form';
-import type { Guest } from 'shared/types/reservations';
+import {
+  type Guest,
+  type GuestAgeGroup,
+  guestAgeGroupSchema
+} from 'shared/types/reservations';
 import { z } from 'zod';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
+import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@/components/ui/dialog';
 import {
   Field,
@@ -23,9 +27,21 @@ import {
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+
+import { guestAgeGroupLabels } from './guest-age-group';
 
 interface AddGuestModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /** The group of the place being filled. */
+  defaultAgeGroup: GuestAgeGroup;
   onAddGuest: (guest: Guest) => void;
 }
 
@@ -33,22 +49,31 @@ const addGuestSchema = z.object({
   firstName: z.string().min(1, t`First name is required`),
   lastName: z.string().min(1, t`Last name is required`),
   email: z
-    .string()
-    .min(1, t`Email is required`)
-    .email(t`Invalid email address`)
+    .email(t`Please enter a valid email address`)
+    .optional()
+    .or(z.literal('')),
+  nationality_code: z.string().min(1, t`Nationality is required`),
+  age_group: guestAgeGroupSchema
 });
 
 type AddGuestFormData = z.infer<typeof addGuestSchema>;
 
-export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
-  const [open, setOpen] = useState(false);
+export function AddGuestModal({
+  open,
+  onOpenChange,
+  defaultAgeGroup,
+  onAddGuest
+}: AddGuestModalProps) {
+  const { i18n } = useLingui();
 
   const form = useForm<AddGuestFormData>({
     resolver: zodResolver(addGuestSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
-      email: ''
+      email: '',
+      nationality_code: '',
+      age_group: defaultAgeGroup
     }
   });
 
@@ -58,48 +83,38 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
       reservation_id: 0,
       first_name: data.firstName,
       last_name: data.lastName,
-      email: data.email,
-      nationality_code: 'DE',
+      email: data.email || null,
+      nationality_code: data.nationality_code,
       is_primary: false,
+      age_group: data.age_group,
       created_at: new Date(),
       updated_at: null
     };
 
     onAddGuest(newGuest);
-    form.reset();
-    setOpen(false);
-  };
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen);
-    if (!newOpen) {
-      form.reset();
-    }
+    onOpenChange(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}
-      >
-        <PlusCircle className="mr-2 h-4 w-4" />
-        <Trans>New Guest</Trans>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>
             <Trans>Add New Guest</Trans>
           </DialogTitle>
+          <DialogDescription>
+            <Trans>Changes apply once the reservation is saved.</Trans>
+          </DialogDescription>
         </DialogHeader>
         <form
           onSubmit={(e) => {
             e.stopPropagation();
             form.handleSubmit(onSubmit)(e);
           }}
-          className="space-y-4"
+          className="space-y-6"
         >
           <FieldSet className="gap-4">
-            <FieldGroup className="gap-4">
+            <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Controller
                 control={form.control}
                 name="firstName"
@@ -146,7 +161,10 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
                 control={form.control}
                 name="email"
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    className="gap-2 sm:col-span-2"
+                  >
                     <FieldLabel htmlFor={field.name}>
                       <Trans>Email</Trans>
                     </FieldLabel>
@@ -163,21 +181,69 @@ export function AddGuestModal({ onAddGuest }: AddGuestModalProps) {
                   </Field>
                 )}
               />
+
+              <Controller
+                control={form.control}
+                name="nationality_code"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel>
+                      <Trans>Nationality</Trans>
+                    </FieldLabel>
+                    <CountryPicker
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value ?? '')}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
+                name="age_group"
+                render={({ field }) => (
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Age group</Trans>
+                    </FieldLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id={field.name} className="w-full">
+                        <SelectValue>
+                          {(value: GuestAgeGroup) =>
+                            i18n._(guestAgeGroupLabels[value])
+                          }
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {guestAgeGroupSchema.options.map((group) => (
+                          <SelectItem key={group} value={group}>
+                            {i18n._(guestAgeGroupLabels[group])}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />
             </FieldGroup>
           </FieldSet>
 
-          <div className="flex justify-end gap-2 pt-4">
+          <DialogFooter>
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={() => onOpenChange(false)}
             >
               <Trans>Cancel</Trans>
             </Button>
             <Button type="submit">
               <Trans>Add Guest</Trans>
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

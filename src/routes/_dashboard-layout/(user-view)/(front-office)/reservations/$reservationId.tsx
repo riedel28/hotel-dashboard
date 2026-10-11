@@ -2,6 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { ChevronLeftIcon } from 'lucide-react';
+import type { GuestAgeGroup } from 'shared/types/reservations';
 import { z } from 'zod';
 
 import { reservationByIdQueryOptions } from '@/api/reservations';
@@ -96,24 +97,20 @@ function ReservationForm() {
   );
 
   const data = reservationQuery.data;
-  const primaryGuest = data.guests.find((guest) => guest.is_primary);
+  const named = (group: GuestAgeGroup) =>
+    data.guests.filter((guest) => guest.age_group === group).length;
   const reservationData = {
     booking_nr: data.booking_nr,
     room_name: data.room_name,
     purpose: data.purpose ?? 'private',
     booking_from: data.booking_from,
     booking_to: data.booking_to,
-    adults: data.adults ?? 1,
-    youth: data.youth ?? 0,
-    children: data.children ?? 0,
-    infants: data.infants ?? 0,
-    primary_guest: {
-      first_name: primaryGuest?.first_name ?? '',
-      last_name: primaryGuest?.last_name ?? '',
-      email: primaryGuest?.email ?? '',
-      nationality_code: primaryGuest?.nationality_code ?? ''
-    },
-    guests: data.guests.filter((guest) => !guest.is_primary)
+    // A head count is never below the guests already named in its group
+    adults: Math.max(data.adults ?? 1, named('adult')),
+    youth: Math.max(data.youth ?? 0, named('youth')),
+    children: Math.max(data.children ?? 0, named('child')),
+    infants: Math.max(data.infants ?? 0, named('infant')),
+    guests: data.guests
   };
 
   return (

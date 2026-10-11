@@ -1,28 +1,26 @@
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Edit2Icon, Loader2Icon, Trash2Icon, UserIcon } from 'lucide-react';
+import { ChevronRightIcon, Loader2Icon, PlusIcon } from 'lucide-react';
 import { useState } from 'react';
-import { Controller, type Path, useForm } from 'react-hook-form';
-import type { Guest, ReservationFormData } from 'shared/types/reservations';
+import { Controller, useForm } from 'react-hook-form';
+import {
+  type Guest,
+  type GuestAgeGroup,
+  guestAgeGroupSchema,
+  type ReservationFormData
+} from 'shared/types/reservations';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { updateReservationById } from '@/api/reservations';
 import { roomsQueryOptions } from '@/api/rooms';
 import { FormSection } from '@/components/form-section';
 import { type NavSection, SectionNav } from '@/components/section-nav';
 import { StickyCardFooter } from '@/components/sticky-card-footer';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CopyButton } from '@/components/ui/copy-button';
-import { CountryPicker } from '@/components/ui/country-picker';
-import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator
-} from '@/components/ui/dropdown-menu';
+import { CountryFlag } from '@/components/ui/country-flag';
 import {
   Field,
   FieldDescription,
@@ -30,7 +28,6 @@ import {
   FieldGroup,
   FieldLabel
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import {
   InputGroup,
   InputGroupAddon,
@@ -46,6 +43,7 @@ import { roomLabel } from '@/routes/_dashboard-layout/(user-view)/devices/-lib/r
 import { AddGuestModal } from './add-guest-modal';
 import { countNights, DateTimeField } from './date-time-field';
 import { EditGuestForm } from './edit-guest-form';
+import { guestAgeGroupLabels } from './guest-age-group';
 import { GuestSearchCombobox } from './guest-search-combobox';
 
 interface EditReservationFormProps {
@@ -53,11 +51,20 @@ interface EditReservationFormProps {
   reservationData: ReservationFormData;
 }
 
-type PrimaryGuest = ReservationFormData['primary_guest'];
+/** The head-count field each age group is planned in. */
+const COUNT_FIELD = {
+  adult: 'adults',
+  youth: 'youth',
+  child: 'children',
+  infant: 'infants'
+} as const satisfies Record<GuestAgeGroup, keyof ReservationFormData>;
 
-/** An untouched primary guest section means the reservation has none. */
-function isBlank(guest: PrimaryGuest) {
-  return Object.values(guest).every((value) => value.trim() === '');
+/** With guests on the list one of them is the primary one: the first, failing a flag. */
+function withPrimary(guests: Guest[]): Guest[] {
+  if (guests.length === 0 || guests.some((guest) => guest.is_primary)) {
+    return guests;
+  }
+  return guests.map((guest, index) => ({ ...guest, is_primary: index === 0 }));
 }
 
 export function EditReservationForm({
@@ -67,35 +74,18 @@ export function EditReservationForm({
   const queryClient = useQueryClient();
   const { t } = useLingui();
   const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
+  // The age group of the place a new guest is being added to
+  const [addingToGroup, setAddingToGroup] = useState<GuestAgeGroup | null>(
+    null
+  );
 
   const form = useForm<ReservationFormData>({
     values: reservationData
   });
 
   const updateReservationMutation = useMutation({
-    mutationFn: ({ primary_guest, guests, ...data }: ReservationFormData) =>
-      updateReservationById(reservationId, {
-        ...data,
-        // The server stores one guest list; the primary guest is a flag on it.
-        guests: [
-          ...(isBlank(primary_guest)
-            ? []
-            : [
-                {
-                  id: 0,
-                  reservation_id: Number(reservationId),
-                  first_name: primary_guest.first_name.trim(),
-                  last_name: primary_guest.last_name.trim(),
-                  email: primary_guest.email.trim() || null,
-                  nationality_code: primary_guest.nationality_code,
-                  is_primary: true,
-                  created_at: new Date(),
-                  updated_at: null
-                }
-              ]),
-          ...guests.map((guest) => ({ ...guest, is_primary: false }))
-        ]
-      }),
+    mutationFn: (data: ReservationFormData) =>
+      updateReservationById(reservationId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
       toast.success(t`Reservation updated successfully`);
@@ -106,25 +96,65 @@ export function EditReservationForm({
     }
   });
 
-  const setGuests = (guests: Guest[]) =>
-    form.setValue('guests', guests, { shouldDirty: true });
+  const guests = form.watch('guests');
+  const counts = form.watch(['adults', 'youth', 'children', 'infants']);
+
+  /** Guests named in each age group against the places planned for it. */
+  const places = guestAgeGroupSchema.options.map((group, index) => {
+    const named = guests.filter((guest) => guest.age_group === group).length;
+    return { group, named, free: Math.max((counts[index] ?? 0) - named, 0) };
+  });
+  const plannedTotal = places.reduce(
+    (total, { named, free }) => total + named + free,
+    0
+  );
+
+  const setGuests = (next: Guest[]) => {
+    form.setValue('guests', withPrimary(next), { shouldDirty: true });
+
+    // A named guest is firmer than a number: the head counts grow to fit the
+    // list, but never shrink — a guest who leaves frees their place.
+    for (const group of guestAgeGroupSchema.options) {
+      const named = next.filter((guest) => guest.age_group === group).length;
+      if (named > form.getValues(COUNT_FIELD[group])) {
+        form.setValue(COUNT_FIELD[group], named, { shouldDirty: true });
+      }
+    }
+  };
 
   const handleRemoveGuest = (guestId: number) => {
-    setGuests(form.getValues('guests').filter((guest) => guest.id !== guestId));
+    setGuests(guests.filter((guest) => guest.id !== guestId));
   };
 
   const handleEditGuest = (updatedGuest: Guest) => {
-    setGuests(
-      form
-        .getValues('guests')
-        .map((g) => (g.id === updatedGuest.id ? updatedGuest : g))
-    );
+    setGuests(guests.map((g) => (g.id === updatedGuest.id ? updatedGuest : g)));
     setEditingGuest(null);
   };
 
-  const handleAddGuest = (newGuest: Guest) => {
-    setGuests([...form.getValues('guests'), newGuest]);
+  const handleMakePrimary = (guestId: number) => {
+    setGuests(
+      guests.map((guest) => ({ ...guest, is_primary: guest.id === guestId }))
+    );
   };
+
+  const handleAddGuest = (newGuest: Guest) => {
+    setGuests([...guests, newGuest]);
+  };
+
+  // The search knows guests by name only: one found there takes the group
+  // that still has places when there is just one such group.
+  const handleAddFoundGuest = (found: Guest) => {
+    const open = places.filter(({ free }) => free > 0);
+    handleAddGuest({
+      ...found,
+      age_group: open.length === 1 && open[0] ? open[0].group : 'adult'
+    });
+  };
+
+  // The primary guest leads the list
+  const guestsInOrder = [...guests].sort(
+    (a, b) => Number(b.is_primary) - Number(a.is_primary)
+  );
 
   const { data: roomsData } = useQuery(roomsQueryOptions({ per_page: 100 }));
   const rooms = roomsData?.index ?? [];
@@ -134,21 +164,11 @@ export function EditReservationForm({
   const isDirty = form.formState.isDirty;
   const isSaving = updateReservationMutation.isPending;
 
-  // Required as soon as any field of the primary guest section is filled.
-  const requiredForPrimaryGuest =
-    (message: string) => (value: string, values: ReservationFormData) =>
-      isBlank(values.primary_guest) || value.trim() !== '' || message;
-  const primaryGuestFields: Path<ReservationFormData>[] = [
-    'primary_guest.first_name',
-    'primary_guest.last_name',
-    'primary_guest.nationality_code'
-  ];
-
   const peopleFields = [
-    { name: 'adults', label: t`Adults`, min: 1 },
-    { name: 'youth', label: t`Youth`, min: 0 },
-    { name: 'children', label: t`Children`, min: 0 },
-    { name: 'infants', label: t`Infants`, min: 0 }
+    { name: 'adults', group: 'adult', label: t`Adults`, min: 1 },
+    { name: 'youth', group: 'youth', label: t`Youth`, min: 0 },
+    { name: 'children', group: 'child', label: t`Children`, min: 0 },
+    { name: 'infants', group: 'infant', label: t`Infants`, min: 0 }
   ] as const;
 
   return (
@@ -396,264 +416,154 @@ export function EditReservationForm({
                   id="guests"
                   title={<Trans>Guests</Trans>}
                   description={
-                    <Trans>How many people are staying, by age group.</Trans>
-                  }
-                >
-                  <FieldGroup className="grid grid-cols-2 gap-4 2xl:grid-cols-4">
-                    {peopleFields.map(({ name, label, min }) => (
-                      <Controller
-                        key={name}
-                        control={form.control}
-                        name={name}
-                        render={({ field, fieldState }) => (
-                          <Field
-                            data-invalid={fieldState.invalid}
-                            className="gap-2"
-                          >
-                            <FieldLabel htmlFor={field.name}>
-                              {label}
-                            </FieldLabel>
-                            <NumberInput
-                              {...field}
-                              id={field.name}
-                              value={field.value}
-                              min={min}
-                              onValueChange={(value) =>
-                                field.onChange(value ?? 0)
-                              }
-                            />
-                            {fieldState.invalid && (
-                              <FieldError errors={[fieldState.error]} />
-                            )}
-                          </Field>
-                        )}
-                      />
-                    ))}
-                  </FieldGroup>
-                </FormSection>
-
-                <Separator />
-
-                <FormSection
-                  id="primary-guest"
-                  title={<Trans>Primary guest</Trans>}
-                  description={
                     <Trans>
-                      The person the reservation is booked under. Leave it empty
-                      if they are not known yet.
+                      How many people are staying, by age group, and who they
+                      are. The primary guest is the one the reservation is
+                      booked under.
                     </Trans>
                   }
                 >
-                  <FieldGroup className="gap-4">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <Controller
-                        control={form.control}
-                        name="primary_guest.first_name"
-                        rules={{
-                          deps: primaryGuestFields,
-                          validate: requiredForPrimaryGuest(
-                            t`First name is required`
-                          )
-                        }}
-                        render={({ field, fieldState }) => (
-                          <Field
-                            data-invalid={fieldState.invalid}
-                            className="gap-2"
-                          >
-                            <FieldLabel htmlFor={field.name}>
-                              <Trans>First name</Trans>
-                            </FieldLabel>
-                            <Input
-                              {...field}
-                              id={field.name}
-                              autoComplete="off"
-                              aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                              <FieldError errors={[fieldState.error]} />
-                            )}
-                          </Field>
-                        )}
-                      />
-
-                      <Controller
-                        control={form.control}
-                        name="primary_guest.last_name"
-                        rules={{
-                          deps: primaryGuestFields,
-                          validate: requiredForPrimaryGuest(
-                            t`Last name is required`
-                          )
-                        }}
-                        render={({ field, fieldState }) => (
-                          <Field
-                            data-invalid={fieldState.invalid}
-                            className="gap-2"
-                          >
-                            <FieldLabel htmlFor={field.name}>
-                              <Trans>Last name</Trans>
-                            </FieldLabel>
-                            <Input
-                              {...field}
-                              id={field.name}
-                              autoComplete="off"
-                              aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                              <FieldError errors={[fieldState.error]} />
-                            )}
-                          </Field>
-                        )}
-                      />
-                    </div>
-
-                    <Controller
-                      control={form.control}
-                      name="primary_guest.email"
-                      rules={{
-                        deps: primaryGuestFields,
-                        validate: (value) =>
-                          value.trim() === '' ||
-                          z.email().safeParse(value.trim()).success ||
-                          t`Invalid email address`
-                      }}
-                      render={({ field, fieldState }) => (
-                        <Field
-                          data-invalid={fieldState.invalid}
-                          className="gap-2"
-                        >
-                          <FieldLabel htmlFor={field.name}>
-                            <Trans>Email</Trans>
-                          </FieldLabel>
-                          <Input
-                            {...field}
-                            id={field.name}
-                            type="email"
-                            autoComplete="off"
-                            aria-invalid={fieldState.invalid}
-                          />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
+                  <div className="flex flex-col gap-6">
+                    <FieldGroup className="grid grid-cols-2 gap-4 2xl:grid-cols-4">
+                      {peopleFields.map(({ name, group, label, min }) => (
+                        <Controller
+                          key={name}
+                          control={form.control}
+                          name={name}
+                          render={({ field, fieldState }) => (
+                            <Field
+                              data-invalid={fieldState.invalid}
+                              className="gap-2"
+                            >
+                              <FieldLabel htmlFor={field.name}>
+                                {label}
+                              </FieldLabel>
+                              <NumberInput
+                                {...field}
+                                id={field.name}
+                                value={field.value}
+                                // Never below the guests already named in the group
+                                min={Math.max(
+                                  min,
+                                  places.find((p) => p.group === group)
+                                    ?.named ?? 0
+                                )}
+                                onValueChange={(value) =>
+                                  field.onChange(value ?? 0)
+                                }
+                              />
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
                           )}
-                        </Field>
-                      )}
-                    />
+                        />
+                      ))}
+                    </FieldGroup>
 
-                    <Controller
-                      control={form.control}
-                      name="primary_guest.nationality_code"
-                      rules={{
-                        deps: primaryGuestFields,
-                        validate: requiredForPrimaryGuest(
-                          t`Nationality is required`
-                        )
-                      }}
-                      render={({ field, fieldState }) => (
-                        <Field
-                          data-invalid={fieldState.invalid}
-                          className="gap-2"
-                        >
-                          <FieldLabel>
-                            <Trans>Nationality</Trans>
-                          </FieldLabel>
-                          <CountryPicker
-                            value={field.value}
-                            onValueChange={(value) =>
-                              field.onChange(value ?? '')
-                            }
-                            aria-invalid={fieldState.invalid}
+                    <div className="flex flex-col gap-2">
+                      <div
+                        className="text-sm text-muted-foreground"
+                        aria-live="polite"
+                      >
+                        <Trans>
+                          {guests.length} of {plannedTotal} guests registered
+                        </Trans>
+                      </div>
+
+                      {/* Two ways to add a guest: find a known one or enter a new one */}
+                      <div className="flex gap-2">
+                        <div className="min-w-0 flex-1">
+                          <GuestSearchCombobox
+                            currentGuests={guests}
+                            onSelectGuest={handleAddFoundGuest}
                           />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
-                    />
-                  </FieldGroup>
-                </FormSection>
-
-                <Separator />
-
-                <FormSection
-                  id="fellow-travelers"
-                  title={<Trans>Fellow travelers</Trans>}
-                  description={
-                    <Trans>Everyone else staying on this reservation.</Trans>
-                  }
-                >
-                  <div className="space-y-4">
-                    <GuestSearchCombobox
-                      currentGuests={form.watch('guests')}
-                      onSelectGuest={handleAddGuest}
-                    />
-                    <Controller
-                      control={form.control}
-                      name="guests"
-                      render={({ field, fieldState }) => (
-                        <Field
-                          data-invalid={fieldState.invalid}
-                          className="gap-2"
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="shrink-0"
+                          onClick={() => setAddingToGroup('adult')}
                         >
-                          <div className="space-y-2">
-                            {field.value.length === 0 ? (
-                              <div className="flex h-10 items-center justify-center text-sm text-muted-foreground">
-                                <Trans>No fellow travelers added yet</Trans>
-                              </div>
-                            ) : (
-                              field.value.map((guest) => (
-                                <div
-                                  key={guest.id}
-                                  className="flex items-center justify-between rounded-md border px-2 py-1"
+                          <PlusIcon aria-hidden="true" />
+                          <Trans>New Guest</Trans>
+                        </Button>
+                      </div>
+
+                      {guestsInOrder.map((guest) => (
+                        <button
+                          key={guest.id}
+                          type="button"
+                          // The whole card opens the guest for editing
+                          className="group flex w-full cursor-pointer items-start gap-2.5 rounded-lg border border-input py-2 pr-3 pl-3 text-left transition-colors outline-none hover:border-foreground/5 hover:bg-accent focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)] dark:bg-input/30 dark:hover:bg-input/60"
+                          onClick={() => setEditingGuest(guest)}
+                        >
+                          {/* As tall as the name's first line, so the flag centres on it */}
+                          <span className="flex h-5 shrink-0 items-center">
+                            <CountryFlag
+                              code={guest.nationality_code}
+                              className="size-4"
+                            />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="flex items-start gap-2">
+                              <span className="line-clamp-2 text-sm wrap-anywhere">
+                                {guest.first_name} {guest.last_name}
+                              </span>
+                              {guest.is_primary && (
+                                <Badge
+                                  size="xs"
+                                  variant="outline"
+                                  color="sky"
+                                  className="mt-0.5 h-4 rounded-sm px-1 py-0"
                                 >
-                                  <div className="flex items-center gap-2">
-                                    <UserIcon className="h-4 w-4 text-muted-foreground" />
-                                    <span className="max-w-md truncate text-sm">
-                                      {guest.first_name} {guest.last_name}
-                                    </span>
-                                  </div>
-                                  <DropdownMenu>
-                                    <DataGridRowActions
-                                      label={<Trans>Open guest menu</Trans>}
-                                    />
-                                    <DropdownMenuContent
-                                      align="end"
-                                      className="w-[180px]"
-                                    >
-                                      <DropdownMenuItem
-                                        onClick={() => {
-                                          // Delay to allow dropdown to close first
-                                          requestAnimationFrame(() => {
-                                            setEditingGuest(guest);
-                                          });
-                                        }}
-                                      >
-                                        <Edit2Icon className="mr-2 h-4 w-4" />
-                                        <Trans>Edit guest</Trans>
-                                      </DropdownMenuItem>
-                                      <DropdownMenuSeparator />
-                                      <DropdownMenuItem
-                                        variant="destructive-soft"
-                                        onClick={() =>
-                                          handleRemoveGuest(guest.id)
-                                        }
-                                      >
-                                        <Trash2Icon className="mr-2 h-4 w-4" />
-                                        <Trans>Remove</Trans>
-                                      </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                  </DropdownMenu>
-                                </div>
-                              ))
-                            )}
-                          </div>
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
-                    />
-                    <div className="flex justify-end">
-                      <AddGuestModal onAddGuest={handleAddGuest} />
+                                  <Trans>Primary</Trans>
+                                </Badge>
+                              )}
+                            </span>
+                            {/* The email tells apart guests who share a name */}
+                            <span className="line-clamp-2 text-xs wrap-anywhere text-muted-foreground">
+                              {t(guestAgeGroupLabels[guest.age_group])}
+                              {guest.email && ` · ${guest.email}`}
+                            </span>
+                          </span>
+                          {/* Only while hovered or focused: where the click leads */}
+                          <ChevronRightIcon
+                            className="size-4 shrink-0 self-center text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+                            aria-hidden="true"
+                          />
+                          <span className="sr-only">
+                            <Trans>Edit guest</Trans>
+                          </span>
+                        </button>
+                      ))}
+
+                      {/* Places planned in the head counts that nobody is named for yet */}
+                      {peopleFields.map(({ group, label }) => {
+                        const free =
+                          places.find((p) => p.group === group)?.free ?? 0;
+                        if (free === 0) return null;
+
+                        return (
+                          <button
+                            key={group}
+                            type="button"
+                            className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg border border-dashed border-input px-3 py-2 text-left text-sm text-muted-foreground transition-colors outline-none hover:border-transparent hover:bg-foreground/5 hover:text-foreground focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)]"
+                            onClick={() => setAddingToGroup(group)}
+                          >
+                            <PlusIcon
+                              className="size-4 shrink-0"
+                              aria-hidden="true"
+                            />
+                            <span className="min-w-0 flex-1 truncate">
+                              {label} · <Trans>{free} not registered</Trans>
+                            </span>
+                            <span className="sr-only">
+                              <Trans>Add guest</Trans>
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </FormSection>
@@ -709,6 +619,19 @@ export function EditReservationForm({
             if (!open) setEditingGuest(null);
           }}
           onSave={handleEditGuest}
+          onRemove={() => handleRemoveGuest(editingGuest.id)}
+          onMakePrimary={() => handleMakePrimary(editingGuest.id)}
+        />
+      )}
+
+      {addingToGroup && (
+        <AddGuestModal
+          open={true}
+          onOpenChange={(open) => {
+            if (!open) setAddingToGroup(null);
+          }}
+          defaultAgeGroup={addingToGroup}
+          onAddGuest={handleAddGuest}
         />
       )}
     </>
@@ -722,7 +645,5 @@ export function EditReservationForm({
 const RESERVATION_FORM_SECTIONS: NavSection[] = [
   { id: 'reservation', label: <Trans>Reservation</Trans> },
   { id: 'stay', label: <Trans>Stay</Trans> },
-  { id: 'guests', label: <Trans>Guests</Trans> },
-  { id: 'primary-guest', label: <Trans>Primary guest</Trans> },
-  { id: 'fellow-travelers', label: <Trans>Fellow travelers</Trans> }
+  { id: 'guests', label: <Trans>Guests</Trans> }
 ];
