@@ -20,6 +20,7 @@ import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { reservationRoomLabel } from '@/lib/rooms';
 
 import { ReservationStatusBadge } from '../reservation-status-badge';
 import { BalanceCell } from './-components/cells/balance-cell';
@@ -183,13 +184,11 @@ export default function ReservationsTable({
           />
         ),
         cell: ({ row }) => (
-          // The room's number; a room the property does not have keeps the
-          // name it was stored with
           <span
             className="block truncate tabular-nums"
             title={row.original.room_name}
           >
-            {row.original.room_number || row.original.room_name}
+            {reservationRoomLabel(row.original)}
           </span>
         ),
         meta: {

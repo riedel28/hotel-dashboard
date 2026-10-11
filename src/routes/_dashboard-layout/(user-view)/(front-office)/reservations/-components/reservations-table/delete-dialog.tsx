@@ -1,6 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import { Loader2Icon } from 'lucide-react';
 import type { Reservation } from 'shared/types/reservations';
 import { toast } from 'sonner';
@@ -16,6 +15,8 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { reservationRoomLabel } from '@/lib/rooms';
+import { formatDate } from '@/utils/date';
 
 interface DeleteDialogProps {
   open: boolean;
@@ -23,12 +24,27 @@ interface DeleteDialogProps {
   reservation: Reservation;
 }
 
-const DATE_FORMAT = 'DD.MM.YYYY';
-
 async function deleteReservation(reservationId: number) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   return client.delete(`/reservations/${reservationId}`);
+}
+
+/**
+ * Enough to tell the reservation apart from its neighbours in the list. Its
+ * own component so that only an open dialog works it out: there is a dialog
+ * for every row.
+ */
+function ReservationSummary({ reservation }: { reservation: Reservation }) {
+  const { t } = useLingui();
+  const room = reservationRoomLabel(reservation);
+
+  // Guest, room and stay, leaving out what the reservation does not have
+  const details = [
+    reservation.primary_guest_name,
+    room && t`Room ${room}`,
+    `${formatDate(reservation.booking_from, {})} – ${formatDate(reservation.booking_to, {})}`
+  ].filter(Boolean);
+
+  return <p className="text-sm wrap-anywhere">{details.join(' · ')}</p>;
 }
 
 export function DeleteDialog({
@@ -38,15 +54,6 @@ export function DeleteDialog({
 }: DeleteDialogProps) {
   const { id: reservationId, booking_nr: reservationNr } = reservation;
   const { t } = useLingui();
-
-  // Guest, room and stay, leaving out what the reservation does not have
-  const details = [
-    reservation.primary_guest_name,
-    reservation.room_number
-      ? t`Room ${reservation.room_number}`
-      : reservation.room_name,
-    `${dayjs(reservation.booking_from).format(DATE_FORMAT)} – ${dayjs(reservation.booking_to).format(DATE_FORMAT)}`
-  ].filter(Boolean);
   const queryClient = useQueryClient();
 
   const deleteReservationMutation = useMutation({
@@ -73,9 +80,8 @@ export function DeleteDialog({
             <Trans>Delete reservation {reservationNr}?</Trans>
           </AlertDialogTitle>
         </AlertDialogHeader>
-        {/* Enough to tell the reservation apart from its neighbours in the list */}
         <div className="flex flex-col gap-1">
-          <p className="text-sm wrap-anywhere">{details.join(' · ')}</p>
+          <ReservationSummary reservation={reservation} />
           <AlertDialogDescription>
             <Trans>This action cannot be undone.</Trans>
           </AlertDialogDescription>

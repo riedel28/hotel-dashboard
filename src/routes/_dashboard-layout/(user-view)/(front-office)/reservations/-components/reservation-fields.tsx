@@ -1,7 +1,12 @@
+import type { MessageDescriptor } from '@lingui/core';
+import { msg } from '@lingui/core/macro';
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { Controller, type UseFormReturn } from 'react-hook-form';
-import type { ReservationFormData } from 'shared/types/reservations';
+import {
+  reservationErrorCodes,
+  type ReservationFormData
+} from 'shared/types/reservations';
 
 import { deviceRoomOptionsQueryOptions } from '@/api/devices';
 import { RoomPicker } from '@/components/room-picker';
@@ -19,16 +24,29 @@ import { roomLabel } from '@/lib/rooms';
 import { countNights } from '../-lib/stay';
 import { DateTimeField } from './date-time-field';
 
+/** The schema's error codes in words; any other message is shown as it is. */
+const errorMessages: Record<string, MessageDescriptor> = {
+  [reservationErrorCodes.roomRequired]: msg`Room selection is required`,
+  [reservationErrorCodes.stayOrder]: msg`Departure must be after arrival`
+};
+
+function ReservationFieldError({ error }: { error?: { message?: string } }) {
+  const { t } = useLingui();
+  const message = error?.message;
+  const known = message ? errorMessages[message] : undefined;
+
+  return <FieldError>{known ? t(known) : message}</FieldError>;
+}
+
 /**
  * The fields the add and the edit form share. The form's schema decides what
- * is valid; a field with a single rule words its own, translated, message.
+ * is valid and names each broken rule by a code.
  */
 interface ReservationFieldProps {
   form: UseFormReturn<ReservationFormData>;
 }
 
 export function RoomField({ form }: ReservationFieldProps) {
-  const { t } = useLingui();
   // The picker's own list, so the selected room is shown the way it is offered
   const { data: rooms = [] } = useQuery(deviceRoomOptionsQueryOptions());
 
@@ -75,9 +93,7 @@ export function RoomField({ form }: ReservationFieldProps) {
                 )}
               </span>
             </RoomPicker>
-            {fieldState.invalid && (
-              <FieldError>{t`Room selection is required`}</FieldError>
-            )}
+            <ReservationFieldError error={fieldState.error} />
           </Field>
         );
       }}
@@ -170,7 +186,7 @@ export function StayFields({ form }: ReservationFieldProps) {
               invalid={fieldState.invalid}
             />
             {fieldState.invalid ? (
-              <FieldError>{t`Departure must be after arrival`}</FieldError>
+              <ReservationFieldError error={fieldState.error} />
             ) : (
               <FieldDescription aria-live="polite">
                 <Plural

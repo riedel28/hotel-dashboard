@@ -34,6 +34,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { getCountryName } from '@/lib/countries';
+import { reservationRoomLabel } from '@/lib/rooms';
 import { cn } from '@/lib/utils';
 import { formatDate } from '@/utils/date';
 
@@ -232,7 +233,7 @@ function ReservationDetails({
             // A long room name gives way to the actions; the full name is in
             // the body
             <span className="min-w-0 truncate" title={reservation.room_name}>
-              {reservation.room_name}
+              {reservationRoomLabel(reservation)}
             </span>
           )}
           {/* Split button: the main part edits, the arrow holds the rest */}
@@ -292,7 +293,7 @@ function ReservationDetails({
           </DetailRow>
 
           <DetailRow label={<Trans>Room</Trans>}>
-            {reservation.room_name || (
+            {reservationRoomLabel(reservation) || (
               <EmptyValue>
                 <Trans>Not assigned</Trans>
               </EmptyValue>

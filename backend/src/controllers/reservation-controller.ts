@@ -152,78 +152,71 @@ async function getReservationById(req: Request, res: Response) {
 
 const MAX_BOOKING_NR_ATTEMPTS = 3;
 
+/**
+ * Runs an insert under a fresh booking number. booking_nr is unique in the
+ * database and two requests in the same millisecond would collide, so a
+ * collision is retried with a random suffix.
+ */
+async function withUniqueBookingNr<T>(
+  insert: (booking_nr: string) => Promise<T>
+): Promise<T> {
+  const base = `RES-${Date.now().toString(36).toUpperCase()}`;
+
+  for (let attempt = 1; ; attempt++) {
+    const booking_nr =
+      attempt === 1
+        ? base
+        : `${base}-${randomBytes(2).toString('hex').toUpperCase()}`;
+
+    try {
+      return await insert(booking_nr);
+    } catch (error) {
+      if (!isUniqueViolation(error) || attempt === MAX_BOOKING_NR_ATTEMPTS) {
+        throw error;
+      }
+    }
+  }
+}
+
 async function createReservation(req: Request, res: Response) {
   // Parsed by validateBody(createReservationSchema)
   const { guests, ...fields }: CreateReservationData = req.body;
 
-  // booking_nr is unique in the database; two requests in the same
-  // millisecond would collide, so a retry adds a random suffix.
-  const baseBookingNr = `RES-${Date.now().toString(36).toUpperCase()}`;
-
   try {
-    let newReservation: typeof reservationsTable.$inferSelect | undefined;
+    // The reservation and its guests land together or not at all
+    const reservation = await withUniqueBookingNr((booking_nr) =>
+      db.transaction(async (tx) => {
+        const [created] = await tx
+          .insert(reservationsTable)
+          .values({
+            ...fields,
+            ...primaryGuestMirror(guests),
+            state: 'pending',
+            booking_nr,
+            booking_id: '',
+            check_in_via: 'web',
+            check_out_via: 'web',
+            received_at: new Date(),
+            balance: '0'
+          })
+          .returning({ id: reservationsTable.id });
 
-    for (let attempt = 1; !newReservation; attempt++) {
-      const booking_nr =
-        attempt === 1
-          ? baseBookingNr
-          : `${baseBookingNr}-${randomBytes(2).toString('hex').toUpperCase()}`;
-
-      try {
-        // The reservation and its guests land together or not at all
-        newReservation = await db.transaction(async (tx) => {
-          const [created] = await tx
-            .insert(reservationsTable)
-            .values({
-              ...fields,
-              state: 'pending',
-              booking_nr,
-              ...primaryGuestMirror(guests),
-              booking_id: '',
-              check_in_via: 'web',
-              check_out_via: 'web',
-              last_opened_at: null,
-              received_at: new Date(),
-              completed_at: null,
-              updated_at: null,
-              page_url: null,
-              balance: '0',
-              room: fields.room_name
-            })
-            .returning();
-
-          if (created && guests.length > 0) {
-            await tx
-              .insert(guestsTable)
-              .values(toGuestRows(guests, created.id));
-          }
-
-          return created;
-        });
-        break;
-      } catch (error) {
-        if (!isUniqueViolation(error) || attempt === MAX_BOOKING_NR_ATTEMPTS) {
-          throw error;
+        if (!created) {
+          throw new Error('The reservation was not inserted');
         }
-      }
-    }
 
-    if (!newReservation) {
-      return res.status(500).json({ error: 'Failed to create reservation' });
-    }
+        if (guests.length > 0) {
+          await tx.insert(guestsTable).values(toGuestRows(guests, created.id));
+        }
 
-    const reservationWithGuests = await db.query.reservations.findFirst({
-      where: eq(reservationsTable.id, newReservation.id),
-      ...reservationDetails
-    });
+        return tx.query.reservations.findFirst({
+          where: eq(reservationsTable.id, created.id),
+          ...reservationDetails
+        });
+      })
+    );
 
-    if (!reservationWithGuests) {
-      return res
-        .status(500)
-        .json({ error: 'Failed to fetch created reservation' });
-    }
-
-    res.status(201).json(reservationWithGuests);
+    res.status(201).json(reservation);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create reservation' });

@@ -94,12 +94,6 @@ export const guestInputSchema = z.object({
   last_name: z.string().trim().min(1),
   email: z.union([z.string(), z.null()]).optional(),
   nationality_code: countryCodeSchema,
-  is_primary: z.boolean().default(false),
-  age_group: guestAgeGroupSchema.default('adult')
-});
-
-// A guest in a form is complete: nothing is left for a default to fill in.
-const guestFormSchema = guestInputSchema.extend({
   is_primary: z.boolean(),
   age_group: guestAgeGroupSchema
 });
@@ -182,32 +176,45 @@ export const reservationIdParamsSchema = z.object({
 
 export const fetchReservationByIdSchema = reservationIdParamsSchema;
 
-/** A stay ends after it starts. Skipped while either end is missing. */
-const stayInOrder = {
-  check: (data: { booking_from?: Date; booking_to?: Date }) =>
-    !data.booking_from ||
-    !data.booking_to ||
-    data.booking_to > data.booking_from,
-  params: { path: ['booking_to'], message: 'Departure must be after arrival' }
-};
+/**
+ * Messages of the rules a form can break, as codes: the forms put them into
+ * words in the reader's language.
+ */
+export const reservationErrorCodes = {
+  roomRequired: 'room_required',
+  stayOrder: 'stay_order'
+} as const;
+
+/** Adds the rule that a stay ends after it starts, where both ends are given. */
+const withStayInOrder = <
+  T extends z.ZodType<{ booking_from?: Date; booking_to?: Date }>
+>(
+  schema: T
+) =>
+  schema.refine(
+    (data) =>
+      !data.booking_from ||
+      !data.booking_to ||
+      data.booking_to > data.booking_from,
+    { path: ['booking_to'], message: reservationErrorCodes.stayOrder }
+  );
 
 // ponytail: a PATCH with only one end of the stay is not checked against the
 // stored other end; the forms always send both. Compare in the controller if
 // partial date updates become a thing.
-export const updateReservationSchema = reservationSchema
-  .omit({
-    id: true,
-    updated_at: true
-  })
-  .extend({ guests: z.array(guestInputSchema) })
-  .partial()
-  .refine(stayInOrder.check, stayInOrder.params);
+export const updateReservationSchema = withStayInOrder(
+  reservationSchema
+    // The room number is read off the room, never written
+    .omit({ id: true, updated_at: true, room_number: true })
+    .extend({ guests: z.array(guestInputSchema) })
+    .partial()
+);
 
 // What the add and the edit form both edit. The booking number is not part of
 // it: the server assigns it and the forms only show it.
 const reservationFields = z.object({
   // The reservation refers to its room by name, as the list does.
-  room_name: z.string().min(1),
+  room_name: z.string().min(1, reservationErrorCodes.roomRequired),
   purpose: z.enum(['private', 'business']),
   booking_from: z.date(),
   booking_to: z.date(),
@@ -216,22 +223,18 @@ const reservationFields = z.object({
   children: z.number().int().min(0),
   infants: z.number().int().min(0),
   // Everyone on the reservation; the primary guest is the flagged one.
-  guests: z.array(guestFormSchema)
+  guests: z.array(guestInputSchema)
 });
 
-export const reservationFormSchema = reservationFields.refine(
-  stayInOrder.check,
-  stayInOrder.params
-);
+export const reservationFormSchema = withStayInOrder(reservationFields);
 
 // The form's data as it arrives over JSON: the dates are strings again.
-export const createReservationSchema = reservationFields
-  .extend({
+export const createReservationSchema = withStayInOrder(
+  reservationFields.extend({
     booking_from: z.coerce.date(),
-    booking_to: z.coerce.date(),
-    guests: z.array(guestInputSchema)
+    booking_to: z.coerce.date()
   })
-  .refine(stayInOrder.check, stayInOrder.params);
+);
 
 // Guest search
 export const searchGuestsParamsSchema = z.object({
