@@ -408,8 +408,7 @@ function ReservationDetails({
       <DeleteDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        reservationNr={reservation.booking_nr}
-        reservationId={reservation.id}
+        reservation={reservation}
       />
     </>
   );

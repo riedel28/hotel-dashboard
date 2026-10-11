@@ -1,6 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { Loader2Icon } from 'lucide-react';
+import type { Reservation } from 'shared/types/reservations';
 import { toast } from 'sonner';
 
 import { client } from '@/api/client';
@@ -18,9 +20,10 @@ import { Button } from '@/components/ui/button';
 interface DeleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  reservationNr: string;
-  reservationId: number;
+  reservation: Reservation;
 }
+
+const DATE_FORMAT = 'DD.MM.YYYY';
 
 async function deleteReservation(reservationId: number) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -31,10 +34,19 @@ async function deleteReservation(reservationId: number) {
 export function DeleteDialog({
   open,
   onOpenChange,
-  reservationNr,
-  reservationId
+  reservation
 }: DeleteDialogProps) {
+  const { id: reservationId, booking_nr: reservationNr } = reservation;
   const { t } = useLingui();
+
+  // Guest, room and stay, leaving out what the reservation does not have
+  const details = [
+    reservation.primary_guest_name,
+    reservation.room_number
+      ? t`Room ${reservation.room_number}`
+      : reservation.room_name,
+    `${dayjs(reservation.booking_from).format(DATE_FORMAT)} – ${dayjs(reservation.booking_to).format(DATE_FORMAT)}`
+  ].filter(Boolean);
   const queryClient = useQueryClient();
 
   const deleteReservationMutation = useMutation({
@@ -58,18 +70,16 @@ export function DeleteDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            <Trans>Are you sure?</Trans>
+            <Trans>Delete reservation {reservationNr}?</Trans>
           </AlertDialogTitle>
-          <AlertDialogDescription className="py-4">
-            <Trans>
-              The reservation&nbsp;
-              <span className="font-medium text-foreground">
-                {reservationNr}
-              </span>
-              &nbsp;will be deleted. This action cannot be undone.
-            </Trans>
-          </AlertDialogDescription>
         </AlertDialogHeader>
+        {/* Enough to tell the reservation apart from its neighbours in the list */}
+        <div className="flex flex-col gap-1">
+          <p className="text-sm wrap-anywhere">{details.join(' · ')}</p>
+          <AlertDialogDescription>
+            <Trans>This action cannot be undone.</Trans>
+          </AlertDialogDescription>
+        </div>
         <AlertDialogFooter>
           <AlertDialogCancel>
             <Trans>Cancel</Trans>
