@@ -76,7 +76,7 @@ test.describe('Edit Guest', () => {
     await expect(page.getByText('Carlos Rivera')).toBeVisible();
 
     // Save the reservation to persist changes
-    await page.getByRole('button', { name: 'Save Changes' }).click();
+    await page.getByRole('button', { name: 'Update Reservation' }).click();
     await expect(
       page.getByText('Reservation updated successfully')
     ).toBeVisible();
