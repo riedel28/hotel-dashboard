@@ -85,7 +85,15 @@ export function CountryPicker({
     >
       <ComboboxTrigger
         className={cn(
-          'flex h-9 w-full items-center justify-between overflow-hidden rounded-lg border border-input px-3 py-2 text-sm ring-offset-background dark:bg-input/30',
+          // Base — mirrors <Input>
+          'flex h-9 w-full items-center justify-between gap-2 overflow-hidden rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm transition-colors outline-none dark:bg-input/30',
+          // Focus, also while its popup is open
+          'focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)] data-popup-open:border-primary data-popup-open:shadow-[inset_0_0_0_1px_var(--color-primary)]',
+          // Error / invalid — from aria-invalid or an enclosing <Field data-invalid>
+          'aria-invalid:border-danger aria-invalid:focus-visible:border-danger aria-invalid:focus-visible:shadow-[inset_0_0_0_1px_var(--color-danger)] aria-invalid:data-popup-open:border-danger aria-invalid:data-popup-open:shadow-[inset_0_0_0_1px_var(--color-danger)]',
+          'in-data-[invalid=true]:border-danger in-data-[invalid=true]:focus-visible:border-danger in-data-[invalid=true]:focus-visible:shadow-[inset_0_0_0_1px_var(--color-danger)] in-data-[invalid=true]:data-popup-open:border-danger in-data-[invalid=true]:data-popup-open:shadow-[inset_0_0_0_1px_var(--color-danger)]',
+          // Disabled
+          'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 dark:disabled:bg-input/80',
           className
         )}
         aria-label={
