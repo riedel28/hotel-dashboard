@@ -1,6 +1,10 @@
 import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 import { type Control, Controller, useFormState } from 'react-hook-form';
+import {
+  ADYEN_METHOD_IDS,
+  type AdyenMethodId
+} from 'shared/types/payment-provider';
 
 import { FormSection } from '@/components/form-section';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
@@ -19,11 +23,7 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-import {
-  ADYEN_PAYMENT_METHODS,
-  type AdyenFormData,
-  type AdyenMethodId
-} from './adyen-form-types';
+import { ADYEN_METHOD_NAMES, type AdyenFormData } from './adyen-form-types';
 
 interface AdyenMappingCodesSectionProps {
   control: Control<AdyenFormData>;
@@ -62,7 +62,7 @@ export function AdyenMappingCodesSection({
             </TableRow>
           </TableHeader>
           <TableBody className="max-md:block">
-            {ADYEN_PAYMENT_METHODS.map(({ id, name }) => (
+            {ADYEN_METHOD_IDS.map((id) => (
               <TableRow
                 key={id}
                 className="hover:bg-transparent max-md:grid max-md:grid-cols-2 max-md:gap-x-3 max-md:gap-y-2 max-md:p-4 md:h-12"
@@ -70,7 +70,7 @@ export function AdyenMappingCodesSection({
                 <TableCell className="max-md:col-span-2 max-md:p-0">
                   <div className="flex items-center gap-2.5 md:h-8">
                     <BrandMark brand={id} />
-                    <span className="text-sm">{name}</span>
+                    <span className="text-sm">{ADYEN_METHOD_NAMES[id]}</span>
                   </div>
                 </TableCell>
                 <TableCell className="max-md:p-0">

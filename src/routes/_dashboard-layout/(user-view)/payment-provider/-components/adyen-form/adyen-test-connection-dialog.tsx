@@ -21,8 +21,8 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { StatusDisc } from '@/components/ui/status-disc';
+import { useFormatLocalized } from '@/hooks/use-format-localized';
 import { cn } from '@/lib/utils';
-import { formatLocalized } from '@/utils/date';
 
 type StepStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped';
 
@@ -34,13 +34,6 @@ interface TestStep {
   error?: string;
 }
 
-export type AdyenEnvironment = 'test' | 'live';
-
-export interface AdyenTestConnectionConfig {
-  environment: AdyenEnvironment;
-  merchantId: string;
-}
-
 export interface AdyenTestConnectionResult {
   passed: boolean;
   finishedAt: Date;
@@ -49,7 +42,6 @@ export interface AdyenTestConnectionResult {
 interface AdyenTestConnectionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  config: AdyenTestConnectionConfig;
   onFinished?: (result: AdyenTestConnectionResult) => void;
 }
 
@@ -67,6 +59,7 @@ export function AdyenTestConnectionDialog({
   onFinished
 }: AdyenTestConnectionDialogProps) {
   const { t } = useLingui();
+  const formatLocalized = useFormatLocalized();
 
   const [steps, setSteps] = React.useState<TestStep[]>([]);
   const [phase, setPhase] = React.useState<'running' | 'done'>('running');

@@ -1,9 +1,20 @@
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { UnplugIcon } from 'lucide-react';
-import { type Control, Controller } from 'react-hook-form';
+import * as React from 'react';
+import { Controller, type UseFormReturn } from 'react-hook-form';
 
 import { FormSection } from '@/components/form-section';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
@@ -23,33 +34,40 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
-import { formatLocalized } from '@/utils/date';
+import { useFormatLocalized } from '@/hooks/use-format-localized';
 
 import type { AdyenFormData } from './adyen-form-types';
-import type {
-  AdyenEnvironment,
-  AdyenTestConnectionResult
+import {
+  AdyenTestConnectionDialog,
+  type AdyenTestConnectionResult
 } from './adyen-test-connection-dialog';
 
 interface AdyenCredentialsSectionProps {
-  control: Control<AdyenFormData>;
+  form: UseFormReturn<AdyenFormData>;
   /** A key is already stored: the field then only takes a replacement. */
-  apiKeyConfigured: boolean;
-  /** Called when the user tries to switch to Live; `apply` commits the change. */
-  onRequestLiveConfirm: (apply: () => void) => void;
-  onTestConnection: () => void;
-  lastTestResult: AdyenTestConnectionResult | null;
+  apiKeyConfigured?: boolean;
   disabled?: boolean;
 }
 
 export function AdyenCredentialsSection({
-  control,
-  apiKeyConfigured,
-  onRequestLiveConfirm,
-  onTestConnection,
-  lastTestResult,
+  form,
+  apiKeyConfigured = false,
   disabled = false
 }: AdyenCredentialsSectionProps) {
+  const formatLocalized = useFormatLocalized();
+  const { control } = form;
+  // The switch to Live waiting to be confirmed, if one is
+  const [pendingLive, setPendingLive] = React.useState<(() => void) | null>(
+    null
+  );
+  const [testOpen, setTestOpen] = React.useState(false);
+  const [lastTestResult, setLastTestResult] =
+    React.useState<AdyenTestConnectionResult | null>(null);
+
+  const handleTestConnection = async () => {
+    if (await form.trigger()) setTestOpen(true);
+  };
+
   return (
     <FormSection
       id="credentials"
@@ -70,12 +88,11 @@ export function AdyenCredentialsSection({
               <RadioGroup
                 value={field.value}
                 onValueChange={(value) => {
-                  const next = value as AdyenEnvironment;
-                  if (next === 'live' && field.value === 'test') {
-                    onRequestLiveConfirm(() => field.onChange('live'));
+                  if (value === 'live' && field.value === 'test') {
+                    setPendingLive(() => () => field.onChange('live'));
                     return;
                   }
-                  field.onChange(next);
+                  field.onChange(value);
                 }}
                 className="grid w-full grid-cols-2 gap-2"
               >
@@ -269,7 +286,7 @@ export function AdyenCredentialsSection({
           <Button
             type="button"
             variant="outline"
-            onClick={onTestConnection}
+            onClick={handleTestConnection}
             disabled={disabled}
           >
             <UnplugIcon data-icon="inline-start" />
@@ -306,6 +323,46 @@ export function AdyenCredentialsSection({
           )}
         </div>
       </div>
+
+      <AlertDialog
+        open={pendingLive !== null}
+        onOpenChange={(open) => {
+          if (!open) setPendingLive(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <Trans>Switch to the Live environment?</Trans>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              <Trans>
+                Live mode processes real payments with real cards. Make sure
+                your credentials are production credentials before switching.
+              </Trans>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              <Trans>Cancel</Trans>
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                pendingLive?.();
+                setPendingLive(null);
+              }}
+            >
+              <Trans>Switch to Live</Trans>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AdyenTestConnectionDialog
+        open={testOpen}
+        onOpenChange={setTestOpen}
+        onFinished={setLastTestResult}
+      />
     </FormSection>
   );
 }
