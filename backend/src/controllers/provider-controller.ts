@@ -57,6 +57,52 @@ async function getProvider(req: SelectedPropertyRequest, res: Response) {
   }
 }
 
+// Updates the provider already stored, leaving its secret as it is. False
+// when there is nothing to keep it for: no provider, another one, or (when
+// the provider needs a secret) one that has none yet.
+async function saveKeepingSecret(
+  propertyId: string,
+  kind: ProviderKind,
+  values: Pick<SaveProviderData, 'provider' | 'config'>,
+  needsSecret: boolean
+) {
+  const updated = await db
+    .update(providerConfigs)
+    .set({ ...values, updated_at: new Date() })
+    .where(
+      and(
+        ofProperty(propertyId, kind),
+        eq(providerConfigs.provider, values.provider),
+        needsSecret ? isNotNull(providerConfigs.secret_encrypted) : undefined
+      )
+    )
+    .returning({ provider: providerConfigs.provider });
+
+  return updated.length > 0;
+}
+
+// Sets the provider up, or replaces whichever one was there before: nothing
+// of the previous one is kept, its secret included.
+async function saveWithSecret(
+  propertyId: string,
+  kind: ProviderKind,
+  values: Pick<SaveProviderData, 'provider' | 'config'>,
+  secret: string | null
+) {
+  const row = {
+    ...values,
+    secret_encrypted: secret === null ? null : encryptSecret(secret),
+    updated_at: new Date()
+  };
+  await db
+    .insert(providerConfigs)
+    .values({ property_id: propertyId, kind, ...row })
+    .onConflictDoUpdate({
+      target: [providerConfigs.property_id, providerConfigs.kind],
+      set: row
+    });
+}
+
 async function saveProvider(req: SelectedPropertyRequest, res: Response) {
   try {
     const propertyId = requireSelectedProperty(req, res);
@@ -64,52 +110,24 @@ async function saveProvider(req: SelectedPropertyRequest, res: Response) {
 
     const kind = kindOf(req);
     // Body is validated + trimmed by validateBody(saveProviderSchemas[kind]).
-    const { provider, secret, config } = req.body as SaveProviderData;
-    const values = { provider, config, updated_at: new Date() };
-    const needsSecret = requiresSecret(provider, config);
+    const { secret, ...values } = req.body as SaveProviderData;
+    const needsSecret = requiresSecret(values.provider, values.config);
 
-    if (!secret) {
-      // An empty secret keeps the stored one, which belongs to this provider:
-      // so this only updates the provider that is already there, and only
-      // while it has the secret it needs.
-      const updated = await db
-        .update(providerConfigs)
-        .set(values)
-        .where(
-          and(
-            ofProperty(propertyId, kind),
-            eq(providerConfigs.provider, provider),
-            needsSecret
-              ? isNotNull(providerConfigs.secret_encrypted)
-              : undefined
-          )
-        )
-        .returning({ provider: providerConfigs.provider });
-
-      if (updated.length === 0 && needsSecret) {
+    // A new secret is stored. An empty one keeps the stored one; where there
+    // is none to keep, the provider is saved without, if it can do without.
+    if (secret) {
+      await saveWithSecret(propertyId, kind, values, secret);
+    } else if (
+      !(await saveKeepingSecret(propertyId, kind, values, needsSecret))
+    ) {
+      if (needsSecret) {
         return res.status(400).json({
           error: 'Validation failed',
           details: [{ field: 'secret', message: 'Secret is required' }]
         });
       }
-      if (updated.length > 0) {
-        return res.status(200).json(await findProvider(propertyId, kind));
-      }
+      await saveWithSecret(propertyId, kind, values, null);
     }
-
-    // Sets the provider up, or replaces whichever one was there before:
-    // nothing of the previous one is kept, its secret included.
-    const row = {
-      ...values,
-      secret_encrypted: secret ? encryptSecret(secret) : null
-    };
-    await db
-      .insert(providerConfigs)
-      .values({ property_id: propertyId, kind, ...row })
-      .onConflictDoUpdate({
-        target: [providerConfigs.property_id, providerConfigs.kind],
-        set: row
-      });
 
     res.status(200).json(await findProvider(propertyId, kind));
   } catch (error) {
