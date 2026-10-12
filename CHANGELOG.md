@@ -1,3 +1,21 @@
+# [1.27.0](https://github.com/riedel28/hotel-dashboard/compare/v1.26.0...v1.27.0) (2026-10-12)
+
+
+### Bug Fixes
+
+* **section-nav:** make the section error dot easier to see ([44a4ba9](https://github.com/riedel28/hotel-dashboard/commit/44a4ba9ad0d6b54c4ccc1df024b6aab2a2997018))
+
+
+### Features
+
+* **door-locks:** choose a door lock system, starting with SALTO ([dd47fde](https://github.com/riedel28/hotel-dashboard/commit/dd47fde5ad7194d4a0b20d36129a3b8beb5cbbc7))
+* **door-locks:** explain SALTO's two interfaces ([6d0adab](https://github.com/riedel28/hotel-dashboard/commit/6d0adab728ae8349ad2a31d4ff713d0ae762b9ef))
+* **nav:** call the payment page Payment Gateway ([bd75d61](https://github.com/riedel28/hotel-dashboard/commit/bd75d61271a33cc206526aa879acf0667aabafab))
+* **payment-provider:** choose and set up a provider per property ([427cf9b](https://github.com/riedel28/hotel-dashboard/commit/427cf9b27c6a97db1f75dc683e13083a5664f07d))
+* **pms-provider:** choose between Casablanca and Apaleo ([9d3b7eb](https://github.com/riedel28/hotel-dashboard/commit/9d3b7eb9cc3e24164d57eff6024bc5035239e3d9))
+* **pms-provider:** link Casablanca's site as its guide ([c250603](https://github.com/riedel28/hotel-dashboard/commit/c250603924a6620a6f43fff480739cc034429a99))
+* **providers:** let a provider do without a secret ([1c34bd8](https://github.com/riedel28/hotel-dashboard/commit/1c34bd833207af0278598d15f73befe13cf09419))
+
 # [1.26.0](https://github.com/riedel28/hotel-dashboard/compare/v1.25.0...v1.26.0) (2026-10-11)
 
 
