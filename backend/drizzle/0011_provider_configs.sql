@@ -12,8 +12,4 @@ CREATE TABLE "provider_configs" (
 );
 --> statement-breakpoint
 ALTER TABLE "provider_configs" ADD CONSTRAINT "provider_configs_property_id_properties_id_fk" FOREIGN KEY ("property_id") REFERENCES "public"."properties"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "provider_configs" ADD CONSTRAINT "provider_configs_updated_by_users_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
--- Carry over the payment providers set up so far; the old table goes in 0013.
-INSERT INTO "provider_configs" ("property_id", "kind", "provider", "config", "secret_encrypted", "created_at", "updated_at")
-SELECT "property_id", 'payment', "provider", "config", "api_key_encrypted", "created_at", "updated_at"
-FROM "payment_provider_configs";
+ALTER TABLE "provider_configs" ADD CONSTRAINT "provider_configs_updated_by_users_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;

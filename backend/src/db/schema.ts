@@ -405,7 +405,7 @@ export const providerConfigs = pgTable(
       .notNull()
       .references(() => properties.id, { onDelete: 'cascade' }),
     kind: text('kind').notNull().$type<ProviderKind>(),
-    provider: text('provider').notNull(),
+    provider: text('provider').notNull().$type<Provider['provider']>(),
     config: jsonb('config').notNull().$type<Provider['config']>(),
     secret_encrypted: text('secret_encrypted').notNull(),
     // Null once the user has been deleted.

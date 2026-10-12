@@ -1,5 +1,5 @@
 {
-  "id": "d06de3db-167e-4bae-b914-0d0447d16686",
+  "id": "180e8a3a-6076-4b62-a552-f00c6e177123",
   "prevId": "16d16675-8baa-4ca2-888c-c20743e19e13",
   "version": "7",
   "dialect": "postgresql",
@@ -764,72 +764,6 @@
       },
       "isRLSEnabled": false
     },
-    "public.payment_provider_configs": {
-      "name": "payment_provider_configs",
-      "schema": "",
-      "columns": {
-        "property_id": {
-          "name": "property_id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "provider": {
-          "name": "provider",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "config": {
-          "name": "config",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "api_key_encrypted": {
-          "name": "api_key_encrypted",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "payment_provider_configs_property_id_properties_id_fk": {
-          "name": "payment_provider_configs_property_id_properties_id_fk",
-          "tableFrom": "payment_provider_configs",
-          "tableTo": "properties",
-          "columnsFrom": ["property_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {
-        "payment_provider_configs_provider_check": {
-          "name": "payment_provider_configs_provider_check",
-          "value": "\"payment_provider_configs\".\"provider\" IN ('adyen', 'payone', 'concardis', 'six_saferpay', 'valitor')"
-        }
-      },
-      "isRLSEnabled": false
-    },
     "public.product_categories": {
       "name": "product_categories",
       "schema": "",
@@ -1300,6 +1234,98 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.provider_configs": {
+      "name": "provider_configs",
+      "schema": "",
+      "columns": {
+        "property_id": {
+          "name": "property_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "config": {
+          "name": "config",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secret_encrypted": {
+          "name": "secret_encrypted",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "provider_configs_property_id_properties_id_fk": {
+          "name": "provider_configs_property_id_properties_id_fk",
+          "tableFrom": "provider_configs",
+          "tableTo": "properties",
+          "columnsFrom": ["property_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "provider_configs_updated_by_users_id_fk": {
+          "name": "provider_configs_updated_by_users_id_fk",
+          "tableFrom": "provider_configs",
+          "tableTo": "users",
+          "columnsFrom": ["updated_by"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "provider_configs_property_id_kind_pk": {
+          "name": "provider_configs_property_id_kind_pk",
+          "columns": ["property_id", "kind"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "provider_configs_kind_check": {
+          "name": "provider_configs_kind_check",
+          "value": "\"provider_configs\".\"kind\" IN ('payment', 'pms', 'door_lock')"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.reservations": {

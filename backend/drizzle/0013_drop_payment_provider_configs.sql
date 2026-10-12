@@ -1,1 +1,0 @@
-DROP TABLE "payment_provider_configs" CASCADE;

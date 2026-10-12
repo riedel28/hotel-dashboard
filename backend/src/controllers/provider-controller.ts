@@ -1,9 +1,10 @@
 import { and, eq } from 'drizzle-orm';
 import type { Response } from 'express';
 
-import type {
-  ConfigurableKind,
-  SaveProviderData
+import {
+  type ConfigurableKind,
+  providerSchemas,
+  type SaveProviderData
 } from '../../../shared/types/providers';
 import { db } from '../db/pool';
 import { providerConfigs, users } from '../db/schema';
@@ -44,13 +45,15 @@ async function findProvider(propertyId: string, kind: ConfigurableKind) {
 
   if (!row) return null;
 
-  return {
+  // Checked on the way out too: `config` is free-form JSON to the database, and
+  // this is where a field added to a schema since gets its default.
+  return providerSchemas[kind].parse({
     provider: row.provider,
     secretConfigured: true,
     config: row.config,
     updated_at: row.updated_at.toISOString(),
     updated_by: row.updated_by
-  };
+  });
 }
 
 async function getProvider(req: SelectedPropertyRequest, res: Response) {
@@ -68,6 +71,9 @@ async function getProvider(req: SelectedPropertyRequest, res: Response) {
 
 async function saveProvider(req: SelectedPropertyRequest, res: Response) {
   try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
     const propertyId = requireSelectedProperty(req, res);
     if (!propertyId) return;
 
@@ -78,7 +84,7 @@ async function saveProvider(req: SelectedPropertyRequest, res: Response) {
       provider,
       config,
       updated_at: new Date(),
-      updated_by: Number(req.user?.id)
+      updated_by: Number(req.user.id)
     };
 
     if (secret) {
