@@ -1,17 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { ProviderScreens } from '@/components/provider-setup/provider-screens';
+import { ProviderPage } from '@/components/provider-setup/provider-page';
 import type { ProviderEntry } from '@/components/provider-setup/types';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator
-} from '@/components/ui/breadcrumb';
-import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { SaltoForm } from './door-locks/-components/salto-form';
 
@@ -41,52 +32,24 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { t } = useLingui();
-  useDocumentTitle(t`Door Locks`);
 
   return (
-    <div className="space-y-1">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink to="/">
-              <Trans>Home</Trans>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <Trans>Integrations</Trans>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>
-              <Trans>Door Locks</Trans>
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      <div className="mb-6 flex flex-col gap-1">
-        <h1 className="text-xl font-bold">
-          <Trans>Door Locks</Trans>
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          <Trans>
-            Manage this property's connection to its door lock system.
-          </Trans>
-        </p>
-      </div>
-
-      <ProviderScreens
-        kind="door_lock"
-        pickerTitle={<Trans>Choose a door lock system</Trans>}
-        pickerDescription={
-          <Trans>
-            Select the system this property's doors are locked with. You enter
-            its connection details in the next step.
-          </Trans>
-        }
-        providers={PROVIDERS}
-      />
-    </div>
+    <ProviderPage
+      kind="door_lock"
+      title={t`Door Locks`}
+      description={
+        <Trans>
+          Manage this property's connection to its door lock system.
+        </Trans>
+      }
+      pickerTitle={<Trans>Choose a door lock system</Trans>}
+      pickerDescription={
+        <Trans>
+          Select the system this property's doors are locked with. You enter its
+          connection details in the next step.
+        </Trans>
+      }
+      providers={PROVIDERS}
+    />
   );
 }

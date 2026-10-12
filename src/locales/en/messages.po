@@ -126,7 +126,7 @@ msgstr "{label} time"
 msgid "{name} assigned to room {label}"
 msgstr "{name} assigned to room {label}"
 
-#: src/components/provider-setup/use-provider-form.tsx:159
+#: src/components/provider-setup/use-provider-form.tsx:182
 msgid "{name} connected"
 msgstr "{name} connected"
 
@@ -170,7 +170,7 @@ msgstr "<0>{0}</0> will no longer belong to room <1>{1}</1>. You can assign it a
 #~ msgid "2FA is off"
 #~ msgstr "2FA is off"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:13
 msgid "401 Unauthorized — check username and password."
 msgstr "401 Unauthorized — check username and password."
 
@@ -190,7 +190,7 @@ msgstr "A customer with this email already exists"
 #~ msgid "A key is stored. Enter a new one only to replace it."
 #~ msgstr "A key is stored. Enter a new one only to replace it."
 
-#: src/components/provider-setup/use-provider-form.tsx:190
+#: src/components/provider-setup/use-provider-form.tsx:213
 msgid "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 msgstr "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 
@@ -348,7 +348,7 @@ msgstr "Address line 1"
 msgid "Address line 2"
 msgstr "Address line 2"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:40
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:36
 msgid "Address line is required"
 msgstr "Address line is required"
 
@@ -509,7 +509,7 @@ msgstr "Android App"
 msgid "API Key"
 msgstr "API Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:87
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:64
 msgid "API Key is required"
 msgstr "API Key is required"
 
@@ -613,7 +613,7 @@ msgstr "At least one symbol"
 msgid "Authenticate credentials"
 msgstr "Authenticate credentials"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:12
 msgid "Authentication"
 msgstr "Authentication"
 
@@ -659,7 +659,7 @@ msgstr "Available"
 #~ msgid "Avatar upload is not yet implemented"
 #~ msgstr "Avatar upload is not yet implemented"
 
-#: src/components/provider-setup/provider-form-card.tsx:122
+#: src/components/provider-setup/provider-form-card.tsx:121
 #: src/components/provider-setup/provider-picker.tsx:86
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:281
@@ -725,8 +725,8 @@ msgstr "Business"
 msgid "Can't scan the code? Enter the key manually"
 msgstr "Can't scan the code? Enter the key manually"
 
-#: src/components/provider-setup/provider-form-card.tsx:113
-#: src/components/provider-setup/use-provider-form.tsx:198
+#: src/components/provider-setup/provider-form-card.tsx:112
+#: src/components/provider-setup/use-provider-form.tsx:221
 #: src/components/sectioned-form.tsx:100
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:144
@@ -929,15 +929,15 @@ msgstr "Children"
 #~ msgid "Children count cannot be negative"
 #~ msgstr "Children count cannot be negative"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:45
 msgid "Choose a door lock system"
 msgstr "Choose a door lock system"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:77
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:39
 msgid "Choose a payment provider"
 msgstr "Choose a payment provider"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:57
 msgid "Choose a property management system"
 msgstr "Choose a property management system"
 
@@ -950,7 +950,7 @@ msgstr "Choose a property management system"
 msgid "City"
 msgstr "City"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:42
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:38
 msgid "City is required"
 msgstr "City is required"
 
@@ -984,7 +984,7 @@ msgstr "Client ID is required"
 msgid "Client Key"
 msgstr "Client Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:33
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:29
 msgid "Client Key is required"
 msgstr "Client Key is required"
 
@@ -1026,7 +1026,7 @@ msgstr "Completed At"
 #~ msgid "Config updated"
 #~ msgstr "Config updated"
 
-#: src/components/provider-setup/use-provider-form.tsx:159
+#: src/components/provider-setup/use-provider-form.tsx:182
 msgid "Configuration updated"
 msgstr "Configuration updated"
 
@@ -1056,7 +1056,7 @@ msgstr "Confirm your new password"
 msgid "Confirm your password"
 msgstr "Confirm your password"
 
-#: src/components/provider-setup/provider-form-card.tsx:132
+#: src/components/provider-setup/provider-form-card.tsx:131
 msgid "Connect provider"
 msgstr "Connect provider"
 
@@ -1077,7 +1077,7 @@ msgstr "Connection failed"
 msgid "Connection successful"
 msgstr "Connection successful"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:66
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:8
 msgid "Connection timed out after 5000 ms — host unreachable."
 msgstr "Connection timed out after 5000 ms — host unreachable."
 
@@ -1186,7 +1186,7 @@ msgstr "Country"
 #~ msgid "Country code"
 #~ msgstr "Country code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:43
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:39
 msgid "Country is required"
 msgstr "Country is required"
 
@@ -1423,7 +1423,7 @@ msgstr "Device not found"
 msgid "Devices"
 msgstr "Devices"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:57
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:30
 msgid "Digits only (max 12)"
 msgstr "Digits only (max 12)"
 
@@ -1458,9 +1458,7 @@ msgid "Done"
 msgstr "Done"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:104
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:44
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:62
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:39
 msgid "Door Locks"
 msgstr "Door Locks"
 
@@ -1625,7 +1623,7 @@ msgstr "Enter a domain without a path, e.g. app.example.com"
 #~ msgid "Enter a password. Must contain:"
 #~ msgstr "Enter a password. Must contain:"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:36
 msgid "Enter a valid port number"
 msgstr "Enter a valid port number"
 
@@ -1958,7 +1956,7 @@ msgstr "Failed to resend verification email"
 msgid "Failed to reset password. The link may have expired."
 msgstr "Failed to reset password. The link may have expired."
 
-#: src/components/provider-setup/use-provider-form.tsx:162
+#: src/components/provider-setup/use-provider-form.tsx:185
 msgid "Failed to save configuration"
 msgstr "Failed to save configuration"
 
@@ -2331,6 +2329,7 @@ msgstr "Hide other roles"
 msgid "Hide password"
 msgstr "Hide password"
 
+#: src/components/provider-setup/provider-page.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:57
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:62
@@ -2338,9 +2337,6 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/new.tsx:27
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:104
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:52
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:48
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:109
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:31
@@ -2354,11 +2350,11 @@ msgstr "Hide password"
 msgid "Home"
 msgstr "Home"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:159
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:99
 msgid "Host"
 msgstr "Host"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:35
 msgid "Host is required"
 msgstr "Host is required"
 
@@ -2432,10 +2428,8 @@ msgstr "Infants"
 msgid "Integration Guide"
 msgstr "Integration Guide"
 
+#: src/components/provider-setup/provider-page.tsx:48
 #: src/routes/_dashboard-layout/-components/nav-items.ts:55
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:57
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:53
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:69
 msgid "Integrations"
 msgstr "Integrations"
 
@@ -2682,15 +2676,15 @@ msgstr "Manage the hotel information your guests can browse, from A to Z."
 #~ msgid "Manage this property's connection to its Adyen payment account."
 #~ msgstr "Manage this property's connection to its Adyen payment account."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:73
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:41
 msgid "Manage this property's connection to its door lock system."
 msgstr "Manage this property's connection to its door lock system."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:37
 msgid "Manage this property's connection to its payment account."
 msgstr "Manage this property's connection to its payment account."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:53
 msgid "Manage this property's connection to its property management system."
 msgstr "Manage this property's connection to its property management system."
 
@@ -2739,7 +2733,7 @@ msgstr "Merchant account not found — check the Merchant ID."
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:32
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:28
 msgid "Merchant ID is required"
 msgstr "Merchant ID is required"
 
@@ -3047,7 +3041,7 @@ msgstr "No properties yet."
 #~ msgid "No response from Adyen."
 #~ msgstr "No response from Adyen."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:28
 msgid "No response from the PMS interface."
 msgstr "No response from the PMS interface."
 
@@ -3222,7 +3216,7 @@ msgstr "Page not found"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:221
 #: src/routes/_auth-layout/auth/login.tsx:213
 #: src/routes/_auth-layout/auth/sign-up.tsx:259
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:239
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:179
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:116
@@ -3245,7 +3239,7 @@ msgstr "Password"
 msgid "Password does not yet meet all requirements"
 msgstr "Password does not yet meet all requirements"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:120
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:59
 msgid "Password is required"
 msgstr "Password is required"
 
@@ -3290,9 +3284,7 @@ msgid "Payment"
 msgstr "Payment"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:110
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:40
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:58
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:66
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:35
 msgid "Payment Gateway"
 msgstr "Payment Gateway"
 
@@ -3430,17 +3422,15 @@ msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:98
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:56
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:74
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:51
 msgid "PMS"
 msgstr "PMS"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:85
 msgid "PMS interface"
 msgstr "PMS interface"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:27
 msgid "PMS interface handshake"
 msgstr "PMS interface handshake"
 
@@ -3452,13 +3442,13 @@ msgstr "PMS interface handshake"
 #~ msgid "PMS-Schnittstelle"
 #~ msgstr "PMS-Schnittstelle"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:166
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:106
 msgid "Port"
 msgstr "Port"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:50
-msgid "Port is required"
-msgstr "Port is required"
+#~ msgid "Port is required"
+#~ msgstr "Port is required"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:57
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:87
@@ -3846,11 +3836,11 @@ msgstr "Rename category"
 #~ msgid "Replace"
 #~ msgstr "Replace"
 
-#: src/components/provider-setup/use-provider-form.tsx:185
+#: src/components/provider-setup/use-provider-form.tsx:208
 msgid "Replace {replaces} with {name}?"
 msgstr "Replace {replaces} with {name}?"
 
-#: src/components/provider-setup/use-provider-form.tsx:206
+#: src/components/provider-setup/use-provider-form.tsx:229
 msgid "Replace provider"
 msgstr "Replace provider"
 
@@ -4108,7 +4098,7 @@ msgstr "Running tests… ({passedCount}/{0})"
 msgid "Save"
 msgstr "Save"
 
-#: src/components/provider-setup/provider-form-card.tsx:130
+#: src/components/provider-setup/provider-form-card.tsx:129
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:39
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:64
@@ -4144,7 +4134,7 @@ msgstr "Save your recovery codes. You'll need them if you lose your phone, and e
 #~ msgid "Saving changes"
 #~ msgstr "Saving changes"
 
-#: src/components/provider-setup/provider-form-card.tsx:99
+#: src/components/provider-setup/provider-form-card.tsx:98
 #: src/components/sectioned-form.tsx:86
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:60
 msgid "Saving changes…"
@@ -4324,15 +4314,15 @@ msgstr "Select stage"
 msgid "Select status"
 msgstr "Select status"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:41
 msgid "Select the provider this property takes payments with. You enter its credentials in the next step."
 msgstr "Select the provider this property takes payments with. You enter its credentials in the next step."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:59
 msgid "Select the system this property is run with. You enter its credentials in the next step."
 msgstr "Select the system this property is run with. You enter its credentials in the next step."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:83
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:47
 msgid "Select the system this property's doors are locked with. You enter its connection details in the next step."
 msgstr "Select the system this property's doors are locked with. You enter its connection details in the next step."
 
@@ -4413,15 +4403,15 @@ msgstr "Setup key copied"
 #~ msgid "Share this URL with guests for direct check-in access"
 #~ msgstr "Share this URL with guests for direct check-in access"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:17
 msgid "SHIP handshake"
 msgstr "SHIP handshake"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:18
 msgid "SHIP handshake rejected: unsupported protocol version."
 msgstr "SHIP handshake rejected: unsupported protocol version."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:148
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:88
 msgid "SHIP interface"
 msgstr "SHIP interface"
 
@@ -4429,15 +4419,15 @@ msgstr "SHIP interface"
 #~ msgid "SHIP-Schnittstelle"
 #~ msgstr "SHIP-Schnittstelle"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:180
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:120
 msgid "SHIP-Type"
 msgstr "SHIP-Type"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:228
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:168
 msgid "SHIP-URL"
 msgstr "SHIP-URL"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:37
 msgid "SHIP-URL is required"
 msgstr "SHIP-URL is required"
 
@@ -4618,7 +4608,7 @@ msgstr "Step {0} of {1}"
 msgid "Stop test"
 msgstr "Stop test"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:146
 msgid "STP is deprecated"
 msgstr "STP is deprecated"
 
@@ -4695,7 +4685,7 @@ msgstr "Switched to {0}"
 msgid "System"
 msgstr "System"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:65
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:7
 msgid "TCP connection"
 msgstr "TCP connection"
 
@@ -4893,7 +4883,7 @@ msgstr "This address isn't verified yet. Check your inbox for the confirmation l
 #~ msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
 #~ msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:209
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:149
 msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 
@@ -4964,11 +4954,11 @@ msgstr "Title"
 msgid "Title is required"
 msgstr "Title is required"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:36
 msgid "TLS certificate"
 msgstr "TLS certificate"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-test-steps.ts:37
 msgid "TLS handshake failed: certificate is self-signed or expired."
 msgstr "TLS handshake failed: certificate is self-signed or expired."
 
@@ -5301,11 +5291,11 @@ msgstr "User updated successfully"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:234
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:174
 msgid "Username"
 msgstr "Username"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:38
 msgid "Username is required"
 msgstr "Username is required"
 
@@ -5586,7 +5576,7 @@ msgstr "ZIP"
 #~ msgid "ZIP / Postal code"
 #~ msgstr "ZIP / Postal code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:41
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:37
 msgid "ZIP / Postal code is required"
 msgstr "ZIP / Postal code is required"
 
