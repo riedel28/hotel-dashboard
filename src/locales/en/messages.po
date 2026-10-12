@@ -3289,6 +3289,13 @@ msgstr "Passwords don't match"
 msgid "Payment"
 msgstr "Payment"
 
+#: src/routes/_dashboard-layout/-components/nav-items.ts:110
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:40
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:66
+msgid "Payment Gateway"
+msgstr "Payment Gateway"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:51
 msgid "Payment method"
 msgstr "Payment method"
@@ -3297,16 +3304,18 @@ msgstr "Payment method"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:40
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:66
-msgid "Payment Provider"
-msgstr "Payment Provider"
+#~ msgid "Payment Provider"
+#~ msgstr "Payment Provider"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-toc.tsx:27
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:23
 msgid "Payment recipient"
 msgstr "Payment recipient"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:219
-#: src/routes/_dashboard-layout/index.tsx:37
+#: src/routes/_dashboard-layout/-components/nav-items.ts:110
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:40
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:66
 #~ msgid "Payments"
 #~ msgstr "Payments"
 

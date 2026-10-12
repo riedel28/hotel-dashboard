@@ -37,7 +37,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { t } = useLingui();
-  useDocumentTitle(t`Payment Provider`);
+  useDocumentTitle(t`Payment Gateway`);
 
   return (
     <div className="space-y-1">
@@ -55,7 +55,7 @@ function RouteComponent() {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>
-              <Trans>Payment Provider</Trans>
+              <Trans>Payment Gateway</Trans>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -63,7 +63,7 @@ function RouteComponent() {
 
       <div className="mb-6 flex max-w-2xl flex-col gap-1">
         <h1 className="text-xl font-semibold text-balance">
-          <Trans>Payment Provider</Trans>
+          <Trans>Payment Gateway</Trans>
         </h1>
         <p className="text-sm text-pretty text-muted-foreground">
           <Trans>

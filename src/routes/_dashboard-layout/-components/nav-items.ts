@@ -107,7 +107,7 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     group: 'integrations',
     to: '/payment-provider',
     icon: CreditCardIcon,
-    label: msg`Payment Provider`
+    label: msg`Payment Gateway`
   },
   devices: {
     group: 'setup',
