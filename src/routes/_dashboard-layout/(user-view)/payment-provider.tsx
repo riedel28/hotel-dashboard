@@ -1,9 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import type { PaymentProviderId } from 'shared/types/providers';
 
-import type { ProviderOption } from '@/components/provider-setup/provider-picker';
 import { ProviderScreens } from '@/components/provider-setup/provider-screens';
+import type { ProviderEntry } from '@/components/provider-setup/types';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,20 +13,20 @@ import {
 } from '@/components/ui/breadcrumb';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
-import { AdyenSettingsForm } from './payment-provider/-components/adyen-form/adyen-settings-form';
-import { AdyenSetupCard } from './payment-provider/-components/adyen-form/adyen-setup-card';
+import { AdyenForm } from './payment-provider/-components/adyen-form/adyen-form';
 
-const PROVIDERS: ProviderOption<PaymentProviderId>[] = [
-  { id: 'adyen', name: 'Adyen', logo: '/adyen-logo.svg', available: true },
-  { id: 'payone', name: 'PAYONE', logo: '/payone-logo.svg' },
+const PROVIDERS: ProviderEntry<'payment'>[] = [
   {
-    id: 'concardis',
-    name: 'Concardis',
-    logo: '/concardis-logo.svg',
-    ink: 'dark'
+    id: 'adyen',
+    name: 'Adyen',
+    logo: { src: '/adyen-logo.svg' },
+    guideUrl: 'https://docs.adyen.com/development-resources/api-credentials/',
+    Form: AdyenForm
   },
-  { id: 'six_saferpay', name: 'SIX Saferpay', logo: '/six-logo.svg' },
-  { id: 'valitor', name: 'Valitor', logo: '/valitor-logo.png', ink: 'dark' }
+  { id: 'payone', name: 'PAYONE', logo: { src: '/payone-logo.svg' } },
+  { id: 'concardis', name: 'Concardis', logo: { src: '/concardis-logo.svg' } },
+  { id: 'six_saferpay', name: 'SIX Saferpay', logo: { src: '/six-logo.svg' } },
+  { id: 'valitor', name: 'Valitor', logo: { src: '/valitor-logo.png' } }
 ];
 
 export const Route = createFileRoute(
@@ -82,18 +81,7 @@ function RouteComponent() {
             credentials in the next step.
           </Trans>
         }
-        options={PROVIDERS}
-        // Adyen is the only one the picker lets through
-        renderForm={({ saved, replaces, onChooseProvider }) =>
-          saved?.provider === 'adyen' ? (
-            <AdyenSettingsForm
-              saved={saved}
-              onChangeProvider={onChooseProvider}
-            />
-          ) : (
-            <AdyenSetupCard replaces={replaces} onBack={onChooseProvider} />
-          )
-        }
+        providers={PROVIDERS}
       />
     </div>
   );

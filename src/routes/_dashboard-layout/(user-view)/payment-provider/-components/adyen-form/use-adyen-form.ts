@@ -27,23 +27,16 @@ const EMPTY_VALUES: AdyenFormData = {
   mappings: EMPTY_ADYEN_MAPPINGS
 };
 
-type Required = Partial<Record<keyof AdyenFormData, MessageDescriptor>>;
-
-const CREDENTIALS = {
+// The API key is not among these: it is required only until one is stored.
+export const ADYEN_CREDENTIALS_REQUIRED = {
   merchantId: msg`Merchant ID is required`,
   clientKey: msg`Client Key is required`
-} satisfies Required;
-
-// Setting Adyen up takes the credentials alone: the recipient and mapping
-// codes follow once it is connected.
-export const ADYEN_SETUP_REQUIRED: Required = {
-  ...CREDENTIALS,
-  secret: msg`API Key is required`
 };
 
-// The API key is not among them: an empty one keeps the key already stored.
-export const ADYEN_SETTINGS_REQUIRED: Required = {
-  ...CREDENTIALS,
+// Connecting Adyen takes the credentials alone; its settings also need the
+// recipient the receipts are issued by.
+export const ADYEN_SETTINGS_REQUIRED = {
+  ...ADYEN_CREDENTIALS_REQUIRED,
   addressLine1: msg`Address line is required`,
   zip: msg`ZIP / Postal code is required`,
   city: msg`City is required`,
@@ -71,15 +64,14 @@ function refineMappingCodes(
 interface UseAdyenFormOptions {
   /** The stored configuration the form starts from and resets to. */
   saved: PaymentProvider | null;
-  required: Required;
+  required: Partial<
+    Record<Exclude<keyof AdyenFormData, 'secret'>, MessageDescriptor>
+  >;
   /** The name of the provider that connecting Adyen would replace. */
   replaces?: string | null;
 }
 
-/**
- * The Adyen form behind both of its screens: the credentials-only setup and
- * the full settings. They differ in which fields must be filled in.
- */
+/** The Adyen form behind both of its screens: setup and settings. */
 export function useAdyenForm({
   saved,
   required,
@@ -89,9 +81,10 @@ export function useAdyenForm({
     kind: 'payment',
     provider: 'adyen',
     name: 'Adyen',
-    config: saved?.config,
+    saved,
     emptyValues: EMPTY_VALUES,
     required,
+    secretRequired: msg`API Key is required`,
     refine: refineMappingCodes,
     replaces
   });

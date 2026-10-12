@@ -1,108 +1,69 @@
 import { Trans } from '@lingui/react/macro';
-import { ArrowUpRightIcon, Loader2Icon } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 import type { FieldValues, UseFormReturn } from 'react-hook-form';
-import type { Provider } from 'shared/types/providers';
+import type { ConfigurableKind, Provider } from 'shared/types/providers';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { FieldGroup } from '@/components/ui/field';
+import { cn } from '@/lib/utils';
 
 import { LastUpdated } from './last-updated';
+import { ProviderCardHeader } from './provider-card-header';
 import { TestConnection } from './test-connection';
 import type { TestConnectionStep } from './test-connection-dialog';
+import type { ProviderEntry } from './types';
 
 interface ProviderFormCardProps<V extends FieldValues> {
   form: UseFormReturn<V>;
   onSubmit: (data: V) => void | Promise<void>;
   isSaving: boolean;
-  /** The provider's name. */
-  name: string;
-  logo: React.ReactNode;
-  /** The provider's documentation, linked from the header when there is some. */
-  guideUrl?: string;
+  entry: ProviderEntry<ConfigurableKind>;
   /** The provider as stored, or null while it is being set up. */
   saved: Pick<Provider, 'updated_at' | 'updated_by'> | null;
   /** Opens the picker: "Back" during setup, "Change provider" after. */
   onChooseProvider: () => void;
-  testSteps: TestConnectionStep[];
+  /** Shown after the name in the header. */
+  badges?: React.ReactNode;
+  /** Adds a "Test connection" button under the fields. */
+  testSteps?: TestConnectionStep[];
   /** The form's fields. */
   children: React.ReactNode;
   /** Dialogs the form opens, e.g. the one confirming a replacement. */
   dialogs?: React.ReactNode;
+  className?: string;
 }
 
 /**
- * A provider's whole form in one compact card, for the ones with a handful of
- * fields: the same card sets the provider up and edits it afterwards.
+ * A provider's form in one card: the same card sets the provider up ("Back",
+ * "Connect provider") and edits it afterwards ("Cancel", "Save changes").
  */
 export function ProviderFormCard<V extends FieldValues>({
   form,
   onSubmit,
   isSaving,
-  name,
-  logo,
-  guideUrl,
+  entry,
   saved,
   onChooseProvider,
+  badges,
   testSteps,
   children,
-  dialogs
+  dialogs,
+  className
 }: ProviderFormCardProps<V>) {
   const formId = React.useId();
   const { isDirty } = form.formState;
 
   return (
-    <Card className="w-full max-w-lg">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-wrap items-center-safe gap-2">
-            <CardTitle>{name}</CardTitle>
-
-            {guideUrl && (
-              <Badge
-                variant="outline"
-                size="sm"
-                className="cursor-pointer bg-accent text-accent-foreground"
-                render={
-                  <a
-                    href={guideUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  />
-                }
-              >
-                <Trans>Integration Guide</Trans>
-                <ArrowUpRightIcon aria-hidden="true" />
-              </Badge>
-            )}
-
-            {saved && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="xs"
-                className="text-muted-foreground"
-                onClick={onChooseProvider}
-                // Leaving for the picker would drop unsaved changes
-                disabled={isDirty || isSaving}
-              >
-                <Trans>Change provider</Trans>
-              </Button>
-            )}
-          </div>
-          <div className="flex h-8 w-24 shrink-0 items-center justify-end">
-            {logo}
-          </div>
-        </div>
-      </CardHeader>
+    <Card className={cn('w-full max-w-lg', className)}>
+      <ProviderCardHeader
+        entry={entry}
+        badges={badges}
+        onChangeProvider={saved ? onChooseProvider : undefined}
+        // Leaving for the picker would drop unsaved changes
+        changeDisabled={isDirty || isSaving}
+      />
 
       <CardContent>
         <form
@@ -115,12 +76,14 @@ export function ProviderFormCard<V extends FieldValues>({
             <FieldGroup>
               {children}
 
-              <TestConnection
-                provider={name}
-                steps={testSteps}
-                validate={() => form.trigger()}
-                disabled={isSaving}
-              />
+              {testSteps && (
+                <TestConnection
+                  provider={entry.name}
+                  steps={testSteps}
+                  validate={() => form.trigger()}
+                  disabled={isSaving}
+                />
+              )}
             </FieldGroup>
           </fieldset>
         </form>

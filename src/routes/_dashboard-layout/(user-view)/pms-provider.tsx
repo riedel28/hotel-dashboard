@@ -1,9 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import type { PmsProviderId } from 'shared/types/providers';
 
-import type { ProviderOption } from '@/components/provider-setup/provider-picker';
 import { ProviderScreens } from '@/components/provider-setup/provider-screens';
+import type { ProviderEntry } from '@/components/provider-setup/types';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,25 +16,31 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { ApaleoForm } from './pms-provider/-components/apaleo-form';
 import { CasablancaForm } from './pms-provider/-components/casablanca-form';
 
-const PROVIDERS: ProviderOption<PmsProviderId>[] = [
+const PROVIDERS: ProviderEntry<'pms'>[] = [
   {
     id: 'casablanca',
     name: 'Casablanca',
-    logo: '/casablanca-logo.png',
-    darkLogo: '/casablanca-logo-inverse.png',
-    available: true
+    logo: {
+      src: '/casablanca-logo.png',
+      darkSrc: '/casablanca-logo-inverse.png'
+    },
+    Form: CasablancaForm
   },
   {
     id: 'apaleo',
     name: 'Apaleo',
-    logo: '/apaleo-logo.png',
-    ink: 'light',
-    available: true
+    logo: { src: '/apaleo-logo.png', lightInk: true },
+    guideUrl: 'https://apaleo.dev',
+    Form: ApaleoForm
   },
   // protel has no logo of its own any more: it is sold under Planet's
   { id: 'protel', name: 'protel' },
-  { id: 'sihot', name: 'SIHOT', logo: '/sihot-logo.svg' },
-  { id: 'oracle_opera', name: 'Oracle OPERA', logo: '/oracle-logo.svg' }
+  { id: 'sihot', name: 'SIHOT', logo: { src: '/sihot-logo.svg' } },
+  {
+    id: 'oracle_opera',
+    name: 'Oracle OPERA',
+    logo: { src: '/oracle-logo.svg' }
+  }
 ];
 
 export const Route = createFileRoute(
@@ -90,20 +95,7 @@ function RouteComponent() {
             credentials in the next step.
           </Trans>
         }
-        options={PROVIDERS}
-        renderForm={({ provider, saved, ...rest }) =>
-          provider === 'apaleo' ? (
-            <ApaleoForm
-              saved={saved?.provider === 'apaleo' ? saved : null}
-              {...rest}
-            />
-          ) : (
-            <CasablancaForm
-              saved={saved?.provider === 'casablanca' ? saved : null}
-              {...rest}
-            />
-          )
-        }
+        providers={PROVIDERS}
       />
     </div>
   );

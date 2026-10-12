@@ -7,40 +7,23 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProvider } from '@/hooks/use-provider';
 
-import { type ProviderOption, ProviderPicker } from './provider-picker';
+import { ProviderPicker } from './provider-picker';
+import type { ProviderEntry } from './types';
 
-/** What the open provider's form is given. */
-export interface ProviderFormProps<
-  K extends ConfigurableKind,
-  Id extends string
-> {
-  /** The provider whose form this is. */
-  provider: Id;
-  /** The property's stored provider of this kind, whichever one it is. */
-  saved: Provider<K> | null;
-  /**
-   * The name of the provider that setting this one up would replace: set while
-   * another one is stored.
-   */
-  replaces: string | null;
-  /** Opens the picker: "Back" during setup, "Change provider" after. */
-  onChooseProvider: () => void;
-}
-
-interface ProviderScreensProps<K extends ConfigurableKind, Id extends string> {
+interface ProviderScreensProps<K extends ConfigurableKind> {
   kind: K;
   pickerTitle: React.ReactNode;
   pickerDescription: React.ReactNode;
-  options: ProviderOption<Id>[];
-  renderForm: (props: ProviderFormProps<K, Id>) => React.ReactNode;
+  /** Every provider of this kind, in the order the picker shows them. */
+  providers: ProviderEntry<K>[];
 }
 
 /**
  * The screens of a provider page: the picker for a property that has no
  * provider of this kind, otherwise the form of the one it has.
  */
-export function ProviderScreens<K extends ConfigurableKind, Id extends string>(
-  props: ProviderScreensProps<K, Id>
+export function ProviderScreens<K extends ConfigurableKind>(
+  props: ProviderScreensProps<K>
 ) {
   const { user } = useAuth();
   const { data, isPending, isError, refetch } = useProvider(props.kind);
@@ -66,35 +49,42 @@ export function ProviderScreens<K extends ConfigurableKind, Id extends string>(
   return <Screens key={user?.selected_property_id} saved={data} {...props} />;
 }
 
-function Screens<K extends ConfigurableKind, Id extends string>({
+function Screens<K extends ConfigurableKind>({
   saved,
   pickerTitle,
   pickerDescription,
-  options,
-  renderForm
-}: ProviderScreensProps<K, Id> & { saved: Provider<K> | null }) {
-  const stored = options.find((option) => option.id === saved?.provider);
+  providers
+}: ProviderScreensProps<K> & { saved: Provider<K> | null }) {
+  const stored = providers.find((provider) => provider.id === saved?.provider);
   // The provider whose form is open, or null for the picker. A property
   // without a provider starts on the picker, one with a provider on its form.
-  const [open, setOpen] = React.useState<Id | null>(stored?.id ?? null);
+  const [open, setOpen] = React.useState(stored?.Form ? stored : null);
 
-  if (open === null) {
+  if (!open?.Form) {
     return (
       <ProviderPicker
         title={pickerTitle}
         description={pickerDescription}
-        options={options}
-        current={stored?.id}
+        providers={providers}
+        current={saved?.provider}
         onSelect={setOpen}
-        onBack={stored ? () => setOpen(stored.id) : undefined}
+        onBack={stored?.Form ? () => setOpen(stored) : undefined}
       />
     );
   }
 
-  return renderForm({
-    provider: open,
-    saved,
-    replaces: stored && stored.id !== open ? stored.name : null,
-    onChooseProvider: () => setOpen(null)
-  });
+  const isStored = saved?.provider === open.id;
+
+  return (
+    <open.Form
+      // A form per provider: its state does not carry over to another one's
+      key={open.id}
+      entry={open}
+      saved={isStored ? saved : null}
+      // Whatever is stored goes when another provider is set up, even one this
+      // page no longer lists: then it is named by its id
+      replaces={saved && !isStored ? (stored?.name ?? saved.provider) : null}
+      onChooseProvider={() => setOpen(null)}
+    />
+  );
 }

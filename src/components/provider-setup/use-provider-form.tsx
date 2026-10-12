@@ -5,6 +5,7 @@ import * as React from 'react';
 import { type DefaultValues, useForm } from 'react-hook-form';
 import type {
   ConfigurableKind,
+  Provider,
   SaveProviderInput
 } from 'shared/types/providers';
 import { toast } from 'sonner';
@@ -22,31 +23,49 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useSaveProvider } from '@/hooks/use-provider';
 
-/** A provider's configuration plus its secret, as its form edits them. */
-type ProviderFormValues = { secret: string } & Record<string, unknown>;
+/** The stored form of one provider of a kind. */
+type StoredProvider<K extends ConfigurableKind, P> = Extract<
+  Provider<K>,
+  { provider: P }
+>;
+
+/** What that provider's form edits: its configuration and its secret. */
+export type ProviderFormValues<
+  K extends ConfigurableKind,
+  P extends Provider<K>['provider']
+> =
+  StoredProvider<K, P> extends { config: infer Config }
+    ? Config & { secret: string }
+    : never;
+
+type Refine<V> = (
+  data: V,
+  ctx: z.RefinementCtx,
+  t: (message: MessageDescriptor) => string
+) => void;
 
 interface UseProviderFormOptions<
   K extends ConfigurableKind,
-  V extends ProviderFormValues
+  P extends Provider<K>['provider']
 > {
   kind: K;
-  provider: SaveProviderInput<K>['provider'];
+  provider: P;
   /** The provider's name, for the messages. */
   name: string;
-  /** The stored configuration the form starts from and resets to, if any. */
-  config: Partial<V> | undefined;
-  emptyValues: V;
+  /** The property's stored provider of this kind, if it is this one. */
+  saved: Provider<K> | null;
+  emptyValues: ProviderFormValues<K, P>;
   /**
    * The fields that must be filled in, with what the form says when one is
    * empty. Keep the object's identity stable: the validation is built from it.
    */
-  required: Partial<Record<keyof V, MessageDescriptor>>;
+  required: Partial<
+    Record<Exclude<keyof ProviderFormValues<K, P>, 'secret'>, MessageDescriptor>
+  >;
+  /** What the form says when the secret is missing while none is stored. */
+  secretRequired: MessageDescriptor;
   /** Anything else to check. Keep its identity stable too. */
-  refine?: (
-    data: V,
-    ctx: z.RefinementCtx,
-    t: (message: MessageDescriptor) => string
-  ) => void;
+  refine?: Refine<ProviderFormValues<K, P>>;
   /** The name of the provider a save would replace: asked about first. */
   replaces?: string | null;
 }
@@ -57,29 +76,44 @@ interface UseProviderFormOptions<
  */
 export function useProviderForm<
   K extends ConfigurableKind,
-  V extends ProviderFormValues
+  P extends Provider<K>['provider']
 >({
   kind,
   provider,
   name,
-  config,
+  saved,
   emptyValues,
   required,
+  secretRequired,
   refine,
   replaces = null
-}: UseProviderFormOptions<K, V>) {
+}: UseProviderFormOptions<K, P>) {
+  type Values = ProviderFormValues<K, P>;
+
   const { t } = useLingui();
   const save = useSaveProvider(kind);
   // The values of a save waiting for the replacement to be confirmed
-  const [pending, setPending] = React.useState<V | null>(null);
+  const [pending, setPending] = React.useState<Values | null>(null);
+
+  // Told apart by `provider`, which the compiler cannot follow through the
+  // type parameter: this check is what makes the configuration this form's.
+  const stored =
+    saved?.provider === provider ? (saved as StoredProvider<K, P>) : null;
+  const isStored = stored !== null;
 
   // The server owns the shape of a configuration (shared/types/providers.ts);
   // this only adds what a form has to say before the request is sent.
   const schema = React.useMemo(
     () =>
-      z.custom<V>().superRefine((data, ctx) => {
-        for (const [field, message] of Object.entries(required)) {
-          if (message && !String(data[field] ?? '').trim()) {
+      z.custom<Values>().superRefine((data, ctx) => {
+        const messages: Record<string, MessageDescriptor | undefined> = {
+          ...required,
+          // A stored secret is kept by leaving the field empty
+          secret: isStored ? undefined : secretRequired
+        };
+        const entered: Record<string, unknown> = data;
+        for (const [field, message] of Object.entries(messages)) {
+          if (message && !String(entered[field] ?? '').trim()) {
             ctx.addIssue({
               code: 'custom',
               path: [field],
@@ -89,32 +123,32 @@ export function useProviderForm<
         }
         refine?.(data, ctx, t);
       }),
-    [required, refine, t]
+    [required, secretRequired, isStored, refine, t]
   );
 
   // Follows the stored configuration: saving it resets the form to it, which
   // also empties the secret's field again.
-  const values = React.useMemo<V>(
-    () => ({ ...emptyValues, ...config }),
-    [emptyValues, config]
+  const values = React.useMemo(
+    (): Values => ({ ...emptyValues, ...stored?.config }),
+    [emptyValues, stored]
   );
 
-  const form = useForm<V>({
+  const form = useForm<Values>({
     resolver: zodResolver(schema),
-    defaultValues: emptyValues as DefaultValues<V>,
+    defaultValues: emptyValues as DefaultValues<Values>,
     values
   });
 
-  const send = async ({ secret, ...rest }: V) => {
+  const send = async ({ secret, ...config }: Values) => {
     try {
-      // The provider's own form produced these values: what pairs a provider
-      // with its configuration is that form, not this hook.
+      // `emptyValues` ties the values to this provider's configuration; the
+      // compiler cannot carry that through the type parameters to the union.
       await save.mutateAsync({
         provider,
         secret,
-        config: rest
+        config
       } as SaveProviderInput<K>);
-      toast.success(config ? t`Configuration updated` : t`${name} connected`);
+      toast.success(isStored ? t`Configuration updated` : t`${name} connected`);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : t`Failed to save configuration`
@@ -122,7 +156,7 @@ export function useProviderForm<
     }
   };
 
-  const onSubmit = (data: V) => {
+  const onSubmit = (data: Values) => {
     if (replaces) {
       setPending(data);
       return;
@@ -130,7 +164,7 @@ export function useProviderForm<
     return send(data);
   };
 
-  const replaceDialog = (
+  const dialogs = (
     <AlertDialog
       open={pending !== null}
       onOpenChange={(open) => {
@@ -168,5 +202,6 @@ export function useProviderForm<
     </AlertDialog>
   );
 
-  return { form, onSubmit, isSaving: save.isPending, replaceDialog };
+  // Shaped to be spread into ProviderFormCard
+  return { form, onSubmit, isSaving: save.isPending, saved: stored, dialogs };
 }

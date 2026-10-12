@@ -3,24 +3,6 @@ import { z } from 'zod';
 // What a property can be connected to. Each kind has one provider at a time.
 export const PROVIDER_KINDS = ['payment', 'pms', 'door_lock'] as const;
 
-// Every provider the pickers offer. Only the ones with a member in the unions
-// below can be configured yet; the rest are shown as coming soon.
-export const PAYMENT_PROVIDER_IDS = [
-  'adyen',
-  'payone',
-  'concardis',
-  'six_saferpay',
-  'valitor'
-] as const;
-
-export const PMS_PROVIDER_IDS = [
-  'casablanca',
-  'apaleo',
-  'protel',
-  'sihot',
-  'oracle_opera'
-] as const;
-
 // The payment methods an Adyen mapping code can be set for.
 export const ADYEN_METHOD_IDS = [
   'mastercard',
@@ -140,8 +122,6 @@ export const providerSchemas = {
 
 export type ProviderKind = (typeof PROVIDER_KINDS)[number];
 export type ConfigurableKind = keyof typeof providerSchemas;
-export type PaymentProviderId = (typeof PAYMENT_PROVIDER_IDS)[number];
-export type PmsProviderId = (typeof PMS_PROVIDER_IDS)[number];
 export type AdyenMethodId = (typeof ADYEN_METHOD_IDS)[number];
 export type AdyenConfig = z.infer<typeof adyenConfigSchema>;
 export type CasablancaConfig = z.infer<typeof casablancaConfigSchema>;

@@ -161,17 +161,12 @@ export function AdyenCredentialsSection({
           )}
         />
 
-        <Controller
-          control={control}
-          name="secret"
-          render={(props) => (
-            <SecretField
-              {...props}
-              label={<Trans>API Key</Trans>}
-              configured={apiKeyConfigured}
-              placeholder={t`Enter your API Key`}
-            />
-          )}
+        <SecretField
+          label={<Trans>API Key</Trans>}
+          error={form.formState.errors.secret}
+          stored={apiKeyConfigured}
+          placeholder={t`Enter your API Key`}
+          {...form.register('secret')}
         />
 
         <Controller

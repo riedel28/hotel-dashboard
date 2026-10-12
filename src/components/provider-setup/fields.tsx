@@ -1,8 +1,12 @@
 import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
-import type {
-  ControllerFieldState,
-  ControllerRenderProps
+import {
+  type Control,
+  type FieldPathByValue,
+  type FieldValues,
+  type FieldError as FormFieldError,
+  useController,
+  type UseFormRegisterReturn
 } from 'react-hook-form';
 
 import {
@@ -16,54 +20,53 @@ import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Switch } from '@/components/ui/switch';
 
-// The fields a provider form is made of. Each is drawn from what a
-// react-hook-form `Controller` hands its `render`, so it can be spread in:
-//   render={(props) => <TextField {...props} label={...} />}
+// The fields a provider form is made of. A text field takes what the form's
+// `register` returns, so it is one element in the form:
+//   <TextField label={...} error={errors.hotelId} {...form.register('hotelId')} />
 
-interface FieldProps<Value> {
-  field: Omit<ControllerRenderProps, 'value'> & { value: Value };
-  fieldState: ControllerFieldState;
+interface InputFieldProps extends UseFormRegisterReturn {
   label: ReactNode;
   description?: ReactNode;
+  error?: FormFieldError;
+  placeholder?: string;
 }
 
-function Error({
-  field,
-  fieldState
-}: Pick<FieldProps<unknown>, 'field' | 'fieldState'>) {
-  return fieldState.invalid ? (
-    <FieldError id={`${field.name}-error`} errors={[fieldState.error]} />
-  ) : null;
-}
-
-const invalidProps = ({
-  field,
-  fieldState
-}: Pick<FieldProps<unknown>, 'field' | 'fieldState'>) => ({
-  'aria-invalid': fieldState.invalid,
-  'aria-describedby': fieldState.invalid ? `${field.name}-error` : undefined
+/** What marks an input as invalid and ties it to its message. */
+const invalidProps = (name: string, error?: FormFieldError) => ({
+  'aria-invalid': error !== undefined,
+  'aria-describedby': error ? `${name}-error` : undefined
 });
 
+function ErrorMessage({
+  name,
+  error
+}: {
+  name: string;
+  error?: FormFieldError;
+}) {
+  return error ? <FieldError id={`${name}-error`} errors={[error]} /> : null;
+}
+
 export function TextField({
-  placeholder,
-  ...props
-}: FieldProps<string> & { placeholder?: string }) {
-  const { field, fieldState, label, description } = props;
+  label,
+  description,
+  error,
+  ...input
+}: InputFieldProps) {
   return (
-    <Field data-invalid={fieldState.invalid}>
-      <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+    <Field data-invalid={error !== undefined}>
+      <FieldLabel htmlFor={input.name}>{label}</FieldLabel>
       <Input
-        id={field.name}
-        {...field}
-        {...invalidProps(props)}
-        placeholder={placeholder}
+        id={input.name}
+        {...input}
+        {...invalidProps(input.name, error)}
         autoComplete="off"
         spellCheck={false}
       />
       {description && (
         <FieldDescription className="text-xs">{description}</FieldDescription>
       )}
-      <Error {...props} />
+      <ErrorMessage name={input.name} error={error} />
     </Field>
   );
 }
@@ -73,52 +76,62 @@ export function TextField({
  * empty: once one is stored it only takes a replacement.
  */
 export function SecretField({
-  configured,
+  label,
+  error,
+  stored,
   placeholder,
-  ...props
-}: FieldProps<string> & {
+  ...input
+}: Omit<InputFieldProps, 'description'> & {
   /** A secret is already stored. */
-  configured: boolean;
-  placeholder?: string;
+  stored: boolean;
 }) {
-  const { field, fieldState, label } = props;
   return (
-    <Field data-invalid={fieldState.invalid}>
-      <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+    <Field data-invalid={error !== undefined}>
+      <FieldLabel htmlFor={input.name}>{label}</FieldLabel>
       <PasswordInput
-        {...field}
-        {...invalidProps(props)}
-        id={field.name}
-        placeholder={configured ? '••••••••••••' : placeholder}
+        id={input.name}
+        {...input}
+        {...invalidProps(input.name, error)}
+        placeholder={stored ? '••••••••••••' : placeholder}
         autoComplete="off"
-        aria-required={!configured}
+        aria-required={!stored}
       />
-      {configured && (
+      {stored && (
         <FieldDescription className="text-xs">
           <Trans>Already stored. Enter a new one only to replace it.</Trans>
         </FieldDescription>
       )}
-      <Error {...props} />
+      <ErrorMessage name={input.name} error={error} />
     </Field>
   );
 }
 
-export function SwitchField({
-  field,
+interface SwitchFieldProps<V extends FieldValues> {
+  control: Control<V>;
+  name: FieldPathByValue<V, boolean>;
+  label: ReactNode;
+  description?: ReactNode;
+}
+
+export function SwitchField<V extends FieldValues>({
+  control,
+  name,
   label,
   description
-}: Omit<FieldProps<boolean>, 'fieldState'>) {
+}: SwitchFieldProps<V>) {
+  const { field } = useController({ control, name });
+
   return (
     <Field orientation="horizontal" className="justify-between gap-3">
       <FieldContent>
-        <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+        <FieldLabel htmlFor={name}>{label}</FieldLabel>
         {description && <FieldDescription>{description}</FieldDescription>}
       </FieldContent>
       <Switch
-        id={field.name}
-        name={field.name}
+        id={name}
+        name={name}
         ref={field.ref}
-        checked={field.value}
+        checked={field.value === true}
         onCheckedChange={field.onChange}
         onBlur={field.onBlur}
         disabled={field.disabled}

@@ -126,7 +126,7 @@ msgstr "{label} time"
 msgid "{name} assigned to room {label}"
 msgstr "{name} assigned to room {label}"
 
-#: src/components/provider-setup/use-provider-form.tsx:117
+#: src/components/provider-setup/use-provider-form.tsx:151
 msgid "{name} connected"
 msgstr "{name} connected"
 
@@ -190,7 +190,7 @@ msgstr "A customer with this email already exists"
 #~ msgid "A key is stored. Enter a new one only to replace it."
 #~ msgstr "A key is stored. Enter a new one only to replace it."
 
-#: src/components/provider-setup/use-provider-form.tsx:148
+#: src/components/provider-setup/use-provider-form.tsx:182
 msgid "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 msgstr "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 
@@ -311,7 +311,7 @@ msgstr "Add Room"
 msgid "Add subcategory"
 msgstr "Add subcategory"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:63
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:52
 msgid "Add the payment recipient to finish the setup."
 msgstr "Add the payment recipient to finish the setup."
 
@@ -324,7 +324,7 @@ msgstr "Add the payment recipient to finish the setup."
 msgid "Added on {0}"
 msgstr "Added on {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:247
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:242
 msgid "Additional configuration"
 msgstr "Additional configuration"
 
@@ -348,7 +348,7 @@ msgstr "Address line 1"
 msgid "Address line 2"
 msgstr "Address line 2"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:47
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:40
 msgid "Address line is required"
 msgstr "Address line is required"
 
@@ -395,8 +395,8 @@ msgid "Adults"
 msgstr "Adults"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-header.tsx:32
-msgid "Adyen"
-msgstr "Adyen"
+#~ msgid "Adyen"
+#~ msgstr "Adyen"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:271
 #~ msgid "Adyen configuration"
@@ -464,7 +464,7 @@ msgstr "Already have an account?"
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Already have one? Any TOTP app works — just scan the QR code."
 
-#: src/components/provider-setup/fields.tsx:98
+#: src/components/provider-setup/fields.tsx:101
 msgid "Already stored. Enter a new one only to replace it."
 msgstr "Already stored. Enter a new one only to replace it."
 
@@ -505,11 +505,11 @@ msgstr "An unexpected error occurred"
 msgid "Android App"
 msgstr "Android App"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:170
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:165
 msgid "API Key"
 msgstr "API Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:41
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:87
 msgid "API Key is required"
 msgstr "API Key is required"
 
@@ -659,10 +659,9 @@ msgstr "Available"
 #~ msgid "Avatar upload is not yet implemented"
 #~ msgstr "Avatar upload is not yet implemented"
 
-#: src/components/provider-setup/provider-form-card.tsx:159
-#: src/components/provider-setup/provider-picker.tsx:108
+#: src/components/provider-setup/provider-form-card.tsx:122
+#: src/components/provider-setup/provider-picker.tsx:86
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:55
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-setup-card.tsx:52
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:281
 msgid "Back"
 msgstr "Back"
@@ -726,8 +725,8 @@ msgstr "Business"
 msgid "Can't scan the code? Enter the key manually"
 msgstr "Can't scan the code? Enter the key manually"
 
-#: src/components/provider-setup/provider-form-card.tsx:150
-#: src/components/provider-setup/use-provider-form.tsx:156
+#: src/components/provider-setup/provider-form-card.tsx:113
+#: src/components/provider-setup/use-provider-form.tsx:190
 #: src/components/sectioned-form.tsx:100
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:144
@@ -738,7 +737,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:91
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:99
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:296
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:291
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
@@ -834,8 +833,7 @@ msgstr "Change language"
 msgid "Change profile picture"
 msgstr "Change profile picture"
 
-#: src/components/provider-setup/provider-form-card.tsx:97
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:55
+#: src/components/provider-setup/provider-card-header.tsx:68
 msgid "Change provider"
 msgstr "Change provider"
 
@@ -931,11 +929,11 @@ msgstr "Children"
 #~ msgid "Children count cannot be negative"
 #~ msgstr "Children count cannot be negative"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:77
 msgid "Choose a payment provider"
 msgstr "Choose a payment provider"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:91
 msgid "Choose a property management system"
 msgstr "Choose a property management system"
 
@@ -948,7 +946,7 @@ msgstr "Choose a property management system"
 msgid "City"
 msgstr "City"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:49
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:42
 msgid "City is required"
 msgstr "City is required"
 
@@ -970,19 +968,19 @@ msgstr "Clear filters"
 msgid "Clear search"
 msgstr "Clear search"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:59
 msgid "Client ID"
 msgstr "Client ID"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:30
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:28
 msgid "Client ID is required"
 msgstr "Client ID is required"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:178
 msgid "Client Key"
 msgstr "Client Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:34
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:33
 msgid "Client Key is required"
 msgstr "Client Key is required"
 
@@ -1004,7 +1002,7 @@ msgstr "Codes are time-based — if yours keeps failing, check that your phone's
 msgid "Columns"
 msgstr "Columns"
 
-#: src/components/provider-setup/provider-picker.tsx:95
+#: src/components/provider-setup/provider-picker.tsx:73
 msgid "Coming soon"
 msgstr "Coming soon"
 
@@ -1024,7 +1022,7 @@ msgstr "Completed At"
 msgid "Config updated"
 msgstr "Config updated"
 
-#: src/components/provider-setup/use-provider-form.tsx:117
+#: src/components/provider-setup/use-provider-form.tsx:151
 msgid "Configuration updated"
 msgstr "Configuration updated"
 
@@ -1054,8 +1052,7 @@ msgstr "Confirm your new password"
 msgid "Confirm your password"
 msgstr "Confirm your password"
 
-#: src/components/provider-setup/provider-form-card.tsx:169
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-setup-card.tsx:58
+#: src/components/provider-setup/provider-form-card.tsx:132
 msgid "Connect provider"
 msgstr "Connect provider"
 
@@ -1121,7 +1118,7 @@ msgstr "Copied to clipboard"
 msgid "Copy"
 msgstr "Copy"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:195
 msgid "Copy Client Key"
 msgstr "Copy Client Key"
 
@@ -1129,7 +1126,7 @@ msgstr "Copy Client Key"
 msgid "Copy message"
 msgstr "Copy message"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:233
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:228
 msgid "Copy Public Key"
 msgstr "Copy Public Key"
 
@@ -1185,7 +1182,7 @@ msgstr "Country"
 #~ msgid "Country code"
 #~ msgstr "Country code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:50
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:43
 msgid "Country is required"
 msgstr "Country is required"
 
@@ -1241,7 +1238,7 @@ msgstr "Creating reservation…"
 msgid "Credentials"
 msgstr "Credentials"
 
-#: src/components/provider-setup/provider-picker.tsx:91
+#: src/components/provider-setup/provider-picker.tsx:69
 msgid "Current"
 msgstr "Current"
 
@@ -1422,7 +1419,7 @@ msgstr "Device not found"
 msgid "Devices"
 msgstr "Devices"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:64
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:57
 msgid "Digits only (max 12)"
 msgstr "Digits only (max 12)"
 
@@ -1704,7 +1701,7 @@ msgstr "Enter the current code from your authenticator app"
 #~ msgid "Enter the new API key"
 #~ msgstr "Enter the new API key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:168
 msgid "Enter your API Key"
 msgstr "Enter your API Key"
 
@@ -1924,7 +1921,7 @@ msgstr "Failed to load rooms"
 #~ msgid "Failed to load the payment provider."
 #~ msgstr "Failed to load the payment provider."
 
-#: src/components/provider-setup/provider-screens.tsx:56
+#: src/components/provider-setup/provider-screens.tsx:39
 msgid "Failed to load the provider."
 msgstr "Failed to load the provider."
 
@@ -1957,7 +1954,7 @@ msgstr "Failed to resend verification email"
 msgid "Failed to reset password. The link may have expired."
 msgstr "Failed to reset password. The link may have expired."
 
-#: src/components/provider-setup/use-provider-form.tsx:120
+#: src/components/provider-setup/use-provider-form.tsx:154
 msgid "Failed to save configuration"
 msgstr "Failed to save configuration"
 
@@ -2176,7 +2173,7 @@ msgstr "Good"
 msgid "Grant administrator privileges to this user"
 msgstr "Grant administrator privileges to this user"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:90
 msgid "Group folio listing by rate plan"
 msgstr "Group folio listing by rate plan"
 
@@ -2338,8 +2335,8 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:57
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:109
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:31
@@ -2367,11 +2364,11 @@ msgstr "Host is required"
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:54
 msgid "Hotel ID"
 msgstr "Hotel ID"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:27
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:25
 msgid "Hotel ID is required"
 msgstr "Hotel ID is required"
 
@@ -2427,16 +2424,15 @@ msgstr "Infants"
 #~ msgid "Info"
 #~ msgstr "Info"
 
-#: src/components/provider-setup/provider-form-card.tsx:82
+#: src/components/provider-setup/provider-card-header.tsx:54
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:216
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-header.tsx:51
 msgid "Integration Guide"
 msgstr "Integration Guide"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:55
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:37
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:67
 msgid "Integrations"
 msgstr "Integrations"
 
@@ -2589,7 +2585,7 @@ msgid "Link"
 msgstr "Link"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:128
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-header.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-environment-badge.tsx:18
 msgid "Live"
 msgstr "Live"
 
@@ -2597,7 +2593,7 @@ msgstr "Live"
 #~ msgid "Live environment"
 #~ msgstr "Live environment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:288
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:283
 msgid "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 msgstr "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 
@@ -2687,11 +2683,11 @@ msgstr "Manage the hotel information your guests can browse, from A to Z."
 msgid "Manage this property's connection to its door lock system."
 msgstr "Manage this property's connection to its door lock system."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:69
 msgid "Manage this property's connection to its payment account."
 msgstr "Manage this property's connection to its payment account."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:83
 msgid "Manage this property's connection to its property management system."
 msgstr "Manage this property's connection to its property management system."
 
@@ -2740,7 +2736,7 @@ msgstr "Merchant account not found — check the Merchant ID."
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:33
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:32
 msgid "Merchant ID is required"
 msgstr "Merchant ID is required"
 
@@ -2791,7 +2787,7 @@ msgstr "Mobile App (Native)"
 msgid "Mobile App (PWA)"
 msgstr "Mobile App (PWA)"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:120
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:73
 msgid "Mock code"
 msgstr "Mock code"
 
@@ -3175,7 +3171,7 @@ msgstr "Open your authenticator app and scan the code below."
 #~ msgid "Opening"
 #~ msgstr "Opening"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:249
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:64
 msgid "optional"
 msgstr "optional"
@@ -3184,7 +3180,7 @@ msgstr "optional"
 msgid "Optional"
 msgstr "Optional"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:260
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:255
 msgid "Optional JSON or certificates passed to the Adyen SDK."
 msgstr "Optional JSON or certificates passed to the Adyen SDK."
 
@@ -3295,9 +3291,9 @@ msgid "Payment method"
 msgstr "Payment method"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:110
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:41
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:59
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:40
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:66
 msgid "Payment Provider"
 msgstr "Payment Provider"
 
@@ -3422,9 +3418,9 @@ msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:98
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:67
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:72
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:80
 msgid "PMS"
 msgstr "PMS"
 
@@ -3633,11 +3629,11 @@ msgstr "Property created successfully"
 #~ msgid "Property Details"
 #~ msgstr "Property Details"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:70
 msgid "Property ID"
 msgstr "Property ID"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:31
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:29
 msgid "Property ID is required"
 msgstr "Property ID is required"
 
@@ -3653,7 +3649,7 @@ msgstr "Property updated successfully"
 msgid "Protect your account with a second step"
 msgstr "Protect your account with a second step"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:220
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:215
 msgid "Public Key"
 msgstr "Public Key"
 
@@ -3834,11 +3830,11 @@ msgstr "Rename category"
 #~ msgid "Replace"
 #~ msgstr "Replace"
 
-#: src/components/provider-setup/use-provider-form.tsx:143
+#: src/components/provider-setup/use-provider-form.tsx:177
 msgid "Replace {replaces} with {name}?"
 msgstr "Replace {replaces} with {name}?"
 
-#: src/components/provider-setup/use-provider-form.tsx:164
+#: src/components/provider-setup/use-provider-form.tsx:198
 msgid "Replace provider"
 msgstr "Replace provider"
 
@@ -4096,8 +4092,8 @@ msgstr "SALTO"
 msgid "Save"
 msgstr "Save"
 
-#: src/components/provider-setup/provider-form-card.tsx:167
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:41
+#: src/components/provider-setup/provider-form-card.tsx:130
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:39
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:64
 msgid "Save changes"
@@ -4132,9 +4128,9 @@ msgstr "Save your recovery codes. You'll need them if you lose your phone, and e
 #~ msgid "Saving changes"
 #~ msgstr "Saving changes"
 
-#: src/components/provider-setup/provider-form-card.tsx:136
+#: src/components/provider-setup/provider-form-card.tsx:99
 #: src/components/sectioned-form.tsx:86
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:60
 msgid "Saving changes…"
 msgstr "Saving changes…"
 
@@ -4230,11 +4226,11 @@ msgstr "Search users"
 msgid "Searching..."
 msgstr "Searching..."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:96
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:64
 msgid "Secret code"
 msgstr "Secret code"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:45
 msgid "Secret code is required"
 msgstr "Secret code is required"
 
@@ -4312,11 +4308,11 @@ msgstr "Select stage"
 msgid "Select status"
 msgstr "Select status"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:79
 msgid "Select the provider this property takes payments with. You enter its credentials in the next step."
 msgstr "Select the provider this property takes payments with. You enter its credentials in the next step."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:93
 msgid "Select the system this property is run with. You enter its credentials in the next step."
 msgstr "Select the system this property is run with. You enter its credentials in the next step."
 
@@ -4338,7 +4334,7 @@ msgstr "Select the system this property is run with. You enter its credentials i
 msgid "Send Invitation"
 msgstr "Send Invitation"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:67
 msgid "Send invoice via PMS"
 msgstr "Send invoice via PMS"
 
@@ -4630,11 +4626,11 @@ msgstr "Successfully logged in!"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Supported formats: JPG, PNG, GIF (max 5MB)"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:304
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:299
 msgid "Switch to Live"
 msgstr "Switch to Live"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:285
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:280
 msgid "Switch to the Live environment?"
 msgstr "Switch to the Live environment?"
 
@@ -4689,7 +4685,7 @@ msgid "Template"
 msgstr "Template"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:117
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-header.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-environment-badge.tsx:18
 msgid "Test"
 msgstr "Test"
 
@@ -4780,7 +4776,7 @@ msgstr "The code is shown on the device screen"
 msgid "The device could not be added. Please try again."
 msgstr "The device could not be added. Please try again."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:109
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:69
 msgid "The invoice will be sent directly to the PMS"
 msgstr "The invoice will be sent directly to the PMS"
 
@@ -4812,7 +4808,7 @@ msgstr "The property {propertyName} has been deleted"
 msgid "The property <0>{propertyName}</0> will be deleted. This action cannot be undone."
 msgstr "The property <0>{propertyName}</0> will be deleted. This action cannot be undone."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:109
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:72
 msgid "The property's code in Apaleo, for example MUC."
 msgstr "The property's code in Apaleo, for example MUC."
 
@@ -4900,7 +4896,7 @@ msgstr "This image is small, so it may look blurry once cropped."
 msgid "This invitation link is invalid."
 msgstr "This invitation link is invalid."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:122
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:75
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr "This is the service code that will be used to skip payment at check-in."
 
@@ -4986,11 +4982,11 @@ msgstr "Toggle Columns"
 #~ msgid "Toggle theme"
 #~ msgstr "Toggle theme"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:96
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:59
 msgid "Token"
 msgstr "Token"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:31
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:40
 msgid "Token is required"
 msgstr "Token is required"
 
@@ -5006,7 +5002,7 @@ msgstr "Too many attempts. Try again in {cooldown} seconds."
 msgid "Top level"
 msgstr "Top level"
 
-#: src/components/provider-setup/provider-screens.tsx:59
+#: src/components/provider-setup/provider-screens.tsx:42
 msgid "Try again"
 msgstr "Try again"
 
@@ -5234,11 +5230,11 @@ msgstr "Use “Add product” above to add the first one."
 msgid "Use a code from my app instead"
 msgstr "Use a code from my app instead"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:130
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:85
 msgid "Use Apaleo Payment for eCom payments"
 msgstr "Use Apaleo Payment for eCom payments"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:120
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:80
 msgid "Use Apaleo Payment for POS payments"
 msgstr "Use Apaleo Payment for POS payments"
 
@@ -5569,7 +5565,7 @@ msgstr "ZIP"
 #~ msgid "ZIP / Postal code"
 #~ msgstr "ZIP / Postal code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:48
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:41
 msgid "ZIP / Postal code is required"
 msgstr "ZIP / Postal code is required"
 

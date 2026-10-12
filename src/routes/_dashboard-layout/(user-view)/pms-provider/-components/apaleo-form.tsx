@@ -1,8 +1,5 @@
-import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { Controller } from 'react-hook-form';
-import type { ApaleoConfig, PmsProvider } from 'shared/types/providers';
 
 import {
   SecretField,
@@ -10,14 +7,15 @@ import {
   TextField
 } from '@/components/provider-setup/fields';
 import { ProviderFormCard } from '@/components/provider-setup/provider-form-card';
-import { useProviderForm } from '@/components/provider-setup/use-provider-form';
+import type { ProviderFormProps } from '@/components/provider-setup/types';
+import {
+  type ProviderFormValues,
+  useProviderForm
+} from '@/components/provider-setup/use-provider-form';
 
 import { PMS_TEST_STEPS } from './pms-test-steps';
 
-type ApaleoFormData = ApaleoConfig & { secret: string };
-type Required = Partial<Record<keyof ApaleoFormData, MessageDescriptor>>;
-
-const EMPTY_VALUES: ApaleoFormData = {
+const EMPTY_VALUES: ProviderFormValues<'pms', 'apaleo'> = {
   clientId: '',
   secret: '',
   propertyId: '',
@@ -26,120 +24,70 @@ const EMPTY_VALUES: ApaleoFormData = {
   groupFolioByRatePlan: false
 };
 
-const SETTINGS_REQUIRED: Required = {
+const REQUIRED = {
   clientId: msg`Client ID is required`,
   propertyId: msg`Property ID is required`
 };
-// Once a secret code is stored, an empty field keeps it.
-const SETUP_REQUIRED: Required = {
-  ...SETTINGS_REQUIRED,
-  secret: msg`Secret code is required`
-};
-
-interface ApaleoFormProps {
-  /** The stored Apaleo configuration, or null while it is being set up. */
-  saved: Extract<PmsProvider, { provider: 'apaleo' }> | null;
-  /** The name of the provider that connecting Apaleo would replace. */
-  replaces: string | null;
-  onChooseProvider: () => void;
-}
 
 export function ApaleoForm({
+  entry,
   saved,
   replaces,
   onChooseProvider
-}: ApaleoFormProps) {
-  const { form, onSubmit, isSaving, replaceDialog } = useProviderForm({
+}: ProviderFormProps<'pms'>) {
+  const providerForm = useProviderForm({
     kind: 'pms',
     provider: 'apaleo',
-    name: 'Apaleo',
-    config: saved?.config,
+    name: entry.name,
+    saved,
     emptyValues: EMPTY_VALUES,
-    required: saved ? SETTINGS_REQUIRED : SETUP_REQUIRED,
+    required: REQUIRED,
+    secretRequired: msg`Secret code is required`,
     replaces
   });
-  const { control } = form;
+  const { form } = providerForm;
+  const { errors } = form.formState;
 
   return (
     <ProviderFormCard
-      form={form}
-      onSubmit={onSubmit}
-      isSaving={isSaving}
-      name="Apaleo"
-      logo={
-        // The only logo file is the light one, for dark surfaces
-        <img
-          src="/apaleo-logo.png"
-          alt=""
-          className="max-h-8 max-w-full object-contain brightness-0 dark:brightness-100"
-        />
-      }
-      guideUrl="https://apaleo.dev"
-      saved={saved}
+      {...providerForm}
+      entry={entry}
       onChooseProvider={onChooseProvider}
       testSteps={PMS_TEST_STEPS}
-      dialogs={replaceDialog}
     >
-      <Controller
-        control={control}
-        name="clientId"
-        render={(props) => (
-          <TextField {...props} label={<Trans>Client ID</Trans>} />
-        )}
+      <TextField
+        label={<Trans>Client ID</Trans>}
+        error={errors.clientId}
+        {...form.register('clientId')}
       />
-      <Controller
-        control={control}
-        name="secret"
-        render={(props) => (
-          <SecretField
-            {...props}
-            label={<Trans>Secret code</Trans>}
-            configured={saved !== null}
-          />
-        )}
+      <SecretField
+        label={<Trans>Secret code</Trans>}
+        error={errors.secret}
+        stored={providerForm.saved !== null}
+        {...form.register('secret')}
       />
-      <Controller
-        control={control}
-        name="propertyId"
-        render={(props) => (
-          <TextField
-            {...props}
-            label={<Trans>Property ID</Trans>}
-            description={
-              <Trans>The property's code in Apaleo, for example MUC.</Trans>
-            }
-          />
-        )}
+      <TextField
+        label={<Trans>Property ID</Trans>}
+        description={
+          <Trans>The property's code in Apaleo, for example MUC.</Trans>
+        }
+        error={errors.propertyId}
+        {...form.register('propertyId')}
       />
-      <Controller
-        control={control}
+      <SwitchField
+        control={form.control}
         name="useApaleoPaymentPos"
-        render={({ field }) => (
-          <SwitchField
-            field={field}
-            label={<Trans>Use Apaleo Payment for POS payments</Trans>}
-          />
-        )}
+        label={<Trans>Use Apaleo Payment for POS payments</Trans>}
       />
-      <Controller
-        control={control}
+      <SwitchField
+        control={form.control}
         name="useApaleoPaymentEcom"
-        render={({ field }) => (
-          <SwitchField
-            field={field}
-            label={<Trans>Use Apaleo Payment for eCom payments</Trans>}
-          />
-        )}
+        label={<Trans>Use Apaleo Payment for eCom payments</Trans>}
       />
-      <Controller
-        control={control}
+      <SwitchField
+        control={form.control}
         name="groupFolioByRatePlan"
-        render={({ field }) => (
-          <SwitchField
-            field={field}
-            label={<Trans>Group folio listing by rate plan</Trans>}
-          />
-        )}
+        label={<Trans>Group folio listing by rate plan</Trans>}
       />
     </ProviderFormCard>
   );
