@@ -14,6 +14,7 @@
     "db:push": "bun --env-file=.env.development drizzle-kit push",
     "db:migrate": "bun --env-file=.env.development drizzle-kit migrate",
     "db:migrate:prod": "bun --env-file=.env.production drizzle-kit migrate",
+    "db:migrate:deploy": "drizzle-kit migrate",
     "db:seed": "bun --env-file=.env.development src/scripts/seed.ts",
     "db:seed:prod": "bun --env-file=.env.production src/scripts/seed.ts",
     "db:studio": "bun --env-file=.env.development drizzle-kit studio",

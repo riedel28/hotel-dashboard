@@ -1,0 +1,56 @@
+name: Deploy backend
+
+# Applies the database migrations to production and, only once they are in,
+# tells Render to deploy the backend. Render's own pre-deploy command would do
+# this, but it needs a paid instance; for this to be the only way in, turn off
+# Auto-Deploy on the Render service.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [master]
+
+# One at a time, in order: a later run must not migrate under an earlier one.
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Migrate, then deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+    steps:
+      - name: Check the deploy secrets
+        run: |
+          if [ -z "$DATABASE_URL" ] || [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::error::Set the PROD_DATABASE_URL and RENDER_DEPLOY_HOOK_URL repository secrets."
+            exit 1
+          fi
+
+      # The commit CI just passed, not whatever master points at by now
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.8"
+
+      - name: Install backend dependencies
+        run: cd ./backend && bun install --frozen-lockfile
+
+      - name: Apply database migrations
+        env:
+          NODE_ENV: production
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: cd ./backend && bun run db:migrate:deploy
+
+      # Reached only when the migrations succeeded
+      - name: Deploy on Render
+        run: curl --fail --silent --show-error --request POST "$RENDER_DEPLOY_HOOK_URL&ref=${{ github.event.workflow_run.head_sha }}"
