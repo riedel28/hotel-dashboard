@@ -35,8 +35,8 @@ import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useFormatLocalized } from '@/hooks/use-format-localized';
 import { cn } from '@/lib/utils';
-import { formatLocalized } from '@/utils/date';
 
 import {
   type TestConnectionConfig,
@@ -57,6 +57,7 @@ interface DoorLocksFormData {
 }
 
 export function DoorLocksForm() {
+  const formatLocalized = useFormatLocalized();
   const [integrationMode, setIntegrationMode] =
     React.useState<IntegrationMode>('pms');
   const [testDialogOpen, setTestDialogOpen] = React.useState(false);

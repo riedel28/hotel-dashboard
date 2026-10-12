@@ -23,7 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-import { formatLocalized } from '@/utils/date';
+import { useFormatLocalized } from '@/hooks/use-format-localized';
 import { getFullName, getInitials } from '@/utils/user';
 
 import { DeleteWorklogDialog } from './delete-worklog-dialog';
@@ -34,6 +34,7 @@ const displayName = (user: WorklogUser) => getFullName(user) || user.email;
 
 export function WorklogCard({ worklog }: { worklog: Worklog }) {
   const { t } = useLingui();
+  const formatLocalized = useFormatLocalized();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);

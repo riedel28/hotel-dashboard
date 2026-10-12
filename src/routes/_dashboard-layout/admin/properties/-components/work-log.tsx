@@ -24,7 +24,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-import { formatLocalized } from '@/utils/date';
+import { useFormatLocalized } from '@/hooks/use-format-localized';
 
 import { WorklogCard } from './worklog-card';
 import { dayKind, groupByDay } from './worklog-days';
@@ -36,6 +36,7 @@ const WRAP = 'box-content max-w-[620px] space-y-8 px-4 pt-2';
 
 function DayHeading({ date }: { date: Date }) {
   const { t } = useLingui();
+  const formatLocalized = useFormatLocalized();
   const kind = dayKind(date);
   const label =
     kind === 'today'

@@ -21,8 +21,8 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { StatusDisc } from '@/components/ui/status-disc';
+import { useFormatLocalized } from '@/hooks/use-format-localized';
 import { cn } from '@/lib/utils';
-import { formatLocalized } from '@/utils/date';
 
 type StepStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped';
 
@@ -69,6 +69,7 @@ export function TestConnectionDialog({
   onFinished
 }: TestConnectionDialogProps) {
   const { t } = useLingui();
+  const formatLocalized = useFormatLocalized();
 
   const [steps, setSteps] = React.useState<TestStep[]>([]);
   const [phase, setPhase] = React.useState<'running' | 'done'>('running');
