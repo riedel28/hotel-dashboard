@@ -42,7 +42,7 @@ export function ProviderCardHeader({
             <Badge
               variant="outline"
               size="sm"
-              className="cursor-pointer bg-accent text-accent-foreground"
+              className="cursor-pointer bg-background text-foreground dark:border-foreground/20"
               render={
                 <a
                   href={entry.guideUrl}

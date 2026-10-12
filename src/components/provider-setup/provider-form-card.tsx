@@ -21,7 +21,7 @@ interface ProviderFormCardProps<V extends FieldValues> {
   isSaving: boolean;
   entry: ProviderEntry<ConfigurableKind>;
   /** The provider as stored, or null while it is being set up. */
-  saved: Pick<Provider, 'updated_at' | 'updated_by'> | null;
+  saved: Pick<Provider, 'updated_at'> | null;
   /** Opens the picker: "Back" during setup, "Change provider" after. */
   onChooseProvider: () => void;
   /** Shown after the name in the header. */
