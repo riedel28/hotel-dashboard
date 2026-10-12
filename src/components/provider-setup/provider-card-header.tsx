@@ -1,12 +1,11 @@
 import { Trans } from '@lingui/react/macro';
-import { ArrowUpRightIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { ProviderKind } from 'shared/types/providers';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 
+import { IntegrationGuideBadge } from './integration-guide-badge';
 import { ProviderLogo } from './provider-logo';
 import type { ProviderEntry } from './types';
 
@@ -38,23 +37,7 @@ export function ProviderCardHeader({
 
           {badges}
 
-          {entry.guideUrl && (
-            <Badge
-              variant="outline"
-              size="sm"
-              className="cursor-pointer bg-background text-foreground dark:border-foreground/20"
-              render={
-                <a
-                  href={entry.guideUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
-            >
-              <Trans>Integration Guide</Trans>
-              <ArrowUpRightIcon aria-hidden="true" />
-            </Badge>
-          )}
+          {entry.guideUrl && <IntegrationGuideBadge href={entry.guideUrl} />}
 
           {onChangeProvider && (
             <Button
