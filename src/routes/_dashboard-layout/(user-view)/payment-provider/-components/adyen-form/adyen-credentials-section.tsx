@@ -1,5 +1,5 @@
 import { t } from '@lingui/core/macro';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { Trans } from '@lingui/react/macro';
 import { UnplugIcon } from 'lucide-react';
 import { type Control, Controller } from 'react-hook-form';
 
@@ -23,6 +23,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
+import { formatLocalized } from '@/utils/date';
 
 import type { AdyenFormData } from './adyen-form-types';
 import type {
@@ -32,6 +33,8 @@ import type {
 
 interface AdyenCredentialsSectionProps {
   control: Control<AdyenFormData>;
+  /** A key is already stored: the field then only takes a replacement. */
+  apiKeyConfigured: boolean;
   /** Called when the user tries to switch to Live; `apply` commits the change. */
   onRequestLiveConfirm: (apply: () => void) => void;
   onTestConnection: () => void;
@@ -41,13 +44,12 @@ interface AdyenCredentialsSectionProps {
 
 export function AdyenCredentialsSection({
   control,
+  apiKeyConfigured,
   onRequestLiveConfirm,
   onTestConnection,
   lastTestResult,
   disabled = false
 }: AdyenCredentialsSectionProps) {
-  const { i18n } = useLingui();
-
   return (
     <FormSection
       id="credentials"
@@ -133,7 +135,7 @@ export function AdyenCredentialsSection({
           )}
         />
 
-        {/* API Key: masked "configured" state with Replace flow */}
+        {/* API Key: never sent back by the server, so it starts out empty */}
         <Controller
           control={control}
           name="apiKey"
@@ -145,14 +147,23 @@ export function AdyenCredentialsSection({
               <PasswordInput
                 {...field}
                 id={field.name}
-                placeholder={t`Enter your API Key`}
+                placeholder={
+                  apiKeyConfigured ? '••••••••••••' : t`Enter your API Key`
+                }
                 autoComplete="off"
-                aria-required="true"
+                aria-required={!apiKeyConfigured}
                 aria-invalid={fieldState.invalid}
                 aria-describedby={
                   fieldState.invalid ? `${field.name}-error` : undefined
                 }
               />
+              {apiKeyConfigured && (
+                <FieldDescription className="text-xs">
+                  <Trans>
+                    A key is stored. Enter a new one only to replace it.
+                  </Trans>
+                </FieldDescription>
+              )}
               {fieldState.invalid && (
                 <FieldError
                   id={`${field.name}-error`}
@@ -235,7 +246,7 @@ export function AdyenCredentialsSection({
               <FieldLabel htmlFor={field.name}>
                 <Trans>Additional configuration</Trans>
                 <span className="-ml-1 font-normal text-muted-foreground">
-                  (<Trans>Optional</Trans>)
+                  (<Trans>optional</Trans>)
                 </span>
               </FieldLabel>
               <Textarea
@@ -245,7 +256,7 @@ export function AdyenCredentialsSection({
                 spellCheck={false}
                 className="font-mono text-xs!"
               />
-              <FieldDescription>
+              <FieldDescription className="text-xs">
                 <Trans>
                   Optional JSON or certificates passed to the Adyen SDK.
                 </Trans>
@@ -286,7 +297,7 @@ export function AdyenCredentialsSection({
               <span>
                 <Trans>
                   Tested at{' '}
-                  {i18n.date(lastTestResult.finishedAt, {
+                  {formatLocalized(lastTestResult.finishedAt, {
                     timeStyle: 'short'
                   })}
                 </Trans>

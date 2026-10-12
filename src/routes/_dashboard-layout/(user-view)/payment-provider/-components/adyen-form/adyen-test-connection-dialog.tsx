@@ -1,13 +1,11 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  CheckIcon,
   CircleDashedIcon,
   CloudIcon,
   CreditCardIcon,
   Loader2Icon,
   MinusIcon,
-  RotateCwIcon,
-  XIcon
+  RotateCwIcon
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -22,7 +20,9 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
+import { StatusDisc } from '@/components/ui/status-disc';
 import { cn } from '@/lib/utils';
+import { formatLocalized } from '@/utils/date';
 
 type StepStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped';
 
@@ -66,7 +66,7 @@ export function AdyenTestConnectionDialog({
   onOpenChange,
   onFinished
 }: AdyenTestConnectionDialogProps) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
 
   const [steps, setSteps] = React.useState<TestStep[]>([]);
   const [phase, setPhase] = React.useState<'running' | 'done'>('running');
@@ -203,7 +203,11 @@ export function AdyenTestConnectionDialog({
                 <Loader2Icon className="size-4 animate-spin motion-reduce:animate-none" />
               </div>
             ) : (
-              <StatusDisc ok={allPassed} className="size-9" />
+              <StatusDisc
+                variant="solid"
+                status={allPassed ? 'success' : 'error'}
+                size="md"
+              />
             )}
 
             <ConnectionLine phase={phase} allPassed={allPassed} />
@@ -272,7 +276,11 @@ export function AdyenTestConnectionDialog({
           {phase === 'running' ? (
             <Loader2Icon className="size-4.5 shrink-0 animate-spin motion-reduce:animate-none" />
           ) : (
-            <StatusDisc ok={allPassed} className="size-4.5" />
+            <StatusDisc
+              variant="solid"
+              status={allPassed ? 'success' : 'error'}
+              size="sm"
+            />
           )}
           <span className="flex-1 font-medium">
             {phase === 'running' ? (
@@ -291,7 +299,7 @@ export function AdyenTestConnectionDialog({
           </span>
           {finishedAt && (
             <span className="text-xs tabular-nums opacity-70">
-              {i18n.date(finishedAt, { timeStyle: 'short' })}
+              {formatLocalized(finishedAt, { timeStyle: 'short' })}
             </span>
           )}
         </div>
@@ -303,13 +311,13 @@ export function AdyenTestConnectionDialog({
             </DialogClose>
           ) : (
             <>
-              <Button variant="secondary" onClick={runTests}>
+              <DialogClose render={<Button variant="outline" />}>
+                <Trans>Close</Trans>
+              </DialogClose>
+              <Button onClick={runTests}>
                 <RotateCwIcon data-icon="inline-start" />
                 <Trans>Run again</Trans>
               </Button>
-              <DialogClose render={<Button />}>
-                <Trans>Close</Trans>
-              </DialogClose>
             </>
           )}
         </DialogFooter>
@@ -338,23 +346,6 @@ function EndpointNode({
   );
 }
 
-function StatusDisc({ ok, className }: { ok: boolean; className?: string }) {
-  const Icon = ok ? CheckIcon : XIcon;
-  return (
-    <span
-      className={cn(
-        'flex shrink-0 items-center justify-center rounded-full text-white',
-        ok
-          ? 'bg-emerald-500 dark:bg-emerald-600'
-          : 'bg-rose-500 dark:bg-rose-900',
-        className
-      )}
-    >
-      <Icon className="size-[60%]" strokeWidth={3} aria-hidden="true" />
-    </span>
-  );
-}
-
 function ConnectionLine({
   phase,
   allPassed
@@ -370,8 +361,8 @@ function ConnectionLine({
           'animate-connection-dash bg-[repeating-linear-gradient(90deg,var(--color-muted-foreground)_0px,var(--color-muted-foreground)_5px,transparent_5px,transparent_12px)] motion-reduce:animate-none',
         phase === 'done' &&
           (allPassed
-            ? 'bg-emerald-500 dark:bg-emerald-800'
-            : 'bg-rose-500 dark:bg-rose-900')
+            ? 'bg-emerald-500/35 dark:bg-emerald-600/35'
+            : 'bg-rose-500/35 dark:bg-rose-700/35')
       )}
     />
   );
@@ -384,9 +375,9 @@ function StepStatusIcon({ status }: { status: StepStatus }) {
         <Loader2Icon className="size-4.5 animate-spin text-muted-foreground motion-reduce:animate-none" />
       );
     case 'passed':
-      return <StatusDisc ok className="size-4.5" />;
+      return <StatusDisc variant="solid" status="success" size="sm" />;
     case 'failed':
-      return <StatusDisc ok={false} className="size-4.5" />;
+      return <StatusDisc variant="solid" status="error" size="sm" />;
     case 'skipped':
       return (
         <span className="flex size-4.5 shrink-0 items-center justify-center rounded-full bg-muted">

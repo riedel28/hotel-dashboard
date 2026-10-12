@@ -6,6 +6,7 @@ import {
   check,
   index,
   integer,
+  jsonb,
   numeric,
   pgTable,
   primaryKey,
@@ -17,6 +18,10 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
+import type {
+  AdyenConfig,
+  PaymentProviderId
+} from '../../../shared/types/payment-provider';
 import {
   type GuestAgeGroup,
   guestAgeGroupSchema,
@@ -388,6 +393,33 @@ export const guestAbcEntries = pgTable(
   (table) => [
     index('guest_abc_entries_property_id_idx').on(table.property_id),
     index('guest_abc_entries_letter_idx').on(table.letter)
+  ]
+);
+
+// The payment provider a property is connected to: one row per property, and no
+// row means none is set up yet. `config` holds the provider's own settings (see
+// adyenConfigSchema); the API key is kept apart, encrypted with secret-box.
+export const paymentProviderConfigs = pgTable(
+  'payment_provider_configs',
+  {
+    property_id: uuid('property_id')
+      .primaryKey()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    provider: text('provider').notNull().$type<PaymentProviderId>(),
+    config: jsonb('config').notNull().$type<AdyenConfig>(),
+    api_key_encrypted: text('api_key_encrypted').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    check(
+      'payment_provider_configs_provider_check',
+      sql`${table.provider} IN ('adyen', 'payone', 'concardis', 'six_saferpay', 'valitor')`
+    )
   ]
 );
 

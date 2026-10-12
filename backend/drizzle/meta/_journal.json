@@ -78,6 +78,13 @@
       "when": 1791700677319,
       "tag": "0010_guest_age_group",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1791784501757,
+      "tag": "0011_payment_provider_configs",
+      "breakpoints": true
     }
   ]
 }

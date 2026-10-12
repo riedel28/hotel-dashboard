@@ -1,4 +1,4 @@
-import type { AdyenEnvironment } from './adyen-test-connection-dialog';
+import type { AdyenConfig } from 'shared/types/payment-provider';
 
 export type AdyenMethodId = 'mastercard' | 'visa' | 'amex' | 'paypal';
 
@@ -7,20 +7,9 @@ export interface AdyenMappingCode {
   pos: string;
 }
 
-export interface AdyenFormData {
-  environment: AdyenEnvironment;
-  merchantId: string;
-  apiKey: string;
-  clientKey: string;
-  publicKey: string;
-  additionalConfig: string;
-  addressLine1: string;
-  addressLine2: string;
-  zip: string;
-  city: string;
-  country: string;
-  mappings: Record<AdyenMethodId, AdyenMappingCode>;
-}
+// The stored configuration plus the API key, which only ever travels to the
+// server: an empty one keeps the key already stored.
+export type AdyenFormData = AdyenConfig & { apiKey: string };
 
 export const ADYEN_PAYMENT_METHODS: Array<{ id: AdyenMethodId; name: string }> =
   [
