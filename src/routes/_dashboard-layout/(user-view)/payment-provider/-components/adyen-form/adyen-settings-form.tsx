@@ -14,7 +14,7 @@ import { AdyenEnvironmentBadge } from './adyen-environment-badge';
 import { ADYEN_FORM_SECTIONS } from './adyen-form-toc';
 import { AdyenMappingCodesSection } from './adyen-mapping-codes-section';
 import { AdyenRecipientSection } from './adyen-recipient-section';
-import { ADYEN_SETTINGS_REQUIRED, useAdyenForm } from './use-adyen-form';
+import { ADYEN_RECIPIENT_REQUIRED, useAdyenForm } from './use-adyen-form';
 
 /** The full configuration of a property's connected Adyen account. */
 export function AdyenSettingsForm({
@@ -26,7 +26,7 @@ export function AdyenSettingsForm({
 }) {
   const { form, onSubmit, isSaving } = useAdyenForm({
     saved,
-    required: ADYEN_SETTINGS_REQUIRED
+    required: ADYEN_RECIPIENT_REQUIRED
   });
   const { isDirty } = form.formState;
 

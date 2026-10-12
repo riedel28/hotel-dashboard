@@ -24,7 +24,7 @@ const EMPTY_VALUES: ProviderFormValues<'pms', 'apaleo'> = {
   groupFolioByRatePlan: false
 };
 
-const REQUIRED = {
+const MESSAGES = {
   clientId: msg`Client ID is required`,
   propertyId: msg`Property ID is required`
 };
@@ -41,7 +41,7 @@ export function ApaleoForm({
     name: entry.name,
     saved,
     emptyValues: EMPTY_VALUES,
-    required: REQUIRED,
+    messages: MESSAGES,
     secretRequired: msg`Secret code is required`,
     replaces
   });
@@ -50,7 +50,7 @@ export function ApaleoForm({
 
   return (
     <ProviderFormCard
-      {...providerForm}
+      providerForm={providerForm}
       entry={entry}
       onChooseProvider={onChooseProvider}
       testSteps={PMS_TEST_STEPS}

@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/card';
 
 import { ProviderLogo } from './provider-logo';
-import type { ProviderEntry } from './types';
+import type { AvailableProvider, ProviderEntry } from './types';
 
 interface ProviderPickerProps<K extends ProviderKind> {
   title: ReactNode;
@@ -22,7 +22,7 @@ interface ProviderPickerProps<K extends ProviderKind> {
   providers: ProviderEntry<K>[];
   /** The id of the provider already set up, when the picker is opened to change it. */
   current?: string;
-  onSelect: (provider: ProviderEntry<K>) => void;
+  onSelect: (provider: AvailableProvider<K>) => void;
   /** Leaves the picker without choosing; omitted when there is nothing to go back to. */
   onBack?: () => void;
 }
@@ -50,7 +50,7 @@ export function ProviderPicker<K extends ProviderKind>({
               <button
                 type="button"
                 disabled={!provider.Form}
-                onClick={() => onSelect(provider)}
+                onClick={() => provider.Form && onSelect(provider)}
                 className="flex h-28 w-full flex-col justify-between rounded-xl border border-border bg-card p-4 text-left transition-colors outline-none hover:bg-muted focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-card dark:bg-input/30 dark:hover:bg-input/50 dark:disabled:hover:bg-input/30"
               >
                 <span className="flex h-8 items-center">

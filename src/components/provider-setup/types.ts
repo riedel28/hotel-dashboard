@@ -14,23 +14,34 @@ export interface ProviderLogoSource {
  * Everything a provider page knows about one provider. A page lists its
  * providers once; the picker, the form's header and the choice of form are all
  * read from that list.
+ *
+ * One with a form can be set up, and its id is the one its schema stores it
+ * under. One without is listed as coming soon.
  */
-export interface ProviderEntry<K extends ProviderKind> {
-  /** As stored: a member of the kind's schema once it can be configured. */
-  id: string;
+export type ProviderEntry<K extends ProviderKind> = {
   name: string;
   /** Without one the provider is shown by name alone. */
   logo?: ProviderLogoSource;
   /** Its documentation, linked from the form's header when there is some. */
   guideUrl?: string;
-  /** Its form. A provider without one is listed as coming soon. */
-  Form?: ComponentType<ProviderFormProps<K>>;
-}
+} & (
+  | {
+      id: Provider<K>['provider'];
+      Form: ComponentType<ProviderFormProps<K>>;
+    }
+  | { id: string; Form?: undefined }
+);
+
+/** A provider that can be set up: one with a form. */
+export type AvailableProvider<K extends ProviderKind> = Extract<
+  ProviderEntry<K>,
+  { Form: object }
+>;
 
 /** What a provider's form is given. */
 export interface ProviderFormProps<K extends ProviderKind> {
   /** The provider this is the form of. */
-  entry: ProviderEntry<K>;
+  entry: AvailableProvider<K>;
   /** Its stored configuration, or null while it is being set up. */
   saved: Provider<K> | null;
   /**

@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useProvider } from '@/hooks/use-provider';
 
 import { ProviderPicker } from './provider-picker';
-import type { ProviderEntry } from './types';
+import type { AvailableProvider, ProviderEntry } from './types';
 
 interface ProviderScreensProps<K extends ProviderKind> {
   kind: K;
@@ -56,11 +56,14 @@ function Screens<K extends ProviderKind>({
   providers
 }: ProviderScreensProps<K> & { saved: Provider<K> | null }) {
   const stored = providers.find((provider) => provider.id === saved?.provider);
+  const storedForm = stored?.Form ? stored : null;
   // The provider whose form is open, or null for the picker. A property
   // without a provider starts on the picker, one with a provider on its form.
-  const [open, setOpen] = React.useState(stored?.Form ? stored : null);
+  const [open, setOpen] = React.useState<AvailableProvider<K> | null>(
+    storedForm
+  );
 
-  if (!open?.Form) {
+  if (!open) {
     return (
       <ProviderPicker
         title={pickerTitle}
@@ -68,7 +71,7 @@ function Screens<K extends ProviderKind>({
         providers={providers}
         current={saved?.provider}
         onSelect={setOpen}
-        onBack={stored?.Form ? () => setOpen(stored) : undefined}
+        onBack={storedForm ? () => setOpen(storedForm) : undefined}
       />
     );
   }

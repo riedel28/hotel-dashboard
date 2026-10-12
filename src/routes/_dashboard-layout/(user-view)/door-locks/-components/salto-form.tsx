@@ -1,14 +1,10 @@
-import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { AlertTriangleIcon, ArrowUpRightIcon } from 'lucide-react';
 import { Controller, useWatch } from 'react-hook-form';
-import { isPortNumber } from 'shared/types/providers';
-import type { z } from 'zod';
 
 import { SecretField, TextField } from '@/components/provider-setup/fields';
 import { ProviderFormCard } from '@/components/provider-setup/provider-form-card';
-import type { TestConnectionStep } from '@/components/provider-setup/test-connection-dialog';
 import type { ProviderFormProps } from '@/components/provider-setup/types';
 import {
   type ProviderFormValues,
@@ -19,6 +15,8 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { SALTO_TEST_STEPS } from './salto-test-steps';
 
 type SaltoFormData = ProviderFormValues<'door_lock', 'salto'>;
 
@@ -32,72 +30,13 @@ const EMPTY_VALUES: SaltoFormData = {
   secret: ''
 };
 
-// Which fields must be filled in depends on the interface: see `refine`.
-const REQUIRED = {};
-
-// Mirrors saltoConfigSchema, in the UI language. The password is the form's
-// secret, which the form hook asks for by itself over SHIP.
-function refine(
-  data: SaltoFormData,
-  ctx: z.RefinementCtx,
-  t: (message: MessageDescriptor) => string
-) {
-  const issue = (field: keyof SaltoFormData, message: MessageDescriptor) =>
-    ctx.addIssue({ code: 'custom', path: [field], message: t(message) });
-
-  if (data.mode === 'pms') {
-    if (!data.host.trim()) issue('host', msg`Host is required`);
-    if (!data.port.trim()) issue('port', msg`Port is required`);
-    else if (!isPortNumber(data.port.trim())) {
-      issue('port', msg`Enter a valid port number`);
-    }
-    return;
-  }
-
-  if (data.shipType === 'https' && !data.shipUrl.trim()) {
-    issue('shipUrl', msg`SHIP-URL is required`);
-  }
-  if (!data.username.trim()) issue('username', msg`Username is required`);
-}
-
-const TCP: TestConnectionStep = {
-  id: 'tcp',
-  name: msg`TCP connection`,
-  error: msg`Connection timed out after 5000 ms — host unreachable.`
+// The interface in use decides which of these the schema asks for.
+const MESSAGES = {
+  host: msg`Host is required`,
+  port: msg`Enter a valid port number`,
+  shipUrl: msg`SHIP-URL is required`,
+  username: msg`Username is required`
 };
-const AUTH: TestConnectionStep = {
-  id: 'auth',
-  name: msg`Authentication`,
-  error: msg`401 Unauthorized — check username and password.`
-};
-const SHIP: TestConnectionStep = {
-  id: 'ship',
-  name: msg`SHIP handshake`,
-  error: msg`SHIP handshake rejected: unsupported protocol version.`
-};
-
-// What a connection test checks, by how the locks are reached.
-const TEST_STEPS = {
-  pms: [
-    TCP,
-    {
-      id: 'handshake',
-      name: msg`PMS interface handshake`,
-      error: msg`No response from the PMS interface.`
-    }
-  ],
-  stp: [TCP, AUTH, SHIP],
-  https: [
-    TCP,
-    {
-      id: 'tls',
-      name: msg`TLS certificate`,
-      error: msg`TLS handshake failed: certificate is self-signed or expired.`
-    },
-    AUTH,
-    SHIP
-  ]
-} satisfies Record<string, TestConnectionStep[]>;
 
 const SHIP_TYPES = [
   { value: 'https', label: 'HTTPS' },
@@ -116,9 +55,8 @@ export function SaltoForm({
     name: entry.name,
     saved,
     emptyValues: EMPTY_VALUES,
-    required: REQUIRED,
+    messages: MESSAGES,
     secretRequired: msg`Password is required`,
-    refine,
     replaces
   });
   const { form } = providerForm;
@@ -130,10 +68,12 @@ export function SaltoForm({
 
   return (
     <ProviderFormCard
-      {...providerForm}
+      providerForm={providerForm}
       entry={entry}
       onChooseProvider={onChooseProvider}
-      testSteps={mode === 'pms' ? TEST_STEPS.pms : TEST_STEPS[shipType]}
+      testSteps={
+        mode === 'pms' ? SALTO_TEST_STEPS.pms : SALTO_TEST_STEPS[shipType]
+      }
     >
       <Controller
         control={form.control}

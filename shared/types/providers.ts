@@ -9,7 +9,7 @@ export const ADYEN_METHOD_IDS = [
 ] as const;
 
 // A mapping code: digits only, at most 12, or empty when not set.
-export const ADYEN_MAPPING_CODE_PATTERN = /^\d{0,12}$/;
+const ADYEN_MAPPING_CODE_PATTERN = /^\d{0,12}$/;
 
 const mappingCodeSchema = z
   .string()
@@ -106,36 +106,6 @@ export function isPortNumber(value: string) {
   return /^\d+$/.test(value) && Number(value) >= 1 && Number(value) <= 65535;
 }
 
-/**
- * Whether a provider cannot work without a secret, given its configuration.
- * All do, except SALTO over the PMS interface.
- */
-export function requiresSecret(provider: string, config: object) {
-  return !(provider === 'salto' && 'mode' in config && config.mode === 'pms');
-}
-
-// A provider paired with its own configuration. The unions below take one
-// member per provider that can be configured, told apart by `provider`.
-const adyenSchema = z.object({
-  provider: z.literal('adyen'),
-  config: adyenConfigSchema
-});
-
-const casablancaSchema = z.object({
-  provider: z.literal('casablanca'),
-  config: casablancaConfigSchema
-});
-
-const apaleoSchema = z.object({
-  provider: z.literal('apaleo'),
-  config: apaleoConfigSchema
-});
-
-const saltoSchema = z.object({
-  provider: z.literal('salto'),
-  config: saltoConfigSchema
-});
-
 // What a save adds: the provider's secret. An empty one keeps the stored one.
 const saving = { secret: z.string().trim().max(500).default('') };
 
@@ -146,39 +116,70 @@ const stored = {
   updated_at: z.iso.datetime()
 };
 
+/**
+ * A provider that can be configured: its id paired with its configuration, as
+ * a save sends it and as a read returns it.
+ *
+ * `requiresSecret` says whether it cannot work without a secret, given its
+ * configuration. Left out, it always needs one.
+ */
+function defineProvider<Id extends string, Config extends z.ZodType>(
+  id: Id,
+  config: Config,
+  requiresSecret?: (config: z.infer<Config>) => boolean
+) {
+  const base = z.object({ provider: z.literal(id), config });
+  return {
+    config,
+    requiresSecret,
+    save: base.extend(saving),
+    stored: base.extend(stored)
+  };
+}
+
+// Every provider is defined here, once. Adding one: define it, then list it
+// under its kind below.
+const providers = {
+  adyen: defineProvider('adyen', adyenConfigSchema),
+  casablanca: defineProvider('casablanca', casablancaConfigSchema),
+  apaleo: defineProvider('apaleo', apaleoConfigSchema),
+  // Over the PMS interface SALTO has no credentials
+  salto: defineProvider(
+    'salto',
+    saltoConfigSchema,
+    (config) => config.mode === 'ship'
+  )
+};
+
 // Per kind of provider (a property has one of each): what a save takes and
 // what a read returns.
 export const saveProviderSchemas = {
-  payment: z.discriminatedUnion('provider', [adyenSchema.extend(saving)]),
+  payment: z.discriminatedUnion('provider', [providers.adyen.save]),
   pms: z.discriminatedUnion('provider', [
-    casablancaSchema.extend(saving),
-    apaleoSchema.extend(saving)
+    providers.casablanca.save,
+    providers.apaleo.save
   ]),
-  door_lock: z.discriminatedUnion('provider', [saltoSchema.extend(saving)])
+  door_lock: z.discriminatedUnion('provider', [providers.salto.save])
 };
 
 export const providerSchemas = {
-  payment: z.discriminatedUnion('provider', [adyenSchema.extend(stored)]),
+  payment: z.discriminatedUnion('provider', [providers.adyen.stored]),
   pms: z.discriminatedUnion('provider', [
-    casablancaSchema.extend(stored),
-    apaleoSchema.extend(stored)
+    providers.casablanca.stored,
+    providers.apaleo.stored
   ]),
-  door_lock: z.discriminatedUnion('provider', [saltoSchema.extend(stored)])
+  door_lock: z.discriminatedUnion('provider', [providers.salto.stored])
 };
 
 export type ProviderKind = keyof typeof providerSchemas;
+export type ProviderId = keyof typeof providers;
 export type AdyenMethodId = (typeof ADYEN_METHOD_IDS)[number];
-export type AdyenConfig = z.infer<typeof adyenConfigSchema>;
-export type CasablancaConfig = z.infer<typeof casablancaConfigSchema>;
-export type ApaleoConfig = z.infer<typeof apaleoConfigSchema>;
-export type SaltoConfig = z.infer<typeof saltoConfigSchema>;
 
 // Null until the property has a provider of that kind set up.
 export type Provider<K extends ProviderKind = ProviderKind> = z.infer<
   (typeof providerSchemas)[K]
 >;
 export type PaymentProvider = Provider<'payment'>;
-export type PmsProvider = Provider<'pms'>;
 // What a client sends, and what the server reads after validation.
 export type SaveProviderInput<K extends ProviderKind = ProviderKind> = z.input<
   (typeof saveProviderSchemas)[K]
@@ -186,3 +187,21 @@ export type SaveProviderInput<K extends ProviderKind = ProviderKind> = z.input<
 export type SaveProviderData = z.infer<
   (typeof saveProviderSchemas)[ProviderKind]
 >;
+
+/** The schema of a provider's configuration: what its form has to satisfy. */
+export function providerConfigSchema(provider: ProviderId): z.ZodType {
+  return providers[provider].config;
+}
+
+/**
+ * Whether a provider cannot work without a secret, given its configuration.
+ * `config` has to be that provider's own, as a validated save pairs them.
+ */
+export function requiresSecret(provider: ProviderId, config: object) {
+  // The pairing holds for the caller's value, but not for the compiler, which
+  // sees every provider's rule and every provider's configuration here.
+  const rule = providers[provider].requiresSecret as
+    | ((config: object) => boolean)
+    | undefined;
+  return rule?.(config) ?? true;
+}

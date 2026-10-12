@@ -22,7 +22,7 @@ const EMPTY_VALUES: ProviderFormValues<'pms', 'casablanca'> = {
   mockCode: ''
 };
 
-const REQUIRED = { hotelId: msg`Hotel ID is required` };
+const MESSAGES = { hotelId: msg`Hotel ID is required` };
 
 export function CasablancaForm({
   entry,
@@ -36,7 +36,7 @@ export function CasablancaForm({
     name: entry.name,
     saved,
     emptyValues: EMPTY_VALUES,
-    required: REQUIRED,
+    messages: MESSAGES,
     secretRequired: msg`Token is required`,
     replaces
   });
@@ -45,7 +45,7 @@ export function CasablancaForm({
 
   return (
     <ProviderFormCard
-      {...providerForm}
+      providerForm={providerForm}
       entry={entry}
       onChooseProvider={onChooseProvider}
       testSteps={PMS_TEST_STEPS}

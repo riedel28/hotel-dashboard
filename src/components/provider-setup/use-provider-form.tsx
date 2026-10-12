@@ -5,6 +5,7 @@ import * as React from 'react';
 import { type DefaultValues, useForm } from 'react-hook-form';
 import {
   type Provider,
+  providerConfigSchema,
   type ProviderKind,
   requiresSecret,
   type SaveProviderInput
@@ -39,11 +40,12 @@ export type ProviderFormValues<
     ? Config & { secret: string }
     : never;
 
-type Refine<V> = (
-  data: V,
-  ctx: z.RefinementCtx,
-  t: (message: MessageDescriptor) => string
-) => void;
+type FieldMessages<
+  K extends ProviderKind,
+  P extends Provider<K>['provider']
+> = Partial<
+  Record<Exclude<keyof ProviderFormValues<K, P>, 'secret'>, MessageDescriptor>
+>;
 
 interface UseProviderFormOptions<
   K extends ProviderKind,
@@ -57,22 +59,30 @@ interface UseProviderFormOptions<
   saved: Provider<K> | null;
   emptyValues: ProviderFormValues<K, P>;
   /**
-   * The fields that must be filled in, with what the form says when one is
-   * empty. Keep the object's identity stable: the validation is built from it.
+   * What the form says about a field the provider's schema rejects: the rules
+   * are the schema's (shared/types/providers.ts), the wording is the form's.
+   * Keep the object's identity stable: the validation is built from it.
    */
-  required: Partial<
-    Record<Exclude<keyof ProviderFormValues<K, P>, 'secret'>, MessageDescriptor>
-  >;
+  messages: FieldMessages<K, P>;
+  /**
+   * Fields this form insists on beyond the schema, with what it says when one
+   * is empty. Keep its identity stable too.
+   */
+  required?: FieldMessages<K, P>;
   /**
    * What the form says when the provider needs a secret (see requiresSecret)
    * and has none: neither stored nor entered.
    */
   secretRequired: MessageDescriptor;
-  /** Anything else to check. Keep its identity stable too. */
-  refine?: Refine<ProviderFormValues<K, P>>;
   /** The name of the provider a save would replace: asked about first. */
   replaces?: string | null;
 }
+
+/** What useProviderForm returns: a provider's form, ready for its card. */
+export type ProviderForm<
+  K extends ProviderKind,
+  P extends Provider<K>['provider']
+> = ReturnType<typeof useProviderForm<K, P>>;
 
 /**
  * The form of one provider: its values follow the stored configuration, a
@@ -87,9 +97,9 @@ export function useProviderForm<
   name,
   saved,
   emptyValues,
+  messages,
   required,
   secretRequired,
-  refine,
   replaces = null
 }: UseProviderFormOptions<K, P>) {
   type Values = ProviderFormValues<K, P>;
@@ -106,32 +116,45 @@ export function useProviderForm<
   const isStored = stored !== null;
   const secretStored = stored?.secretConfigured ?? false;
 
-  // The server owns the shape of a configuration (shared/types/providers.ts);
-  // this only adds what a form has to say before the request is sent.
+  // The provider's own schema decides what is valid, the same one the server
+  // applies; this only words its verdict and adds what the form insists on.
   const schema = React.useMemo(
     () =>
       z.custom<Values>().superRefine((data, ctx) => {
-        const messages: Record<string, MessageDescriptor | undefined> = {
-          ...required,
-          // A stored secret is kept by leaving the field empty
-          secret:
-            requiresSecret(provider, data) && !secretStored
-              ? secretRequired
-              : undefined
-        };
-        const entered: Record<string, unknown> = data;
-        for (const [field, message] of Object.entries(messages)) {
-          if (message && !String(entered[field] ?? '').trim()) {
+        const issue = (field: string, message?: MessageDescriptor) => {
+          if (message) {
             ctx.addIssue({
               code: 'custom',
               path: [field],
               message: t(message)
             });
           }
+        };
+        const worded: Record<string, MessageDescriptor | undefined> = messages;
+        const entered: Record<string, unknown> = data;
+
+        // A rule the form has no wording for still shows, in the schema's words
+        const result = providerConfigSchema(provider).safeParse(data);
+        for (const { path, message } of result.error?.issues ?? []) {
+          const wording = worded[String(path[0])];
+          ctx.addIssue({
+            code: 'custom',
+            path,
+            message: wording ? t(wording) : message
+          });
         }
-        refine?.(data, ctx, t);
+
+        const insisted: typeof worded = required ?? {};
+        for (const [field, message] of Object.entries(insisted)) {
+          if (!String(entered[field] ?? '').trim()) issue(field, message);
+        }
+
+        // A stored secret is kept by leaving the field empty
+        if (requiresSecret(provider, data) && !secretStored && !data.secret) {
+          issue('secret', secretRequired);
+        }
       }),
-    [provider, required, secretRequired, secretStored, refine, t]
+    [provider, messages, required, secretRequired, secretStored, t]
   );
 
   // Follows the stored configuration: saving it resets the form to it, which
@@ -210,11 +233,11 @@ export function useProviderForm<
     </AlertDialog>
   );
 
-  // Shaped to be spread into ProviderFormCard
   return {
     form,
     onSubmit,
     isSaving: save.isPending,
+    /** The stored provider, when it is this form's. */
     saved: stored,
     secretStored,
     dialogs

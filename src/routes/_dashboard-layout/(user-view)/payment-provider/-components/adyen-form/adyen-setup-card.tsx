@@ -3,7 +3,7 @@ import type { ProviderFormProps } from '@/components/provider-setup/types';
 
 import { AdyenCredentialsSection } from './adyen-credentials-section';
 import { AdyenEnvironmentBadge } from './adyen-environment-badge';
-import { ADYEN_CREDENTIALS_REQUIRED, useAdyenForm } from './use-adyen-form';
+import { useAdyenForm } from './use-adyen-form';
 
 /**
  * Connects Adyen to a property: the credentials alone. The recipient and
@@ -16,14 +16,13 @@ export function AdyenSetupCard({
 }: Omit<ProviderFormProps<'payment'>, 'saved'>) {
   const providerForm = useAdyenForm({
     saved: null,
-    required: ADYEN_CREDENTIALS_REQUIRED,
     replaces
   });
   const { form, isSaving } = providerForm;
 
   return (
     <ProviderFormCard
-      {...providerForm}
+      providerForm={providerForm}
       className="max-w-4xl"
       entry={entry}
       badges={<AdyenEnvironmentBadge control={form.control} />}

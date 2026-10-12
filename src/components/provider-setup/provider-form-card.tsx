@@ -16,12 +16,17 @@ import type { TestConnectionStep } from './test-connection-dialog';
 import type { ProviderEntry } from './types';
 
 interface ProviderFormCardProps<V extends FieldValues> {
-  form: UseFormReturn<V>;
-  onSubmit: (data: V) => void | Promise<void>;
-  isSaving: boolean;
+  /** What useProviderForm returned. */
+  providerForm: {
+    form: UseFormReturn<V>;
+    onSubmit: (data: V) => void | Promise<void>;
+    isSaving: boolean;
+    /** The provider as stored, or null while it is being set up. */
+    saved: Pick<Provider, 'updated_at'> | null;
+    /** The dialogs the form opens, e.g. the one confirming a replacement. */
+    dialogs: React.ReactNode;
+  };
   entry: ProviderEntry<ProviderKind>;
-  /** The provider as stored, or null while it is being set up. */
-  saved: Pick<Provider, 'updated_at'> | null;
   /** Opens the picker: "Back" during setup, "Change provider" after. */
   onChooseProvider: () => void;
   /** Shown after the name in the header. */
@@ -30,8 +35,6 @@ interface ProviderFormCardProps<V extends FieldValues> {
   testSteps?: TestConnectionStep[];
   /** The form's fields. */
   children: React.ReactNode;
-  /** Dialogs the form opens, e.g. the one confirming a replacement. */
-  dialogs?: React.ReactNode;
   className?: string;
 }
 
@@ -40,16 +43,12 @@ interface ProviderFormCardProps<V extends FieldValues> {
  * "Connect provider") and edits it afterwards ("Cancel", "Save changes").
  */
 export function ProviderFormCard<V extends FieldValues>({
-  form,
-  onSubmit,
-  isSaving,
+  providerForm: { form, onSubmit, isSaving, saved, dialogs },
   entry,
-  saved,
   onChooseProvider,
   badges,
   testSteps,
   children,
-  dialogs,
   className
 }: ProviderFormCardProps<V>) {
   const formId = React.useId();
