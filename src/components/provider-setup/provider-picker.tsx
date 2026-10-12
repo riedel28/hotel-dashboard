@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
-import type { ConfigurableKind } from 'shared/types/providers';
+import type { ProviderKind } from 'shared/types/providers';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import {
 import { ProviderLogo } from './provider-logo';
 import type { ProviderEntry } from './types';
 
-interface ProviderPickerProps<K extends ConfigurableKind> {
+interface ProviderPickerProps<K extends ProviderKind> {
   title: ReactNode;
   description: ReactNode;
   providers: ProviderEntry<K>[];
@@ -28,7 +28,7 @@ interface ProviderPickerProps<K extends ConfigurableKind> {
 }
 
 /** The providers of one kind to choose from, as tiles. */
-export function ProviderPicker<K extends ConfigurableKind>({
+export function ProviderPicker<K extends ProviderKind>({
   title,
   description,
   providers,

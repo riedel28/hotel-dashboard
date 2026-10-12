@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
 import {
-  type ConfigurableKind,
   type Provider,
+  type ProviderKind,
   providerSchemas,
   type SaveProviderInput,
   saveProviderSchemas
@@ -11,7 +11,7 @@ import { client, handleApiError } from './client';
 
 // The server scopes this to the caller's selected property; the id is in the
 // key so that switching property never shows the previous one's provider.
-export function providerQueryOptions<K extends ConfigurableKind>(
+export function providerQueryOptions<K extends ProviderKind>(
   kind: K,
   propertyId: string | null
 ) {
@@ -23,7 +23,7 @@ export function providerQueryOptions<K extends ConfigurableKind>(
 
 // The schema is picked by kind, which the compiler cannot follow through the
 // lookup: hence the casts, here and in saveProvider, and nowhere else.
-async function fetchProvider<K extends ConfigurableKind>(
+async function fetchProvider<K extends ProviderKind>(
   kind: K
 ): Promise<Provider<K> | null> {
   try {
@@ -36,7 +36,7 @@ async function fetchProvider<K extends ConfigurableKind>(
   }
 }
 
-async function saveProvider<K extends ConfigurableKind>(
+async function saveProvider<K extends ProviderKind>(
   kind: K,
   data: SaveProviderInput<K>
 ): Promise<Provider<K>> {

@@ -63,7 +63,7 @@ export function ApaleoForm({
       <SecretField
         label={<Trans>Secret code</Trans>}
         error={errors.secret}
-        stored={providerForm.saved !== null}
+        stored={providerForm.secretStored}
         {...form.register('secret')}
       />
       <TextField

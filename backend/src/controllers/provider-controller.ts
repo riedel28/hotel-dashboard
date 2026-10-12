@@ -1,47 +1,36 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, isNotNull } from 'drizzle-orm';
 import type { Response } from 'express';
 
 import {
-  type ConfigurableKind,
+  type ProviderKind,
   providerSchemas,
+  requiresSecret,
   type SaveProviderData
 } from '../../../shared/types/providers';
 import { db } from '../db/pool';
-import { providerConfigs, users } from '../db/schema';
+import { providerConfigs } from '../db/schema';
 import {
   requireSelectedProperty,
   type SelectedPropertyRequest
 } from '../middleware/selected-property';
 import { encryptSecret } from '../utils/secret-box';
 
-// The route only lets a configurable kind through (see routes/providers.ts).
+// The route only lets a known kind through (see routes/providers.ts).
 const kindOf = (req: SelectedPropertyRequest) =>
-  req.params.kind as ConfigurableKind;
+  req.params.kind as ProviderKind;
 
-const ofProperty = (propertyId: string, kind: ConfigurableKind) =>
+const ofProperty = (propertyId: string, kind: ProviderKind) =>
   and(
     eq(providerConfigs.property_id, propertyId),
     eq(providerConfigs.kind, kind)
   );
 
 // The property's provider of that kind as the API returns it, or null. The
-// secret never leaves the server: the client only learns that one is set.
-async function findProvider(propertyId: string, kind: ConfigurableKind) {
-  const [row] = await db
-    .select({
-      provider: providerConfigs.provider,
-      config: providerConfigs.config,
-      updated_at: providerConfigs.updated_at,
-      updated_by: {
-        id: users.id,
-        first_name: users.first_name,
-        last_name: users.last_name,
-        email: users.email
-      }
-    })
-    .from(providerConfigs)
-    .leftJoin(users, eq(users.id, providerConfigs.updated_by))
-    .where(ofProperty(propertyId, kind));
+// secret never leaves the server: the client only learns whether one is set.
+async function findProvider(propertyId: string, kind: ProviderKind) {
+  const row = await db.query.providerConfigs.findFirst({
+    where: ofProperty(propertyId, kind)
+  });
 
   if (!row) return null;
 
@@ -49,10 +38,9 @@ async function findProvider(propertyId: string, kind: ConfigurableKind) {
   // this is where a field added to a schema since gets its default.
   return providerSchemas[kind].parse({
     provider: row.provider,
-    secretConfigured: true,
+    secretConfigured: row.secret_encrypted !== null,
     config: row.config,
-    updated_at: row.updated_at.toISOString(),
-    updated_by: row.updated_by
+    updated_at: row.updated_at.toISOString()
   });
 }
 
@@ -71,53 +59,57 @@ async function getProvider(req: SelectedPropertyRequest, res: Response) {
 
 async function saveProvider(req: SelectedPropertyRequest, res: Response) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ error: 'Authentication required' });
-    }
     const propertyId = requireSelectedProperty(req, res);
     if (!propertyId) return;
 
     const kind = kindOf(req);
     // Body is validated + trimmed by validateBody(saveProviderSchemas[kind]).
     const { provider, secret, config } = req.body as SaveProviderData;
-    const values = {
-      provider,
-      config,
-      updated_at: new Date(),
-      updated_by: Number(req.user.id)
-    };
+    const values = { provider, config, updated_at: new Date() };
+    const needsSecret = requiresSecret(provider, config);
 
-    if (secret) {
-      // Sets the provider up, or replaces whichever one was there before.
-      const withSecret = { ...values, secret_encrypted: encryptSecret(secret) };
-      await db
-        .insert(providerConfigs)
-        .values({ property_id: propertyId, kind, ...withSecret })
-        .onConflictDoUpdate({
-          target: [providerConfigs.property_id, providerConfigs.kind],
-          set: withSecret
-        });
-    } else {
-      // Without a new secret only a provider that already has one can be
-      // saved: the stored secret is kept, and it belongs to that provider.
+    if (!secret) {
+      // An empty secret keeps the stored one, which belongs to this provider:
+      // so this only updates the provider that is already there, and only
+      // while it has the secret it needs.
       const updated = await db
         .update(providerConfigs)
         .set(values)
         .where(
           and(
             ofProperty(propertyId, kind),
-            eq(providerConfigs.provider, provider)
+            eq(providerConfigs.provider, provider),
+            needsSecret
+              ? isNotNull(providerConfigs.secret_encrypted)
+              : undefined
           )
         )
         .returning({ provider: providerConfigs.provider });
 
-      if (updated.length === 0) {
+      if (updated.length === 0 && needsSecret) {
         return res.status(400).json({
           error: 'Validation failed',
           details: [{ field: 'secret', message: 'Secret is required' }]
         });
       }
+      if (updated.length > 0) {
+        return res.status(200).json(await findProvider(propertyId, kind));
+      }
     }
+
+    // Sets the provider up, or replaces whichever one was there before:
+    // nothing of the previous one is kept, its secret included.
+    const row = {
+      ...values,
+      secret_encrypted: secret ? encryptSecret(secret) : null
+    };
+    await db
+      .insert(providerConfigs)
+      .values({ property_id: propertyId, kind, ...row })
+      .onConflictDoUpdate({
+        target: [providerConfigs.property_id, providerConfigs.kind],
+        set: row
+      });
 
     res.status(200).json(await findProvider(propertyId, kind));
   } catch (error) {

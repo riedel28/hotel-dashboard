@@ -3,10 +3,11 @@ import type { MessageDescriptor } from '@lingui/core';
 import { Trans, useLingui } from '@lingui/react/macro';
 import * as React from 'react';
 import { type DefaultValues, useForm } from 'react-hook-form';
-import type {
-  ConfigurableKind,
-  Provider,
-  SaveProviderInput
+import {
+  type Provider,
+  type ProviderKind,
+  requiresSecret,
+  type SaveProviderInput
 } from 'shared/types/providers';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -24,14 +25,14 @@ import {
 import { useSaveProvider } from '@/hooks/use-provider';
 
 /** The stored form of one provider of a kind. */
-type StoredProvider<K extends ConfigurableKind, P> = Extract<
+type StoredProvider<K extends ProviderKind, P> = Extract<
   Provider<K>,
   { provider: P }
 >;
 
 /** What that provider's form edits: its configuration and its secret. */
 export type ProviderFormValues<
-  K extends ConfigurableKind,
+  K extends ProviderKind,
   P extends Provider<K>['provider']
 > =
   StoredProvider<K, P> extends { config: infer Config }
@@ -45,7 +46,7 @@ type Refine<V> = (
 ) => void;
 
 interface UseProviderFormOptions<
-  K extends ConfigurableKind,
+  K extends ProviderKind,
   P extends Provider<K>['provider']
 > {
   kind: K;
@@ -62,7 +63,10 @@ interface UseProviderFormOptions<
   required: Partial<
     Record<Exclude<keyof ProviderFormValues<K, P>, 'secret'>, MessageDescriptor>
   >;
-  /** What the form says when the secret is missing while none is stored. */
+  /**
+   * What the form says when the provider needs a secret (see requiresSecret)
+   * and has none: neither stored nor entered.
+   */
   secretRequired: MessageDescriptor;
   /** Anything else to check. Keep its identity stable too. */
   refine?: Refine<ProviderFormValues<K, P>>;
@@ -75,7 +79,7 @@ interface UseProviderFormOptions<
  * save sends them to the server, and replacing another provider is confirmed.
  */
 export function useProviderForm<
-  K extends ConfigurableKind,
+  K extends ProviderKind,
   P extends Provider<K>['provider']
 >({
   kind,
@@ -100,6 +104,7 @@ export function useProviderForm<
   const stored =
     saved?.provider === provider ? (saved as StoredProvider<K, P>) : null;
   const isStored = stored !== null;
+  const secretStored = stored?.secretConfigured ?? false;
 
   // The server owns the shape of a configuration (shared/types/providers.ts);
   // this only adds what a form has to say before the request is sent.
@@ -109,7 +114,10 @@ export function useProviderForm<
         const messages: Record<string, MessageDescriptor | undefined> = {
           ...required,
           // A stored secret is kept by leaving the field empty
-          secret: isStored ? undefined : secretRequired
+          secret:
+            requiresSecret(provider, data) && !secretStored
+              ? secretRequired
+              : undefined
         };
         const entered: Record<string, unknown> = data;
         for (const [field, message] of Object.entries(messages)) {
@@ -123,7 +131,7 @@ export function useProviderForm<
         }
         refine?.(data, ctx, t);
       }),
-    [required, secretRequired, isStored, refine, t]
+    [provider, required, secretRequired, secretStored, refine, t]
   );
 
   // Follows the stored configuration: saving it resets the form to it, which
@@ -203,5 +211,12 @@ export function useProviderForm<
   );
 
   // Shaped to be spread into ProviderFormCard
-  return { form, onSubmit, isSaving: save.isPending, saved: stored, dialogs };
+  return {
+    form,
+    onSubmit,
+    isSaving: save.isPending,
+    saved: stored,
+    secretStored,
+    dialogs
+  };
 }

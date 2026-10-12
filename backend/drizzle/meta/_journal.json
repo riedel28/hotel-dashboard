@@ -85,6 +85,13 @@
       "when": 1791787700070,
       "tag": "0011_provider_configs",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1791790028410,
+      "tag": "0012_optional_provider_secret",
+      "breakpoints": true
     }
   ]
 }

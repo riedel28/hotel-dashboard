@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro';
 import * as React from 'react';
-import type { ConfigurableKind, Provider } from 'shared/types/providers';
+import type { Provider, ProviderKind } from 'shared/types/providers';
 
 import { useAuth } from '@/auth';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { useProvider } from '@/hooks/use-provider';
 import { ProviderPicker } from './provider-picker';
 import type { ProviderEntry } from './types';
 
-interface ProviderScreensProps<K extends ConfigurableKind> {
+interface ProviderScreensProps<K extends ProviderKind> {
   kind: K;
   pickerTitle: React.ReactNode;
   pickerDescription: React.ReactNode;
@@ -22,7 +22,7 @@ interface ProviderScreensProps<K extends ConfigurableKind> {
  * The screens of a provider page: the picker for a property that has no
  * provider of this kind, otherwise the form of the one it has.
  */
-export function ProviderScreens<K extends ConfigurableKind>(
+export function ProviderScreens<K extends ProviderKind>(
   props: ProviderScreensProps<K>
 ) {
   const { user } = useAuth();
@@ -49,7 +49,7 @@ export function ProviderScreens<K extends ConfigurableKind>(
   return <Screens key={user?.selected_property_id} saved={data} {...props} />;
 }
 
-function Screens<K extends ConfigurableKind>({
+function Screens<K extends ProviderKind>({
   saved,
   pickerTitle,
   pickerDescription,

@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro';
 import { ArrowUpRightIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
-import type { ConfigurableKind } from 'shared/types/providers';
+import type { ProviderKind } from 'shared/types/providers';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { ProviderLogo } from './provider-logo';
 import type { ProviderEntry } from './types';
 
 interface ProviderCardHeaderProps {
-  entry: ProviderEntry<ConfigurableKind>;
+  entry: ProviderEntry<ProviderKind>;
   /** Shown after the name, e.g. the environment a provider runs in. */
   badges?: ReactNode;
   /** Opens the picker. Omitted while the provider is being set up. */

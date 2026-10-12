@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import { Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 import type { FieldValues, UseFormReturn } from 'react-hook-form';
-import type { ConfigurableKind, Provider } from 'shared/types/providers';
+import type { Provider, ProviderKind } from 'shared/types/providers';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -19,7 +19,7 @@ interface ProviderFormCardProps<V extends FieldValues> {
   form: UseFormReturn<V>;
   onSubmit: (data: V) => void | Promise<void>;
   isSaving: boolean;
-  entry: ProviderEntry<ConfigurableKind>;
+  entry: ProviderEntry<ProviderKind>;
   /** The provider as stored, or null while it is being set up. */
   saved: Pick<Provider, 'updated_at'> | null;
   /** Opens the picker: "Back" during setup, "Change provider" after. */

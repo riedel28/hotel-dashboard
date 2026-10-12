@@ -12,7 +12,6 @@ describe('Providers API', () => {
   let otherAuth: string;
   let noPropertyAuth: string;
   let propertyId: string;
-  let userId: number;
 
   const adyen = {
     environment: 'test',
@@ -30,7 +29,7 @@ describe('Providers API', () => {
       .set('Authorization', as)
       .send(body);
 
-  const storedSecret = async (kind: 'payment' | 'pms') => {
+  const storedSecret = async (kind: 'payment' | 'pms' | 'door_lock') => {
     const [row] = await db
       .select()
       .from(providerConfigs)
@@ -40,7 +39,7 @@ describe('Providers API', () => {
           eq(providerConfigs.kind, kind)
         )
       );
-    return decryptSecret(row.secret_encrypted);
+    return row.secret_encrypted && decryptSecret(row.secret_encrypted);
   };
 
   beforeEach(async () => {
@@ -48,9 +47,8 @@ describe('Providers API', () => {
     const otherProperty = await createTestProperty({ name: 'Hotel B' });
     propertyId = property.id;
 
-    const { user, token } = await createTestUser({ first_name: 'Ada' });
+    const { user, token } = await createTestUser();
     const { user: other, token: otherToken } = await createTestUser();
-    userId = user.id;
     await db
       .update(users)
       .set({ selected_property_id: property.id })
@@ -71,10 +69,9 @@ describe('Providers API', () => {
     await request(app).get('/api/providers/payment').expect(401);
   });
 
-  test('only configurable kinds exist', async () => {
-    await get('door_lock').expect(404);
+  test('only the kinds of provider exist', async () => {
     await get('nonsense').expect(404);
-    await put('door_lock', {}).expect(404);
+    await put('nonsense', {}).expect(404);
   });
 
   test('is null until a provider is set up', async () => {
@@ -82,7 +79,7 @@ describe('Providers API', () => {
     expect((await get('pms').expect(200)).body).toBeNull();
   });
 
-  test('sets up a provider, names who did it and never returns the secret', async () => {
+  test('sets up a provider and never returns the secret', async () => {
     const { body: saved } = await put('payment', {
       provider: 'adyen',
       secret: 'secret-key',
@@ -95,8 +92,7 @@ describe('Providers API', () => {
     expect(body).toMatchObject({
       provider: 'adyen',
       secretConfigured: true,
-      config: { ...adyen, addressLine1: '', mappings: { visa: {} } },
-      updated_by: { id: userId, first_name: 'Ada' }
+      config: { ...adyen, addressLine1: '', mappings: { visa: {} } }
     });
     expect(JSON.stringify(body)).not.toContain('secret-key');
     expect(await storedSecret('payment')).toBe('secret-key');
@@ -161,6 +157,53 @@ describe('Providers API', () => {
     expect(body).toMatchObject({ provider: 'apaleo', config: apaleo });
     expect(body.config).not.toHaveProperty('hotelId');
     expect(await storedSecret('pms')).toBe('apaleo-secret');
+  });
+
+  describe('SALTO, which needs a secret only over SHIP', () => {
+    const overPms = { mode: 'pms', host: '10.0.0.5', port: '8090' };
+    const overShip = {
+      mode: 'ship',
+      shipType: 'https',
+      shipUrl: 'https://salto.example',
+      username: 'ship'
+    };
+    const save = (config: object, secret = '') =>
+      put('door_lock', { provider: 'salto', secret, config });
+
+    test('is set up over the PMS interface without one', async () => {
+      const { body } = await save(overPms).expect(200);
+
+      expect(body).toMatchObject({
+        provider: 'salto',
+        secretConfigured: false,
+        config: { ...overPms, username: '' }
+      });
+      expect(await storedSecret('door_lock')).toBeNull();
+    });
+
+    test('takes a password to switch to SHIP, then keeps it', async () => {
+      await save(overPms).expect(200);
+      await save(overShip).expect(400);
+
+      const { body } = await save(overShip, 'ship-password').expect(200);
+      expect(body.secretConfigured).toBe(true);
+
+      // Back and forth without entering it again
+      await save({ ...overShip, ...overPms }).expect(200);
+      await save({ ...overPms, ...overShip }).expect(200);
+      expect(await storedSecret('door_lock')).toBe('ship-password');
+    });
+
+    test('checks the fields of the interface in use', async () => {
+      await save({ mode: 'pms', host: '', port: '8090' }).expect(400);
+      await save({ mode: 'pms', host: 'h', port: '70000' }).expect(400);
+      await save({ ...overShip, shipUrl: '' }, 'p').expect(400);
+      await save({ ...overShip, username: '' }, 'p').expect(400);
+      // STP has no URL
+      await save({ mode: 'ship', shipType: 'stp', username: 'u' }, 'p').expect(
+        200
+      );
+    });
   });
 
   test('validates the request', async () => {

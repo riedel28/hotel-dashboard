@@ -407,12 +407,8 @@ export const providerConfigs = pgTable(
     kind: text('kind').notNull().$type<ProviderKind>(),
     provider: text('provider').notNull().$type<Provider['provider']>(),
     config: jsonb('config').notNull().$type<Provider['config']>(),
-    secret_encrypted: text('secret_encrypted').notNull(),
-    // Null once the user has been deleted.
-    updated_by: bigint('updated_by', { mode: 'number' }).references(
-      () => users.id,
-      { onDelete: 'set null' }
-    ),
+    // Null for a provider that needs no secret (see requiresSecret).
+    secret_encrypted: text('secret_encrypted'),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),

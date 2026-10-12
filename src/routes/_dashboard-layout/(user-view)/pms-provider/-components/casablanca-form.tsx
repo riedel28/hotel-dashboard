@@ -58,7 +58,7 @@ export function CasablancaForm({
       <SecretField
         label={<Trans>Token</Trans>}
         error={errors.secret}
-        stored={providerForm.saved !== null}
+        stored={providerForm.secretStored}
         {...form.register('secret')}
       />
       <SwitchField

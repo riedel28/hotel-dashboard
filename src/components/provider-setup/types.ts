@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import type { ConfigurableKind, Provider } from 'shared/types/providers';
+import type { Provider, ProviderKind } from 'shared/types/providers';
 
 /** A provider's logo: a file in public/, and how it copes with both themes. */
 export interface ProviderLogoSource {
@@ -15,7 +15,7 @@ export interface ProviderLogoSource {
  * providers once; the picker, the form's header and the choice of form are all
  * read from that list.
  */
-export interface ProviderEntry<K extends ConfigurableKind> {
+export interface ProviderEntry<K extends ProviderKind> {
   /** As stored: a member of the kind's schema once it can be configured. */
   id: string;
   name: string;
@@ -28,7 +28,7 @@ export interface ProviderEntry<K extends ConfigurableKind> {
 }
 
 /** What a provider's form is given. */
-export interface ProviderFormProps<K extends ConfigurableKind> {
+export interface ProviderFormProps<K extends ProviderKind> {
   /** The provider this is the form of. */
   entry: ProviderEntry<K>;
   /** Its stored configuration, or null while it is being set up. */

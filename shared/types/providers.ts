@@ -1,8 +1,5 @@
 import { z } from 'zod';
 
-// What a property can be connected to. Each kind has one provider at a time.
-export const PROVIDER_KINDS = ['payment', 'pms', 'door_lock'] as const;
-
 // The payment methods an Adyen mapping code can be set for.
 export const ADYEN_METHOD_IDS = [
   'mastercard',
@@ -66,6 +63,57 @@ export const apaleoConfigSchema = z.object({
   groupFolioByRatePlan: z.boolean().default(false)
 });
 
+// SALTO, the door lock system. It is reached either through the PMS interface
+// (a host and a port, no credentials) or through SHIP (a user and a password,
+// which is its secret). The fields of both ways are kept, so switching between
+// them loses nothing; only those of the chosen one have to be filled in.
+export const saltoConfigSchema = z
+  .object({
+    mode: z.enum(['pms', 'ship']),
+    host: z.string().trim().max(255).default(''),
+    port: z.string().trim().max(5).default(''),
+    shipType: z.enum(['stp', 'https']).default('https'),
+    shipUrl: z.string().trim().max(500).default(''),
+    username: z.string().trim().max(200).default('')
+  })
+  .superRefine((config, ctx) => {
+    const require = (
+      field: 'host' | 'shipUrl' | 'username',
+      message: string
+    ) => {
+      if (!config[field])
+        ctx.addIssue({ code: 'custom', path: [field], message });
+    };
+
+    if (config.mode === 'pms') {
+      require('host', 'Host is required');
+      if (!isPortNumber(config.port)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['port'],
+          message: 'Enter a valid port number'
+        });
+      }
+    } else {
+      if (config.shipType === 'https')
+        require('shipUrl', 'SHIP-URL is required');
+      require('username', 'Username is required');
+    }
+  });
+
+/** A TCP port: digits only, 1 to 65535. */
+export function isPortNumber(value: string) {
+  return /^\d+$/.test(value) && Number(value) >= 1 && Number(value) <= 65535;
+}
+
+/**
+ * Whether a provider cannot work without a secret, given its configuration.
+ * All do, except SALTO over the PMS interface.
+ */
+export function requiresSecret(provider: string, config: object) {
+  return !(provider === 'salto' && 'mode' in config && config.mode === 'pms');
+}
+
 // A provider paired with its own configuration. The unions below take one
 // member per provider that can be configured, told apart by `provider`.
 const adyenSchema = z.object({
@@ -83,6 +131,11 @@ const apaleoSchema = z.object({
   config: apaleoConfigSchema
 });
 
+const saltoSchema = z.object({
+  provider: z.literal('salto'),
+  config: saltoConfigSchema
+});
+
 // What a save adds: the provider's secret. An empty one keeps the stored one.
 const saving = { secret: z.string().trim().max(500).default('') };
 
@@ -90,26 +143,18 @@ const saving = { secret: z.string().trim().max(500).default('') };
 // back, only whether one is set.
 const stored = {
   secretConfigured: z.boolean(),
-  updated_at: z.iso.datetime(),
-  // Null once the user has been deleted.
-  updated_by: z
-    .object({
-      id: z.number().int().positive(),
-      first_name: z.string().nullable(),
-      last_name: z.string().nullable(),
-      email: z.string()
-    })
-    .nullable()
+  updated_at: z.iso.datetime()
 };
 
-// Per kind: what a save takes and what a read returns. A kind missing here
-// cannot be configured yet.
+// Per kind of provider (a property has one of each): what a save takes and
+// what a read returns.
 export const saveProviderSchemas = {
   payment: z.discriminatedUnion('provider', [adyenSchema.extend(saving)]),
   pms: z.discriminatedUnion('provider', [
     casablancaSchema.extend(saving),
     apaleoSchema.extend(saving)
-  ])
+  ]),
+  door_lock: z.discriminatedUnion('provider', [saltoSchema.extend(saving)])
 };
 
 export const providerSchemas = {
@@ -117,25 +162,27 @@ export const providerSchemas = {
   pms: z.discriminatedUnion('provider', [
     casablancaSchema.extend(stored),
     apaleoSchema.extend(stored)
-  ])
+  ]),
+  door_lock: z.discriminatedUnion('provider', [saltoSchema.extend(stored)])
 };
 
-export type ProviderKind = (typeof PROVIDER_KINDS)[number];
-export type ConfigurableKind = keyof typeof providerSchemas;
+export type ProviderKind = keyof typeof providerSchemas;
 export type AdyenMethodId = (typeof ADYEN_METHOD_IDS)[number];
 export type AdyenConfig = z.infer<typeof adyenConfigSchema>;
 export type CasablancaConfig = z.infer<typeof casablancaConfigSchema>;
 export type ApaleoConfig = z.infer<typeof apaleoConfigSchema>;
+export type SaltoConfig = z.infer<typeof saltoConfigSchema>;
 
 // Null until the property has a provider of that kind set up.
-export type Provider<K extends ConfigurableKind = ConfigurableKind> = z.infer<
+export type Provider<K extends ProviderKind = ProviderKind> = z.infer<
   (typeof providerSchemas)[K]
 >;
 export type PaymentProvider = Provider<'payment'>;
 export type PmsProvider = Provider<'pms'>;
 // What a client sends, and what the server reads after validation.
-export type SaveProviderInput<K extends ConfigurableKind = ConfigurableKind> =
-  z.input<(typeof saveProviderSchemas)[K]>;
+export type SaveProviderInput<K extends ProviderKind = ProviderKind> = z.input<
+  (typeof saveProviderSchemas)[K]
+>;
 export type SaveProviderData = z.infer<
-  (typeof saveProviderSchemas)[ConfigurableKind]
+  (typeof saveProviderSchemas)[ProviderKind]
 >;
