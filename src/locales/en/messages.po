@@ -933,7 +933,7 @@ msgstr "Children"
 msgid "Choose a payment provider"
 msgstr "Choose a payment provider"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:93
 msgid "Choose a property management system"
 msgstr "Choose a property management system"
 
@@ -2336,7 +2336,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:48
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:109
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:31
@@ -2432,7 +2432,7 @@ msgstr "Integration Guide"
 #: src/routes/_dashboard-layout/-components/nav-items.ts:55
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:37
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:53
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:69
 msgid "Integrations"
 msgstr "Integrations"
 
@@ -2550,13 +2550,13 @@ msgstr "Last signal"
 #~ msgid "Last updated {0}"
 #~ msgstr "Last updated {0}"
 
-#: src/components/provider-setup/last-updated.tsx:27
+#: src/components/provider-setup/last-updated.tsx:18
 msgid "Last updated {date}"
 msgstr "Last updated {date}"
 
 #: src/components/provider-setup/last-updated.tsx:23
-msgid "Last updated {date} · {name}"
-msgstr "Last updated {date} · {name}"
+#~ msgid "Last updated {date} · {name}"
+#~ msgstr "Last updated {date} · {name}"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:91
 #~ msgid "Last updated {lastUpdated}"
@@ -2687,7 +2687,7 @@ msgstr "Manage this property's connection to its door lock system."
 msgid "Manage this property's connection to its payment account."
 msgstr "Manage this property's connection to its payment account."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:83
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:85
 msgid "Manage this property's connection to its property management system."
 msgstr "Manage this property's connection to its property management system."
 
@@ -2787,7 +2787,7 @@ msgstr "Mobile App (Native)"
 msgid "Mobile App (PWA)"
 msgstr "Mobile App (PWA)"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:73
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:70
 msgid "Mock code"
 msgstr "Mock code"
 
@@ -3418,9 +3418,9 @@ msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:98
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:72
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:56
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:74
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:82
 msgid "PMS"
 msgstr "PMS"
 
@@ -4312,7 +4312,7 @@ msgstr "Select status"
 msgid "Select the provider this property takes payments with. You enter its credentials in the next step."
 msgstr "Select the provider this property takes payments with. You enter its credentials in the next step."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:95
 msgid "Select the system this property is run with. You enter its credentials in the next step."
 msgstr "Select the system this property is run with. You enter its credentials in the next step."
 
@@ -4777,8 +4777,8 @@ msgid "The device could not be added. Please try again."
 msgstr "The device could not be added. Please try again."
 
 #: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:69
-msgid "The invoice will be sent directly to the PMS"
-msgstr "The invoice will be sent directly to the PMS"
+#~ msgid "The invoice will be sent directly to the PMS"
+#~ msgstr "The invoice will be sent directly to the PMS"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:25
 msgid "The merchant address shown on payment receipts."
@@ -4896,7 +4896,7 @@ msgstr "This image is small, so it may look blurry once cropped."
 msgid "This invitation link is invalid."
 msgstr "This invitation link is invalid."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:72
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr "This is the service code that will be used to skip payment at check-in."
 

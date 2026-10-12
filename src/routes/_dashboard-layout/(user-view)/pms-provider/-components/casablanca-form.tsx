@@ -65,9 +65,6 @@ export function CasablancaForm({
         control={form.control}
         name="sendInvoiceViaPms"
         label={<Trans>Send invoice via PMS</Trans>}
-        description={
-          <Trans>The invoice will be sent directly to the PMS</Trans>
-        }
       />
       <TextField
         label={<Trans>Mock code</Trans>}

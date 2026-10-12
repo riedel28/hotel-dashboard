@@ -24,6 +24,8 @@ const PROVIDERS: ProviderEntry<'pms'>[] = [
       src: '/casablanca-logo.png',
       darkSrc: '/casablanca-logo-inverse.png'
     },
+    // Casablanca publishes no API documentation: its site stands in for it
+    guideUrl: 'https://www.casablanca.at',
     Form: CasablancaForm
   },
   {
