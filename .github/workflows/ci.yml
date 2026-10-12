@@ -35,7 +35,7 @@ jobs:
           --health-retries 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -70,9 +70,10 @@ jobs:
       - name: Build
         run: bun --bun vite build
 
+  # Runs alongside the test job, not after it: the two share nothing, and
+  # waiting for one before starting the other doubled the time to a verdict.
   e2e:
     name: E2E Tests
-    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # A private database per job. Sharing one remote test database let two
@@ -92,7 +93,7 @@ jobs:
           --health-retries 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -105,12 +106,19 @@ jobs:
       - name: Install backend dependencies
         run: cd ./backend && bun install --frozen-lockfile
 
+      # Keyed by the Playwright version, which is what decides the browser
+      # build. Hashing package.json dropped the cache at every release, since
+      # the release bumps the version in it.
+      - name: Read the Playwright version
+        id: playwright-version
+        run: echo "version=$(bunx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
       - name: Cache Playwright browsers
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}-${{ hashFiles('package.json') }}
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -141,7 +149,7 @@ jobs:
         run: bunx playwright test
 
       - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
