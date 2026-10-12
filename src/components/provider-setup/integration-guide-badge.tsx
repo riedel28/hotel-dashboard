@@ -9,7 +9,7 @@ export function IntegrationGuideBadge({ href }: { href: string }) {
     <Badge
       variant="outline"
       size="sm"
-      className="cursor-pointer bg-background text-foreground dark:bg-background/80 dark:border-foreground/20 hover:bg-background/50 dark:hover:bg-background/60"
+      className="cursor-pointer bg-background text-foreground hover:bg-background/50 dark:border-foreground/20 dark:bg-background/80 dark:hover:bg-background/60"
       render={<a href={href} target="_blank" rel="noopener noreferrer" />}
     >
       <Trans>Integration Guide</Trans>

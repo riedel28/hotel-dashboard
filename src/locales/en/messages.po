@@ -126,7 +126,7 @@ msgstr "{label} time"
 msgid "{name} assigned to room {label}"
 msgstr "{name} assigned to room {label}"
 
-#: src/components/provider-setup/use-provider-form.tsx:151
+#: src/components/provider-setup/use-provider-form.tsx:159
 msgid "{name} connected"
 msgstr "{name} connected"
 
@@ -170,7 +170,7 @@ msgstr "<0>{0}</0> will no longer belong to room <1>{1}</1>. You can assign it a
 #~ msgid "2FA is off"
 #~ msgstr "2FA is off"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:71
 msgid "401 Unauthorized — check username and password."
 msgstr "401 Unauthorized — check username and password."
 
@@ -190,7 +190,7 @@ msgstr "A customer with this email already exists"
 #~ msgid "A key is stored. Enter a new one only to replace it."
 #~ msgstr "A key is stored. Enter a new one only to replace it."
 
-#: src/components/provider-setup/use-provider-form.tsx:182
+#: src/components/provider-setup/use-provider-form.tsx:190
 msgid "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 msgstr "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 
@@ -613,7 +613,7 @@ msgstr "At least one symbol"
 msgid "Authenticate credentials"
 msgstr "Authenticate credentials"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:70
 msgid "Authentication"
 msgstr "Authentication"
 
@@ -726,7 +726,7 @@ msgid "Can't scan the code? Enter the key manually"
 msgstr "Can't scan the code? Enter the key manually"
 
 #: src/components/provider-setup/provider-form-card.tsx:113
-#: src/components/provider-setup/use-provider-form.tsx:190
+#: src/components/provider-setup/use-provider-form.tsx:198
 #: src/components/sectioned-form.tsx:100
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:144
@@ -833,7 +833,7 @@ msgstr "Change language"
 msgid "Change profile picture"
 msgstr "Change profile picture"
 
-#: src/components/provider-setup/provider-card-header.tsx:68
+#: src/components/provider-setup/provider-card-header.tsx:51
 msgid "Change provider"
 msgstr "Change provider"
 
@@ -929,6 +929,10 @@ msgstr "Children"
 #~ msgid "Children count cannot be negative"
 #~ msgstr "Children count cannot be negative"
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:81
+msgid "Choose a door lock system"
+msgstr "Choose a door lock system"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:77
 msgid "Choose a payment provider"
 msgstr "Choose a payment provider"
@@ -1019,10 +1023,10 @@ msgid "Completed At"
 msgstr "Completed At"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:186
-msgid "Config updated"
-msgstr "Config updated"
+#~ msgid "Config updated"
+#~ msgstr "Config updated"
 
-#: src/components/provider-setup/use-provider-form.tsx:151
+#: src/components/provider-setup/use-provider-form.tsx:159
 msgid "Configuration updated"
 msgstr "Configuration updated"
 
@@ -1073,7 +1077,7 @@ msgstr "Connection failed"
 msgid "Connection successful"
 msgstr "Connection successful"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:66
 msgid "Connection timed out after 5000 ms — host unreachable."
 msgstr "Connection timed out after 5000 ms — host unreachable."
 
@@ -1454,9 +1458,9 @@ msgid "Done"
 msgstr "Done"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:104
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:24
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:42
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:50
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:44
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:70
 msgid "Door Locks"
 msgstr "Door Locks"
 
@@ -1621,7 +1625,7 @@ msgstr "Enter a domain without a path, e.g. app.example.com"
 #~ msgid "Enter a password. Must contain:"
 #~ msgstr "Enter a password. Must contain:"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:137
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:52
 msgid "Enter a valid port number"
 msgstr "Enter a valid port number"
 
@@ -1954,7 +1958,7 @@ msgstr "Failed to resend verification email"
 msgid "Failed to reset password. The link may have expired."
 msgstr "Failed to reset password. The link may have expired."
 
-#: src/components/provider-setup/use-provider-form.tsx:154
+#: src/components/provider-setup/use-provider-form.tsx:162
 msgid "Failed to save configuration"
 msgstr "Failed to save configuration"
 
@@ -2240,8 +2244,8 @@ msgstr "HEIC photos from iPhone aren't supported. Choose a JPG or PNG, or take a
 #~ msgstr "Hello '/_dashboard-layout/pms-provider'!"
 
 #: src/routes/_dashboard-layout/(user-view)/access-provider.tsx:13
-msgid "Hello \"/_dashboard-layout/access-provider\"!"
-msgstr "Hello \"/_dashboard-layout/access-provider\"!"
+#~ msgid "Hello \"/_dashboard-layout/access-provider\"!"
+#~ msgstr "Hello \"/_dashboard-layout/access-provider\"!"
 
 #: src/routes/_dashboard-layout/admin/customers.tsx:16
 #~ msgid "Hello \"/_dashboard-layout/admin/customers\"!"
@@ -2334,7 +2338,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/new.tsx:27
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:104
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:52
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
@@ -2350,11 +2354,11 @@ msgstr "Hide password"
 msgid "Home"
 msgstr "Home"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:270
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:159
 msgid "Host"
 msgstr "Host"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:120
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:49
 msgid "Host is required"
 msgstr "Host is required"
 
@@ -2424,13 +2428,12 @@ msgstr "Infants"
 #~ msgid "Info"
 #~ msgstr "Info"
 
-#: src/components/provider-setup/provider-card-header.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:216
+#: src/components/provider-setup/integration-guide-badge.tsx:15
 msgid "Integration Guide"
 msgstr "Integration Guide"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:55
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:57
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:53
 #: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:69
 msgid "Integrations"
@@ -2679,7 +2682,7 @@ msgstr "Manage the hotel information your guests can browse, from A to Z."
 #~ msgid "Manage this property's connection to its Adyen payment account."
 #~ msgstr "Manage this property's connection to its Adyen payment account."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:73
 msgid "Manage this property's connection to its door lock system."
 msgstr "Manage this property's connection to its door lock system."
 
@@ -3044,7 +3047,7 @@ msgstr "No properties yet."
 #~ msgid "No response from Adyen."
 #~ msgstr "No response from Adyen."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:86
 msgid "No response from the PMS interface."
 msgstr "No response from the PMS interface."
 
@@ -3219,7 +3222,7 @@ msgstr "Page not found"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:221
 #: src/routes/_auth-layout/auth/login.tsx:213
 #: src/routes/_auth-layout/auth/sign-up.tsx:259
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:422
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:239
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:116
@@ -3242,7 +3245,7 @@ msgstr "Password"
 msgid "Password does not yet meet all requirements"
 msgstr "Password does not yet meet all requirements"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:161
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:120
 msgid "Password is required"
 msgstr "Password is required"
 
@@ -3424,7 +3427,11 @@ msgstr "Please verify your email address before logging in."
 msgid "PMS"
 msgstr "PMS"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:145
+msgid "PMS interface"
+msgstr "PMS interface"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:85
 msgid "PMS interface handshake"
 msgstr "PMS interface handshake"
 
@@ -3433,14 +3440,14 @@ msgstr "PMS interface handshake"
 #~ msgstr "PMS Provider"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:250
-msgid "PMS-Schnittstelle"
-msgstr "PMS-Schnittstelle"
+#~ msgid "PMS-Schnittstelle"
+#~ msgstr "PMS-Schnittstelle"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:292
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:166
 msgid "Port"
 msgstr "Port"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:50
 msgid "Port is required"
 msgstr "Port is required"
 
@@ -3830,11 +3837,11 @@ msgstr "Rename category"
 #~ msgid "Replace"
 #~ msgstr "Replace"
 
-#: src/components/provider-setup/use-provider-form.tsx:177
+#: src/components/provider-setup/use-provider-form.tsx:185
 msgid "Replace {replaces} with {name}?"
 msgstr "Replace {replaces} with {name}?"
 
-#: src/components/provider-setup/use-provider-form.tsx:198
+#: src/components/provider-setup/use-provider-form.tsx:206
 msgid "Replace provider"
 msgstr "Replace provider"
 
@@ -4083,8 +4090,8 @@ msgid "Running tests… ({passedCount}/{0})"
 msgstr "Running tests… ({passedCount}/{0})"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:202
-msgid "SALTO"
-msgstr "SALTO"
+#~ msgid "SALTO"
+#~ msgstr "SALTO"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
@@ -4316,6 +4323,10 @@ msgstr "Select the provider this property takes payments with. You enter its cre
 msgid "Select the system this property is run with. You enter its credentials in the next step."
 msgstr "Select the system this property is run with. You enter its credentials in the next step."
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:83
+msgid "Select the system this property's doors are locked with. You enter its connection details in the next step."
+msgstr "Select the system this property's doors are locked with. You enter its connection details in the next step."
+
 #: src/routes/_dashboard-layout/-components/view-selector.tsx:37
 #~ msgid "Select view"
 #~ msgstr "Select view"
@@ -4393,27 +4404,31 @@ msgstr "Setup key copied"
 #~ msgid "Share this URL with guests for direct check-in access"
 #~ msgstr "Share this URL with guests for direct check-in access"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:75
 msgid "SHIP handshake"
 msgstr "SHIP handshake"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:76
 msgid "SHIP handshake rejected: unsupported protocol version."
 msgstr "SHIP handshake rejected: unsupported protocol version."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:256
-msgid "SHIP-Schnittstelle"
-msgstr "SHIP-Schnittstelle"
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:148
+msgid "SHIP interface"
+msgstr "SHIP interface"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:320
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:256
+#~ msgid "SHIP-Schnittstelle"
+#~ msgstr "SHIP-Schnittstelle"
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:180
 msgid "SHIP-Type"
 msgstr "SHIP-Type"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:380
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:228
 msgid "SHIP-URL"
 msgstr "SHIP-URL"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:58
 msgid "SHIP-URL is required"
 msgstr "SHIP-URL is required"
 
@@ -4594,7 +4609,7 @@ msgstr "Step {0} of {1}"
 msgid "Stop test"
 msgstr "Stop test"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:350
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:206
 msgid "STP is deprecated"
 msgstr "STP is deprecated"
 
@@ -4671,7 +4686,7 @@ msgstr "Switched to {0}"
 msgid "System"
 msgstr "System"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:65
 msgid "TCP connection"
 msgstr "TCP connection"
 
@@ -4690,7 +4705,6 @@ msgid "Test"
 msgstr "Test"
 
 #: src/components/provider-setup/test-connection.tsx:47
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:482
 msgid "Test connection"
 msgstr "Test connection"
 
@@ -4703,9 +4717,7 @@ msgid "Test provider configuration"
 msgstr "Test provider configuration"
 
 #. placeholder {0}: formatLocalized(lastResult.finishedAt, { timeStyle: 'short' })
-#. placeholder {0}: formatLocalized(lastTestResult.finishedAt, { timeStyle: 'short' })
 #: src/components/provider-setup/test-connection.tsx:69
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:467
 msgid "Tested at {0}"
 msgstr "Tested at {0}"
 
@@ -4872,7 +4884,7 @@ msgstr "This address isn't verified yet. Check your inbox for the confirmation l
 #~ msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
 #~ msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:353
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:209
 msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 
@@ -4943,11 +4955,11 @@ msgstr "Title"
 msgid "Title is required"
 msgstr "Title is required"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:77
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:94
 msgid "TLS certificate"
 msgstr "TLS certificate"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:95
 msgid "TLS handshake failed: certificate is self-signed or expired."
 msgstr "TLS handshake failed: certificate is self-signed or expired."
 
@@ -5178,8 +5190,8 @@ msgid "Update"
 msgstr "Update"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:486
-msgid "Update config"
-msgstr "Update config"
+#~ msgid "Update config"
+#~ msgstr "Update config"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:151
 msgid "Update password"
@@ -5280,11 +5292,11 @@ msgstr "User updated successfully"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:402
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:234
 msgid "Username"
 msgstr "Username"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:60
 msgid "Username is required"
 msgstr "Username is required"
 
