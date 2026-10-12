@@ -6,6 +6,7 @@ import {
   check,
   index,
   integer,
+  jsonb,
   numeric,
   pgTable,
   primaryKey,
@@ -17,6 +18,7 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
+import type { Provider, ProviderKind } from '../../../shared/types/providers';
 import {
   type GuestAgeGroup,
   guestAgeGroupSchema,
@@ -388,6 +390,38 @@ export const guestAbcEntries = pgTable(
   (table) => [
     index('guest_abc_entries_property_id_idx').on(table.property_id),
     index('guest_abc_entries_letter_idx').on(table.letter)
+  ]
+);
+
+// What a property is connected to: one row per property and kind of provider
+// (payment, PMS, door locks), and no row means none is set up yet. `config`
+// holds the provider's own settings, validated on the way in by the schemas in
+// shared/types/providers.ts; its secret (an API key, a token) is kept apart,
+// encrypted with secret-box.
+export const providerConfigs = pgTable(
+  'provider_configs',
+  {
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    kind: text('kind').notNull().$type<ProviderKind>(),
+    provider: text('provider').notNull().$type<Provider['provider']>(),
+    config: jsonb('config').notNull().$type<Provider['config']>(),
+    // Null for a provider that needs no secret (see requiresSecret).
+    secret_encrypted: text('secret_encrypted'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    primaryKey({ columns: [table.property_id, table.kind] }),
+    check(
+      'provider_configs_kind_check',
+      sql`${table.kind} IN ('payment', 'pms', 'door_lock')`
+    )
   ]
 );
 

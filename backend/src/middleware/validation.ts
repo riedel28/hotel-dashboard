@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
-import { ZodError, ZodObject } from 'zod';
+import { ZodError, ZodObject, type ZodType } from 'zod';
 
-// Validate request body
-function validateBody(schema: ZodObject<any>) {
+// Validate request body. Any schema: a body can be a union of objects too.
+function validateBody(schema: ZodType) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Parse and validate request body

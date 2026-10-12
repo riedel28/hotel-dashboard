@@ -8,13 +8,14 @@ import {
 import env from '../../env';
 
 /**
- * Symmetric encryption for secrets that must be recoverable in plaintext —
- * currently only the TOTP shared secret, which has to be handed back to otplib
- * on every verification and so cannot be hashed.
+ * Symmetric encryption for secrets that must be recoverable in plaintext: the
+ * TOTP shared secret, which has to be handed back to otplib on every
+ * verification, and a property's payment provider API key.
  *
  * The key is derived from TOTP_ENCRYPTION_KEY, falling back to JWT_SECRET.
- * Rotating whichever one is in use makes every stored secret undecryptable and
- * forces affected users to re-enrol their authenticator.
+ * Rotating whichever one is in use makes every stored secret undecryptable:
+ * affected users must re-enrol their authenticator and every payment provider
+ * API key must be entered again.
  */
 
 const ALGORITHM = 'aes-256-gcm';

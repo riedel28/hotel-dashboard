@@ -1,10 +1,22 @@
-import { t } from '@lingui/core/macro';
-import { Trans, useLingui } from '@lingui/react/macro';
-import { UnplugIcon } from 'lucide-react';
-import { type Control, Controller } from 'react-hook-form';
+import { msg, t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import * as React from 'react';
+import { Controller, type UseFormReturn } from 'react-hook-form';
 
 import { FormSection } from '@/components/form-section';
-import { Button } from '@/components/ui/button';
+import { SecretField } from '@/components/provider-setup/fields';
+import { TestConnection } from '@/components/provider-setup/test-connection';
+import type { TestConnectionStep } from '@/components/provider-setup/test-connection-dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
   Field,
@@ -19,34 +31,51 @@ import {
   InputGroupInput
 } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
-import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
 
 import type { AdyenFormData } from './adyen-form-types';
-import type {
-  AdyenEnvironment,
-  AdyenTestConnectionResult
-} from './adyen-test-connection-dialog';
+
+const TEST_STEPS: TestConnectionStep[] = [
+  {
+    id: 'reach',
+    name: msg`Reach Adyen API`,
+    error: msg`Could not reach the Adyen API — request timed out after 5000 ms.`
+  },
+  {
+    id: 'auth',
+    name: msg`Authenticate credentials`,
+    error: msg`401 Unauthorized — the API key was rejected.`
+  },
+  {
+    id: 'environment',
+    name: msg`Verify environment`,
+    error: msg`Environment mismatch — these credentials belong to a different environment.`
+  },
+  {
+    id: 'merchant',
+    name: msg`Fetch merchant account`,
+    error: msg`Merchant account not found — check the Merchant ID.`
+  }
+];
 
 interface AdyenCredentialsSectionProps {
-  control: Control<AdyenFormData>;
-  /** Called when the user tries to switch to Live; `apply` commits the change. */
-  onRequestLiveConfirm: (apply: () => void) => void;
-  onTestConnection: () => void;
-  lastTestResult: AdyenTestConnectionResult | null;
+  form: UseFormReturn<AdyenFormData>;
+  /** A key is already stored: the field then only takes a replacement. */
+  apiKeyConfigured?: boolean;
   disabled?: boolean;
 }
 
 export function AdyenCredentialsSection({
-  control,
-  onRequestLiveConfirm,
-  onTestConnection,
-  lastTestResult,
+  form,
+  apiKeyConfigured = false,
   disabled = false
 }: AdyenCredentialsSectionProps) {
-  const { i18n } = useLingui();
+  const { control } = form;
+  // The switch to Live waiting to be confirmed, if one is
+  const [pendingLive, setPendingLive] = React.useState<(() => void) | null>(
+    null
+  );
 
   return (
     <FormSection
@@ -68,12 +97,11 @@ export function AdyenCredentialsSection({
               <RadioGroup
                 value={field.value}
                 onValueChange={(value) => {
-                  const next = value as AdyenEnvironment;
-                  if (next === 'live' && field.value === 'test') {
-                    onRequestLiveConfirm(() => field.onChange('live'));
+                  if (value === 'live' && field.value === 'test') {
+                    setPendingLive(() => () => field.onChange('live'));
                     return;
                   }
-                  field.onChange(next);
+                  field.onChange(value);
                 }}
                 className="grid w-full grid-cols-2 gap-2"
               >
@@ -133,34 +161,12 @@ export function AdyenCredentialsSection({
           )}
         />
 
-        {/* API Key: masked "configured" state with Replace flow */}
-        <Controller
-          control={control}
-          name="apiKey"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>
-                <Trans>API Key</Trans>
-              </FieldLabel>
-              <PasswordInput
-                {...field}
-                id={field.name}
-                placeholder={t`Enter your API Key`}
-                autoComplete="off"
-                aria-required="true"
-                aria-invalid={fieldState.invalid}
-                aria-describedby={
-                  fieldState.invalid ? `${field.name}-error` : undefined
-                }
-              />
-              {fieldState.invalid && (
-                <FieldError
-                  id={`${field.name}-error`}
-                  errors={[fieldState.error]}
-                />
-              )}
-            </Field>
-          )}
+        <SecretField
+          label={<Trans>API Key</Trans>}
+          error={form.formState.errors.secret}
+          stored={apiKeyConfigured}
+          placeholder={t`Enter your API Key`}
+          {...form.register('secret')}
         />
 
         <Controller
@@ -235,7 +241,7 @@ export function AdyenCredentialsSection({
               <FieldLabel htmlFor={field.name}>
                 <Trans>Additional configuration</Trans>
                 <span className="-ml-1 font-normal text-muted-foreground">
-                  (<Trans>Optional</Trans>)
+                  (<Trans>optional</Trans>)
                 </span>
               </FieldLabel>
               <Textarea
@@ -245,7 +251,7 @@ export function AdyenCredentialsSection({
                 spellCheck={false}
                 className="font-mono text-xs!"
               />
-              <FieldDescription>
+              <FieldDescription className="text-xs">
                 <Trans>
                   Optional JSON or certificates passed to the Adyen SDK.
                 </Trans>
@@ -254,47 +260,47 @@ export function AdyenCredentialsSection({
           )}
         />
 
-        <div className="flex flex-wrap items-center gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onTestConnection}
-            disabled={disabled}
-          >
-            <UnplugIcon data-icon="inline-start" />
-            <Trans>Test connection</Trans>
-          </Button>
-          {lastTestResult && (
-            <p
-              className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground"
-              role="status"
-              aria-live="polite"
-            >
-              <StatusDisc
-                variant="solid"
-                status={lastTestResult.passed ? 'success' : 'error'}
-                size="xs"
-              />
-              <span>
-                {lastTestResult.passed ? (
-                  <Trans>Connection successful</Trans>
-                ) : (
-                  <Trans>Connection failed</Trans>
-                )}
-              </span>
-              <span aria-hidden="true">·</span>
-              <span>
-                <Trans>
-                  Tested at{' '}
-                  {i18n.date(lastTestResult.finishedAt, {
-                    timeStyle: 'short'
-                  })}
-                </Trans>
-              </span>
-            </p>
-          )}
-        </div>
+        <TestConnection
+          provider="Adyen"
+          steps={TEST_STEPS}
+          validate={() => form.trigger()}
+          disabled={disabled}
+        />
       </div>
+
+      <AlertDialog
+        open={pendingLive !== null}
+        onOpenChange={(open) => {
+          if (!open) setPendingLive(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <Trans>Switch to the Live environment?</Trans>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              <Trans>
+                Live mode processes real payments with real cards. Make sure
+                your credentials are production credentials before switching.
+              </Trans>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              <Trans>Cancel</Trans>
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                pendingLive?.();
+                setPendingLive(null);
+              }}
+            >
+              <Trans>Switch to Live</Trans>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </FormSection>
   );
 }

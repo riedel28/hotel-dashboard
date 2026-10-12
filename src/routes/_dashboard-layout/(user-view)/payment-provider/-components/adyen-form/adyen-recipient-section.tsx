@@ -61,7 +61,7 @@ export function AdyenRecipientSection({
               <FieldLabel htmlFor={field.name}>
                 <Trans>Address line 2</Trans>{' '}
                 <span className="-ml-1 font-normal text-muted-foreground">
-                  (<Trans>Optional</Trans>)
+                  (<Trans>optional</Trans>)
                 </span>
               </FieldLabel>
               <Input id={field.name} {...field} autoComplete="address-line2" />

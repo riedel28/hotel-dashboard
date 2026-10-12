@@ -14,7 +14,7 @@ const alertVariants = cva(
         // A quiet, compact notice rather than a call for attention
         info: 'border-foreground/10 bg-sky-50 px-3 py-2 text-sky-800 *:data-[slot=alert-description]:text-current dark:bg-sky-800/20 dark:text-sky-300 [&>svg]:text-current',
         warning:
-          'border-amber-300 bg-amber-50 text-amber-800 *:data-[slot=alert-description]:text-amber-700 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200 dark:*:data-[slot=alert-description]:text-amber-300 [&>svg]:text-current'
+          'border-amber-300 bg-amber-50 text-amber-800 *:data-[slot=alert-description]:text-current dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200 [&>svg]:text-current'
       }
     },
     defaultVariants: {

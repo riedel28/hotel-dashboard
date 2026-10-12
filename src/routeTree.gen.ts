@@ -20,7 +20,6 @@ import { Route as AuthLayoutAuthResetPasswordRouteImport } from './routes/_auth-
 import { Route as AuthLayoutAuthSignUpRouteImport } from './routes/_auth-layout/auth/sign-up'
 import { Route as AuthLayoutAuthVerifyEmailRouteImport } from './routes/_auth-layout/auth/verify-email'
 import { Route as DashboardLayoutuserViewAboutRouteImport } from './routes/_dashboard-layout/(user-view)/about'
-import { Route as DashboardLayoutuserViewAccessProviderRouteImport } from './routes/_dashboard-layout/(user-view)/access-provider'
 import { Route as DashboardLayoutuserViewAnalyticsRouteImport } from './routes/_dashboard-layout/(user-view)/analytics'
 import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes/_dashboard-layout/(user-view)/checkin-page'
 import { Route as DashboardLayoutuserViewCompanyRouteImport } from './routes/_dashboard-layout/(user-view)/company'
@@ -107,12 +106,6 @@ const DashboardLayoutuserViewAboutRoute =
   DashboardLayoutuserViewAboutRouteImport.update({
     id: '/(user-view)/about',
     path: '/about',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewAccessProviderRoute =
-  DashboardLayoutuserViewAccessProviderRouteImport.update({
-    id: '/(user-view)/access-provider',
-    path: '/access-provider',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewAnalyticsRoute =
@@ -302,7 +295,6 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
-  '/access-provider': typeof DashboardLayoutuserViewAccessProviderRoute
   '/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
@@ -342,7 +334,6 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/about': typeof DashboardLayoutuserViewAboutRoute
-  '/access-provider': typeof DashboardLayoutuserViewAccessProviderRoute
   '/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
@@ -386,7 +377,6 @@ export interface FileRoutesById {
   '/_auth-layout/auth/sign-up': typeof AuthLayoutAuthSignUpRoute
   '/_auth-layout/auth/verify-email': typeof AuthLayoutAuthVerifyEmailRoute
   '/_dashboard-layout/(user-view)/about': typeof DashboardLayoutuserViewAboutRoute
-  '/_dashboard-layout/(user-view)/access-provider': typeof DashboardLayoutuserViewAccessProviderRoute
   '/_dashboard-layout/(user-view)/analytics': typeof DashboardLayoutuserViewAnalyticsRoute
   '/_dashboard-layout/(user-view)/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/_dashboard-layout/(user-view)/company': typeof DashboardLayoutuserViewCompanyRoute
@@ -429,7 +419,6 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify-email'
     | '/about'
-    | '/access-provider'
     | '/analytics'
     | '/checkin-page'
     | '/company'
@@ -469,7 +458,6 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify-email'
     | '/about'
-    | '/access-provider'
     | '/analytics'
     | '/checkin-page'
     | '/company'
@@ -512,7 +500,6 @@ export interface FileRouteTypes {
     | '/_auth-layout/auth/sign-up'
     | '/_auth-layout/auth/verify-email'
     | '/_dashboard-layout/(user-view)/about'
-    | '/_dashboard-layout/(user-view)/access-provider'
     | '/_dashboard-layout/(user-view)/analytics'
     | '/_dashboard-layout/(user-view)/checkin-page'
     | '/_dashboard-layout/(user-view)/company'
@@ -626,13 +613,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof DashboardLayoutuserViewAboutRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/access-provider': {
-      id: '/_dashboard-layout/(user-view)/access-provider'
-      path: '/access-provider'
-      fullPath: '/access-provider'
-      preLoaderRoute: typeof DashboardLayoutuserViewAccessProviderRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/analytics': {
@@ -890,7 +870,6 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutAdminRoute: typeof DashboardLayoutAdminRouteWithChildren
   DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
   DashboardLayoutuserViewAboutRoute: typeof DashboardLayoutuserViewAboutRoute
-  DashboardLayoutuserViewAccessProviderRoute: typeof DashboardLayoutuserViewAccessProviderRoute
   DashboardLayoutuserViewAnalyticsRoute: typeof DashboardLayoutuserViewAnalyticsRoute
   DashboardLayoutuserViewCheckinPageRoute: typeof DashboardLayoutuserViewCheckinPageRoute
   DashboardLayoutuserViewCompanyRoute: typeof DashboardLayoutuserViewCompanyRoute
@@ -921,8 +900,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutAdminRoute: DashboardLayoutAdminRouteWithChildren,
   DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
   DashboardLayoutuserViewAboutRoute: DashboardLayoutuserViewAboutRoute,
-  DashboardLayoutuserViewAccessProviderRoute:
-    DashboardLayoutuserViewAccessProviderRoute,
   DashboardLayoutuserViewAnalyticsRoute: DashboardLayoutuserViewAnalyticsRoute,
   DashboardLayoutuserViewCheckinPageRoute:
     DashboardLayoutuserViewCheckinPageRoute,

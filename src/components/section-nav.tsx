@@ -193,8 +193,10 @@ export function useHashSectionJump() {
 /** Marks a section that holds invalid fields. */
 function ErrorDot() {
   return (
-    // Plain red rather than the muted danger tone: it has to catch the eye
-    <span className="size-1.5 shrink-0 rounded-full bg-red-500">
+    // Plain red rather than the muted danger tone: it has to catch the eye.
+    // A step darker on light surfaces and a step lighter on dark ones, where
+    // red-500 sits too close to the background to stand out at this size.
+    <span className="size-2 shrink-0 rounded-full bg-red-600 dark:bg-red-400">
       <span className="sr-only">
         <Trans>Has errors</Trans>
       </span>
