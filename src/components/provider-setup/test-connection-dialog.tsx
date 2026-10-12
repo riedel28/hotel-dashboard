@@ -159,7 +159,7 @@ export function TestConnectionDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       {/* Top-anchored so height changes (error details) grow downward instead
           of re-centering the whole dialog */}
-      <DialogContent className="top-[15vh] translate-y-0">
+      <DialogContent className="top-[15vh] translate-y-0 sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
             <Trans>Test provider configuration</Trans>
