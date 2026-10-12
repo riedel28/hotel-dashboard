@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { Trans } from '@lingui/react/macro';
 import {
   AlertTriangleIcon,
   ArrowUpRightIcon,
@@ -36,6 +36,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import { formatLocalized } from '@/utils/date';
 
 import {
   type TestConnectionConfig,
@@ -56,7 +57,6 @@ interface DoorLocksFormData {
 }
 
 export function DoorLocksForm() {
-  const { i18n } = useLingui();
   const [integrationMode, setIntegrationMode] =
     React.useState<IntegrationMode>('pms');
   const [testDialogOpen, setTestDialogOpen] = React.useState(false);
@@ -437,7 +437,7 @@ export function DoorLocksForm() {
               </span>
               <Trans>
                 Tested at{' '}
-                {i18n.date(lastTestResult.finishedAt, {
+                {formatLocalized(lastTestResult.finishedAt, {
                   timeStyle: 'short'
                 })}
               </Trans>

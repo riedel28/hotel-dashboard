@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import { StatusDisc } from '@/components/ui/status-disc';
 import { cn } from '@/lib/utils';
+import { formatLocalized } from '@/utils/date';
 
 type StepStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped';
 
@@ -67,7 +68,7 @@ export function TestConnectionDialog({
   config,
   onFinished
 }: TestConnectionDialogProps) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
 
   const [steps, setSteps] = React.useState<TestStep[]>([]);
   const [phase, setPhase] = React.useState<'running' | 'done'>('running');
@@ -306,7 +307,7 @@ export function TestConnectionDialog({
           </span>
           {finishedAt && (
             <span className="text-xs tabular-nums opacity-70">
-              {i18n.date(finishedAt, { timeStyle: 'short' })}
+              {formatLocalized(finishedAt, { timeStyle: 'short' })}
             </span>
           )}
         </div>

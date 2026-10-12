@@ -23,6 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import { formatLocalized } from '@/utils/date';
 import { getFullName, getInitials } from '@/utils/user';
 
 import { DeleteWorklogDialog } from './delete-worklog-dialog';
@@ -32,7 +33,7 @@ import { WorklogMessageForm } from './worklog-message-form';
 const displayName = (user: WorklogUser) => getFullName(user) || user.email;
 
 export function WorklogCard({ worklog }: { worklog: Worklog }) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -56,7 +57,10 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
   const authorName = author ? displayName(author) : t`Deleted user`;
   const editedAt =
     worklog.updated_at &&
-    i18n.date(worklog.updated_at, { dateStyle: 'medium', timeStyle: 'short' });
+    formatLocalized(worklog.updated_at, {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    });
   // Named only when it adds something: an edit by the author goes without.
   const editorName =
     editor && editor.id !== author?.id ? displayName(editor) : null;
@@ -89,10 +93,10 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
                   />
                 }
               >
-                {i18n.date(worklog.created_at, { timeStyle: 'short' })}
+                {formatLocalized(worklog.created_at, { timeStyle: 'short' })}
               </TooltipTrigger>
               <TooltipContent>
-                {i18n.date(worklog.created_at, {
+                {formatLocalized(worklog.created_at, {
                   dateStyle: 'full',
                   timeStyle: 'short'
                 })}
