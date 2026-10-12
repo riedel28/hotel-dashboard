@@ -1,10 +1,12 @@
-import { t } from '@lingui/core/macro';
+import { msg, t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { UnplugIcon } from 'lucide-react';
 import * as React from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 
 import { FormSection } from '@/components/form-section';
+import { SecretField } from '@/components/provider-setup/fields';
+import { TestConnection } from '@/components/provider-setup/test-connection';
+import type { TestConnectionStep } from '@/components/provider-setup/test-connection-dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +17,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
   Field,
@@ -30,17 +31,33 @@ import {
   InputGroupInput
 } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
-import { PasswordInput } from '@/components/ui/password-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { StatusDisc } from '@/components/ui/status-disc';
 import { Textarea } from '@/components/ui/textarea';
-import { useFormatLocalized } from '@/hooks/use-format-localized';
 
 import type { AdyenFormData } from './adyen-form-types';
-import {
-  AdyenTestConnectionDialog,
-  type AdyenTestConnectionResult
-} from './adyen-test-connection-dialog';
+
+const TEST_STEPS: TestConnectionStep[] = [
+  {
+    id: 'reach',
+    name: msg`Reach Adyen API`,
+    error: msg`Could not reach the Adyen API — request timed out after 5000 ms.`
+  },
+  {
+    id: 'auth',
+    name: msg`Authenticate credentials`,
+    error: msg`401 Unauthorized — the API key was rejected.`
+  },
+  {
+    id: 'environment',
+    name: msg`Verify environment`,
+    error: msg`Environment mismatch — these credentials belong to a different environment.`
+  },
+  {
+    id: 'merchant',
+    name: msg`Fetch merchant account`,
+    error: msg`Merchant account not found — check the Merchant ID.`
+  }
+];
 
 interface AdyenCredentialsSectionProps {
   form: UseFormReturn<AdyenFormData>;
@@ -54,19 +71,11 @@ export function AdyenCredentialsSection({
   apiKeyConfigured = false,
   disabled = false
 }: AdyenCredentialsSectionProps) {
-  const formatLocalized = useFormatLocalized();
   const { control } = form;
   // The switch to Live waiting to be confirmed, if one is
   const [pendingLive, setPendingLive] = React.useState<(() => void) | null>(
     null
   );
-  const [testOpen, setTestOpen] = React.useState(false);
-  const [lastTestResult, setLastTestResult] =
-    React.useState<AdyenTestConnectionResult | null>(null);
-
-  const handleTestConnection = async () => {
-    if (await form.trigger()) setTestOpen(true);
-  };
 
   return (
     <FormSection
@@ -152,42 +161,16 @@ export function AdyenCredentialsSection({
           )}
         />
 
-        {/* API Key: never sent back by the server, so it starts out empty */}
         <Controller
           control={control}
-          name="apiKey"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>
-                <Trans>API Key</Trans>
-              </FieldLabel>
-              <PasswordInput
-                {...field}
-                id={field.name}
-                placeholder={
-                  apiKeyConfigured ? '••••••••••••' : t`Enter your API Key`
-                }
-                autoComplete="off"
-                aria-required={!apiKeyConfigured}
-                aria-invalid={fieldState.invalid}
-                aria-describedby={
-                  fieldState.invalid ? `${field.name}-error` : undefined
-                }
-              />
-              {apiKeyConfigured && (
-                <FieldDescription className="text-xs">
-                  <Trans>
-                    A key is stored. Enter a new one only to replace it.
-                  </Trans>
-                </FieldDescription>
-              )}
-              {fieldState.invalid && (
-                <FieldError
-                  id={`${field.name}-error`}
-                  errors={[fieldState.error]}
-                />
-              )}
-            </Field>
+          name="secret"
+          render={(props) => (
+            <SecretField
+              {...props}
+              label={<Trans>API Key</Trans>}
+              configured={apiKeyConfigured}
+              placeholder={t`Enter your API Key`}
+            />
           )}
         />
 
@@ -282,46 +265,12 @@ export function AdyenCredentialsSection({
           )}
         />
 
-        <div className="flex flex-wrap items-center gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleTestConnection}
-            disabled={disabled}
-          >
-            <UnplugIcon data-icon="inline-start" />
-            <Trans>Test connection</Trans>
-          </Button>
-          {lastTestResult && (
-            <p
-              className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground"
-              role="status"
-              aria-live="polite"
-            >
-              <StatusDisc
-                variant="solid"
-                status={lastTestResult.passed ? 'success' : 'error'}
-                size="xs"
-              />
-              <span>
-                {lastTestResult.passed ? (
-                  <Trans>Connection successful</Trans>
-                ) : (
-                  <Trans>Connection failed</Trans>
-                )}
-              </span>
-              <span aria-hidden="true">·</span>
-              <span>
-                <Trans>
-                  Tested at{' '}
-                  {formatLocalized(lastTestResult.finishedAt, {
-                    timeStyle: 'short'
-                  })}
-                </Trans>
-              </span>
-            </p>
-          )}
-        </div>
+        <TestConnection
+          provider="Adyen"
+          steps={TEST_STEPS}
+          validate={() => form.trigger()}
+          disabled={disabled}
+        />
       </div>
 
       <AlertDialog
@@ -357,12 +306,6 @@ export function AdyenCredentialsSection({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      <AdyenTestConnectionDialog
-        open={testOpen}
-        onOpenChange={setTestOpen}
-        onFinished={setLastTestResult}
-      />
     </FormSection>
   );
 }

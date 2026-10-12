@@ -1,4 +1,3 @@
-import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { Loader2Icon } from 'lucide-react';
 import * as React from 'react';
@@ -8,23 +7,22 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 
 import { AdyenCredentialsSection } from './adyen-credentials-section';
 import { AdyenFormHeader } from './adyen-form-header';
-import { type AdyenRequiredField, useAdyenForm } from './use-adyen-form';
-
-// The recipient and mapping codes follow once the provider is connected.
-const REQUIRED: AdyenRequiredField[] = ['merchantId', 'apiKey', 'clientKey'];
+import { ADYEN_SETUP_REQUIRED, useAdyenForm } from './use-adyen-form';
 
 interface AdyenSetupCardProps {
+  /** The name of the provider that connecting Adyen would replace. */
+  replaces: string | null;
   /** Back to the provider picker. */
   onBack: () => void;
 }
 
 /** Connects Adyen to a property that has no provider yet: credentials alone. */
-export function AdyenSetupCard({ onBack }: AdyenSetupCardProps) {
+export function AdyenSetupCard({ replaces, onBack }: AdyenSetupCardProps) {
   const formId = React.useId();
-  const { form, onSubmit, isSaving } = useAdyenForm({
+  const { form, onSubmit, isSaving, replaceDialog } = useAdyenForm({
     saved: null,
-    required: REQUIRED,
-    savedMessage: msg`Adyen connected`
+    required: ADYEN_SETUP_REQUIRED,
+    replaces
   });
 
   return (
@@ -60,6 +58,8 @@ export function AdyenSetupCard({ onBack }: AdyenSetupCardProps) {
           <Trans>Connect provider</Trans>
         </Button>
       </CardFooter>
+
+      {replaceDialog}
     </Card>
   );
 }

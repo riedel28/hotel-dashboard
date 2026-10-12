@@ -1,12 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
-import * as React from 'react';
-import type {
-  PaymentProvider,
-  PaymentProviderId
-} from 'shared/types/payment-provider';
+import type { PaymentProviderId } from 'shared/types/providers';
 
-import { useAuth } from '@/auth';
+import type { ProviderOption } from '@/components/provider-setup/provider-picker';
+import { ProviderScreens } from '@/components/provider-setup/provider-screens';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,14 +12,23 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { AdyenSettingsForm } from './payment-provider/-components/adyen-form/adyen-settings-form';
 import { AdyenSetupCard } from './payment-provider/-components/adyen-form/adyen-setup-card';
-import { ProviderPicker } from './payment-provider/-components/provider-picker';
-import { usePaymentProvider } from './payment-provider/-hooks/use-payment-provider';
+
+const PROVIDERS: ProviderOption<PaymentProviderId>[] = [
+  { id: 'adyen', name: 'Adyen', logo: '/adyen-logo.svg', available: true },
+  { id: 'payone', name: 'PAYONE', logo: '/payone-logo.svg' },
+  {
+    id: 'concardis',
+    name: 'Concardis',
+    logo: '/concardis-logo.svg',
+    ink: 'dark'
+  },
+  { id: 'six_saferpay', name: 'SIX Saferpay', logo: '/six-logo.svg' },
+  { id: 'valitor', name: 'Valitor', logo: '/valitor-logo.png', ink: 'dark' }
+];
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/payment-provider'
@@ -67,60 +73,28 @@ function RouteComponent() {
         </p>
       </div>
 
-      <PaymentProviderContent />
-    </div>
-  );
-}
-
-function PaymentProviderContent() {
-  const { user } = useAuth();
-  const { data, isPending, isError, refetch } = usePaymentProvider();
-
-  if (isPending) {
-    return <Skeleton className="h-96 max-w-4xl rounded-xl" />;
-  }
-
-  if (isError) {
-    return (
-      <div className="flex flex-col items-start gap-3">
-        <p className="text-sm text-muted-foreground" role="alert">
-          <Trans>Failed to load the payment provider.</Trans>
-        </p>
-        <Button variant="outline" onClick={() => refetch()}>
-          <Trans>Try again</Trans>
-        </Button>
-      </div>
-    );
-  }
-
-  // Keyed by property: switching it starts over from that property's state.
-  return (
-    <PaymentProviderScreens key={user?.selected_property_id} saved={data} />
-  );
-}
-
-function PaymentProviderScreens({ saved }: { saved: PaymentProvider | null }) {
-  // The provider whose screen is open, or null for the picker. A property
-  // without a provider starts on the picker, one with a provider on its form.
-  const [open, setOpen] = React.useState<PaymentProviderId | null>(
-    saved?.provider ?? null
-  );
-
-  if (open === null) {
-    return (
-      <ProviderPicker
-        current={saved?.provider}
-        onSelect={setOpen}
-        onBack={saved ? () => setOpen(saved.provider) : undefined}
+      <ProviderScreens
+        kind="payment"
+        pickerTitle={<Trans>Choose a payment provider</Trans>}
+        pickerDescription={
+          <Trans>
+            Select the provider this property takes payments with. You enter its
+            credentials in the next step.
+          </Trans>
+        }
+        options={PROVIDERS}
+        // Adyen is the only one the picker lets through
+        renderForm={({ saved, replaces, onChooseProvider }) =>
+          saved?.provider === 'adyen' ? (
+            <AdyenSettingsForm
+              saved={saved}
+              onChangeProvider={onChooseProvider}
+            />
+          ) : (
+            <AdyenSetupCard replaces={replaces} onBack={onChooseProvider} />
+          )
+        }
       />
-    );
-  }
-
-  // The stored provider opens on its settings, any other on its setup. Adyen
-  // is the only one the picker lets through; the next one branches here.
-  return saved?.provider === open ? (
-    <AdyenSettingsForm saved={saved} onChangeProvider={() => setOpen(null)} />
-  ) : (
-    <AdyenSetupCard onBack={() => setOpen(null)} />
+    </div>
   );
 }

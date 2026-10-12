@@ -16,7 +16,7 @@ export const ADYEN_FORM_SECTIONS: NavSection[] = [
     fields: [
       'environment',
       'merchantId',
-      'apiKey',
+      'secret',
       'clientKey',
       'publicKey',
       'additionalConfig'

@@ -1,30 +1,19 @@
-import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { InfoIcon } from 'lucide-react';
-import type { PaymentProvider } from 'shared/types/payment-provider';
+import type { PaymentProvider } from 'shared/types/providers';
 
+import { LastUpdated } from '@/components/provider-setup/last-updated';
 import { SectionedFormShell } from '@/components/sectioned-form';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useFormatLocalized } from '@/hooks/use-format-localized';
 
 import { AdyenCredentialsSection } from './adyen-credentials-section';
 import { AdyenFormHeader } from './adyen-form-header';
 import { ADYEN_FORM_SECTIONS } from './adyen-form-toc';
 import { AdyenMappingCodesSection } from './adyen-mapping-codes-section';
 import { AdyenRecipientSection } from './adyen-recipient-section';
-import { type AdyenRequiredField, useAdyenForm } from './use-adyen-form';
-
-// The API key is not among them: an empty one keeps the key already stored.
-const REQUIRED: AdyenRequiredField[] = [
-  'merchantId',
-  'clientKey',
-  'addressLine1',
-  'zip',
-  'city',
-  'country'
-];
+import { ADYEN_SETTINGS_REQUIRED, useAdyenForm } from './use-adyen-form';
 
 interface AdyenSettingsFormProps {
   saved: PaymentProvider;
@@ -37,18 +26,11 @@ export function AdyenSettingsForm({
   saved,
   onChangeProvider
 }: AdyenSettingsFormProps) {
-  const formatLocalized = useFormatLocalized();
   const { form, onSubmit, isSaving } = useAdyenForm({
     saved,
-    required: REQUIRED,
-    savedMessage: msg`Configuration updated`
+    required: ADYEN_SETTINGS_REQUIRED
   });
   const { isDirty } = form.formState;
-
-  const lastUpdated = formatLocalized(saved.updated_at, {
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  });
 
   return (
     <SectionedFormShell
@@ -88,7 +70,7 @@ export function AdyenSettingsForm({
         isSaving ? (
           <Trans>Saving changes…</Trans>
         ) : isDirty ? null : (
-          <Trans>Last updated {lastUpdated}</Trans>
+          <LastUpdated saved={saved} />
         )
       }
     >

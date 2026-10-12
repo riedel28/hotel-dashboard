@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { t } from '@lingui/core/macro';
+import { msg, t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import {
   AlertTriangleIcon,
@@ -14,6 +14,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import {
+  TestConnectionDialog,
+  type TestConnectionResult,
+  type TestConnectionStep
+} from '@/components/provider-setup/test-connection-dialog';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -38,11 +43,44 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useFormatLocalized } from '@/hooks/use-format-localized';
 import { cn } from '@/lib/utils';
 
-import {
-  type TestConnectionConfig,
-  TestConnectionDialog,
-  type TestConnectionResult
-} from './test-connection-dialog';
+const TCP: TestConnectionStep = {
+  id: 'tcp',
+  name: msg`TCP connection`,
+  error: msg`Connection timed out after 5000 ms — host unreachable.`
+};
+const AUTH: TestConnectionStep = {
+  id: 'auth',
+  name: msg`Authentication`,
+  error: msg`401 Unauthorized — check username and password.`
+};
+const SHIP: TestConnectionStep = {
+  id: 'ship',
+  name: msg`SHIP handshake`,
+  error: msg`SHIP handshake rejected: unsupported protocol version.`
+};
+
+// What a connection test checks, by how the locks are reached.
+const TEST_STEPS = {
+  pms: [
+    TCP,
+    {
+      id: 'handshake',
+      name: msg`PMS interface handshake`,
+      error: msg`No response from the PMS interface.`
+    }
+  ],
+  stp: [TCP, AUTH, SHIP],
+  https: [
+    TCP,
+    {
+      id: 'tls',
+      name: msg`TLS certificate`,
+      error: msg`TLS handshake failed: certificate is self-signed or expired.`
+    },
+    AUTH,
+    SHIP
+  ]
+} satisfies Record<string, TestConnectionStep[]>;
 
 type IntegrationMode = 'pms' | 'ship';
 type ShipType = 'stp' | 'https';
@@ -61,8 +99,6 @@ export function DoorLocksForm() {
   const [integrationMode, setIntegrationMode] =
     React.useState<IntegrationMode>('pms');
   const [testDialogOpen, setTestDialogOpen] = React.useState(false);
-  const [testConfig, setTestConfig] =
-    React.useState<TestConnectionConfig | null>(null);
   const [lastTestResult, setLastTestResult] =
     React.useState<TestConnectionResult | null>(null);
 
@@ -153,14 +189,6 @@ export function DoorLocksForm() {
   const handleTestConnection = async () => {
     const valid = await form.trigger();
     if (!valid) return;
-    const values = form.getValues();
-    setTestConfig({
-      mode: integrationMode,
-      shipType: values.shipType,
-      host: values.host,
-      port: values.port,
-      shipUrl: values.shipUrl
-    });
     setTestDialogOpen(true);
   };
 
@@ -464,14 +492,15 @@ export function DoorLocksForm() {
         </div>
       </CardFooter>
 
-      {testConfig && (
-        <TestConnectionDialog
-          open={testDialogOpen}
-          onOpenChange={setTestDialogOpen}
-          config={testConfig}
-          onFinished={setLastTestResult}
-        />
-      )}
+      <TestConnectionDialog
+        open={testDialogOpen}
+        onOpenChange={setTestDialogOpen}
+        provider="SALTO"
+        steps={
+          integrationMode === 'pms' ? TEST_STEPS.pms : TEST_STEPS[shipType]
+        }
+        onFinished={setLastTestResult}
+      />
     </Card>
   );
 }

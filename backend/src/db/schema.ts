@@ -18,10 +18,7 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import type {
-  PaymentProvider,
-  PaymentProviderId
-} from '../../../shared/types/payment-provider';
+import type { Provider, ProviderKind } from '../../../shared/types/providers';
 import {
   type GuestAgeGroup,
   guestAgeGroupSchema,
@@ -396,18 +393,26 @@ export const guestAbcEntries = pgTable(
   ]
 );
 
-// The payment provider a property is connected to: one row per property, and no
-// row means none is set up yet. `config` holds the provider's own settings (see
-// adyenConfigSchema); the API key is kept apart, encrypted with secret-box.
-export const paymentProviderConfigs = pgTable(
-  'payment_provider_configs',
+// What a property is connected to: one row per property and kind of provider
+// (payment, PMS, door locks), and no row means none is set up yet. `config`
+// holds the provider's own settings, validated on the way in by the schemas in
+// shared/types/providers.ts; its secret (an API key, a token) is kept apart,
+// encrypted with secret-box.
+export const providerConfigs = pgTable(
+  'provider_configs',
   {
     property_id: uuid('property_id')
-      .primaryKey()
+      .notNull()
       .references(() => properties.id, { onDelete: 'cascade' }),
-    provider: text('provider').notNull().$type<PaymentProviderId>(),
-    config: jsonb('config').notNull().$type<PaymentProvider['config']>(),
-    api_key_encrypted: text('api_key_encrypted').notNull(),
+    kind: text('kind').notNull().$type<ProviderKind>(),
+    provider: text('provider').notNull(),
+    config: jsonb('config').notNull().$type<Provider['config']>(),
+    secret_encrypted: text('secret_encrypted').notNull(),
+    // Null once the user has been deleted.
+    updated_by: bigint('updated_by', { mode: 'number' }).references(
+      () => users.id,
+      { onDelete: 'set null' }
+    ),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -416,9 +421,10 @@ export const paymentProviderConfigs = pgTable(
       .defaultNow()
   },
   (table) => [
+    primaryKey({ columns: [table.property_id, table.kind] }),
     check(
-      'payment_provider_configs_provider_check',
-      sql`${table.provider} IN ('adyen', 'payone', 'concardis', 'six_saferpay', 'valitor')`
+      'provider_configs_kind_check',
+      sql`${table.kind} IN ('payment', 'pms', 'door_lock')`
     )
   ]
 );

@@ -1,10 +1,7 @@
 import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 import { type Control, Controller, useFormState } from 'react-hook-form';
-import {
-  ADYEN_METHOD_IDS,
-  type AdyenMethodId
-} from 'shared/types/payment-provider';
+import { ADYEN_METHOD_IDS, type AdyenMethodId } from 'shared/types/providers';
 
 import { FormSection } from '@/components/form-section';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';

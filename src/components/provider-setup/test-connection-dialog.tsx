@@ -1,3 +1,4 @@
+import type { MessageDescriptor } from '@lingui/core';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   CircleDashedIcon,
@@ -34,12 +35,11 @@ interface TestStep {
   error?: string;
 }
 
-export interface TestConnectionConfig {
-  mode: 'pms' | 'ship';
-  shipType: 'stp' | 'https';
-  host: string;
-  port: string;
-  shipUrl: string;
+/** One check of a connection test, with what it says when it fails. */
+export interface TestConnectionStep {
+  id: string;
+  name: MessageDescriptor;
+  error: MessageDescriptor;
 }
 
 export interface TestConnectionResult {
@@ -50,7 +50,10 @@ export interface TestConnectionResult {
 interface TestConnectionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  config: TestConnectionConfig;
+  /** What is being connected to, e.g. "Adyen". */
+  provider: string;
+  /** Keep the list's identity stable: a new one restarts the test. */
+  steps: TestConnectionStep[];
   onFinished?: (result: TestConnectionResult) => void;
 }
 
@@ -62,10 +65,15 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Runs a provider's connection checks one after another and shows how far
+ * they got. The checks are simulated until the backend can run real ones.
+ */
 export function TestConnectionDialog({
   open,
   onOpenChange,
-  config,
+  provider,
+  steps: stepDefs,
   onFinished
 }: TestConnectionDialogProps) {
   const { t } = useLingui();
@@ -76,61 +84,19 @@ export function TestConnectionDialog({
   const [finishedAt, setFinishedAt] = React.useState<Date | null>(null);
   const runIdRef = React.useRef(0);
 
-  const buildSteps = React.useCallback((): TestStep[] => {
-    const step = (id: string, name: string): TestStep => ({
-      id,
-      name,
-      status: 'pending'
-    });
-
-    if (config.mode === 'pms') {
-      return [
-        step('tcp', t`TCP connection`),
-        step('handshake', t`PMS interface handshake`)
-      ];
-    }
-    if (config.shipType === 'https') {
-      return [
-        step('tcp', t`TCP connection`),
-        step('tls', t`TLS certificate`),
-        step('auth', t`Authentication`),
-        step('ship', t`SHIP handshake`)
-      ];
-    }
-    return [
-      step('tcp', t`TCP connection`),
-      step('auth', t`Authentication`),
-      step('ship', t`SHIP handshake`)
-    ];
-  }, [config, t]);
-
-  const mockErrorFor = React.useCallback(
-    (stepId: string): string => {
-      switch (stepId) {
-        case 'tcp':
-          return t`Connection timed out after 5000 ms — host unreachable.`;
-        case 'tls':
-          return t`TLS handshake failed: certificate is self-signed or expired.`;
-        case 'auth':
-          return t`401 Unauthorized — check username and password.`;
-        case 'ship':
-          return t`SHIP handshake rejected: unsupported protocol version.`;
-        default:
-          return t`No response from the PMS interface.`;
-      }
-    },
-    [t]
-  );
-
   const runTests = React.useCallback(async () => {
     const runId = ++runIdRef.current;
-    const initialSteps = buildSteps();
+    const initialSteps = stepDefs.map(({ id, name }): TestStep => ({
+      id,
+      name: t(name),
+      status: 'pending'
+    }));
     setSteps(initialSteps);
     setPhase('running');
     setFinishedAt(null);
 
     let failed = false;
-    for (const [index, stepDef] of initialSteps.entries()) {
+    for (const [index, stepDef] of stepDefs.entries()) {
       if (runIdRef.current !== runId) return;
 
       if (failed) {
@@ -150,10 +116,10 @@ export function TestConnectionDialog({
       await sleep(durationMs);
       if (runIdRef.current !== runId) return;
 
-      const stepPassed = Math.random() >= 0.35;
+      const stepPassed = Math.random() >= 0.3;
       if (!stepPassed) {
         failed = true;
-        const error = mockErrorFor(stepDef.id);
+        const error = t(stepDef.error);
         setSteps((prev) =>
           prev.map((s, i) =>
             i === index ? { ...s, status: 'failed', durationMs, error } : s
@@ -174,7 +140,7 @@ export function TestConnectionDialog({
     setPhase('done');
     setFinishedAt(at);
     onFinished?.({ passed: !failed, finishedAt: at });
-  }, [buildSteps, mockErrorFor, onFinished]);
+  }, [stepDefs, t, onFinished]);
 
   React.useEffect(() => {
     if (open) {
@@ -200,8 +166,7 @@ export function TestConnectionDialog({
           </DialogTitle>
           <DialogDescription>
             <Trans>
-              Checks the connection to SALTO ProAccess Space using the current
-              form values.
+              Checks the connection to {provider} using the current form values.
             </Trans>
           </DialogDescription>
         </DialogHeader>
@@ -210,19 +175,20 @@ export function TestConnectionDialog({
           <div className="flex items-center gap-3">
             <EndpointNode
               icon={<CloudIcon className="size-5" aria-hidden="true" />}
-              label="Our server"
+              label={t`Our server`}
             />
 
             <ConnectionLine phase={phase} allPassed={allPassed} />
 
             {phase === 'running' ? (
               <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-background text-muted-foreground dark:bg-input/30">
-                <Loader2Icon className="size-4 animate-spin" />
+                <Loader2Icon className="size-4 animate-spin motion-reduce:animate-none" />
               </div>
             ) : (
               <StatusDisc
-                status={allPassed ? 'success' : 'error'}
                 variant="solid"
+                status={allPassed ? 'success' : 'error'}
+                size="md"
               />
             )}
 
@@ -230,7 +196,7 @@ export function TestConnectionDialog({
 
             <EndpointNode
               icon={<ServerIcon className="size-5" aria-hidden="true" />}
-              label="SALTO"
+              label={provider}
             />
           </div>
         </div>
@@ -259,12 +225,16 @@ export function TestConnectionDialog({
                 </span>
               </div>
               {step.status === 'failed' && step.error && (
-                <div className="ml-7 flex items-center gap-2 rounded-lg border border-rose-200/70 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-800 dark:border-rose-800/30 dark:bg-rose-800/20 dark:text-rose-300">
+                <div
+                  className="ml-7 flex items-center gap-2 rounded-lg border border-rose-200/70 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-800 dark:border-rose-800/30 dark:bg-rose-800/20 dark:text-rose-300"
+                  role="alert"
+                >
                   <span className="flex-1">{step.error}</span>
                   <CopyButton
                     text={step.error}
                     size="icon-xs"
-                    className="-my-0.5 -mr-1"
+                    buttonClassName="bg-transparent!"
+                    iconClassName="-my-0.5 -mr-1 text-rose-800 dark:text-rose-300"
                   />
                 </div>
               )}
@@ -273,6 +243,8 @@ export function TestConnectionDialog({
         </ul>
 
         <div
+          role="status"
+          aria-live="polite"
           className={cn(
             'flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm',
             phase === 'running'
@@ -283,11 +255,11 @@ export function TestConnectionDialog({
           )}
         >
           {phase === 'running' ? (
-            <Loader2Icon className="size-4.5 shrink-0 animate-spin" />
+            <Loader2Icon className="size-4.5 shrink-0 animate-spin motion-reduce:animate-none" />
           ) : (
             <StatusDisc
-              status={allPassed ? 'success' : 'error'}
               variant="solid"
+              status={allPassed ? 'success' : 'error'}
               size="sm"
             />
           )}
@@ -316,17 +288,17 @@ export function TestConnectionDialog({
         <DialogFooter>
           {phase === 'running' ? (
             <DialogClose render={<Button variant="outline" />}>
-              <Trans>Cancel</Trans>
+              <Trans>Stop test</Trans>
             </DialogClose>
           ) : (
             <>
-              <Button variant="secondary" onClick={runTests}>
+              <DialogClose render={<Button variant="outline" />}>
+                <Trans>Close</Trans>
+              </DialogClose>
+              <Button onClick={runTests}>
                 <RotateCwIcon data-icon="inline-start" />
                 <Trans>Run again</Trans>
               </Button>
-              <DialogClose render={<Button />}>
-                <Trans>Close</Trans>
-              </DialogClose>
             </>
           )}
         </DialogFooter>
@@ -343,8 +315,8 @@ function EndpointNode({
   label: string;
 }) {
   return (
-    <div className="flex w-24 shrink-0 flex-col items-center gap-2 text-center">
-      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-background text-foreground/70 dark:bg-input/30">
+    <div className="flex w-16 shrink-0 flex-col items-center gap-2 text-center sm:w-24">
+      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card text-foreground/70 dark:bg-input/30">
         {icon}
       </div>
       <span className="text-xs leading-tight font-medium">{label}</span>
@@ -364,11 +336,11 @@ function ConnectionLine({
       className={cn(
         'h-0.5 flex-1 rounded-full',
         phase === 'running' &&
-          'animate-connection-dash bg-[repeating-linear-gradient(90deg,var(--color-muted-foreground)_0px,var(--color-muted-foreground)_5px,transparent_5px,transparent_12px)]',
+          'animate-connection-dash bg-[repeating-linear-gradient(90deg,var(--color-muted-foreground)_0px,var(--color-muted-foreground)_5px,transparent_5px,transparent_12px)] motion-reduce:animate-none',
         phase === 'done' &&
           (allPassed
-            ? 'bg-emerald-500 dark:bg-emerald-800'
-            : 'bg-rose-500/70 dark:bg-rose-900')
+            ? 'bg-emerald-500/35 dark:bg-emerald-600/35'
+            : 'bg-rose-500/35 dark:bg-rose-700/35')
       )}
     />
   );
@@ -377,11 +349,13 @@ function ConnectionLine({
 function StepStatusIcon({ status }: { status: StepStatus }) {
   switch (status) {
     case 'running':
-      return <Loader2Icon className="size-4.5 animate-spin text-primary" />;
+      return (
+        <Loader2Icon className="size-4.5 animate-spin text-muted-foreground motion-reduce:animate-none" />
+      );
     case 'passed':
-      return <StatusDisc status="success" variant="solid" size="sm" />;
+      return <StatusDisc variant="solid" status="success" size="sm" />;
     case 'failed':
-      return <StatusDisc status="error" variant="solid" size="sm" />;
+      return <StatusDisc variant="solid" status="error" size="sm" />;
     case 'skipped':
       return (
         <span className="flex size-4.5 shrink-0 items-center justify-center rounded-full bg-muted">

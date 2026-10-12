@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro';
-import type { PaymentProviderId } from 'shared/types/payment-provider';
+import type { ReactNode } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -13,65 +13,52 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-interface ProviderOption {
-  id: PaymentProviderId;
+export interface ProviderOption<Id extends string = string> {
+  id: Id;
   name: string;
-  /** A file in public/. */
-  logo: string;
-  /** Its ink is too dark for the dark theme, where it gets a light plate. */
-  darkInk?: boolean;
+  /** A file in public/. Without one the tile shows the name alone. */
+  logo?: string;
+  /** Its variant for the dark theme, when there is one. */
+  darkLogo?: string;
+  /**
+   * Set when the logo only reads on one kind of surface. A dark one gets a
+   * light plate in the dark theme; a light one is shown black in the light one.
+   */
+  ink?: 'dark' | 'light';
   /** Whether it can be set up yet. */
   available?: boolean;
 }
 
-const PROVIDERS: ProviderOption[] = [
-  {
-    id: 'adyen',
-    name: 'Adyen',
-    logo: '/adyen-logo.svg',
-    available: true
-  },
-  { id: 'payone', name: 'PAYONE', logo: '/payone-logo.svg' },
-  {
-    id: 'concardis',
-    name: 'Concardis',
-    logo: '/concardis-logo.svg',
-    darkInk: true
-  },
-  { id: 'six_saferpay', name: 'SIX Saferpay', logo: '/six-logo.svg' },
-  { id: 'valitor', name: 'Valitor', logo: '/valitor-logo.png', darkInk: true }
-];
-
-interface ProviderPickerProps {
+interface ProviderPickerProps<Id extends string> {
+  title: ReactNode;
+  description: ReactNode;
+  options: ProviderOption<Id>[];
   /** The provider already set up, when the picker is opened to change it. */
-  current?: PaymentProviderId;
-  onSelect: (provider: PaymentProviderId) => void;
+  current?: string;
+  onSelect: (provider: Id) => void;
   /** Leaves the picker without choosing; omitted when there is nothing to go back to. */
   onBack?: () => void;
 }
 
-export function ProviderPicker({
+/** The providers of one kind to choose from, as tiles. */
+export function ProviderPicker<Id extends string>({
+  title,
+  description,
+  options,
   current,
   onSelect,
   onBack
-}: ProviderPickerProps) {
+}: ProviderPickerProps<Id>) {
   return (
     <Card className="max-w-4xl">
       <CardHeader>
-        <CardTitle>
-          <Trans>Choose a payment provider</Trans>
-        </CardTitle>
-        <CardDescription>
-          <Trans>
-            Select the provider this property takes payments with. You enter its
-            credentials in the next step.
-          </Trans>
-        </CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
 
       <CardContent>
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {PROVIDERS.map((provider) => (
+          {options.map((provider) => (
             <li key={provider.id}>
               <button
                 type="button"
@@ -80,19 +67,32 @@ export function ProviderPicker({
                 className="flex h-28 w-full flex-col justify-between rounded-xl border border-border bg-card p-4 text-left transition-colors outline-none hover:bg-muted focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-card dark:bg-input/30 dark:hover:bg-input/50 dark:disabled:hover:bg-input/30"
               >
                 <span className="flex h-8 items-center">
-                  <img
-                    src={provider.logo}
-                    alt=""
-                    className={cn(
-                      'max-h-8 max-w-24 object-contain',
-                      // Not available yet: no colour, white in the dark theme
-                      !provider.available &&
-                        'grayscale dark:brightness-0 dark:invert',
-                      provider.available &&
-                        provider.darkInk &&
-                        'dark:rounded-md dark:bg-white dark:px-2 dark:py-1'
-                    )}
-                  />
+                  {provider.logo && (
+                    <img
+                      src={provider.logo}
+                      alt=""
+                      className={cn(
+                        'max-h-8 max-w-24 object-contain',
+                        provider.darkLogo && 'dark:hidden',
+                        provider.available
+                          ? {
+                              'dark:rounded-md dark:bg-white dark:px-2 dark:py-1':
+                                provider.ink === 'dark',
+                              'brightness-0 dark:brightness-100':
+                                provider.ink === 'light'
+                            }
+                          : // Not available yet: no colour, white in the dark theme
+                            'grayscale dark:brightness-0 dark:invert'
+                      )}
+                    />
+                  )}
+                  {provider.darkLogo && (
+                    <img
+                      src={provider.darkLogo}
+                      alt=""
+                      className="hidden max-h-8 max-w-24 object-contain dark:block"
+                    />
+                  )}
                 </span>
                 <span className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium">{provider.name}</span>

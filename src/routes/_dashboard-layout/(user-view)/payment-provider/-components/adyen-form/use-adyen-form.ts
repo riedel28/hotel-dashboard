@@ -1,25 +1,21 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
-import { useLingui } from '@lingui/react/macro';
-import * as React from 'react';
-import { useForm } from 'react-hook-form';
 import {
   ADYEN_MAPPING_CODE_PATTERN,
   ADYEN_METHOD_IDS,
   EMPTY_ADYEN_MAPPINGS,
   type PaymentProvider
-} from 'shared/types/payment-provider';
-import { toast } from 'sonner';
-import { z } from 'zod';
+} from 'shared/types/providers';
+import type { z } from 'zod';
 
-import { useSavePaymentProvider } from '../../-hooks/use-payment-provider';
+import { useProviderForm } from '@/components/provider-setup/use-provider-form';
+
 import type { AdyenFormData } from './adyen-form-types';
 
 const EMPTY_VALUES: AdyenFormData = {
   environment: 'test',
   merchantId: '',
-  apiKey: '',
+  secret: '',
   clientKey: '',
   publicKey: '',
   additionalConfig: '',
@@ -31,26 +27,53 @@ const EMPTY_VALUES: AdyenFormData = {
   mappings: EMPTY_ADYEN_MAPPINGS
 };
 
-// The fields a form may insist on, with what it says when one is empty.
-const REQUIRED_MESSAGES = {
+type Required = Partial<Record<keyof AdyenFormData, MessageDescriptor>>;
+
+const CREDENTIALS = {
   merchantId: msg`Merchant ID is required`,
-  apiKey: msg`API Key is required`,
-  clientKey: msg`Client Key is required`,
+  clientKey: msg`Client Key is required`
+} satisfies Required;
+
+// Setting Adyen up takes the credentials alone: the recipient and mapping
+// codes follow once it is connected.
+export const ADYEN_SETUP_REQUIRED: Required = {
+  ...CREDENTIALS,
+  secret: msg`API Key is required`
+};
+
+// The API key is not among them: an empty one keeps the key already stored.
+export const ADYEN_SETTINGS_REQUIRED: Required = {
+  ...CREDENTIALS,
   addressLine1: msg`Address line is required`,
   zip: msg`ZIP / Postal code is required`,
   city: msg`City is required`,
   country: msg`Country is required`
-} satisfies Partial<Record<keyof AdyenFormData, MessageDescriptor>>;
+};
 
-export type AdyenRequiredField = keyof typeof REQUIRED_MESSAGES;
+function refineMappingCodes(
+  data: AdyenFormData,
+  ctx: z.RefinementCtx,
+  t: (message: MessageDescriptor) => string
+) {
+  for (const id of ADYEN_METHOD_IDS) {
+    for (const kind of ['ecom', 'pos'] as const) {
+      if (!ADYEN_MAPPING_CODE_PATTERN.test(data.mappings[id][kind])) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['mappings', id, kind],
+          message: t(msg`Digits only (max 12)`)
+        });
+      }
+    }
+  }
+}
 
 interface UseAdyenFormOptions {
   /** The stored configuration the form starts from and resets to. */
   saved: PaymentProvider | null;
-  /** Keep the list's identity stable: the validation is rebuilt from it. */
-  required: AdyenRequiredField[];
-  /** The toast for a successful save. */
-  savedMessage: MessageDescriptor;
+  required: Required;
+  /** The name of the provider that connecting Adyen would replace. */
+  replaces?: string | null;
 }
 
 /**
@@ -60,64 +83,16 @@ interface UseAdyenFormOptions {
 export function useAdyenForm({
   saved,
   required,
-  savedMessage
+  replaces
 }: UseAdyenFormOptions) {
-  const { t } = useLingui();
-  const save = useSavePaymentProvider();
-
-  // The server owns the shape (adyenConfigSchema); this only adds what a form
-  // has to say before the request is sent.
-  const schema = React.useMemo(
-    () =>
-      z.custom<AdyenFormData>().superRefine((data, ctx) => {
-        for (const field of required) {
-          if (!data[field].trim()) {
-            ctx.addIssue({
-              code: 'custom',
-              path: [field],
-              message: t(REQUIRED_MESSAGES[field])
-            });
-          }
-        }
-
-        for (const id of ADYEN_METHOD_IDS) {
-          for (const kind of ['ecom', 'pos'] as const) {
-            if (!ADYEN_MAPPING_CODE_PATTERN.test(data.mappings[id][kind])) {
-              ctx.addIssue({
-                code: 'custom',
-                path: ['mappings', id, kind],
-                message: t`Digits only (max 12)`
-              });
-            }
-          }
-        }
-      }),
-    [required, t]
-  );
-
-  // Follows the stored configuration: saving it resets the form to it, which
-  // also empties the API key field again.
-  const values = React.useMemo<AdyenFormData>(
-    () => ({ ...EMPTY_VALUES, ...saved?.config }),
-    [saved]
-  );
-
-  const form = useForm<AdyenFormData>({
-    resolver: zodResolver(schema),
-    defaultValues: EMPTY_VALUES,
-    values
+  return useProviderForm({
+    kind: 'payment',
+    provider: 'adyen',
+    name: 'Adyen',
+    config: saved?.config,
+    emptyValues: EMPTY_VALUES,
+    required,
+    refine: refineMappingCodes,
+    replaces
   });
-
-  const onSubmit = async ({ apiKey, ...config }: AdyenFormData) => {
-    try {
-      await save.mutateAsync({ provider: 'adyen', apiKey, config });
-      toast.success(t(savedMessage));
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : t`Failed to save configuration`
-      );
-    }
-  };
-
-  return { form, onSubmit, isSaving: save.isPending };
 }
