@@ -98,8 +98,7 @@ msgstr "{0} roles total"
 #~ msgstr "{0}, {1}"
 
 #. placeholder {0}: steps.length
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:304
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:288
+#: src/components/provider-setup/test-connection-dialog.tsx:276
 msgid "{failedCount} of {0} tests failed"
 msgstr "{failedCount} of {0} tests failed"
 
@@ -126,6 +125,10 @@ msgstr "{label} time"
 #: src/routes/_dashboard-layout/(user-view)/devices/-hooks/use-assign-device-room.ts:50
 msgid "{name} assigned to room {label}"
 msgstr "{name} assigned to room {label}"
+
+#: src/components/provider-setup/use-provider-form.tsx:117
+msgid "{name} connected"
+msgstr "{name} connected"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-hooks/use-assign-device-room.ts:52
 msgid "{name} unassigned from its room"
@@ -167,21 +170,29 @@ msgstr "<0>{0}</0> will no longer belong to room <1>{1}</1>. You can assign it a
 #~ msgid "2FA is off"
 #~ msgstr "2FA is off"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:54
 msgid "401 Unauthorized — check username and password."
 msgstr "401 Unauthorized — check username and password."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:90
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:48
 msgid "401 Unauthorized — the API key was rejected."
 msgstr "401 Unauthorized — the API key was rejected."
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-test-steps.ts:15
+msgid "401 Unauthorized — the credentials were rejected."
+msgstr "401 Unauthorized — the credentials were rejected."
 
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:85
 msgid "A customer with this email already exists"
 msgstr "A customer with this email already exists"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:179
-msgid "A key is stored. Enter a new one only to replace it."
-msgstr "A key is stored. Enter a new one only to replace it."
+#: src/components/provider-setup/fields.tsx:98
+#~ msgid "A key is stored. Enter a new one only to replace it."
+#~ msgstr "A key is stored. Enter a new one only to replace it."
+
+#: src/components/provider-setup/use-provider-form.tsx:148
+msgid "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
+msgstr "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:82
 msgid "A second step at sign-in, from an app on your phone."
@@ -208,7 +219,7 @@ msgstr "Account activated!"
 #~ msgid "Account settings"
 #~ msgstr "Account settings"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:39
 msgid "Accounting codes reported to your PMS per payment method and channel."
 msgstr "Accounting codes reported to your PMS per payment method and channel."
 
@@ -300,7 +311,7 @@ msgstr "Add Room"
 msgid "Add subcategory"
 msgstr "Add subcategory"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:63
 msgid "Add the payment recipient to finish the setup."
 msgstr "Add the payment recipient to finish the setup."
 
@@ -313,7 +324,7 @@ msgstr "Add the payment recipient to finish the setup."
 msgid "Added on {0}"
 msgstr "Added on {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:264
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:247
 msgid "Additional configuration"
 msgstr "Additional configuration"
 
@@ -337,7 +348,7 @@ msgstr "Address line 1"
 msgid "Address line 2"
 msgstr "Address line 2"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:39
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:47
 msgid "Address line is required"
 msgstr "Address line is required"
 
@@ -392,8 +403,8 @@ msgstr "Adyen"
 #~ msgstr "Adyen configuration"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-setup-card.tsx:27
-msgid "Adyen connected"
-msgstr "Adyen connected"
+#~ msgid "Adyen connected"
+#~ msgstr "Adyen connected"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:212
 msgid "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
@@ -437,8 +448,7 @@ msgstr "All statuses"
 #~ msgstr "All Statuses"
 
 #. placeholder {0}: steps.length
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:300
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:284
+#: src/components/provider-setup/test-connection-dialog.tsx:272
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
@@ -453,6 +463,10 @@ msgstr "Already have an account?"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/authenticator-apps.tsx:82
 msgid "Already have one? Any TOTP app works — just scan the QR code."
 msgstr "Already have one? Any TOTP app works — just scan the QR code."
+
+#: src/components/provider-setup/fields.tsx:98
+msgid "Already stored. Enter a new one only to replace it."
+msgstr "Already stored. Enter a new one only to replace it."
 
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:158
 msgid "An error occurred while fetching customers"
@@ -491,11 +505,11 @@ msgstr "An unexpected error occurred"
 msgid "Android App"
 msgstr "Android App"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:162
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:170
 msgid "API Key"
 msgstr "API Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:37
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:41
 msgid "API Key is required"
 msgstr "API Key is required"
 
@@ -594,12 +608,12 @@ msgstr "At least one symbol"
 #~ msgid "Austria"
 #~ msgstr "Austria"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:47
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-test-steps.ts:14
 msgid "Authenticate credentials"
 msgstr "Authenticate credentials"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:96
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:53
 msgid "Authentication"
 msgstr "Authentication"
 
@@ -645,9 +659,10 @@ msgstr "Available"
 #~ msgid "Avatar upload is not yet implemented"
 #~ msgstr "Avatar upload is not yet implemented"
 
+#: src/components/provider-setup/provider-form-card.tsx:159
+#: src/components/provider-setup/provider-picker.tsx:108
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:55
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-setup-card.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/provider-picker.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-setup-card.tsx:52
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:281
 msgid "Back"
 msgstr "Back"
@@ -711,6 +726,8 @@ msgstr "Business"
 msgid "Can't scan the code? Enter the key manually"
 msgstr "Can't scan the code? Enter the key manually"
 
+#: src/components/provider-setup/provider-form-card.tsx:150
+#: src/components/provider-setup/use-provider-form.tsx:156
 #: src/components/sectioned-form.tsx:100
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:144
@@ -721,8 +738,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:91
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:99
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:319
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:347
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:296
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
@@ -757,8 +773,8 @@ msgid "Caps Lock is on"
 msgstr "Caps Lock is on"
 
 #: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:52
-msgid "Casablanca"
-msgstr "Casablanca"
+#~ msgid "Casablanca"
+#~ msgstr "Casablanca"
 
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:82
 msgid "Categories"
@@ -818,7 +834,8 @@ msgstr "Change language"
 msgid "Change profile picture"
 msgstr "Change profile picture"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:73
+#: src/components/provider-setup/provider-form-card.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:55
 msgid "Change provider"
 msgstr "Change provider"
 
@@ -890,13 +907,17 @@ msgstr "Checked out"
 #~ msgid "Checkin Page"
 #~ msgstr "Checkin Page"
 
+#: src/components/provider-setup/test-connection-dialog.tsx:168
+msgid "Checks the connection to {provider} using the current form values."
+msgstr "Checks the connection to {provider} using the current form values."
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:179
-msgid "Checks the connection to Adyen using the current form values."
-msgstr "Checks the connection to Adyen using the current form values."
+#~ msgid "Checks the connection to Adyen using the current form values."
+#~ msgstr "Checks the connection to Adyen using the current form values."
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:202
-msgid "Checks the connection to SALTO ProAccess Space using the current form values."
-msgstr "Checks the connection to SALTO ProAccess Space using the current form values."
+#~ msgid "Checks the connection to SALTO ProAccess Space using the current form values."
+#~ msgstr "Checks the connection to SALTO ProAccess Space using the current form values."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-lib/age-groups.ts:44
 msgid "Child"
@@ -910,9 +931,13 @@ msgstr "Children"
 #~ msgid "Children count cannot be negative"
 #~ msgstr "Children count cannot be negative"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/provider-picker.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:78
 msgid "Choose a payment provider"
 msgstr "Choose a payment provider"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:86
+msgid "Choose a property management system"
+msgstr "Choose a property management system"
 
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:145
 #~ msgid "Choose how this property connects to its door locks"
@@ -923,7 +948,7 @@ msgstr "Choose a payment provider"
 msgid "City"
 msgstr "City"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:41
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:49
 msgid "City is required"
 msgstr "City is required"
 
@@ -945,18 +970,25 @@ msgstr "Clear filters"
 msgid "Clear search"
 msgstr "Clear search"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:87
+msgid "Client ID"
+msgstr "Client ID"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:30
+msgid "Client ID is required"
+msgstr "Client ID is required"
+
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:183
 msgid "Client Key"
 msgstr "Client Key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:38
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:34
 msgid "Client Key is required"
 msgstr "Client Key is required"
 
+#: src/components/provider-setup/test-connection-dialog.tsx:296
 #: src/components/ui/drawer.tsx:55
 #: src/components/ui/sheet.tsx:79
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:328
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:308
 msgid "Close"
 msgstr "Close"
 
@@ -972,7 +1004,7 @@ msgstr "Codes are time-based — if yours keeps failing, check that your phone's
 msgid "Columns"
 msgstr "Columns"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/provider-picker.tsx:105
+#: src/components/provider-setup/provider-picker.tsx:95
 msgid "Coming soon"
 msgstr "Coming soon"
 
@@ -988,12 +1020,11 @@ msgstr "Company"
 msgid "Completed At"
 msgstr "Completed At"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:150
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:186
 msgid "Config updated"
 msgstr "Config updated"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:44
+#: src/components/provider-setup/use-provider-form.tsx:117
 msgid "Configuration updated"
 msgstr "Configuration updated"
 
@@ -1023,7 +1054,8 @@ msgstr "Confirm your new password"
 msgid "Confirm your password"
 msgstr "Confirm your password"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-setup-card.tsx:60
+#: src/components/provider-setup/provider-form-card.tsx:169
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-setup-card.tsx:58
 msgid "Connect provider"
 msgstr "Connect provider"
 
@@ -1032,7 +1064,7 @@ msgstr "Connect provider"
 #~ msgid "Connected"
 #~ msgstr "Connected"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:310
+#: src/components/provider-setup/test-connection.tsx:64
 msgid "Connection failed"
 msgstr "Connection failed"
 
@@ -1040,11 +1072,11 @@ msgstr "Connection failed"
 #~ msgid "Connection method"
 #~ msgstr "Connection method"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:308
+#: src/components/provider-setup/test-connection.tsx:62
 msgid "Connection successful"
 msgstr "Connection successful"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:111
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:49
 msgid "Connection timed out after 5000 ms — host unreachable."
 msgstr "Connection timed out after 5000 ms — host unreachable."
 
@@ -1089,7 +1121,7 @@ msgstr "Copied to clipboard"
 msgid "Copy"
 msgstr "Copy"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:217
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:200
 msgid "Copy Client Key"
 msgstr "Copy Client Key"
 
@@ -1097,7 +1129,7 @@ msgstr "Copy Client Key"
 msgid "Copy message"
 msgstr "Copy message"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:250
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:233
 msgid "Copy Public Key"
 msgstr "Copy Public Key"
 
@@ -1118,9 +1150,13 @@ msgstr "Copy setup key"
 #~ msgid "Copy to clipboard"
 #~ msgstr "Copy to clipboard"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:43
 msgid "Could not reach the Adyen API — request timed out after 5000 ms."
 msgstr "Could not reach the Adyen API — request timed out after 5000 ms."
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-test-steps.ts:10
+msgid "Could not reach the API — request timed out after 5000 ms."
+msgstr "Could not reach the API — request timed out after 5000 ms."
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:72
 msgid "Couldn't generate new recovery codes"
@@ -1149,7 +1185,7 @@ msgstr "Country"
 #~ msgid "Country code"
 #~ msgstr "Country code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:42
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:50
 msgid "Country is required"
 msgstr "Country is required"
 
@@ -1200,12 +1236,12 @@ msgstr "Create the first category to start adding products."
 msgid "Creating reservation…"
 msgstr "Creating reservation…"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:74
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:83
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-toc.tsx:15
 msgid "Credentials"
 msgstr "Credentials"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/provider-picker.tsx:101
+#: src/components/provider-setup/provider-picker.tsx:91
 msgid "Current"
 msgstr "Current"
 
@@ -1386,7 +1422,7 @@ msgstr "Device not found"
 msgid "Devices"
 msgstr "Devices"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:89
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:64
 msgid "Digits only (max 12)"
 msgstr "Digits only (max 12)"
 
@@ -1443,8 +1479,8 @@ msgstr "Drag to move, pinch or use the slider to zoom."
 msgid "Drop an image here or choose one. It's resized automatically, so any size is fine."
 msgstr "Drop an image here or choose one. It's resized automatically, so any size is fine."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:57
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:78
 msgid "E-com"
 msgstr "E-com"
 
@@ -1588,7 +1624,7 @@ msgstr "Enter a domain without a path, e.g. app.example.com"
 #~ msgid "Enter a password. Must contain:"
 #~ msgstr "Enter a password. Must contain:"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:137
 msgid "Enter a valid port number"
 msgstr "Enter a valid port number"
 
@@ -1668,7 +1704,7 @@ msgstr "Enter the current code from your authenticator app"
 #~ msgid "Enter the new API key"
 #~ msgstr "Enter the new API key"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:172
 msgid "Enter your API Key"
 msgstr "Enter your API Key"
 
@@ -1732,11 +1768,11 @@ msgstr "Entry <0>{entryTitle}</0> was deleted"
 msgid "Entry was deleted"
 msgstr "Entry was deleted"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:95
 msgid "Environment"
 msgstr "Environment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:92
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:53
 msgid "Environment mismatch — these credentials belong to a different environment."
 msgstr "Environment mismatch — these credentials belong to a different environment."
 
@@ -1885,8 +1921,12 @@ msgid "Failed to load rooms"
 msgstr "Failed to load rooms"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:87
-msgid "Failed to load the payment provider."
-msgstr "Failed to load the payment provider."
+#~ msgid "Failed to load the payment provider."
+#~ msgstr "Failed to load the payment provider."
+
+#: src/components/provider-setup/provider-screens.tsx:56
+msgid "Failed to load the provider."
+msgstr "Failed to load the provider."
 
 #: src/routes/_auth-layout/auth/login.tsx:93
 msgid "Failed to login. Please try again."
@@ -1917,7 +1957,7 @@ msgstr "Failed to resend verification email"
 msgid "Failed to reset password. The link may have expired."
 msgstr "Failed to reset password. The link may have expired."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:117
+#: src/components/provider-setup/use-provider-form.tsx:120
 msgid "Failed to save configuration"
 msgstr "Failed to save configuration"
 
@@ -1992,9 +2032,13 @@ msgstr "Fair"
 msgid "Fellow travelers"
 msgstr "Fellow travelers"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:57
 msgid "Fetch merchant account"
 msgstr "Fetch merchant account"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-test-steps.ts:19
+msgid "Fetch property"
+msgstr "Fetch property"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-section.tsx:57
 #~ msgid "File size must be less than 5MB"
@@ -2131,6 +2175,10 @@ msgstr "Good"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:203
 msgid "Grant administrator privileges to this user"
 msgstr "Grant administrator privileges to this user"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:140
+msgid "Group folio listing by rate plan"
+msgstr "Group folio listing by rate plan"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:86
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:35
@@ -2290,8 +2338,8 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:32
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:43
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:32
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:57
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:109
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:31
@@ -2305,11 +2353,11 @@ msgstr "Hide password"
 msgid "Home"
 msgstr "Home"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:242
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:270
 msgid "Host"
 msgstr "Host"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:120
 msgid "Host is required"
 msgstr "Host is required"
 
@@ -2319,9 +2367,13 @@ msgstr "Host is required"
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:87
 msgid "Hotel ID"
 msgstr "Hotel ID"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:27
+msgid "Hotel ID is required"
+msgstr "Hotel ID is required"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:37
 #~ msgid "Housekeeping Agent"
@@ -2375,16 +2427,16 @@ msgstr "Infants"
 #~ msgid "Info"
 #~ msgstr "Info"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:188
+#: src/components/provider-setup/provider-form-card.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:216
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-header.tsx:51
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:67
 msgid "Integration Guide"
 msgstr "Integration Guide"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:55
 #: src/routes/_dashboard-layout/(user-view)/door-locks.tsx:37
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:48
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:62
 msgid "Integrations"
 msgstr "Integrations"
 
@@ -2502,9 +2554,17 @@ msgstr "Last signal"
 #~ msgid "Last updated {0}"
 #~ msgstr "Last updated {0}"
 
+#: src/components/provider-setup/last-updated.tsx:27
+msgid "Last updated {date}"
+msgstr "Last updated {date}"
+
+#: src/components/provider-setup/last-updated.tsx:23
+msgid "Last updated {date} · {name}"
+msgstr "Last updated {date} · {name}"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:91
-msgid "Last updated {lastUpdated}"
-msgstr "Last updated {lastUpdated}"
+#~ msgid "Last updated {lastUpdated}"
+#~ msgstr "Last updated {lastUpdated}"
 
 #. placeholder {0}: i18n.date(lastSavedAt, { timeStyle: 'short' })
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form.tsx:263
@@ -2528,7 +2588,7 @@ msgstr "Light"
 msgid "Link"
 msgstr "Link"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:128
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-header.tsx:36
 msgid "Live"
 msgstr "Live"
@@ -2537,7 +2597,7 @@ msgstr "Live"
 #~ msgid "Live environment"
 #~ msgstr "Live environment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:339
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:288
 msgid "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 msgstr "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 
@@ -2627,11 +2687,11 @@ msgstr "Manage the hotel information your guests can browse, from A to Z."
 msgid "Manage this property's connection to its door lock system."
 msgstr "Manage this property's connection to its door lock system."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:70
 msgid "Manage this property's connection to its payment account."
 msgstr "Manage this property's connection to its payment account."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:78
 msgid "Manage this property's connection to its property management system."
 msgstr "Manage this property's connection to its property management system."
 
@@ -2656,7 +2716,7 @@ msgstr "Manage your personal details, security and access rights."
 #~ msgstr "Manage your user roles and permissions"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-toc.tsx:32
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:40
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:37
 msgid "Mapping codes"
 msgstr "Mapping codes"
 
@@ -2672,15 +2732,15 @@ msgstr "Meldeschein App (iPad)"
 #~ msgid "Menu items"
 #~ msgstr "Menu items"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:58
 msgid "Merchant account not found — check the Merchant ID."
 msgstr "Merchant account not found — check the Merchant ID."
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:132
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:141
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:36
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:33
 msgid "Merchant ID is required"
 msgstr "Merchant ID is required"
 
@@ -2731,7 +2791,7 @@ msgstr "Mobile App (Native)"
 msgid "Mobile App (PWA)"
 msgstr "Mobile App (PWA)"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:120
 msgid "Mock code"
 msgstr "Mock code"
 
@@ -2985,10 +3045,10 @@ msgstr "No properties yet."
 #~ msgstr "No properties yet. Assign this customer on a property's page."
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:96
-msgid "No response from Adyen."
-msgstr "No response from Adyen."
+#~ msgid "No response from Adyen."
+#~ msgstr "No response from Adyen."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:69
 msgid "No response from the PMS interface."
 msgstr "No response from the PMS interface."
 
@@ -3115,7 +3175,7 @@ msgstr "Open your authenticator app and scan the code below."
 #~ msgid "Opening"
 #~ msgstr "Opening"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:266
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:249
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:64
 msgid "optional"
 msgstr "optional"
@@ -3124,7 +3184,7 @@ msgstr "optional"
 msgid "Optional"
 msgstr "Optional"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:277
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:260
 msgid "Optional JSON or certificates passed to the Adyen SDK."
 msgstr "Optional JSON or certificates passed to the Adyen SDK."
 
@@ -3141,7 +3201,7 @@ msgstr "Optional JSON or certificates passed to the Adyen SDK."
 msgid "Other logs for reservation {bookingNr}"
 msgstr "Other logs for reservation {bookingNr}"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:189
+#: src/components/provider-setup/test-connection-dialog.tsx:178
 msgid "Our server"
 msgstr "Our server"
 
@@ -3163,7 +3223,7 @@ msgstr "Page not found"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:221
 #: src/routes/_auth-layout/auth/login.tsx:213
 #: src/routes/_auth-layout/auth/sign-up.tsx:259
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:394
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:422
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:116
@@ -3186,7 +3246,7 @@ msgstr "Password"
 msgid "Password does not yet meet all requirements"
 msgstr "Password does not yet meet all requirements"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:125
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:161
 msgid "Password is required"
 msgstr "Password is required"
 
@@ -3230,14 +3290,14 @@ msgstr "Passwords don't match"
 msgid "Payment"
 msgstr "Payment"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:51
 msgid "Payment method"
 msgstr "Payment method"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:110
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:35
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:53
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:41
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:67
 msgid "Payment Provider"
 msgstr "Payment Provider"
 
@@ -3362,13 +3422,13 @@ msgid "Please verify your email address before logging in."
 msgstr "Please verify your email address before logging in."
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:98
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:24
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:42
-#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:50
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:75
 msgid "PMS"
 msgstr "PMS"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:68
 msgid "PMS interface handshake"
 msgstr "PMS interface handshake"
 
@@ -3376,20 +3436,20 @@ msgstr "PMS interface handshake"
 #~ msgid "PMS Provider"
 #~ msgstr "PMS Provider"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:250
 msgid "PMS-Schnittstelle"
 msgstr "PMS-Schnittstelle"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:264
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:292
 msgid "Port"
 msgstr "Port"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:127
 msgid "Port is required"
 msgstr "Port is required"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:60
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:90
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:57
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:87
 msgid "POS"
 msgstr "POS"
 
@@ -3573,6 +3633,18 @@ msgstr "Property created successfully"
 #~ msgid "Property Details"
 #~ msgstr "Property Details"
 
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:107
+msgid "Property ID"
+msgstr "Property ID"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:31
+msgid "Property ID is required"
+msgstr "Property ID is required"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-test-steps.ts:20
+msgid "Property not found — check its ID."
+msgstr "Property not found — check its ID."
+
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:92
 msgid "Property updated successfully"
 msgstr "Property updated successfully"
@@ -3581,7 +3653,7 @@ msgstr "Property updated successfully"
 msgid "Protect your account with a second step"
 msgstr "Protect your account with a second step"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:237
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:220
 msgid "Public Key"
 msgstr "Public Key"
 
@@ -3624,9 +3696,13 @@ msgstr "QR code for setting up two-factor authentication"
 msgid "Quantity"
 msgstr "Quantity"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:77
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:42
 msgid "Reach Adyen API"
 msgstr "Reach Adyen API"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-test-steps.ts:9
+msgid "Reach the API"
+msgstr "Reach the API"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:78
 msgid "Read-only"
@@ -3757,6 +3833,14 @@ msgstr "Rename category"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:903
 #~ msgid "Replace"
 #~ msgstr "Replace"
+
+#: src/components/provider-setup/use-provider-form.tsx:143
+msgid "Replace {replaces} with {name}?"
+msgstr "Replace {replaces} with {name}?"
+
+#: src/components/provider-setup/use-provider-form.tsx:164
+msgid "Replace provider"
+msgstr "Replace provider"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:320
 msgid "Resend"
@@ -3993,18 +4077,16 @@ msgstr "Rows per page"
 msgid "RSX API"
 msgstr "RSX API"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:325
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:312
+#: src/components/provider-setup/test-connection-dialog.tsx:300
 msgid "Run again"
 msgstr "Run again"
 
 #. placeholder {0}: steps.length
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:296
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:280
+#: src/components/provider-setup/test-connection-dialog.tsx:268
 msgid "Running tests… ({passedCount}/{0})"
 msgstr "Running tests… ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:202
 msgid "SALTO"
 msgstr "SALTO"
 
@@ -4014,7 +4096,8 @@ msgstr "SALTO"
 msgid "Save"
 msgstr "Save"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:59
+#: src/components/provider-setup/provider-form-card.tsx:167
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:64
 msgid "Save changes"
@@ -4049,8 +4132,9 @@ msgstr "Save your recovery codes. You'll need them if you lose your phone, and e
 #~ msgid "Saving changes"
 #~ msgstr "Saving changes"
 
+#: src/components/provider-setup/provider-form-card.tsx:136
 #: src/components/sectioned-form.tsx:86
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:71
 msgid "Saving changes…"
 msgstr "Saving changes…"
 
@@ -4146,6 +4230,14 @@ msgstr "Search users"
 msgid "Searching..."
 msgstr "Searching..."
 
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:96
+msgid "Secret code"
+msgstr "Secret code"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:36
+msgid "Secret code is required"
+msgstr "Secret code is required"
+
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:126
 #~ msgid "Security"
 #~ msgstr "Security"
@@ -4220,9 +4312,13 @@ msgstr "Select stage"
 msgid "Select status"
 msgstr "Select status"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/provider-picker.tsx:65
+#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:80
 msgid "Select the provider this property takes payments with. You enter its credentials in the next step."
 msgstr "Select the provider this property takes payments with. You enter its credentials in the next step."
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider.tsx:88
+msgid "Select the system this property is run with. You enter its credentials in the next step."
+msgstr "Select the system this property is run with. You enter its credentials in the next step."
 
 #: src/routes/_dashboard-layout/-components/view-selector.tsx:37
 #~ msgid "Select view"
@@ -4242,7 +4338,7 @@ msgstr "Select the provider this property takes payments with. You enter its cre
 msgid "Send Invitation"
 msgstr "Send Invitation"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:107
 msgid "Send invoice via PMS"
 msgstr "Send invoice via PMS"
 
@@ -4301,28 +4397,27 @@ msgstr "Setup key copied"
 #~ msgid "Share this URL with guests for direct check-in access"
 #~ msgstr "Share this URL with guests for direct check-in access"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:97
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:103
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:58
 msgid "SHIP handshake"
 msgstr "SHIP handshake"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:59
 msgid "SHIP handshake rejected: unsupported protocol version."
 msgstr "SHIP handshake rejected: unsupported protocol version."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:228
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:256
 msgid "SHIP-Schnittstelle"
 msgstr "SHIP-Schnittstelle"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:292
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:320
 msgid "SHIP-Type"
 msgstr "SHIP-Type"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:352
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:380
 msgid "SHIP-URL"
 msgstr "SHIP-URL"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:111
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:147
 msgid "SHIP-URL is required"
 msgstr "SHIP-URL is required"
 
@@ -4406,8 +4501,7 @@ msgstr "Sign Up"
 msgid "Skip to main content"
 msgstr "Skip to main content"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:255
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:233
+#: src/components/provider-setup/test-connection-dialog.tsx:221
 msgid "Skipped"
 msgstr "Skipped"
 
@@ -4500,11 +4594,11 @@ msgstr "Stay"
 msgid "Step {0} of {1}"
 msgstr "Step {0} of {1}"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:303
+#: src/components/provider-setup/test-connection-dialog.tsx:291
 msgid "Stop test"
 msgstr "Stop test"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:322
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:350
 msgid "STP is deprecated"
 msgstr "STP is deprecated"
 
@@ -4536,11 +4630,11 @@ msgstr "Successfully logged in!"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Supported formats: JPG, PNG, GIF (max 5MB)"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:355
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:304
 msgid "Switch to Live"
 msgstr "Switch to Live"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:336
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:285
 msgid "Switch to the Live environment?"
 msgstr "Switch to the Live environment?"
 
@@ -4581,13 +4675,11 @@ msgstr "Switched to {0}"
 msgid "System"
 msgstr "System"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:88
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:94
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:48
 msgid "TCP connection"
 msgstr "TCP connection"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:85
 msgid "Technical connection details for your Adyen account."
 msgstr "Technical connection details for your Adyen account."
 
@@ -4596,13 +4688,13 @@ msgstr "Technical connection details for your Adyen account."
 msgid "Template"
 msgstr "Template"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:117
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-form-header.tsx:36
 msgid "Test"
 msgstr "Test"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:454
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:293
+#: src/components/provider-setup/test-connection.tsx:47
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:482
 msgid "Test connection"
 msgstr "Test connection"
 
@@ -4610,15 +4702,14 @@ msgstr "Test connection"
 #~ msgid "Test environment"
 #~ msgstr "Test environment"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:199
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:176
+#: src/components/provider-setup/test-connection-dialog.tsx:165
 msgid "Test provider configuration"
 msgstr "Test provider configuration"
 
+#. placeholder {0}: formatLocalized(lastResult.finishedAt, { timeStyle: 'short' })
 #. placeholder {0}: formatLocalized(lastTestResult.finishedAt, { timeStyle: 'short' })
-#. placeholder {0}: formatLocalized(lastTestResult.finishedAt, { timeStyle: 'short' })
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:439
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:315
+#: src/components/provider-setup/test-connection.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:467
 msgid "Tested at {0}"
 msgstr "Tested at {0}"
 
@@ -4689,7 +4780,7 @@ msgstr "The code is shown on the device screen"
 msgid "The device could not be added. Please try again."
 msgstr "The device could not be added. Please try again."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:130
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:109
 msgid "The invoice will be sent directly to the PMS"
 msgstr "The invoice will be sent directly to the PMS"
 
@@ -4720,6 +4811,10 @@ msgstr "The property {propertyName} has been deleted"
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:56
 msgid "The property <0>{propertyName}</0> will be deleted. This action cannot be undone."
 msgstr "The property <0>{propertyName}</0> will be deleted. This action cannot be undone."
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:109
+msgid "The property's code in Apaleo, for example MUC."
+msgstr "The property's code in Apaleo, for example MUC."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:68
 msgid "The reservation {reservationNr} has been deleted"
@@ -4781,7 +4876,7 @@ msgstr "This address isn't verified yet. Check your inbox for the confirmation l
 #~ msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
 #~ msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:325
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:353
 msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 msgstr "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 
@@ -4805,7 +4900,7 @@ msgstr "This image is small, so it may look blurry once cropped."
 msgid "This invitation link is invalid."
 msgstr "This invitation link is invalid."
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:122
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr "This is the service code that will be used to skip payment at check-in."
 
@@ -4852,11 +4947,11 @@ msgstr "Title"
 msgid "Title is required"
 msgstr "Title is required"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:77
 msgid "TLS certificate"
 msgstr "TLS certificate"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/test-connection-dialog.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:78
 msgid "TLS handshake failed: certificate is self-signed or expired."
 msgstr "TLS handshake failed: certificate is self-signed or expired."
 
@@ -4891,9 +4986,13 @@ msgstr "Toggle Columns"
 #~ msgid "Toggle theme"
 #~ msgstr "Toggle theme"
 
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:109
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:96
 msgid "Token"
 msgstr "Token"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:31
+msgid "Token is required"
+msgstr "Token is required"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:107
 msgid "Too many attempts. Please try again later."
@@ -4907,7 +5006,7 @@ msgstr "Too many attempts. Try again in {cooldown} seconds."
 msgid "Top level"
 msgstr "Top level"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider.tsx:90
+#: src/components/provider-setup/provider-screens.tsx:59
 msgid "Try again"
 msgstr "Try again"
 
@@ -5066,7 +5165,7 @@ msgstr "Unnamed device"
 msgid "Unpin {title} column"
 msgstr "Unpin {title} column"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:102
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:244
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
@@ -5082,8 +5181,7 @@ msgstr "Unsaved changes"
 msgid "Update"
 msgstr "Update"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:458
-#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/pms-form.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:486
 msgid "Update config"
 msgstr "Update config"
 
@@ -5136,6 +5234,14 @@ msgstr "Use “Add product” above to add the first one."
 msgid "Use a code from my app instead"
 msgstr "Use a code from my app instead"
 
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:130
+msgid "Use Apaleo Payment for eCom payments"
+msgstr "Use Apaleo Payment for eCom payments"
+
+#: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/apaleo-form.tsx:120
+msgid "Use Apaleo Payment for POS payments"
+msgstr "Use Apaleo Payment for POS payments"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:140
 msgid "Use at least {MIN_PASSWORD_LENGTH} characters. A passphrase of a few unrelated words beats a short, complicated one."
 msgstr "Use at least {MIN_PASSWORD_LENGTH} characters. A passphrase of a few unrelated words beats a short, complicated one."
@@ -5178,11 +5284,11 @@ msgstr "User updated successfully"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:374
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:402
 msgid "Username"
 msgstr "Username"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/door-locks-form.tsx:154
 msgid "Username is required"
 msgstr "Username is required"
 
@@ -5224,7 +5330,7 @@ msgstr "Verify"
 msgid "Verify Email"
 msgstr "Verify Email"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:52
 msgid "Verify environment"
 msgstr "Verify environment"
 
@@ -5463,7 +5569,7 @@ msgstr "ZIP"
 #~ msgid "ZIP / Postal code"
 #~ msgstr "ZIP / Postal code"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:40
+#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:48
 msgid "ZIP / Postal code is required"
 msgstr "ZIP / Postal code is required"
 
