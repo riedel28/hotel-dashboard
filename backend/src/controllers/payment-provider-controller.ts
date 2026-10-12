@@ -1,8 +1,7 @@
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import type { Response } from 'express';
-import type { z } from 'zod';
 
-import type { savePaymentProviderSchema } from '../../../shared/types/payment-provider';
+import type { SavedPaymentProviderData } from '../../../shared/types/payment-provider';
 import { db } from '../db/pool';
 import { paymentProviderConfigs } from '../db/schema';
 import {
@@ -49,42 +48,39 @@ async function savePaymentProvider(
     if (!propertyId) return;
 
     // Body is validated + trimmed by validateBody(savePaymentProviderSchema).
-    const { provider, apiKey, config } = req.body as z.infer<
-      typeof savePaymentProviderSchema
-    >;
+    const { provider, apiKey, config } = req.body as SavedPaymentProviderData;
+    const values = { provider, config, updated_at: new Date() };
 
-    const existing = await db.query.paymentProviderConfigs.findFirst({
-      where: eq(paymentProviderConfigs.property_id, propertyId),
-      columns: { provider: true }
-    });
+    // Without a new key only a provider that already has one can be saved, and
+    // the stored key is only kept for the provider it belongs to.
+    if (!apiKey) {
+      const [updated] = await db
+        .update(paymentProviderConfigs)
+        .set(values)
+        .where(
+          and(
+            eq(paymentProviderConfigs.property_id, propertyId),
+            eq(paymentProviderConfigs.provider, provider)
+          )
+        )
+        .returning();
 
-    // A stored key is only kept for the provider it belongs to.
-    if (!apiKey && existing?.provider !== provider) {
-      return res.status(400).json({
-        error: 'Validation failed',
-        details: [{ field: 'apiKey', message: 'API key is required' }]
-      });
+      if (!updated) {
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: [{ field: 'apiKey', message: 'API key is required' }]
+        });
+      }
+      return res.status(200).json(transformConfig(updated));
     }
 
-    // Empty on an update that keeps the stored key, where it is left out of `set`.
-    const apiKeyEncrypted = apiKey ? encryptSecret(apiKey) : '';
-
+    const withKey = { ...values, api_key_encrypted: encryptSecret(apiKey) };
     const [row] = await db
       .insert(paymentProviderConfigs)
-      .values({
-        property_id: propertyId,
-        provider,
-        config,
-        api_key_encrypted: apiKeyEncrypted
-      })
+      .values({ property_id: propertyId, ...withKey })
       .onConflictDoUpdate({
         target: paymentProviderConfigs.property_id,
-        set: {
-          provider,
-          config,
-          updated_at: new Date(),
-          ...(apiKey ? { api_key_encrypted: apiKeyEncrypted } : {})
-        }
+        set: withKey
       })
       .returning();
 

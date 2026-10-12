@@ -19,7 +19,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import type {
-  AdyenConfig,
+  PaymentProvider,
   PaymentProviderId
 } from '../../../shared/types/payment-provider';
 import {
@@ -406,7 +406,7 @@ export const paymentProviderConfigs = pgTable(
       .primaryKey()
       .references(() => properties.id, { onDelete: 'cascade' }),
     provider: text('provider').notNull().$type<PaymentProviderId>(),
-    config: jsonb('config').notNull().$type<AdyenConfig>(),
+    config: jsonb('config').notNull().$type<PaymentProvider['config']>(),
     api_key_encrypted: text('api_key_encrypted').notNull(),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
