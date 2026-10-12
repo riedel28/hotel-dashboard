@@ -920,6 +920,18 @@ msgstr "Property-Management-System auswählen"
 #~ msgid "Choose how this property connects to its door locks"
 #~ msgstr ""
 
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:114
+msgid "Choose this if guests open doors over Bluetooth with the mobile app (Android and iOS), or if key cards are encoded at a check-in station."
+msgstr "Wählen Sie dies, wenn Gäste Türen per Bluetooth mit der mobilen App (Android und iOS) öffnen oder wenn Schlüsselkarten an einer Check-in-Station codiert werden."
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:124
+msgid "Choose this if your SALTO installation is integrated through SHIP, its host interface protocol. The connection signs in with a user name and password. If you are unsure which interface is set up, ask your SALTO partner."
+msgstr "Wählen Sie dies, wenn Ihre SALTO-Installation über SHIP, das Host-Interface-Protokoll von SALTO, angebunden ist. Die Verbindung meldet sich mit Benutzername und Passwort an. Wenn Sie nicht sicher sind, welche Schnittstelle eingerichtet ist, fragen Sie Ihren SALTO-Partner."
+
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:104
+#~ msgid "Choose this to connect through SALTO's host interface protocol (SHIP) with a user name and password."
+#~ msgstr "Wählen Sie dies, um die Verbindung über das Host-Interface-Protokoll von SALTO (SHIP) mit Benutzername und Passwort herzustellen."
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:105
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:204
 msgid "City"
@@ -1588,7 +1600,7 @@ msgstr "Domain ohne Pfad eingeben, z. B. app.example.com"
 #~ msgid "Enter a password. Must contain:"
 #~ msgstr "Geben Sie ein Passwort ein. Muss enthalten:"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:46
 msgid "Enter a valid port number"
 msgstr ""
 
@@ -2290,11 +2302,11 @@ msgstr "Passwort ausblenden"
 msgid "Home"
 msgstr "Start"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:141
 msgid "Host"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:35
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:45
 msgid "Host is required"
 msgstr ""
 
@@ -3137,7 +3149,7 @@ msgstr "Seite nicht gefunden"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:221
 #: src/routes/_auth-layout/auth/login.tsx:213
 #: src/routes/_auth-layout/auth/sign-up.tsx:259
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:221
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:116
@@ -3159,7 +3171,7 @@ msgstr "Passwort"
 msgid "Password does not yet meet all requirements"
 msgstr "Das Passwort erfüllt noch nicht alle Anforderungen"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:86
 msgid "Password is required"
 msgstr "Passwort ist erforderlich"
 
@@ -3336,7 +3348,7 @@ msgstr "Bitte verifizieren Sie Ihre E-Mail-Adresse, bevor Sie sich anmelden."
 msgid "PMS"
 msgstr "PMS"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:112
 msgid "PMS interface"
 msgstr "PMS-Schnittstelle"
 
@@ -3352,7 +3364,7 @@ msgstr "PMS-Schnittstellen-Handshake"
 #~ msgid "PMS-Schnittstelle"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:106
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:148
 msgid "Port"
 msgstr ""
 
@@ -4293,7 +4305,7 @@ msgstr "SHIP-Handshake"
 msgid "SHIP handshake rejected: unsupported protocol version."
 msgstr "SHIP-Handshake abgelehnt: nicht unterstützte Protokollversion."
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:122
 msgid "SHIP interface"
 msgstr "SHIP-Schnittstelle"
 
@@ -4301,15 +4313,15 @@ msgstr "SHIP-Schnittstelle"
 #~ msgid "SHIP-Schnittstelle"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:120
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:162
 msgid "SHIP-Type"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:210
 msgid "SHIP-URL"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:47
 msgid "SHIP-URL is required"
 msgstr ""
 
@@ -4489,7 +4501,7 @@ msgstr "Schritt {0} von {1}"
 msgid "Stop test"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:146
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:188
 msgid "STP is deprecated"
 msgstr ""
 
@@ -4755,7 +4767,7 @@ msgstr ""
 #~ msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide</0>"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:191
 msgid "This connection method is outdated and will stop being supported in a future release. <0>View the migration guide<1/></0>"
 msgstr ""
 
@@ -5153,11 +5165,11 @@ msgstr "Benutzer erfolgreich aktualisiert"
 msgid "user@example.com"
 msgstr "benutzer@beispiel.de"
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:216
 msgid "Username"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:48
 msgid "Username is required"
 msgstr ""
 

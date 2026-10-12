@@ -1,6 +1,11 @@
 import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
-import { AlertTriangleIcon, ArrowUpRightIcon } from 'lucide-react';
+import {
+  AlertTriangleIcon,
+  ArrowUpRightIcon,
+  CircleHelpIcon
+} from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 
 import { SecretField, TextField } from '@/components/provider-setup/fields';
@@ -15,6 +20,11 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 
 import { SALTO_TEST_STEPS } from './salto-test-steps';
 
@@ -42,6 +52,23 @@ const SHIP_TYPES = [
   { value: 'https', label: 'HTTPS' },
   { value: 'stp', label: 'STP' }
 ] as const;
+
+/** A help mark beside an interface's name: what it is for, on hover. */
+function InterfaceHint({ children }: { children: ReactNode }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={<span className="inline-flex text-muted-foreground" />}
+      >
+        <CircleHelpIcon className="size-3.5" aria-hidden="true" />
+      </TooltipTrigger>
+      {/* A few short lines: wide enough not to be a column, narrow enough to read */}
+      <TooltipContent className="max-w-64 py-2 leading-relaxed text-pretty">
+        {children}
+      </TooltipContent>
+    </Tooltip>
+  );
+}
 
 export function SaltoForm({
   entry,
@@ -83,9 +110,24 @@ export function SaltoForm({
             <TabsList className="h-9! w-full">
               <TabsTrigger value="pms" className="flex-1 text-foreground/70!">
                 <Trans>PMS interface</Trans>
+                <InterfaceHint>
+                  <Trans>
+                    Choose this if guests open doors over Bluetooth with the
+                    mobile app (Android and iOS), or if key cards are encoded at
+                    a check-in station.
+                  </Trans>
+                </InterfaceHint>
               </TabsTrigger>
               <TabsTrigger value="ship" className="flex-1 text-foreground/70!">
                 <Trans>SHIP interface</Trans>
+                <InterfaceHint>
+                  <Trans>
+                    Choose this if your SALTO installation is integrated through
+                    SHIP, its host interface protocol. The connection signs in
+                    with a user name and password. If you are unsure which
+                    interface is set up, ask your SALTO partner.
+                  </Trans>
+                </InterfaceHint>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -153,7 +195,7 @@ export function SaltoForm({
                     href="https://docs.saltosystems.com/ship-https-migration"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 underline underline-offset-4 hover:text-foreground"
+                    className="inline-flex items-center gap-1 font-medium underline-offset-4 hover:underline"
                   >
                     View the migration guide
                     <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
