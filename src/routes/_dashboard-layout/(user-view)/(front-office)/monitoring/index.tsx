@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { ListFilterIcon, XIcon } from 'lucide-react';
+import { ListFilterIcon, RefreshCwIcon, XIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
@@ -14,7 +14,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button';
 import {
   Empty,
   EmptyContent,
@@ -230,12 +229,11 @@ function LoadError({
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <DataGridRefreshButton
-            variant="destructive"
-            isRefreshing={isRetrying}
-            onRefresh={onRetry}
-            className="w-auto sm:ml-0"
-          />
+          {/* The one action here, so it says what it does */}
+          <Button variant="destructive" onClick={onRetry} disabled={isRetrying}>
+            <RefreshCwIcon className={cn(isRetrying && 'animate-spin')} />
+            <Trans>Refresh</Trans>
+          </Button>
         </EmptyContent>
       </Empty>
     </div>

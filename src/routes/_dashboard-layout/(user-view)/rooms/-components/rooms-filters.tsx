@@ -45,20 +45,20 @@ export function RoomsFilters({
   return (
     // The same row as on the reservations page: stacked on small screens,
     // one line with the refresh button at the far end on large ones
-    <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:flex lg:items-center">
+    <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:flex xl:items-center">
       <SearchInput
         value={filters.q ?? ''}
         onChange={(q) => setFilters({ q: q || undefined })}
         placeholder={t`Search rooms`}
         aria-label={t`Search number or name`}
         className="text-sm"
-        wrapperClassName="w-full lg:w-[250px]"
+        wrapperClassName="w-full xl:w-[250px]"
         debounceMs={300}
       />
       <DataGridCheckboxFilter
         label={<Trans>Type</Trans>}
         placeholder={<Trans>All types</Trans>}
-        className="w-full lg:w-[180px]"
+        className="w-full xl:w-[180px]"
         value={filters.room_type ?? []}
         onValueChange={(room_type) =>
           setFilters({ room_type: room_type.length ? room_type : undefined })
@@ -77,7 +77,7 @@ export function RoomsFilters({
         <DataGridCheckboxFilter
           label={<Trans>Floor</Trans>}
           placeholder={<Trans>All floors</Trans>}
-          className="w-full lg:w-[180px]"
+          className="w-full xl:w-[180px]"
           value={(filters.floor ?? []).map(String)}
           onValueChange={(floor) =>
             setFilters({
@@ -101,7 +101,7 @@ export function RoomsFilters({
         onValueChange={(status) => setFilters({ status })}
         options={statusOptions}
         showFooter
-        className="w-full lg:w-[180px]"
+        className="w-full xl:w-[180px]"
       />
       <ClearFiltersButton
         hasActiveFilters={hasActiveFilters}
@@ -110,7 +110,6 @@ export function RoomsFilters({
       <DataGridRefreshButton
         isRefreshing={isRefreshing}
         onRefresh={onRefresh}
-        className="sm:ml-0 sm:w-full lg:ml-auto lg:w-auto"
       />
     </div>
   );
