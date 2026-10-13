@@ -1,9 +1,17 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useQueryClient,
+  type UseQueryResult
+} from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { BuildingIcon, DoorOpenIcon, PlusIcon, UploadIcon } from 'lucide-react';
+import { BuildingIcon, DoorOpenIcon, PlusIcon } from 'lucide-react';
 import { useState } from 'react';
-import { roomSortColumns, roomStatusSchema } from 'shared/types/rooms';
+import {
+  type FetchRoomsResponse,
+  roomSortColumns,
+  roomStatusSchema
+} from 'shared/types/rooms';
 import { z } from 'zod';
 
 import { roomFilterOptionsQueryOptions, roomsQueryOptions } from '@/api/rooms';
@@ -62,12 +70,22 @@ function RoomsPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Rooms`);
   const { user } = useAuth();
-  const { openForm } = useRoomsSearch();
+  const search = useRoomsSearch();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
   const hasProperty = Boolean(user?.selected_property_id);
   // Rooms are edited by administrators only; everyone else gets the list
   const canManage = Boolean(user?.is_admin) && hasProperty;
+
+  // A plain query, not a suspense one: a change of filter, sorting or page
+  // keeps the rows on screen (dimmed) until the new ones arrive, and the
+  // filters never leave. Only the very first load shows the skeleton.
+  const roomsQuery = useQuery({
+    ...roomsQueryOptions(search.params),
+    enabled: hasProperty
+  });
+  // The property has no rooms at all (not: none match the filters)
+  const hasNoRooms = roomsQuery.data?.total === 0 && !search.hasActiveFilters;
 
   return (
     <div className="space-y-1">
@@ -91,10 +109,11 @@ function RoomsPage() {
         <h1 className="text-xl font-bold">
           <Trans>Rooms</Trans>
         </h1>
-        {canManage && (
+        {/* An empty property offers the same two actions in its empty state */}
+        {canManage && !hasNoRooms && (
           <div className="flex gap-2">
             <ImportButton onImport={() => setIsImportOpen(true)} />
-            <Button onClick={() => openForm('new')}>
+            <Button onClick={() => search.openForm('new')}>
               <PlusIcon aria-hidden="true" />
               <Trans>Add room</Trans>
             </Button>
@@ -104,6 +123,8 @@ function RoomsPage() {
 
       {hasProperty ? (
         <RoomsContent
+          roomsQuery={roomsQuery}
+          hasNoRooms={hasNoRooms}
           canManage={canManage}
           onImport={() => setIsImportOpen(true)}
         />
@@ -133,26 +154,28 @@ function RoomsPage() {
 }
 
 interface RoomsContentProps {
+  /** The page of rooms the URL asks for; the page header reads it too */
+  roomsQuery: UseQueryResult<FetchRoomsResponse>;
+  hasNoRooms: boolean;
   canManage: boolean;
   onImport: () => void;
 }
 
-function RoomsContent({ canManage, onImport }: RoomsContentProps) {
+function RoomsContent({
+  roomsQuery,
+  hasNoRooms,
+  canManage,
+  onImport
+}: RoomsContentProps) {
   const queryClient = useQueryClient();
   const search = useRoomsSearch();
 
-  // Plain queries, not suspense ones: a change of filter, sorting or page
-  // keeps the rows on screen (dimmed) until the new ones arrive, and the
-  // filters never leave. Only the very first load shows the skeleton.
-  const roomsQuery = useQuery(roomsQueryOptions(search.params));
   const { data: options = { room_types: [], floors: [] } } = useQuery(
     roomFilterOptionsQueryOptions()
   );
   const rooms = roomsQuery.data?.index ?? [];
   // Only those who may edit have a form to open
   const form = useEditingRoom(canManage ? search.formTarget : undefined, rooms);
-
-  const hasNoRooms = roomsQuery.data?.total === 0 && !search.hasActiveFilters;
 
   return (
     <>
@@ -229,7 +252,6 @@ interface NoRoomsProps {
   onImport: () => void;
 }
 
-/** The property has no rooms at all (not: none match the filters). */
 function NoRooms({ canManage, onAdd, onImport }: NoRoomsProps) {
   return (
     <Empty>
@@ -252,15 +274,12 @@ function NoRooms({ canManage, onAdd, onImport }: NoRoomsProps) {
         </EmptyDescription>
       </EmptyHeader>
       {canManage && (
-        <EmptyContent>
+        <EmptyContent className="flex-row justify-center gap-2">
           <Button onClick={onAdd}>
             <PlusIcon aria-hidden="true" />
             <Trans>Add room</Trans>
           </Button>
-          <Button variant="outline" onClick={onImport}>
-            <UploadIcon />
-            <Trans>Import</Trans>
-          </Button>
+          <ImportButton onImport={onImport} />
         </EmptyContent>
       )}
     </Empty>
