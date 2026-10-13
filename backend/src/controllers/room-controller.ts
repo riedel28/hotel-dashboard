@@ -10,7 +10,8 @@ import {
   isNull,
   not,
   or,
-  type SQL
+  type SQL,
+  sql
 } from 'drizzle-orm';
 
 import type {
@@ -94,7 +95,7 @@ const getRooms = handle('Failed to fetch rooms', async (req, res) => {
     sort_order,
     page,
     per_page: perPage
-  } = req.query as unknown as ParsedRoomsParams;
+  }: ParsedRoomsParams = res.locals.query;
 
   const propertyId = req.selectedPropertyId ?? null;
   if (!propertyId) {
@@ -202,8 +203,8 @@ const createRoom = handle('Failed to create room', async (req, res) => {
   const propertyId = requireSelectedProperty(req, res);
   if (!propertyId) return;
 
-  const { room_number, name, room_type, floor, status } =
-    req.body as CreateRoomData;
+  const { room_number, name, room_type, floor, status }: CreateRoomData =
+    req.body;
 
   try {
     const [created] = await db
@@ -233,34 +234,41 @@ const updateRoom = handle('Failed to update room', async (req, res) => {
   if (!propertyId) return;
 
   const roomId = Number(req.params.id);
-  const existing = await findRoom(propertyId, roomId);
-  if (!existing) {
-    return res.status(404).json({ error: 'Room not found' });
-  }
+  const { name, ...rest }: UpdateRoomData = req.body ?? {};
 
-  const { name, ...rest } = (req.body ?? {}) as UpdateRoomData;
-  const updates = {
-    ...rest,
-    // An emptied name falls back to the room number
-    ...(name !== undefined && {
-      name: name || rest.room_number || existing.room_number
-    })
-  };
-
-  // Renaming would cut the reservation loose from its room
-  if (
-    updates.name !== undefined &&
-    updates.name !== existing.name &&
-    existing.has_active_reservation
-  ) {
-    return res.status(409).json(conflict('ROOM_HAS_ACTIVE_RESERVATION'));
-  }
+  // An emptied name falls back to the room number: the new one, or the
+  // room's own
+  const nextName =
+    name === undefined
+      ? undefined
+      : name || rest.room_number || sql<string>`${rooms.room_number}`;
 
   try {
-    await db
+    // As in the delete, the reservation check rides in the statement: a
+    // rename would cut the reservation loose from its room, so it applies
+    // only to a room without one (or when the name stays what it is)
+    const [updated] = await db
       .update(rooms)
-      .set({ ...updates, updated_at: new Date() })
-      .where(inProperty(propertyId, roomId));
+      .set({
+        ...rest,
+        ...(nextName !== undefined && { name: nextName }),
+        updated_at: new Date()
+      })
+      .where(
+        and(
+          inProperty(propertyId, roomId),
+          nextName === undefined
+            ? undefined
+            : or(not(hasActiveReservation), eq(rooms.name, nextName))
+        )
+      )
+      .returning({ id: rooms.id });
+
+    if (!updated) {
+      return (await findRoom(propertyId, roomId))
+        ? res.status(409).json(conflict('ROOM_HAS_ACTIVE_RESERVATION'))
+        : res.status(404).json({ error: 'Room not found' });
+    }
   } catch (error) {
     if (isUniqueViolation(error)) {
       return res.status(409).json(conflict('ROOM_NUMBER_TAKEN'));

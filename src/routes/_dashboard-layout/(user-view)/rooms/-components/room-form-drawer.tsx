@@ -54,7 +54,7 @@ const formSchema = createRoomSchema.required();
 
 type FormValues = z.infer<typeof formSchema>;
 
-// The shared schema speaks English; these are what the form shows instead
+// What the form says when the schema finds one of these empty
 const requiredMessages = {
   room_number: msg`Room number is required`,
   room_type: msg`Room type is required`
@@ -106,13 +106,14 @@ export function RoomFormDrawer({
     }
   }, [open, room, form]);
 
-  // A missing required field, in the reader's language; an error the server
-  // sent (a taken number) is already worded
+  // The schema's "too short" on these fields means "required", said in the
+  // reader's language. Any other error keeps its own words: the server's
+  // (a taken number) are translated, a rule added later is at least true.
   const requiredError = (
     field: keyof typeof requiredMessages,
     error?: FormFieldError
   ) =>
-    error && error.type !== 'server'
+    error?.type === 'too_small'
       ? { ...error, message: t(requiredMessages[field]) }
       : error;
 

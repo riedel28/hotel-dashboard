@@ -85,6 +85,7 @@ export const roomImportBodySchema = z.object({
 });
 
 export type RoomImportMode = z.infer<typeof roomImportModeSchema>;
+export type RoomImportBody = z.infer<typeof roomImportBodySchema>;
 export type RoomImportFileError = z.infer<typeof roomImportFileErrorSchema>;
 export type RoomImportRowError = z.infer<typeof roomImportRowErrorSchema>;
 export type RoomImportRow = z.infer<typeof roomImportRowSchema>;

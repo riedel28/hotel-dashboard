@@ -296,6 +296,12 @@ describe('Rooms API', () => {
       expect(res.body.floor).toBe(3);
     });
 
+    test('an emptied name follows a number changed in the same request', async () => {
+      const { id } = await room('1');
+      const res = await update(admin, id, { name: '', room_number: '9' });
+      expect(res.body).toMatchObject({ name: '9', room_number: '9' });
+    });
+
     test('is scoped and admin only', async () => {
       const { id } = await room('1');
       expect((await update(otherAdmin, id, { floor: 1 })).status).toBe(404);

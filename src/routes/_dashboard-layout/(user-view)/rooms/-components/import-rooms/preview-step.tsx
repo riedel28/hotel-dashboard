@@ -8,8 +8,8 @@ import type {
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import { DialogFooter } from '@/components/ui/dialog';
+import { SegmentedControl } from '@/components/ui/segmented-control';
 import { cn } from '@/lib/utils';
 
 import { PreviewDeletions } from './preview-deletions';
@@ -72,11 +72,10 @@ export function PreviewStep({
         )}
       >
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-          <DataGridSegmentedFilter
-            required
+          <SegmentedControl
             label={t`Import mode`}
             value={mode}
-            onValueChange={(next) => next && onModeChange(next)}
+            onValueChange={onModeChange}
             options={[
               { value: 'merge', label: <Trans>Merge</Trans> },
               { value: 'replace', label: <Trans>Replace all</Trans> }

@@ -181,6 +181,14 @@ describe('Rooms import', () => {
         .post('/api/rooms/import/preview')
         .set('Authorization', admin);
       expect(none.body.code).toBe('FILE_REQUIRED');
+
+      // A file under another field name is not the upload this route takes
+      const misplaced = await request(app)
+        .post('/api/rooms/import/preview')
+        .set('Authorization', admin)
+        .attach('sheet', Buffer.from('number,type\n1,S\n'), 'rooms.csv');
+      expect(misplaced.status).toBe(400);
+      expect(misplaced.body.code).toBe('INVALID_UPLOAD');
     });
 
     test('is for administrators', async () => {

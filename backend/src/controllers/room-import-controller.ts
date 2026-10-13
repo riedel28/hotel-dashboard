@@ -1,8 +1,8 @@
 import type { Response } from 'express';
 
 import type {
-  RoomImportFileError,
-  RoomImportMode
+  RoomImportBody,
+  RoomImportFileError
 } from '../../../shared/types/room-imports';
 import { db } from '../db/pool';
 import { loadPropertyRooms } from '../db/room-queries';
@@ -34,11 +34,12 @@ async function readRequest(req: SelectedPropertyRequest, res: Response) {
   const propertyId = requireSelectedProperty(req, res);
   if (!propertyId) return undefined;
 
+  // upload() answers for a missing file before any handler runs
+  const file = req.file;
+  if (!file) throw new Error('upload() must run before the import handlers');
+
   try {
-    const fileRows = await readRoomFile(
-      req.file!.buffer,
-      req.file!.originalname
-    );
+    const fileRows = await readRoomFile(file.buffer, file.originalname);
     return { propertyId, fileRows };
   } catch (error) {
     if (error instanceof RoomImportFileProblem) {
@@ -57,7 +58,7 @@ const previewRoomImport = handle(
     const request = await readRequest(req, res);
     if (!request) return;
 
-    const { mode } = req.body as { mode: RoomImportMode };
+    const { mode }: RoomImportBody = req.body;
     const existing = await loadPropertyRooms(db, request.propertyId);
     res.status(200).json(planRoomImport(request.fileRows, existing, mode));
   }
@@ -68,7 +69,7 @@ const applyRoomImport = handle('Failed to import rooms', async (req, res) => {
   if (!request) return;
 
   const { propertyId, fileRows } = request;
-  const { mode, token } = req.body as { mode: RoomImportMode; token?: string };
+  const { mode, token }: RoomImportBody = req.body;
 
   try {
     const result = await db.transaction(async (tx) => {

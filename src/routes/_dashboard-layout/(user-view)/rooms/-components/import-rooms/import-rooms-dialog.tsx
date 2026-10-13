@@ -1,6 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   keepPreviousData,
+  skipToken,
   useMutation,
   useQuery,
   useQueryClient
@@ -77,13 +78,13 @@ export function ImportRoomsDialog({
       file?.lastModified,
       mode
     ],
-    queryFn: () => previewRoomImport(file!, mode),
-    enabled: file !== null,
+    queryFn: file ? () => previewRoomImport(file, mode) : skipToken,
     staleTime: Infinity,
     gcTime: 0,
     // The previous plan stays up, dimmed, while the other mode's loads
     placeholderData: keepPreviousData
   });
+  // Without a file the query is idle but still holds the last plan
   const preview = file ? previewQuery.data : undefined;
 
   const close = () => {
@@ -95,7 +96,8 @@ export function ImportRoomsDialog({
 
   const applyMutation = useMutation({
     // The token says which preview is being applied
-    mutationFn: (token: string) => applyRoomImport(file!, mode, token),
+    mutationFn: ({ file, token }: { file: File; token: string }) =>
+      applyRoomImport(file, mode, token),
     onSuccess: async ({ created, updated, deleted, skipped }) => {
       close();
       await invalidateRooms(queryClient);
@@ -115,7 +117,7 @@ export function ImportRoomsDialog({
   // mode, a refreshed one) is not
   const isStale =
     codeOf(applyMutation.error) === 'IMPORT_PREVIEW_STALE' &&
-    applyMutation.variables === preview?.token;
+    applyMutation.variables?.token === preview?.token;
 
   // A file the server refuses sends the wizard back to the first step
   const uploadError =
@@ -145,7 +147,7 @@ export function ImportRoomsDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {preview ? (
+        {file && preview ? (
           <PreviewStep
             // A new plan starts unconfirmed, on its first page
             key={preview.token}
@@ -160,7 +162,7 @@ export function ImportRoomsDialog({
               void previewQuery.refetch();
             }}
             isApplying={applyMutation.isPending}
-            onApply={() => applyMutation.mutate(preview.token)}
+            onApply={() => applyMutation.mutate({ file, token: preview.token })}
             onBack={() => setFile(null)}
           />
         ) : (

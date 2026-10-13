@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 // Shared with components that take on a badge's color, e.g. a selected
-// segment of DataGridSegmentedFilter.
+// segment of SegmentedControl.
 const badgeColors = {
   gray: 'border-foreground/10 bg-gray-50 text-gray-800 dark:bg-gray-600/20 dark:text-gray-300 [a]:hover:bg-gray-100 dark:[a]:hover:bg-gray-800/30',
   red: 'border-foreground/10 bg-red-50 text-red-800 dark:bg-red-800/20 dark:text-red-300 [a]:hover:bg-red-100 dark:[a]:hover:bg-red-800/30',

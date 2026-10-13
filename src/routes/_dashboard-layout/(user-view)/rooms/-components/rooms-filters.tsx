@@ -103,14 +103,18 @@ export function RoomsFilters({
         showFooter
         className="w-full xl:w-[180px]"
       />
-      <ClearFiltersButton
-        hasActiveFilters={hasActiveFilters}
-        onClear={clearFilters}
-      />
-      <DataGridRefreshButton
-        isRefreshing={isRefreshing}
-        onRefresh={onRefresh}
-      />
+      {/* Below xl the two share the grid's last row; from xl they are
+          items of the one line like the filters */}
+      <div className="flex items-center gap-2 md:col-span-2 xl:contents">
+        <ClearFiltersButton
+          hasActiveFilters={hasActiveFilters}
+          onClear={clearFilters}
+        />
+        <DataGridRefreshButton
+          isRefreshing={isRefreshing}
+          onRefresh={onRefresh}
+        />
+      </div>
     </div>
   );
 }

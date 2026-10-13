@@ -26,6 +26,57 @@ function parseFloor(text: string) {
   return /^-?\d+$/.test(text) ? Number(text) : undefined;
 }
 
+type Field = RoomImportRow['changes'][number]['field'];
+const fields: Field[] = ['name', 'room_type', 'floor'];
+
+// What a row asks the room to be. A column the file lacks, or a floor that
+// is no number, asks for nothing: the room keeps what it has.
+function targetOf(row: RoomFileRow, room: ExistingRoom | undefined) {
+  const floor = row.floor === undefined ? undefined : parseFloor(row.floor);
+  // An empty name cell names the room by its number, as the form does
+  const name =
+    row.name === undefined
+      ? undefined
+      : row.name || room?.room_number || row.number;
+
+  return {
+    values: {
+      name: name ?? room?.name ?? row.number,
+      room_type: row.type || null,
+      floor: floor === undefined ? (room?.floor ?? null) : floor
+    },
+    hasBadFloor: row.floor !== undefined && floor === undefined
+  };
+}
+
+function errorsOf(
+  row: RoomFileRow,
+  room: ExistingRoom | undefined,
+  { values, hasBadFloor }: ReturnType<typeof targetOf>,
+  isDuplicate: boolean
+) {
+  const errors: RoomImportRowError[] = [];
+  if (!row.number) errors.push('MISSING_NUMBER');
+  else if (isDuplicate) errors.push('DUPLICATE_NUMBER');
+  if (!row.type) errors.push('MISSING_TYPE');
+  if (hasBadFloor) errors.push('INVALID_FLOOR');
+  // A reservation finds its room by the name
+  if (room?.has_active_reservation && values.name !== room.name) {
+    errors.push('NAME_LOCKED');
+  }
+  return errors;
+}
+
+function statusOf(
+  hasErrors: boolean,
+  room: ExistingRoom | undefined,
+  hasChanges: boolean
+): RoomImportRow['status'] {
+  if (hasErrors) return 'error';
+  if (!room) return 'new';
+  return hasChanges ? 'changed' : 'unchanged';
+}
+
 /**
  * What importing `fileRows` into `existing` would do. Pure: the preview shows
  * it and the apply step runs it, and the token ties the two together.
@@ -40,64 +91,38 @@ export function planRoomImport(
   );
   const knownTypes = new Set(existing.map((room) => room.room_type));
 
+  // How often each number appears in the file
   const seen = new Map<string, number>();
-  for (const row of fileRows) {
-    if (row.number) {
-      seen.set(keyOf(row.number), (seen.get(keyOf(row.number)) ?? 0) + 1);
-    }
+  for (const { number } of fileRows) {
+    if (number) seen.set(keyOf(number), (seen.get(keyOf(number)) ?? 0) + 1);
   }
 
   const rows = fileRows.map((row): RoomImportRow => {
     const room = byKey.get(keyOf(row.number));
-    const floor = row.floor === undefined ? undefined : parseFloor(row.floor);
-    // An empty name cell names the room by its number, as the form does
-    const name =
-      row.name === undefined
-        ? undefined
-        : row.name || room?.room_number || row.number;
-
-    const errors: RoomImportRowError[] = [];
-    if (!row.number) errors.push('MISSING_NUMBER');
-    else if (seen.get(keyOf(row.number))! > 1) errors.push('DUPLICATE_NUMBER');
-    if (!row.type) errors.push('MISSING_TYPE');
-    if (row.floor !== undefined && floor === undefined) {
-      errors.push('INVALID_FLOOR');
-    }
-    if (
-      room?.has_active_reservation &&
-      name !== undefined &&
-      name !== room.name
-    ) {
-      errors.push('NAME_LOCKED');
-    }
-
-    // A column the file lacks leaves the room's value alone
-    const target = {
-      name: name ?? room?.name ?? row.number,
-      room_type: row.type || null,
-      floor: floor === undefined ? (room?.floor ?? null) : floor
-    };
-    const changes = room
-      ? (['name', 'room_type', 'floor'] as const)
-          .filter((field) => room[field] !== target[field])
-          .map((field) => ({ field, from: room[field], to: target[field] }))
-      : [];
+    const target = targetOf(row, room);
+    const { values } = target;
+    const errors = errorsOf(
+      row,
+      room,
+      target,
+      (seen.get(keyOf(row.number)) ?? 0) > 1
+    );
+    const changes =
+      room && errors.length === 0
+        ? fields
+            .filter((field) => room[field] !== values[field])
+            .map((field) => ({ field, from: room[field], to: values[field] }))
+        : [];
 
     return {
       line: row.line,
-      status: errors.length
-        ? 'error'
-        : !room
-          ? 'new'
-          : changes.length
-            ? 'changed'
-            : 'unchanged',
+      status: statusOf(errors.length > 0, room, changes.length > 0),
       // The stored spelling wins over the file's (12a for an existing 12A)
       room_number: room?.room_number ?? row.number,
-      ...target,
+      ...values,
       is_new_type: Boolean(row.type) && !knownTypes.has(row.type),
       errors,
-      changes: errors.length ? [] : changes
+      changes
     };
   });
 
