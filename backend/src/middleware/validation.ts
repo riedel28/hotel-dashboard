@@ -62,6 +62,8 @@ function validateQuery(schema: ZodObject<any>) {
         configurable: true,
         enumerable: true
       });
+      // Typed handlers read it here: req.query stays typed as raw strings
+      res.locals.query = validatedData;
 
       next();
     } catch (error) {

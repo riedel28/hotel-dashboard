@@ -16,7 +16,8 @@ const ago = (count: number) => new Date(now - minutes(count)).toISOString();
 const room = (id: number, room_number: string) => ({
   id,
   name: `Room ${room_number}`,
-  room_number
+  room_number,
+  floor: null
 });
 
 const device = (id: number, overrides: Partial<Device> = {}): Device => ({

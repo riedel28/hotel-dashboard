@@ -1,6 +1,9 @@
+import { eq } from 'drizzle-orm';
+
 import { db } from '../../src/db/pool.ts';
 import {
   properties,
+  reservations,
   roles,
   rooms,
   userRoles,
@@ -56,6 +59,36 @@ export async function createTestRole(name: string) {
   return role;
 }
 
+// The Authorization header of a new user who has `propertyId` selected
+export async function createTestSession(
+  propertyId: string | null,
+  is_admin = false
+) {
+  const { user, token } = await createTestUser({ is_admin });
+  await db
+    .update(users)
+    .set({ selected_property_id: propertyId })
+    .where(eq(users.id, user.id));
+  return `Bearer ${token}`;
+}
+
+const DAY = 24 * 60 * 60 * 1000;
+
+// A reservation naming a room; by default it starts tomorrow, so it is active
+export function createTestReservation(
+  room_name: string,
+  extra: Partial<typeof reservations.$inferInsert> = {}
+) {
+  return db.insert(reservations).values({
+    state: 'pending',
+    booking_nr: `B-${Math.random()}`,
+    room_name,
+    booking_from: new Date(Date.now() + DAY),
+    booking_to: new Date(Date.now() + 2 * DAY),
+    ...extra
+  });
+}
+
 export async function createTestProperty(
   propertyData: Partial<{
     name: string;
@@ -80,7 +113,8 @@ export async function createTestRoom(
   roomData: { property_id: string } & Partial<{
     name: string;
     room_number: string;
-    room_type: string;
+    room_type: string | null;
+    floor: number | null;
     status: 'available' | 'occupied' | 'maintenance' | 'out_of_order';
     created_at: Date;
     updated_at: Date;

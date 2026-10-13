@@ -6,6 +6,7 @@ import type {
   DeviceClaimErrorCode
 } from '../../../shared/types/devices';
 import { db } from '../db/pool';
+import { naturalRoomNumber } from '../db/room-queries';
 import { devices, rooms } from '../db/schema';
 import { withFailMessage } from '../middleware/error';
 import {
@@ -22,7 +23,8 @@ const handle = withFailMessage<DevicesRequest>;
 const roomColumns = {
   id: rooms.id,
   name: rooms.name,
-  room_number: rooms.room_number
+  room_number: rooms.room_number,
+  floor: rooms.floor
 };
 
 // Devices with their rooms, narrowed by the caller's condition
@@ -95,7 +97,7 @@ const getDeviceRoomOptions = handle(
       .select(roomColumns)
       .from(rooms)
       .where(eq(rooms.property_id, propertyId))
-      .orderBy(asc(rooms.room_number), asc(rooms.name));
+      .orderBy(asc(naturalRoomNumber));
     res.status(200).json(options);
   }
 );

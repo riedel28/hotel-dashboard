@@ -1,11 +1,22 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { type PaginationState, type SortingState } from '@tanstack/react-table';
-import type { RoomStatus } from 'shared/types/rooms';
+import {
+  useQuery,
+  useQueryClient,
+  type UseQueryResult
+} from '@tanstack/react-query';
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
+import { BuildingIcon, DoorOpenIcon, PlusIcon } from 'lucide-react';
+import { useState } from 'react';
+import {
+  type FetchRoomsResponse,
+  roomSortColumns,
+  roomStatusSchema
+} from 'shared/types/rooms';
+import { z } from 'zod';
 
-import { fetchRoomsParamsSchema, roomsQueryOptions } from '@/api/rooms';
-import { QueryBoundary } from '@/components/query-boundary';
+import { roomFilterOptionsQueryOptions, roomsQueryOptions } from '@/api/rooms';
+import { useAuth } from '@/auth';
+import { ErrorState } from '@/components/error-state';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,20 +25,67 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
 
-import { AddRoomModal } from './-components/add-room-modal';
-import { RoomClearFilters } from './-components/room-clear-filters';
-import { RoomRefresh } from './-components/room-refresh';
-import { RoomSearch } from './-components/room-search';
-import { RoomStatusFilter } from './-components/room-status-filter';
+import { ImportButton } from './-components/import-rooms/import-button';
+import { ImportRoomsDialog } from './-components/import-rooms/import-rooms-dialog';
+import { RoomFormDrawer } from './-components/room-form-drawer';
 import { RoomsFilters } from './-components/rooms-filters';
 import RoomsTable from './-components/rooms-table/rooms-table';
+import { useEditingRoom } from './-hooks/use-editing-room';
+import { useRoomsSearch } from './-hooks/use-rooms-search';
+
+const PAGE_SIZES = [5, 10, 25, 50, 100];
+const DEFAULT_PAGE_SIZE = 10;
+
+const roomsSearchSchema = z.object({
+  // A room number typed into the URL by hand arrives as a number
+  q: z.union([z.string(), z.number().transform(String)]).optional(),
+  status: roomStatusSchema.optional(),
+  room_type: z.array(z.string()).optional(),
+  floor: z.array(z.number().int()).optional(),
+  page: z.number().int().positive().default(1),
+  per_page: z
+    .number()
+    .refine((size) => PAGE_SIZES.includes(size))
+    .default(DEFAULT_PAGE_SIZE),
+  sort_by: z.enum(roomSortColumns).default('room_number'),
+  sort_order: z.enum(['asc', 'desc']).default('asc'),
+  // The room open in the form; 'new' for an empty one
+  edit: z.union([z.number().int().positive(), z.literal('new')]).optional()
+});
 
 function RoomsPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Rooms`);
+  const { user } = useAuth();
+  const search = useRoomsSearch();
+  const [isImportOpen, setIsImportOpen] = useState(false);
+
+  const hasProperty = Boolean(user?.selected_property_id);
+  // Rooms are edited by administrators only; everyone else gets the list
+  const canManage = Boolean(user?.is_admin) && hasProperty;
+
+  // A plain query, not a suspense one: a change of filter, sorting or page
+  // keeps the rows on screen (dimmed) until the new ones arrive, and the
+  // filters never leave. Only the very first load shows the skeleton.
+  const roomsQuery = useQuery({
+    ...roomsQueryOptions(search.params),
+    enabled: hasProperty
+  });
+  // The property has no rooms at all (not: none match the filters)
+  const hasNoRooms = roomsQuery.data?.total === 0 && !search.hasActiveFilters;
 
   return (
     <div className="space-y-1">
@@ -51,203 +109,196 @@ function RoomsPage() {
         <h1 className="text-xl font-bold">
           <Trans>Rooms</Trans>
         </h1>
-        <AddRoomModal />
+        {/* An empty property offers the same two actions in its empty state */}
+        {canManage && !hasNoRooms && (
+          <div className="flex gap-2">
+            <ImportButton onImport={() => setIsImportOpen(true)} />
+            <Button onClick={() => search.openForm('new')}>
+              <PlusIcon aria-hidden="true" />
+              <Trans>Add room</Trans>
+            </Button>
+          </div>
+        )}
       </div>
 
-      <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching rooms</Trans>}
-        fallback={
-          <RoomsTable
-            data={[]}
-            isLoading={true}
-            pageIndex={0}
-            pageSize={10}
-            totalCount={0}
-            pageCount={0}
-          />
-        }
-      >
-        <RoomsContent />
-      </QueryBoundary>
+      {hasProperty ? (
+        <RoomsContent
+          roomsQuery={roomsQuery}
+          hasNoRooms={hasNoRooms}
+          canManage={canManage}
+          onImport={() => setIsImportOpen(true)}
+        />
+      ) : (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <BuildingIcon />
+            </EmptyMedia>
+            <EmptyTitle>
+              <Trans>No property selected</Trans>
+            </EmptyTitle>
+            <EmptyDescription>
+              <Trans>
+                Select a property at the top of the page to see its rooms.
+              </Trans>
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      )}
+
+      {canManage && (
+        <ImportRoomsDialog open={isImportOpen} onOpenChange={setIsImportOpen} />
+      )}
     </div>
   );
 }
 
-function RoomsContent() {
-  const { page, per_page, status, q, sort_by, sort_order } = Route.useSearch();
-  const navigate = Route.useNavigate();
+interface RoomsContentProps {
+  /** The page of rooms the URL asks for; the page header reads it too */
+  roomsQuery: UseQueryResult<FetchRoomsResponse>;
+  hasNoRooms: boolean;
+  canManage: boolean;
+  onImport: () => void;
+}
+
+function RoomsContent({
+  roomsQuery,
+  hasNoRooms,
+  canManage,
+  onImport
+}: RoomsContentProps) {
   const queryClient = useQueryClient();
+  const search = useRoomsSearch();
 
-  const roomsQuery = useSuspenseQuery(
-    roomsQueryOptions({
-      page,
-      per_page,
-      status,
-      q,
-      sort_by,
-      sort_order
-    })
+  const { data: options = { room_types: [], floors: [] } } = useQuery(
+    roomFilterOptionsQueryOptions()
   );
-
-  const handleRefresh = () => {
-    queryClient.invalidateQueries({
-      queryKey: roomsQueryOptions({
-        page,
-        per_page,
-        status,
-        q,
-        sort_by,
-        sort_order
-      }).queryKey
-    });
-  };
-
-  const handleStatusChange = (newStatus: RoomStatus | undefined) => {
-    navigate({
-      to: '/rooms',
-      search: (prev) => ({ ...prev, page: 1, status: newStatus })
-    });
-  };
-
-  const handleSearchChange = (searchTerm: string) => {
-    navigate({
-      to: '/rooms',
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        q: searchTerm || undefined
-      })
-    });
-  };
-
-  const handlePaginationChange = (
-    updaterOrValue:
-      | PaginationState
-      | ((old: PaginationState) => PaginationState)
-  ) => {
-    const pagination =
-      typeof updaterOrValue === 'function'
-        ? updaterOrValue({
-            pageIndex: (page ?? 1) - 1,
-            pageSize: per_page ?? 10
-          })
-        : updaterOrValue;
-
-    navigate({
-      to: '/rooms',
-      search: (prev) => ({
-        ...prev,
-        page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
-      })
-    });
-  };
-
-  const handleSortingChange = (
-    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
-  ) => {
-    const sorting =
-      typeof updaterOrValue === 'function'
-        ? updaterOrValue(
-            sort_by
-              ? [{ id: sort_by, desc: sort_order === 'desc' }]
-              : [{ id: 'name', desc: false }]
-          )
-        : updaterOrValue;
-
-    // Convert TanStack Table SortingState to URL params
-    const firstSort = sorting[0];
-    if (firstSort) {
-      navigate({
-        to: '/rooms',
-        search: (prev) => ({
-          ...prev,
-          page: 1, // Reset to first page when sorting changes
-          sort_by: firstSort.id as
-            | 'name'
-            | 'room_number'
-            | 'room_type'
-            | 'status',
-          sort_order: firstSort.desc ? ('desc' as const) : ('asc' as const)
-        })
-      });
-    } else {
-      // Clear sorting - use default
-      navigate({
-        to: '/rooms',
-        search: (prev) => ({
-          ...prev,
-          page: 1,
-          sort_by: undefined,
-          sort_order: undefined
-        })
-      });
-    }
-  };
-
-  const handleClearFilters = () => {
-    navigate({
-      to: '/rooms',
-      search: {
-        page: 1,
-        per_page: per_page,
-        status: undefined,
-        q: undefined
-      }
-    });
-  };
-
-  // Convert URL params to TanStack Table SortingState
-  const sorting: SortingState = sort_by
-    ? [{ id: sort_by, desc: sort_order === 'desc' }]
-    : [{ id: 'name', desc: false }];
-
-  const hasActiveFilters = Boolean(q || status);
+  const rooms = roomsQuery.data?.index ?? [];
+  // Only those who may edit have a form to open
+  const form = useEditingRoom(canManage ? search.formTarget : undefined, rooms);
 
   return (
-    <div className="space-y-2.5">
-      <RoomsFilters>
-        <RoomSearch value={q} onChange={handleSearchChange} />
-        <RoomStatusFilter value={status} onChange={handleStatusChange} />
-        <RoomClearFilters
-          hasActiveFilters={hasActiveFilters}
-          onClear={handleClearFilters}
+    <>
+      {hasNoRooms ? (
+        <NoRooms
+          canManage={canManage}
+          onAdd={() => search.openForm('new')}
+          onImport={onImport}
         />
-        <RoomRefresh
-          isRefreshing={roomsQuery.isFetching}
-          onRefresh={handleRefresh}
-        />
-      </RoomsFilters>
+      ) : (
+        <div className="space-y-2.5">
+          <RoomsFilters
+            filters={search.filters}
+            hasActiveFilters={search.hasActiveFilters}
+            setFilters={search.setFilters}
+            clearFilters={search.clearFilters}
+            roomTypes={options.room_types}
+            floors={options.floors}
+            isRefreshing={roomsQuery.isFetching}
+            onRefresh={() =>
+              queryClient.invalidateQueries({ queryKey: ['rooms'] })
+            }
+          />
 
-      <div
-        className={cn(
-          'opacity-100 transition-opacity duration-300 ease-in-out',
-          {
-            'opacity-70': roomsQuery.isFetching
-          }
-        )}
-      >
-        <RoomsTable
-          data={roomsQuery.data.index}
-          pageIndex={(page ?? 1) - 1}
-          pageSize={per_page ?? 10}
-          totalCount={roomsQuery.data.total}
-          pageCount={roomsQuery.data.page_count}
-          onPaginationChange={handlePaginationChange}
-          sorting={sorting}
-          onSortingChange={handleSortingChange}
+          <div
+            className={cn('transition-opacity duration-300 ease-in-out', {
+              'opacity-70': roomsQuery.isFetching
+            })}
+          >
+            {roomsQuery.isError ? (
+              <ErrorState
+                message={
+                  roomsQuery.error.message || (
+                    <Trans>An error occurred while fetching rooms</Trans>
+                  )
+                }
+                isRetrying={roomsQuery.isFetching}
+                onRetry={() => roomsQuery.refetch()}
+              />
+            ) : (
+              <RoomsTable
+                data={rooms}
+                isLoading={roomsQuery.isLoading}
+                pageIndex={search.pageIndex}
+                pageSize={search.pageSize}
+                totalCount={roomsQuery.data?.total ?? 0}
+                pageCount={roomsQuery.data?.page_count ?? 0}
+                sort={search.sort}
+                onSortChange={search.setSort}
+                onPageChange={search.setPage}
+                onEdit={canManage ? search.openForm : undefined}
+                emptyMessage={<Trans>No rooms match the filters</Trans>}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
+      {canManage && (
+        <RoomFormDrawer
+          open={form.isOpen}
+          onOpenChange={(open) => !open && search.closeForm()}
+          room={form.room}
+          roomTypes={options.room_types}
         />
-      </div>
-    </div>
+      )}
+    </>
+  );
+}
+
+interface NoRoomsProps {
+  canManage: boolean;
+  onAdd: () => void;
+  onImport: () => void;
+}
+
+function NoRooms({ canManage, onAdd, onImport }: NoRoomsProps) {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <DoorOpenIcon />
+        </EmptyMedia>
+        <EmptyTitle>
+          <Trans>No rooms yet</Trans>
+        </EmptyTitle>
+        <EmptyDescription>
+          {canManage ? (
+            <Trans>
+              Add the rooms of this property one by one, or import them from a
+              CSV or XLSX file.
+            </Trans>
+          ) : (
+            <Trans>An administrator has not added any rooms yet.</Trans>
+          )}
+        </EmptyDescription>
+      </EmptyHeader>
+      {canManage && (
+        <EmptyContent className="flex-row justify-center gap-2">
+          <Button onClick={onAdd}>
+            <PlusIcon aria-hidden="true" />
+            <Trans>Add room</Trans>
+          </Button>
+          <ImportButton onImport={onImport} />
+        </EmptyContent>
+      )}
+    </Empty>
   );
 }
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/rooms/')({
-  validateSearch: (search) => fetchRoomsParamsSchema.parse(search),
-  loaderDeps: ({ search }) => search,
-  loader: ({ context: { queryClient }, deps }) => {
-    return queryClient.ensureQueryData(roomsQueryOptions(deps));
+  // A stale or hand-edited link loses its bad params, not the whole page
+  validateSearch: lenientSearch(roomsSearchSchema),
+  // Keep default values out of the URL
+  search: {
+    middlewares: [
+      stripSearchParams({
+        page: 1,
+        per_page: DEFAULT_PAGE_SIZE,
+        sort_by: 'room_number',
+        sort_order: 'asc'
+      })
+    ]
   },
   component: RoomsPage
 });

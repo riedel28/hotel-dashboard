@@ -60,3 +60,6 @@ ds-bundle/
 .design-sync/learnings/
 .design-sync/node_modules
 ds-dist/
+
+# Preview server config written by the Claude desktop app
+.claude/launch.json

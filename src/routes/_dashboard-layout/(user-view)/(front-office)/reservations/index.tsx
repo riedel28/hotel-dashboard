@@ -134,7 +134,6 @@ function ReservationsContent() {
         <DataGridRefreshButton
           isRefreshing={reservationsQuery.isFetching}
           onRefresh={refresh}
-          className="sm:ml-0 sm:w-full lg:ml-auto lg:w-auto"
         />
       </ReservationsFilters>
 

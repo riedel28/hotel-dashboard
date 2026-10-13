@@ -1,13 +1,8 @@
-'use client';
-
 import { Trans } from '@lingui/react/macro';
-import { Link as RouterLink } from '@tanstack/react-router';
-import { type Row } from '@tanstack/react-table';
-import { PenSquareIcon, Trash2Icon } from 'lucide-react';
+import { PencilIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 
 import type { Room } from '@/api/rooms';
-import { type DataGridFeatures } from '@/components/ui/data-grid';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
@@ -19,47 +14,36 @@ import {
 import { DeleteDialog } from './delete-dialog';
 
 interface RowActionsProps {
-  row: Row<DataGridFeatures, Room>;
+  room: Room;
+  onEdit: (roomId: number) => void;
 }
 
-export function RowActions({ row }: RowActionsProps) {
+export function RowActions({ room, onEdit }: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
   return (
     <>
       <DropdownMenu>
         <DataGridRowActions />
-        <DropdownMenuContent align="end" className="w-[180px]">
-          <DropdownMenuItem
-            render={(props) => (
-              <RouterLink
-                {...props}
-                to="/rooms/$roomId"
-                params={{
-                  roomId: String(row.original.id)
-                }}
-                preload="intent"
-              >
-                <PenSquareIcon className="mr-2 h-4 w-4" />
-                <Trans>Edit</Trans>
-              </RouterLink>
-            )}
-          />
+        <DropdownMenuContent align="end" className="w-auto min-w-28">
+          <DropdownMenuItem onClick={() => onEdit(room.id)}>
+            <PencilIcon />
+            <Trans>Edit room</Trans>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive-soft"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <Trash2Icon className="mr-2 h-4 w-4" />
-            <Trans>Delete</Trans>
+            <Trash2Icon />
+            <Trans>Delete room</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DeleteDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        roomName={row.original.name}
-        roomId={row.original.id}
+        room={room}
       />
     </>
   );
