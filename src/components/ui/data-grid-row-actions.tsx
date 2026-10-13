@@ -22,7 +22,9 @@ function DataGridRowActions({
     <DropdownMenuTrigger
       className={cn(
         buttonVariants({ variant: 'ghost' }),
-        'group flex size-7 data-[state=open]:bg-muted',
+        // Taller than a line of text: the negative margin keeps it from
+        // stretching its row, so rows with and without a menu are equally tall
+        'group -my-0.5 flex size-7 data-[state=open]:bg-muted',
         className
       )}
       {...props}

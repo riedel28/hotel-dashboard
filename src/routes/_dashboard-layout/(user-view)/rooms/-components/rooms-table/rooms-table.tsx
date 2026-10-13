@@ -109,9 +109,7 @@ export default function RoomsTable({
               id: 'actions',
               header: () => null,
               cell: ({ row }) => (
-                // The menu button is taller than a line of text; pulled in so
-                // the rows are as tall as in the other tables
-                <div className="-my-0.5 flex justify-center">
+                <div className="flex justify-center">
                   <RowActions room={row.original} onEdit={onEdit} />
                 </div>
               ),
