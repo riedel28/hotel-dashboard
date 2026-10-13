@@ -89,8 +89,14 @@ function Segmented<T extends string>({
           key={option.value}
           type="button"
           size="sm"
-          variant={option.value === value ? 'outline' : 'ghost'}
+          variant="ghost"
           aria-pressed={option.value === value}
+          // The active one is a raised chip, as in the tabs: no border
+          className={cn(
+            option.value === value
+              ? 'bg-background text-foreground shadow-sm hover:bg-background dark:bg-input/60 dark:hover:bg-input/60'
+              : 'text-muted-foreground'
+          )}
           onClick={() => onChange(option.value)}
         >
           {option.label}
@@ -510,7 +516,7 @@ function PreviewStep({
     {
       label: t`To update`,
       count: summary.update,
-      color: 'text-sky-600 dark:text-sky-400'
+      color: ''
     },
     { label: t`Unchanged`, count: summary.unchanged, color: '' },
     { label: t`Errors`, count: summary.errors, color: 'text-danger' },
@@ -626,102 +632,100 @@ function PreviewStep({
             />
           </div>
 
-          <div className="overflow-hidden rounded-lg border">
-            <Table>
-              <TableHeader className="bg-muted/50">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-14">
+                  <Trans>Line</Trans>
+                </TableHead>
+                <TableHead className="w-24">
+                  <Trans>Number</Trans>
+                </TableHead>
+                <TableHead className="w-28">
+                  <Trans>Status</Trans>
+                </TableHead>
+                <TableHead>
+                  <Trans>Details</Trans>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {shown.length === 0 && (
                 <TableRow>
-                  <TableHead className="w-14">
-                    <Trans>Line</Trans>
-                  </TableHead>
-                  <TableHead className="w-24">
-                    <Trans>Number</Trans>
-                  </TableHead>
-                  <TableHead className="w-28">
-                    <Trans>Status</Trans>
-                  </TableHead>
-                  <TableHead>
-                    <Trans>Details</Trans>
-                  </TableHead>
+                  <TableCell
+                    colSpan={4}
+                    className="py-8 text-center text-muted-foreground"
+                  >
+                    <Trans>No rows to show</Trans>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {shown.length === 0 && (
-                  <TableRow>
-                    <TableCell
-                      colSpan={4}
-                      className="py-8 text-center text-muted-foreground"
+              )}
+              {shown.map((row) => (
+                <TableRow key={row.line} className="align-top">
+                  <TableCell className="text-muted-foreground tabular-nums">
+                    {row.line}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {row.room_number || '—'}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      size="sm"
+                      color={statusColors[row.status]}
                     >
-                      <Trans>No rows to show</Trans>
-                    </TableCell>
-                  </TableRow>
-                )}
-                {shown.map((row) => (
-                  <TableRow key={row.line} className="align-top">
-                    <TableCell className="text-muted-foreground tabular-nums">
-                      {row.line}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {row.room_number || '—'}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        size="sm"
-                        color={statusColors[row.status]}
-                      >
-                        {statusLabels[row.status]}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="whitespace-normal">
-                      {row.status === 'error' && (
-                        <ul className="space-y-0.5 text-danger">
-                          {row.errors.map((code) => (
-                            <li key={code}>{rowErrors[code]}</li>
-                          ))}
-                        </ul>
-                      )}
-                      {row.status === 'changed' && (
-                        <dl className="grid grid-cols-[3.5rem_1fr] gap-x-3 gap-y-0.5">
-                          {row.changes.map(({ field, from, to }) => (
-                            <Fragment key={field}>
-                              <dt className="text-muted-foreground">
-                                {fieldLabels[field]}
-                              </dt>
-                              <dd className="flex flex-wrap items-center gap-x-1.5">
-                                <span className="text-muted-foreground line-through">
-                                  {from ?? '—'}
-                                </span>
-                                <ArrowRightIcon
-                                  aria-label={t`becomes`}
-                                  className="size-3 shrink-0 text-muted-foreground"
-                                />
-                                <span className="font-medium">{to ?? '—'}</span>
-                                {field === 'room_type' && row.is_new_type && (
-                                  <NewTypeBadge />
-                                )}
-                              </dd>
-                            </Fragment>
-                          ))}
-                        </dl>
-                      )}
-                      {(row.status === 'new' || row.status === 'unchanged') && (
-                        <span className="flex flex-wrap items-center gap-x-1.5 text-muted-foreground">
-                          {[
-                            row.name,
-                            row.room_type,
-                            row.floor === null ? null : t`Floor ${row.floor}`
-                          ]
-                            .filter(Boolean)
-                            .join(' · ')}
-                          {row.is_new_type && <NewTypeBadge />}
-                        </span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                      {statusLabels[row.status]}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="whitespace-normal">
+                    {row.status === 'error' && (
+                      <ul className="space-y-0.5 text-danger">
+                        {row.errors.map((code) => (
+                          <li key={code}>{rowErrors[code]}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {row.status === 'changed' && (
+                      <dl className="grid grid-cols-[3.5rem_1fr] gap-x-3 gap-y-0.5">
+                        {row.changes.map(({ field, from, to }) => (
+                          <Fragment key={field}>
+                            <dt className="text-muted-foreground">
+                              {fieldLabels[field]}
+                            </dt>
+                            <dd className="flex flex-wrap items-center gap-x-1.5">
+                              <span className="text-muted-foreground line-through">
+                                {from ?? '—'}
+                              </span>
+                              <ArrowRightIcon
+                                aria-label={t`becomes`}
+                                className="size-3 shrink-0 text-muted-foreground"
+                              />
+                              <span className="font-medium">{to ?? '—'}</span>
+                              {field === 'room_type' && row.is_new_type && (
+                                <NewTypeBadge />
+                              )}
+                            </dd>
+                          </Fragment>
+                        ))}
+                      </dl>
+                    )}
+                    {(row.status === 'new' || row.status === 'unchanged') && (
+                      <span className="flex flex-wrap items-center gap-x-1.5 text-muted-foreground">
+                        {[
+                          row.name,
+                          row.room_type,
+                          row.floor === null ? null : t`Floor ${row.floor}`
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                        {row.is_new_type && <NewTypeBadge />}
+                      </span>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
 
           {(summary.errors > 0 || pageCount > 1) && (
             <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
