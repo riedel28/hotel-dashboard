@@ -1,3 +1,21 @@
+# [1.28.0](https://github.com/riedel28/hotel-dashboard/compare/v1.27.0...v1.28.0) (2026-10-13)
+
+
+### Bug Fixes
+
+* **rooms:** draw the Import split button's divider as one border ([48dab88](https://github.com/riedel28/hotel-dashboard/commit/48dab88a5bdc8abd5cf9a755a79a796ea09eca14))
+* **rooms:** keep the table and filters on screen while a filter change loads ([e85a02b](https://github.com/riedel28/hotel-dashboard/commit/e85a02b4771788040f9fe345f64fe5836c909962))
+
+
+### Features
+
+* **data-grid:** refresh as an icon, clear-filters holding its place ([e83543c](https://github.com/riedel28/hotel-dashboard/commit/e83543cf781416dbffc3c64df5224ecd1f28f695))
+* **rooms:** fold the template downloads into the Import button ([a39999b](https://github.com/riedel28/hotel-dashboard/commit/a39999b23397fcc9e5b17667465de4e8b80fb912))
+* **rooms:** import rooms from CSV and XLSX with a preview ([e6e47dc](https://github.com/riedel28/hotel-dashboard/commit/e6e47dc5fd8499e586ae15379b9b5bcedae70be7))
+* **rooms:** name the row menu actions Edit room and Delete room ([6034c5b](https://github.com/riedel28/hotel-dashboard/commit/6034c5b7ecfa270b1e840ab740213103d267b332))
+* **rooms:** one set of actions for a property without rooms ([c500d5f](https://github.com/riedel28/hotel-dashboard/commit/c500d5f960c0c98cd0ed4715b58bdda052c8bb03))
+* **rooms:** scope rooms to the selected property and rework the list and form ([7e2776d](https://github.com/riedel28/hotel-dashboard/commit/7e2776d9b6ca5fd4fa00e0ceca05e27698a2c866))
+
 # [1.27.0](https://github.com/riedel28/hotel-dashboard/compare/v1.26.0...v1.27.0) (2026-10-12)
 
 
