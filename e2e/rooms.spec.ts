@@ -25,17 +25,28 @@ test.describe('Rooms', () => {
     await expect(page.getByRole('heading', { name: 'Rooms' })).toBeVisible();
   });
 
+  // A property without rooms offers "Add room" twice: in the header and in
+  // the empty state. The header's comes first and is always there.
+  const addRoomButton = (page: Page) =>
+    page.getByRole('button', { name: 'Add room' }).first();
+
+  // The form's fields by label, apart from the filters behind it (the search
+  // is labelled "Search number or name")
+  const drawer = (page: Page) => page.getByRole('dialog');
+
   // Creates a room through the drawer and returns its number
   async function createRoom(page: Page, roomName: string) {
     const roomNumber = `E2E-${Date.now()}`;
-    await page.getByRole('button', { name: 'Add room' }).click();
+    await addRoomButton(page).click();
     await expect(page.getByRole('heading', { name: 'Add room' })).toBeVisible();
 
-    await page.getByLabel('Number').fill(roomNumber);
-    await page.getByLabel('Name').fill(roomName);
-    await page.getByLabel('Type').fill('Suite');
+    await drawer(page).getByLabel('Number').fill(roomNumber);
+    await drawer(page).getByLabel('Name').fill(roomName);
+    await drawer(page).getByLabel('Type').fill('Suite');
 
-    await page.getByRole('button', { name: 'Add', exact: true }).click();
+    await drawer(page)
+      .getByRole('button', { name: 'Add', exact: true })
+      .click();
 
     await expect(page.getByText('Room created successfully')).toBeVisible();
 
@@ -52,10 +63,12 @@ test.describe('Rooms', () => {
   test('should reject a room number that is taken', async ({ page }) => {
     const roomNumber = await createRoom(page, `E2E Taken Room ${Date.now()}`);
 
-    await page.getByRole('button', { name: 'Add room' }).click();
-    await page.getByLabel('Number').fill(roomNumber.toLowerCase());
-    await page.getByLabel('Type').fill('Suite');
-    await page.getByRole('button', { name: 'Add', exact: true }).click();
+    await addRoomButton(page).click();
+    await drawer(page).getByLabel('Number').fill(roomNumber.toLowerCase());
+    await drawer(page).getByLabel('Type').fill('Suite');
+    await drawer(page)
+      .getByRole('button', { name: 'Add', exact: true })
+      .click();
 
     await expect(
       page.getByText('A room with this number already exists')
@@ -75,11 +88,11 @@ test.describe('Rooms', () => {
     await expect(
       page.getByRole('heading', { name: 'Edit room' })
     ).toBeVisible();
-    await expect(page.getByLabel('Name')).toHaveValue(roomName);
+    await expect(drawer(page).getByLabel('Name')).toHaveValue(roomName);
 
     const updatedName = `${roomName} Updated`;
-    await page.getByLabel('Name').fill(updatedName);
-    await page.getByRole('button', { name: 'Update' }).click();
+    await drawer(page).getByLabel('Name').fill(updatedName);
+    await drawer(page).getByRole('button', { name: 'Update' }).click();
 
     await expect(page.getByText('Room updated successfully')).toBeVisible();
 
