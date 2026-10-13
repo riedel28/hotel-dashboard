@@ -1,5 +1,12 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 import {
+  type RoomImportMode,
+  type RoomImportPreview,
+  roomImportPreviewSchema,
+  type RoomImportResult,
+  roomImportResultSchema
+} from 'shared/types/room-imports';
+import {
   type CreateRoomData,
   createRoomSchema,
   type FetchRoomsParams,
@@ -103,6 +110,49 @@ export async function deleteRoomById(id: number): Promise<void> {
     await client.delete(`/rooms/${id}`);
   } catch (err) {
     handleApiError(err, 'deleteRoomById');
+  }
+}
+
+// Both import steps send the file itself; a large one takes a while to plan
+function importRequest(
+  step: 'preview' | 'apply',
+  file: File,
+  fields: Record<string, string>
+) {
+  const body = new FormData();
+  body.append('file', file);
+  for (const [name, value] of Object.entries(fields)) {
+    body.append(name, value);
+  }
+  return client.post(`/rooms/import/${step}`, body, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 60_000
+  });
+}
+
+export async function previewRoomImport(
+  file: File,
+  mode: RoomImportMode
+): Promise<RoomImportPreview> {
+  try {
+    const response = await importRequest('preview', file, { mode });
+    return roomImportPreviewSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'previewRoomImport');
+  }
+}
+
+// `token` is the preview's: the import runs only if it would still do the same
+export async function applyRoomImport(
+  file: File,
+  mode: RoomImportMode,
+  token: string
+): Promise<RoomImportResult> {
+  try {
+    const response = await importRequest('apply', file, { mode, token });
+    return roomImportResultSchema.parse(response.data);
+  } catch (err) {
+    handleApiError(err, 'applyRoomImport');
   }
 }
 

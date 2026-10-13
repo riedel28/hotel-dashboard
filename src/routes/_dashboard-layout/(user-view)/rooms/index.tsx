@@ -5,7 +5,14 @@ import {
   useSuspenseQuery
 } from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { BuildingIcon, DoorOpenIcon, PlusCircleIcon } from 'lucide-react';
+import {
+  BuildingIcon,
+  DoorOpenIcon,
+  DownloadIcon,
+  PlusCircleIcon,
+  UploadIcon
+} from 'lucide-react';
+import { useState } from 'react';
 import { roomSortColumns, roomStatusSchema } from 'shared/types/rooms';
 import { z } from 'zod';
 
@@ -26,6 +33,12 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import {
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -37,6 +50,10 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
 
+import {
+  ImportRoomsDialog,
+  ROOM_TEMPLATES
+} from './-components/import-rooms-dialog';
 import { RoomFormDrawer } from './-components/room-form-drawer';
 import { RoomsFilters } from './-components/rooms-filters';
 import RoomsTable from './-components/rooms-table/rooms-table';
@@ -67,6 +84,7 @@ function RoomsPage() {
   useDocumentTitle(t`Rooms`);
   const { user } = useAuth();
   const { openForm } = useRoomsSearch();
+  const [isImportOpen, setIsImportOpen] = useState(false);
 
   const hasProperty = Boolean(user?.selected_property_id);
   // Rooms are edited by administrators only; everyone else gets the list
@@ -96,6 +114,36 @@ function RoomsPage() {
         </h1>
         {canManage && (
           <div className="flex gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={(props) => (
+                  <Button variant="outline" {...props}>
+                    <DownloadIcon className="mr-2 h-4 w-4" />
+                    <Trans>Download template</Trans>
+                  </Button>
+                )}
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  render={(props) => (
+                    <a {...props} href={ROOM_TEMPLATES.csv} download>
+                      CSV
+                    </a>
+                  )}
+                />
+                <DropdownMenuItem
+                  render={(props) => (
+                    <a {...props} href={ROOM_TEMPLATES.xlsx} download>
+                      XLSX
+                    </a>
+                  )}
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button variant="outline" onClick={() => setIsImportOpen(true)}>
+              <UploadIcon className="mr-2 h-4 w-4" />
+              <Trans>Import</Trans>
+            </Button>
             <Button onClick={() => openForm('new')}>
               <PlusCircleIcon className="mr-2 h-4 w-4" />
               <Trans>Add room</Trans>
@@ -116,7 +164,10 @@ function RoomsPage() {
             </div>
           }
         >
-          <RoomsContent canManage={canManage} />
+          <RoomsContent
+            canManage={canManage}
+            onImport={() => setIsImportOpen(true)}
+          />
         </QueryBoundary>
       ) : (
         <Empty>
@@ -135,11 +186,20 @@ function RoomsPage() {
           </EmptyHeader>
         </Empty>
       )}
+
+      {canManage && (
+        <ImportRoomsDialog open={isImportOpen} onOpenChange={setIsImportOpen} />
+      )}
     </div>
   );
 }
 
-function RoomsContent({ canManage }: { canManage: boolean }) {
+interface RoomsContentProps {
+  canManage: boolean;
+  onImport: () => void;
+}
+
+function RoomsContent({ canManage, onImport }: RoomsContentProps) {
   const queryClient = useQueryClient();
   const search = useRoomsSearch();
   const { formTarget } = search;
@@ -180,7 +240,10 @@ function RoomsContent({ canManage }: { canManage: boolean }) {
             </EmptyTitle>
             <EmptyDescription>
               {canManage ? (
-                <Trans>Add the rooms of this property one by one.</Trans>
+                <Trans>
+                  Add the rooms of this property one by one, or import them from
+                  a CSV or XLSX file.
+                </Trans>
               ) : (
                 <Trans>An administrator has not added any rooms yet.</Trans>
               )}
@@ -191,6 +254,10 @@ function RoomsContent({ canManage }: { canManage: boolean }) {
               <Button onClick={() => search.openForm('new')}>
                 <PlusCircleIcon className="mr-2 h-4 w-4" />
                 <Trans>Add room</Trans>
+              </Button>
+              <Button variant="outline" onClick={onImport}>
+                <UploadIcon className="mr-2 h-4 w-4" />
+                <Trans>Import</Trans>
               </Button>
             </EmptyContent>
           )}

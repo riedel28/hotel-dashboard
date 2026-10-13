@@ -1,6 +1,11 @@
 import { Router } from 'express';
 
 import {
+  ROOM_IMPORT_EXTENSIONS,
+  ROOM_IMPORT_MAX_BYTES,
+  roomImportBodySchema
+} from '../../../shared/types/room-imports';
+import {
   createRoomSchema,
   fetchRoomsParamsSchema,
   roomIdParamsSchema,
@@ -14,9 +19,14 @@ import {
   getRooms,
   updateRoom
 } from '../controllers/room-controller';
+import {
+  applyRoomImport,
+  previewRoomImport
+} from '../controllers/room-import-controller';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/authorization';
 import { attachSelectedProperty } from '../middleware/selected-property';
+import { upload } from '../middleware/upload';
 import {
   validateBody,
   validateParams,
@@ -31,6 +41,19 @@ router.use(attachSelectedProperty);
 
 // Create room (admin only)
 router.post('/', requireAdmin, validateBody(createRoomSchema), createRoom);
+
+// Import from CSV or XLSX (admin only): the preview plans, the apply runs the
+// plan the preview showed. Both take the file as multipart field `file`.
+const importUpload = [
+  requireAdmin,
+  upload({
+    maxBytes: ROOM_IMPORT_MAX_BYTES,
+    extensions: ROOM_IMPORT_EXTENSIONS
+  }),
+  validateBody(roomImportBodySchema)
+];
+router.post('/import/preview', importUpload, previewRoomImport);
+router.post('/import/apply', importUpload, applyRoomImport);
 
 // Get rooms
 router.get('/', validateQuery(fetchRoomsParamsSchema), getRooms);
