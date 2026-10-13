@@ -3,7 +3,7 @@ import { ArrowRightIcon } from 'lucide-react';
 import { Fragment, type ReactNode, useState } from 'react';
 import type { RoomImportRow } from 'shared/types/room-imports';
 
-import { Badge, type BadgeProps } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import {
@@ -28,11 +28,12 @@ const matches: Record<RowFilter, (row: RoomImportRow) => boolean> = {
   errors: (row) => row.status === 'error'
 };
 
-const statusColors: Record<RoomImportRow['status'], BadgeProps['color']> = {
-  new: 'emerald',
-  changed: 'sky',
-  unchanged: 'gray',
-  error: 'red'
+// The summary tiles' colors; a change is plain text, as its tile is
+const statusColors: Record<RoomImportRow['status'], string> = {
+  new: 'text-emerald-600 dark:text-emerald-400',
+  changed: '',
+  unchanged: 'text-muted-foreground',
+  error: 'text-danger'
 };
 
 // A filter's name with how many rows it shows
@@ -181,13 +182,9 @@ export function PreviewRows({ rows }: { rows: RoomImportRow[] }) {
                 {row.room_number || '—'}
               </TableCell>
               <TableCell>
-                <Badge
-                  variant="outline"
-                  size="sm"
-                  color={statusColors[row.status]}
-                >
+                <span className={statusColors[row.status]}>
                   {t(statusLabels[row.status])}
-                </Badge>
+                </span>
               </TableCell>
               <TableCell className="whitespace-normal">
                 <RowDetails row={row} />

@@ -97,7 +97,9 @@ function DataGridSegmentedFilter<TValue extends string>({
                   // theme the badge outline is dropped
                   cn(badgeColors[color], 'dark:border-transparent')
                 : isSelected
-                  ? 'border-foreground/2 bg-muted text-foreground dark:border-transparent'
+                  ? // On the dark theme muted is too close to the track to read as
+                    // the chosen one
+                    'border-foreground/2 bg-muted text-foreground dark:border-transparent dark:bg-foreground/15'
                   : 'text-foreground/60 hover:text-foreground'
             )}
           >
