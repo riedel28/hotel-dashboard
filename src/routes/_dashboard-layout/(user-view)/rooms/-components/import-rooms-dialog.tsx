@@ -347,10 +347,11 @@ function UploadStep({
         <Button
           type="button"
           variant="outline"
+          size="sm"
           disabled={isChecking}
           onClick={() => inputRef.current?.click()}
         >
-          <UploadIcon className="mr-2 h-4 w-4" />
+          <UploadIcon aria-hidden="true" />
           <Trans>Choose file</Trans>
         </Button>
       </div>
