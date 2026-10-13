@@ -131,7 +131,9 @@ function RoomsPage() {
                     <Button
                       variant="outline"
                       aria-label={t`Download template`}
-                      className="-ml-px rounded-l-none px-2"
+                      // No left border: the Import button's right one is the divider. Two
+                      // overlapping borders would add up, the dark one being translucent
+                      className="rounded-l-none border-l-0 px-2"
                       {...props}
                     >
                       <ChevronDownIcon className="h-4 w-4" />
