@@ -51,10 +51,8 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
 
-import {
-  ImportRoomsDialog,
-  ROOM_TEMPLATES
-} from './-components/import-rooms-dialog';
+import { ImportRoomsDialog } from './-components/import-rooms/import-rooms-dialog';
+import { ROOM_TEMPLATES } from './-components/import-rooms/upload-step';
 import { RoomFormDrawer } from './-components/room-form-drawer';
 import { RoomsFilters } from './-components/rooms-filters';
 import RoomsTable from './-components/rooms-table/rooms-table';
@@ -122,7 +120,7 @@ function RoomsPage() {
                 className="rounded-r-none"
                 onClick={() => setIsImportOpen(true)}
               >
-                <UploadIcon className="mr-2 h-4 w-4" />
+                <UploadIcon />
                 <Trans>Import</Trans>
               </Button>
               <DropdownMenu>
@@ -140,11 +138,11 @@ function RoomsPage() {
                     </Button>
                   )}
                 />
-                <DropdownMenuContent align="end" className="w-60">
+                <DropdownMenuContent align="end" className="min-w-56">
                   <DropdownMenuItem
                     render={(props) => (
                       <a {...props} href={ROOM_TEMPLATES.csv} download>
-                        <DownloadIcon className="mr-2 h-4 w-4" />
+                        <DownloadIcon />
                         <Trans>Download CSV template</Trans>
                       </a>
                     )}
@@ -152,7 +150,7 @@ function RoomsPage() {
                   <DropdownMenuItem
                     render={(props) => (
                       <a {...props} href={ROOM_TEMPLATES.xlsx} download>
-                        <DownloadIcon className="mr-2 h-4 w-4" />
+                        <DownloadIcon />
                         <Trans>Download XLSX template</Trans>
                       </a>
                     )}

@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro';
-import { PenSquareIcon, Trash2Icon } from 'lucide-react';
+import { PencilIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 
 import type { Room } from '@/api/rooms';
@@ -27,7 +27,7 @@ export function RowActions({ room, onEdit }: RowActionsProps) {
         <DataGridRowActions />
         <DropdownMenuContent align="end" className="w-auto min-w-28">
           <DropdownMenuItem onClick={() => onEdit(room.id)}>
-            <PenSquareIcon className="mr-2 h-4 w-4" />
+            <PencilIcon />
             <Trans>Edit room</Trans>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -35,7 +35,7 @@ export function RowActions({ room, onEdit }: RowActionsProps) {
             variant="destructive-soft"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <Trash2Icon className="mr-2 h-4 w-4" />
+            <Trash2Icon />
             <Trans>Delete room</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>

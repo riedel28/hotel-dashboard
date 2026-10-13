@@ -9,23 +9,16 @@ import { ApiError } from '@/api/client';
 import { deleteRoomById } from '@/api/rooms';
 import { render } from '@/test-utils';
 
+import { testRoom } from '../test-room';
 import { DeleteDialog } from './delete-dialog';
 
-vi.mock('@/api/rooms', () => ({ deleteRoomById: vi.fn() }));
+vi.mock('@/api/rooms', () => ({
+  deleteRoomById: vi.fn(),
+  invalidateRooms: vi.fn(async () => {})
+}));
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
-const room: Room = {
-  id: 7,
-  name: 'Garden',
-  property_id: '00000000-0000-4000-8000-000000000000',
-  room_number: '12A',
-  room_type: 'Suite',
-  floor: 1,
-  status: 'available',
-  has_active_reservation: false,
-  created_at: '2026-01-01T00:00:00.000Z',
-  updated_at: '2026-01-01T00:00:00.000Z'
-};
+const room = testRoom;
 
 function renderDialog(overrides: Partial<Room> = {}) {
   const onOpenChange = vi.fn();

@@ -17,6 +17,7 @@ import { ImportRoomsDialog } from './import-rooms-dialog';
 
 vi.mock('@/api/rooms', () => ({
   previewRoomImport: vi.fn(),
+  invalidateRooms: vi.fn(async () => {}),
   applyRoomImport: vi.fn()
 }));
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
@@ -158,7 +159,7 @@ describe('ImportRoomsDialog', () => {
     expect(previewRoomImport).toHaveBeenCalledTimes(1);
     expect(previewRoomImport).toHaveBeenLastCalledWith(csv, 'merge');
 
-    await user.click(screen.getByRole('button', { name: 'Replace all' }));
+    await user.click(screen.getByRole('radio', { name: 'Replace all' }));
 
     await screen.findByLabelText('Rooms to delete');
     expect(previewRoomImport).toHaveBeenCalledTimes(2);
@@ -170,7 +171,7 @@ describe('ImportRoomsDialog', () => {
     const { user } = await renderPreview();
     await screen.findByLabelText('Summary');
 
-    await user.click(screen.getByRole('button', { name: /^Errors/ }));
+    await user.click(screen.getByRole('radio', { name: /^Errors/ }));
 
     expect(screen.getByText('No room number')).toBeVisible();
     expect(
@@ -184,7 +185,7 @@ describe('ImportRoomsDialog', () => {
   test('replacing needs the deletion confirmed first', async () => {
     const { user } = await renderPreview();
     await screen.findByLabelText('Summary');
-    await user.click(screen.getByRole('button', { name: 'Replace all' }));
+    await user.click(screen.getByRole('radio', { name: 'Replace all' }));
 
     const deletions = await screen.findByLabelText('Rooms to delete');
     expect(within(deletions).getByText('201')).toBeVisible();

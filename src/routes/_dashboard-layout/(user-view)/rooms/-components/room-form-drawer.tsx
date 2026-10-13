@@ -1,15 +1,25 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { msg } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import * as React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { roomStatusSchema } from 'shared/types/rooms';
+import {
+  Controller,
+  type FieldError as FormFieldError,
+  useForm
+} from 'react-hook-form';
+import { createRoomSchema, roomStatusSchema } from 'shared/types/rooms';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { ApiError } from '@/api/client';
-import { createRoom, type Room, updateRoomById } from '@/api/rooms';
+import {
+  createRoom,
+  invalidateRooms,
+  type Room,
+  updateRoomById
+} from '@/api/rooms';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -37,19 +47,18 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-import { RoomStatusLabel } from './rooms-table/-components/cells/room-status-cell';
+import { RoomStatusLabel } from './room-status';
 
-// Messages are translated, so the schema is built per render locale
-const formSchema = (messages: { number: string; type: string }) =>
-  z.object({
-    room_number: z.string().trim().min(1, messages.number),
-    name: z.string().trim(),
-    room_type: z.string().trim().min(1, messages.type),
-    floor: z.number().int().nullable(),
-    status: roomStatusSchema
-  });
+// The rules are the API's own; the form only wants every field present
+const formSchema = createRoomSchema.required();
 
-type FormValues = z.infer<ReturnType<typeof formSchema>>;
+type FormValues = z.infer<typeof formSchema>;
+
+// The shared schema speaks English; these are what the form shows instead
+const requiredMessages = {
+  room_number: msg`Room number is required`,
+  room_type: msg`Room type is required`
+};
 
 const toDefaults = (room?: Room | null): FormValues => ({
   room_number: room?.room_number ?? '',
@@ -87,12 +96,7 @@ export function RoomFormDrawer({
   const isNameLocked = Boolean(room?.has_active_reservation);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(
-      formSchema({
-        number: t`Room number is required`,
-        type: t`Room type is required`
-      })
-    ),
+    resolver: zodResolver(formSchema),
     defaultValues: toDefaults(room)
   });
 
@@ -102,16 +106,22 @@ export function RoomFormDrawer({
     }
   }, [open, room, form]);
 
+  // A missing required field, in the reader's language; an error the server
+  // sent (a taken number) is already worded
+  const requiredError = (
+    field: keyof typeof requiredMessages,
+    error?: FormFieldError
+  ) =>
+    error && error.type !== 'server'
+      ? { ...error, message: t(requiredMessages[field]) }
+      : error;
+
   const saveMutation = useMutation({
     mutationFn: (values: FormValues) =>
       room ? updateRoomById(room.id, values) : createRoom(values),
     onSuccess: async () => {
       onOpenChange(false);
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['rooms'] }),
-        // The room picker lists the rooms too
-        queryClient.invalidateQueries({ queryKey: ['devices', 'room-options'] })
-      ]);
+      await invalidateRooms(queryClient);
       toast.success(
         isEdit ? t`Room updated successfully` : t`Room created successfully`
       );
@@ -174,7 +184,11 @@ export function RoomFormDrawer({
                           aria-invalid={fieldState.invalid}
                         />
                         {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
+                          <FieldError
+                            errors={[
+                              requiredError('room_number', fieldState.error)
+                            ]}
+                          />
                         )}
                       </Field>
                     )}
@@ -262,7 +276,11 @@ export function RoomFormDrawer({
                         ))}
                       </datalist>
                       {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
+                        <FieldError
+                          errors={[
+                            requiredError('room_type', fieldState.error)
+                          ]}
+                        />
                       )}
                     </Field>
                   )}

@@ -1,13 +1,13 @@
-import { eq } from 'drizzle-orm';
 import request from 'supertest';
 
 import app from '../src/app';
 import { db } from '../src/db/pool';
-import { devices, reservations, rooms, users } from '../src/db/schema';
+import { devices, rooms } from '../src/db/schema';
 import {
   createTestProperty,
+  createTestReservation,
   createTestRoom,
-  createTestUser
+  createTestSession
 } from './helpers/db-helpers';
 
 const day = 24 * 60 * 60 * 1000;
@@ -20,15 +20,6 @@ describe('Rooms API', () => {
   let propertyId: string;
   let otherPropertyId: string;
 
-  const userOf = async (propertyId: string | null, is_admin: boolean) => {
-    const { user, token } = await createTestUser({ is_admin });
-    await db
-      .update(users)
-      .set({ selected_property_id: propertyId })
-      .where(eq(users.id, user.id));
-    return `Bearer ${token}`;
-  };
-
   const room = (
     room_number: string,
     extra: Partial<Parameters<typeof createTestRoom>[0]> = {}
@@ -37,19 +28,6 @@ describe('Rooms API', () => {
       property_id: propertyId,
       room_number,
       name: `Room ${room_number}`,
-      ...extra
-    });
-
-  const reserve = (
-    room_name: string,
-    extra: Partial<typeof reservations.$inferInsert> = {}
-  ) =>
-    db.insert(reservations).values({
-      state: 'pending',
-      booking_nr: `B-${Math.random()}`,
-      room_name,
-      booking_from: new Date(Date.now() + day),
-      booking_to: new Date(Date.now() + 2 * day),
       ...extra
     });
 
@@ -67,10 +45,10 @@ describe('Rooms API', () => {
   beforeEach(async () => {
     propertyId = (await createTestProperty({ name: 'Hotel A' })).id;
     otherPropertyId = (await createTestProperty({ name: 'Hotel B' })).id;
-    admin = await userOf(propertyId, true);
-    member = await userOf(propertyId, false);
-    otherAdmin = await userOf(otherPropertyId, true);
-    noPropertyAdmin = await userOf(null, true);
+    admin = await createTestSession(propertyId, true);
+    member = await createTestSession(propertyId, false);
+    otherAdmin = await createTestSession(otherPropertyId, true);
+    noPropertyAdmin = await createTestSession(null, true);
   });
 
   describe('GET /api/rooms', () => {
@@ -134,20 +112,20 @@ describe('Rooms API', () => {
       await room('2');
       await room('3');
       await room('4');
-      await reserve('Room 1');
+      await createTestReservation('Room 1');
       // Over and checked out
-      await reserve('Room 2', {
+      await createTestReservation('Room 2', {
         state: 'checked_out',
         booking_to: new Date(Date.now() + day)
       });
       // Past its end, but the guest is still in the house
-      await reserve('Room 3', {
+      await createTestReservation('Room 3', {
         state: 'checked_in',
         booking_from: new Date(Date.now() - 3 * day),
         booking_to: new Date(Date.now() - day)
       });
       // Never showed up
-      await reserve('Room 4', {
+      await createTestReservation('Room 4', {
         booking_from: new Date(Date.now() - 3 * day),
         booking_to: new Date(Date.now() - day)
       });
@@ -306,7 +284,7 @@ describe('Rooms API', () => {
 
     test('will not rename a room with an active reservation', async () => {
       const { id } = await room('1');
-      await reserve('Room 1');
+      await createTestReservation('Room 1');
 
       const renamed = await update(admin, id, { name: 'Garden' });
       expect(renamed.status).toBe(409);
@@ -347,7 +325,7 @@ describe('Rooms API', () => {
 
     test('refuses while the room has an active reservation', async () => {
       const { id } = await room('1');
-      await reserve('Room 1');
+      await createTestReservation('Room 1');
 
       const res = await remove(admin, id);
       expect(res.status).toBe(409);

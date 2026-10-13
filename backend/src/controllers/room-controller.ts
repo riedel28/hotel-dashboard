@@ -10,18 +10,18 @@ import {
   isNull,
   not,
   or,
-  type SQL,
-  sql
+  type SQL
 } from 'drizzle-orm';
 
 import type {
   CreateRoomData,
-  FetchRoomsParams,
+  ParsedRoomsParams,
   RoomErrorCode,
   UpdateRoomData
 } from '../../../shared/types/rooms';
 import { db } from '../db/pool';
-import { reservations, rooms } from '../db/schema';
+import { hasActiveReservation, naturalRoomNumber } from '../db/room-queries';
+import { rooms } from '../db/schema';
 import { withFailMessage } from '../middleware/error';
 import {
   requireSelectedProperty,
@@ -33,22 +33,6 @@ import { escapeLikePattern, isUniqueViolation } from '../utils/sql';
 // property, lists are empty and writes are 400. A room of another property
 // is a 404.
 const handle = withFailMessage<SelectedPropertyRequest>;
-
-// A reservation names its room (reservations.room_name) instead of holding
-// it. It is active until the guest has checked out: not yet over, or the
-// guest is still in the house past its end.
-// ponytail: reservations carry no property, so a room of another property
-// with the same name matches too; a reservations.room_id would end that.
-export const hasActiveReservation = sql<boolean>`exists (
-  select 1 from ${reservations}
-  where ${reservations.room_name} = ${rooms.name}
-    and ${reservations.state} <> 'checked_out'
-    and (${reservations.booking_to} >= now()
-      or ${reservations.state} in ('checked_in', 'ready_out'))
-)`;
-
-// Room numbers in the order a person reads them: 2 < 10 < 10A
-export const naturalRoomNumber = sql`${rooms.room_number} collate numeric_sort`;
 
 const errors: Record<RoomErrorCode, string> = {
   ROOM_NUMBER_TAKEN: 'A room with this number already exists',
@@ -100,10 +84,17 @@ const sortColumns = {
 };
 
 const getRooms = handle('Failed to fetch rooms', async (req, res) => {
-  const { q, status, room_type, floor, sort_by, sort_order } =
-    req.query as FetchRoomsParams;
-  const page = Number(req.query.page) || 1;
-  const perPage = Number(req.query.per_page) || 10;
+  // validateQuery has parsed the query: defaults filled, numbers coerced
+  const {
+    q,
+    status,
+    room_type,
+    floor,
+    sort_by,
+    sort_order,
+    page,
+    per_page: perPage
+  } = req.query as unknown as ParsedRoomsParams;
 
   const propertyId = req.selectedPropertyId ?? null;
   if (!propertyId) {

@@ -21,7 +21,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import type { RoomSortColumn } from '../../-hooks/use-rooms-search';
-import { RoomStatusCell } from './-components/cells/room-status-cell';
+import { RoomStatusCell } from '../room-status';
 import { RowActions } from './row-actions';
 
 interface RoomsTableProps {
@@ -38,8 +38,6 @@ interface RoomsTableProps {
   onEdit?: (roomId: number) => void;
   emptyMessage?: ReactNode;
 }
-
-const text = (value: unknown) => <span>{(value as string | null) || '—'}</span>;
 
 export default function RoomsTable({
   data,
@@ -70,15 +68,14 @@ export default function RoomsTable({
       id: RoomSortColumn,
       title: string,
       size: number,
-      cell: ColumnDef<DataGridFeatures, Room>['cell'] = (info) =>
-        text(info.getValue())
+      render: (room: Room) => ReactNode
     ): ColumnDef<DataGridFeatures, Room> => ({
       accessorKey: id,
       id,
       header: ({ column }) => (
         <DataGridColumnHeader title={title} visibility={true} column={column} />
       ),
-      cell,
+      cell: ({ row }) => render(row.original),
       meta: {
         skeleton: <Skeleton className="h-6 w-20" />,
         headerTitle: title
@@ -90,18 +87,16 @@ export default function RoomsTable({
     });
 
     return [
-      column('room_number', t`Number`, 120, (info) => (
-        <span className="font-medium">{info.getValue() as string}</span>
+      column('room_number', t`Number`, 120, (room) => (
+        <span className="font-medium">{room.room_number}</span>
       )),
-      column('name', t`Name`, 200),
-      column('room_type', t`Type`, 160),
-      column('floor', t`Floor`, 100, (info) => (
-        <span className="tabular-nums">
-          {(info.getValue() as number | null) ?? '—'}
-        </span>
+      column('name', t`Name`, 200, (room) => room.name),
+      column('room_type', t`Type`, 160, (room) => room.room_type || '—'),
+      column('floor', t`Floor`, 100, (room) => (
+        <span className="tabular-nums">{room.floor ?? '—'}</span>
       )),
-      column('status', t`Status`, 130, ({ row }) => (
-        <RoomStatusCell status={row.original.status} />
+      column('status', t`Status`, 130, (room) => (
+        <RoomStatusCell status={room.status} />
       )),
       ...(onEdit
         ? [

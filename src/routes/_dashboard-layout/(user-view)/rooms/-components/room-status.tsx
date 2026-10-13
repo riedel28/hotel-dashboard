@@ -26,11 +26,12 @@ function getStatusMessage(status: RoomStatus) {
   }
 }
 
-interface RoomStatusCellProps {
+interface RoomStatusProps {
   status: RoomStatus;
 }
 
-export function RoomStatusCell({ status }: RoomStatusCellProps) {
+/** The status as a badge, for the table and the filter. */
+export function RoomStatusCell({ status }: RoomStatusProps) {
   return (
     <Badge
       variant="outline"
@@ -51,7 +52,7 @@ const dotColors: Record<RoomStatus, string> = {
 };
 
 /** A colored dot with the status spelled out, for selects. */
-export function RoomStatusLabel({ status }: RoomStatusCellProps) {
+export function RoomStatusLabel({ status }: RoomStatusProps) {
   return (
     <span className="flex items-center gap-2">
       <span

@@ -6,6 +6,7 @@ import type {
   DeviceClaimErrorCode
 } from '../../../shared/types/devices';
 import { db } from '../db/pool';
+import { naturalRoomNumber } from '../db/room-queries';
 import { devices, rooms } from '../db/schema';
 import { withFailMessage } from '../middleware/error';
 import {
@@ -13,7 +14,6 @@ import {
   type SelectedPropertyRequest
 } from '../middleware/selected-property';
 import { comparePassword, hashPassword } from '../utils/password';
-import { naturalRoomNumber } from './room-controller';
 
 // Property scope is resolved by attachSelectedProperty. Without a selected
 // property, lists are empty and writes are 400.

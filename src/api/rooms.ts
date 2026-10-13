@@ -1,4 +1,8 @@
-import { keepPreviousData, queryOptions } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  type QueryClient,
+  queryOptions
+} from '@tanstack/react-query';
 import {
   type RoomImportMode,
   type RoomImportPreview,
@@ -46,6 +50,15 @@ async function fetchRooms(
   } catch (err) {
     handleApiError(err, 'fetchRooms');
   }
+}
+
+/** Refetches everything that shows rooms; call after any change to them. */
+export function invalidateRooms(queryClient: QueryClient) {
+  return Promise.all([
+    queryClient.invalidateQueries({ queryKey: ['rooms'] }),
+    // The room picker of devices and reservations lists the rooms too
+    queryClient.invalidateQueries({ queryKey: ['devices', 'room-options'] })
+  ]);
 }
 
 // The types and floors the property's rooms use

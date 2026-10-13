@@ -41,6 +41,11 @@ interface DataGridSegmentedFilterProps<TValue extends string> {
   label: string;
   allLabel?: ReactNode;
   /**
+   * One option is always chosen: there is no "All" segment, and
+   * `onValueChange` never reports undefined.
+   */
+  required?: boolean;
+  /**
    * Whether a selected colored segment becomes the badge of its color
    * (default). When false the color shows in the dot alone.
    */
@@ -54,13 +59,13 @@ function DataGridSegmentedFilter<TValue extends string>({
   onValueChange,
   label,
   allLabel,
+  required = false,
   tintSelected = true,
   className
 }: DataGridSegmentedFilterProps<TValue>) {
-  const segments = [
-    { value: ALL_VALUE, label: allLabel ?? <Trans>All</Trans> },
-    ...options
-  ];
+  const segments = required
+    ? options
+    : [{ value: ALL_VALUE, label: allLabel ?? <Trans>All</Trans> }, ...options];
 
   return (
     <RadioGroupPrimitive

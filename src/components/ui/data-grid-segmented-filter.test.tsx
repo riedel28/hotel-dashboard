@@ -33,4 +33,24 @@ describe('DataGridSegmentedFilter', () => {
     await user.click(screen.getByRole('radio', { name: 'All statuses' }));
     expect(onValueChange).toHaveBeenLastCalledWith(undefined);
   });
+
+  test('has no All segment when one option is always chosen', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+
+    render(
+      <DataGridSegmentedFilter
+        required
+        label="Status"
+        value="success"
+        onValueChange={onValueChange}
+        options={options}
+      />
+    );
+
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
+
+    await user.click(screen.getByRole('radio', { name: 'Error' }));
+    expect(onValueChange).toHaveBeenCalledWith('error');
+  });
 });

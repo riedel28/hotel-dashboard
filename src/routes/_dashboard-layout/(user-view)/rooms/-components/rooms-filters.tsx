@@ -12,7 +12,7 @@ import { DataGridRefreshButton } from '@/components/ui/data-grid-refresh-button'
 import { SearchInput } from '@/components/ui/search-input';
 
 import type { RoomsSearch } from '../-hooks/use-rooms-search';
-import { RoomStatusCell } from './rooms-table/-components/cells/room-status-cell';
+import { RoomStatusCell } from './room-status';
 
 const statusOptions = roomStatusSchema.options.map((status) => ({
   value: status,

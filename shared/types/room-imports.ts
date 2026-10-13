@@ -6,13 +6,9 @@ const roomImportModeSchema = z.enum(['merge', 'replace']);
 export const ROOM_IMPORT_MAX_BYTES = 5 * 1024 * 1024;
 export const ROOM_IMPORT_MAX_ROWS = 5000;
 export const ROOM_IMPORT_EXTENSIONS = ['.csv', '.xlsx'];
-export const ROOM_IMPORT_COLUMNS = ['number', 'name', 'type', 'floor'] as const;
 
-// The whole file is refused
+// The file arrived (see uploads.ts for when it does not) but cannot be used
 const roomImportFileErrorSchema = z.enum([
-  'FILE_REQUIRED',
-  'FILE_TOO_LARGE',
-  'UNSUPPORTED_FILE',
   'UNREADABLE_FILE',
   'EMPTY_FILE',
   'MISSING_COLUMNS',

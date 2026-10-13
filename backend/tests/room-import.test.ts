@@ -6,14 +6,14 @@ import request from 'supertest';
 
 import app from '../src/app';
 import { db } from '../src/db/pool';
-import { devices, reservations, rooms, users } from '../src/db/schema';
+import { devices, rooms } from '../src/db/schema';
 import {
   createTestProperty,
+  createTestReservation,
   createTestRoom,
-  createTestUser
+  createTestSession
 } from './helpers/db-helpers';
 
-const day = 24 * 60 * 60 * 1000;
 const template = (extension: string) =>
   readFileSync(
     join(__dirname, `../../public/templates/rooms-template.${extension}`)
@@ -25,15 +25,6 @@ describe('Rooms import', () => {
   let propertyId: string;
   let otherPropertyId: string;
 
-  const userOf = async (propertyId: string, is_admin: boolean) => {
-    const { user, token } = await createTestUser({ is_admin });
-    await db
-      .update(users)
-      .set({ selected_property_id: propertyId })
-      .where(eq(users.id, user.id));
-    return `Bearer ${token}`;
-  };
-
   const room = (
     room_number: string,
     extra: Partial<Parameters<typeof createTestRoom>[0]> = {}
@@ -44,15 +35,6 @@ describe('Rooms import', () => {
       name: `Room ${room_number}`,
       floor: 1,
       ...extra
-    });
-
-  const reserve = (room_name: string) =>
-    db.insert(reservations).values({
-      state: 'pending',
-      booking_nr: `B-${Math.random()}`,
-      room_name,
-      booking_from: new Date(Date.now() + day),
-      booking_to: new Date(Date.now() + 2 * day)
     });
 
   const send = (
@@ -85,8 +67,8 @@ describe('Rooms import', () => {
   beforeEach(async () => {
     propertyId = (await createTestProperty({ name: 'Hotel A' })).id;
     otherPropertyId = (await createTestProperty({ name: 'Hotel B' })).id;
-    admin = await userOf(propertyId, true);
-    member = await userOf(propertyId, false);
+    admin = await createTestSession(propertyId, true);
+    member = await createTestSession(propertyId, false);
   });
 
   describe('preview', () => {
@@ -154,7 +136,7 @@ describe('Rooms import', () => {
       await room('101');
       await room('102');
       await room('103');
-      await reserve('Room 103');
+      await createTestReservation('Room 103');
       await createTestRoom({
         property_id: otherPropertyId,
         room_number: '900'
@@ -241,7 +223,7 @@ describe('Rooms import', () => {
       await room('101');
       const { id } = await room('102');
       await room('103');
-      await reserve('Room 103');
+      await createTestReservation('Room 103');
       await db
         .insert(devices)
         .values({ serial_number: 'SN1', pin_hash: 'x', room_id: id });

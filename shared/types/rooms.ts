@@ -38,7 +38,7 @@ export const roomSortColumns = [
 ] as const;
 
 export const fetchRoomsParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1).optional(),
+  page: z.coerce.number().int().positive().default(1),
   per_page: z.coerce
     .number()
     .int()
@@ -46,8 +46,7 @@ export const fetchRoomsParamsSchema = z.object({
     .refine((val) => [5, 10, 25, 50, 100].includes(val), {
       message: 'per_page must be one of: 5, 10, 25, 50, 100'
     })
-    .default(10)
-    .optional(),
+    .default(10),
   q: z.string().optional(),
   status: roomStatusSchema.optional(),
   // '' stands for rooms without a type
@@ -95,7 +94,9 @@ export const roomIdParamsSchema = z.object({
 // Type exports
 export type RoomStatus = z.infer<typeof roomStatusSchema>;
 export type Room = z.infer<typeof roomSchema>;
-export type FetchRoomsParams = z.infer<typeof fetchRoomsParamsSchema>;
+// What a caller passes: page and per_page may be left to their defaults
+export type FetchRoomsParams = z.input<typeof fetchRoomsParamsSchema>;
+export type ParsedRoomsParams = z.output<typeof fetchRoomsParamsSchema>;
 export type FetchRoomsResponse = z.infer<typeof fetchRoomsResponseSchema>;
 export type RoomFilterOptions = z.infer<typeof roomFilterOptionsSchema>;
 export type RoomErrorCode = z.infer<typeof roomErrorCodeSchema>;

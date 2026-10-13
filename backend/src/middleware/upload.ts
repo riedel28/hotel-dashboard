@@ -3,6 +3,8 @@ import { extname } from 'node:path';
 import type { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 
+import type { UploadError } from '../../../shared/types/uploads';
+
 interface UploadOptions {
   maxBytes: number;
   /** Lowercase, with the dot: ['.csv', '.xlsx'] */
@@ -20,30 +22,26 @@ export function upload({ maxBytes, extensions }: UploadOptions) {
     limits: { fileSize: maxBytes, files: 1 }
   }).single('file');
 
-  return (req: Request, res: Response, next: NextFunction) =>
+  return (req: Request, res: Response, next: NextFunction) => {
+    const refuse = (status: number, code: UploadError, error: string) =>
+      res.status(status).json({ error, code });
+
     single(req, res, (error: unknown) => {
       if (error instanceof multer.MulterError) {
         return error.code === 'LIMIT_FILE_SIZE'
-          ? res
-              .status(413)
-              .json({ error: 'File is too large', code: 'FILE_TOO_LARGE' })
-          : res
-              .status(400)
-              .json({ error: 'Invalid upload', code: 'FILE_REQUIRED' });
+          ? refuse(413, 'FILE_TOO_LARGE', 'File is too large')
+          : refuse(400, 'INVALID_UPLOAD', 'Send one file in the field "file"');
       }
       if (error) {
         return next(error);
       }
       if (!req.file) {
-        return res
-          .status(400)
-          .json({ error: 'No file uploaded', code: 'FILE_REQUIRED' });
+        return refuse(400, 'FILE_REQUIRED', 'No file uploaded');
       }
       if (!extensions.includes(extname(req.file.originalname).toLowerCase())) {
-        return res
-          .status(400)
-          .json({ error: 'Unsupported file type', code: 'UNSUPPORTED_FILE' });
+        return refuse(400, 'UNSUPPORTED_FILE', 'Unsupported file type');
       }
       next();
     });
+  };
 }

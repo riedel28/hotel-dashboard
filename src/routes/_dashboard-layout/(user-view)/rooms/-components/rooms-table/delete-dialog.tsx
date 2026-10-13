@@ -4,7 +4,7 @@ import { Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { ApiError } from '@/api/client';
-import { deleteRoomById, type Room } from '@/api/rooms';
+import { deleteRoomById, invalidateRooms, type Room } from '@/api/rooms';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -34,12 +34,7 @@ export function DeleteDialog({ open, onOpenChange, room }: DeleteDialogProps) {
   const label = roomLabel(room);
   const isBlocked = room.has_active_reservation;
 
-  const refresh = () =>
-    Promise.all([
-      queryClient.invalidateQueries({ queryKey: ['rooms'] }),
-      // The room picker lists the rooms too
-      queryClient.invalidateQueries({ queryKey: ['devices', 'room-options'] })
-    ]);
+  const refresh = () => invalidateRooms(queryClient);
 
   const deleteRoomMutation = useMutation({
     mutationFn: () => deleteRoomById(room.id),
