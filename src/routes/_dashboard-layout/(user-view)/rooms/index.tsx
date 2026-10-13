@@ -7,6 +7,7 @@ import {
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import {
   BuildingIcon,
+  ChevronDownIcon,
   DoorOpenIcon,
   DownloadIcon,
   PlusCircleIcon,
@@ -114,36 +115,49 @@ function RoomsPage() {
         </h1>
         {canManage && (
           <div className="flex gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={(props) => (
-                  <Button variant="outline" {...props}>
-                    <DownloadIcon className="mr-2 h-4 w-4" />
-                    <Trans>Download template</Trans>
-                  </Button>
-                )}
-              />
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
+            {/* One control: Import, with the templates behind the arrow */}
+            <div className="flex">
+              <Button
+                variant="outline"
+                className="rounded-r-none"
+                onClick={() => setIsImportOpen(true)}
+              >
+                <UploadIcon className="mr-2 h-4 w-4" />
+                <Trans>Import</Trans>
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger
                   render={(props) => (
-                    <a {...props} href={ROOM_TEMPLATES.csv} download>
-                      CSV
-                    </a>
+                    <Button
+                      variant="outline"
+                      aria-label={t`Download template`}
+                      className="-ml-px rounded-l-none px-2"
+                      {...props}
+                    >
+                      <ChevronDownIcon className="h-4 w-4" />
+                    </Button>
                   )}
                 />
-                <DropdownMenuItem
-                  render={(props) => (
-                    <a {...props} href={ROOM_TEMPLATES.xlsx} download>
-                      XLSX
-                    </a>
-                  )}
-                />
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button variant="outline" onClick={() => setIsImportOpen(true)}>
-              <UploadIcon className="mr-2 h-4 w-4" />
-              <Trans>Import</Trans>
-            </Button>
+                <DropdownMenuContent align="end" className="w-60">
+                  <DropdownMenuItem
+                    render={(props) => (
+                      <a {...props} href={ROOM_TEMPLATES.csv} download>
+                        <DownloadIcon className="mr-2 h-4 w-4" />
+                        <Trans>Download CSV template</Trans>
+                      </a>
+                    )}
+                  />
+                  <DropdownMenuItem
+                    render={(props) => (
+                      <a {...props} href={ROOM_TEMPLATES.xlsx} download>
+                        <DownloadIcon className="mr-2 h-4 w-4" />
+                        <Trans>Download XLSX template</Trans>
+                      </a>
+                    )}
+                  />
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <Button onClick={() => openForm('new')}>
               <PlusCircleIcon className="mr-2 h-4 w-4" />
               <Trans>Add room</Trans>
