@@ -28,7 +28,7 @@ export function RowActions({ room, onEdit }: RowActionsProps) {
         <DropdownMenuContent align="end" className="w-auto min-w-28">
           <DropdownMenuItem onClick={() => onEdit(room.id)}>
             <PenSquareIcon className="mr-2 h-4 w-4" />
-            <Trans>Edit</Trans>
+            <Trans>Edit room</Trans>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -36,7 +36,7 @@ export function RowActions({ room, onEdit }: RowActionsProps) {
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash2Icon className="mr-2 h-4 w-4" />
-            <Trans>Delete</Trans>
+            <Trans>Delete room</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
