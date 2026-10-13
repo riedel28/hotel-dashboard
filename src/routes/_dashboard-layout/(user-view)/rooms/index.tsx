@@ -1,9 +1,5 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import {
-  useQuery,
-  useQueryClient,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import {
   BuildingIcon,
@@ -23,7 +19,7 @@ import {
   roomsQueryOptions
 } from '@/api/rooms';
 import { useAuth } from '@/auth';
-import { QueryBoundary } from '@/components/query-boundary';
+import { ErrorState } from '@/components/error-state';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -167,22 +163,10 @@ function RoomsPage() {
       </div>
 
       {hasProperty ? (
-        <QueryBoundary
-          className="min-h-[60vh] items-center justify-center"
-          message={<Trans>An error occurred while fetching rooms</Trans>}
-          fallback={
-            // An empty row as tall as the filters keeps the table in place
-            <div className="space-y-2.5">
-              <div className="h-9" />
-              <RoomsTable data={[]} isLoading />
-            </div>
-          }
-        >
-          <RoomsContent
-            canManage={canManage}
-            onImport={() => setIsImportOpen(true)}
-          />
-        </QueryBoundary>
+        <RoomsContent
+          canManage={canManage}
+          onImport={() => setIsImportOpen(true)}
+        />
       ) : (
         <Empty>
           <EmptyHeader>
@@ -218,9 +202,14 @@ function RoomsContent({ canManage, onImport }: RoomsContentProps) {
   const search = useRoomsSearch();
   const { formTarget } = search;
 
-  const roomsQuery = useSuspenseQuery(roomsQueryOptions(search.params));
-  const { data: options } = useSuspenseQuery(roomFilterOptionsQueryOptions());
-  const rooms = roomsQuery.data.index;
+  // Plain queries, not suspense ones: a change of filter, sorting or page
+  // keeps the rows on screen (dimmed) until the new ones arrive, and the
+  // filters never leave. Only the very first load shows the skeleton.
+  const roomsQuery = useQuery(roomsQueryOptions(search.params));
+  const { data: options = { room_types: [], floors: [] } } = useQuery(
+    roomFilterOptionsQueryOptions()
+  );
+  const rooms = roomsQuery.data?.index ?? [];
 
   // The room being edited is normally on the page; a link to one that is
   // not gets it from the API
@@ -241,7 +230,7 @@ function RoomsContent({ canManage, onImport }: RoomsContentProps) {
     />
   );
 
-  if (roomsQuery.data.total === 0 && !search.hasActiveFilters) {
+  if (roomsQuery.data?.total === 0 && !search.hasActiveFilters) {
     return (
       <>
         <Empty>
@@ -300,18 +289,31 @@ function RoomsContent({ canManage, onImport }: RoomsContentProps) {
           { 'opacity-70': roomsQuery.isFetching }
         )}
       >
-        <RoomsTable
-          data={rooms}
-          pageIndex={search.pageIndex}
-          pageSize={search.pageSize}
-          totalCount={roomsQuery.data.total}
-          pageCount={roomsQuery.data.page_count}
-          sort={search.sort}
-          onSortChange={search.setSort}
-          onPageChange={search.setPage}
-          onEdit={canManage ? search.openForm : undefined}
-          emptyMessage={<Trans>No rooms match the filters</Trans>}
-        />
+        {roomsQuery.isError ? (
+          <ErrorState
+            message={
+              roomsQuery.error.message || (
+                <Trans>An error occurred while fetching rooms</Trans>
+              )
+            }
+            isRetrying={roomsQuery.isFetching}
+            onRetry={() => roomsQuery.refetch()}
+          />
+        ) : (
+          <RoomsTable
+            data={rooms}
+            isLoading={roomsQuery.isLoading}
+            pageIndex={search.pageIndex}
+            pageSize={search.pageSize}
+            totalCount={roomsQuery.data?.total ?? 0}
+            pageCount={roomsQuery.data?.page_count ?? 0}
+            sort={search.sort}
+            onSortChange={search.setSort}
+            onPageChange={search.setPage}
+            onEdit={canManage ? search.openForm : undefined}
+            emptyMessage={<Trans>No rooms match the filters</Trans>}
+          />
+        )}
       </div>
 
       {form}
