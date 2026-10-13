@@ -37,7 +37,6 @@ import { Route as DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport
 import { Route as DashboardLayoutuserViewDevicesIndexRouteImport } from './routes/_dashboard-layout/(user-view)/devices/index'
 import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
 import { Route as DashboardLayoutuserViewRoomsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/index'
-import { Route as DashboardLayoutuserViewRoomsRoomIdRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/$roomId'
 import { Route as DashboardLayoutuserViewUsersIndexRouteImport } from './routes/_dashboard-layout/(user-view)/users/index'
 import { Route as DashboardLayoutuserViewUsersUserIdRouteImport } from './routes/_dashboard-layout/(user-view)/users/$userId'
 import { Route as DashboardLayoutAdminCustomersIndexRouteImport } from './routes/_dashboard-layout/admin/customers/index'
@@ -210,12 +209,6 @@ const DashboardLayoutuserViewRoomsIndexRoute =
     path: '/rooms/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-const DashboardLayoutuserViewRoomsRoomIdRoute =
-  DashboardLayoutuserViewRoomsRoomIdRouteImport.update({
-    id: '/(user-view)/rooms/$roomId',
-    path: '/rooms/$roomId',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
 const DashboardLayoutuserViewUsersIndexRoute =
   DashboardLayoutuserViewUsersIndexRouteImport.update({
     id: '/(user-view)/users/',
@@ -309,7 +302,6 @@ export interface FileRoutesByFullPath {
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  '/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
@@ -348,7 +340,6 @@ export interface FileRoutesByTo {
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  '/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
@@ -391,7 +382,6 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/(front-office)/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/_dashboard-layout/(user-view)/(front-office)/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/_dashboard-layout/(user-view)/(front-office)/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  '/_dashboard-layout/(user-view)/rooms/$roomId': typeof DashboardLayoutuserViewRoomsRoomIdRoute
   '/_dashboard-layout/(user-view)/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/_dashboard-layout/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/_dashboard-layout/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
@@ -433,7 +423,6 @@ export interface FileRouteTypes {
     | '/orders'
     | '/payments'
     | '/registration-forms'
-    | '/rooms/$roomId'
     | '/users/$userId'
     | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
@@ -472,7 +461,6 @@ export interface FileRouteTypes {
     | '/orders'
     | '/payments'
     | '/registration-forms'
-    | '/rooms/$roomId'
     | '/users/$userId'
     | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
@@ -514,7 +502,6 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/(front-office)/orders'
     | '/_dashboard-layout/(user-view)/(front-office)/payments'
     | '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
-    | '/_dashboard-layout/(user-view)/rooms/$roomId'
     | '/_dashboard-layout/(user-view)/users/$userId'
     | '/_dashboard-layout/admin/customers/$customerId'
     | '/_dashboard-layout/admin/properties/$propertyId'
@@ -734,13 +721,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewRoomsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(user-view)/rooms/$roomId': {
-      id: '/_dashboard-layout/(user-view)/rooms/$roomId'
-      path: '/rooms/$roomId'
-      fullPath: '/rooms/$roomId'
-      preLoaderRoute: typeof DashboardLayoutuserViewRoomsRoomIdRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
     '/_dashboard-layout/(user-view)/users/': {
       id: '/_dashboard-layout/(user-view)/users/'
       path: '/users'
@@ -883,7 +863,6 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewfrontOfficeOrdersRoute: typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   DashboardLayoutuserViewfrontOfficePaymentsRoute: typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  DashboardLayoutuserViewRoomsRoomIdRoute: typeof DashboardLayoutuserViewRoomsRoomIdRoute
   DashboardLayoutuserViewUsersUserIdRoute: typeof DashboardLayoutuserViewUsersUserIdRoute
   DashboardLayoutuserViewDevicesIndexRoute: typeof DashboardLayoutuserViewDevicesIndexRoute
   DashboardLayoutuserViewProductsIndexRoute: typeof DashboardLayoutuserViewProductsIndexRoute
@@ -919,8 +898,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewfrontOfficePaymentsRoute,
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute:
     DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute,
-  DashboardLayoutuserViewRoomsRoomIdRoute:
-    DashboardLayoutuserViewRoomsRoomIdRoute,
   DashboardLayoutuserViewUsersUserIdRoute:
     DashboardLayoutuserViewUsersUserIdRoute,
   DashboardLayoutuserViewDevicesIndexRoute:

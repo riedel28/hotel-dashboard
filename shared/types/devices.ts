@@ -24,7 +24,8 @@ export const deviceClaimErrorCodeSchema = z.enum([
 export const deviceRoomSchema = z.object({
   id: z.number().int().positive(),
   name: z.string(),
-  room_number: z.string().nullable()
+  room_number: z.string(),
+  floor: z.number().int().nullable()
 });
 
 export const deviceSchema = z.object({

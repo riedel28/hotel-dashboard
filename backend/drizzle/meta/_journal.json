@@ -92,6 +92,13 @@
       "when": 1791790028410,
       "tag": "0012_optional_provider_secret",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1791872827876,
+      "tag": "0013_rooms_number_floor",
+      "breakpoints": true
     }
   ]
 }

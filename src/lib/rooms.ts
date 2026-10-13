@@ -16,19 +16,11 @@ export const reservationRoomLabel = (reservation: {
   room_name: string;
 }) => reservation.room_number || reservation.room_name;
 
-// ponytail: the floor is read off the room number — everything but its last
-// two digits (204 → 2). Numbering like "A12" lands in "no floor"; add a floor
-// column to rooms if a property needs that.
-export function floorOf(roomNumber: string | null): number | null {
-  const match = roomNumber?.trim().match(/^(\d+)\d{2}$/);
-  return match ? Number(match[1]) : null;
-}
-
 /** Rooms by floor, lowest first; rooms without a floor come last. */
 export function groupRoomsByFloor(rooms: DeviceRoom[]) {
   const groups = new Map<number | null, DeviceRoom[]>();
   for (const room of rooms) {
-    const floor = floorOf(room.room_number);
+    const { floor } = room;
     groups.set(floor, [...(groups.get(floor) ?? []), room]);
   }
   return [...groups]

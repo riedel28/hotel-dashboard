@@ -1,750 +1,366 @@
+import { eq } from 'drizzle-orm';
 import request from 'supertest';
 
 import app from '../src/app';
 import { db } from '../src/db/pool';
+import { devices, reservations, rooms, users } from '../src/db/schema';
 import {
-  properties as propertiesTable,
-  rooms as roomsTable
-} from '../src/db/schema';
-import { createTestUser } from './helpers/db-helpers';
+  createTestProperty,
+  createTestRoom,
+  createTestUser
+} from './helpers/db-helpers';
+
+const day = 24 * 60 * 60 * 1000;
 
 describe('Rooms API', () => {
-  let authToken: string;
+  let admin: string;
+  let member: string;
+  let otherAdmin: string;
+  let noPropertyAdmin: string;
   let propertyId: string;
-  let propertyId2: string;
+  let otherPropertyId: string;
+
+  const userOf = async (propertyId: string | null, is_admin: boolean) => {
+    const { user, token } = await createTestUser({ is_admin });
+    await db
+      .update(users)
+      .set({ selected_property_id: propertyId })
+      .where(eq(users.id, user.id));
+    return `Bearer ${token}`;
+  };
+
+  const room = (
+    room_number: string,
+    extra: Partial<Parameters<typeof createTestRoom>[0]> = {}
+  ) =>
+    createTestRoom({
+      property_id: propertyId,
+      room_number,
+      name: `Room ${room_number}`,
+      ...extra
+    });
+
+  const reserve = (
+    room_name: string,
+    extra: Partial<typeof reservations.$inferInsert> = {}
+  ) =>
+    db.insert(reservations).values({
+      state: 'pending',
+      booking_nr: `B-${Math.random()}`,
+      room_name,
+      booking_from: new Date(Date.now() + day),
+      booking_to: new Date(Date.now() + 2 * day),
+      ...extra
+    });
+
+  const list = (authorization: string, query: object = {}) =>
+    request(app)
+      .get('/api/rooms')
+      .set('Authorization', authorization)
+      .query(query);
+
+  const numbers = async (query: object = {}) =>
+    (await list(admin, query)).body.index.map(
+      (r: { room_number: string }) => r.room_number
+    );
 
   beforeEach(async () => {
-    const { token } = await createTestUser({
-      password: 'Password123!'
-    });
-    authToken = token;
-
-    // Create test properties
-    const [property1, property2] = await db
-      .insert(propertiesTable)
-      .values([
-        { name: 'Test Property 1', stage: 'demo' },
-        { name: 'Test Property 2', stage: 'production' }
-      ])
-      .returning();
-
-    propertyId = property1.id;
-    propertyId2 = property2.id;
-
-    // Create test rooms
-    await db.insert(roomsTable).values([
-      {
-        name: 'Deluxe Suite',
-        property_id: propertyId,
-        room_number: '101',
-        room_type: 'Suite',
-        status: 'available'
-      },
-      {
-        name: 'Standard Room',
-        property_id: propertyId,
-        room_number: '102',
-        room_type: 'Standard',
-        status: 'occupied'
-      },
-      {
-        name: 'Executive Room',
-        property_id: propertyId,
-        room_number: '201',
-        room_type: 'Executive',
-        status: 'available'
-      },
-      {
-        name: 'Maintenance Room',
-        property_id: propertyId,
-        room_number: '301',
-        room_type: 'Standard',
-        status: 'maintenance'
-      },
-      {
-        name: 'Out of Order Room',
-        property_id: propertyId,
-        room_number: '401',
-        room_type: 'Standard',
-        status: 'out_of_order'
-      },
-      {
-        name: 'Property 2 Room',
-        property_id: propertyId2,
-        room_number: '501',
-        room_type: 'Deluxe',
-        status: 'available'
-      },
-      {
-        name: 'Another Suite',
-        property_id: propertyId,
-        room_number: '202',
-        room_type: 'Suite',
-        status: 'available'
-      },
-      {
-        name: 'Basic Room',
-        property_id: propertyId,
-        room_number: '103',
-        room_type: 'Basic',
-        status: 'occupied'
-      },
-      {
-        name: 'Premium Suite',
-        property_id: propertyId,
-        room_number: '203',
-        room_type: 'Suite',
-        status: 'available'
-      },
-      {
-        name: 'Economy Room',
-        property_id: propertyId,
-        room_number: '104',
-        room_type: 'Economy',
-        status: 'available'
-      },
-      {
-        name: 'Luxury Suite',
-        property_id: propertyId,
-        room_number: '204',
-        room_type: 'Suite',
-        status: 'occupied'
-      }
-    ]);
+    propertyId = (await createTestProperty({ name: 'Hotel A' })).id;
+    otherPropertyId = (await createTestProperty({ name: 'Hotel B' })).id;
+    admin = await userOf(propertyId, true);
+    member = await userOf(propertyId, false);
+    otherAdmin = await userOf(otherPropertyId, true);
+    noPropertyAdmin = await userOf(null, true);
   });
 
   describe('GET /api/rooms', () => {
-    test('should get all rooms successfully with default pagination', async () => {
-      const response = await request(app)
-        .get('/api/rooms')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
+    test('lists only the selected property, in natural order by number', async () => {
+      for (const number of ['10', '2', '10A', '1']) await room(number);
+      await createTestRoom({ property_id: otherPropertyId, room_number: '5' });
 
-      expect(response.body).toHaveProperty('index');
-      expect(response.body).toHaveProperty('page');
-      expect(response.body).toHaveProperty('per_page');
-      expect(response.body).toHaveProperty('total');
-      expect(response.body).toHaveProperty('page_count');
-      expect(response.body.page).toBe(1);
-      expect(response.body.per_page).toBe(10);
-      expect(response.body.total).toBe(11);
-      expect(response.body.page_count).toBe(2);
-      expect(Array.isArray(response.body.index)).toBe(true);
-      expect(response.body.index.length).toBe(10);
-
-      // Verify room structure
-      const room = response.body.index[0];
-      expect(room).toHaveProperty('id');
-      expect(room).toHaveProperty('name');
-      expect(room).toHaveProperty('property_id');
-      expect(room).toHaveProperty('room_number');
-      expect(room).toHaveProperty('room_type');
-      expect(room).toHaveProperty('status');
-      expect([
-        'available',
-        'occupied',
-        'maintenance',
-        'out_of_order'
-      ]).toContain(room.status);
+      expect(await numbers()).toEqual(['1', '2', '10', '10A']);
+      expect(await numbers({ sort_order: 'desc' })).toEqual([
+        '10A',
+        '10',
+        '2',
+        '1'
+      ]);
     });
 
-    test('should return paginated results', async () => {
-      const response = await request(app)
-        .get('/api/rooms?page=1&per_page=5')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.page).toBe(1);
-      expect(response.body.per_page).toBe(5);
-      expect(response.body.total).toBe(11);
-      expect(response.body.page_count).toBe(3);
-      expect(response.body.index.length).toBe(5);
+    test('is empty without a selected property', async () => {
+      await room('1');
+      const res = await list(noPropertyAdmin);
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({ index: [], total: 0, page_count: 0 });
     });
 
-    test('should return second page correctly', async () => {
-      const response = await request(app)
-        .get('/api/rooms?page=2&per_page=5')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.page).toBe(2);
-      expect(response.body.per_page).toBe(5);
-      expect(response.body.total).toBe(11);
-      expect(response.body.page_count).toBe(3);
-      expect(response.body.index.length).toBe(5);
+    test('paginates', async () => {
+      for (const number of ['1', '2', '3', '4', '5', '6']) await room(number);
+      const res = await list(admin, { page: 2, per_page: 5 });
+      expect(res.body).toMatchObject({ total: 6, page_count: 2, page: 2 });
+      expect(res.body.index).toHaveLength(1);
     });
 
-    test('should return empty array for page beyond available data', async () => {
-      const response = await request(app)
-        .get('/api/rooms?page=10&per_page=5')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.page).toBe(10);
-      expect(response.body.per_page).toBe(5);
-      expect(response.body.total).toBe(11);
-      expect(response.body.page_count).toBe(3);
-      expect(response.body.index.length).toBe(0);
+    test('searches number and name', async () => {
+      await room('101', { name: 'Garden' });
+      await room('202', { name: 'Lake view' });
+      expect(await numbers({ q: '10' })).toEqual(['101']);
+      expect(await numbers({ q: 'lake' })).toEqual(['202']);
     });
 
-    test('should filter rooms by search query (name)', async () => {
-      const response = await request(app)
-        .get('/api/rooms?q=Suite')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
+    test('filters by type, floor and status', async () => {
+      await room('101', { room_type: 'Suite', floor: 1 });
+      await room('201', { room_type: 'Standard', floor: 2 });
+      await room('301', { room_type: null, floor: 3, status: 'maintenance' });
+      await room('B1', { room_type: 'Standard', floor: -1 });
 
-      expect(response.body.total).toBeGreaterThan(0);
+      expect(await numbers({ room_type: 'Standard' })).toEqual(['201', 'B1']);
+      expect(await numbers({ room_type: ['Suite', ''] })).toEqual([
+        '101',
+        '301'
+      ]);
+      expect(await numbers({ floor: [-1, 2] })).toEqual(['201', 'B1']);
+      expect(await numbers({ status: 'maintenance' })).toEqual(['301']);
+    });
+
+    test('sorts by floor', async () => {
+      await room('A', { floor: 2 });
+      await room('B', { floor: -1 });
+      expect(await numbers({ sort_by: 'floor' })).toEqual(['B', 'A']);
+    });
+
+    test('flags rooms with an active reservation', async () => {
+      await room('1');
+      await room('2');
+      await room('3');
+      await room('4');
+      await reserve('Room 1');
+      // Over and checked out
+      await reserve('Room 2', {
+        state: 'checked_out',
+        booking_to: new Date(Date.now() + day)
+      });
+      // Past its end, but the guest is still in the house
+      await reserve('Room 3', {
+        state: 'checked_in',
+        booking_from: new Date(Date.now() - 3 * day),
+        booking_to: new Date(Date.now() - day)
+      });
+      // Never showed up
+      await reserve('Room 4', {
+        booking_from: new Date(Date.now() - 3 * day),
+        booking_to: new Date(Date.now() - day)
+      });
+
+      const res = await list(admin);
       expect(
-        response.body.index.every((room: { name: string }) =>
-          room.name.includes('Suite')
+        res.body.index.map(
+          (r: { has_active_reservation: boolean }) => r.has_active_reservation
         )
-      ).toBe(true);
+      ).toEqual([true, false, true, false]);
     });
 
-    test('should filter rooms by search query (room_number)', async () => {
-      const response = await request(app)
-        .get('/api/rooms?q=101')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBe(1);
-      expect(response.body.index[0].room_number).toBe('101');
-    });
-
-    test('should filter rooms by search query (room_type)', async () => {
-      const response = await request(app)
-        .get('/api/rooms?q=Standard')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBeGreaterThan(0);
-      expect(
-        response.body.index.every((room: { room_type: string }) =>
-          room.room_type?.includes('Standard')
-        )
-      ).toBe(true);
-    });
-
-    test('should return empty results for non-matching search query', async () => {
-      const response = await request(app)
-        .get('/api/rooms?q=NonexistentRoom123')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBe(0);
-      expect(response.body.index.length).toBe(0);
-    });
-
-    test('should filter rooms by property_id', async () => {
-      const response = await request(app)
-        .get(`/api/rooms?property_id=${propertyId}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBe(10);
-      expect(
-        response.body.index.every(
-          (room: { property_id: string }) => room.property_id === propertyId
-        )
-      ).toBe(true);
-    });
-
-    test('should filter rooms by property_id (different property)', async () => {
-      const response = await request(app)
-        .get(`/api/rooms?property_id=${propertyId2}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBe(1);
-      expect(response.body.index[0].property_id).toBe(propertyId2);
-    });
-
-    test('should filter rooms by status', async () => {
-      const response = await request(app)
-        .get('/api/rooms?status=available')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBeGreaterThan(0);
-      expect(
-        response.body.index.every(
-          (room: { status: string }) => room.status === 'available'
-        )
-      ).toBe(true);
-    });
-
-    test('should filter rooms by status (occupied)', async () => {
-      const response = await request(app)
-        .get('/api/rooms?status=occupied')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBe(3);
-      expect(
-        response.body.index.every(
-          (room: { status: string }) => room.status === 'occupied'
-        )
-      ).toBe(true);
-    });
-
-    test('should filter rooms by status (maintenance)', async () => {
-      const response = await request(app)
-        .get('/api/rooms?status=maintenance')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBe(1);
-      expect(response.body.index[0].status).toBe('maintenance');
-    });
-
-    test('should combine pagination and search', async () => {
-      const response = await request(app)
-        .get('/api/rooms?q=Suite&page=1&per_page=5')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.index.length).toBeLessThanOrEqual(5);
-      expect(
-        response.body.index.every((room: { name: string }) =>
-          room.name.includes('Suite')
-        )
-      ).toBe(true);
-    });
-
-    test('should combine property_id and status filters', async () => {
-      const response = await request(app)
-        .get(`/api/rooms?property_id=${propertyId}&status=available`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.total).toBeGreaterThan(0);
-      expect(
-        response.body.index.every(
-          (room: { property_id: string; status: string }) =>
-            room.property_id === propertyId && room.status === 'available'
-        )
-      ).toBe(true);
-    });
-
-    test('should combine search, property_id, and status filters', async () => {
-      const response = await request(app)
-        .get(
-          `/api/rooms?q=Suite&property_id=${propertyId}&status=available&page=1&per_page=5`
-        )
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.index.length).toBeLessThanOrEqual(5);
-      expect(
-        response.body.index.every(
-          (room: { name: string; property_id: string; status: string }) =>
-            room.name.includes('Suite') &&
-            room.property_id === propertyId &&
-            room.status === 'available'
-        )
-      ).toBe(true);
-    });
-
-    test('should return 401 without authentication', async () => {
-      await request(app).get('/api/rooms').expect(401);
-    });
-
-    test('should return 400 for invalid per_page value', async () => {
-      await request(app)
-        .get('/api/rooms?per_page=3')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(400);
-    });
-
-    test('should return 400 for invalid page value', async () => {
-      await request(app)
-        .get('/api/rooms?page=0')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(400);
-    });
-
-    test('should return 400 for invalid status value', async () => {
-      await request(app)
-        .get('/api/rooms?status=invalid_status')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(400);
-    });
-
-    test('should accept valid per_page values', async () => {
-      const validPerPageValues = [5, 10, 25, 50, 100];
-
-      for (const perPage of validPerPageValues) {
-        const response = await request(app)
-          .get(`/api/rooms?per_page=${perPage}`)
-          .set('Authorization', `Bearer ${authToken}`)
-          .expect(200);
-
-        expect(response.body.per_page).toBe(perPage);
-      }
-    });
-
-    test('should accept valid status values', async () => {
-      const validStatusValues = [
-        'available',
-        'occupied',
-        'maintenance',
-        'out_of_order'
-      ];
-
-      for (const status of validStatusValues) {
-        const response = await request(app)
-          .get(`/api/rooms?status=${status}`)
-          .set('Authorization', `Bearer ${authToken}`)
-          .expect(200);
-
-        expect(
-          response.body.index.every(
-            (room: { status: string }) => room.status === status
-          )
-        ).toBe(true);
-      }
+    test('rejects bad input and missing auth', async () => {
+      expect((await list(admin, { per_page: 7 })).status).toBe(400);
+      expect((await list(admin, { status: 'nope' })).status).toBe(400);
+      expect((await request(app).get('/api/rooms')).status).toBe(401);
     });
   });
 
+  test('GET /api/rooms/filter-options lists the types and floors in use', async () => {
+    await room('101', { room_type: 'Suite', floor: 1 });
+    await room('102', { room_type: 'Suite', floor: 1 });
+    await room('B1', { room_type: null, floor: -1 });
+    await createTestRoom({
+      property_id: otherPropertyId,
+      room_type: 'Penthouse',
+      floor: 9
+    });
+
+    const res = await request(app)
+      .get('/api/rooms/filter-options')
+      .set('Authorization', admin);
+    expect(res.body).toEqual({ room_types: ['Suite'], floors: [-1, 1] });
+  });
+
   describe('POST /api/rooms', () => {
-    let adminToken: string;
+    const create = (authorization: string, body: object) =>
+      request(app)
+        .post('/api/rooms')
+        .set('Authorization', authorization)
+        .send(body);
 
-    beforeEach(async () => {
-      const { token } = await createTestUser({
-        password: 'Password123!',
-        is_admin: true
+    test('creates a room in the selected property', async () => {
+      const res = await create(admin, {
+        room_number: ' 12A ',
+        name: 'Garden',
+        room_type: 'Suite',
+        floor: -1
       });
-      adminToken = token;
-    });
-
-    test('should create a room with valid data', async () => {
-      const newRoom = {
-        name: 'New Test Room',
+      expect(res.status).toBe(201);
+      expect(res.body).toMatchObject({
+        room_number: '12A',
+        name: 'Garden',
+        room_type: 'Suite',
+        floor: -1,
+        status: 'available',
         property_id: propertyId,
-        room_number: '999',
-        room_type: 'Deluxe',
-        status: 'available'
-      };
-
-      const response = await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send(newRoom)
-        .expect(201);
-
-      expect(response.body).toHaveProperty('id');
-      expect(response.body.name).toBe('New Test Room');
-      expect(response.body.property_id).toBe(propertyId);
-      expect(response.body.room_number).toBe('999');
-      expect(response.body.room_type).toBe('Deluxe');
-      expect(response.body.status).toBe('available');
-      expect(response.body).toHaveProperty('created_at');
-      expect(response.body).toHaveProperty('updated_at');
+        has_active_reservation: false
+      });
     });
 
-    test('should create a room with only required fields', async () => {
-      const newRoom = {
-        name: 'Minimal Room',
-        property_id: propertyId
-      };
-
-      const response = await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send(newRoom)
-        .expect(201);
-
-      expect(response.body.name).toBe('Minimal Room');
-      expect(response.body.property_id).toBe(propertyId);
-      expect(response.body.room_number).toBeNull();
-      expect(response.body.room_type).toBeNull();
-      expect(response.body.status).toBe('available');
+    test('names the room after its number when no name is given', async () => {
+      const res = await create(admin, { room_number: '7', room_type: 'Suite' });
+      expect(res.body.name).toBe('7');
     });
 
-    test('should return the created room in the rooms list', async () => {
-      const newRoom = {
-        name: 'Findable Room',
-        property_id: propertyId,
-        room_number: '777'
-      };
+    test('rejects a number taken in the property, whatever its case', async () => {
+      await room('12A');
+      const res = await create(admin, { room_number: '12a', room_type: 'S' });
+      expect(res.status).toBe(409);
+      expect(res.body.code).toBe('ROOM_NUMBER_TAKEN');
 
-      await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send(newRoom)
-        .expect(201);
-
-      const listResponse = await request(app)
-        .get('/api/rooms?q=Findable')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .expect(200);
-
-      expect(listResponse.body.total).toBe(1);
-      expect(listResponse.body.index[0].name).toBe('Findable Room');
+      // Another property may use the same number
+      const other = await create(otherAdmin, {
+        room_number: '12A',
+        room_type: 'S'
+      });
+      expect(other.status).toBe(201);
     });
 
-    test('should return 400 when property_id is missing', async () => {
-      const response = await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ name: 'No Property Room' })
-        .expect(400);
-
-      expect(response.body).toHaveProperty('error');
+    test('requires number and type', async () => {
+      expect((await create(admin, { room_type: 'S' })).status).toBe(400);
+      expect(
+        (await create(admin, { room_number: '  ', room_type: 'S' })).status
+      ).toBe(400);
+      expect((await create(admin, { room_number: '1' })).status).toBe(400);
+      expect(
+        (await create(admin, { room_number: '1', room_type: 'S', floor: 1.5 }))
+          .status
+      ).toBe(400);
     });
 
-    test('should return 400 when property_id is empty string', async () => {
-      const response = await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ name: 'Bad Property Room', property_id: '' })
-        .expect(400);
-
-      expect(response.body).toHaveProperty('error');
-    });
-
-    test('should return 400 when name is missing', async () => {
-      const response = await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ property_id: propertyId })
-        .expect(400);
-
-      expect(response.body).toHaveProperty('error');
-    });
-
-    test('should return 403 for non-admin users', async () => {
-      await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send({
-          name: 'Unauthorized Room',
-          property_id: propertyId
-        })
-        .expect(403);
-    });
-
-    test('should return 401 without authentication', async () => {
-      await request(app)
-        .post('/api/rooms')
-        .send({
-          name: 'Unauthenticated Room',
-          property_id: propertyId
-        })
-        .expect(401);
+    test('needs an admin with a selected property', async () => {
+      const body = { room_number: '1', room_type: 'S' };
+      expect((await create(member, body)).status).toBe(403);
+      expect((await create(noPropertyAdmin, body)).status).toBe(400);
+      expect((await request(app).post('/api/rooms').send(body)).status).toBe(
+        401
+      );
     });
   });
 
   describe('GET /api/rooms/:id', () => {
-    let roomId: number;
+    test('returns a room of the selected property only', async () => {
+      const { id } = await room('1');
+      const get = (authorization: string) =>
+        request(app)
+          .get(`/api/rooms/${id}`)
+          .set('Authorization', authorization);
 
-    beforeEach(async () => {
-      const response = await request(app)
-        .get('/api/rooms')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      roomId = response.body.index[0].id;
-    });
-
-    test('should return a single room by ID', async () => {
-      const response = await request(app)
-        .get(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-
-      expect(response.body.id).toBe(roomId);
-      expect(response.body).toHaveProperty('name');
-      expect(response.body).toHaveProperty('property_id');
-      expect(response.body).toHaveProperty('room_number');
-      expect(response.body).toHaveProperty('room_type');
-      expect(response.body).toHaveProperty('status');
-      expect(response.body).toHaveProperty('created_at');
-      expect(response.body).toHaveProperty('updated_at');
-    });
-
-    test('should return 404 for non-existent room', async () => {
-      await request(app)
-        .get('/api/rooms/99999')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(404);
-    });
-
-    test('should return 401 without authentication', async () => {
-      await request(app).get(`/api/rooms/${roomId}`).expect(401);
-    });
-
-    test('should return 400 for invalid ID parameter', async () => {
-      await request(app)
-        .get('/api/rooms/invalid-id')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(400);
+      expect((await get(member)).body.room_number).toBe('1');
+      expect((await get(otherAdmin)).status).toBe(404);
+      expect(
+        (await request(app).get('/api/rooms/abc').set('Authorization', admin))
+          .status
+      ).toBe(400);
     });
   });
 
   describe('PATCH /api/rooms/:id', () => {
-    let adminToken: string;
-    let roomId: number;
+    const update = (authorization: string, id: number, body: object) =>
+      request(app)
+        .patch(`/api/rooms/${id}`)
+        .set('Authorization', authorization)
+        .send(body);
 
-    beforeEach(async () => {
-      const { token } = await createTestUser({
-        password: 'Password123!',
-        is_admin: true
+    test('updates fields', async () => {
+      const { id } = await room('1', { floor: 1 });
+      const res = await update(admin, id, {
+        room_number: '1B',
+        floor: null,
+        status: 'maintenance'
       });
-      adminToken = token;
-
-      const createResponse = await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'Room To Update',
-          property_id: propertyId,
-          room_number: '500',
-          room_type: 'Standard',
-          status: 'available'
-        })
-        .expect(201);
-
-      roomId = createResponse.body.id;
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({
+        room_number: '1B',
+        name: 'Room 1',
+        floor: null,
+        status: 'maintenance'
+      });
     });
 
-    test('should update room name successfully', async () => {
-      const response = await request(app)
-        .patch(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ name: 'Updated Room Name' })
-        .expect(200);
-
-      expect(response.body.id).toBe(roomId);
-      expect(response.body.name).toBe('Updated Room Name');
-      expect(response.body.room_number).toBe('500');
-      expect(response.body.updated_at).toBeTruthy();
+    test('an emptied name falls back to the number', async () => {
+      const { id } = await room('1');
+      const res = await update(admin, id, { name: '' });
+      expect(res.body.name).toBe('1');
     });
 
-    test('should update room status', async () => {
-      const response = await request(app)
-        .patch(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ status: 'maintenance' })
-        .expect(200);
-
-      expect(response.body.id).toBe(roomId);
-      expect(response.body.status).toBe('maintenance');
+    test('rejects a taken number', async () => {
+      await room('1');
+      const { id } = await room('2');
+      const res = await update(admin, id, { room_number: '1' });
+      expect(res.status).toBe(409);
+      expect(res.body.code).toBe('ROOM_NUMBER_TAKEN');
     });
 
-    test('should update multiple fields at once', async () => {
-      const response = await request(app)
-        .patch(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'Fully Updated Room',
-          room_number: '600',
-          room_type: 'Suite',
-          status: 'occupied'
-        })
-        .expect(200);
+    test('will not rename a room with an active reservation', async () => {
+      const { id } = await room('1');
+      await reserve('Room 1');
 
-      expect(response.body.name).toBe('Fully Updated Room');
-      expect(response.body.room_number).toBe('600');
-      expect(response.body.room_type).toBe('Suite');
-      expect(response.body.status).toBe('occupied');
+      const renamed = await update(admin, id, { name: 'Garden' });
+      expect(renamed.status).toBe(409);
+      expect(renamed.body.code).toBe('ROOM_HAS_ACTIVE_RESERVATION');
+
+      // Everything else stays editable
+      const res = await update(admin, id, { name: 'Room 1', floor: 3 });
+      expect(res.status).toBe(200);
+      expect(res.body.floor).toBe(3);
     });
 
-    test('should return 404 for non-existent room', async () => {
-      await request(app)
-        .patch('/api/rooms/99999')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ name: 'Ghost Room' })
-        .expect(404);
-    });
-
-    test('should return 401 without authentication', async () => {
-      await request(app)
-        .patch(`/api/rooms/${roomId}`)
-        .send({ name: 'No Auth' })
-        .expect(401);
-    });
-
-    test('should return 403 for non-admin users', async () => {
-      await request(app)
-        .patch(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .send({ name: 'Non Admin Update' })
-        .expect(403);
-    });
-
-    test('should return 400 for invalid status value', async () => {
-      await request(app)
-        .patch(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ status: 'invalid_status' })
-        .expect(400);
+    test('is scoped and admin only', async () => {
+      const { id } = await room('1');
+      expect((await update(otherAdmin, id, { floor: 1 })).status).toBe(404);
+      expect((await update(member, id, { floor: 1 })).status).toBe(403);
+      expect((await update(admin, 999999, { floor: 1 })).status).toBe(404);
+      expect((await update(admin, id, { status: 'nope' })).status).toBe(400);
     });
   });
 
   describe('DELETE /api/rooms/:id', () => {
-    let adminToken: string;
-    let roomId: number;
+    const remove = (authorization: string, id: number) =>
+      request(app)
+        .delete(`/api/rooms/${id}`)
+        .set('Authorization', authorization);
 
-    beforeEach(async () => {
-      const { token } = await createTestUser({
-        password: 'Password123!',
-        is_admin: true
-      });
-      adminToken = token;
+    test('deletes the room and unassigns its devices', async () => {
+      const { id } = await room('1');
+      await db
+        .insert(devices)
+        .values({ serial_number: 'SN1', pin_hash: 'x', room_id: id });
 
-      const createResponse = await request(app)
-        .post('/api/rooms')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({
-          name: 'Room To Delete',
-          property_id: propertyId,
-          room_number: '900',
-          room_type: 'Standard',
-          status: 'available'
-        })
-        .expect(201);
-
-      roomId = createResponse.body.id;
+      expect((await remove(admin, id)).status).toBe(200);
+      expect(await db.select().from(rooms)).toHaveLength(0);
+      const [device] = await db.select().from(devices);
+      expect(device.room_id).toBeNull();
     });
 
-    test('should delete room successfully', async () => {
-      const response = await request(app)
-        .delete(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .expect(200);
+    test('refuses while the room has an active reservation', async () => {
+      const { id } = await room('1');
+      await reserve('Room 1');
 
-      expect(response.body).toHaveProperty('message');
+      const res = await remove(admin, id);
+      expect(res.status).toBe(409);
+      expect(res.body.code).toBe('ROOM_HAS_ACTIVE_RESERVATION');
+      expect(await db.select().from(rooms)).toHaveLength(1);
     });
 
-    test('should verify room is gone after deletion', async () => {
-      await request(app)
-        .delete(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .expect(200);
-
-      await request(app)
-        .get(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .expect(404);
-    });
-
-    test('should return 404 for non-existent room', async () => {
-      await request(app)
-        .delete('/api/rooms/99999')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .expect(404);
-    });
-
-    test('should return 401 without authentication', async () => {
-      await request(app).delete(`/api/rooms/${roomId}`).expect(401);
-    });
-
-    test('should return 403 for non-admin users', async () => {
-      await request(app)
-        .delete(`/api/rooms/${roomId}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(403);
+    test('is scoped and admin only', async () => {
+      const { id } = await room('1');
+      expect((await remove(otherAdmin, id)).status).toBe(404);
+      expect((await remove(member, id)).status).toBe(403);
+      expect((await remove(admin, 999999)).status).toBe(404);
+      expect(await db.select().from(rooms)).toHaveLength(1);
     });
   });
 });

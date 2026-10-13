@@ -247,8 +247,9 @@ export const rooms = pgTable(
       .references(() => properties.id, {
         onDelete: 'cascade'
       }),
-    room_number: text('room_number'),
+    room_number: text('room_number').notNull(),
     room_type: text('room_type'),
+    floor: integer('floor'),
     status: text('status')
       .notNull()
       .default('available')
@@ -263,6 +264,11 @@ export const rooms = pgTable(
   (table) => [
     index('rooms_property_id_idx').on(table.property_id),
     index('rooms_status_idx').on(table.status),
+    // Room numbers are unique within a property, case-insensitively
+    uniqueIndex('rooms_property_room_number_key').on(
+      table.property_id,
+      sql`lower(${table.room_number})`
+    ),
     check(
       'rooms_status_check',
       sql`${table.status} IN ('available', 'occupied', 'maintenance', 'out_of_order')`

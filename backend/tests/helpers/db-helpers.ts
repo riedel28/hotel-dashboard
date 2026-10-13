@@ -80,7 +80,8 @@ export async function createTestRoom(
   roomData: { property_id: string } & Partial<{
     name: string;
     room_number: string;
-    room_type: string;
+    room_type: string | null;
+    floor: number | null;
     status: 'available' | 'occupied' | 'maintenance' | 'out_of_order';
     created_at: Date;
     updated_at: Date;

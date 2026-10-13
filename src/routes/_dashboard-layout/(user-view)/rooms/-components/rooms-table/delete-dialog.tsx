@@ -1,10 +1,10 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
 import { Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { deleteRoomById } from '@/api/rooms';
+import { ApiError } from '@/api/client';
+import { deleteRoomById, type Room } from '@/api/rooms';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,76 +15,114 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
+import { roomLabel } from '@/lib/rooms';
 
 interface DeleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  roomName: string;
-  roomId: number;
+  room: Room;
 }
 
-async function deleteRoom(roomId: number) {
-  return deleteRoomById(String(roomId));
-}
-
-export function DeleteDialog({
-  open,
-  onOpenChange,
-  roomName,
-  roomId
-}: DeleteDialogProps) {
+export function DeleteDialog({ open, onOpenChange, room }: DeleteDialogProps) {
   const { t } = useLingui();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const label = roomLabel(room);
+  const isBlocked = room.has_active_reservation;
+
+  const refresh = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['rooms'] }),
+      // The room picker lists the rooms too
+      queryClient.invalidateQueries({ queryKey: ['devices', 'room-options'] })
+    ]);
 
   const deleteRoomMutation = useMutation({
-    mutationFn: () => deleteRoom(roomId),
+    mutationFn: () => deleteRoomById(room.id),
     onSuccess: async () => {
-      // First close the modal
       onOpenChange(false);
-
-      // Then update the table and show success message after the update
-      await queryClient.invalidateQueries({ queryKey: ['rooms'] });
-
-      // Navigate back to rooms list
-      navigate({ to: '/rooms' });
-
-      toast.success(t`The room ${roomName} has been deleted`);
+      await refresh();
+      toast.success(t`The room ${label} has been deleted`);
     },
-    onError: () => {
+    onError: (error) => {
+      // A reservation made since the list was loaded: the refreshed row
+      // turns this dialog into its blocked state
+      if (
+        error instanceof ApiError &&
+        error.code === 'ROOM_HAS_ACTIVE_RESERVATION'
+      ) {
+        toast.error(
+          t`The room ${label} has an active reservation and cannot be deleted`
+        );
+        return refresh();
+      }
       toast.error(t`Error deleting room`);
     }
   });
+
+  const deleteButton = (
+    <Button
+      variant="destructive"
+      onClick={() => deleteRoomMutation.mutate()}
+      disabled={isBlocked || deleteRoomMutation.isPending}
+    >
+      {deleteRoomMutation.isPending && (
+        <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+      )}
+      <Trans>Delete</Trans>
+    </Button>
+  );
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            <Trans>Are you sure?</Trans>
+            {isBlocked ? (
+              <Trans>This room cannot be deleted</Trans>
+            ) : (
+              <Trans>Are you sure?</Trans>
+            )}
           </AlertDialogTitle>
           <AlertDialogDescription className="py-4">
-            <Trans>
-              The room&nbsp;
-              <span className="font-medium text-foreground">{roomName}</span>
-              &nbsp;will be deleted. This action cannot be undone.
-            </Trans>
+            {isBlocked ? (
+              <Trans>
+                The room&nbsp;
+                <span className="font-medium text-foreground">{label}</span>
+                &nbsp;has an active reservation. It can be deleted once the
+                guest has checked out or the reservation is moved to another
+                room.
+              </Trans>
+            ) : (
+              <Trans>
+                The room&nbsp;
+                <span className="font-medium text-foreground">{label}</span>
+                &nbsp;will be deleted. This action cannot be undone.
+              </Trans>
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>
             <Trans>Cancel</Trans>
           </AlertDialogCancel>
-          <Button
-            variant="destructive"
-            onClick={() => deleteRoomMutation.mutate()}
-            disabled={deleteRoomMutation.isPending}
-          >
-            {deleteRoomMutation.isPending && (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            <Trans>Delete</Trans>
-          </Button>
+          {isBlocked ? (
+            <Tooltip>
+              {/* A disabled button fires no pointer events of its own */}
+              <TooltipTrigger render={<span tabIndex={0} />}>
+                {deleteButton}
+              </TooltipTrigger>
+              <TooltipContent>
+                <Trans>The room has an active reservation</Trans>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            deleteButton
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

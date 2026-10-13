@@ -1,10 +1,20 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { type PaginationState, type SortingState } from '@tanstack/react-table';
-import type { RoomStatus } from 'shared/types/rooms';
+import {
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery
+} from '@tanstack/react-query';
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
+import { BuildingIcon, DoorOpenIcon, PlusCircleIcon } from 'lucide-react';
+import { roomSortColumns, roomStatusSchema } from 'shared/types/rooms';
+import { z } from 'zod';
 
-import { fetchRoomsParamsSchema, roomsQueryOptions } from '@/api/rooms';
+import {
+  roomByIdQueryOptions,
+  roomFilterOptionsQueryOptions,
+  roomsQueryOptions
+} from '@/api/rooms';
+import { useAuth } from '@/auth';
 import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
@@ -14,20 +24,53 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
 
-import { AddRoomModal } from './-components/add-room-modal';
-import { RoomClearFilters } from './-components/room-clear-filters';
-import { RoomRefresh } from './-components/room-refresh';
-import { RoomSearch } from './-components/room-search';
-import { RoomStatusFilter } from './-components/room-status-filter';
+import { RoomFormDrawer } from './-components/room-form-drawer';
 import { RoomsFilters } from './-components/rooms-filters';
 import RoomsTable from './-components/rooms-table/rooms-table';
+import { useRoomsSearch } from './-hooks/use-rooms-search';
+
+const PAGE_SIZES = [5, 10, 25, 50, 100];
+const DEFAULT_PAGE_SIZE = 10;
+
+const roomsSearchSchema = z.object({
+  // A room number typed into the URL by hand arrives as a number
+  q: z.union([z.string(), z.number().transform(String)]).optional(),
+  status: roomStatusSchema.optional(),
+  room_type: z.array(z.string()).optional(),
+  floor: z.array(z.number().int()).optional(),
+  page: z.number().int().positive().default(1),
+  per_page: z
+    .number()
+    .refine((size) => PAGE_SIZES.includes(size))
+    .default(DEFAULT_PAGE_SIZE),
+  sort_by: z.enum(roomSortColumns).default('room_number'),
+  sort_order: z.enum(['asc', 'desc']).default('asc'),
+  // The room open in the form; 'new' for an empty one
+  edit: z.union([z.number().int().positive(), z.literal('new')]).optional()
+});
 
 function RoomsPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Rooms`);
+  const { user } = useAuth();
+  const { openForm } = useRoomsSearch();
+
+  const hasProperty = Boolean(user?.selected_property_id);
+  // Rooms are edited by administrators only; everyone else gets the list
+  const canManage = Boolean(user?.is_admin) && hasProperty;
 
   return (
     <div className="space-y-1">
@@ -51,203 +94,163 @@ function RoomsPage() {
         <h1 className="text-xl font-bold">
           <Trans>Rooms</Trans>
         </h1>
-        <AddRoomModal />
+        {canManage && (
+          <div className="flex gap-2">
+            <Button onClick={() => openForm('new')}>
+              <PlusCircleIcon className="mr-2 h-4 w-4" />
+              <Trans>Add room</Trans>
+            </Button>
+          </div>
+        )}
       </div>
 
-      <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching rooms</Trans>}
-        fallback={
-          <RoomsTable
-            data={[]}
-            isLoading={true}
-            pageIndex={0}
-            pageSize={10}
-            totalCount={0}
-            pageCount={0}
-          />
-        }
-      >
-        <RoomsContent />
-      </QueryBoundary>
+      {hasProperty ? (
+        <QueryBoundary
+          className="min-h-[60vh] items-center justify-center"
+          message={<Trans>An error occurred while fetching rooms</Trans>}
+          fallback={
+            // An empty row as tall as the filters keeps the table in place
+            <div className="space-y-2.5">
+              <div className="h-9" />
+              <RoomsTable data={[]} isLoading />
+            </div>
+          }
+        >
+          <RoomsContent canManage={canManage} />
+        </QueryBoundary>
+      ) : (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <BuildingIcon />
+            </EmptyMedia>
+            <EmptyTitle>
+              <Trans>No property selected</Trans>
+            </EmptyTitle>
+            <EmptyDescription>
+              <Trans>
+                Select a property at the top of the page to see its rooms.
+              </Trans>
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      )}
     </div>
   );
 }
 
-function RoomsContent() {
-  const { page, per_page, status, q, sort_by, sort_order } = Route.useSearch();
-  const navigate = Route.useNavigate();
+function RoomsContent({ canManage }: { canManage: boolean }) {
   const queryClient = useQueryClient();
+  const search = useRoomsSearch();
+  const { formTarget } = search;
 
-  const roomsQuery = useSuspenseQuery(
-    roomsQueryOptions({
-      page,
-      per_page,
-      status,
-      q,
-      sort_by,
-      sort_order
-    })
+  const roomsQuery = useSuspenseQuery(roomsQueryOptions(search.params));
+  const { data: options } = useSuspenseQuery(roomFilterOptionsQueryOptions());
+  const rooms = roomsQuery.data.index;
+
+  // The room being edited is normally on the page; a link to one that is
+  // not gets it from the API
+  const editingId = typeof formTarget === 'number' ? formTarget : undefined;
+  const listed = rooms.find((room) => room.id === editingId);
+  const { data: fetched } = useQuery({
+    ...roomByIdQueryOptions(editingId ?? 0),
+    enabled: canManage && editingId !== undefined && !listed
+  });
+  const editing = editingId === undefined ? null : (listed ?? fetched);
+
+  const form = canManage && (
+    <RoomFormDrawer
+      open={formTarget === 'new' || editing != null}
+      onOpenChange={(open) => !open && search.closeForm()}
+      room={editing}
+      roomTypes={options.room_types}
+    />
   );
 
-  const handleRefresh = () => {
-    queryClient.invalidateQueries({
-      queryKey: roomsQueryOptions({
-        page,
-        per_page,
-        status,
-        q,
-        sort_by,
-        sort_order
-      }).queryKey
-    });
-  };
-
-  const handleStatusChange = (newStatus: RoomStatus | undefined) => {
-    navigate({
-      to: '/rooms',
-      search: (prev) => ({ ...prev, page: 1, status: newStatus })
-    });
-  };
-
-  const handleSearchChange = (searchTerm: string) => {
-    navigate({
-      to: '/rooms',
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        q: searchTerm || undefined
-      })
-    });
-  };
-
-  const handlePaginationChange = (
-    updaterOrValue:
-      | PaginationState
-      | ((old: PaginationState) => PaginationState)
-  ) => {
-    const pagination =
-      typeof updaterOrValue === 'function'
-        ? updaterOrValue({
-            pageIndex: (page ?? 1) - 1,
-            pageSize: per_page ?? 10
-          })
-        : updaterOrValue;
-
-    navigate({
-      to: '/rooms',
-      search: (prev) => ({
-        ...prev,
-        page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
-      })
-    });
-  };
-
-  const handleSortingChange = (
-    updaterOrValue: SortingState | ((old: SortingState) => SortingState)
-  ) => {
-    const sorting =
-      typeof updaterOrValue === 'function'
-        ? updaterOrValue(
-            sort_by
-              ? [{ id: sort_by, desc: sort_order === 'desc' }]
-              : [{ id: 'name', desc: false }]
-          )
-        : updaterOrValue;
-
-    // Convert TanStack Table SortingState to URL params
-    const firstSort = sorting[0];
-    if (firstSort) {
-      navigate({
-        to: '/rooms',
-        search: (prev) => ({
-          ...prev,
-          page: 1, // Reset to first page when sorting changes
-          sort_by: firstSort.id as
-            | 'name'
-            | 'room_number'
-            | 'room_type'
-            | 'status',
-          sort_order: firstSort.desc ? ('desc' as const) : ('asc' as const)
-        })
-      });
-    } else {
-      // Clear sorting - use default
-      navigate({
-        to: '/rooms',
-        search: (prev) => ({
-          ...prev,
-          page: 1,
-          sort_by: undefined,
-          sort_order: undefined
-        })
-      });
-    }
-  };
-
-  const handleClearFilters = () => {
-    navigate({
-      to: '/rooms',
-      search: {
-        page: 1,
-        per_page: per_page,
-        status: undefined,
-        q: undefined
-      }
-    });
-  };
-
-  // Convert URL params to TanStack Table SortingState
-  const sorting: SortingState = sort_by
-    ? [{ id: sort_by, desc: sort_order === 'desc' }]
-    : [{ id: 'name', desc: false }];
-
-  const hasActiveFilters = Boolean(q || status);
+  if (roomsQuery.data.total === 0 && !search.hasActiveFilters) {
+    return (
+      <>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <DoorOpenIcon />
+            </EmptyMedia>
+            <EmptyTitle>
+              <Trans>No rooms yet</Trans>
+            </EmptyTitle>
+            <EmptyDescription>
+              {canManage ? (
+                <Trans>Add the rooms of this property one by one.</Trans>
+              ) : (
+                <Trans>An administrator has not added any rooms yet.</Trans>
+              )}
+            </EmptyDescription>
+          </EmptyHeader>
+          {canManage && (
+            <EmptyContent>
+              <Button onClick={() => search.openForm('new')}>
+                <PlusCircleIcon className="mr-2 h-4 w-4" />
+                <Trans>Add room</Trans>
+              </Button>
+            </EmptyContent>
+          )}
+        </Empty>
+        {form}
+      </>
+    );
+  }
 
   return (
     <div className="space-y-2.5">
-      <RoomsFilters>
-        <RoomSearch value={q} onChange={handleSearchChange} />
-        <RoomStatusFilter value={status} onChange={handleStatusChange} />
-        <RoomClearFilters
-          hasActiveFilters={hasActiveFilters}
-          onClear={handleClearFilters}
-        />
-        <RoomRefresh
-          isRefreshing={roomsQuery.isFetching}
-          onRefresh={handleRefresh}
-        />
-      </RoomsFilters>
+      <RoomsFilters
+        filters={search.filters}
+        hasActiveFilters={search.hasActiveFilters}
+        setFilters={search.setFilters}
+        clearFilters={search.clearFilters}
+        roomTypes={options.room_types}
+        floors={options.floors}
+        isRefreshing={roomsQuery.isFetching}
+        onRefresh={() => queryClient.invalidateQueries({ queryKey: ['rooms'] })}
+      />
 
       <div
         className={cn(
           'opacity-100 transition-opacity duration-300 ease-in-out',
-          {
-            'opacity-70': roomsQuery.isFetching
-          }
+          { 'opacity-70': roomsQuery.isFetching }
         )}
       >
         <RoomsTable
-          data={roomsQuery.data.index}
-          pageIndex={(page ?? 1) - 1}
-          pageSize={per_page ?? 10}
+          data={rooms}
+          pageIndex={search.pageIndex}
+          pageSize={search.pageSize}
           totalCount={roomsQuery.data.total}
           pageCount={roomsQuery.data.page_count}
-          onPaginationChange={handlePaginationChange}
-          sorting={sorting}
-          onSortingChange={handleSortingChange}
+          sort={search.sort}
+          onSortChange={search.setSort}
+          onPageChange={search.setPage}
+          onEdit={canManage ? search.openForm : undefined}
+          emptyMessage={<Trans>No rooms match the filters</Trans>}
         />
       </div>
+
+      {form}
     </div>
   );
 }
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/rooms/')({
-  validateSearch: (search) => fetchRoomsParamsSchema.parse(search),
-  loaderDeps: ({ search }) => search,
-  loader: ({ context: { queryClient }, deps }) => {
-    return queryClient.ensureQueryData(roomsQueryOptions(deps));
+  // A stale or hand-edited link loses its bad params, not the whole page
+  validateSearch: lenientSearch(roomsSearchSchema),
+  // Keep default values out of the URL
+  search: {
+    middlewares: [
+      stripSearchParams({
+        page: 1,
+        per_page: DEFAULT_PAGE_SIZE,
+        sort_by: 'room_number',
+        sort_order: 'asc'
+      })
+    ]
   },
   component: RoomsPage
 });

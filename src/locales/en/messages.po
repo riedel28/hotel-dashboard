@@ -194,6 +194,10 @@ msgstr "A customer with this email already exists"
 msgid "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 msgstr "A property has one provider of a kind. Connecting {name} removes the {replaces} configuration, including its credentials."
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:124
+msgid "A room with this number already exists"
+msgstr "A room with this number already exists"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:82
 msgid "A second step at sign-in, from an app on your phone."
 msgstr "A second step at sign-in, from an app on your phone."
@@ -239,6 +243,7 @@ msgstr "Active"
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:290
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:309
 msgid "Add"
 msgstr "Add"
 
@@ -302,9 +307,15 @@ msgstr "Add Property"
 msgid "Add Reservation"
 msgstr "Add Reservation"
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:143
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:193
+msgid "Add room"
+msgstr "Add room"
+
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:91
-msgid "Add Room"
-msgstr "Add Room"
+#~ msgid "Add Room"
+#~ msgstr "Add Room"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:69
 #: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:139
@@ -314,6 +325,10 @@ msgstr "Add subcategory"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:52
 msgid "Add the payment recipient to finish the setup."
 msgstr "Add the payment recipient to finish the setup."
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:183
+msgid "Add the rooms of this property one by one."
+msgstr "Add the rooms of this property one by one."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/add-user-modal.tsx:116
 #~ msgid "Add User"
@@ -425,6 +440,10 @@ msgstr "All"
 msgid "All countries"
 msgstr "All countries"
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:77
+msgid "All floors"
+msgstr "All floors"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:86
 #~ msgid "All logs"
 #~ msgstr "All logs"
@@ -439,7 +458,7 @@ msgstr "All stages"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:90
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:24
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:96
 msgid "All statuses"
 msgstr "All statuses"
 
@@ -453,6 +472,7 @@ msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:59
 msgid "All types"
 msgstr "All types"
 
@@ -467,6 +487,10 @@ msgstr "Already have one? Any TOTP app works — just scan the QR code."
 #: src/components/provider-setup/fields.tsx:101
 msgid "Already stored. Enter a new one only to replace it."
 msgstr "Already stored. Enter a new one only to replace it."
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:185
+msgid "An administrator has not added any rooms yet."
+msgstr "An administrator has not added any rooms yet."
 
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:158
 msgid "An error occurred while fetching customers"
@@ -488,7 +512,7 @@ msgstr "An error occurred while fetching properties"
 msgid "An error occurred while fetching reservations"
 msgstr "An error occurred while fetching reservations"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:110
 msgid "An error occurred while fetching rooms"
 msgstr "An error occurred while fetching rooms"
 
@@ -543,7 +567,7 @@ msgstr "Are you sure you want to delete <0>{productTitle}</0>? This action cann
 msgid "Are you sure you want to logout?"
 msgstr "Are you sure you want to logout?"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:88
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:51
 msgid "Are you sure?"
 msgstr "Are you sure?"
@@ -633,8 +657,6 @@ msgstr "Authenticator app"
 #~ msgid "Authy ↗"
 #~ msgstr "Authy ↗"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:199
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:181
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:16
 msgid "Available"
 msgstr "Available"
@@ -747,8 +769,8 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:263
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:226
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:305
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:111
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:82
@@ -975,7 +997,6 @@ msgstr "Clear all"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:204
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
 msgid "Clear filters"
 msgstr "Clear filters"
@@ -1202,7 +1223,6 @@ msgstr "Country"
 msgid "Country is required"
 msgstr "Country is required"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:232
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:88
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:215
 msgid "Create"
@@ -1230,8 +1250,8 @@ msgstr "Create New Property"
 #~ msgstr "Create New Reservation"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:98
-msgid "Create New Room"
-msgstr "Create New Room"
+#~ msgid "Create New Room"
+#~ msgstr "Create New Room"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/add-user-modal.tsx:123
 #~ msgid "Create New User"
@@ -1331,8 +1351,8 @@ msgstr "Date"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:49
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:58
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:86
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:39
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
@@ -1495,6 +1515,10 @@ msgstr "Drop an image here or choose one. It's resized automatically, so any siz
 msgid "E-com"
 msgstr "E-com"
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:250
+msgid "e.g. Standard, Suite"
+msgstr "e.g. Standard, Suite"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:26
 msgid "Each code can be used once."
 msgstr "Each code can be used once."
@@ -1507,7 +1531,7 @@ msgstr "Each code works once"
 #~ msgid "Each code works once."
 #~ msgstr "Each code works once."
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:44
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/row-actions.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:124
 msgid "Edit"
@@ -1550,8 +1574,7 @@ msgstr "Edit reservation"
 msgid "Edit Reservation"
 msgstr "Edit Reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:43
-#: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:143
 msgid "Edit room"
 msgstr "Edit room"
 
@@ -1678,18 +1701,18 @@ msgstr "Enter property name"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:116
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:97
-msgid "Enter room name"
-msgstr "Enter room name"
+#~ msgid "Enter room name"
+#~ msgstr "Enter room name"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:119
-msgid "Enter room number"
-msgstr "Enter room number"
+#~ msgid "Enter room number"
+#~ msgstr "Enter room number"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:160
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:141
-msgid "Enter room type (e.g., Standard, Suite)"
-msgstr "Enter room type (e.g., Standard, Suite)"
+#~ msgid "Enter room type (e.g., Standard, Suite)"
+#~ msgstr "Enter room type (e.g., Standard, Suite)"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:193
 msgid "Enter the 6-digit code"
@@ -1796,6 +1819,10 @@ msgstr "Error"
 #~ msgid "Error changing password"
 #~ msgstr "Error changing password"
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:133
+msgid "Error creating room"
+msgstr "Error creating room"
+
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:44
 msgid "Error deleting property"
 msgstr "Error deleting property"
@@ -1804,7 +1831,7 @@ msgstr "Error deleting property"
 msgid "Error deleting reservation"
 msgstr "Error deleting reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:55
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:63
 msgid "Error deleting room"
 msgstr "Error deleting room"
 
@@ -1827,6 +1854,10 @@ msgstr "Error deleting user"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:58
 #~ msgid "Error updating roles"
 #~ msgstr "Error updating roles"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:133
+msgid "Error updating room"
+msgstr "Error updating room"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:69
 #~ msgid "Error updating two-factor authentication"
@@ -1899,8 +1930,8 @@ msgid "Failed to create reservation"
 msgstr "Failed to create reservation"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:77
-msgid "Failed to create room"
-msgstr "Failed to create room"
+#~ msgid "Failed to create room"
+#~ msgstr "Failed to create room"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/add-user-modal.tsx:92
 #~ msgid "Failed to create user"
@@ -2027,8 +2058,8 @@ msgid "Failed to update reservation. Please try again."
 msgstr "Failed to update reservation. Please try again."
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:67
-msgid "Failed to update room. Please try again."
-msgstr "Failed to update room. Please try again."
+#~ msgid "Failed to update room. Please try again."
+#~ msgstr "Failed to update room. Please try again."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:87
 msgid "Failed to update user"
@@ -2086,6 +2117,12 @@ msgstr "First Name"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:34
 msgid "First name is required"
 msgstr "First name is required"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:188
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:98
+msgid "Floor"
+msgstr "Floor"
 
 #. placeholder {0}: group.floor
 #: src/components/room-picker.tsx:138
@@ -2351,8 +2388,7 @@ msgstr "Hide password"
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:109
-#: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:31
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:30
@@ -2581,6 +2617,10 @@ msgstr "Last updated {date}"
 msgid "Last used {0}"
 msgstr "Last used {0}"
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:228
+msgid "Left empty, the room is named by its number."
+msgstr "Left empty, the room is named by its number."
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:397
 #~ msgid "Letter"
 #~ msgstr "Letter"
@@ -2650,8 +2690,6 @@ msgstr "Login"
 msgid "Main navigation"
 msgstr "Main navigation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:205
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:187
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:20
 msgid "Maintenance"
 msgstr "Maintenance"
@@ -2855,8 +2893,8 @@ msgstr "My profile"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:224
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:134
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:76
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:212
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:96
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:125
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:126
 msgid "Name"
@@ -3049,6 +3087,10 @@ msgstr "No properties yet."
 #~ msgid "No properties yet. Assign this customer on a property's page."
 #~ msgstr "No properties yet. Assign this customer on a property's page."
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:128
+msgid "No property selected"
+msgstr "No property selected"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-test-connection-dialog.tsx:96
 #~ msgid "No response from Adyen."
 #~ msgstr "No response from Adyen."
@@ -3081,6 +3123,18 @@ msgstr "No room"
 #: src/components/room-picker.tsx:127
 msgid "No rooms found"
 msgstr "No rooms found"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:232
+msgid "No rooms match the filters"
+msgstr "No rooms match the filters"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:179
+msgid "No rooms yet"
+msgstr "No rooms yet"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:67
+msgid "No type"
+msgstr "No type"
 
 #: src/components/sectioned-form.tsx:88
 msgid "No unsaved changes"
@@ -3120,6 +3174,11 @@ msgstr "Notes your team adds about this property will be listed here."
 msgid "Nothing found"
 msgstr "Nothing found"
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:93
+msgid "Number"
+msgstr "Number"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:232
 #~ msgid "Number of People"
 #~ msgstr "Number of People"
@@ -3128,8 +3187,6 @@ msgstr "Nothing found"
 msgid "Numbered list"
 msgstr "Numbered list"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:202
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:184
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:18
 msgid "Occupied"
 msgstr "Occupied"
@@ -3186,6 +3243,7 @@ msgid "optional"
 msgstr "optional"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:73
 msgid "Optional"
 msgstr "Optional"
 
@@ -3210,8 +3268,6 @@ msgstr "Other logs for reservation {bookingNr}"
 msgid "Our server"
 msgstr "Our server"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:208
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:190
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:22
 msgid "Out of Order"
 msgstr "Out of Order"
@@ -3758,7 +3814,6 @@ msgstr "Recovery codes copied"
 
 #: src/components/error-state.tsx:78
 #: src/components/ui/data-grid-refresh-button.tsx:32
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-refresh.tsx:23
 msgid "Refresh"
 msgstr "Refresh"
 
@@ -4027,19 +4082,19 @@ msgstr "Room <0>(Optional)</0>"
 msgid "Room assignment"
 msgstr "Room assignment"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:74
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:116
 msgid "Room created successfully"
 msgstr "Room created successfully"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:80
 #: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:22
-msgid "Room Details"
-msgstr "Room Details"
+#~ msgid "Room Details"
+#~ msgstr "Room Details"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:92
-msgid "Room Name"
-msgstr "Room Name"
+#~ msgid "Room Name"
+#~ msgstr "Room Name"
 
 #: src/components/room-picker.tsx:97
 msgid "Room number"
@@ -4049,8 +4104,12 @@ msgstr "Room number"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:96
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:107
-msgid "Room Number"
-msgstr "Room Number"
+#~ msgid "Room Number"
+#~ msgstr "Room Number"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:92
+msgid "Room number is required"
+msgstr "Room number is required"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:29
 msgid "Room selection is required"
@@ -4060,18 +4119,21 @@ msgstr "Room selection is required"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:135
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:119
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:130
-msgid "Room Type"
-msgstr "Room Type"
+#~ msgid "Room Type"
+#~ msgstr "Room Type"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:63
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:93
+msgid "Room type is required"
+msgstr "Room type is required"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:116
 msgid "Room updated successfully"
 msgstr "Room updated successfully"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:80
-#: src/routes/_dashboard-layout/(user-view)/rooms/$roomId.tsx:37
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:30
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:44
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:95
 msgid "Rooms"
 msgstr "Rooms"
 
@@ -4117,7 +4179,6 @@ msgstr "Save"
 msgid "Save changes"
 msgstr "Save changes"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:209
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:296
 msgid "Save Changes"
 msgstr "Save Changes"
@@ -4214,6 +4275,10 @@ msgstr "Search logs"
 msgid "Search name, serial number, room"
 msgstr "Search name, serial number, room"
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:53
+msgid "Search number or name"
+msgstr "Search number or name"
+
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:117
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:118
 msgid "Search products"
@@ -4232,7 +4297,7 @@ msgid "Search reservations"
 msgstr "Search reservations"
 
 #: src/components/room-picker.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-search.tsx:17
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:52
 msgid "Search rooms"
 msgstr "Search rooms"
 
@@ -4267,6 +4332,10 @@ msgstr "Select"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:46
 msgid "Select a category to view products"
 msgstr "Select a category to view products"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:131
+msgid "Select a property at the top of the page to see its rooms."
+msgstr "Select a property at the top of the page to see its rooms."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:91
 msgid "Select a room"
@@ -4321,8 +4390,6 @@ msgid "Select stage"
 msgstr "Select stage"
 
 #: src/components/ui/data-grid-radio-filter.tsx:55
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:191
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:173
 msgid "Select status"
 msgstr "Select status"
 
@@ -4596,11 +4663,9 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:105
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:116
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:89
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/add-room-modal.tsx:175
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/edit-room-form.tsx:157
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-status-filter.tsx:23
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:142
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:153
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:271
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:103
 msgid "Status"
 msgstr "Status"
 
@@ -4855,13 +4920,41 @@ msgstr "The reservation {reservationNr} has been deleted"
 msgid "The reservation number is assigned automatically on save."
 msgstr "The reservation number is assigned automatically on save."
 
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:59
+msgid "The room {label} has an active reservation and cannot be deleted"
+msgstr "The room {label} has an active reservation and cannot be deleted"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:49
+msgid "The room {label} has been deleted"
+msgstr "The room {label} has been deleted"
+
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:52
-msgid "The room {roomName} has been deleted"
-msgstr "The room {roomName} has been deleted"
+#~ msgid "The room {roomName} has been deleted"
+#~ msgstr "The room {roomName} has been deleted"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:93
+msgid "The room <0>{label}</0> has an active reservation. It can be deleted once the guest has checked out or the reservation is moved to another room."
+msgstr "The room <0>{label}</0> has an active reservation. It can be deleted once the guest has checked out or the reservation is moved to another room."
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:101
+msgid "The room <0>{label}</0> will be deleted. This action cannot be undone."
+msgstr "The room <0>{label}</0> will be deleted. This action cannot be undone."
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:67
-msgid "The room <0>{roomName}</0> will be deleted. This action cannot be undone."
-msgstr "The room <0>{roomName}</0> will be deleted. This action cannot be undone."
+#~ msgid "The room <0>{roomName}</0> will be deleted. This action cannot be undone."
+#~ msgstr "The room <0>{roomName}</0> will be deleted. This action cannot be undone."
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:120
+msgid "The room has an active reservation"
+msgstr "The room has an active reservation"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:130
+msgid "The room has an active reservation and cannot be renamed"
+msgstr "The room has an active reservation and cannot be renamed"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:223
+msgid "The room has an active reservation, so its name cannot be changed."
+msgstr "The room has an active reservation, so its name cannot be changed."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:39
 msgid "The user {userName} has been deleted"
@@ -4934,6 +5027,10 @@ msgstr "This password reset link is invalid."
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:196
 msgid "This profile was updated elsewhere"
 msgstr "This profile was updated elsewhere"
+
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:86
+msgid "This room cannot be deleted"
+msgstr "This room cannot be deleted"
 
 #: src/routes/_auth-layout/auth/verify-email.tsx:101
 msgid "This verification link is invalid or has expired. Please request a new one."
@@ -5132,6 +5229,9 @@ msgstr "Two-step verification"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:114
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:108
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:243
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:97
 msgid "Type"
 msgstr "Type"
 
@@ -5196,6 +5296,7 @@ msgstr "Unsaved changes"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:302
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:309
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:141
 msgid "Update"
 msgstr "Update"
