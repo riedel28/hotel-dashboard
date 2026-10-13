@@ -2,7 +2,6 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { roomStatusSchema } from 'shared/types/rooms';
 
 import { ClearFiltersButton } from '@/components/clear-filters-button';
-import { FiltersBar } from '@/components/filters-bar';
 import {
   DataGridCheckboxFilter,
   DataGridCheckboxFilterClear,
@@ -44,70 +43,75 @@ export function RoomsFilters({
   const { t } = useLingui();
 
   return (
-    <FiltersBar>
-      <div className="flex flex-wrap items-center gap-2">
-        <SearchInput
-          value={filters.q ?? ''}
-          onChange={(q) => setFilters({ q: q || undefined })}
-          placeholder={t`Search rooms`}
-          aria-label={t`Search number or name`}
-          wrapperClassName="w-full sm:w-[250px]"
-          debounceMs={300}
-        />
+    // The same row as on the reservations page: stacked on small screens,
+    // one line with the refresh button at the far end on large ones
+    <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:flex lg:items-center">
+      <SearchInput
+        value={filters.q ?? ''}
+        onChange={(q) => setFilters({ q: q || undefined })}
+        placeholder={t`Search rooms`}
+        aria-label={t`Search number or name`}
+        className="text-sm"
+        wrapperClassName="w-full lg:w-[250px]"
+        debounceMs={300}
+      />
+      <DataGridCheckboxFilter
+        label={<Trans>Type</Trans>}
+        placeholder={<Trans>All types</Trans>}
+        className="w-full lg:w-[180px]"
+        value={filters.room_type ?? []}
+        onValueChange={(room_type) =>
+          setFilters({ room_type: room_type.length ? room_type : undefined })
+        }
+        options={[
+          ...roomTypes.map((type) => ({ value: type, label: type })),
+          // '' is how the API spells "rooms without a type"
+          { value: '', label: <Trans>No type</Trans> }
+        ]}
+      >
+        <DataGridCheckboxFilterFooter>
+          <DataGridCheckboxFilterClear />
+        </DataGridCheckboxFilterFooter>
+      </DataGridCheckboxFilter>
+      {floors.length > 0 && (
         <DataGridCheckboxFilter
-          label={<Trans>Type</Trans>}
-          placeholder={<Trans>All types</Trans>}
-          value={filters.room_type ?? []}
-          onValueChange={(room_type) =>
-            setFilters({ room_type: room_type.length ? room_type : undefined })
+          label={<Trans>Floor</Trans>}
+          placeholder={<Trans>All floors</Trans>}
+          className="w-full lg:w-[180px]"
+          value={(filters.floor ?? []).map(String)}
+          onValueChange={(floor) =>
+            setFilters({
+              floor: floor.length ? floor.map(Number) : undefined
+            })
           }
-          options={[
-            ...roomTypes.map((type) => ({ value: type, label: type })),
-            // '' is how the API spells "rooms without a type"
-            { value: '', label: <Trans>No type</Trans> }
-          ]}
+          options={floors.map((floor) => ({
+            value: String(floor),
+            label: String(floor)
+          }))}
         >
           <DataGridCheckboxFilterFooter>
             <DataGridCheckboxFilterClear />
           </DataGridCheckboxFilterFooter>
         </DataGridCheckboxFilter>
-        {floors.length > 0 && (
-          <DataGridCheckboxFilter
-            label={<Trans>Floor</Trans>}
-            placeholder={<Trans>All floors</Trans>}
-            value={(filters.floor ?? []).map(String)}
-            onValueChange={(floor) =>
-              setFilters({
-                floor: floor.length ? floor.map(Number) : undefined
-              })
-            }
-            options={floors.map((floor) => ({
-              value: String(floor),
-              label: String(floor)
-            }))}
-          >
-            <DataGridCheckboxFilterFooter>
-              <DataGridCheckboxFilterClear />
-            </DataGridCheckboxFilterFooter>
-          </DataGridCheckboxFilter>
-        )}
-        <DataGridRadioFilter
-          label={<Trans>Status</Trans>}
-          placeholder={<Trans>All statuses</Trans>}
-          value={filters.status}
-          onValueChange={(status) => setFilters({ status })}
-          options={statusOptions}
-          showFooter
-        />
-        <ClearFiltersButton
-          hasActiveFilters={hasActiveFilters}
-          onClear={clearFilters}
-        />
-      </div>
+      )}
+      <DataGridRadioFilter
+        label={<Trans>Status</Trans>}
+        placeholder={<Trans>All statuses</Trans>}
+        value={filters.status}
+        onValueChange={(status) => setFilters({ status })}
+        options={statusOptions}
+        showFooter
+        className="w-full lg:w-[180px]"
+      />
+      <ClearFiltersButton
+        hasActiveFilters={hasActiveFilters}
+        onClear={clearFilters}
+      />
       <DataGridRefreshButton
         isRefreshing={isRefreshing}
         onRefresh={onRefresh}
+        className="sm:ml-0 sm:w-full lg:ml-auto lg:w-auto"
       />
-    </FiltersBar>
+    </div>
   );
 }

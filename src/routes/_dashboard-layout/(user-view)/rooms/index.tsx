@@ -10,7 +10,7 @@ import {
   ChevronDownIcon,
   DoorOpenIcon,
   DownloadIcon,
-  PlusCircleIcon,
+  PlusIcon,
   UploadIcon
 } from 'lucide-react';
 import { useState } from 'react';
@@ -159,7 +159,7 @@ function RoomsPage() {
               </DropdownMenu>
             </div>
             <Button onClick={() => openForm('new')}>
-              <PlusCircleIcon className="mr-2 h-4 w-4" />
+              <PlusIcon aria-hidden="true" />
               <Trans>Add room</Trans>
             </Button>
           </div>
@@ -266,7 +266,7 @@ function RoomsContent({ canManage, onImport }: RoomsContentProps) {
           {canManage && (
             <EmptyContent>
               <Button onClick={() => search.openForm('new')}>
-                <PlusCircleIcon className="mr-2 h-4 w-4" />
+                <PlusIcon aria-hidden="true" />
                 <Trans>Add room</Trans>
               </Button>
               <Button variant="outline" onClick={onImport}>
