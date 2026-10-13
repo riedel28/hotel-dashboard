@@ -6,12 +6,13 @@ import {
   useQueryClient
 } from '@tanstack/react-query';
 import {
+  ArrowRightIcon,
   DownloadIcon,
   FileSpreadsheetIcon,
   Loader2Icon,
   UploadIcon
 } from 'lucide-react';
-import { type ReactNode, useRef, useState } from 'react';
+import { Fragment, type ReactNode, useRef, useState } from 'react';
 import {
   ROOM_IMPORT_COLUMNS,
   ROOM_IMPORT_EXTENSIONS,
@@ -426,6 +427,22 @@ function UploadStep({
   );
 }
 
+// A filter's name with how many rows it shows
+const counted = (label: ReactNode, count: number) => (
+  <>
+    {label}
+    <span className="text-muted-foreground tabular-nums">{count}</span>
+  </>
+);
+
+function NewTypeBadge() {
+  return (
+    <Badge variant="outline" size="xs" color="yellow">
+      <Trans>New type</Trans>
+    </Badge>
+  );
+}
+
 const statusColors: Record<RoomImportRow['status'], BadgeProps['color']> = {
   new: 'emerald',
   changed: 'sky',
@@ -484,15 +501,33 @@ function PreviewStep({
     NAME_LOCKED: t`The room has an active reservation and cannot be renamed`
   };
 
+  const stats = [
+    {
+      label: t`To create`,
+      count: summary.create,
+      color: 'text-emerald-600 dark:text-emerald-400'
+    },
+    {
+      label: t`To update`,
+      count: summary.update,
+      color: 'text-sky-600 dark:text-sky-400'
+    },
+    { label: t`Unchanged`, count: summary.unchanged, color: '' },
+    { label: t`Errors`, count: summary.errors, color: 'text-danger' },
+    ...(isReplace
+      ? [{ label: t`To delete`, count: summary.delete, color: 'text-danger' }]
+      : [])
+  ];
+
   return (
     <>
       <div
         className={cn(
-          'min-h-0 flex-1 space-y-4 overflow-y-auto transition-opacity',
+          'min-h-0 flex-1 space-y-5 overflow-y-auto transition-opacity',
           isRefreshing && 'opacity-60'
         )}
       >
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <Segmented
             label={t`Import mode`}
             value={mode}
@@ -505,13 +540,13 @@ function PreviewStep({
           <p className="text-sm text-muted-foreground">
             {isReplace ? (
               <Trans>
-                New rooms are added and existing ones updated. Rooms that are
-                not in the file are deleted.
+                Adds and updates rooms, and deletes those that are not in the
+                file.
               </Trans>
             ) : (
               <Trans>
-                New rooms are added and existing ones updated. Rooms that are
-                not in the file stay as they are.
+                Adds and updates rooms. Rooms that are not in the file stay as
+                they are.
               </Trans>
             )}
           </p>
@@ -519,18 +554,26 @@ function PreviewStep({
 
         <dl
           aria-label={t`Summary`}
-          className="flex flex-wrap gap-x-6 gap-y-1 text-sm"
+          className={cn(
+            'grid grid-cols-2 gap-2',
+            isReplace ? 'sm:grid-cols-5' : 'sm:grid-cols-4'
+          )}
         >
-          {[
-            [t`To create`, summary.create],
-            [t`To update`, summary.update],
-            [t`Unchanged`, summary.unchanged],
-            [t`Errors`, summary.errors],
-            ...(isReplace ? [[t`To delete`, summary.delete] as const] : [])
-          ].map(([label, count]) => (
-            <div key={label} className="flex items-baseline gap-1.5">
-              <dt className="text-muted-foreground">{label}</dt>
-              <dd className="font-semibold tabular-nums">{count}</dd>
+          {stats.map(({ label, count, color }) => (
+            // Reversed, so the number reads first while the label stays the term
+            <div
+              key={label}
+              className="flex flex-col-reverse rounded-lg border px-3 py-2"
+            >
+              <dt className="text-xs text-muted-foreground">{label}</dt>
+              <dd
+                className={cn(
+                  'text-xl font-semibold tabular-nums',
+                  count > 0 ? color : 'text-muted-foreground'
+                )}
+              >
+                {count}
+              </dd>
             </div>
           ))}
         </dl>
@@ -554,29 +597,43 @@ function PreviewStep({
           </Alert>
         )}
 
-        <div className="space-y-2">
-          <Segmented
-            label={t`Rows shown`}
-            value={filter}
-            onChange={(next) => {
-              setFilter(next);
-              setPage(0);
-            }}
-            options={[
-              { value: 'changes', label: <Trans>Changes</Trans> },
-              { value: 'errors', label: <Trans>Errors</Trans> },
-              { value: 'all', label: <Trans>All</Trans> }
-            ]}
-          />
+        <section className="space-y-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm font-medium">
+              <Trans>Rows in the file</Trans>
+            </h3>
+            <Segmented
+              label={t`Rows shown`}
+              value={filter}
+              onChange={(next) => {
+                setFilter(next);
+                setPage(0);
+              }}
+              options={[
+                {
+                  value: 'changes',
+                  label: counted(<Trans>Changes</Trans>, changeCount)
+                },
+                {
+                  value: 'errors',
+                  label: counted(<Trans>Errors</Trans>, summary.errors)
+                },
+                {
+                  value: 'all',
+                  label: counted(<Trans>All</Trans>, preview.rows.length)
+                }
+              ]}
+            />
+          </div>
 
-          <div className="rounded-lg border">
+          <div className="overflow-hidden rounded-lg border">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-muted/50">
                 <TableRow>
-                  <TableHead className="w-16">
+                  <TableHead className="w-14">
                     <Trans>Line</Trans>
                   </TableHead>
-                  <TableHead className="w-28">
+                  <TableHead className="w-24">
                     <Trans>Number</Trans>
                   </TableHead>
                   <TableHead className="w-28">
@@ -592,14 +649,14 @@ function PreviewStep({
                   <TableRow>
                     <TableCell
                       colSpan={4}
-                      className="py-6 text-center text-muted-foreground"
+                      className="py-8 text-center text-muted-foreground"
                     >
                       <Trans>No rows to show</Trans>
                     </TableCell>
                   </TableRow>
                 )}
                 {shown.map((row) => (
-                  <TableRow key={row.line}>
+                  <TableRow key={row.line} className="align-top">
                     <TableCell className="text-muted-foreground tabular-nums">
                       {row.line}
                     </TableCell>
@@ -617,30 +674,38 @@ function PreviewStep({
                     </TableCell>
                     <TableCell className="whitespace-normal">
                       {row.status === 'error' && (
-                        <ul className="text-danger">
+                        <ul className="space-y-0.5 text-danger">
                           {row.errors.map((code) => (
                             <li key={code}>{rowErrors[code]}</li>
                           ))}
                         </ul>
                       )}
                       {row.status === 'changed' && (
-                        <ul>
+                        <dl className="grid grid-cols-[3.5rem_1fr] gap-x-3 gap-y-0.5">
                           {row.changes.map(({ field, from, to }) => (
-                            <li key={field}>
-                              <span className="text-muted-foreground">
-                                {fieldLabels[field]}:
-                              </span>{' '}
-                              <span className="line-through opacity-70">
-                                {from ?? '—'}
-                              </span>
-                              {' → '}
-                              <span className="font-medium">{to ?? '—'}</span>
-                            </li>
+                            <Fragment key={field}>
+                              <dt className="text-muted-foreground">
+                                {fieldLabels[field]}
+                              </dt>
+                              <dd className="flex flex-wrap items-center gap-x-1.5">
+                                <span className="text-muted-foreground line-through">
+                                  {from ?? '—'}
+                                </span>
+                                <ArrowRightIcon
+                                  aria-label={t`becomes`}
+                                  className="size-3 shrink-0 text-muted-foreground"
+                                />
+                                <span className="font-medium">{to ?? '—'}</span>
+                                {field === 'room_type' && row.is_new_type && (
+                                  <NewTypeBadge />
+                                )}
+                              </dd>
+                            </Fragment>
                           ))}
-                        </ul>
+                        </dl>
                       )}
                       {(row.status === 'new' || row.status === 'unchanged') && (
-                        <span className="text-muted-foreground">
+                        <span className="flex flex-wrap items-center gap-x-1.5 text-muted-foreground">
                           {[
                             row.name,
                             row.room_type,
@@ -648,17 +713,8 @@ function PreviewStep({
                           ]
                             .filter(Boolean)
                             .join(' · ')}
+                          {row.is_new_type && <NewTypeBadge />}
                         </span>
-                      )}
-                      {row.is_new_type && row.status !== 'error' && (
-                        <Badge
-                          variant="outline"
-                          size="xs"
-                          color="yellow"
-                          className="ml-2"
-                        >
-                          <Trans>New type</Trans>
-                        </Badge>
                       )}
                     </TableCell>
                   </TableRow>
@@ -667,65 +723,77 @@ function PreviewStep({
             </Table>
           </div>
 
-          <div className="flex items-center justify-between gap-2 text-sm text-muted-foreground">
-            <p>
-              <Trans>Rows with errors are skipped.</Trans>
-            </p>
-            {pageCount > 1 && (
-              <div className="flex items-center gap-2">
-                <span className="tabular-nums">
-                  <Trans>
-                    Page {page + 1} of {pageCount}
-                  </Trans>
-                </span>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  disabled={page === 0}
-                  onClick={() => setPage(page - 1)}
-                >
-                  <Trans>Previous</Trans>
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  disabled={page >= pageCount - 1}
-                  onClick={() => setPage(page + 1)}
-                >
-                  <Trans>Next</Trans>
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
+          {(summary.errors > 0 || pageCount > 1) && (
+            <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+              <p>
+                {summary.errors > 0 && (
+                  <Trans>Rows with errors are skipped.</Trans>
+                )}
+              </p>
+              {pageCount > 1 && (
+                <div className="flex items-center gap-2">
+                  <span className="tabular-nums">
+                    <Trans>
+                      Page {page + 1} of {pageCount}
+                    </Trans>
+                  </span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    disabled={page === 0}
+                    onClick={() => setPage(page - 1)}
+                  >
+                    <Trans>Previous</Trans>
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    disabled={page >= pageCount - 1}
+                    onClick={() => setPage(page + 1)}
+                  >
+                    <Trans>Next</Trans>
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
 
         {isReplace && deletions.length > 0 && (
           <section
             aria-label={t`Rooms to delete`}
-            className="space-y-2 rounded-lg border border-danger/40 p-3"
+            className="overflow-hidden rounded-lg border border-danger/40"
           >
-            <h3 className="text-sm font-semibold">
-              <Trans>Rooms that are not in the file</Trans>
-            </h3>
-            <ul className="max-h-40 space-y-1 overflow-y-auto text-sm">
-              {deletions.map((room) => (
-                <li key={room.id} className="flex items-center gap-2">
-                  <span className="font-medium">{room.room_number}</span>
-                  {room.name !== room.room_number && (
-                    <span className="text-muted-foreground">{room.name}</span>
-                  )}
-                  {room.has_active_reservation && (
-                    <Badge variant="outline" size="xs" color="yellow">
-                      <Trans>Active reservation — will be skipped</Trans>
-                    </Badge>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-2 p-3">
+              <h3 className="flex items-center gap-2 text-sm font-medium">
+                <Trans>Rooms that are not in the file</Trans>
+                <span className="font-normal text-muted-foreground tabular-nums">
+                  {deletions.length}
+                </span>
+              </h3>
+              <ul className="flex max-h-32 flex-wrap gap-1.5 overflow-y-auto text-xs">
+                {deletions.map((room) => (
+                  <li
+                    key={room.id}
+                    className="flex items-center gap-1.5 rounded-md border bg-muted/50 px-2 py-1"
+                  >
+                    <span className="font-medium">{room.room_number}</span>
+                    {room.name !== room.room_number && (
+                      <span className="text-muted-foreground">{room.name}</span>
+                    )}
+                    {room.has_active_reservation && (
+                      <Badge variant="outline" size="xs" color="yellow">
+                        <Trans>Active reservation — will be skipped</Trans>
+                      </Badge>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
             {summary.delete > 0 && (
-              <label className="flex items-center gap-2 text-sm font-medium">
+              <label className="flex items-center gap-2 border-t border-danger/40 bg-danger/5 px-3 py-2.5 text-sm font-medium">
                 <Checkbox
                   checked={isConfirmed}
                   onCheckedChange={(checked) =>

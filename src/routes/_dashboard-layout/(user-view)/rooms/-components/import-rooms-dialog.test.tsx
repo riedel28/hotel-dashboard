@@ -170,7 +170,7 @@ describe('ImportRoomsDialog', () => {
     const { user } = await renderPreview();
     await screen.findByLabelText('Summary');
 
-    await user.click(screen.getByRole('button', { name: 'Errors' }));
+    await user.click(screen.getByRole('button', { name: /^Errors/ }));
 
     expect(screen.getByText('No room number')).toBeVisible();
     expect(
