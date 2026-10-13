@@ -25,7 +25,7 @@ export function RowActions({ room, onEdit }: RowActionsProps) {
     <>
       <DropdownMenu>
         <DataGridRowActions />
-        <DropdownMenuContent align="end" className="w-[180px]">
+        <DropdownMenuContent align="end" className="w-auto min-w-40">
           <DropdownMenuItem onClick={() => onEdit(room.id)}>
             <PenSquareIcon className="mr-2 h-4 w-4" />
             <Trans>Edit</Trans>
