@@ -667,7 +667,7 @@ msgstr "Authenticator-App"
 #~ msgid "Authy ↗"
 #~ msgstr "Authy ↗"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:16
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:17
 msgid "Available"
 msgstr "Verfügbar"
 
@@ -2721,7 +2721,7 @@ msgstr "Anmelden"
 msgid "Main navigation"
 msgstr "Hauptnavigation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:20
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:21
 msgid "Maintenance"
 msgstr "Wartung"
 
@@ -3243,7 +3243,7 @@ msgstr "Nummer"
 msgid "Numbered list"
 msgstr "Nummerierte Liste"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:18
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:19
 msgid "Occupied"
 msgstr "Belegt"
 
@@ -3298,11 +3298,11 @@ msgstr "Öffnen Sie Ihre Authenticator-App und scannen Sie den Code unten."
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:73
 msgid "optional"
 msgstr "optional"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:118
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:73
 msgid "Optional"
 msgstr "Optional"
 
@@ -3327,7 +3327,7 @@ msgstr ""
 msgid "Our server"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:22
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:23
 msgid "Out of Order"
 msgstr "Außer Betrieb"
 

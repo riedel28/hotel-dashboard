@@ -679,7 +679,7 @@ msgstr "Authenticator app"
 #~ msgid "Authy ↗"
 #~ msgstr "Authy ↗"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:16
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:17
 msgid "Available"
 msgstr "Available"
 
@@ -2788,7 +2788,7 @@ msgstr "Login"
 msgid "Main navigation"
 msgstr "Main navigation"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:20
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:21
 msgid "Maintenance"
 msgstr "Maintenance"
 
@@ -3320,7 +3320,7 @@ msgstr "Number"
 msgid "Numbered list"
 msgstr "Numbered list"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:18
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:19
 msgid "Occupied"
 msgstr "Occupied"
 
@@ -3376,11 +3376,11 @@ msgstr "Open your authenticator app and scan the code below."
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:73
 msgid "optional"
 msgstr "optional"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:118
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:73
 msgid "Optional"
 msgstr "Optional"
 
@@ -3405,7 +3405,7 @@ msgstr "Other logs for reservation {bookingNr}"
 msgid "Our server"
 msgstr "Our server"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:22
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/-components/cells/room-status-cell.tsx:23
 msgid "Out of Order"
 msgstr "Out of Order"
 

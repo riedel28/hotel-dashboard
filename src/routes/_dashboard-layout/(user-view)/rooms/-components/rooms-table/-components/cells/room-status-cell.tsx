@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import type { RoomStatus } from 'shared/types/rooms';
 
 import { Badge, type BadgeProps } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 const statusVariantMap: Record<RoomStatus, BadgeProps['color']> = {
   available: 'emerald',
@@ -38,5 +39,26 @@ export function RoomStatusCell({ status }: RoomStatusCellProps) {
     >
       {getStatusMessage(status)}
     </Badge>
+  );
+}
+
+// The badge's colors, as a dot
+const dotColors: Record<RoomStatus, string> = {
+  available: 'bg-emerald-500',
+  occupied: 'bg-yellow-500',
+  maintenance: 'bg-sky-500',
+  out_of_order: 'bg-red-500'
+};
+
+/** A colored dot with the status spelled out, for selects. */
+export function RoomStatusLabel({ status }: RoomStatusCellProps) {
+  return (
+    <span className="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className={cn('size-1.5 shrink-0 rounded-full', dotColors[status])}
+      />
+      {getStatusMessage(status)}
+    </span>
   );
 }

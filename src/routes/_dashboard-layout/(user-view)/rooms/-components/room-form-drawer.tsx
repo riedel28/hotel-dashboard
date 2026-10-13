@@ -37,7 +37,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-import { RoomStatusCell } from './rooms-table/-components/cells/room-status-cell';
+import { RoomStatusLabel } from './rooms-table/-components/cells/room-status-cell';
 
 // Messages are translated, so the schema is built per render locale
 const formSchema = (messages: { number: string; type: string }) =>
@@ -70,7 +70,7 @@ interface RoomFormDrawerProps {
 
 const optional = (
   <span className="-ml-1 font-normal text-muted-foreground">
-    (<Trans>Optional</Trans>)
+    (<Trans>optional</Trans>)
   </span>
 );
 
@@ -282,14 +282,14 @@ export function RoomFormDrawer({
                         <SelectTrigger id="room-status">
                           <SelectValue>
                             {(value: FormValues['status']) => (
-                              <RoomStatusCell status={value} />
+                              <RoomStatusLabel status={value} />
                             )}
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           {roomStatusSchema.options.map((status) => (
                             <SelectItem key={status} value={status}>
-                              <RoomStatusCell status={status} />
+                              <RoomStatusLabel status={status} />
                             </SelectItem>
                           ))}
                         </SelectContent>
