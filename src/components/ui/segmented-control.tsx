@@ -81,9 +81,10 @@ function SegmentedControl<TValue extends string>({
                   // theme the badge outline is dropped
                   cn(badgeColors[color], 'dark:border-transparent')
                 : isSelected
-                  ? // On the dark theme muted is too close to the track to read as
-                    // the chosen one
-                    'border-foreground/2 bg-muted text-foreground dark:border-transparent dark:bg-foreground/15'
+                  ? // On the dark theme muted is too close to the track to read
+                    // as chosen; the input token at the outline button's
+                    // hover strength stands out without glaring
+                    'border-foreground/2 bg-muted text-foreground dark:border-transparent dark:bg-input/50'
                   : 'text-foreground/60 hover:text-foreground'
             )}
           >
