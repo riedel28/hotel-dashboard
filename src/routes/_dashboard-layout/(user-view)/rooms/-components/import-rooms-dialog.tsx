@@ -5,7 +5,12 @@ import {
   useQuery,
   useQueryClient
 } from '@tanstack/react-query';
-import { FileSpreadsheetIcon, Loader2Icon, UploadIcon } from 'lucide-react';
+import {
+  DownloadIcon,
+  FileSpreadsheetIcon,
+  Loader2Icon,
+  UploadIcon
+} from 'lucide-react';
 import { type ReactNode, useRef, useState } from 'react';
 import {
   ROOM_IMPORT_COLUMNS,
@@ -45,6 +50,10 @@ export const ROOM_TEMPLATES = {
   csv: '/templates/rooms-template.csv',
   xlsx: '/templates/rooms-template.xlsx'
 };
+
+// The colors of <Link>, for links that download instead of navigating
+const templateLinkClassName =
+  'inline-flex items-center gap-1 rounded-sm text-cyan-800 underline-offset-4 outline-none hover:underline focus-visible:shadow-[0_0_0_2px_var(--color-primary)] dark:text-cyan-200/85';
 
 const PAGE_SIZE = 50;
 
@@ -266,6 +275,33 @@ function UploadStep({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  const columns = [
+    {
+      name: 'number',
+      required: true,
+      description: t`Room number, e.g. 12A. Rooms are matched by it.`
+    },
+    {
+      name: 'type',
+      required: true,
+      description: t`Room type, e.g. Standard or Suite.`
+    },
+    {
+      name: 'name',
+      required: false,
+      description: t`An empty cell names the room by its number.`
+    },
+    {
+      name: 'floor',
+      required: false,
+      description: t`A whole number; an empty cell clears the floor.`
+    }
+  ] satisfies {
+    name: (typeof ROOM_IMPORT_COLUMNS)[number];
+    required: boolean;
+    description: string;
+  }[];
+
   return (
     <>
       <div
@@ -280,8 +316,8 @@ function UploadStep({
           onPick(event.dataTransfer.files[0]);
         }}
         className={cn(
-          'flex flex-col items-center gap-3 rounded-lg border border-dashed border-input px-6 py-10 text-center transition-colors',
-          isDragging && 'border-primary bg-primary/5'
+          'flex flex-col items-center gap-3 rounded-lg border border-dashed border-input bg-muted px-6 py-10 text-center transition-colors',
+          isDragging && 'border-primary bg-primary/10'
         )}
       >
         {isChecking ? (
@@ -325,42 +361,59 @@ function UploadStep({
         </Alert>
       )}
 
-      <div className="space-y-1 text-sm text-muted-foreground">
-        <p>
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium">
+          <Trans>Columns</Trans>
+        </h3>
+        <dl className="divide-y rounded-lg border text-sm">
+          {columns.map(({ name, required, description }) => (
+            <div
+              key={name}
+              className="grid grid-cols-[4.5rem_1fr] items-baseline gap-x-3 gap-y-0.5 px-3 py-2 sm:grid-cols-[4.5rem_5rem_1fr]"
+            >
+              <dt>
+                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+                  {name}
+                </code>
+              </dt>
+              <dd
+                className={cn(
+                  'text-xs',
+                  required ? 'font-medium' : 'text-muted-foreground'
+                )}
+              >
+                {required ? <Trans>required</Trans> : <Trans>optional</Trans>}
+              </dd>
+              <dd className="col-span-2 text-muted-foreground sm:col-span-1">
+                {description}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p className="text-xs text-muted-foreground">
           <Trans>
-            Expected columns, in any order. Rooms are matched by their number.
+            Columns can be in any order. A column that is missing from the file
+            leaves its values unchanged.
           </Trans>
         </p>
-        <p className="font-mono text-xs text-foreground">
-          {ROOM_IMPORT_COLUMNS.join(', ')}
-        </p>
-        <p>
-          <Trans>
-            <span className="font-mono text-xs">number</span> and{' '}
-            <span className="font-mono text-xs">type</span> are required. An
-            empty <span className="font-mono text-xs">name</span> or{' '}
-            <span className="font-mono text-xs">floor</span> cell clears the
-            value; a missing column leaves it as it is.
-          </Trans>
-        </p>
-        <p>
-          <Trans>Download a template:</Trans>{' '}
-          <a
-            className="text-primary underline-offset-4 hover:underline"
-            href={ROOM_TEMPLATES.csv}
-            download
-          >
-            CSV
-          </a>
-          {' · '}
-          <a
-            className="text-primary underline-offset-4 hover:underline"
-            href={ROOM_TEMPLATES.xlsx}
-            download
-          >
-            XLSX
-          </a>
-        </p>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+        <span className="text-muted-foreground">
+          <Trans>Need a starting point?</Trans>
+        </span>
+        <a className={templateLinkClassName} href={ROOM_TEMPLATES.csv} download>
+          <DownloadIcon className="size-3.5" />
+          <Trans>CSV template</Trans>
+        </a>
+        <a
+          className={templateLinkClassName}
+          href={ROOM_TEMPLATES.xlsx}
+          download
+        >
+          <DownloadIcon className="size-3.5" />
+          <Trans>XLSX template</Trans>
+        </a>
       </div>
 
       <DialogFooter>
