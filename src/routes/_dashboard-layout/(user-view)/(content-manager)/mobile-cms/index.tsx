@@ -274,8 +274,8 @@ function MobileCmsPage() {
   let content: React.ReactNode;
   if (nodesQuery.isPending) {
     content = (
-      <div className="grid gap-4 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <div className="space-y-2 max-lg:hidden">
+      <div className="grid gap-4 @3xl:grid-cols-[17rem_minmax(0,1fr)]">
+        <div className="space-y-2 @max-3xl:hidden">
           {Array.from({ length: 6 }, (_, i) => (
             <Skeleton key={i} className="h-8" />
           ))}
@@ -334,8 +334,10 @@ function MobileCmsPage() {
     );
   } else {
     content = (
-      <div className="grid items-start gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] xl:grid-cols-[18rem_minmax(0,1fr)_22rem]">
-        <aside className="sticky top-4 max-lg:hidden">{treePanel}</aside>
+      // Columns follow the room <main> has (sidebar open or not), not the
+      // window: three only where the editor keeps ~40rem between them.
+      <div className="grid items-start gap-6 @3xl:grid-cols-[17rem_minmax(0,1fr)] @7xl:grid-cols-[17rem_minmax(0,1fr)_21rem]">
+        <aside className="sticky top-4 @max-3xl:hidden">{treePanel}</aside>
 
         <section
           className="min-w-0 rounded-xl border bg-card px-4 pt-4"
@@ -372,7 +374,7 @@ function MobileCmsPage() {
                   </Trans>
                 </EmptyDescription>
               </EmptyHeader>
-              <EmptyContent className="lg:hidden">
+              <EmptyContent className="@3xl:hidden">
                 <Button variant="outline" onClick={() => setTreeOpen(true)}>
                   <ListTreeIcon />
                   <Trans>Show content tree</Trans>
@@ -382,7 +384,7 @@ function MobileCmsPage() {
           )}
         </section>
 
-        <aside className="sticky top-4 max-xl:hidden" aria-label={t`Preview`}>
+        <aside className="sticky top-4 @max-7xl:hidden" aria-label={t`Preview`}>
           {preview}
         </aside>
       </div>
@@ -390,7 +392,7 @@ function MobileCmsPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="@container space-y-1">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -407,7 +409,7 @@ function MobileCmsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-xl font-bold">
             <Trans>Mobile CMS</Trans>
@@ -423,7 +425,7 @@ function MobileCmsPage() {
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="lg:hidden"
+              className="@3xl:hidden"
               onClick={() => setTreeOpen(true)}
             >
               <ListTreeIcon />
@@ -431,7 +433,7 @@ function MobileCmsPage() {
             </Button>
             <Button
               variant="outline"
-              className="xl:hidden"
+              className="@7xl:hidden"
               onClick={() => setPreviewOpen(true)}
             >
               <SmartphoneIcon />
