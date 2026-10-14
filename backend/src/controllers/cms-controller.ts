@@ -7,6 +7,7 @@ import type { z } from 'zod';
 import { sanitizeCmsHtml } from '../../../shared/cms-html';
 import {
   cmsChildren,
+  cmsDescendantIds,
   cmsMoveError,
   cmsReorder
 } from '../../../shared/cms-tree';
@@ -399,51 +400,68 @@ const duplicateCmsNode = handle(
           )
         );
 
-      const copy = async (
-        node: CmsNode,
-        parentId: number | null,
-        isRoot: boolean
-      ): Promise<number> => {
-        const [created] = await tx
-          .insert(cmsNodes)
-          .values({
-            property_id: propertyId,
-            parent_id: parentId,
-            position: isRoot ? node.position + 1 : node.position,
-            type: node.type,
-            hidden: isRoot ? true : node.hidden,
-            url: node.url,
-            open_mode: node.open_mode
-          })
-          .returning({ id: cmsNodes.id });
-        const newId = created!.id;
+      // The branch, the original first. Its ids are drawn up front, so the
+      // copy goes in with one insert per table however big it is (a node at
+      // a time cost a few round trips each).
+      const branch = [
+        original,
+        ...cmsDescendantIds(nodes, id).map((descendant) =>
+          nodes.find((node) => node.id === descendant)!
+        )
+      ];
+      const { rows } = await tx.execute<{ id: string }>(sql`
+        SELECT nextval(pg_get_serial_sequence('cms_nodes', 'id')) AS id
+        FROM generate_series(1, ${branch.length})
+      `);
+      const copyOf = new Map(
+        branch.map((node, index) => [node.id, Number(rows[index]!.id)])
+      );
+      const newId = (node: CmsNode) => copyOf.get(node.id)!;
 
-        const translations = cmsLocales.flatMap((locale) => {
+      await tx
+        .insert(cmsNodes)
+        .overridingSystemValue()
+        .values(
+          branch.map((node) => {
+            const isRoot = node === original;
+            return {
+              id: newId(node),
+              property_id: propertyId,
+              parent_id: isRoot ? node.parent_id : copyOf.get(node.parent_id!)!,
+              position: isRoot ? node.position + 1 : node.position,
+              type: node.type,
+              hidden: isRoot ? true : node.hidden,
+              url: node.url,
+              open_mode: node.open_mode
+            };
+          })
+        );
+
+      const translations = branch.flatMap((node) =>
+        cmsLocales.flatMap((locale) => {
           const t = node.translations[locale];
           if (!t) return [];
           const title =
-            isRoot && t.title ? `${t.title}${copySuffix[locale]}` : t.title;
-          return [{ ...t, title, node_id: newId, locale }];
-        });
-        if (translations.length > 0) {
-          await tx.insert(cmsNodeTranslations).values(translations);
-        }
-        if (node.image_ids.length > 0) {
-          await tx.insert(cmsNodeImages).values(
-            node.image_ids.map((image_id, position) => ({
-              node_id: newId,
-              image_id,
-              position
-            }))
-          );
-        }
-        for (const child of nodes.filter((n) => n.parent_id === node.id)) {
-          await copy(child, newId, false);
-        }
-        return newId;
-      };
-
-      return copy(original, original.parent_id, true);
+            node === original && t.title
+              ? `${t.title}${copySuffix[locale]}`
+              : t.title;
+          return [{ ...t, title, node_id: newId(node), locale }];
+        })
+      );
+      if (translations.length > 0) {
+        await tx.insert(cmsNodeTranslations).values(translations);
+      }
+      const images = branch.flatMap((node) =>
+        node.image_ids.map((image_id, position) => ({
+          node_id: newId(node),
+          image_id,
+          position
+        }))
+      );
+      if (images.length > 0) {
+        await tx.insert(cmsNodeImages).values(images);
+      }
+      return newId(original);
     });
 
     await sendNode(res, 201, propertyId, copyId);

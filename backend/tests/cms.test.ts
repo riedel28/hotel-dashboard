@@ -311,7 +311,16 @@ describe('Mobile CMS API', () => {
 
   it('duplicates a branch right after the original, hidden', async () => {
     const first = await create('Restaurant');
-    await create('Speisekarte', first.id);
+    const menu = await create('Speisekarte', first.id);
+    await create('Allergene', menu.id);
+    // A child that is shown (create starts hidden) and has an image.
+    const image = await uploadImage();
+    await save(menu, { image_ids: [image] }).expect(200);
+    await request(app)
+      .patch(`/api/cms/nodes/${menu.id}/visibility`)
+      .set('Authorization', auth)
+      .send({ hidden: false })
+      .expect(200);
     const last = await create('Bar');
 
     const res = await request(app)
@@ -325,9 +334,18 @@ describe('Mobile CMS API', () => {
     const nodes = await list();
     expect(nodes.find((n) => n.id === last.id)?.position).toBe(2);
     const copiedChildren = nodes.filter((n) => n.parent_id === copy.id);
-    expect(copiedChildren.map((n) => n.translations.de?.title)).toEqual([
-      'Speisekarte'
+    expect(copiedChildren).toMatchObject([
+      { translations: { de: { title: 'Speisekarte' } }, hidden: false }
     ]);
+    expect(copiedChildren[0]?.image_ids).toEqual([image]);
+    const grandchildren = nodes.filter(
+      (n) => n.parent_id === copiedChildren[0]?.id
+    );
+    expect(grandchildren.map((n) => n.translations.de?.title)).toEqual([
+      'Allergene'
+    ]);
+    // The copy's ids came from the sequence: later nodes don't collide.
+    await create('Spa');
   });
 
   it('deletes a node with its whole branch', async () => {
