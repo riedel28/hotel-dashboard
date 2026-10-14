@@ -1,45 +1,12 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plural, Trans, useLingui } from '@lingui/react/macro';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useBlocker } from '@tanstack/react-router';
-import {
-  ArrowUpIcon,
-  ArrowUpRightIcon,
-  CopyIcon,
-  EyeOffIcon,
-  FileTextIcon,
-  GripVerticalIcon,
-  InfoIcon,
-  Loader2Icon,
-  PlusIcon
-} from 'lucide-react';
+import { Trans, useLingui } from '@lingui/react/macro';
+import { ArrowUpIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import * as React from 'react';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { cmsChildren, cmsLineage, cmsVisibility } from 'shared/cms-tree';
-import {
-  type CmsLocale,
-  cmsLocales,
-  type CmsNodeType,
-  cmsPrimaryLocale,
-  cmsSubtitleMaxLength,
-  cmsUrlSchema
-} from 'shared/types/cms';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import type { CmsNodeType } from 'shared/types/cms';
 
-import { ApiError } from '@/api/client';
-import { type CmsNode, cmsNodesQueryOptions, saveCmsNode } from '@/api/cms';
+import type { CmsNode } from '@/api/cms';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -55,12 +22,6 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import {
   Field,
   FieldDescription,
   FieldError,
@@ -70,23 +31,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioCards } from '@/components/ui/radio-cards';
-import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
 
-import {
-  type CmsForm,
-  formToPayload,
-  hasText,
-  isMissingTranslation,
-  nodeToForm,
-  typeChange,
-  type TypeChange
-} from '../-lib/cms-content';
-import { moveItem, useDragReorder } from '../-lib/use-drag-reorder';
+import { type CmsForm, typeChange, type TypeChange } from '../-lib/cms-content';
 import { useNodeTitle } from '../-lib/use-node-title';
 import { ImageField } from './image-field';
+import { NestedItems } from './nested-items';
+import { TypeChangeDialog, UnsavedChangesDialog } from './node-editor-dialogs';
+import { TranslationTabs } from './translation-tabs';
+import { useNodeForm } from './use-node-form';
 
 interface NodeEditorProps {
   node: CmsNode;
@@ -97,69 +50,6 @@ interface NodeEditorProps {
   onToggleHidden: (node: CmsNode) => void;
   onAddChild: (node: CmsNode, type: CmsNodeType) => void;
   onReorder: (node: CmsNode, index: number) => void;
-}
-
-// Buttons inside the blue "no translation" note, in the note's own colours
-// (Alert info: sky-50 / sky-800, dark sky-800/20 / sky-300) instead of the
-// neutral ones that stood out on it.
-const noteButtonClassName =
-  'border-sky-800/20 bg-transparent text-sky-800 hover:bg-sky-100 hover:text-sky-900 dark:border-sky-300/20 dark:bg-transparent dark:text-sky-300 dark:hover:bg-sky-800/40 dark:hover:text-sky-200';
-const noteGhostButtonClassName =
-  'text-sky-800 hover:bg-sky-100 hover:text-sky-900 dark:text-sky-300 dark:hover:bg-sky-800/40 dark:hover:text-sky-200';
-
-const localeNames: Record<CmsLocale, string> = { de: 'Deutsch', en: 'English' };
-
-function useFormSchema() {
-  const { t } = useLingui();
-  return React.useMemo(() => {
-    const translation = (locale: CmsLocale) =>
-      z.object({
-        title:
-          locale === cmsPrimaryLocale
-            ? z
-                .string()
-                .trim()
-                .min(1, t`Title is required`)
-            : z.string(),
-        subtitle: z
-          .string()
-          .max(
-            cmsSubtitleMaxLength,
-            t`At most ${cmsSubtitleMaxLength} characters`
-          ),
-        body: z.string(),
-        url: z
-          .string()
-          .refine(
-            (value) => !value.trim() || cmsUrlSchema.safeParse(value).success,
-            t`Enter a URL starting with http:// or https://`
-          )
-      });
-    return z
-      .object({
-        type: z.enum(['page', 'link']),
-        url: z.string(),
-        open_mode: z.enum(['in_app', 'system']),
-        gallery: z.array(z.string()),
-        icon: z.string().nullable(),
-        translations: z.object({
-          de: translation('de'),
-          en: translation('en')
-        })
-      })
-      .superRefine((values, ctx) => {
-        if (
-          values.type === 'link' &&
-          !cmsUrlSchema.safeParse(values.url).success
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            path: ['url'],
-            message: t`Enter a URL starting with http:// or https://`
-          });
-        }
-      });
-  }, [t]);
 }
 
 // The selected node's form, saved explicitly. Mounted per node (keyed by id),
@@ -174,106 +64,13 @@ export function NodeEditor({
   onReorder
 }: NodeEditorProps) {
   const { t } = useLingui();
-  const queryClient = useQueryClient();
-  const schema = useFormSchema();
   const titleOf = useNodeTitle();
-  const form = useForm<CmsForm>({
-    resolver: zodResolver(schema),
-    defaultValues: nodeToForm(node),
-    mode: 'onTouched'
-  });
-  const { isDirty } = form.formState;
-  const values = useWatch({ control: form.control }) as CmsForm;
-
-  // The version the form was loaded from; a save from it that finds a newer
-  // one on the server is answered with 409.
-  const version = React.useRef(node.updated_at);
-  React.useEffect(() => {
-    // Someone saved the node meanwhile (or our own save came back): follow
-    // it unless there are local edits — those keep the old version and get
-    // the conflict on save.
-    if (node.updated_at !== version.current && !form.formState.isDirty) {
-      form.reset(nodeToForm(node));
-      version.current = node.updated_at;
-    }
-  }, [node, form]);
+  const { form, values, isDirty, save, submit, blocker } = useNodeForm(node);
 
   React.useEffect(() => {
     onDraftChange(values);
   }, [values, onDraftChange]);
   React.useEffect(() => () => onDraftChange(null), [onDraftChange]);
-
-  const reloadFromServer = async () => {
-    const fresh = await queryClient.fetchQuery({
-      ...cmsNodesQueryOptions,
-      staleTime: 0
-    });
-    const latest = fresh.find((n) => n.id === node.id);
-    if (latest) {
-      version.current = latest.updated_at;
-      form.reset(nodeToForm(latest));
-    }
-  };
-
-  const save = useMutation({
-    mutationFn: (formValues: CmsForm) =>
-      saveCmsNode(node.id, formToPayload(formValues, version.current)),
-    onSuccess: (saved) => {
-      version.current = saved.updated_at;
-      form.reset(nodeToForm(saved));
-      queryClient.setQueryData<CmsNode[]>(
-        cmsNodesQueryOptions.queryKey,
-        (list) => list?.map((n) => (n.id === saved.id ? saved : n))
-      );
-      void queryClient.invalidateQueries({
-        queryKey: cmsNodesQueryOptions.queryKey
-      });
-      const title = titleOf(saved);
-      toast.success(t`“${title}” saved`);
-    },
-    // The form keeps what was typed in every case.
-    onError: (error) => {
-      if (error instanceof ApiError && error.code === 'STALE') {
-        toast.error(t`Someone else changed this item meanwhile`, {
-          description: t`Reload to see their version. Your edits are kept until then.`,
-          action: { label: t`Reload`, onClick: () => void reloadFromServer() },
-          duration: Infinity
-        });
-      } else {
-        toast.error(t`Failed to save`, { description: error.message });
-      }
-    }
-  });
-
-  // Saves when valid; whether it worked, for the unsaved-changes dialog.
-  const submit = () =>
-    new Promise<boolean>((resolve) => {
-      void form.handleSubmit(
-        (formValues) =>
-          save.mutate(formValues, {
-            onSuccess: () => resolve(true),
-            onError: () => resolve(false)
-          }),
-        () => {
-          toast.error(t`Check the highlighted fields`);
-          resolve(false);
-        }
-      )();
-    });
-
-  const blocker = useBlocker({
-    shouldBlockFn: ({ current, next }) =>
-      form.formState.isDirty &&
-      !(
-        next.pathname === current.pathname &&
-        (next.search as { node?: number }).node ===
-          (current.search as { node?: number }).node
-      ),
-    enableBeforeUnload: () => form.formState.isDirty,
-    withResolver: true
-  });
-
-  // --- Type change ---
 
   const children = cmsChildren(nodes, node.id);
   const [pendingType, setPendingType] = React.useState<TypeChange | null>(null);
@@ -285,13 +82,6 @@ export function NodeEditor({
       setPendingType(change);
     }
   };
-
-  // --- Languages ---
-
-  const [locale, setLocale] = React.useState<CmsLocale>(cmsPrimaryLocale);
-  // Secondary locales whose fields are shown although still empty.
-  const [started, setStarted] = React.useState<Set<CmsLocale>>(new Set());
-  const errors = form.formState.errors.translations;
 
   const visibility = cmsVisibility(nodes, node.id);
   const hiddenBy =
@@ -474,103 +264,7 @@ export function NodeEditor({
             />
           )}
 
-          <Tabs
-            value={locale}
-            onValueChange={(value) => setLocale(value as CmsLocale)}
-          >
-            {/* Pills, like the tabs on a property's admin page. */}
-            <TabsList variant="pills">
-              {cmsLocales.map((code) => {
-                const missing = isMissingTranslation(values.translations, code);
-                const invalid = !!errors?.[code];
-                return (
-                  <TabsTrigger key={code} value={code} className="gap-2">
-                    {localeNames[code]}
-                    {code === cmsPrimaryLocale && (
-                      <span className="-ml-1 font-normal text-muted-foreground">
-                        (<Trans>main</Trans>)
-                      </span>
-                    )}
-                    {(missing || invalid) && (
-                      <span
-                        className={cn(
-                          'size-1.25 rounded-full',
-                          invalid ? 'bg-danger' : 'bg-amber-500'
-                        )}
-                        aria-label={
-                          invalid ? t`Has errors` : t`Translation missing`
-                        }
-                        title={invalid ? t`Has errors` : t`Translation missing`}
-                      />
-                    )}
-                  </TabsTrigger>
-                );
-              })}
-            </TabsList>
-            {cmsLocales.map((code) => {
-              const isPrimary = code === cmsPrimaryLocale;
-              const empty =
-                !isPrimary &&
-                !hasText(values.translations[code]) &&
-                !started.has(code);
-              return (
-                <TabsContent key={code} value={code} className="pt-2">
-                  {empty ? (
-                    // Blue note like the reservation form's: nothing is
-                    // wrong, the app just falls back to German.
-                    <Alert variant="info" role="note">
-                      <InfoIcon aria-hidden="true" />
-                      <AlertDescription className="flex flex-col items-start gap-2">
-                        <Trans>
-                          No translation yet. The app shows the German text in
-                          its place.
-                        </Trans>
-                        <div className="flex flex-wrap gap-2">
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            className={noteButtonClassName}
-                            onClick={() => {
-                              const primary = form.getValues(
-                                `translations.${cmsPrimaryLocale}`
-                              );
-                              form.setValue(
-                                `translations.${code}`,
-                                { ...primary },
-                                { shouldDirty: true }
-                              );
-                            }}
-                          >
-                            <CopyIcon />
-                            <Trans>Copy from German</Trans>
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            className={noteGhostButtonClassName}
-                            onClick={() =>
-                              setStarted((set) => new Set(set).add(code))
-                            }
-                          >
-                            <Trans>Start empty</Trans>
-                          </Button>
-                        </div>
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    <TranslationFields
-                      form={form}
-                      locale={code}
-                      type={values.type}
-                      primary={values.translations[cmsPrimaryLocale]}
-                    />
-                  )}
-                </TabsContent>
-              );
-            })}
-          </Tabs>
+          <TranslationTabs form={form} values={values} />
 
           {values.type === 'page' && (
             <NestedItems
@@ -623,342 +317,14 @@ export function NodeEditor({
             }}
           />
 
-          <AlertDialog
-            open={blocker.status === 'blocked'}
-            onOpenChange={(open) => !open && blocker.reset?.()}
-          >
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  <Trans>Save changes?</Trans>
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  <Trans>“{titleOf(node)}” has unsaved changes.</Trans>
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => blocker.reset?.()}>
-                  <Trans>Stay</Trans>
-                </AlertDialogCancel>
-                <Button variant="outline" onClick={() => blocker.proceed?.()}>
-                  <Trans>Don’t save</Trans>
-                </Button>
-                <Button
-                  disabled={save.isPending}
-                  onClick={async () => {
-                    if (await submit()) blocker.proceed?.();
-                    else blocker.reset?.();
-                  }}
-                >
-                  <Trans>Save</Trans>
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <UnsavedChangesDialog
+            blocker={blocker}
+            title={titleOf(node)}
+            isSaving={save.isPending}
+            onSave={submit}
+          />
         </form>
       </CardContent>
     </>
-  );
-}
-
-function TranslationFields({
-  form,
-  locale,
-  type,
-  primary
-}: {
-  form: ReturnType<typeof useForm<CmsForm>>;
-  locale: CmsLocale;
-  type: CmsNodeType;
-  primary: CmsForm['translations'][CmsLocale];
-}) {
-  const { t } = useLingui();
-  const isPrimary = locale === cmsPrimaryLocale;
-  // Secondary locales show the German text as a hint of what's shown instead.
-  const placeholder = (value: string) =>
-    isPrimary ? undefined : value || undefined;
-  const id = (field: string) => `cms-${locale}-${field}`;
-
-  return (
-    <div className="flex flex-col gap-4">
-      <Controller
-        control={form.control}
-        name={`translations.${locale}.title`}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="gap-2">
-            <FieldLabel htmlFor={id('title')}>
-              <Trans>Title</Trans>
-              {!isPrimary && <FieldOptional />}
-            </FieldLabel>
-            <Input
-              {...field}
-              id={id('title')}
-              maxLength={200}
-              placeholder={placeholder(primary.title)}
-              aria-invalid={fieldState.invalid}
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      <Controller
-        control={form.control}
-        name={`translations.${locale}.subtitle`}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="gap-2">
-            <div className="flex items-baseline justify-between">
-              <FieldLabel htmlFor={id('subtitle')}>
-                <Trans>Subtitle</Trans>
-                <FieldOptional />
-              </FieldLabel>
-              <span
-                className={cn(
-                  'text-xs tabular-nums',
-                  field.value.length > cmsSubtitleMaxLength
-                    ? 'text-danger'
-                    : 'text-muted-foreground'
-                )}
-                aria-live="polite"
-              >
-                {field.value.length}/{cmsSubtitleMaxLength}
-              </span>
-            </div>
-            <Input
-              {...field}
-              id={id('subtitle')}
-              placeholder={placeholder(primary.subtitle)}
-              aria-invalid={fieldState.invalid}
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-      {type === 'page' ? (
-        <Controller
-          control={form.control}
-          name={`translations.${locale}.body`}
-          render={({ field }) => (
-            <Field className="gap-2">
-              <FieldLabel htmlFor={id('body')}>
-                <Trans>Text</Trans>
-              </FieldLabel>
-              <RichTextEditor
-                variant="cms"
-                id={id('body')}
-                aria-label={t`Text`}
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            </Field>
-          )}
-        />
-      ) : (
-        !isPrimary && (
-          <Controller
-            control={form.control}
-            name={`translations.${locale}.url`}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="gap-2">
-                <FieldLabel htmlFor={id('url')}>
-                  <Trans>URL for this language</Trans>
-                  <FieldOptional />
-                </FieldLabel>
-                <Input
-                  {...field}
-                  id={id('url')}
-                  type="url"
-                  inputMode="url"
-                  placeholder={form.getValues('url') || 'https://'}
-                  aria-invalid={fieldState.invalid}
-                />
-                <FieldDescription>
-                  <Trans>Leave empty to use the main URL.</Trans>
-                </FieldDescription>
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-        )
-      )}
-    </div>
-  );
-}
-
-function NestedItems({
-  parent,
-  items,
-  titleOf,
-  onSelect,
-  onAddChild,
-  onReorder
-}: {
-  parent: CmsNode;
-  items: CmsNode[];
-  titleOf: (node: CmsNode) => string;
-  onSelect: (id: number) => void;
-  onAddChild: (node: CmsNode, type: CmsNodeType) => void;
-  onReorder: (node: CmsNode, index: number) => void;
-}) {
-  const { t } = useLingui();
-  const { itemProps } = useDragReorder((from, to) => {
-    const moved = items[from];
-    if (moved) onReorder(moved, moveItem(items, from, to).indexOf(moved));
-  });
-
-  return (
-    <section aria-labelledby="cms-nested" className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <h2 id="cms-nested" className="text-sm font-medium">
-          <Trans>Nested items</Trans>
-        </h2>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={<Button type="button" size="sm" variant="outline" />}
-          >
-            <PlusIcon />
-            <Trans>Add</Trans>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onAddChild(parent, 'page')}>
-              <FileTextIcon />
-              <Trans>Page</Trans>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onAddChild(parent, 'link')}>
-              <ArrowUpRightIcon />
-              <Trans>External link</Trans>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      {items.length === 0 ? (
-        <p className="rounded-lg border border-dashed p-3 text-sm text-muted-foreground">
-          <Trans>No nested items.</Trans>
-        </p>
-      ) : (
-        <ul className="divide-y rounded-lg border" aria-label={t`Nested items`}>
-          {items.map((item, index) => (
-            <li
-              key={item.id}
-              {...itemProps(index)}
-              className="flex items-center gap-2 px-2 py-1.5 text-sm data-dragging:opacity-40 data-drop-target:bg-accent"
-            >
-              <GripVerticalIcon
-                className="size-4 cursor-grab text-muted-foreground"
-                aria-hidden
-              />
-              {item.type === 'link' ? (
-                <ArrowUpRightIcon className="size-4 text-muted-foreground" />
-              ) : (
-                <FileTextIcon className="size-4 text-muted-foreground" />
-              )}
-              <button
-                type="button"
-                className={cn(
-                  'min-w-0 flex-1 truncate text-start underline-offset-4 hover:underline',
-                  item.hidden && 'text-muted-foreground'
-                )}
-                onClick={() => onSelect(item.id)}
-              >
-                {titleOf(item)}
-              </button>
-              {item.hidden && (
-                <EyeOffIcon
-                  className="size-4 text-muted-foreground"
-                  aria-label={t`Hidden`}
-                />
-              )}
-              <Button
-                type="button"
-                size="icon-xs"
-                variant="ghost"
-                aria-label={t`Move up`}
-                disabled={index === 0}
-                onClick={() => onReorder(item, index - 1)}
-              >
-                <ArrowUpIcon />
-              </Button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-}
-
-function TypeChangeDialog({
-  change,
-  onClose,
-  onConfirm
-}: {
-  change: TypeChange | null;
-  onClose: () => void;
-  onConfirm: () => void;
-}) {
-  const blocked = change?.kind === 'blocked';
-  return (
-    <AlertDialog
-      open={change != null && change.kind !== 'free'}
-      onOpenChange={(open) => !open && onClose()}
-    >
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {blocked ? (
-              <Trans>This page has nested items</Trans>
-            ) : (
-              <Trans>Make this a link?</Trans>
-            )}
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            {change?.kind === 'blocked' && (
-              <Plural
-                value={change.childCount}
-                one="A link can’t contain other items. Move or delete its # nested item first."
-                other="A link can’t contain other items. Move or delete its # nested items first."
-              />
-            )}
-            {change?.kind === 'confirm' &&
-              (change.hasText ? (
-                <Plural
-                  value={change.imageCount}
-                  _0="The text is removed when you save."
-                  one="The text and # image are removed when you save."
-                  other="The text and # images are removed when you save."
-                />
-              ) : (
-                <Plural
-                  value={change.imageCount}
-                  one="# image is removed when you save."
-                  other="# images are removed when you save."
-                />
-              ))}{' '}
-            {!blocked && (
-              <Trans>
-                Until then you can switch back without losing anything.
-              </Trans>
-            )}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          {blocked ? (
-            <AlertDialogAction onClick={onClose}>
-              <Trans>OK</Trans>
-            </AlertDialogAction>
-          ) : (
-            <>
-              <AlertDialogCancel>
-                <Trans>Cancel</Trans>
-              </AlertDialogCancel>
-              <AlertDialogAction onClick={onConfirm}>
-                <Trans>Make it a link</Trans>
-              </AlertDialogAction>
-            </>
-          )}
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   );
 }
