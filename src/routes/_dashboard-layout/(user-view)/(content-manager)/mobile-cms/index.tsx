@@ -275,7 +275,7 @@ function MobileCmsPage() {
   let content: React.ReactNode;
   if (nodesQuery.isPending) {
     content = (
-      <div className="grid gap-4 @3xl:grid-cols-[minmax(17rem,1fr)_minmax(0,38rem)] @7xl:grid-cols-[17rem_minmax(0,1fr)]">
+      <div className="grid gap-4 @3xl:grid-cols-[minmax(17rem,22rem)_minmax(0,38rem)] @7xl:grid-cols-[17rem_minmax(0,1fr)]">
         <div className="space-y-2 @max-3xl:hidden">
           {Array.from({ length: 6 }, (_, i) => (
             <Skeleton key={i} className="h-8" />
@@ -337,8 +337,8 @@ function MobileCmsPage() {
     content = (
       // Columns follow the room <main> has (sidebar open or not), not the
       // window: three only where the editor keeps ~40rem between them. With
-      // two, the form stops at a readable width and the tree takes the rest.
-      <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,1fr)_minmax(0,38rem)] @7xl:grid-cols-[17rem_minmax(0,1fr)_21rem]">
+      // two, both stop at a readable width.
+      <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,22rem)_minmax(0,38rem)] @7xl:grid-cols-[17rem_minmax(0,1fr)_21rem]">
         <aside className="sticky top-4 @max-3xl:hidden">{treePanel}</aside>
 
         <section
