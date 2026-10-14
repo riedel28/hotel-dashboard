@@ -841,7 +841,7 @@ function NestedItems({
               <button
                 type="button"
                 className={cn(
-                  'min-w-0 flex-1 truncate text-start hover:underline',
+                  'min-w-0 flex-1 truncate text-start underline-offset-4 hover:underline',
                   item.hidden && 'text-muted-foreground'
                 )}
                 onClick={() => onSelect(item.id)}
