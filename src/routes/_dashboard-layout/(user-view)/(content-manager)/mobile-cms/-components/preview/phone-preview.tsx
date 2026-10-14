@@ -108,7 +108,7 @@ export function PhonePreview({
             }
           ]}
         />
-        <div className="flex items-center gap-2">
+        <div className="ms-auto flex items-center gap-2">
           <Switch
             id="cms-preview-hidden"
             size="sm"
