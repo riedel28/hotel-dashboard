@@ -7,9 +7,9 @@ import {
 import { useTree } from '@headless-tree/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
+  ArrowUpRightIcon,
   CopyIcon,
   EllipsisIcon,
-  ExternalLinkIcon,
   EyeIcon,
   EyeOffIcon,
   FileTextIcon,
@@ -100,7 +100,7 @@ function NodeMenu({
               <DropdownMenuItem
                 onClick={() => actions.onAddChild(node, 'link')}
               >
-                <ExternalLinkIcon />
+                <ArrowUpRightIcon />
                 <Trans>External link</Trans>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
@@ -261,7 +261,7 @@ export function CmsTree({
                 )}
               >
                 {node.type === 'link' ? (
-                  <ExternalLinkIcon
+                  <ArrowUpRightIcon
                     className="size-4 text-muted-foreground"
                     aria-label={t`External link`}
                   />

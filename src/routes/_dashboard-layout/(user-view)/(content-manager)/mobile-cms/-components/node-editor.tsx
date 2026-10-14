@@ -4,9 +4,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useBlocker } from '@tanstack/react-router';
 import {
   ArrowUpIcon,
+  ArrowUpRightIcon,
   ChevronRightIcon,
   CopyIcon,
-  ExternalLinkIcon,
   EyeOffIcon,
   FileTextIcon,
   GripVerticalIcon,
@@ -549,7 +549,10 @@ export function NodeEditor({
         />
       )}
 
-      <div className="sticky bottom-0 z-10 -mx-4 flex items-center justify-end gap-2 border-t bg-card/95 px-4 py-3 backdrop-blur-sm">
+      {/* The page scrolls in <main>, whose bottom padding (pb-4, md:pb-8) a
+          sticky element stops short of: the negative offset lets the bar
+          reach the window's bottom edge instead of floating above it. */}
+      <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t bg-card px-4 py-3 md:-bottom-8">
         <span className="me-auto text-sm text-muted-foreground" role="status">
           {isDirty ? (
             <span className="flex items-center gap-1.5 text-foreground">
@@ -790,7 +793,7 @@ function NestedItems({
               <Trans>Page</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onAddChild(parent, 'link')}>
-              <ExternalLinkIcon />
+              <ArrowUpRightIcon />
               <Trans>External link</Trans>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -813,7 +816,7 @@ function NestedItems({
                 aria-hidden
               />
               {item.type === 'link' ? (
-                <ExternalLinkIcon className="size-4 text-muted-foreground" />
+                <ArrowUpRightIcon className="size-4 text-muted-foreground" />
               ) : (
                 <FileTextIcon className="size-4 text-muted-foreground" />
               )}

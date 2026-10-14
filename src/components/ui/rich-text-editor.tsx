@@ -82,6 +82,9 @@ export const cmsRichTextExtensions = [
     horizontalRule: false,
     strike: false,
     heading: { levels: [2, 3] },
+    // It appends an empty paragraph after a closing list or heading, which
+    // reads as an edit and marks a just-opened form as unsaved.
+    trailingNode: false,
     link: {
       openOnClick: false,
       protocols: ['http', 'https', 'mailto', 'tel'],
@@ -177,6 +180,9 @@ function TextStyleMenu({
     </DropdownMenu>
   );
 }
+
+// An empty document is reported as '' rather than '<p></p>'.
+const htmlOf = (editor: Editor) => (editor.isEmpty ? '' : editor.getHTML());
 
 // A bare "example.com" would otherwise become a relative URL.
 function withScheme(url: string) {
@@ -437,6 +443,8 @@ function RichTextEditor({
   // Raw HTML mode: the value is edited as source. The editor picks it up
   // (and normalizes it) when switching back.
   const [htmlMode, setHtmlMode] = React.useState(false);
+  // The editor's own HTML for the current value.
+  const shownHtml = React.useRef<string | null>(null);
   const editor = useEditor({
     extensions: variant.extensions,
     content: value,
@@ -453,17 +461,26 @@ function RichTextEditor({
         )
       }
     },
-    onUpdate: ({ editor }) => onChange(editor.isEmpty ? '' : editor.getHTML()),
+    // The editor rewrites stored HTML into its own form (a list item gets a
+    // <p>, …) and reports that as an update. Only a change from that form is
+    // an edit; otherwise a form would turn dirty just by being opened.
+    onCreate: ({ editor }) => {
+      shownHtml.current = htmlOf(editor);
+    },
+    onUpdate: ({ editor }) => {
+      const html = htmlOf(editor);
+      if (html !== shownHtml.current) onChange(html);
+    },
     onBlur
   });
 
   // Follow value changes that didn't come from typing (e.g. a form reset).
   React.useEffect(() => {
     if (!editor || htmlMode) return;
-    const current = editor.isEmpty ? '' : editor.getHTML();
-    if (value !== current) {
+    if (value !== htmlOf(editor)) {
       editor.commands.setContent(value, { emitUpdate: false });
     }
+    shownHtml.current = htmlOf(editor);
   }, [editor, value, htmlMode]);
 
   React.useEffect(() => {

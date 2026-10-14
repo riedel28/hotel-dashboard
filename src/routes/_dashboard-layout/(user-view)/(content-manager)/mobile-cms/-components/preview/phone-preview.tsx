@@ -1,12 +1,12 @@
 import './preview-html.css';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
+  ArrowUpRightIcon,
   BatteryFullIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   EyeOffIcon,
   SignalIcon,
-  SquareArrowOutUpRightIcon,
   WifiIcon
 } from 'lucide-react';
 import * as React from 'react';
@@ -198,7 +198,7 @@ export function PhonePreview({
                       )}
                     </span>
                     {node.type === 'link' ? (
-                      <SquareArrowOutUpRightIcon className="size-4 shrink-0 text-(--app-chevron)" />
+                      <ArrowUpRightIcon className="size-4 shrink-0 text-(--app-chevron)" />
                     ) : (
                       <ChevronRightIcon className="size-5 shrink-0 text-(--app-chevron)" />
                     )}
