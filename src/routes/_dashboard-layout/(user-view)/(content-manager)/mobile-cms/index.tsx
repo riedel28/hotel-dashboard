@@ -357,9 +357,9 @@ function MobileCmsPage() {
               onReorder={actions.onReorder}
             />
           ) : (
-            // A title and a hint, one step larger than Products' empty list.
+            // A title and a hint, a size up from Products' empty list.
             <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 pb-4 text-center">
-              <p className="text-lg font-medium">
+              <p className="text-base font-medium">
                 {requestedId != null ? (
                   <Trans>This item doesn’t exist (anymore)</Trans>
                 ) : (
