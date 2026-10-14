@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
   AlertCircleIcon,
+  EyeIcon,
   ListTreeIcon,
   PlusIcon,
   RotateCcwIcon,
@@ -274,7 +275,7 @@ function MobileCmsPage() {
   let content: React.ReactNode;
   if (nodesQuery.isPending) {
     content = (
-      <div className="grid gap-4 @3xl:grid-cols-[17rem_minmax(0,1fr)]">
+      <div className="grid gap-4 @3xl:grid-cols-[minmax(17rem,1fr)_minmax(0,44rem)] @7xl:grid-cols-[17rem_minmax(0,1fr)]">
         <div className="space-y-2 @max-3xl:hidden">
           {Array.from({ length: 6 }, (_, i) => (
             <Skeleton key={i} className="h-8" />
@@ -335,8 +336,9 @@ function MobileCmsPage() {
   } else {
     content = (
       // Columns follow the room <main> has (sidebar open or not), not the
-      // window: three only where the editor keeps ~40rem between them.
-      <div className="grid items-start gap-6 @3xl:grid-cols-[17rem_minmax(0,1fr)] @7xl:grid-cols-[17rem_minmax(0,1fr)_21rem]">
+      // window: three only where the editor keeps ~40rem between them. With
+      // two, the form stops at a readable width and the tree takes the rest.
+      <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,1fr)_minmax(0,44rem)] @7xl:grid-cols-[17rem_minmax(0,1fr)_21rem]">
         <aside className="sticky top-4 @max-3xl:hidden">{treePanel}</aside>
 
         <section
@@ -436,7 +438,7 @@ function MobileCmsPage() {
               className="@7xl:hidden"
               onClick={() => setPreviewOpen(true)}
             >
-              <SmartphoneIcon />
+              <EyeIcon />
               <Trans>Preview</Trans>
             </Button>
           </div>
