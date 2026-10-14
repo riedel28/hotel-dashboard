@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import * as React from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { type CmsNodeType, cmsUrlSchema } from 'shared/types/cms';
+import { type CmsNodeType, cmsNodeTypeSchema } from 'shared/types/cms';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { RadioCards } from '@/components/ui/radio-cards';
 
+import { useFormRules } from '../-lib/use-form-rules';
 import { useLastNonNull } from '../-lib/use-last-non-null';
 
 export interface CreateNodeRequest {
@@ -52,30 +53,17 @@ export function CreateNodeDialog({
   onCreate
 }: CreateNodeDialogProps) {
   const { t } = useLingui();
+  const rules = useFormRules();
   const schema = React.useMemo(
     () =>
       z
         .object({
-          type: z.enum(['page', 'link']),
-          title: z
-            .string()
-            .trim()
-            .min(1, t`Title is required`),
+          type: cmsNodeTypeSchema,
+          title: rules.title,
           url: z.string()
         })
-        .superRefine((values, ctx) => {
-          if (
-            values.type === 'link' &&
-            !cmsUrlSchema.safeParse(values.url).success
-          ) {
-            ctx.addIssue({
-              code: 'custom',
-              path: ['url'],
-              message: t`Enter a URL starting with http:// or https://`
-            });
-          }
-        }),
-    [t]
+        .superRefine(rules.linkUrl),
+    [rules]
   );
   const form = useForm<Values>({
     resolver: zodResolver(schema),

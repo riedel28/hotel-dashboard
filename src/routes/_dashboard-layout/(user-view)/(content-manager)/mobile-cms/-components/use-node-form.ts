@@ -6,6 +6,8 @@ import * as React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
   type CmsLocale,
+  cmsNodeTypeSchema,
+  cmsOpenModeSchema,
   cmsPrimaryLocale,
   cmsSubtitleMaxLength,
   cmsUrlSchema
@@ -17,20 +19,16 @@ import { ApiError } from '@/api/client';
 import { type CmsNode, cmsNodesQueryOptions, saveCmsNode } from '@/api/cms';
 
 import { type CmsForm, formToPayload, nodeToForm } from '../-lib/cms-content';
+import { useFormRules } from '../-lib/use-form-rules';
 import { useNodeTitle } from '../-lib/use-node-title';
 
 function useFormSchema() {
   const { t } = useLingui();
+  const rules = useFormRules();
   return React.useMemo(() => {
     const translation = (locale: CmsLocale) =>
       z.object({
-        title:
-          locale === cmsPrimaryLocale
-            ? z
-                .string()
-                .trim()
-                .min(1, t`Title is required`)
-            : z.string(),
+        title: locale === cmsPrimaryLocale ? rules.title : z.string(),
         subtitle: z
           .string()
           .max(
@@ -38,18 +36,19 @@ function useFormSchema() {
             t`At most ${cmsSubtitleMaxLength} characters`
           ),
         body: z.string(),
+        // A language's own URL: optional, http(s) when given.
         url: z
           .string()
           .refine(
             (value) => !value.trim() || cmsUrlSchema.safeParse(value).success,
-            t`Enter a URL starting with http:// or https://`
+            rules.urlMessage
           )
       });
     return z
       .object({
-        type: z.enum(['page', 'link']),
+        type: cmsNodeTypeSchema,
         url: z.string(),
-        open_mode: z.enum(['in_app', 'system']),
+        open_mode: cmsOpenModeSchema,
         gallery: z.array(z.string()),
         icon: z.string().nullable(),
         translations: z.object({
@@ -57,19 +56,8 @@ function useFormSchema() {
           en: translation('en')
         })
       })
-      .superRefine((values, ctx) => {
-        if (
-          values.type === 'link' &&
-          !cmsUrlSchema.safeParse(values.url).success
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            path: ['url'],
-            message: t`Enter a URL starting with http:// or https://`
-          });
-        }
-      });
-  }, [t]);
+      .superRefine(rules.linkUrl);
+  }, [t, rules]);
 }
 
 /**
