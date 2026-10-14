@@ -8,6 +8,8 @@ import {
 import { useTree } from '@headless-tree/react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
+  ArrowDownIcon,
+  ArrowUpIcon,
   ArrowUpRightIcon,
   CopyIcon,
   CornerUpRightIcon,
@@ -64,9 +66,12 @@ export interface CmsTreeActions {
 
 function NodeMenu({
   node,
+  place,
   actions
 }: {
   node: CmsNode;
+  // Its index among its siblings; null while a filter hides some of them.
+  place: { index: number; count: number } | null;
   actions: CmsTreeActions;
 }) {
   const { t } = useLingui();
@@ -111,6 +116,21 @@ function NodeMenu({
         <DropdownMenuItem onClick={() => actions.onMoveTo(node)}>
           <CornerUpRightIcon />
           <Trans>Move to…</Trans>
+        </DropdownMenuItem>
+        {/* Dragging's counterpart for the keyboard and a single tap. */}
+        <DropdownMenuItem
+          disabled={!place || place.index === 0}
+          onClick={() => place && actions.onReorder(node, place.index - 1)}
+        >
+          <ArrowUpIcon />
+          <Trans>Move up</Trans>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          disabled={!place || place.index === place.count - 1}
+          onClick={() => place && actions.onReorder(node, place.index + 1)}
+        >
+          <ArrowDownIcon />
+          <Trans>Move down</Trans>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => actions.onToggleHidden(node)}>
           {node.hidden ? <EyeIcon /> : <EyeOffIcon />}
@@ -252,6 +272,7 @@ export function CmsTree({
         const title = localized(node.translations, locale, 'title');
         const visibility = cmsVisibility(nodes, node.id);
         const childCount = cmsChildren(nodes, node.id).length;
+        const siblings = cmsChildren(nodes, node.parent_id);
         const isSelected = node.id === selectedId;
 
         return (
@@ -280,11 +301,13 @@ export function CmsTree({
                 {node.type === 'link' ? (
                   <ArrowUpRightIcon
                     className="size-4 text-muted-foreground"
+                    role="img"
                     aria-label={t`External link`}
                   />
                 ) : (
                   <FileTextIcon
                     className="size-4 text-muted-foreground"
+                    role="img"
                     aria-label={t`Page`}
                   />
                 )}
@@ -301,6 +324,7 @@ export function CmsTree({
                 {isAnyTranslationMissing(node.translations) && (
                   <LanguagesIcon
                     className="size-3.5 text-amber-600 dark:text-amber-400"
+                    role="img"
                     aria-label={t`Translation missing`}
                   >
                     <title>{t`Translation missing`}</title>
@@ -338,7 +362,18 @@ export function CmsTree({
                     <EyeIcon className="size-4" />
                   )}
                 </button>
-                <NodeMenu node={node} actions={actions} />
+                <NodeMenu
+                  node={node}
+                  place={
+                    isFiltering
+                      ? null
+                      : {
+                          index: siblings.findIndex((s) => s.id === node.id),
+                          count: siblings.length
+                        }
+                  }
+                  actions={actions}
+                />
               </TreeItemLabel>
             </div>
           </TreeItem>

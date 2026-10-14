@@ -79,9 +79,13 @@ export function TranslationTabs({
                     'size-1.25 rounded-full',
                     invalid ? 'bg-danger' : 'bg-amber-500'
                   )}
-                  aria-label={invalid ? t`Has errors` : t`Translation missing`}
                   title={invalid ? t`Has errors` : t`Translation missing`}
-                />
+                >
+                  {/* A span's aria-label isn't read; text is. */}
+                  <span className="sr-only">
+                    {invalid ? t`Has errors` : t`Translation missing`}
+                  </span>
+                </span>
               )}
             </TabsTrigger>
           );
@@ -211,7 +215,8 @@ function TranslationFields({
                     ? 'text-danger'
                     : 'text-muted-foreground'
                 )}
-                aria-live="polite"
+                // Read with the field, not announced on every keystroke.
+                id={id('subtitle-count')}
               >
                 {field.value.length}/{cmsSubtitleMaxLength}
               </span>
@@ -219,6 +224,7 @@ function TranslationFields({
             <Input
               {...field}
               id={id('subtitle')}
+              aria-describedby={id('subtitle-count')}
               placeholder={placeholder(primary.subtitle)}
               aria-invalid={fieldState.invalid}
             />

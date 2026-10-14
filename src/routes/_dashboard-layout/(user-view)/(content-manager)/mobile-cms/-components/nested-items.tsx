@@ -102,6 +102,7 @@ export function NestedItems({
               {item.hidden && (
                 <EyeOffIcon
                   className="size-4 text-muted-foreground"
+                  role="img"
                   aria-label={t`Hidden`}
                 />
               )}

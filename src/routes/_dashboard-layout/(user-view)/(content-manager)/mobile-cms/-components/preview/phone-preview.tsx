@@ -328,13 +328,18 @@ function PageContent({
   subtitle: string;
   html: string;
 }) {
+  const { t } = useLingui();
   const [current, setCurrent] = React.useState(0);
   return (
     <div>
       {images.length > 0 && (
         <div className="relative">
           <div
-            className="flex snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto"
+            // Focusable, so the arrow keys scroll it without a mouse.
+            tabIndex={0}
+            role="region"
+            aria-label={t`Images`}
+            className="flex snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--app-accent)"
             onScroll={(event) => {
               const el = event.currentTarget;
               setCurrent(Math.round(el.scrollLeft / el.clientWidth));
