@@ -16,20 +16,34 @@ export const cmsAllowedTags = [
   'a'
 ];
 
+// Dropped with their content instead of kept as text.
+const nonTextTags = ['script', 'style', 'textarea', 'option', 'noscript'];
+
 const options: sanitizeHtml.IOptions = {
   allowedTags: cmsAllowedTags,
   allowedAttributes: { a: ['href'] },
   allowedSchemes: ['http', 'https', 'mailto', 'tel'],
-  // Drop <script>/<style> with their content instead of keeping it as text.
-  nonTextTags: ['script', 'style', 'textarea', 'option', 'noscript']
+  nonTextTags
 };
+
+/**
+ * Whether a CMS text has anything a guest would read: markup, whitespace
+ * and the empty paragraph an editor leaves behind don't count.
+ */
+export function cmsHasText(html: string) {
+  return (
+    sanitizeHtml(html, {
+      allowedTags: [],
+      allowedAttributes: {},
+      nonTextTags
+    }).trim() !== ''
+  );
+}
 
 // The one sanitizer for a CMS text: the server runs it on save, the preview
 // on every render, so the preview shows exactly what gets stored.
 // Returns '' when no text is left.
 export function sanitizeCmsHtml(html: string) {
   const clean = sanitizeHtml(html, options).trim();
-  return sanitizeHtml(clean, { allowedTags: [], allowedAttributes: {} }).trim()
-    ? clean
-    : '';
+  return cmsHasText(clean) ? clean : '';
 }

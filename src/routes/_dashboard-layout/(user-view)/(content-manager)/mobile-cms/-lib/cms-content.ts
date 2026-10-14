@@ -1,3 +1,4 @@
+import { cmsHasText } from 'shared/cms-html';
 import { cmsLineage } from 'shared/cms-tree';
 import {
   type CmsLocale,
@@ -84,7 +85,7 @@ export function formToPayload(
 
 // An empty editor still reports '<p></p>' in places; count only real text.
 function isBlank(value: string | null | undefined) {
-  return !value || value.replace(/<[^>]*>|&nbsp;|\s/g, '') === '';
+  return !value || !cmsHasText(value);
 }
 
 /** Whether a locale has anything in it at all. */

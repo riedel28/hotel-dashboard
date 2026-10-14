@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { sanitizeCmsHtml } from './cms-html';
+import { cmsHasText, sanitizeCmsHtml } from './cms-html';
 
 describe('sanitizeCmsHtml', () => {
   it('keeps the formats the app renders', () => {
@@ -29,5 +29,15 @@ describe('sanitizeCmsHtml', () => {
   it('returns an empty string when no text is left', () => {
     expect(sanitizeCmsHtml('<p></p><p><br></p>')).toBe('');
     expect(sanitizeCmsHtml('<img src="https://x/y.png">')).toBe('');
+  });
+});
+
+describe('cmsHasText', () => {
+  it('ignores markup, blanks and what the sanitizer drops', () => {
+    expect(cmsHasText('<p></p>')).toBe(false);
+    expect(cmsHasText('<p>&nbsp; </p><br>')).toBe(false);
+    expect(cmsHasText('<script>alert(1)</script>')).toBe(false);
+    expect(cmsHasText('<p>Hallo</p>')).toBe(true);
+    expect(cmsHasText('AT&T')).toBe(true);
   });
 });
