@@ -32,6 +32,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Drawer,
@@ -339,7 +340,12 @@ function MobileCmsPage() {
       // window; the preview gets its own column only from 80rem. Tree and
       // form stop at a readable width either way, the rest stays empty.
       <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,22rem)_minmax(0,38rem)] @7xl:grid-cols-[minmax(17rem,22rem)_minmax(0,38rem)_21rem]">
-        <aside className="sticky top-4 @max-3xl:hidden">{treePanel}</aside>
+        <aside className="sticky top-4 @max-3xl:hidden">
+          {/* A card like Products' categories, without its title. */}
+          <Card>
+            <CardContent>{treePanel}</CardContent>
+          </Card>
+        </aside>
 
         <section
           className="min-w-0 rounded-xl border bg-card px-4 pt-4"
