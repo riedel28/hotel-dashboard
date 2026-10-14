@@ -9,11 +9,11 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ArrowUpRightIcon,
   CopyIcon,
+  CornerUpRightIcon,
   EllipsisIcon,
   EyeIcon,
   EyeOffIcon,
   FileTextIcon,
-  FolderInputIcon,
   LanguagesIcon,
   PlusIcon,
   Trash2Icon
@@ -111,7 +111,7 @@ function NodeMenu({
           <Trans>Duplicate</Trans>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => actions.onMoveTo(node)}>
-          <FolderInputIcon />
+          <CornerUpRightIcon />
           <Trans>Move to…</Trans>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => actions.onToggleHidden(node)}>
