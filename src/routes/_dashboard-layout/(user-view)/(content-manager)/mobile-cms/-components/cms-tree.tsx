@@ -346,7 +346,7 @@ export function CmsTree({
           </TreeItem>
         );
       })}
-      <TreeDragLine />
+      <TreeDragLine className="bg-muted-foreground before:border-muted-foreground" />
     </Tree>
   );
 }
