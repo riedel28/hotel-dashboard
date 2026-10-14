@@ -204,7 +204,8 @@ export function ImageField({ value, onChange, max = 30 }: ImageFieldProps) {
           onClick={() => inputRef.current?.click()}
           aria-label={max === 1 ? t`Add image` : t`Add images`}
           title={max === 1 ? t`Add image` : t`Add images`}
-          className="flex size-24 items-center justify-center rounded-lg border border-dashed text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          // Same surface and border colour as an input, dashed.
+          className="flex size-24 items-center justify-center rounded-lg border border-dashed border-input bg-transparent text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--color-primary)] focus-visible:outline-none dark:bg-input/30 dark:hover:bg-input/50"
         >
           <PlusIcon className="size-5" />
         </button>
