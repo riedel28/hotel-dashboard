@@ -44,6 +44,7 @@ import {
 import { cn } from '@/lib/utils';
 
 import { isAnyTranslationMissing, localized } from '../-lib/cms-content';
+import { useNodeTitle } from '../-lib/use-node-title';
 
 const rootItemId = 'root';
 const indent = 20;
@@ -153,6 +154,7 @@ export function CmsTree({
   actions
 }: CmsTreeProps) {
   const { t } = useLingui();
+  const titleOf = useNodeTitle();
   const byId = React.useMemo(
     () => new Map(nodes.map((node) => [String(node.id), node])),
     [nodes]
@@ -294,7 +296,7 @@ export function CmsTree({
                   )}
                   title={title.value}
                 >
-                  {title.value || t`Untitled`}
+                  {titleOf(node, locale)}
                 </span>
                 {isAnyTranslationMissing(node.translations) && (
                   <LanguagesIcon

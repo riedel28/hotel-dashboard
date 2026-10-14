@@ -79,12 +79,12 @@ import {
   formToPayload,
   hasText,
   isMissingTranslation,
-  localized,
   nodeToForm,
   typeChange,
   type TypeChange
 } from '../-lib/cms-content';
 import { moveItem, useDragReorder } from '../-lib/use-drag-reorder';
+import { useNodeTitle } from '../-lib/use-node-title';
 import { ImageField } from './image-field';
 
 interface NodeEditorProps {
@@ -175,6 +175,7 @@ export function NodeEditor({
   const { t } = useLingui();
   const queryClient = useQueryClient();
   const schema = useFormSchema();
+  const titleOf = useNodeTitle();
   const form = useForm<CmsForm>({
     resolver: zodResolver(schema),
     defaultValues: nodeToForm(node),
@@ -296,8 +297,6 @@ export function NodeEditor({
     visibility.state === 'hidden_by_parent'
       ? nodes.find((n) => n.id === visibility.ancestorId)
       : undefined;
-  const titleOf = (n: CmsNode) =>
-    localized(n.translations, cmsPrimaryLocale, 'title').value || t`Untitled`;
 
   const path = cmsLineage(nodes, node.id).reverse();
 

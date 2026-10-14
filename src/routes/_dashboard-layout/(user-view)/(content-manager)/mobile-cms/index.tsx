@@ -64,12 +64,8 @@ import { MoveNodeDialog } from './-components/move-node-dialog';
 import { NodeEditor } from './-components/node-editor';
 import { PhonePreview } from './-components/preview/phone-preview';
 import { useCmsMutations } from './-components/use-cms-mutations';
-import {
-  applyForm,
-  type CmsForm,
-  filterNodes,
-  localized
-} from './-lib/cms-content';
+import { applyForm, type CmsForm, filterNodes } from './-lib/cms-content';
+import { useNodeTitle } from './-lib/use-node-title';
 
 // Columns follow the room <main> has (sidebar open or not), not the window;
 // the preview gets its own column only from 80rem. Tree and form share the
@@ -161,12 +157,7 @@ function MobileCmsPage() {
   const [moveTarget, setMoveTarget] = React.useState<CmsNode | null>(null);
   const [deleteTarget, setDeleteTarget] = React.useState<CmsNode | null>(null);
 
-  const titleOf = React.useCallback(
-    (node: CmsNode) =>
-      localized(node.translations, cmsPrimaryLocale, 'title').value ||
-      t`Untitled`,
-    [t]
-  );
+  const titleOf = useNodeTitle();
 
   const actions: CmsTreeActions = React.useMemo(
     () => ({

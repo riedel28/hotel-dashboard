@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
-import { localized } from '../-lib/cms-content';
+import { useNodeTitle } from '../-lib/use-node-title';
 
 interface MoveNodeDialogProps {
   node: CmsNode | null;
@@ -36,6 +36,7 @@ export function MoveNodeDialog({
   onMove
 }: MoveNodeDialogProps) {
   const { t } = useLingui();
+  const titleOf = useNodeTitle();
   const [target, setTarget] = React.useState<number | null | undefined>();
 
   React.useEffect(() => {
@@ -68,15 +69,14 @@ export function MoveNodeDialog({
     },
     ...rows.map(({ node: candidate, depth }) => ({
       id: candidate.id,
-      title:
-        localized(candidate.translations, locale, 'title').value || t`Untitled`,
+      title: titleOf(candidate, locale),
       depth: depth + 1,
       disabled:
         candidate.id === node.parent_id ||
         cmsMoveError(nodes, node.id, candidate.id) != null
     }))
   ];
-  const title = localized(node.translations, locale, 'title').value;
+  const title = titleOf(node, locale);
 
   return (
     <Dialog open onOpenChange={onOpenChange}>
