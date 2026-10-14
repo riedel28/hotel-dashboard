@@ -484,17 +484,17 @@ export function NodeEditor({
             const missing = isMissingTranslation(values.translations, code);
             const invalid = !!errors?.[code];
             return (
-              <TabsTrigger key={code} value={code} className="gap-1.5">
+              <TabsTrigger key={code} value={code} className="gap-2">
                 {localeNames[code]}
                 {code === cmsPrimaryLocale && (
-                  <span className="-ml-0.5 font-normal text-muted-foreground">
+                  <span className="-ml-1 font-normal text-muted-foreground">
                     (<Trans>main</Trans>)
                   </span>
                 )}
                 {(missing || invalid) && (
                   <span
                     className={cn(
-                      'size-1.5 rounded-full',
+                      'size-1.25 rounded-full',
                       invalid ? 'bg-danger' : 'bg-amber-500'
                     )}
                     aria-label={
