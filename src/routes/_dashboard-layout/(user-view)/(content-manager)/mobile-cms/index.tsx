@@ -306,13 +306,12 @@ function MobileCmsPage() {
           </Card>
         </aside>
 
-        {/* overflow-visible: the form's save bar sticks to the window, which
-            a clipping card would prevent. No bottom padding: the bar is the
-            card's bottom edge. */}
+        {/* overflow-visible: the form's save bar sticks to the window,
+            which a clipping card would prevent. */}
         <Card
           role="region"
           aria-label={t`Editor`}
-          className="min-w-0 overflow-visible pb-0 md:pb-0"
+          className="min-w-0 overflow-visible"
         >
           {selected ? (
             // Renders its own header (path and title) and content.
@@ -329,7 +328,7 @@ function MobileCmsPage() {
           ) : (
             <CardContent>
               {/* A title and a hint, a size up from Products' empty list. */}
-              <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 pb-4 text-center md:pb-6">
+              <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 text-center">
                 <p className="text-base font-medium">
                   {requestedId != null ? (
                     <Trans>This item doesn’t exist (anymore)</Trans>

@@ -6,6 +6,7 @@ import { cmsChildren, cmsLineage, cmsVisibility } from 'shared/cms-tree';
 import type { CmsNodeType } from 'shared/types/cms';
 
 import type { CmsNode } from '@/api/cms';
+import { StickyCardFooter } from '@/components/sticky-card-footer';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -70,6 +71,7 @@ export function NodeEditor({
   const { t } = useLingui();
   const titleOf = useNodeTitle();
   const { form, values, isDirty, save, submit, blocker } = useNodeForm(node);
+  const formId = React.useId();
 
   React.useEffect(() => {
     onDraftChange({ nodeId: node.id, form: values });
@@ -143,6 +145,7 @@ export function NodeEditor({
       </CardHeader>
       <CardContent>
         <form
+          id={formId}
           onSubmit={(event) => {
             event.preventDefault();
             void submit();
@@ -281,37 +284,6 @@ export function NodeEditor({
             />
           )}
 
-          {/* The page scrolls in <main>, whose bottom padding (pb-4, md:pb-8) a
-          sticky element stops short of: the negative offset lets the bar
-          reach the window's bottom edge instead of floating above it. The
-          side margins undo the card's padding (px-4, md:px-6). */}
-          <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t border-border/60 bg-card px-4 py-4 md:-bottom-8 md:-mx-6 md:px-6">
-            <span className="me-auto text-sm" role="status">
-              {isDirty && (
-                <span className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-amber-500" />
-                  <Trans>Unsaved changes</Trans>
-                </span>
-              )}
-            </span>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={!isDirty || save.isPending}
-              onClick={() => form.reset()}
-            >
-              <Trans>Cancel</Trans>
-            </Button>
-            <Button
-              type="submit"
-              disabled={!isDirty || save.isPending}
-              aria-busy={save.isPending}
-            >
-              {save.isPending && <Loader2Icon className="animate-spin" />}
-              <Trans>Save</Trans>
-            </Button>
-          </div>
-
           <TypeChangeDialog
             change={pendingType}
             onClose={() => setPendingType(null)}
@@ -329,6 +301,34 @@ export function NodeEditor({
           />
         </form>
       </CardContent>
+      {/* The app's save bar: sticks to the window's bottom edge. */}
+      <StickyCardFooter className="gap-2">
+        <span className="me-auto text-sm" role="status">
+          {isDirty && (
+            <span className="flex items-center gap-2">
+              <span className="size-1.5 rounded-full bg-amber-500" />
+              <Trans>Unsaved changes</Trans>
+            </span>
+          )}
+        </span>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={!isDirty || save.isPending}
+          onClick={() => form.reset()}
+        >
+          <Trans>Cancel</Trans>
+        </Button>
+        <Button
+          type="submit"
+          form={formId}
+          disabled={!isDirty || save.isPending}
+          aria-busy={save.isPending}
+        >
+          {save.isPending && <Loader2Icon className="animate-spin" />}
+          <Trans>Save</Trans>
+        </Button>
+      </StickyCardFooter>
     </>
   );
 }
