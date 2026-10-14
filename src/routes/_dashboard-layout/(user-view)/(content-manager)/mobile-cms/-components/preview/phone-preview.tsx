@@ -83,9 +83,10 @@ export function PhonePreview({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <div className="flex flex-wrap items-center gap-2">
         <SegmentedControl
           label={t`Preview language`}
+          size="sm"
           value={locale}
           onValueChange={setLocale}
           options={cmsLocales.map((value) => ({
@@ -95,6 +96,7 @@ export function PhonePreview({
         />
         <SegmentedControl
           label={t`Preview mode`}
+          size="sm"
           value={effectiveMode}
           onValueChange={setMode}
           options={[
@@ -109,11 +111,12 @@ export function PhonePreview({
         <div className="flex items-center gap-2">
           <Switch
             id="cms-preview-hidden"
+            size="sm"
             aria-label={t`Show hidden`}
             checked={showHidden}
             onCheckedChange={setShowHidden}
           />
-          <Label htmlFor="cms-preview-hidden" className="font-normal">
+          <Label htmlFor="cms-preview-hidden" className="text-xs font-normal">
             <Trans>Show hidden</Trans>
           </Label>
         </div>
