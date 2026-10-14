@@ -98,6 +98,8 @@ export function ImageField({ value, onChange, max = 30 }: ImageFieldProps) {
           <img
             src={cmsImageUrl(id)}
             alt={t`Image ${index + 1}`}
+            loading="lazy"
+            decoding="async"
             className="size-full object-cover"
             draggable={false}
           />

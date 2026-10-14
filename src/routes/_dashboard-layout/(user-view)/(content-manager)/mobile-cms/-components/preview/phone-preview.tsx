@@ -10,7 +10,6 @@ import {
   WifiIcon
 } from 'lucide-react';
 import * as React from 'react';
-import { sanitizeCmsHtml } from 'shared/cms-html';
 import { cmsChildren, cmsVisibility } from 'shared/cms-tree';
 import { type CmsLocale, cmsLocales, cmsPrimaryLocale } from 'shared/types/cms';
 import { toast } from 'sonner';
@@ -25,6 +24,24 @@ import { localized } from '../../-lib/cms-content';
 import { appTokens, appTokenStyle } from './tokens';
 
 type Mode = 'list' | 'page';
+
+type Sanitize = (html: string) => string;
+// sanitize-html (with postcss) is most of this page's code, so it loads
+// after the preview has rendered, not with the CMS; until then a page shows
+// no text. Kept here once loaded.
+let loadedSanitize: Sanitize | null = null;
+
+function useSanitize() {
+  const [sanitize, setSanitize] = React.useState(() => loadedSanitize);
+  React.useEffect(() => {
+    if (sanitize) return;
+    void import('shared/cms-html').then(({ sanitizeCmsHtml }) => {
+      loadedSanitize = sanitizeCmsHtml;
+      setSanitize(() => sanitizeCmsHtml);
+    });
+  }, [sanitize]);
+  return sanitize;
+}
 
 interface PhonePreviewProps {
   // Every node, the selected one with the editor's unsaved state applied.
@@ -49,6 +66,7 @@ export function PhonePreview({
   const [locale, setLocale] = React.useState<CmsLocale>(cmsPrimaryLocale);
   const [mode, setMode] = React.useState<Mode>('page');
   const [showHidden, setShowHidden] = React.useState(false);
+  const sanitize = useSanitize();
   // Rendered twice (column and drawer): ids must differ for the label.
   const showHiddenId = React.useId();
 
@@ -160,7 +178,7 @@ export function PhonePreview({
               images={screenNode.image_ids}
               title={text(screenNode, 'title')}
               subtitle={text(screenNode, 'subtitle')}
-              html={sanitizeCmsHtml(text(screenNode, 'body'))}
+              html={sanitize?.(text(screenNode, 'body')) ?? ''}
             />
           )}
 
@@ -191,6 +209,8 @@ export function PhonePreview({
                       <img
                         src={cmsImageUrl(node.image_ids[0])}
                         alt=""
+                        loading="lazy"
+                        decoding="async"
                         className="size-10 shrink-0 rounded-md object-cover"
                       />
                     ) : (
@@ -350,6 +370,8 @@ function PageContent({
                 key={id}
                 src={cmsImageUrl(id)}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="aspect-[4/3] w-full shrink-0 snap-center object-cover"
               />
             ))}
