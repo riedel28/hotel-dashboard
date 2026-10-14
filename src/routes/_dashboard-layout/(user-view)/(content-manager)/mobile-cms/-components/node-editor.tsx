@@ -62,6 +62,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { SegmentedControl } from '@/components/ui/segmented-control';
 import { Switch } from '@/components/ui/switch';
@@ -403,18 +404,35 @@ export function NodeEditor({
             name="open_mode"
             render={({ field }) => (
               <Field className="gap-2">
-                <FieldLabel>
+                <FieldLabel id="cms-open-mode">
                   <Trans>Opens in</Trans>
                 </FieldLabel>
-                <SegmentedControl
-                  label={t`Opens in`}
+                {/* Radio cards like the Adyen environment choice. */}
+                <RadioGroup
+                  aria-labelledby="cms-open-mode"
                   value={field.value}
                   onValueChange={field.onChange}
-                  options={[
-                    { value: 'in_app', label: t`In-app browser` },
-                    { value: 'system', label: t`System browser` }
-                  ]}
-                />
+                  className="grid w-full grid-cols-2 gap-2"
+                >
+                  {(
+                    [
+                      ['in_app', t`In-app browser`],
+                      ['system', t`System browser`]
+                    ] as const
+                  ).map(([value, label]) => (
+                    <Label
+                      key={value}
+                      htmlFor={`cms-open-mode-${value}`}
+                      className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                    >
+                      <RadioGroupItem
+                        value={value}
+                        id={`cms-open-mode-${value}`}
+                      />
+                      {label}
+                    </Label>
+                  ))}
+                </RadioGroup>
               </Field>
             )}
           />
