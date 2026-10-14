@@ -357,32 +357,23 @@ function MobileCmsPage() {
               onReorder={actions.onReorder}
             />
           ) : (
-            <Empty className="pb-8">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <ListTreeIcon />
-                </EmptyMedia>
-                <EmptyTitle>
-                  {requestedId != null ? (
-                    <Trans>This item doesn’t exist (anymore)</Trans>
-                  ) : (
-                    <Trans>Pick an item to edit</Trans>
-                  )}
-                </EmptyTitle>
-                <EmptyDescription>
-                  <Trans>
-                    Choose a page or link in the tree, or tap one in the
-                    preview.
-                  </Trans>
-                </EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent className="@3xl:hidden">
-                <Button variant="outline" onClick={() => setTreeOpen(true)}>
-                  <ListTreeIcon />
-                  <Trans>Show content tree</Trans>
-                </Button>
-              </EmptyContent>
-            </Empty>
+            // Like Products without a category: one quiet line.
+            <div className="flex min-h-[140px] flex-col items-center justify-center gap-3 pb-4 text-center text-base text-muted-foreground">
+              {requestedId != null ? (
+                <Trans>This item doesn’t exist (anymore)</Trans>
+              ) : (
+                <Trans>Select a page or link to edit it</Trans>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                className="@3xl:hidden"
+                onClick={() => setTreeOpen(true)}
+              >
+                <ListTreeIcon />
+                <Trans>Show content tree</Trans>
+              </Button>
+            </div>
           )}
         </section>
 
