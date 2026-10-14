@@ -1,3 +1,4 @@
+import { cmsLineage } from 'shared/cms-tree';
 import {
   type CmsLocale,
   cmsLocales,
@@ -186,27 +187,6 @@ export function applyForm(node: CmsNode, form: CmsForm): CmsNode {
   };
 }
 
-/** The node's children in their order. */
-export function childrenOf(nodes: CmsNode[], parentId: number | null) {
-  return nodes
-    .filter((node) => node.parent_id === parentId)
-    .sort((a, b) => a.position - b.position || a.id - b.id);
-}
-
-/** The node followed by its ancestors up to the top level. */
-export function lineage(nodes: CmsNode[], id: number) {
-  const byId = new Map(nodes.map((node) => [node.id, node]));
-  const result: CmsNode[] = [];
-  const seen = new Set<number>();
-  let node = byId.get(id);
-  while (node && !seen.has(node.id)) {
-    seen.add(node.id);
-    result.push(node);
-    node = node.parent_id == null ? undefined : byId.get(node.parent_id);
-  }
-  return result;
-}
-
 /**
  * The nodes a filtered tree shows: those matching (title in `locale`, with
  * fallback, containing `query`; and/or missing a translation), plus their
@@ -228,7 +208,7 @@ export function filterNodes(
       (!needle || title.toLocaleLowerCase().includes(needle)) &&
       (!onlyMissing || isAnyTranslationMissing(node.translations));
     if (matches) {
-      for (const n of lineage(nodes, node.id)) keep.add(n.id);
+      for (const n of cmsLineage(nodes, node.id)) keep.add(n.id);
     }
   }
   return nodes.filter((node) => keep.has(node.id));

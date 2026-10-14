@@ -5,7 +5,11 @@ import type { Response } from 'express';
 import type { z } from 'zod';
 
 import { sanitizeCmsHtml } from '../../../shared/cms-html';
-import { cmsMoveError } from '../../../shared/cms-tree';
+import {
+  cmsChildren,
+  cmsMoveError,
+  cmsReorder
+} from '../../../shared/cms-tree';
 import {
   type CmsLocale,
   cmsLocales,
@@ -164,7 +168,7 @@ const createCmsNode = handle('Failed to create node', async (req, res) => {
     const error = cmsMoveError(rows, -1, parent_id);
     if (error) return { error: moveErrors[error] };
 
-    const siblings = rows.filter((row) => row.parent_id === parent_id);
+    const siblings = cmsChildren(rows, parent_id);
     const [node] = await tx
       .insert(cmsNodes)
       .values({
@@ -320,10 +324,7 @@ const moveCmsNode = handle('Failed to move node', async (req, res) => {
     const error = cmsMoveError(rows, id, parent_id);
     if (error) return { status: 400, error: moveErrors[error] };
 
-    const siblings = rows.filter(
-      (row) => row.parent_id === parent_id && row.id !== id
-    );
-    siblings.splice(Math.min(index, siblings.length), 0, node);
+    const siblings = cmsReorder(rows, node, parent_id, index);
     for (const [position, sibling] of siblings.entries()) {
       if (sibling.id === id) {
         await tx

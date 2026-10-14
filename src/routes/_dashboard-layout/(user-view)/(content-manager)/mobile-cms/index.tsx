@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { EyeIcon, ListTreeIcon, PlusIcon, SmartphoneIcon } from 'lucide-react';
 import * as React from 'react';
-import { cmsDescendantIds } from 'shared/cms-tree';
+import { cmsDescendantIds, cmsLineage } from 'shared/cms-tree';
 import {
   type CmsLocale,
   cmsLocales,
@@ -68,7 +68,6 @@ import {
   applyForm,
   type CmsForm,
   filterNodes,
-  lineage,
   localized
 } from './-lib/cms-content';
 
@@ -122,7 +121,7 @@ function MobileCmsPage() {
   const selectedId = selected?.id ?? null;
   React.useEffect(() => {
     if (selectedId == null) return;
-    const ancestors = lineage(nodes, selectedId)
+    const ancestors = cmsLineage(nodes, selectedId)
       .slice(1)
       .map((node) => String(node.id));
     setExpandedItems((current) =>

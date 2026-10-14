@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { CornerDownRightIcon, HomeIcon } from 'lucide-react';
 import * as React from 'react';
-import { cmsMoveError } from 'shared/cms-tree';
+import { cmsChildren, cmsMoveError } from 'shared/cms-tree';
 import type { CmsLocale } from 'shared/types/cms';
 
 import type { CmsNode } from '@/api/cms';
@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
-import { childrenOf, localized } from '../-lib/cms-content';
+import { localized } from '../-lib/cms-content';
 
 interface MoveNodeDialogProps {
   node: CmsNode | null;
@@ -46,7 +46,7 @@ export function MoveNodeDialog({
   const rows = React.useMemo(() => {
     const result: { node: CmsNode; depth: number }[] = [];
     const walk = (parentId: number | null, depth: number) => {
-      for (const child of childrenOf(nodes, parentId)) {
+      for (const child of cmsChildren(nodes, parentId)) {
         result.push({ node: child, depth });
         walk(child.id, depth + 1);
       }
@@ -132,7 +132,7 @@ export function MoveNodeDialog({
             disabled={target === undefined}
             onClick={() => {
               if (target === undefined) return;
-              onMove(target, childrenOf(nodes, target).length);
+              onMove(target, cmsChildren(nodes, target).length);
               onOpenChange(false);
             }}
           >

@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { cmsDescendantIds, cmsMoveError, cmsVisibility } from './cms-tree';
+import {
+  cmsChildren,
+  cmsDescendantIds,
+  cmsLineage,
+  cmsMoveError,
+  cmsReorder,
+  cmsVisibility
+} from './cms-tree';
 
 // root ─┬─ restaurant ─── menu ─── drinks
 //       └─ website (link)
@@ -71,5 +78,36 @@ describe('cmsVisibility', () => {
       state: 'hidden_by_parent',
       ancestorId: 3
     });
+  });
+});
+
+describe('cmsLineage', () => {
+  it('walks from the node up to the top level', () => {
+    expect(cmsLineage(nodes, 4).map((n) => n.id)).toEqual([4, 3, 2, 1]);
+    expect(cmsLineage(nodes, 6).map((n) => n.id)).toEqual([6]);
+    expect(cmsLineage(nodes, 99)).toEqual([]);
+  });
+});
+
+describe('cmsChildren and cmsReorder', () => {
+  // Positions out of id order, and a tie broken by id.
+  const level = [
+    { id: 1, parent_id: null, position: 2 },
+    { id: 2, parent_id: null, position: 0 },
+    { id: 3, parent_id: null, position: 0 },
+    { id: 4, parent_id: 1, position: 0 }
+  ];
+  const ids = (list: { id: number }[]) => list.map((n) => n.id);
+
+  it('orders children by position, then id', () => {
+    expect(ids(cmsChildren(level, null))).toEqual([2, 3, 1]);
+    expect(ids(cmsChildren(level, 1))).toEqual([4]);
+  });
+
+  it('puts the node at the index among its new siblings', () => {
+    expect(ids(cmsReorder(level, level[0]!, null, 0))).toEqual([1, 2, 3]);
+    expect(ids(cmsReorder(level, level[1]!, null, 9))).toEqual([3, 1, 2]);
+    // From another parent.
+    expect(ids(cmsReorder(level, level[3]!, null, 1))).toEqual([2, 4, 3, 1]);
   });
 });

@@ -1,5 +1,6 @@
 import { useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { cmsReorder } from 'shared/cms-tree';
 import type { MoveCmsNodeData } from 'shared/types/cms';
 import { toast } from 'sonner';
 
@@ -58,11 +59,9 @@ export function useCmsMutations() {
       patchOptimistically((nodes) => {
         const node = nodes.find((n) => n.id === id);
         if (!node || node.parent_id !== parent_id) return nodes;
-        const siblings = nodes
-          .filter((n) => n.parent_id === parent_id && n.id !== id)
-          .sort((a, b) => a.position - b.position || a.id - b.id);
-        siblings.splice(index, 0, node);
-        const positions = new Map(siblings.map((n, i) => [n.id, i]));
+        const positions = new Map(
+          cmsReorder(nodes, node, parent_id, index).map((n, i) => [n.id, i])
+        );
         return nodes.map((n) =>
           positions.has(n.id) ? { ...n, position: positions.get(n.id)! } : n
         );

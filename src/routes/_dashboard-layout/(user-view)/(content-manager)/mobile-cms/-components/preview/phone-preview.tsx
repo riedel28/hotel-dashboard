@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import * as React from 'react';
 import { sanitizeCmsHtml } from 'shared/cms-html';
-import { cmsVisibility } from 'shared/cms-tree';
+import { cmsChildren, cmsVisibility } from 'shared/cms-tree';
 import { type CmsLocale, cmsLocales } from 'shared/types/cms';
 import { toast } from 'sonner';
 
@@ -21,7 +21,7 @@ import { SegmentedControl } from '@/components/ui/segmented-control';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
-import { childrenOf, localized } from '../../-lib/cms-content';
+import { localized } from '../../-lib/cms-content';
 import { appTokens, appTokenStyle } from './tokens';
 
 type Mode = 'list' | 'page';
@@ -62,7 +62,7 @@ export function PhonePreview({
   const text = (node: CmsNode, field: 'title' | 'subtitle' | 'body') =>
     localized(node.translations, locale, field).value;
 
-  const rows = childrenOf(nodes, screenNode?.id ?? null).filter(
+  const rows = cmsChildren(nodes, screenNode?.id ?? null).filter(
     (node) => showHidden || !node.hidden || node.id === selectedId
   );
 

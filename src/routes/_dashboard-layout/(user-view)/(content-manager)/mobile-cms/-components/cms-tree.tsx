@@ -20,7 +20,7 @@ import {
   Trash2Icon
 } from 'lucide-react';
 import * as React from 'react';
-import { cmsVisibility } from 'shared/cms-tree';
+import { cmsChildren, cmsVisibility } from 'shared/cms-tree';
 import type { CmsLocale, CmsNodeType } from 'shared/types/cms';
 
 import type { CmsNode } from '@/api/cms';
@@ -43,11 +43,7 @@ import {
 } from '@/components/ui/tree';
 import { cn } from '@/lib/utils';
 
-import {
-  childrenOf,
-  isAnyTranslationMissing,
-  localized
-} from '../-lib/cms-content';
+import { isAnyTranslationMissing, localized } from '../-lib/cms-content';
 
 const rootItemId = 'root';
 const indent = 20;
@@ -167,7 +163,7 @@ export function CmsTree({
     const shown = new Set(shownNodes.map((node) => node.id));
     const add = (itemId: string, parentId: number | null) => {
       result[itemId] = {
-        children: childrenOf(nodes, parentId)
+        children: cmsChildren(nodes, parentId)
           .filter((child) => shown.has(child.id))
           .map((child) => String(child.id))
       };
@@ -253,7 +249,7 @@ export function CmsTree({
         if (!node) return null;
         const title = localized(node.translations, locale, 'title');
         const visibility = cmsVisibility(nodes, node.id);
-        const childCount = childrenOf(nodes, node.id).length;
+        const childCount = cmsChildren(nodes, node.id).length;
         const isSelected = node.id === selectedId;
 
         return (

@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { cmsVisibility } from 'shared/cms-tree';
+import { cmsChildren, cmsLineage, cmsVisibility } from 'shared/cms-tree';
 import {
   type CmsLocale,
   cmsLocales,
@@ -75,12 +75,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 
 import {
-  childrenOf,
   type CmsForm,
   formToPayload,
   hasText,
   isMissingTranslation,
-  lineage,
   localized,
   nodeToForm,
   typeChange,
@@ -275,7 +273,7 @@ export function NodeEditor({
 
   // --- Type change ---
 
-  const children = childrenOf(nodes, node.id);
+  const children = cmsChildren(nodes, node.id);
   const [pendingType, setPendingType] = React.useState<TypeChange | null>(null);
   const changeType = (to: CmsNodeType) => {
     const change = typeChange(form.getValues(), to, children.length);
@@ -301,7 +299,7 @@ export function NodeEditor({
   const titleOf = (n: CmsNode) =>
     localized(n.translations, cmsPrimaryLocale, 'title').value || t`Untitled`;
 
-  const path = lineage(nodes, node.id).reverse();
+  const path = cmsLineage(nodes, node.id).reverse();
 
   return (
     <>
