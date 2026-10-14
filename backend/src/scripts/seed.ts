@@ -3,10 +3,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { sanitizeCmsHtml } from '../../../shared/cms-html';
-import type {
-  CmsLocale,
-  CmsNodeType,
-  CmsOpenMode
+import {
+  cmsLocales,
+  type CmsNodeType,
+  type CmsOpenMode
 } from '../../../shared/types/cms';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { propertyOptionSchema } from '../../../shared/types/properties';
@@ -347,9 +347,7 @@ async function seedCms(
       .returning({ id: cmsNodes.id });
     if (!created) throw new Error(`Failed to seed ${node.de.title}`);
 
-    const locales = (['de', 'en'] as const).filter(
-      (locale): locale is CmsLocale => node[locale] !== undefined
-    );
+    const locales = cmsLocales.filter((locale) => node[locale] !== undefined);
     await db.insert(cmsNodeTranslations).values(
       locales.map((locale) => {
         const t = node[locale]!;

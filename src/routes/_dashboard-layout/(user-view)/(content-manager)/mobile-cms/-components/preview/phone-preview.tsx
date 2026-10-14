@@ -12,7 +12,7 @@ import {
 import * as React from 'react';
 import { sanitizeCmsHtml } from 'shared/cms-html';
 import { cmsChildren, cmsVisibility } from 'shared/cms-tree';
-import { type CmsLocale, cmsLocales } from 'shared/types/cms';
+import { type CmsLocale, cmsLocales, cmsPrimaryLocale } from 'shared/types/cms';
 import { toast } from 'sonner';
 
 import { cmsImageUrl, type CmsNode } from '@/api/cms';
@@ -46,7 +46,7 @@ export function PhonePreview({
   homeTitle
 }: PhonePreviewProps) {
   const { t } = useLingui();
-  const [locale, setLocale] = React.useState<CmsLocale>('de');
+  const [locale, setLocale] = React.useState<CmsLocale>(cmsPrimaryLocale);
   const [mode, setMode] = React.useState<Mode>('page');
   const [showHidden, setShowHidden] = React.useState(false);
 

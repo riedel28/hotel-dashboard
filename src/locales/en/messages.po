@@ -654,7 +654,7 @@ msgstr "API Key is required"
 msgid "App version"
 msgstr "App version"
 
-#: src/components/ui/rich-text-editor.tsx:264
+#: src/components/ui/rich-text-editor.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:213
 msgid "Apply"
 msgstr "Apply"
@@ -832,7 +832,7 @@ msgstr "Balance"
 msgid "becomes"
 msgstr "becomes"
 
-#: src/components/ui/rich-text-editor.tsx:302
+#: src/components/ui/rich-text-editor.tsx:305
 msgid "Bold"
 msgstr "Bold"
 
@@ -857,7 +857,7 @@ msgstr "Bold"
 #~ msgid "Booking number is required"
 #~ msgstr "Booking number is required"
 
-#: src/components/ui/rich-text-editor.tsx:320
+#: src/components/ui/rich-text-editor.tsx:323
 msgid "Bulleted list"
 msgstr "Bulleted list"
 
@@ -1095,7 +1095,7 @@ msgstr "Children"
 msgid "Choose a door lock system"
 msgstr "Choose a door lock system"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:344
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:337
 msgid "Choose a page or link in the tree, or tap one in the preview."
 msgstr "Choose a page or link in the tree, or tap one in the preview."
 
@@ -1287,7 +1287,7 @@ msgstr "Contact"
 #~ msgid "Contains an uppercase letter"
 #~ msgstr "Contains an uppercase letter"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:427
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:420
 msgid "Content"
 msgstr "Content"
 
@@ -1296,7 +1296,7 @@ msgstr "Content"
 msgid "Content Manager"
 msgstr "Content Manager"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:394
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:387
 msgid "Content of the hotel’s mobile app. Saved changes are live at once."
 msgstr "Content of the hotel’s mobile app. Saved changes are live at once."
 
@@ -1434,7 +1434,7 @@ msgstr "Create reservation"
 msgid "Create the first category to start adding products."
 msgstr "Create the first category to start adding products."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:297
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:290
 msgid "Create the first item"
 msgstr "Create the first item"
 
@@ -1787,8 +1787,8 @@ msgstr "Edit guest"
 msgid "Edit Guest"
 msgstr "Edit Guest"
 
-#: src/components/ui/rich-text-editor.tsx:419
-#: src/components/ui/rich-text-editor.tsx:420
+#: src/components/ui/rich-text-editor.tsx:422
+#: src/components/ui/rich-text-editor.tsx:423
 msgid "Edit HTML"
 msgstr "Edit HTML"
 
@@ -1835,7 +1835,7 @@ msgstr "edited {editedAt}"
 msgid "edited {editedAt} by {editorName}"
 msgstr "edited {editedAt} by {editorName}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:317
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:310
 msgid "Editor"
 msgstr "Editor"
 
@@ -2445,7 +2445,7 @@ msgstr "Forgot password?"
 msgid "Forgot your current password?"
 msgstr "Forgot your current password?"
 
-#: src/components/ui/rich-text-editor.tsx:336
+#: src/components/ui/rich-text-editor.tsx:339
 msgid "Formatting"
 msgstr "Formatting"
 
@@ -2580,11 +2580,11 @@ msgstr "Has errors"
 #~ msgid "Heading"
 #~ msgstr "Heading"
 
-#: src/components/ui/rich-text-editor.tsx:175
+#: src/components/ui/rich-text-editor.tsx:178
 msgid "Heading {headingLevel}"
 msgstr "Heading {headingLevel}"
 
-#: src/components/ui/rich-text-editor.tsx:151
+#: src/components/ui/rich-text-editor.tsx:154
 msgid "Heading {level}"
 msgstr "Heading {level}"
 
@@ -2708,7 +2708,7 @@ msgstr "Hide password"
 #: src/components/provider-setup/provider-page.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:104
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:376
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:369
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:50
@@ -2785,7 +2785,7 @@ msgstr "I don't have my phone — use a recovery code"
 msgid "I've saved my recovery codes in a safe place"
 msgstr "I've saved my recovery codes in a safe place"
 
-#: src/components/ui/rich-text-editor.tsx:407
+#: src/components/ui/rich-text-editor.tsx:410
 msgid "Image"
 msgstr "Image"
 
@@ -2875,11 +2875,11 @@ msgstr "Invite User"
 msgid "iOS App"
 msgstr "iOS App"
 
-#: src/components/ui/rich-text-editor.tsx:308
+#: src/components/ui/rich-text-editor.tsx:311
 msgid "Italic"
 msgstr "Italic"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:529
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:522
 msgid "Item"
 msgstr "Item"
 
@@ -2887,7 +2887,7 @@ msgstr "Item"
 msgid "Items"
 msgstr "Items"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:288
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:281
 msgid "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 msgstr "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 
@@ -2920,7 +2920,7 @@ msgstr "Keep setting up"
 msgid "Language"
 msgstr "Language"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:545
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:538
 msgid "Language of the titles"
 msgstr "Language of the titles"
 
@@ -3023,7 +3023,7 @@ msgstr "Light"
 msgid "Line"
 msgstr "Line"
 
-#: src/components/ui/rich-text-editor.tsx:392
+#: src/components/ui/rich-text-editor.tsx:395
 msgid "Link"
 msgstr "Link"
 
@@ -3258,8 +3258,8 @@ msgstr "Mobile App (PWA)"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:99
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:83
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:382
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:391
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:375
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:384
 msgid "Mobile CMS"
 msgstr "Mobile CMS"
 
@@ -3458,7 +3458,7 @@ msgstr "No categories yet"
 #~ msgid "No categories yet. Add a category to get started."
 #~ msgstr "No categories yet. Add a category to get started."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:285
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:278
 msgid "No content yet"
 msgstr "No content yet"
 
@@ -3527,7 +3527,7 @@ msgstr "No floor"
 msgid "No guests found"
 msgstr "No guests found"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:340
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:333
 msgid "No item selected"
 msgstr "No item selected"
 
@@ -3686,7 +3686,7 @@ msgstr "Notes your team adds about this property will be listed here."
 msgid "Nothing found"
 msgstr "Nothing found"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:557
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:550
 msgid "Nothing matches"
 msgstr "Nothing matches"
 
@@ -3704,7 +3704,7 @@ msgstr "Number"
 #~ msgid "Number of People"
 #~ msgstr "Number of People"
 
-#: src/components/ui/rich-text-editor.tsx:326
+#: src/components/ui/rich-text-editor.tsx:329
 msgid "Numbered list"
 msgstr "Numbered list"
 
@@ -3743,8 +3743,8 @@ msgstr "Only images are allowed."
 msgid "Only the first image was used"
 msgstr "Only the first image was used"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:536
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:541
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:529
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:534
 msgid "Only untranslated"
 msgstr "Only untranslated"
 
@@ -4097,9 +4097,9 @@ msgstr "POS"
 msgid "Position your photo"
 msgstr "Position your photo"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:363
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:415
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:438
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:356
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:408
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:431
 msgid "Preview"
 msgstr "Preview"
 
@@ -4397,8 +4397,8 @@ msgstr "Recovery codes"
 msgid "Recovery codes copied"
 msgstr "Recovery codes copied"
 
-#: src/components/ui/rich-text-editor.tsx:359
-#: src/components/ui/rich-text-editor.tsx:360
+#: src/components/ui/rich-text-editor.tsx:362
+#: src/components/ui/rich-text-editor.tsx:363
 msgid "Redo"
 msgstr "Redo"
 
@@ -4447,7 +4447,7 @@ msgstr "Reload to see their version. Your edits are kept until then."
 msgid "Remember me"
 msgstr "Remember me"
 
-#: src/components/ui/rich-text-editor.tsx:264
+#: src/components/ui/rich-text-editor.tsx:267
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:264
 msgid "Remove"
 msgstr "Remove"
@@ -4962,7 +4962,7 @@ msgstr "Search reservations"
 msgid "Search rooms"
 msgstr "Search rooms"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:524
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:517
 msgid "Search titles"
 msgstr "Search titles"
 
@@ -5214,7 +5214,7 @@ msgstr "Show all roles"
 #~ msgid "Show API key"
 #~ msgstr "Show API key"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:356
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:349
 msgid "Show content tree"
 msgstr "Show content tree"
 
@@ -5532,14 +5532,14 @@ msgstr "Tested at {0}"
 #~ msgid "Testing the Test environment for {0}."
 #~ msgstr "Testing the Test environment for {0}."
 
-#: src/components/ui/rich-text-editor.tsx:151
-#: src/components/ui/rich-text-editor.tsx:164
+#: src/components/ui/rich-text-editor.tsx:154
+#: src/components/ui/rich-text-editor.tsx:167
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:236
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:241
 msgid "Text"
 msgstr "Text"
 
-#: src/components/ui/rich-text-editor.tsx:145
+#: src/components/ui/rich-text-editor.tsx:148
 msgid "Text style"
 msgstr "Text style"
 
@@ -5585,7 +5585,7 @@ msgstr "The booking number, the room and the purpose of the stay."
 msgid "The code is shown on the device screen"
 msgstr "The code is shown on the device screen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:271
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:264
 msgid "The content could not be loaded"
 msgstr "The content could not be loaded"
 
@@ -5798,7 +5798,7 @@ msgstr "This invitation link is invalid."
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr "This is the service code that will be used to skip payment at check-in."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:338
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:331
 msgid "This item doesn’t exist (anymore)"
 msgstr "This item doesn’t exist (anymore)"
 
@@ -5951,7 +5951,7 @@ msgstr "Top level"
 msgid "Translation missing"
 msgstr "Translation missing"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:407
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:400
 msgid "Tree"
 msgstr "Tree"
 
@@ -6100,12 +6100,12 @@ msgstr "Unchanged"
 msgid "Unchecked nav items are hidden from the navigation and the Start page for this property."
 msgstr "Unchecked nav items are hidden from the navigation and the Start page for this property."
 
-#: src/components/ui/rich-text-editor.tsx:314
+#: src/components/ui/rich-text-editor.tsx:317
 msgid "Underline"
 msgstr "Underline"
 
-#: src/components/ui/rich-text-editor.tsx:346
-#: src/components/ui/rich-text-editor.tsx:347
+#: src/components/ui/rich-text-editor.tsx:349
+#: src/components/ui/rich-text-editor.tsx:350
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:85
 msgid "Undo"
 msgstr "Undo"

@@ -99,13 +99,16 @@ const variants = {
     extensions: richTextExtensions,
     headingLevels: [1, 2, 3, 4, 5, 6],
     images: true,
-    cms: false
+    history: false,
+    htmlMode: false
   },
   cms: {
     extensions: cmsRichTextExtensions,
     headingLevels: [2, 3],
     images: false,
-    cms: true
+    // Undo/redo buttons and editing the HTML source.
+    history: true,
+    htmlMode: true
   }
 } as const;
 
@@ -336,7 +339,7 @@ function Toolbar({
       aria-label={t`Formatting`}
       className="flex flex-wrap items-center gap-0.5 border-b border-input p-1"
     >
-      {variant.cms && (
+      {variant.history && (
         <>
           <Button
             type="button"
@@ -413,7 +416,7 @@ function Toolbar({
           }}
         />
       )}
-      {variant.cms && (
+      {variant.htmlMode && (
         <Toggle
           className={cn(toolbarButtonClassName, 'ms-auto')}
           aria-label={t`Edit HTML`}

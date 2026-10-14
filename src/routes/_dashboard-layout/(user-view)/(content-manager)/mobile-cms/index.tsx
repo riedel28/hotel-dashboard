@@ -159,11 +159,15 @@ function MobileCmsPage() {
 
   const titleOf = useNodeTitle();
 
+  // mutate() is stable, the mutation objects around it are not.
+  const { mutate: setVisibility } = mutations.setVisibility;
+  const { mutate: duplicate } = mutations.duplicate;
+  const { mutate: move } = mutations.move;
   const actions: CmsTreeActions = React.useMemo(
     () => ({
       onSelect: (id) => select(id),
       onToggleHidden: (node) =>
-        mutations.setVisibility.mutate({ id: node.id, hidden: !node.hidden }),
+        setVisibility({ id: node.id, hidden: !node.hidden }),
       onAddChild: (node, type) =>
         setCreateRequest({
           parentId: node.id,
@@ -171,21 +175,15 @@ function MobileCmsPage() {
           type
         }),
       onDuplicate: (node) =>
-        mutations.duplicate.mutate(node.id, {
+        duplicate(node.id, {
           onSuccess: (copy) => select(copy.id)
         }),
       onMoveTo: (node) => setMoveTarget(node),
       onDelete: (node) => setDeleteTarget(node),
       onReorder: (node, index) =>
-        mutations.move.mutate({ id: node.id, parent_id: node.parent_id, index })
+        move({ id: node.id, parent_id: node.parent_id, index })
     }),
-    [
-      mutations.setVisibility,
-      mutations.duplicate,
-      mutations.move,
-      select,
-      titleOf
-    ]
+    [setVisibility, duplicate, move, select, titleOf]
   );
 
   const addSection = () =>
@@ -196,16 +194,11 @@ function MobileCmsPage() {
     title: string;
     url?: string;
   }) => {
-    const parentId = createRequest?.parentId ?? null;
     const created = await mutations.create.mutateAsync({
-      parent_id: parentId,
+      parent_id: createRequest?.parentId ?? null,
       ...data
     });
-    if (parentId != null) {
-      setExpandedItems((current) => [
-        ...new Set([...current, String(parentId)])
-      ]);
-    }
+    // Selecting it expands the path to it (see above).
     select(created.id);
   };
 
