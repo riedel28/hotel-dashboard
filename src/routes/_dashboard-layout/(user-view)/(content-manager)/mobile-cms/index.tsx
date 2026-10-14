@@ -188,8 +188,10 @@ function MobileCmsPage() {
     [setVisibility, duplicate, move, select, titleOf]
   );
 
-  const addSection = () =>
-    setCreateRequest({ parentId: null, parentTitle: null });
+  const addSection = React.useCallback(
+    () => setCreateRequest({ parentId: null, parentTitle: null }),
+    []
+  );
 
   const createNode = async (data: {
     type: CmsNodeType;
@@ -477,7 +479,9 @@ function MobileCmsPage() {
   );
 }
 
-function TreePanel({
+// Memoized: typing in the editor re-renders the page (the preview follows the
+// draft), but the tree shows saved nodes and needn't redraw for that.
+const TreePanel = React.memo(function TreePanel({
   nodes,
   shownNodes,
   isFiltering,
@@ -567,7 +571,7 @@ function TreePanel({
       )}
     </div>
   );
-}
+});
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/'
