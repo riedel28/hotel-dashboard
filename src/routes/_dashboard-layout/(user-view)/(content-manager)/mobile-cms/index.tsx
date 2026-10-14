@@ -347,48 +347,55 @@ function MobileCmsPage() {
           </Card>
         </aside>
 
-        <section
-          className="min-w-0 rounded-xl border bg-card px-4 pt-4"
+        {/* overflow-visible: the form's save bar sticks to the window, which
+            a clipping card would prevent. No bottom padding: the bar is the
+            card's bottom edge. */}
+        <Card
+          role="region"
           aria-label={t`Editor`}
+          className="min-w-0 overflow-visible pb-0 md:pb-0"
         >
-          {selected ? (
-            <NodeEditor
-              key={selected.id}
-              node={selected}
-              nodes={nodes}
-              onDraftChange={setDraft}
-              onSelect={select}
-              onToggleHidden={actions.onToggleHidden}
-              onAddChild={actions.onAddChild}
-              onReorder={actions.onReorder}
-            />
-          ) : (
-            // A title and a hint, a size up from Products' empty list.
-            <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 pb-4 text-center">
-              <p className="text-base font-medium">
-                {requestedId != null ? (
-                  <Trans>This item doesn’t exist (anymore)</Trans>
-                ) : (
-                  <Trans>No item selected</Trans>
-                )}
-              </p>
-              <p className="text-base text-balance text-muted-foreground">
-                <Trans>
-                  Choose a page or link in the tree, or tap one in the preview.
-                </Trans>
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-2 @3xl:hidden"
-                onClick={() => setTreeOpen(true)}
-              >
-                <ListTreeIcon />
-                <Trans>Show content tree</Trans>
-              </Button>
-            </div>
-          )}
-        </section>
+          <CardContent>
+            {selected ? (
+              <NodeEditor
+                key={selected.id}
+                node={selected}
+                nodes={nodes}
+                onDraftChange={setDraft}
+                onSelect={select}
+                onToggleHidden={actions.onToggleHidden}
+                onAddChild={actions.onAddChild}
+                onReorder={actions.onReorder}
+              />
+            ) : (
+              // A title and a hint, a size up from Products' empty list.
+              <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 pb-4 text-center md:pb-6">
+                <p className="text-base font-medium">
+                  {requestedId != null ? (
+                    <Trans>This item doesn’t exist (anymore)</Trans>
+                  ) : (
+                    <Trans>No item selected</Trans>
+                  )}
+                </p>
+                <p className="text-base text-balance text-muted-foreground">
+                  <Trans>
+                    Choose a page or link in the tree, or tap one in the
+                    preview.
+                  </Trans>
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-2 @3xl:hidden"
+                  onClick={() => setTreeOpen(true)}
+                >
+                  <ListTreeIcon />
+                  <Trans>Show content tree</Trans>
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         <aside className="sticky top-4 @max-7xl:hidden" aria-label={t`Preview`}>
           {preview}

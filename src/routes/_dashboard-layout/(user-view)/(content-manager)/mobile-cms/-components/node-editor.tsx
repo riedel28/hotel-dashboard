@@ -581,8 +581,9 @@ export function NodeEditor({
 
       {/* The page scrolls in <main>, whose bottom padding (pb-4, md:pb-8) a
           sticky element stops short of: the negative offset lets the bar
-          reach the window's bottom edge instead of floating above it. */}
-      <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t bg-card px-4 py-3 md:-bottom-8">
+          reach the window's bottom edge instead of floating above it. The
+          side margins undo the card's padding (px-4, md:px-6). */}
+      <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t bg-card px-4 py-3 md:-bottom-8 md:-mx-6 md:px-6">
         <span className="me-auto text-sm text-muted-foreground" role="status">
           {isDirty ? (
             <span className="flex items-center gap-2 text-foreground">
