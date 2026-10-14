@@ -2,8 +2,8 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  ImagePlusIcon,
   Loader2Icon,
+  PlusIcon,
   RotateCcwIcon,
   XIcon
 } from 'lucide-react';
@@ -202,10 +202,11 @@ export function ImageField({ value, onChange, max = 30 }: ImageFieldProps) {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="flex size-24 flex-col items-center justify-center gap-1 rounded-lg border border-dashed text-xs text-muted-foreground hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          aria-label={max === 1 ? t`Add image` : t`Add images`}
+          title={max === 1 ? t`Add image` : t`Add images`}
+          className="flex size-24 items-center justify-center rounded-lg border border-dashed text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
         >
-          <ImagePlusIcon className="size-5" />
-          {max === 1 ? <Trans>Add image</Trans> : <Trans>Add images</Trans>}
+          <PlusIcon className="size-5" />
         </button>
       )}
       <input
