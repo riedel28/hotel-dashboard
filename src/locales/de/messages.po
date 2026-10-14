@@ -41,7 +41,7 @@ msgid "“{0}” deleted"
 msgstr "„{0}“ gelöscht"
 
 #. placeholder {0}: titleOf(node)
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:612
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:613
 msgid "“{0}” has unsaved changes."
 msgstr "„{0}“ hat ungespeicherte Änderungen."
 
@@ -54,12 +54,12 @@ msgid "(optional)"
 msgstr "(optional)"
 
 #. placeholder {0}: change.imageCount
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:900
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:909
 msgid "{0, plural, =0 {The text is removed when you save.} one {The text and # image are removed when you save.} other {The text and # images are removed when you save.}}"
 msgstr "{0, plural, =0 {Der Text wird beim Speichern entfernt.} one {Der Text und # Bild werden beim Speichern entfernt.} other {Der Text und # Bilder werden beim Speichern entfernt.}}"
 
 #. placeholder {0}: change.imageCount
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:907
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:916
 msgid "{0, plural, one {# image is removed when you save.} other {# images are removed when you save.}}"
 msgstr "{0, plural, one {# Bild wird beim Speichern entfernt.} other {# Bilder werden beim Speichern entfernt.}}"
 
@@ -79,7 +79,7 @@ msgid "{0, plural, one {# selected} other {# selected}}"
 msgstr "{0, plural, one {# ausgewählt} other {# ausgewählt}}"
 
 #. placeholder {0}: change.childCount
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:892
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:901
 msgid "{0, plural, one {A link can’t contain other items. Move or delete its # nested item first.} other {A link can’t contain other items. Move or delete its # nested items first.}}"
 msgstr "{0, plural, one {Ein Link kann keine weiteren Einträge enthalten. Verschiebe oder lösche zuerst den # untergeordneten Eintrag.} other {Ein Link kann keine weiteren Einträge enthalten. Verschiebe oder lösche zuerst die # untergeordneten Einträge.}}"
 
@@ -294,7 +294,7 @@ msgstr "Aktive Reservierung – wird übersprungen"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:153
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:193
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:797
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:806
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:290
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
@@ -519,7 +519,7 @@ msgstr "Altersgruppe"
 msgid "All"
 msgstr "Alle"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:572
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:573
 msgid "All changes saved"
 msgstr "Alle Änderungen gespeichert"
 
@@ -855,8 +855,8 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:190
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/delete-node-dialog.tsx:70
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/move-node-dialog.tsx:129
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:581
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:928
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:582
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:937
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:84
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:299
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:91
@@ -1287,7 +1287,7 @@ msgstr "Kopieren"
 msgid "Copy Client Key"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:523
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:524
 msgid "Copy from German"
 msgstr "Aus Deutsch kopieren"
 
@@ -1635,7 +1635,7 @@ msgstr "Doe"
 #~ msgid "Don't have an account?"
 #~ msgstr "Haben Sie noch kein Konto?"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:620
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:621
 msgid "Don’t save"
 msgstr "Nicht speichern"
 
@@ -2088,7 +2088,7 @@ msgstr "Ereignis"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:266
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:135
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:340
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:806
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:815
 msgid "External link"
 msgstr "Externer Link"
 
@@ -2501,8 +2501,8 @@ msgid "Guests don’t see this item because “{0}” is hidden."
 msgstr "Gäste sehen diesen Eintrag nicht, weil „{0}“ ausgeblendet ist."
 
 #: src/components/section-nav.tsx:201
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:481
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:483
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:482
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:484
 msgid "Has errors"
 msgstr "Enthält Fehler"
 
@@ -2600,7 +2600,7 @@ msgstr "Hallo /orders!"
 msgid "Hello from About!"
 msgstr "Hallo von About!"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:845
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:854
 msgid "Hidden"
 msgstr "Ausgeblendet"
 
@@ -2716,10 +2716,14 @@ msgid "Image {0}"
 msgstr "Bild {0}"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:427
-msgid "Image or icon (optional)"
-msgstr "Bild oder Icon (optional)"
+msgid "Image or icon"
+msgstr "Bild oder Icon"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:445
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:427
+#~ msgid "Image or icon (optional)"
+#~ msgstr "Bild oder Icon (optional)"
+
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:446
 msgid "Images"
 msgstr "Bilder"
 
@@ -2803,7 +2807,7 @@ msgstr "Einträge"
 msgid "John"
 msgstr "John"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:448
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:449
 msgid "JPG, PNG or WebP up to 2 MB. Drag to change the order."
 msgstr "JPG, PNG oder WebP bis 2 MB. Zum Sortieren ziehen."
 
@@ -2908,7 +2912,7 @@ msgstr "Zuletzt aktualisiert: {date}"
 msgid "Last used {0}"
 msgstr "Zuletzt verwendet {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:751
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:760
 msgid "Leave empty to use the main URL."
 msgstr "Leer lassen, um die Haupt-URL zu verwenden."
 
@@ -2996,7 +3000,7 @@ msgstr "Anmelden"
 #~ msgid "Login into account"
 #~ msgstr "Anmelden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:471
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:472
 msgid "main"
 msgstr "Hauptsprache"
 
@@ -3008,7 +3012,7 @@ msgstr "Hauptnavigation"
 msgid "Maintenance"
 msgstr "Wartung"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:931
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:940
 msgid "Make it a link"
 msgstr "In Link umwandeln"
 
@@ -3016,7 +3020,7 @@ msgstr "In Link umwandeln"
 msgid "Make primary"
 msgstr "Zum Hauptgast machen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:887
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:896
 msgid "Make this a link?"
 msgstr "In einen Link umwandeln?"
 
@@ -3228,7 +3232,7 @@ msgstr "Nach rechts verschieben"
 msgid "Move to…"
 msgstr "Verschieben nach…"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:852
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:861
 msgid "Move up"
 msgstr "Nach oben"
 
@@ -3270,8 +3274,8 @@ msgstr "Navigationspunkte"
 msgid "Need a starting point?"
 msgstr "Brauchen Sie eine Vorlage?"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:790
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:816
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:799
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:825
 msgid "Nested items"
 msgstr "Untereinträge"
 
@@ -3437,7 +3441,7 @@ msgstr ""
 msgid "No name"
 msgstr "Kein Name"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:813
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:822
 msgid "No nested items."
 msgstr "Keine Untereinträge."
 
@@ -3534,7 +3538,7 @@ msgstr "Noch keine Zimmer"
 msgid "No rows to show"
 msgstr "Keine Zeilen vorhanden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:501
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:502
 msgid "No translation yet. The app shows the German text in its place."
 msgstr "Noch keine Übersetzung. Die App zeigt stattdessen den deutschen Text."
 
@@ -3610,7 +3614,7 @@ msgstr "Belegt"
 msgid "Offline"
 msgstr "Offline"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:923
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:932
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:101
 msgid "OK"
@@ -3674,6 +3678,7 @@ msgstr "Öffnet im In-App-Browser"
 msgid "Opens in the system browser"
 msgstr "Öffnet im Systembrowser"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:643
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/upload-step.tsx:124
@@ -3714,7 +3719,7 @@ msgstr "Außer Betrieb"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:271
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:339
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:802
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:811
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:106
 msgid "Page"
 msgstr "Seite"
@@ -4687,8 +4692,8 @@ msgstr "Tests laufen… ({passedCount}/{0})"
 #~ msgid "SALTO"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:589
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:629
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:590
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:630
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:265
@@ -4706,7 +4711,7 @@ msgstr "Änderungen speichern"
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:609
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:610
 msgid "Save changes?"
 msgstr "Änderungen speichern?"
 
@@ -5195,7 +5200,7 @@ msgstr "Staging"
 msgid "Start"
 msgstr "Start"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:533
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:534
 msgid "Start empty"
 msgstr "Leer beginnen"
 
@@ -5221,7 +5226,7 @@ msgstr "Station"
 msgid "Status"
 msgstr "Status"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:617
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:618
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:94
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:330
@@ -5263,9 +5268,13 @@ msgstr "Stark"
 #~ msgid "Subheading"
 #~ msgstr "Zwischenüberschrift"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:695
+msgid "Subtitle"
+msgstr "Untertitel"
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:688
-msgid "Subtitle (optional)"
-msgstr "Untertitel (optional)"
+#~ msgid "Subtitle (optional)"
+#~ msgstr "Untertitel (optional)"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:292
 #~ msgid "Success"
@@ -5379,8 +5388,8 @@ msgstr "Getestet um {0}"
 
 #: src/components/ui/rich-text-editor.tsx:151
 #: src/components/ui/rich-text-editor.tsx:164
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:719
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:724
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:727
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:732
 msgid "Text"
 msgstr "Text"
 
@@ -5652,7 +5661,7 @@ msgstr "Dieser Link ist ausgeblendet und für Gäste nicht sichtbar."
 msgid "This log does not exist or was removed."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:885
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:894
 msgid "This page has nested items"
 msgstr "Diese Seite hat Untereinträge"
 
@@ -5694,7 +5703,7 @@ msgstr "Zeitbasiert (TOTP) · 6 Ziffern · 30 Sekunden"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:100
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:665
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:674
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:96
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:41
 msgid "Title"
@@ -5705,8 +5714,8 @@ msgid "Title (German)"
 msgstr "Titel (Deutsch)"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:667
-msgid "Title (optional)"
-msgstr "Titel (optional)"
+#~ msgid "Title (optional)"
+#~ msgstr "Titel (optional)"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:109
@@ -5784,8 +5793,8 @@ msgstr "Oberste Ebene"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:287
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:289
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:481
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:483
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:482
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:484
 msgid "Translation missing"
 msgstr "Übersetzung fehlt"
 
@@ -5963,13 +5972,13 @@ msgstr "Unbenanntes Gerät"
 msgid "Unpin {title} column"
 msgstr "Spalte {title} lösen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:569
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:570
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:244
 msgid "Unsaved changes"
 msgstr "Nicht gespeicherte Änderungen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:914
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:923
 msgid "Until then you can switch back without losing anything."
 msgstr "Bis dahin kannst du ohne Verlust zurückwechseln."
 
@@ -6037,9 +6046,13 @@ msgstr "{0} wird hochgeladen"
 msgid "Upper and lowercase letters"
 msgstr "Groß- und Kleinbuchstaben"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:748
+msgid "URL for this language"
+msgstr "URL für diese Sprache"
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:740
-msgid "URL for this language (optional)"
-msgstr "URL für diese Sprache (optional)"
+#~ msgid "URL for this language (optional)"
+#~ msgstr "URL für diese Sprache (optional)"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:10
 #~ msgid "Use “Add category” above to create the first one."

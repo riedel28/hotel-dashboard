@@ -424,7 +424,8 @@ export function NodeEditor({
             render={({ field }) => (
               <Field className="gap-2">
                 <FieldLabel>
-                  <Trans>Image or icon (optional)</Trans>
+                  <Trans>Image or icon</Trans>
+                  <Optional />
                 </FieldLabel>
                 <ImageField
                   max={1}
@@ -635,6 +636,15 @@ export function NodeEditor({
   );
 }
 
+// Marks an optional field's label, as elsewhere in the app.
+function Optional() {
+  return (
+    <span className="-ml-1 font-normal text-muted-foreground">
+      (<Trans>optional</Trans>)
+    </span>
+  );
+}
+
 function TranslationFields({
   form,
   locale,
@@ -661,11 +671,8 @@ function TranslationFields({
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-2">
             <FieldLabel htmlFor={id('title')}>
-              {isPrimary ? (
-                <Trans>Title</Trans>
-              ) : (
-                <Trans>Title (optional)</Trans>
-              )}
+              <Trans>Title</Trans>
+              {!isPrimary && <Optional />}
             </FieldLabel>
             <Input
               {...field}
@@ -685,7 +692,8 @@ function TranslationFields({
           <Field data-invalid={fieldState.invalid} className="gap-2">
             <div className="flex items-baseline justify-between">
               <FieldLabel htmlFor={id('subtitle')}>
-                <Trans>Subtitle (optional)</Trans>
+                <Trans>Subtitle</Trans>
+                <Optional />
               </FieldLabel>
               <span
                 className={cn(
@@ -737,7 +745,8 @@ function TranslationFields({
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} className="gap-2">
                 <FieldLabel htmlFor={id('url')}>
-                  <Trans>URL for this language (optional)</Trans>
+                  <Trans>URL for this language</Trans>
+                  <Optional />
                 </FieldLabel>
                 <Input
                   {...field}
