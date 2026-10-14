@@ -104,7 +104,7 @@ interface NodeEditorProps {
 // (Alert info: sky-50 / sky-800, dark sky-800/20 / sky-300) instead of the
 // neutral ones that stood out on it.
 const noteButtonClassName =
-  'border-sky-300 bg-transparent text-sky-800 hover:bg-sky-100 hover:text-sky-900 dark:border-sky-700 dark:bg-transparent dark:text-sky-300 dark:hover:bg-sky-800/40 dark:hover:text-sky-200';
+  'border-sky-800/20 bg-transparent text-sky-800 hover:bg-sky-100 hover:text-sky-900 dark:border-sky-300/20 dark:bg-transparent dark:text-sky-300 dark:hover:bg-sky-800/40 dark:hover:text-sky-200';
 const noteGhostButtonClassName =
   'text-sky-800 hover:bg-sky-100 hover:text-sky-900 dark:text-sky-300 dark:hover:bg-sky-800/40 dark:hover:text-sky-200';
 
