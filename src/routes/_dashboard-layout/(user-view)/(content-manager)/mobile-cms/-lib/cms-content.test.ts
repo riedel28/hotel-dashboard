@@ -147,19 +147,10 @@ describe('typeChange', () => {
       open_mode: 'in_app',
       image_ids: []
     });
-    expect(payload.translations.de.body).toBe('');
   });
 });
 
 describe('formToPayload', () => {
-  it('sends EN only when it has any text', () => {
-    const form = nodeToForm(node());
-    expect(formToPayload(form, 'v1').translations.en).toBeUndefined();
-
-    form.translations.en.title = 'Spa';
-    expect(formToPayload(form, 'v1').translations.en?.title).toBe('Spa');
-  });
-
   it("sends a page's gallery and a link's single image", () => {
     const page = nodeToForm(node({ image_ids: [imageB, imageA] }));
     expect(formToPayload(page, 'v1').image_ids).toEqual([imageB, imageA]);

@@ -56,29 +56,22 @@ export function nodeToForm(node: CmsNode): CmsForm {
   };
 }
 
-/** What the server stores for the form: only the current type's fields. */
+/**
+ * The form as the server takes it: the current type's image(s), URL and
+ * open mode. The translations go as typed — the server drops what the type
+ * doesn't have and stores an empty secondary locale as untranslated.
+ */
 export function formToPayload(
   form: CmsForm,
   updatedAt: string
 ): SaveCmsNodeData {
   const isLink = form.type === 'link';
-  const translation = (t: CmsFormTranslation) => ({
-    title: t.title,
-    subtitle: t.subtitle,
-    body: isLink ? '' : t.body,
-    url: isLink ? t.url : ''
-  });
   return {
     type: form.type,
     url: isLink ? form.url.trim() : null,
     open_mode: isLink ? form.open_mode : null,
     image_ids: isLink ? (form.icon ? [form.icon] : []) : form.gallery,
-    translations: {
-      de: translation(form.translations.de),
-      ...(hasText(form.translations.en) && {
-        en: translation(form.translations.en)
-      })
-    },
+    translations: form.translations,
     updated_at: updatedAt
   };
 }
@@ -167,24 +160,7 @@ export function typeChange(
 
 /** A saved node with the form's unsaved state, for the preview. */
 export function applyForm(node: CmsNode, form: CmsForm): CmsNode {
-  const payload = formToPayload(form, node.updated_at);
-  const translation = (t: CmsFormTranslation) => ({
-    title: t.title || null,
-    subtitle: t.subtitle || null,
-    body: payload.type === 'link' ? null : t.body || null,
-    url: payload.type === 'link' ? t.url || null : null
-  });
-  return {
-    ...node,
-    type: payload.type,
-    url: payload.url ?? null,
-    open_mode: payload.open_mode ?? null,
-    image_ids: payload.image_ids,
-    translations: {
-      de: translation(form.translations.de),
-      en: translation(form.translations.en)
-    }
-  };
+  return { ...node, ...formToPayload(form, node.updated_at) };
 }
 
 /**
