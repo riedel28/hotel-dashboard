@@ -10,6 +10,7 @@ import env from '../env';
 import { errorHandler, notFound } from './middleware/error';
 import { createStrictRateLimiter } from './middleware/rate-limit';
 import authRouter from './routes/auth';
+import cmsRouter from './routes/cms';
 import customersRouter from './routes/customers';
 import devicesRouter from './routes/devices';
 import guestAbcRouter from './routes/guest-abc';
@@ -70,6 +71,7 @@ app.get('/api/health', (_req, res) => {
 const authLimiter = createStrictRateLimiter();
 app.use('/api/auth', authLimiter, verificationRouter);
 app.use('/api/auth', authLimiter, authRouter);
+app.use('/api/cms', cmsRouter);
 app.use('/api/devices', devicesRouter);
 app.use('/api/guest-abc', guestAbcRouter);
 app.use('/api/monitoring', monitoringRouter);
