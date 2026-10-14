@@ -11,6 +11,7 @@ import {
   LayoutGridIcon,
   LockIcon,
   ShoppingBagIcon,
+  SmartphoneIcon,
   SquareActivityIcon,
   TabletSmartphoneIcon,
   UsersIcon
@@ -90,6 +91,12 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     to: '/products',
     icon: ShoppingBagIcon,
     label: msg`Products`
+  },
+  'mobile-cms': {
+    group: 'content-manager',
+    to: '/mobile-cms',
+    icon: SmartphoneIcon,
+    label: msg`Mobile CMS`
   },
   'pms-provider': {
     group: 'integrations',

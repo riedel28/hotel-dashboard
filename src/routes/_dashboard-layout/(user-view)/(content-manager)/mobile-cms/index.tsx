@@ -537,6 +537,7 @@ function TreePanel({
         <div className="flex items-center gap-2">
           <Checkbox
             id="cms-only-missing"
+            aria-label={t`Only untranslated`}
             checked={onlyMissing}
             onCheckedChange={(checked) => onOnlyMissingChange(checked === true)}
           />
