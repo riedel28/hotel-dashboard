@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
+import { useLastNonNull } from '../-lib/use-last-non-null';
 import { useNodeTitle } from '../-lib/use-node-title';
 
 interface MoveNodeDialogProps {
@@ -29,7 +30,7 @@ interface MoveNodeDialogProps {
 // Pick a new parent: the top level or any page that is neither the node, one
 // of its descendants, nor its current parent. The node goes to the end there.
 export function MoveNodeDialog({
-  node,
+  node: requested,
   nodes,
   locale,
   onOpenChange,
@@ -39,9 +40,11 @@ export function MoveNodeDialog({
   const titleOf = useNodeTitle();
   const [target, setTarget] = React.useState<number | null | undefined>();
 
+  // Kept while the dialog closes.
+  const node = useLastNonNull(requested);
   React.useEffect(() => {
     setTarget(undefined);
-  }, [node]);
+  }, [requested]);
 
   // Every node in tree order with its depth.
   const rows = React.useMemo(() => {
@@ -79,7 +82,7 @@ export function MoveNodeDialog({
   const title = titleOf(node, locale);
 
   return (
-    <Dialog open onOpenChange={onOpenChange}>
+    <Dialog open={requested != null} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>

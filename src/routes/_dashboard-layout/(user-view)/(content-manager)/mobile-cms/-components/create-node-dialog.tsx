@@ -23,6 +23,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { RadioCards } from '@/components/ui/radio-cards';
 
+import { useLastNonNull } from '../-lib/use-last-non-null';
+
 export interface CreateNodeRequest {
   parentId: number | null;
   // Shown in the title; null for a top-level section.
@@ -100,7 +102,7 @@ export function CreateNodeDialog({
     }
   };
 
-  const parentTitle = request?.parentTitle;
+  const parentTitle = useLastNonNull(request)?.parentTitle;
 
   return (
     <Dialog open={request != null} onOpenChange={onOpenChange}>

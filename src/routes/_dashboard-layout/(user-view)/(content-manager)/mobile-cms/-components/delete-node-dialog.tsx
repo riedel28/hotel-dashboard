@@ -11,6 +11,8 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 
+import { useLastNonNull } from '../-lib/use-last-non-null';
+
 // How many descendants are listed by name before "and N more".
 const listedDescendants = 5;
 
@@ -25,8 +27,9 @@ export function DeleteNodeDialog({
   onOpenChange,
   onConfirm
 }: DeleteNodeDialogProps) {
-  const title = target?.title ?? '';
-  const descendants = target?.descendantTitles ?? [];
+  const shown = useLastNonNull(target);
+  const title = shown?.title ?? '';
+  const descendants = shown?.descendantTitles ?? [];
   const rest = descendants.length - listedDescendants;
 
   return (

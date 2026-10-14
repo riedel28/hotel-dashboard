@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 import type { TypeChange } from '../-lib/cms-content';
+import { useLastNonNull } from '../-lib/use-last-non-null';
 import type { useNodeForm } from './use-node-form';
 
 // Page → link: refused while it has nested items, confirmed when text or
@@ -26,7 +27,8 @@ export function TypeChangeDialog({
   onClose: () => void;
   onConfirm: () => void;
 }) {
-  const blocked = change?.kind === 'blocked';
+  const shown = useLastNonNull(change);
+  const blocked = shown?.kind === 'blocked';
   return (
     <AlertDialog
       open={change != null && change.kind !== 'free'}
@@ -42,24 +44,24 @@ export function TypeChangeDialog({
             )}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {change?.kind === 'blocked' && (
+            {shown?.kind === 'blocked' && (
               <Plural
-                value={change.childCount}
+                value={shown.childCount}
                 one="A link can’t contain other items. Move or delete its # nested item first."
                 other="A link can’t contain other items. Move or delete its # nested items first."
               />
             )}
-            {change?.kind === 'confirm' &&
-              (change.hasText ? (
+            {shown?.kind === 'confirm' &&
+              (shown.hasText ? (
                 <Plural
-                  value={change.imageCount}
+                  value={shown.imageCount}
                   _0="The text is removed when you save."
                   one="The text and # image are removed when you save."
                   other="The text and # images are removed when you save."
                 />
               ) : (
                 <Plural
-                  value={change.imageCount}
+                  value={shown.imageCount}
                   one="# image is removed when you save."
                   other="# images are removed when you save."
                 />
