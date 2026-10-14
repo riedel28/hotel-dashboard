@@ -584,8 +584,8 @@ export function NodeEditor({
       <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t bg-card px-4 py-3 md:-bottom-8">
         <span className="me-auto text-sm text-muted-foreground" role="status">
           {isDirty ? (
-            <span className="flex items-center gap-1.5 text-foreground">
-              <span className="size-2 rounded-full bg-amber-500" />
+            <span className="flex items-center gap-2 text-foreground">
+              <span className="size-1.5 rounded-full bg-amber-500" />
               <Trans>Unsaved changes</Trans>
             </span>
           ) : (
