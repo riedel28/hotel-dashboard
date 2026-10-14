@@ -1,6 +1,8 @@
+import sanitizeHtml from 'sanitize-html';
 import { describe, expect, it } from 'vitest';
 
-import { cmsHasText, sanitizeCmsHtml } from './cms-html';
+import { sanitizeCmsHtml } from './cms-html';
+import { cmsHasText } from './cms-text';
 
 describe('sanitizeCmsHtml', () => {
   it('keeps the formats the app renders', () => {
@@ -39,5 +41,26 @@ describe('cmsHasText', () => {
     expect(cmsHasText('<script>alert(1)</script>')).toBe(false);
     expect(cmsHasText('<p>Hallo</p>')).toBe(true);
     expect(cmsHasText('AT&T')).toBe(true);
+    expect(cmsHasText('<p>a &lt; b</p>')).toBe(true);
+  });
+  it('agrees with what sanitize-html leaves as text', () => {
+    const samples = [
+      '<p></p>',
+      '<p>&nbsp;</p>',
+      '<p>\u00a0</p>',
+      '<br><ul><li></li></ul>',
+      '<style>p { color: red }</style>',
+      '<script>alert(1)</script><p> </p>',
+      '<p>Hallo</p>',
+      '<p>&amp;</p>',
+      '<h2>Öffnungszeiten</h2>'
+    ];
+    for (const html of samples) {
+      const text = sanitizeHtml(html, {
+        allowedTags: [],
+        allowedAttributes: {}
+      }).trim();
+      expect(cmsHasText(html), html).toBe(text !== '');
+    }
   });
 });

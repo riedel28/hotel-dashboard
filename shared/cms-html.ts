@@ -1,5 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 
+import { cmsHasText } from './cms-text';
+
 // The HTML a CMS text may contain: what the app renders natively. Narrower
 // than shared/rich-text.ts — images go to the gallery, headings are H2/H3.
 export const cmsAllowedTags = [
@@ -25,20 +27,6 @@ const options: sanitizeHtml.IOptions = {
   allowedSchemes: ['http', 'https', 'mailto', 'tel'],
   nonTextTags
 };
-
-/**
- * Whether a CMS text has anything a guest would read: markup, whitespace
- * and the empty paragraph an editor leaves behind don't count.
- */
-export function cmsHasText(html: string) {
-  return (
-    sanitizeHtml(html, {
-      allowedTags: [],
-      allowedAttributes: {},
-      nonTextTags
-    }).trim() !== ''
-  );
-}
 
 // The one sanitizer for a CMS text: the server runs it on save, the preview
 // on every render, so the preview shows exactly what gets stored.

@@ -1,4 +1,4 @@
-import { cmsHasText } from 'shared/cms-html';
+import { cmsHasText } from 'shared/cms-text';
 import { cmsLineage } from 'shared/cms-tree';
 import {
   type CmsLocale,
