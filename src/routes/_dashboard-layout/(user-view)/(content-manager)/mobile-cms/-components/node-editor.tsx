@@ -294,29 +294,32 @@ export function NodeEditor({
     <>
       {/* Like the Products card: the path above, the open item as title. */}
       <CardHeader>
-        <Breadcrumb aria-label={t`Path`}>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink to="/mobile-cms" search={{}}>
-                <Trans>Content</Trans>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            {path.slice(0, -1).map((ancestor) => (
-              <React.Fragment key={ancestor.id}>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem className="min-w-0" title={titleOf(ancestor)}>
-                  <BreadcrumbLink
-                    to="/mobile-cms"
-                    search={{ node: ancestor.id }}
-                    className="truncate"
-                  >
-                    {titleOf(ancestor)}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </React.Fragment>
-            ))}
-          </BreadcrumbList>
-        </Breadcrumb>
+        {/* Only below the top level: there the path would be Home alone. */}
+        {path.length > 1 && (
+          <Breadcrumb aria-label={t`Path`}>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink to="/mobile-cms" search={{}}>
+                  <Trans>Home</Trans>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              {path.slice(0, -1).map((ancestor) => (
+                <React.Fragment key={ancestor.id}>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem className="min-w-0" title={titleOf(ancestor)}>
+                    <BreadcrumbLink
+                      to="/mobile-cms"
+                      search={{ node: ancestor.id }}
+                      className="truncate"
+                    >
+                      {titleOf(ancestor)}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </React.Fragment>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
+        )}
         <CardTitle className="truncate text-base" title={titleOf(node)}>
           {titleOf(node)}
         </CardTitle>
