@@ -15,6 +15,8 @@ export const appTokens = {
     separator: '#c6c6c8',
     accent: '#007aff',
     chevron: '#c4c4c7',
+    // Thumbnail of a page without images
+    placeholder: '#e5e5ea',
     hiddenBanner: '#fff4e5',
     hiddenBannerText: '#8a4b00'
   },
@@ -34,6 +36,7 @@ export const appTokenStyle = {
   '--app-separator': appTokens.color.separator,
   '--app-accent': appTokens.color.accent,
   '--app-chevron': appTokens.color.chevron,
+  '--app-placeholder': appTokens.color.placeholder,
   '--app-banner': appTokens.color.hiddenBanner,
   '--app-banner-text': appTokens.color.hiddenBannerText,
   '--app-screen': `${appTokens.spacing.screen}px`,
