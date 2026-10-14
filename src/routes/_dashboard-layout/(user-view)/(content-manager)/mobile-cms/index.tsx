@@ -276,7 +276,7 @@ function MobileCmsPage() {
   let content: React.ReactNode;
   if (nodesQuery.isPending) {
     content = (
-      <div className="grid gap-4 @3xl:grid-cols-[minmax(17rem,22rem)_minmax(0,38rem)]">
+      <div className="grid gap-4 @3xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)]">
         <div className="space-y-2 @max-3xl:hidden">
           {Array.from({ length: 6 }, (_, i) => (
             <Skeleton key={i} className="h-8" />
@@ -338,8 +338,8 @@ function MobileCmsPage() {
     content = (
       // Columns follow the room <main> has (sidebar open or not), not the
       // window; the preview gets its own column only from 80rem. Tree and
-      // form stop at a readable width either way, the rest stays empty.
-      <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,22rem)_minmax(0,38rem)] @7xl:grid-cols-[minmax(17rem,22rem)_minmax(0,38rem)_21rem]">
+      // form share the rest 5:7, so no gap is left on the right.
+      <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)] @7xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)_21rem]">
         <aside className="sticky top-4 @max-3xl:hidden">
           {/* A card like Products' categories, without its title. */}
           <Card>
