@@ -76,7 +76,7 @@ export function TypeChangeDialog({
         <AlertDialogFooter>
           {blocked ? (
             <AlertDialogCancel>
-              <Trans>Cancel</Trans>
+              <Trans>Close</Trans>
             </AlertDialogCancel>
           ) : (
             <>

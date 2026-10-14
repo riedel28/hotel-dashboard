@@ -879,7 +879,6 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/delete-node-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/move-node-dialog.tsx:132
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:84
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:303
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:84
@@ -1173,6 +1172,7 @@ msgstr "Client Key is required"
 #: src/components/provider-setup/test-connection-dialog.tsx:296
 #: src/components/ui/drawer.tsx:55
 #: src/components/ui/sheet.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 msgid "Close"
 msgstr "Close"
 
