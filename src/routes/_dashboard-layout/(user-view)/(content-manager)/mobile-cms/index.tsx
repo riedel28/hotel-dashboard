@@ -355,20 +355,21 @@ function MobileCmsPage() {
           aria-label={t`Editor`}
           className="min-w-0 overflow-visible pb-0 md:pb-0"
         >
-          <CardContent>
-            {selected ? (
-              <NodeEditor
-                key={selected.id}
-                node={selected}
-                nodes={nodes}
-                onDraftChange={setDraft}
-                onSelect={select}
-                onToggleHidden={actions.onToggleHidden}
-                onAddChild={actions.onAddChild}
-                onReorder={actions.onReorder}
-              />
-            ) : (
-              // A title and a hint, a size up from Products' empty list.
+          {selected ? (
+            // Renders its own header (path and title) and content.
+            <NodeEditor
+              key={selected.id}
+              node={selected}
+              nodes={nodes}
+              onDraftChange={setDraft}
+              onSelect={select}
+              onToggleHidden={actions.onToggleHidden}
+              onAddChild={actions.onAddChild}
+              onReorder={actions.onReorder}
+            />
+          ) : (
+            <CardContent>
+              {/* A title and a hint, a size up from Products' empty list. */}
               <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 pb-4 text-center md:pb-6">
                 <p className="text-base font-medium">
                   {requestedId != null ? (
@@ -393,8 +394,8 @@ function MobileCmsPage() {
                   <Trans>Show content tree</Trans>
                 </Button>
               </div>
-            )}
-          </CardContent>
+            </CardContent>
+          )}
         </Card>
 
         <aside className="sticky top-4 @max-7xl:hidden" aria-label={t`Preview`}>

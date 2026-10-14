@@ -44,10 +44,10 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -291,33 +291,20 @@ export function NodeEditor({
   const path = lineage(nodes, node.id).reverse();
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        void submit();
-      }}
-      className="flex flex-col gap-5"
-      aria-label={t`Edit item`}
-    >
-      <Breadcrumb aria-label={t`Path`}>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink to="/mobile-cms" search={{}}>
-              <Trans>Content</Trans>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          {path.map((ancestor, index) => (
-            <React.Fragment key={ancestor.id}>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem className="min-w-0" title={titleOf(ancestor)}>
-                {index === path.length - 1 ? (
-                  <BreadcrumbPage
-                    className="truncate"
-                    title={titleOf(ancestor)}
-                  >
-                    {titleOf(ancestor)}
-                  </BreadcrumbPage>
-                ) : (
+    <>
+      {/* Like the Products card: the path above, the open item as title. */}
+      <CardHeader>
+        <Breadcrumb aria-label={t`Path`}>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink to="/mobile-cms" search={{}}>
+                <Trans>Content</Trans>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            {path.slice(0, -1).map((ancestor) => (
+              <React.Fragment key={ancestor.id}>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem className="min-w-0" title={titleOf(ancestor)}>
                   <BreadcrumbLink
                     to="/mobile-cms"
                     search={{ node: ancestor.id }}
@@ -325,335 +312,351 @@ export function NodeEditor({
                   >
                     {titleOf(ancestor)}
                   </BreadcrumbLink>
-                )}
-              </BreadcrumbItem>
-            </React.Fragment>
-          ))}
-        </BreadcrumbList>
-      </Breadcrumb>
+                </BreadcrumbItem>
+              </React.Fragment>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
+        <CardTitle className="truncate text-base" title={titleOf(node)}>
+          {titleOf(node)}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            void submit();
+          }}
+          className="flex flex-col gap-5"
+          aria-label={t`Edit item`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <SegmentedControl
+              label={t`Type`}
+              value={values.type}
+              onValueChange={changeType}
+              options={[
+                { value: 'page', label: t`Page` },
+                { value: 'link', label: t`External link` }
+              ]}
+            />
+            <div className="flex items-center gap-2">
+              <Switch
+                id="cms-node-visible"
+                aria-label={t`Visible to guests`}
+                checked={!node.hidden}
+                onCheckedChange={() => onToggleHidden(node)}
+              />
+              <Label htmlFor="cms-node-visible" className="font-normal">
+                <Trans>Visible to guests</Trans>
+              </Label>
+            </div>
+          </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <SegmentedControl
-          label={t`Type`}
-          value={values.type}
-          onValueChange={changeType}
-          options={[
-            { value: 'page', label: t`Page` },
-            { value: 'link', label: t`External link` }
-          ]}
-        />
-        <div className="flex items-center gap-2">
-          <Switch
-            id="cms-node-visible"
-            aria-label={t`Visible to guests`}
-            checked={!node.hidden}
-            onCheckedChange={() => onToggleHidden(node)}
-          />
-          <Label htmlFor="cms-node-visible" className="font-normal">
-            <Trans>Visible to guests</Trans>
-          </Label>
-        </div>
-      </div>
-
-      {hiddenBy && (
-        <Alert variant="warning">
-          <EyeOffIcon />
-          <AlertDescription className="flex flex-wrap items-center justify-between gap-2">
-            <span>
-              <Trans>
-                Guests don’t see this item because “{titleOf(hiddenBy)}” is
-                hidden.
-              </Trans>
-            </span>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={() => onSelect(hiddenBy.id)}
-            >
-              <ArrowUpIcon />
-              <Trans>Go to parent</Trans>
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {values.type === 'link' ? (
-        <div className="flex flex-col gap-4">
-          <Controller
-            control={form.control}
-            name="url"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="gap-2">
-                <FieldLabel htmlFor="cms-url">URL</FieldLabel>
-                <Input
-                  {...field}
-                  id="cms-url"
-                  type="url"
-                  inputMode="url"
-                  placeholder="https://"
-                  aria-invalid={fieldState.invalid}
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="open_mode"
-            render={({ field }) => (
-              <Field className="gap-2">
-                <FieldLabel id="cms-open-mode">
-                  <Trans>Opens in</Trans>
-                </FieldLabel>
-                {/* Radio cards like the Adyen environment choice. */}
-                <RadioGroup
-                  aria-labelledby="cms-open-mode"
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="grid w-full grid-cols-2 gap-2"
+          {hiddenBy && (
+            <Alert variant="warning">
+              <EyeOffIcon />
+              <AlertDescription className="flex flex-wrap items-center justify-between gap-2">
+                <span>
+                  <Trans>
+                    Guests don’t see this item because “{titleOf(hiddenBy)}” is
+                    hidden.
+                  </Trans>
+                </span>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => onSelect(hiddenBy.id)}
                 >
-                  {(
-                    [
-                      ['in_app', t`In-app browser`],
-                      ['system', t`System browser`]
-                    ] as const
-                  ).map(([value, label]) => (
-                    <Label
-                      key={value}
-                      htmlFor={`cms-open-mode-${value}`}
-                      className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
-                    >
-                      <RadioGroupItem
-                        value={value}
-                        id={`cms-open-mode-${value}`}
-                      />
-                      {label}
-                    </Label>
-                  ))}
-                </RadioGroup>
-              </Field>
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="icon"
-            render={({ field }) => (
-              <Field className="gap-2">
-                <FieldLabel>
-                  <Trans>Image or icon</Trans>
-                  <Optional />
-                </FieldLabel>
-                <ImageField
-                  max={1}
-                  value={field.value ? [field.value] : []}
-                  onChange={(ids) => field.onChange(ids[0] ?? null)}
-                />
-              </Field>
-            )}
-          />
-        </div>
-      ) : (
-        <Controller
-          control={form.control}
-          name="gallery"
-          render={({ field }) => (
-            <Field className="gap-2">
-              <FieldLabel>
-                <Trans>Images</Trans>
-              </FieldLabel>
-              <FieldDescription>
-                <Trans>
-                  JPG, PNG or WebP up to 2 MB. Drag to change the order.
-                </Trans>
-              </FieldDescription>
-              <ImageField value={field.value} onChange={field.onChange} />
-            </Field>
+                  <ArrowUpIcon />
+                  <Trans>Go to parent</Trans>
+                </Button>
+              </AlertDescription>
+            </Alert>
           )}
-        />
-      )}
 
-      <Tabs
-        value={locale}
-        onValueChange={(value) => setLocale(value as CmsLocale)}
-      >
-        {/* Pills, like the tabs on a property's admin page. */}
-        <TabsList variant="pills">
-          {cmsLocales.map((code) => {
-            const missing = isMissingTranslation(values.translations, code);
-            const invalid = !!errors?.[code];
-            return (
-              <TabsTrigger key={code} value={code} className="gap-2">
-                {localeNames[code]}
-                {code === cmsPrimaryLocale && (
-                  <span className="-ml-1 font-normal text-muted-foreground">
-                    (<Trans>main</Trans>)
-                  </span>
-                )}
-                {(missing || invalid) && (
-                  <span
-                    className={cn(
-                      'size-1.25 rounded-full',
-                      invalid ? 'bg-danger' : 'bg-amber-500'
+          {values.type === 'link' ? (
+            <div className="flex flex-col gap-4">
+              <Controller
+                control={form.control}
+                name="url"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor="cms-url">URL</FieldLabel>
+                    <Input
+                      {...field}
+                      id="cms-url"
+                      type="url"
+                      inputMode="url"
+                      placeholder="https://"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
                     )}
-                    aria-label={
-                      invalid ? t`Has errors` : t`Translation missing`
-                    }
-                    title={invalid ? t`Has errors` : t`Translation missing`}
-                  />
+                  </Field>
                 )}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
-        {cmsLocales.map((code) => {
-          const isPrimary = code === cmsPrimaryLocale;
-          const empty =
-            !isPrimary &&
-            !hasText(values.translations[code]) &&
-            !started.has(code);
-          return (
-            <TabsContent key={code} value={code} className="pt-2">
-              {empty ? (
-                <div className="flex flex-col items-start gap-3 rounded-lg border border-dashed p-4 text-sm">
-                  <p className="text-muted-foreground">
+              />
+              <Controller
+                control={form.control}
+                name="open_mode"
+                render={({ field }) => (
+                  <Field className="gap-2">
+                    <FieldLabel id="cms-open-mode">
+                      <Trans>Opens in</Trans>
+                    </FieldLabel>
+                    {/* Radio cards like the Adyen environment choice. */}
+                    <RadioGroup
+                      aria-labelledby="cms-open-mode"
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      className="grid w-full grid-cols-2 gap-2"
+                    >
+                      {(
+                        [
+                          ['in_app', t`In-app browser`],
+                          ['system', t`System browser`]
+                        ] as const
+                      ).map(([value, label]) => (
+                        <Label
+                          key={value}
+                          htmlFor={`cms-open-mode-${value}`}
+                          className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+                        >
+                          <RadioGroupItem
+                            value={value}
+                            id={`cms-open-mode-${value}`}
+                          />
+                          {label}
+                        </Label>
+                      ))}
+                    </RadioGroup>
+                  </Field>
+                )}
+              />
+              <Controller
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <Field className="gap-2">
+                    <FieldLabel>
+                      <Trans>Image or icon</Trans>
+                      <Optional />
+                    </FieldLabel>
+                    <ImageField
+                      max={1}
+                      value={field.value ? [field.value] : []}
+                      onChange={(ids) => field.onChange(ids[0] ?? null)}
+                    />
+                  </Field>
+                )}
+              />
+            </div>
+          ) : (
+            <Controller
+              control={form.control}
+              name="gallery"
+              render={({ field }) => (
+                <Field className="gap-2">
+                  <FieldLabel>
+                    <Trans>Images</Trans>
+                  </FieldLabel>
+                  <FieldDescription>
                     <Trans>
-                      No translation yet. The app shows the German text in its
-                      place.
+                      JPG, PNG or WebP up to 2 MB. Drag to change the order.
                     </Trans>
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        const primary = form.getValues(
-                          `translations.${cmsPrimaryLocale}`
-                        );
-                        form.setValue(
-                          `translations.${code}`,
-                          { ...primary },
-                          { shouldDirty: true }
-                        );
-                      }}
-                    >
-                      <CopyIcon />
-                      <Trans>Copy from German</Trans>
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      onClick={() =>
-                        setStarted((set) => new Set(set).add(code))
-                      }
-                    >
-                      <Trans>Start empty</Trans>
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <TranslationFields
-                  form={form}
-                  locale={code}
-                  type={values.type}
-                  primary={values.translations[cmsPrimaryLocale]}
-                />
+                  </FieldDescription>
+                  <ImageField value={field.value} onChange={field.onChange} />
+                </Field>
               )}
-            </TabsContent>
-          );
-        })}
-      </Tabs>
+            />
+          )}
 
-      {values.type === 'page' && (
-        <NestedItems
-          parent={node}
-          items={children}
-          titleOf={titleOf}
-          onSelect={onSelect}
-          onAddChild={onAddChild}
-          onReorder={onReorder}
-        />
-      )}
+          <Tabs
+            value={locale}
+            onValueChange={(value) => setLocale(value as CmsLocale)}
+          >
+            {/* Pills, like the tabs on a property's admin page. */}
+            <TabsList variant="pills">
+              {cmsLocales.map((code) => {
+                const missing = isMissingTranslation(values.translations, code);
+                const invalid = !!errors?.[code];
+                return (
+                  <TabsTrigger key={code} value={code} className="gap-2">
+                    {localeNames[code]}
+                    {code === cmsPrimaryLocale && (
+                      <span className="-ml-1 font-normal text-muted-foreground">
+                        (<Trans>main</Trans>)
+                      </span>
+                    )}
+                    {(missing || invalid) && (
+                      <span
+                        className={cn(
+                          'size-1.25 rounded-full',
+                          invalid ? 'bg-danger' : 'bg-amber-500'
+                        )}
+                        aria-label={
+                          invalid ? t`Has errors` : t`Translation missing`
+                        }
+                        title={invalid ? t`Has errors` : t`Translation missing`}
+                      />
+                    )}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+            {cmsLocales.map((code) => {
+              const isPrimary = code === cmsPrimaryLocale;
+              const empty =
+                !isPrimary &&
+                !hasText(values.translations[code]) &&
+                !started.has(code);
+              return (
+                <TabsContent key={code} value={code} className="pt-2">
+                  {empty ? (
+                    <div className="flex flex-col items-start gap-3 rounded-lg border border-dashed p-4 text-sm">
+                      <p className="text-muted-foreground">
+                        <Trans>
+                          No translation yet. The app shows the German text in
+                          its place.
+                        </Trans>
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const primary = form.getValues(
+                              `translations.${cmsPrimaryLocale}`
+                            );
+                            form.setValue(
+                              `translations.${code}`,
+                              { ...primary },
+                              { shouldDirty: true }
+                            );
+                          }}
+                        >
+                          <CopyIcon />
+                          <Trans>Copy from German</Trans>
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() =>
+                            setStarted((set) => new Set(set).add(code))
+                          }
+                        >
+                          <Trans>Start empty</Trans>
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <TranslationFields
+                      form={form}
+                      locale={code}
+                      type={values.type}
+                      primary={values.translations[cmsPrimaryLocale]}
+                    />
+                  )}
+                </TabsContent>
+              );
+            })}
+          </Tabs>
 
-      {/* The page scrolls in <main>, whose bottom padding (pb-4, md:pb-8) a
+          {values.type === 'page' && (
+            <NestedItems
+              parent={node}
+              items={children}
+              titleOf={titleOf}
+              onSelect={onSelect}
+              onAddChild={onAddChild}
+              onReorder={onReorder}
+            />
+          )}
+
+          {/* The page scrolls in <main>, whose bottom padding (pb-4, md:pb-8) a
           sticky element stops short of: the negative offset lets the bar
           reach the window's bottom edge instead of floating above it. The
           side margins undo the card's padding (px-4, md:px-6). */}
-      <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t bg-card px-4 py-3 md:-bottom-8 md:-mx-6 md:px-6">
-        <span className="me-auto text-sm text-muted-foreground" role="status">
-          {isDirty ? (
-            <span className="flex items-center gap-2 text-foreground">
-              <span className="size-1.5 rounded-full bg-amber-500" />
-              <Trans>Unsaved changes</Trans>
+          <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t bg-card px-4 py-3 md:-bottom-8 md:-mx-6 md:px-6">
+            <span
+              className="me-auto text-sm text-muted-foreground"
+              role="status"
+            >
+              {isDirty ? (
+                <span className="flex items-center gap-2 text-foreground">
+                  <span className="size-1.5 rounded-full bg-amber-500" />
+                  <Trans>Unsaved changes</Trans>
+                </span>
+              ) : (
+                <Trans>All changes saved</Trans>
+              )}
             </span>
-          ) : (
-            <Trans>All changes saved</Trans>
-          )}
-        </span>
-        <Button
-          type="button"
-          variant="ghost"
-          disabled={!isDirty || save.isPending}
-          onClick={() => form.reset()}
-        >
-          <Trans>Cancel</Trans>
-        </Button>
-        <Button
-          type="submit"
-          disabled={!isDirty || save.isPending}
-          aria-busy={save.isPending}
-        >
-          {save.isPending && <Loader2Icon className="animate-spin" />}
-          <Trans>Save</Trans>
-        </Button>
-      </div>
-
-      <TypeChangeDialog
-        change={pendingType}
-        onClose={() => setPendingType(null)}
-        onConfirm={() => {
-          form.setValue('type', 'link', { shouldDirty: true });
-          setPendingType(null);
-        }}
-      />
-
-      <AlertDialog
-        open={blocker.status === 'blocked'}
-        onOpenChange={(open) => !open && blocker.reset?.()}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              <Trans>Save changes?</Trans>
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              <Trans>“{titleOf(node)}” has unsaved changes.</Trans>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => blocker.reset?.()}>
-              <Trans>Stay</Trans>
-            </AlertDialogCancel>
-            <Button variant="outline" onClick={() => blocker.proceed?.()}>
-              <Trans>Don’t save</Trans>
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={!isDirty || save.isPending}
+              onClick={() => form.reset()}
+            >
+              <Trans>Cancel</Trans>
             </Button>
             <Button
-              disabled={save.isPending}
-              onClick={async () => {
-                if (await submit()) blocker.proceed?.();
-                else blocker.reset?.();
-              }}
+              type="submit"
+              disabled={!isDirty || save.isPending}
+              aria-busy={save.isPending}
             >
+              {save.isPending && <Loader2Icon className="animate-spin" />}
               <Trans>Save</Trans>
             </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </form>
+          </div>
+
+          <TypeChangeDialog
+            change={pendingType}
+            onClose={() => setPendingType(null)}
+            onConfirm={() => {
+              form.setValue('type', 'link', { shouldDirty: true });
+              setPendingType(null);
+            }}
+          />
+
+          <AlertDialog
+            open={blocker.status === 'blocked'}
+            onOpenChange={(open) => !open && blocker.reset?.()}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  <Trans>Save changes?</Trans>
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  <Trans>“{titleOf(node)}” has unsaved changes.</Trans>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => blocker.reset?.()}>
+                  <Trans>Stay</Trans>
+                </AlertDialogCancel>
+                <Button variant="outline" onClick={() => blocker.proceed?.()}>
+                  <Trans>Don’t save</Trans>
+                </Button>
+                <Button
+                  disabled={save.isPending}
+                  onClick={async () => {
+                    if (await submit()) blocker.proceed?.();
+                    else blocker.reset?.();
+                  }}
+                >
+                  <Trans>Save</Trans>
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </form>
+      </CardContent>
+    </>
   );
 }
 
