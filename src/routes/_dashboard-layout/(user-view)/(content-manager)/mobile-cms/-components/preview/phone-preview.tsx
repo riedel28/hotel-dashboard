@@ -70,7 +70,7 @@ export function PhonePreview({
     onSelect(node.id);
     if (node.type === 'link') {
       const url = localized(node.translations, locale, 'url').value || node.url;
-      toast(t`Link: ${url}`, {
+      toast.info(t`Link: ${url}`, {
         description:
           node.open_mode === 'system'
             ? t`Opens in the system browser`
