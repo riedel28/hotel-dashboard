@@ -2,6 +2,7 @@ import {
   dragAndDropFeature,
   hotkeysCoreFeature,
   type ItemInstance,
+  selectionFeature,
   syncDataLoaderFeature
 } from '@headless-tree/core';
 import { useTree } from '@headless-tree/react';
@@ -183,11 +184,21 @@ export function CmsTree({
 
   const [focusedItem, setFocusedItem] = React.useState<string | null>(null);
 
+  // Drag and drop moves the selected items, or the focused one without
+  // selection support — not the row grabbed. Selection mirrors the open node
+  // and can't be changed here, so a drag always takes the grabbed row alone.
+  const selectedItems = React.useMemo(
+    () => (selectedId == null ? [] : [String(selectedId)]),
+    [selectedId]
+  );
+
   const tree = useTree<ItemData>({
     state: {
       expandedItems,
-      focusedItem: focusedItem && items[focusedItem] ? focusedItem : null
+      focusedItem: focusedItem && items[focusedItem] ? focusedItem : null,
+      selectedItems
     },
+    setSelectedItems: () => {},
     setExpandedItems: (updater) => {
       if (!isFiltering) setExpandedItems(updater);
     },
@@ -207,8 +218,11 @@ export function CmsTree({
     // Reordering within a level only; moving elsewhere is "Move to…".
     canReorder: true,
     canDrag: () => !isFiltering,
+    // Asked for a position among the parent's children and, first, for the
+    // parent itself ("may it go in there at all?"): both must hold for the
+    // node's own parent only. onDrop acts on a position alone.
     canDrop: (dragged, target) => {
-      if (!('childIndex' in target)) return false;
+      if (dragged.length !== 1) return false;
       const node = byId.get(dragged[0]?.getId() ?? '');
       const parentItemId =
         node?.parent_id == null ? rootItemId : String(node.parent_id);
@@ -220,7 +234,12 @@ export function CmsTree({
         actions.onReorder(node, target.insertionIndex);
       }
     },
-    features: [syncDataLoaderFeature, hotkeysCoreFeature, dragAndDropFeature]
+    features: [
+      syncDataLoaderFeature,
+      hotkeysCoreFeature,
+      selectionFeature,
+      dragAndDropFeature
+    ]
   });
 
   React.useEffect(() => {
