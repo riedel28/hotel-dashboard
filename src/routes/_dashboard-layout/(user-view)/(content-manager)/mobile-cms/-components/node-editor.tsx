@@ -215,7 +215,8 @@ export function NodeEditor({
       void queryClient.invalidateQueries({
         queryKey: cmsNodesQueryOptions.queryKey
       });
-      toast.success(t`Saved`);
+      const title = titleOf(saved);
+      toast.success(t`“${title}” saved`);
     },
     // The form keeps what was typed in every case.
     onError: (error) => {
