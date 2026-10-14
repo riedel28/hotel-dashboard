@@ -5,7 +5,6 @@ import { useBlocker } from '@tanstack/react-router';
 import {
   ArrowUpIcon,
   ArrowUpRightIcon,
-  ChevronRightIcon,
   CopyIcon,
   EyeOffIcon,
   FileTextIcon,
@@ -40,6 +39,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -290,36 +297,38 @@ export function NodeEditor({
       className="flex flex-col gap-5"
       aria-label={t`Edit item`}
     >
-      <nav
-        aria-label={t`Path`}
-        className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground"
-      >
-        <button
-          type="button"
-          className="hover:text-foreground hover:underline"
-          onClick={() => onSelect(null)}
-        >
-          <Trans>Content</Trans>
-        </button>
-        {path.map((ancestor, index) => (
-          <React.Fragment key={ancestor.id}>
-            <ChevronRightIcon className="size-3.5" />
-            {index === path.length - 1 ? (
-              <span aria-current="page" className="font-medium text-foreground">
-                {titleOf(ancestor)}
-              </span>
-            ) : (
-              <button
-                type="button"
-                className="hover:text-foreground hover:underline"
-                onClick={() => onSelect(ancestor.id)}
-              >
-                {titleOf(ancestor)}
-              </button>
-            )}
-          </React.Fragment>
-        ))}
-      </nav>
+      <Breadcrumb aria-label={t`Path`}>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink to="/mobile-cms" search={{}}>
+              <Trans>Content</Trans>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          {path.map((ancestor, index) => (
+            <React.Fragment key={ancestor.id}>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem className="min-w-0" title={titleOf(ancestor)}>
+                {index === path.length - 1 ? (
+                  <BreadcrumbPage
+                    className="truncate"
+                    title={titleOf(ancestor)}
+                  >
+                    {titleOf(ancestor)}
+                  </BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink
+                    to="/mobile-cms"
+                    search={{ node: ancestor.id }}
+                    className="truncate"
+                  >
+                    {titleOf(ancestor)}
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            </React.Fragment>
+          ))}
+        </BreadcrumbList>
+      </Breadcrumb>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <SegmentedControl
