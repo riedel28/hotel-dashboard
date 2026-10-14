@@ -183,8 +183,8 @@ export function PhonePreview({
                       node.hidden && 'opacity-40'
                     )}
                   >
-                    {/* A page shows its first image, or a grey square
-                        without one; a link only its image, if it has one. */}
+                    {/* Every item shows its first image, or a grey square
+                        without one. */}
                     {node.image_ids[0] ? (
                       <img
                         src={cmsImageUrl(node.image_ids[0])}
@@ -192,9 +192,7 @@ export function PhonePreview({
                         className="size-10 shrink-0 rounded-md object-cover"
                       />
                     ) : (
-                      node.type === 'page' && (
-                        <span className="size-10 shrink-0 rounded-md bg-(--app-placeholder)" />
-                      )
+                      <span className="size-10 shrink-0 rounded-md bg-(--app-placeholder)" />
                     )}
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-(length:--app-body) text-(--app-text)">

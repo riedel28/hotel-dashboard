@@ -15,7 +15,7 @@ export const appTokens = {
     separator: '#c6c6c8',
     accent: '#007aff',
     chevron: '#c4c4c7',
-    // Thumbnail of a page without images
+    // Thumbnail of an item without images
     placeholder: '#e5e5ea',
     hiddenBanner: '#fff4e5',
     hiddenBannerText: '#8a4b00'
