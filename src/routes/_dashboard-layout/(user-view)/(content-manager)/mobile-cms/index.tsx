@@ -58,7 +58,6 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { CmsTree, type CmsTreeActions } from './-components/cms-tree';
@@ -67,6 +66,7 @@ import {
   type CreateNodeRequest
 } from './-components/create-node-dialog';
 import { DeleteNodeDialog } from './-components/delete-node-dialog';
+import { CmsLoadingState } from './-components/loading-state';
 import { MoveNodeDialog } from './-components/move-node-dialog';
 import { NodeEditor } from './-components/node-editor';
 import { PhonePreview } from './-components/preview/phone-preview';
@@ -78,6 +78,12 @@ import {
   lineage,
   localized
 } from './-lib/cms-content';
+
+// Columns follow the room <main> has (sidebar open or not), not the window;
+// the preview gets its own column only from 80rem. Tree and form share the
+// rest 5:7, so no gap is left on the right. The loading state uses it too.
+const columnsClassName =
+  'grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)] @7xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)_21rem]';
 
 const mobileCmsSearchSchema = z.object({
   // The selected node; a link to it opens it directly.
@@ -275,20 +281,7 @@ function MobileCmsPage() {
 
   let content: React.ReactNode;
   if (nodesQuery.isPending) {
-    content = (
-      <div className="grid gap-4 @3xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)]">
-        <div className="space-y-2 @max-3xl:hidden">
-          {Array.from({ length: 6 }, (_, i) => (
-            <Skeleton key={i} className="h-8" />
-          ))}
-        </div>
-        <div className="space-y-4">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-10" />
-          <Skeleton className="h-40" />
-        </div>
-      </div>
-    );
+    content = <CmsLoadingState columnsClassName={columnsClassName} />;
   } else if (nodesQuery.isError) {
     content = (
       <Alert variant="destructive" className="max-w-xl">
@@ -336,10 +329,7 @@ function MobileCmsPage() {
     );
   } else {
     content = (
-      // Columns follow the room <main> has (sidebar open or not), not the
-      // window; the preview gets its own column only from 80rem. Tree and
-      // form share the rest 5:7, so no gap is left on the right.
-      <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)] @7xl:grid-cols-[minmax(17rem,5fr)_minmax(0,7fr)_21rem]">
+      <div className={columnsClassName}>
         <aside className="sticky top-4 @max-3xl:hidden">
           {/* A card like Products' categories, without its title. */}
           <Card>
