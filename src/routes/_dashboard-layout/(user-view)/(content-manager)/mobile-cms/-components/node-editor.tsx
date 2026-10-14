@@ -100,6 +100,9 @@ interface NodeEditorProps {
   onReorder: (node: CmsNode, index: number) => void;
 }
 
+const noteActionClassName =
+  'inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring';
+
 const localeNames: Record<CmsLocale, string> = { de: 'Deutsch', en: 'English' };
 
 function useFormSchema() {
@@ -514,16 +517,19 @@ export function NodeEditor({
                     // wrong, the app just falls back to German.
                     <Alert variant="info" role="note">
                       <InfoIcon aria-hidden="true" />
-                      <AlertDescription className="flex flex-col items-start gap-3">
-                        <Trans>
-                          No translation yet. The app shows the German text in
-                          its place.
-                        </Trans>
-                        <div className="flex flex-wrap gap-2">
-                          <Button
+                      <AlertDescription className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <span className="min-w-0 flex-1">
+                          <Trans>
+                            No translation yet. The app shows the German text in
+                            its place.
+                          </Trans>
+                        </span>
+                        {/* Text buttons in the note's own colour, like the
+                            Monitoring filter note. */}
+                        <span className="flex gap-3">
+                          <button
                             type="button"
-                            size="sm"
-                            variant="outline"
+                            className={noteActionClassName}
                             onClick={() => {
                               const primary = form.getValues(
                                 `translations.${cmsPrimaryLocale}`
@@ -535,20 +541,19 @@ export function NodeEditor({
                               );
                             }}
                           >
-                            <CopyIcon />
+                            <CopyIcon className="size-4" aria-hidden="true" />
                             <Trans>Copy from German</Trans>
-                          </Button>
-                          <Button
+                          </button>
+                          <button
                             type="button"
-                            size="sm"
-                            variant="ghost"
+                            className={noteActionClassName}
                             onClick={() =>
                               setStarted((set) => new Set(set).add(code))
                             }
                           >
                             <Trans>Start empty</Trans>
-                          </Button>
-                        </div>
+                          </button>
+                        </span>
                       </AlertDescription>
                     </Alert>
                   ) : (
