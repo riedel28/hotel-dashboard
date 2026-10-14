@@ -47,7 +47,12 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,7 +69,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
-import { SegmentedControl } from '@/components/ui/segmented-control';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
@@ -323,6 +327,18 @@ export function NodeEditor({
         <CardTitle className="truncate text-base" title={titleOf(node)}>
           {titleOf(node)}
         </CardTitle>
+        {/* Applied at once, not with Save: next to the title, not in the form. */}
+        <CardAction className="flex items-center gap-2 self-end">
+          <Switch
+            id="cms-node-visible"
+            aria-label={t`Visible to guests`}
+            checked={!node.hidden}
+            onCheckedChange={() => onToggleHidden(node)}
+          />
+          <Label htmlFor="cms-node-visible" className="font-normal">
+            <Trans>Visible to guests</Trans>
+          </Label>
+        </CardAction>
       </CardHeader>
       <CardContent>
         <form
@@ -333,28 +349,20 @@ export function NodeEditor({
           className="flex flex-col gap-5"
           aria-label={t`Edit item`}
         >
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <SegmentedControl
-              label={t`Type`}
+          <Field className="gap-2">
+            <FieldLabel id="cms-type">
+              <Trans>Type</Trans>
+            </FieldLabel>
+            <RadioCards
+              labelledBy="cms-type"
               value={values.type}
               onValueChange={changeType}
               options={[
-                { value: 'page', label: t`Page` },
-                { value: 'link', label: t`External link` }
+                ['page', t`Page`],
+                ['link', t`External link`]
               ]}
             />
-            <div className="flex items-center gap-2">
-              <Switch
-                id="cms-node-visible"
-                aria-label={t`Visible to guests`}
-                checked={!node.hidden}
-                onCheckedChange={() => onToggleHidden(node)}
-              />
-              <Label htmlFor="cms-node-visible" className="font-normal">
-                <Trans>Visible to guests</Trans>
-              </Label>
-            </div>
-          </div>
+          </Field>
 
           {hiddenBy && (
             <Alert variant="warning">
@@ -409,32 +417,15 @@ export function NodeEditor({
                     <FieldLabel id="cms-open-mode">
                       <Trans>Opens in</Trans>
                     </FieldLabel>
-                    {/* Radio cards like the Adyen environment choice. */}
-                    <RadioGroup
-                      aria-labelledby="cms-open-mode"
+                    <RadioCards
+                      labelledBy="cms-open-mode"
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="grid w-full grid-cols-2 gap-2"
-                    >
-                      {(
-                        [
-                          ['in_app', t`In-app browser`],
-                          ['system', t`System browser`]
-                        ] as const
-                      ).map(([value, label]) => (
-                        <Label
-                          key={value}
-                          htmlFor={`cms-open-mode-${value}`}
-                          className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
-                        >
-                          <RadioGroupItem
-                            value={value}
-                            id={`cms-open-mode-${value}`}
-                          />
-                          {label}
-                        </Label>
-                      ))}
-                    </RadioGroup>
+                      options={[
+                        ['in_app', t`In-app browser`],
+                        ['system', t`System browser`]
+                      ]}
+                    />
                   </Field>
                 )}
               />
@@ -660,6 +651,42 @@ export function NodeEditor({
         </form>
       </CardContent>
     </>
+  );
+}
+
+// Two or three choices as bordered radio cards, like the Adyen environment.
+function RadioCards<TValue extends string>({
+  labelledBy,
+  value,
+  onValueChange,
+  options
+}: {
+  labelledBy: string;
+  value: TValue;
+  onValueChange: (value: TValue) => void;
+  options: [TValue, string][];
+}) {
+  return (
+    <RadioGroup
+      aria-labelledby={labelledBy}
+      value={value}
+      onValueChange={(next) => onValueChange(next as TValue)}
+      className="grid w-full grid-cols-2 gap-2"
+    >
+      {options.map(([optionValue, label]) => (
+        <Label
+          key={optionValue}
+          htmlFor={`${labelledBy}-${optionValue}`}
+          className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
+        >
+          <RadioGroupItem
+            value={optionValue}
+            id={`${labelledBy}-${optionValue}`}
+          />
+          {label}
+        </Label>
+      ))}
+    </RadioGroup>
   );
 }
 
