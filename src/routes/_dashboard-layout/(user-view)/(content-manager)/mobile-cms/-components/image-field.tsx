@@ -55,7 +55,7 @@ export function ImageField({ value, onChange, max = 30 }: ImageFieldProps) {
       const id = await uploadCmsImage(entry.file);
       setUploads((list) => list.filter((u) => u.key !== entry.key));
       // Kept in the ref at once: two uploads may finish before a re-render.
-      valueRef.current = max === 1 ? [id] : [...valueRef.current, id];
+      valueRef.current = [...valueRef.current, id];
       onChange(valueRef.current);
     } catch (error) {
       setUploads((list) =>
@@ -72,7 +72,7 @@ export function ImageField({ value, onChange, max = 30 }: ImageFieldProps) {
   };
 
   const pick = (files: FileList | null) => {
-    const room = max === 1 ? 1 : max - value.length - uploads.length;
+    const room = max - value.length - uploads.length;
     for (const file of [...(files ?? [])].slice(0, Math.max(0, room))) {
       const tooBig = file.size > cmsImageMaxBytes;
       const entry: Upload = {
@@ -85,8 +85,7 @@ export function ImageField({ value, onChange, max = 30 }: ImageFieldProps) {
     }
   };
 
-  const canAdd =
-    max === 1 ? uploads.length === 0 : value.length + uploads.length < max;
+  const canAdd = value.length + uploads.length < max;
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -198,7 +197,7 @@ export function ImageField({ value, onChange, max = 30 }: ImageFieldProps) {
         </div>
       ))}
 
-      {canAdd && (max > 1 || value.length === 0) && (
+      {canAdd && (
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
