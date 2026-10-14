@@ -121,7 +121,7 @@ function NodeMenu({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          variant="destructive"
+          variant="destructive-soft"
           onClick={() => actions.onDelete(node)}
         >
           <Trash2Icon />
