@@ -110,7 +110,7 @@ export function CreateNodeDialog({
             {parentTitle ? (
               <Trans>Add to “{parentTitle}”</Trans>
             ) : (
-              <Trans>Add section</Trans>
+              <Trans>Add item</Trans>
             )}
           </DialogTitle>
           <DialogDescription>

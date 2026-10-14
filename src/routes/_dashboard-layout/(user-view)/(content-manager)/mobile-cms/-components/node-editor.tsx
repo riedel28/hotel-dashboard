@@ -9,6 +9,7 @@ import {
   EyeOffIcon,
   FileTextIcon,
   GripVerticalIcon,
+  InfoIcon,
   Loader2Icon,
   PlusIcon
 } from 'lucide-react';
@@ -509,44 +510,47 @@ export function NodeEditor({
               return (
                 <TabsContent key={code} value={code} className="pt-2">
                   {empty ? (
-                    <div className="flex flex-col items-start gap-3 rounded-lg border border-dashed p-4 text-sm">
-                      <p className="text-muted-foreground">
+                    // Blue note like the reservation form's: nothing is
+                    // wrong, the app just falls back to German.
+                    <Alert variant="info" role="note">
+                      <InfoIcon aria-hidden="true" />
+                      <AlertDescription className="flex flex-col items-start gap-3">
                         <Trans>
                           No translation yet. The app shows the German text in
                           its place.
                         </Trans>
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            const primary = form.getValues(
-                              `translations.${cmsPrimaryLocale}`
-                            );
-                            form.setValue(
-                              `translations.${code}`,
-                              { ...primary },
-                              { shouldDirty: true }
-                            );
-                          }}
-                        >
-                          <CopyIcon />
-                          <Trans>Copy from German</Trans>
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="ghost"
-                          onClick={() =>
-                            setStarted((set) => new Set(set).add(code))
-                          }
-                        >
-                          <Trans>Start empty</Trans>
-                        </Button>
-                      </div>
-                    </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              const primary = form.getValues(
+                                `translations.${cmsPrimaryLocale}`
+                              );
+                              form.setValue(
+                                `translations.${code}`,
+                                { ...primary },
+                                { shouldDirty: true }
+                              );
+                            }}
+                          >
+                            <CopyIcon />
+                            <Trans>Copy from German</Trans>
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            onClick={() =>
+                              setStarted((set) => new Set(set).add(code))
+                            }
+                          >
+                            <Trans>Start empty</Trans>
+                          </Button>
+                        </div>
+                      </AlertDescription>
+                    </Alert>
                   ) : (
                     <TranslationFields
                       form={form}
@@ -575,23 +579,18 @@ export function NodeEditor({
           sticky element stops short of: the negative offset lets the bar
           reach the window's bottom edge instead of floating above it. The
           side margins undo the card's padding (px-4, md:px-6). */}
-          <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t bg-card px-4 py-3 md:-bottom-8 md:-mx-6 md:px-6">
-            <span
-              className="me-auto text-sm text-muted-foreground"
-              role="status"
-            >
-              {isDirty ? (
-                <span className="flex items-center gap-2 text-foreground">
+          <div className="sticky -bottom-4 z-10 -mx-4 flex items-center justify-end gap-2 rounded-b-xl border-t border-border/60 bg-card px-4 py-4 md:-bottom-8 md:-mx-6 md:px-6">
+            <span className="me-auto text-sm" role="status">
+              {isDirty && (
+                <span className="flex items-center gap-2">
                   <span className="size-1.5 rounded-full bg-amber-500" />
                   <Trans>Unsaved changes</Trans>
                 </span>
-              ) : (
-                <Trans>All changes saved</Trans>
               )}
             </span>
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               disabled={!isDirty || save.isPending}
               onClick={() => form.reset()}
             >

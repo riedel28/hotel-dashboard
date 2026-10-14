@@ -1,14 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import {
-  AlertCircleIcon,
-  EyeIcon,
-  ListTreeIcon,
-  PlusIcon,
-  RotateCcwIcon,
-  SmartphoneIcon
-} from 'lucide-react';
+import { EyeIcon, ListTreeIcon, PlusIcon, SmartphoneIcon } from 'lucide-react';
 import * as React from 'react';
 import { cmsDescendantIds } from 'shared/cms-tree';
 import {
@@ -22,7 +15,7 @@ import { z } from 'zod';
 import { type CmsNode, cmsNodesQueryOptions } from '@/api/cms';
 import { selectablePropertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ErrorState } from '@/components/error-state';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -284,23 +277,12 @@ function MobileCmsPage() {
     content = <CmsLoadingState columnsClassName={columnsClassName} />;
   } else if (nodesQuery.isError) {
     content = (
-      <Alert variant="destructive" className="max-w-xl">
-        <AlertCircleIcon />
-        <AlertTitle>
-          <Trans>The content could not be loaded</Trans>
-        </AlertTitle>
-        <AlertDescription className="flex flex-col items-start gap-2">
-          {nodesQuery.error.message}
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => void nodesQuery.refetch()}
-          >
-            <RotateCcwIcon />
-            <Trans>Try again</Trans>
-          </Button>
-        </AlertDescription>
-      </Alert>
+      <ErrorState
+        title={<Trans>The content could not be loaded</Trans>}
+        message={nodesQuery.error.message}
+        onRetry={() => void nodesQuery.refetch()}
+        isRetrying={nodesQuery.isFetching}
+      />
     );
   } else if (nodes.length === 0) {
     content = (
@@ -314,15 +296,15 @@ function MobileCmsPage() {
           </EmptyTitle>
           <EmptyDescription>
             <Trans>
-              Sections are the top level of the hotel’s mobile app. Start with
-              the first one.
+              Items are the pages and links guests see in the hotel’s mobile
+              app. Start with the first one.
             </Trans>
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
           <Button onClick={addSection}>
             <PlusIcon />
-            <Trans>Create the first section</Trans>
+            <Trans>Create the first item</Trans>
           </Button>
         </EmptyContent>
       </Empty>
@@ -420,8 +402,7 @@ function MobileCmsPage() {
           </h1>
           <p className="text-sm text-muted-foreground">
             <Trans>
-              Content of the mobile app for {propertyName}. Saved changes are
-              live at once.
+              Content of the hotel’s mobile app. Saved changes are live at once.
             </Trans>
           </p>
         </div>
@@ -553,15 +534,10 @@ function TreePanel({
           placeholder={t`Search titles`}
           wrapperClassName="flex-1"
         />
-        <SegmentedControl
-          label={t`Language of the titles`}
-          value={locale}
-          onValueChange={onLocaleChange}
-          options={cmsLocales.map((value) => ({
-            value,
-            label: value.toUpperCase()
-          }))}
-        />
+        <Button variant="outline" onClick={onAddSection}>
+          <PlusIcon />
+          <Trans>Item</Trans>
+        </Button>
       </div>
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
@@ -575,10 +551,16 @@ function TreePanel({
             <Trans>Only untranslated</Trans>
           </Label>
         </div>
-        <Button size="sm" variant="outline" onClick={onAddSection}>
-          <PlusIcon />
-          <Trans>Section</Trans>
-        </Button>
+        <SegmentedControl
+          label={t`Language of the titles`}
+          size="sm"
+          value={locale}
+          onValueChange={onLocaleChange}
+          options={cmsLocales.map((value) => ({
+            value,
+            label: value.toUpperCase()
+          }))}
+        />
       </div>
       {shownNodes.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted-foreground">
