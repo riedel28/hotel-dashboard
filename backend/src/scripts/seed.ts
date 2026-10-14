@@ -2,10 +2,18 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { sanitizeCmsHtml } from '../../../shared/cms-html';
+import type {
+  CmsLocale,
+  CmsNodeType,
+  CmsOpenMode
+} from '../../../shared/types/cms';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { propertyOptionSchema } from '../../../shared/types/properties';
 import { db } from '../db/pool';
 import {
+  cmsNodes,
+  cmsNodeTranslations,
   customers,
   devices,
   guestAbcEntries,
@@ -298,6 +306,68 @@ async function seedProducts(
   }
 }
 
+type CmsSeedTranslation = {
+  title?: string;
+  subtitle?: string;
+  body?: string;
+  url?: string;
+};
+type CmsSeed = {
+  type: CmsNodeType;
+  hidden?: boolean;
+  url?: string;
+  open_mode?: CmsOpenMode;
+  de: CmsSeedTranslation;
+  en?: CmsSeedTranslation;
+  children?: CmsSeed[];
+};
+
+/**
+ * Mobile app content three levels deep: pages and both kinds of links, a
+ * hidden node, a branch hidden by its parent and some missing English
+ * translations. No images — the seed has no files to upload.
+ */
+async function seedCms(
+  nodes = loadData<CmsSeed[]>('cms'),
+  parentId: number | null = null
+): Promise<number> {
+  let count = 0;
+  for (const [position, node] of nodes.entries()) {
+    const [created] = await db
+      .insert(cmsNodes)
+      .values({
+        property_id: OVERLOOK_HOTEL_ID,
+        parent_id: parentId,
+        position,
+        type: node.type,
+        hidden: node.hidden ?? false,
+        url: node.url ?? null,
+        open_mode: node.open_mode ?? null
+      })
+      .returning({ id: cmsNodes.id });
+    if (!created) throw new Error(`Failed to seed ${node.de.title}`);
+
+    const locales = (['de', 'en'] as const).filter(
+      (locale): locale is CmsLocale => node[locale] !== undefined
+    );
+    await db.insert(cmsNodeTranslations).values(
+      locales.map((locale) => {
+        const t = node[locale]!;
+        return {
+          node_id: created.id,
+          locale,
+          title: t.title ?? null,
+          subtitle: t.subtitle ?? null,
+          body: t.body ? sanitizeCmsHtml(t.body) || null : null,
+          url: t.url ?? null
+        };
+      })
+    );
+    count += 1 + (await seedCms(node.children ?? [], created.id));
+  }
+  return count;
+}
+
 /**
  * Rooms and guest devices are generated, not listed: four floors of twelve
  * rooms, a tablet in every room, a TV in most, and a few devices not assigned
@@ -440,6 +510,7 @@ async function seed() {
     const guestAbcCount = await seedGuestAbc();
     await seedWorklogs(demoUsers);
     await seedProducts();
+    const cmsCount = await seedCms();
     await seedRoomsAndDevices();
     const logCount = await seedMonitoringLogs();
 
@@ -453,6 +524,7 @@ async function seed() {
     );
     console.log(`- ${propertyCount} properties`);
     console.log(`- ${guestAbcCount} Guest ABC entries`);
+    console.log(`- ${cmsCount} mobile CMS nodes`);
     console.log(`- ${logCount} monitoring logs`);
   } catch (error) {
     console.error('❌ Seed failed:', error);
