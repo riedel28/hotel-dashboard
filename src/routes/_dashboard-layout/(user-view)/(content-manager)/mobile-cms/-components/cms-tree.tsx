@@ -28,6 +28,7 @@ import type { CmsLocale, CmsNodeType } from 'shared/types/cms';
 import type { CmsNode } from '@/api/cms';
 import { CountBadge } from '@/components/ui/count-badge';
 import {
+  createDropdownMenuHandle,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -64,88 +65,123 @@ export interface CmsTreeActions {
   onReorder: (node: CmsNode, index: number) => void;
 }
 
+type MenuHandle = ReturnType<typeof createDropdownMenuHandle<number>>;
+
+const stop = (event: React.SyntheticEvent) => event.stopPropagation();
+
+// A row's "…": only a trigger. The tree has one menu for all rows (a menu
+// per row made each tree render twice as slow with a few hundred items).
+function NodeMenuTrigger({ menu, node }: { menu: MenuHandle; node: CmsNode }) {
+  const { t } = useLingui();
+  return (
+    <DropdownMenuTrigger
+      handle={menu}
+      payload={node.id}
+      aria-label={t`Actions`}
+      onClick={stop}
+      onKeyDown={stop}
+      className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-foreground/10 focus-visible:opacity-100 data-popup-open:opacity-100"
+    >
+      <EllipsisIcon className="size-4" />
+    </DropdownMenuTrigger>
+  );
+}
+
 function NodeMenu({
+  menu,
+  nodes,
+  isFiltering,
+  actions
+}: {
+  menu: MenuHandle;
+  nodes: CmsNode[];
+  isFiltering: boolean;
+  actions: CmsTreeActions;
+}) {
+  return (
+    <DropdownMenu handle={menu}>
+      {({ payload }) => {
+        const node = nodes.find((n) => n.id === payload);
+        if (!node) return null;
+        const siblings = cmsChildren(nodes, node.parent_id);
+        // Its place among its siblings; none while a filter hides some.
+        const place = isFiltering
+          ? null
+          : {
+              index: siblings.findIndex((s) => s.id === node.id),
+              count: siblings.length
+            };
+        return <NodeMenuContent node={node} place={place} actions={actions} />;
+      }}
+    </DropdownMenu>
+  );
+}
+
+function NodeMenuContent({
   node,
   place,
   actions
 }: {
   node: CmsNode;
-  // Its index among its siblings; null while a filter hides some of them.
   place: { index: number; count: number } | null;
   actions: CmsTreeActions;
 }) {
-  const { t } = useLingui();
-  const stop = (event: React.SyntheticEvent) => event.stopPropagation();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        aria-label={t`Actions`}
-        onClick={stop}
-        onKeyDown={stop}
-        className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-foreground/10 focus-visible:opacity-100 data-popup-open:opacity-100"
+    <DropdownMenuContent align="end" className="w-52" onClick={stop}>
+      {node.type === 'page' && (
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <PlusIcon />
+            <Trans>Add nested</Trans>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem onClick={() => actions.onAddChild(node, 'page')}>
+              <FileTextIcon />
+              <Trans>Page</Trans>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => actions.onAddChild(node, 'link')}>
+              <ArrowUpRightIcon />
+              <Trans>External link</Trans>
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      )}
+      <DropdownMenuItem onClick={() => actions.onDuplicate(node)}>
+        <CopyIcon />
+        <Trans>Duplicate</Trans>
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => actions.onMoveTo(node)}>
+        <CornerUpRightIcon />
+        <Trans>Move to…</Trans>
+      </DropdownMenuItem>
+      {/* Dragging's counterpart for the keyboard and a single tap. */}
+      <DropdownMenuItem
+        disabled={!place || place.index === 0}
+        onClick={() => place && actions.onReorder(node, place.index - 1)}
       >
-        <EllipsisIcon className="size-4" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52" onClick={stop}>
-        {node.type === 'page' && (
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <PlusIcon />
-              <Trans>Add nested</Trans>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuItem
-                onClick={() => actions.onAddChild(node, 'page')}
-              >
-                <FileTextIcon />
-                <Trans>Page</Trans>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => actions.onAddChild(node, 'link')}
-              >
-                <ArrowUpRightIcon />
-                <Trans>External link</Trans>
-              </DropdownMenuItem>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-        )}
-        <DropdownMenuItem onClick={() => actions.onDuplicate(node)}>
-          <CopyIcon />
-          <Trans>Duplicate</Trans>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => actions.onMoveTo(node)}>
-          <CornerUpRightIcon />
-          <Trans>Move to…</Trans>
-        </DropdownMenuItem>
-        {/* Dragging's counterpart for the keyboard and a single tap. */}
-        <DropdownMenuItem
-          disabled={!place || place.index === 0}
-          onClick={() => place && actions.onReorder(node, place.index - 1)}
-        >
-          <ArrowUpIcon />
-          <Trans>Move up</Trans>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          disabled={!place || place.index === place.count - 1}
-          onClick={() => place && actions.onReorder(node, place.index + 1)}
-        >
-          <ArrowDownIcon />
-          <Trans>Move down</Trans>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => actions.onToggleHidden(node)}>
-          {node.hidden ? <EyeIcon /> : <EyeOffIcon />}
-          {node.hidden ? <Trans>Show</Trans> : <Trans>Hide</Trans>}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          variant="destructive-soft"
-          onClick={() => actions.onDelete(node)}
-        >
-          <Trash2Icon />
-          <Trans>Delete</Trans>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <ArrowUpIcon />
+        <Trans>Move up</Trans>
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        disabled={!place || place.index === place.count - 1}
+        onClick={() => place && actions.onReorder(node, place.index + 1)}
+      >
+        <ArrowDownIcon />
+        <Trans>Move down</Trans>
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => actions.onToggleHidden(node)}>
+        {node.hidden ? <EyeIcon /> : <EyeOffIcon />}
+        {node.hidden ? <Trans>Show</Trans> : <Trans>Hide</Trans>}
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        variant="destructive-soft"
+        onClick={() => actions.onDelete(node)}
+      >
+        <Trash2Icon />
+        <Trans>Delete</Trans>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
   );
 }
 
@@ -175,6 +211,7 @@ export function CmsTree({
 }: CmsTreeProps) {
   const { t } = useLingui();
   const titleOf = useNodeTitle();
+  const [menu] = React.useState(() => createDropdownMenuHandle<number>());
   const byId = React.useMemo(
     () => new Map(nodes.map((node) => [String(node.id), node])),
     [nodes]
@@ -272,7 +309,6 @@ export function CmsTree({
         const title = localized(node.translations, locale, 'title');
         const visibility = cmsVisibility(nodes, node.id);
         const childCount = cmsChildren(nodes, node.id).length;
-        const siblings = cmsChildren(nodes, node.parent_id);
         const isSelected = node.id === selectedId;
 
         return (
@@ -362,23 +398,18 @@ export function CmsTree({
                     <EyeIcon className="size-4" />
                   )}
                 </button>
-                <NodeMenu
-                  node={node}
-                  place={
-                    isFiltering
-                      ? null
-                      : {
-                          index: siblings.findIndex((s) => s.id === node.id),
-                          count: siblings.length
-                        }
-                  }
-                  actions={actions}
-                />
+                <NodeMenuTrigger menu={menu} node={node} />
               </TreeItemLabel>
             </div>
           </TreeItem>
         );
       })}
+      <NodeMenu
+        menu={menu}
+        nodes={nodes}
+        isFiltering={isFiltering}
+        actions={actions}
+      />
       <TreeDragLine className="bg-muted-foreground before:border-muted-foreground" />
     </Tree>
   );
