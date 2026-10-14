@@ -18,7 +18,8 @@ import {
   type CmsTranslation,
   type createCmsNodeSchema,
   type MoveCmsNodeData,
-  type saveCmsNodeSchema
+  type saveCmsNodeSchema,
+  type setCmsNodeVisibilitySchema
 } from '../../../shared/types/cms';
 import { db } from '../db/pool';
 import {
@@ -27,7 +28,11 @@ import {
   cmsNodes,
   cmsNodeTranslations
 } from '../db/schema';
-import { isForeignKeyViolation, withFailMessage } from '../middleware/error';
+import {
+  HttpProblem,
+  isForeignKeyViolation,
+  withFailMessage
+} from '../middleware/error';
 import {
   requireSelectedProperty,
   type SelectedPropertyRequest
@@ -52,12 +57,21 @@ const copySuffix: Record<CmsLocale, string> = {
   en: ' (copy)'
 };
 
-/** Every node of the property with its translations and images. */
-async function loadNodes(ex: Executor, propertyId: string): Promise<CmsNode[]> {
+/** The property's nodes (or the one with `id`) with translations and images. */
+async function loadNodes(
+  ex: Executor,
+  propertyId: string,
+  id?: number
+): Promise<CmsNode[]> {
   const nodes = await ex
     .select()
     .from(cmsNodes)
-    .where(eq(cmsNodes.property_id, propertyId))
+    .where(
+      and(
+        eq(cmsNodes.property_id, propertyId),
+        id === undefined ? undefined : eq(cmsNodes.id, id)
+      )
+    )
     .orderBy(asc(cmsNodes.position), asc(cmsNodes.id));
   const ids = nodes.map((node) => node.id);
   if (ids.length === 0) return [];
@@ -143,10 +157,18 @@ const moveErrors = {
   cycle: 'A node cannot be moved into itself or its descendants'
 };
 
-function sendNode(res: Response, status: number, nodes: CmsNode[], id: number) {
-  const node = nodes.find((candidate) => candidate.id === id);
-  if (!node) return res.status(404).json({ error: 'Node not found' });
-  return res.status(status).json(node);
+const nodeNotFound = () => new HttpProblem(404, 'Node not found');
+const imageNotFound = () => new HttpProblem(400, 'Image not found');
+
+async function sendNode(
+  res: Response,
+  status: number,
+  propertyId: string,
+  id: number
+) {
+  const [node] = await loadNodes(db, propertyId, id);
+  if (!node) throw nodeNotFound();
+  res.status(status).json(node);
 }
 
 const getCmsNodes = handle('Failed to fetch content', async (req, res) => {
@@ -163,10 +185,10 @@ const createCmsNode = handle('Failed to create node', async (req, res) => {
     typeof createCmsNodeSchema
   >;
 
-  const result = await db.transaction(async (tx) => {
+  const id = await db.transaction(async (tx) => {
     const rows = await lockNodes(tx, propertyId);
     const error = cmsMoveError(rows, -1, parent_id);
-    if (error) return { error: moveErrors[error] };
+    if (error) throw new HttpProblem(400, moveErrors[error]);
 
     const siblings = cmsChildren(rows, parent_id);
     const [node] = await tx
@@ -184,13 +206,9 @@ const createCmsNode = handle('Failed to create node', async (req, res) => {
     await tx
       .insert(cmsNodeTranslations)
       .values({ node_id: node!.id, locale: cmsPrimaryLocale, title });
-    return { id: node!.id };
+    return node!.id;
   });
-
-  if ('error' in result) {
-    return res.status(400).json({ error: result.error });
-  }
-  sendNode(res, 201, await loadNodes(db, propertyId), result.id);
+  await sendNode(res, 201, propertyId, id);
 });
 
 // The editor form, written as a whole: type, URL, translations and images.
@@ -202,110 +220,100 @@ const saveCmsNode = handle('Failed to save node', async (req, res) => {
   const data = req.body as z.output<typeof saveCmsNodeSchema>;
   const isLink = data.type === 'link';
 
-  const save = db.transaction(async (tx) => {
-    const [node] = await tx
-      .select()
-      .from(cmsNodes)
-      .where(and(eq(cmsNodes.id, id), eq(cmsNodes.property_id, propertyId)))
-      .for('update');
-    if (!node) return { status: 404, error: 'Node not found' };
-    if (node.updated_at.toISOString() !== data.updated_at) {
-      return {
-        status: 409,
-        code: 'STALE',
-        error: 'The node was changed by someone else'
-      };
-    }
-    if (isLink) {
-      const [child] = await tx
-        .select({ id: cmsNodes.id })
+  await db
+    .transaction(async (tx) => {
+      const [node] = await tx
+        .select()
         .from(cmsNodes)
-        .where(eq(cmsNodes.parent_id, id))
-        .limit(1);
-      if (child) {
-        return {
-          status: 409,
-          code: 'HAS_CHILDREN',
-          error: 'Move or delete the nested items before making this a link'
-        };
-      }
-    }
-
-    const imageIds = [...new Set(data.image_ids)];
-    if (imageIds.length > 0) {
-      const owned = await tx
-        .select({ id: cmsImages.id })
-        .from(cmsImages)
-        .where(
-          and(
-            eq(cmsImages.property_id, propertyId),
-            inArray(cmsImages.id, imageIds)
-          )
+        .where(and(eq(cmsNodes.id, id), eq(cmsNodes.property_id, propertyId)))
+        .for('update');
+      if (!node) throw nodeNotFound();
+      if (node.updated_at.toISOString() !== data.updated_at) {
+        throw new HttpProblem(
+          409,
+          'The node was changed by someone else',
+          'STALE'
         );
-      if (owned.length !== imageIds.length) {
-        return { status: 400, error: 'Image not found' };
       }
-    }
+      if (isLink) {
+        const [child] = await tx
+          .select({ id: cmsNodes.id })
+          .from(cmsNodes)
+          .where(eq(cmsNodes.parent_id, id))
+          .limit(1);
+        if (child) {
+          throw new HttpProblem(
+            409,
+            'Move or delete the nested items before making this a link',
+            'HAS_CHILDREN'
+          );
+        }
+      }
 
-    await tx
-      .update(cmsNodes)
-      .set({
-        type: data.type,
-        url: isLink ? data.url : null,
-        open_mode: isLink ? data.open_mode : null,
-        updated_at: new Date()
-      })
-      .where(eq(cmsNodes.id, id));
+      const imageIds = [...new Set(data.image_ids)];
+      if (imageIds.length > 0) {
+        const owned = await tx
+          .select({ id: cmsImages.id })
+          .from(cmsImages)
+          .where(
+            and(
+              eq(cmsImages.property_id, propertyId),
+              inArray(cmsImages.id, imageIds)
+            )
+          );
+        if (owned.length !== imageIds.length) throw imageNotFound();
+      }
 
-    // A link has no text, a page no URL override. A locale with nothing
-    // left has no row, which is what "not translated" means.
-    const rows = cmsLocales.flatMap((locale) => {
-      const t: CmsTranslation | undefined = data.translations[locale];
-      if (!t) return [];
-      const row = {
-        node_id: id,
-        locale,
-        title: t.title,
-        subtitle: t.subtitle,
-        body: isLink ? null : sanitizeCmsHtml(t.body ?? '') || null,
-        url: isLink ? t.url : null
-      };
-      const empty = !row.title && !row.subtitle && !row.body && !row.url;
-      return empty && locale !== cmsPrimaryLocale ? [] : [row];
-    });
-    await tx
-      .delete(cmsNodeTranslations)
-      .where(eq(cmsNodeTranslations.node_id, id));
-    await tx.insert(cmsNodeTranslations).values(rows);
+      await tx
+        .update(cmsNodes)
+        .set({
+          type: data.type,
+          url: isLink ? data.url : null,
+          open_mode: isLink ? data.open_mode : null,
+          updated_at: new Date()
+        })
+        .where(eq(cmsNodes.id, id));
 
-    await tx.delete(cmsNodeImages).where(eq(cmsNodeImages.node_id, id));
-    if (imageIds.length > 0) {
-      await tx.insert(cmsNodeImages).values(
-        imageIds.map((image_id, position) => ({
+      // A link has no text, a page no URL override. A locale with nothing
+      // left has no row, which is what "not translated" means.
+      const rows = cmsLocales.flatMap((locale) => {
+        const t: CmsTranslation | undefined = data.translations[locale];
+        if (!t) return [];
+        const row = {
           node_id: id,
-          image_id,
-          position
-        }))
-      );
-    }
-    return { status: 200 };
-  });
-  // An image swept between the check and the insert (a form left open for
-  // over a day) fails the foreign key: the same "not found".
-  const result = await save.catch((error: unknown) => {
-    if (isForeignKeyViolation(error)) {
-      return { status: 400, error: 'Image not found', code: undefined };
-    }
-    throw error;
-  });
+          locale,
+          title: t.title,
+          subtitle: t.subtitle,
+          body: isLink ? null : sanitizeCmsHtml(t.body ?? '') || null,
+          url: isLink ? t.url : null
+        };
+        const empty = !row.title && !row.subtitle && !row.body && !row.url;
+        return empty && locale !== cmsPrimaryLocale ? [] : [row];
+      });
+      await tx
+        .delete(cmsNodeTranslations)
+        .where(eq(cmsNodeTranslations.node_id, id));
+      await tx.insert(cmsNodeTranslations).values(rows);
 
-  if (result.error) {
-    return res
-      .status(result.status)
-      .json({ error: result.error, code: result.code });
-  }
+      await tx.delete(cmsNodeImages).where(eq(cmsNodeImages.node_id, id));
+      if (imageIds.length > 0) {
+        await tx.insert(cmsNodeImages).values(
+          imageIds.map((image_id, position) => ({
+            node_id: id,
+            image_id,
+            position
+          }))
+        );
+      }
+    })
+    // An image swept between the check and the insert (a form left open for
+    // over a day) fails the foreign key: the same "not found".
+    .catch((error: unknown) => {
+      throw isForeignKeyViolation(error) ? imageNotFound() : error;
+    });
+
   await sweepImages(db, propertyId);
-  sendNode(res, 200, await loadNodes(db, propertyId), id);
+  await sendNode(res, 200, propertyId, id);
 });
 
 // Reorder and move in one: the node goes to `index` among the children of
@@ -317,12 +325,12 @@ const moveCmsNode = handle('Failed to move node', async (req, res) => {
   const id = Number(req.params.id);
   const { parent_id, index } = req.body as MoveCmsNodeData;
 
-  const result = await db.transaction(async (tx) => {
+  await db.transaction(async (tx) => {
     const rows = await lockNodes(tx, propertyId);
     const node = rows.find((row) => row.id === id);
-    if (!node) return { status: 404, error: 'Node not found' };
+    if (!node) throw nodeNotFound();
     const error = cmsMoveError(rows, id, parent_id);
-    if (error) return { status: 400, error: moveErrors[error] };
+    if (error) throw new HttpProblem(400, moveErrors[error]);
 
     const siblings = cmsReorder(rows, node, parent_id, index);
     for (const [position, sibling] of siblings.entries()) {
@@ -338,13 +346,8 @@ const moveCmsNode = handle('Failed to move node', async (req, res) => {
           .where(eq(cmsNodes.id, sibling.id));
       }
     }
-    return { status: 200 };
   });
-
-  if (result.error) {
-    return res.status(result.status).json({ error: result.error });
-  }
-  sendNode(res, 200, await loadNodes(db, propertyId), id);
+  await sendNode(res, 200, propertyId, id);
 });
 
 const setCmsNodeVisibility = handle(
@@ -356,13 +359,13 @@ const setCmsNodeVisibility = handle(
     const id = Number(req.params.id);
     const [updated] = await db
       .update(cmsNodes)
-      .set({ hidden: (req.body as { hidden: boolean }).hidden })
+      .set({
+        hidden: (req.body as z.output<typeof setCmsNodeVisibilitySchema>).hidden
+      })
       .where(and(eq(cmsNodes.id, id), eq(cmsNodes.property_id, propertyId)))
       .returning({ id: cmsNodes.id });
-    if (!updated) {
-      return res.status(404).json({ error: 'Node not found' });
-    }
-    sendNode(res, 200, await loadNodes(db, propertyId), id);
+    if (!updated) throw nodeNotFound();
+    await sendNode(res, 200, propertyId, id);
   }
 );
 
@@ -380,7 +383,7 @@ const duplicateCmsNode = handle(
       await lockNodes(tx, propertyId);
       const nodes = await loadNodes(tx, propertyId);
       const original = nodes.find((node) => node.id === id);
-      if (!original) return null;
+      if (!original) throw nodeNotFound();
 
       // Make room right after the original.
       await tx
@@ -443,10 +446,7 @@ const duplicateCmsNode = handle(
       return copy(original, original.parent_id, true);
     });
 
-    if (copyId == null) {
-      return res.status(404).json({ error: 'Node not found' });
-    }
-    sendNode(res, 201, await loadNodes(db, propertyId), copyId);
+    await sendNode(res, 201, propertyId, copyId);
   }
 );
 
@@ -464,9 +464,7 @@ const deleteCmsNode = handle('Failed to delete node', async (req, res) => {
       )
     )
     .returning({ id: cmsNodes.id });
-  if (!deleted) {
-    return res.status(404).json({ error: 'Node not found' });
-  }
+  if (!deleted) throw nodeNotFound();
   await sweepImages(db, propertyId);
   res.status(200).json({ message: 'Node deleted successfully' });
 });
@@ -495,9 +493,7 @@ const getCmsImage = handle('Failed to fetch image', async (req, res) => {
     .select({ mime: cmsImages.mime, data: cmsImages.data })
     .from(cmsImages)
     .where(eq(cmsImages.id, String(req.params.id)));
-  if (!image) {
-    return res.status(404).json({ error: 'Image not found' });
-  }
+  if (!image) throw new HttpProblem(404, 'Image not found');
   res
     .status(200)
     .set({
