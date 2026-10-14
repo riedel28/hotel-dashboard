@@ -64,7 +64,7 @@ import { MoveNodeDialog } from './-components/move-node-dialog';
 import { NodeEditor } from './-components/node-editor';
 import { PhonePreview } from './-components/preview/phone-preview';
 import { useCmsMutations } from './-components/use-cms-mutations';
-import { applyForm, type CmsForm, filterNodes } from './-lib/cms-content';
+import { applyForm, type CmsDraft, filterNodes } from './-lib/cms-content';
 import { useNodeTitle } from './-lib/use-node-title';
 
 // Columns follow the room <main> has (sidebar open or not), not the window;
@@ -140,12 +140,14 @@ function MobileCmsPage() {
   );
 
   // --- The editor's unsaved state, for the preview ---
-  const [draft, setDraft] = React.useState<CmsForm | null>(null);
+  // Tagged with its node: right after switching nodes, the page renders once
+  // before the new editor has reported, still holding the old one's form.
+  const [draft, setDraft] = React.useState<CmsDraft | null>(null);
   const previewNodes = React.useMemo(
     () =>
-      draft && selected
+      draft && draft.nodeId === selected?.id
         ? nodes.map((node) =>
-            node.id === selected.id ? applyForm(node, draft) : node
+            node.id === draft.nodeId ? applyForm(node, draft.form) : node
           )
         : nodes,
     [nodes, draft, selected]

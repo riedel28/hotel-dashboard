@@ -33,7 +33,11 @@ import { Label } from '@/components/ui/label';
 import { RadioCards } from '@/components/ui/radio-cards';
 import { Switch } from '@/components/ui/switch';
 
-import { type CmsForm, typeChange, type TypeChange } from '../-lib/cms-content';
+import {
+  type CmsDraft,
+  typeChange,
+  type TypeChange
+} from '../-lib/cms-content';
 import { useNodeTitle } from '../-lib/use-node-title';
 import { ImageField } from './image-field';
 import { NestedItems } from './nested-items';
@@ -45,7 +49,7 @@ interface NodeEditorProps {
   node: CmsNode;
   nodes: CmsNode[];
   // Reports the form as it is typed, for the preview.
-  onDraftChange: (draft: CmsForm | null) => void;
+  onDraftChange: (draft: CmsDraft | null) => void;
   onSelect: (id: number | null) => void;
   onToggleHidden: (node: CmsNode) => void;
   onAddChild: (node: CmsNode, type: CmsNodeType) => void;
@@ -68,8 +72,8 @@ export function NodeEditor({
   const { form, values, isDirty, save, submit, blocker } = useNodeForm(node);
 
   React.useEffect(() => {
-    onDraftChange(values);
-  }, [values, onDraftChange]);
+    onDraftChange({ nodeId: node.id, form: values });
+  }, [node.id, values, onDraftChange]);
   React.useEffect(() => () => onDraftChange(null), [onDraftChange]);
 
   const children = cmsChildren(nodes, node.id);

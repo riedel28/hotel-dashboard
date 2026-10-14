@@ -36,6 +36,12 @@ export interface CmsForm {
   translations: Record<CmsLocale, CmsFormTranslation>;
 }
 
+/** A node's form as typed, not saved yet: what the preview shows. */
+export interface CmsDraft {
+  nodeId: number;
+  form: CmsForm;
+}
+
 export function nodeToForm(node: CmsNode): CmsForm {
   const translation = (locale: CmsLocale): CmsFormTranslation => {
     const t = node.translations[locale];
