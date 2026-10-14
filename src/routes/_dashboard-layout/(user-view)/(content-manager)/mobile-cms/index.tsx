@@ -357,16 +357,16 @@ function MobileCmsPage() {
               onReorder={actions.onReorder}
             />
           ) : (
-            // Styled like Products' empty state: a title and a hint.
+            // A title and a hint, one step larger than Products' empty list.
             <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 pb-4 text-center">
-              <p className="text-sm font-medium">
+              <p className="text-lg font-medium">
                 {requestedId != null ? (
                   <Trans>This item doesn’t exist (anymore)</Trans>
                 ) : (
                   <Trans>No item selected</Trans>
                 )}
               </p>
-              <p className="text-sm text-balance text-muted-foreground">
+              <p className="text-base text-balance text-muted-foreground">
                 <Trans>
                   Choose a page or link in the tree, or tap one in the preview.
                 </Trans>
