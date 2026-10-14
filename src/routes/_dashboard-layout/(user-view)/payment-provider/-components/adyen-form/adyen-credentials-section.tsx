@@ -22,7 +22,8 @@ import {
   Field,
   FieldDescription,
   FieldError,
-  FieldLabel
+  FieldLabel,
+  FieldOptional
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
@@ -30,8 +31,7 @@ import {
   InputGroupAddon,
   InputGroupInput
 } from '@/components/ui/input-group';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioCards } from '@/components/ui/radio-cards';
 import { Textarea } from '@/components/ui/textarea';
 
 import type { AdyenFormData } from './adyen-form-types';
@@ -94,7 +94,7 @@ export function AdyenCredentialsSection({
               <FieldLabel>
                 <Trans>Environment</Trans>
               </FieldLabel>
-              <RadioGroup
+              <RadioCards
                 value={field.value}
                 onValueChange={(value) => {
                   if (value === 'live' && field.value === 'test') {
@@ -103,31 +103,12 @@ export function AdyenCredentialsSection({
                   }
                   field.onChange(value);
                 }}
-                className="grid w-full grid-cols-2 gap-2"
-              >
-                <Label
-                  htmlFor="environment-test"
-                  className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted has-[button:disabled]:cursor-not-allowed has-[button:disabled]:opacity-50 dark:bg-input/30"
-                >
-                  <RadioGroupItem
-                    value="test"
-                    id="environment-test"
-                    disabled={disabled}
-                  />
-                  <Trans>Test</Trans>
-                </Label>
-                <Label
-                  htmlFor="environment-live"
-                  className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted has-[button:disabled]:cursor-not-allowed has-[button:disabled]:opacity-50 dark:bg-input/30"
-                >
-                  <RadioGroupItem
-                    value="live"
-                    id="environment-live"
-                    disabled={disabled}
-                  />
-                  <Trans>Live</Trans>
-                </Label>
-              </RadioGroup>
+                disabled={disabled}
+                options={[
+                  { value: 'test', label: <Trans>Test</Trans> },
+                  { value: 'live', label: <Trans>Live</Trans> }
+                ]}
+              />
             </Field>
           )}
         />
@@ -240,9 +221,7 @@ export function AdyenCredentialsSection({
             <Field>
               <FieldLabel htmlFor={field.name}>
                 <Trans>Additional configuration</Trans>
-                <span className="-ml-1 font-normal text-muted-foreground">
-                  (<Trans>optional</Trans>)
-                </span>
+                <FieldOptional />
               </FieldLabel>
               <Textarea
                 id={field.name}

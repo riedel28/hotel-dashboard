@@ -64,11 +64,12 @@ import {
   Field,
   FieldDescription,
   FieldError,
-  FieldLabel
+  FieldLabel,
+  FieldOptional
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioCards } from '@/components/ui/radio-cards';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -360,12 +361,12 @@ export function NodeEditor({
               <Trans>Type</Trans>
             </FieldLabel>
             <RadioCards
-              labelledBy="cms-type"
+              aria-labelledby="cms-type"
               value={values.type}
               onValueChange={changeType}
               options={[
-                ['page', t`Page`],
-                ['link', t`External link`]
+                { value: 'page', label: t`Page` },
+                { value: 'link', label: t`External link` }
               ]}
             />
           </Field>
@@ -424,12 +425,12 @@ export function NodeEditor({
                       <Trans>Opens in</Trans>
                     </FieldLabel>
                     <RadioCards
-                      labelledBy="cms-open-mode"
+                      aria-labelledby="cms-open-mode"
                       value={field.value}
                       onValueChange={field.onChange}
                       options={[
-                        ['in_app', t`In-app browser`],
-                        ['system', t`System browser`]
+                        { value: 'in_app', label: t`In-app browser` },
+                        { value: 'system', label: t`System browser` }
                       ]}
                     />
                   </Field>
@@ -442,7 +443,7 @@ export function NodeEditor({
                   <Field className="gap-2">
                     <FieldLabel>
                       <Trans>Image or icon</Trans>
-                      <Optional />
+                      <FieldOptional />
                     </FieldLabel>
                     <ImageField
                       max={1}
@@ -660,51 +661,6 @@ export function NodeEditor({
   );
 }
 
-// Two or three choices as bordered radio cards, like the Adyen environment.
-function RadioCards<TValue extends string>({
-  labelledBy,
-  value,
-  onValueChange,
-  options
-}: {
-  labelledBy: string;
-  value: TValue;
-  onValueChange: (value: TValue) => void;
-  options: [TValue, string][];
-}) {
-  return (
-    <RadioGroup
-      aria-labelledby={labelledBy}
-      value={value}
-      onValueChange={(next) => onValueChange(next as TValue)}
-      className="grid w-full grid-cols-2 gap-2"
-    >
-      {options.map(([optionValue, label]) => (
-        <Label
-          key={optionValue}
-          htmlFor={`${labelledBy}-${optionValue}`}
-          className="flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium transition-colors hover:bg-muted dark:bg-input/30"
-        >
-          <RadioGroupItem
-            value={optionValue}
-            id={`${labelledBy}-${optionValue}`}
-          />
-          {label}
-        </Label>
-      ))}
-    </RadioGroup>
-  );
-}
-
-// Marks an optional field's label, as elsewhere in the app.
-function Optional() {
-  return (
-    <span className="-ml-1 font-normal text-muted-foreground">
-      (<Trans>optional</Trans>)
-    </span>
-  );
-}
-
 function TranslationFields({
   form,
   locale,
@@ -732,7 +688,7 @@ function TranslationFields({
           <Field data-invalid={fieldState.invalid} className="gap-2">
             <FieldLabel htmlFor={id('title')}>
               <Trans>Title</Trans>
-              {!isPrimary && <Optional />}
+              {!isPrimary && <FieldOptional />}
             </FieldLabel>
             <Input
               {...field}
@@ -753,7 +709,7 @@ function TranslationFields({
             <div className="flex items-baseline justify-between">
               <FieldLabel htmlFor={id('subtitle')}>
                 <Trans>Subtitle</Trans>
-                <Optional />
+                <FieldOptional />
               </FieldLabel>
               <span
                 className={cn(
@@ -806,7 +762,7 @@ function TranslationFields({
               <Field data-invalid={fieldState.invalid} className="gap-2">
                 <FieldLabel htmlFor={id('url')}>
                   <Trans>URL for this language</Trans>
-                  <Optional />
+                  <FieldOptional />
                 </FieldLabel>
                 <Input
                   {...field}

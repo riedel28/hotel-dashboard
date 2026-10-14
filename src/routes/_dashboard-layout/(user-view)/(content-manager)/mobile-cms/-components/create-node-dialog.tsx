@@ -21,7 +21,7 @@ import {
   FieldLabel
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { SegmentedControl } from '@/components/ui/segmented-control';
+import { RadioCards } from '@/components/ui/radio-cards';
 
 export interface CreateNodeRequest {
   parentId: number | null;
@@ -126,15 +126,20 @@ export function CreateNodeDialog({
               control={form.control}
               name="type"
               render={({ field }) => (
-                <SegmentedControl
-                  label={t`Type`}
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  options={[
-                    { value: 'page', label: t`Page` },
-                    { value: 'link', label: t`External link` }
-                  ]}
-                />
+                <Field className="gap-2">
+                  <FieldLabel id="cms-new-type">
+                    <Trans>Type</Trans>
+                  </FieldLabel>
+                  <RadioCards
+                    aria-labelledby="cms-new-type"
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    options={[
+                      { value: 'page', label: t`Page` },
+                      { value: 'link', label: t`External link` }
+                    ]}
+                  />
+                </Field>
               )}
             />
             <Controller
