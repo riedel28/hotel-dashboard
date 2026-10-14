@@ -460,16 +460,21 @@ export function NodeEditor({
         value={locale}
         onValueChange={(value) => setLocale(value as CmsLocale)}
       >
-        <TabsList variant="line">
+        {/* Same full-width switch as the SALTO form's interface tabs. */}
+        <TabsList className="h-9! w-full">
           {cmsLocales.map((code) => {
             const missing = isMissingTranslation(values.translations, code);
             const invalid = !!errors?.[code];
             return (
-              <TabsTrigger key={code} value={code} className="gap-1.5">
+              <TabsTrigger
+                key={code}
+                value={code}
+                className="flex-1 gap-1.5 text-foreground/70!"
+              >
                 {localeNames[code]}
                 {code === cmsPrimaryLocale && (
-                  <span className="text-xs text-muted-foreground">
-                    <Trans>main</Trans>
+                  <span className="-ml-0.5 font-normal text-muted-foreground">
+                    (<Trans>main</Trans>)
                   </span>
                 )}
                 {(missing || invalid) && (
