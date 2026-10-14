@@ -3,7 +3,12 @@ import { type Control, Controller } from 'react-hook-form';
 
 import { FormSection } from '@/components/form-section';
 import { CountryPicker } from '@/components/ui/country-picker';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+  FieldOptional
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 import type { AdyenFormData } from './adyen-form-types';
@@ -59,10 +64,8 @@ export function AdyenRecipientSection({
           render={({ field }) => (
             <Field>
               <FieldLabel htmlFor={field.name}>
-                <Trans>Address line 2</Trans>{' '}
-                <span className="-ml-1 font-normal text-muted-foreground">
-                  (<Trans>optional</Trans>)
-                </span>
+                <Trans>Address line 2</Trans>
+                <FieldOptional />
               </FieldLabel>
               <Input id={field.name} {...field} autoComplete="address-line2" />
             </Field>

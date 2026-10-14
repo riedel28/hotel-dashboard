@@ -28,6 +28,7 @@ export const navItemIdSchema = z.enum([
   'rooms',
   'guest-abc',
   'products',
+  'mobile-cms',
   'pms-provider',
   'door-locks',
   'payment-provider',

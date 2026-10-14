@@ -1,11 +1,12 @@
 import { Editor } from '@tiptap/react';
+import { sanitizeCmsHtml } from 'shared/cms-html';
 import {
   richTextAllowedAttributes,
   richTextAllowedTags
 } from 'shared/rich-text';
 import { describe, expect, it } from 'vitest';
 
-import { richTextExtensions } from './rich-text-editor';
+import { cmsRichTextExtensions, richTextExtensions } from './rich-text-editor';
 
 // Everything the toolbar can apply, at once.
 const everything =
@@ -43,5 +44,22 @@ describe('rich-text editor', () => {
         ).toContain(name);
       }
     }
+  });
+
+  it('in the CMS variant only produces HTML the CMS sanitizer keeps', () => {
+    const editor = new Editor({
+      extensions: cmsRichTextExtensions,
+      content:
+        '<h2>Heading</h2><h3>Sub</h3><p><strong>b</strong> <em>i</em> <u>u</u><br>' +
+        '<a href="https://example.com">link</a></p><ul><li><p>item</p></li></ul>' +
+        '<ol><li><p>item</p></li></ol>'
+    });
+    const html = editor.getHTML();
+    editor.destroy();
+
+    // Normalize both the same way, then compare: nothing may be dropped.
+    const normalize = (value: string) =>
+      new DOMParser().parseFromString(value, 'text/html').body.innerHTML;
+    expect(normalize(sanitizeCmsHtml(html))).toBe(normalize(html));
   });
 });

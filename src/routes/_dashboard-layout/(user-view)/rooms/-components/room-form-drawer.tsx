@@ -35,6 +35,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldOptional,
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -76,12 +77,6 @@ interface RoomFormDrawerProps {
   /** Types the property already uses, offered as suggestions */
   roomTypes: string[];
 }
-
-const optional = (
-  <span className="-ml-1 font-normal text-muted-foreground">
-    (<Trans>optional</Trans>)
-  </span>
-);
 
 export function RoomFormDrawer({
   open,
@@ -203,7 +198,8 @@ export function RoomFormDrawer({
                         className="gap-2"
                       >
                         <FieldLabel htmlFor="room-floor">
-                          <Trans>Floor</Trans> {optional}
+                          <Trans>Floor</Trans>
+                          <FieldOptional />
                         </FieldLabel>
                         <NumberInput
                           id="room-floor"
@@ -227,7 +223,8 @@ export function RoomFormDrawer({
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid} className="gap-2">
                       <FieldLabel htmlFor="room-name">
-                        <Trans>Name</Trans> {optional}
+                        <Trans>Name</Trans>
+                        <FieldOptional />
                       </FieldLabel>
                       <Input
                         id="room-name"

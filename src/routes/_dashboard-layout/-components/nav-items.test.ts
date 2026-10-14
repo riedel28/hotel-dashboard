@@ -14,6 +14,7 @@ describe('userNavSections', () => {
       '/rooms',
       '/guest-abc',
       '/products',
+      '/mobile-cms',
       '/pms-provider',
       '/door-locks',
       '/payment-provider',
@@ -31,7 +32,7 @@ describe('userNavSections', () => {
   });
 
   test('drops a group once all its items are disabled', () => {
-    const sections = userNavSections(['guest-abc', 'products']);
+    const sections = userNavSections(['guest-abc', 'products', 'mobile-cms']);
     expect(sections.map((section) => section.key)).toEqual([
       'main',
       'front-office',

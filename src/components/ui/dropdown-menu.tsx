@@ -4,7 +4,9 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
+function DropdownMenu<Payload = unknown>({
+  ...props
+}: MenuPrimitive.Root.Props<Payload>) {
   return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
 }
 
@@ -12,9 +14,15 @@ function DropdownMenuPortal({ ...props }: MenuPrimitive.Portal.Props) {
   return <MenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />;
 }
 
-function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
+function DropdownMenuTrigger<Payload = unknown>({
+  ...props
+}: MenuPrimitive.Trigger.Props<Payload>) {
   return <MenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />;
 }
+
+// One menu for many triggers (e.g. a row's "…" in a long list): each
+// trigger passes its `payload`, the single DropdownMenu renders for it.
+const createDropdownMenuHandle = MenuPrimitive.createHandle;
 
 function DropdownMenuContent({
   align = 'start',
@@ -302,6 +310,7 @@ function DropdownMenuItemIndicator({
 }
 
 export {
+  createDropdownMenuHandle,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,

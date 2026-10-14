@@ -41,6 +41,8 @@ interface SegmentedControlProps<TValue extends string> {
    * (default). When false the color shows in the dot alone.
    */
   tintSelected?: boolean;
+  /** 'sm' for compact toolbars, e.g. above a preview. */
+  size?: 'sm' | 'default';
   className?: string;
 }
 
@@ -51,6 +53,7 @@ function SegmentedControl<TValue extends string>({
   onValueChange,
   label,
   tintSelected = true,
+  size = 'default',
   className
 }: SegmentedControlProps<TValue>) {
   return (
@@ -62,6 +65,7 @@ function SegmentedControl<TValue extends string>({
       // Same height, radius and surface as the dropdown filters beside it
       className={cn(
         'flex h-9 w-fit shrink-0 items-center rounded-lg border border-input bg-background p-1 dark:bg-input/30',
+        size === 'sm' && 'h-7 p-0.5',
         className
       )}
     >
@@ -85,7 +89,8 @@ function SegmentedControl<TValue extends string>({
                     // as chosen; the input token at the outline button's
                     // hover strength stands out without glaring
                     'border-foreground/2 bg-muted text-foreground dark:border-transparent dark:bg-input/50'
-                  : 'text-foreground/60 hover:text-foreground'
+                  : 'text-foreground/60 hover:text-foreground',
+              size === 'sm' && 'px-2 text-xs'
             )}
           >
             {color && (

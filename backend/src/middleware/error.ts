@@ -68,9 +68,24 @@ export function isForeignKeyViolation(error: unknown) {
   return (code ?? cause?.code) === foreignKeyViolation;
 }
 
+// An expected failure with its own status (and optional machine-readable
+// code), thrown from anywhere in a handler wrapped by withFailMessage — out
+// of a transaction too, which then rolls back.
+export class HttpProblem extends Error {
+  readonly status: number;
+  readonly code: string | undefined;
+
+  constructor(status: number, message: string, code?: string) {
+    super(message);
+    this.status = status;
+    this.code = code;
+  }
+}
+
 // Wraps a route handler so an unexpected error is logged and answered with a
 // 500 carrying `failMessage` — the per-operation message controllers
-// otherwise repeat in a try/catch of their own.
+// otherwise repeat in a try/catch of their own. An HttpProblem is answered
+// as it says.
 export function withFailMessage<Req extends Request = Request>(
   failMessage: string,
   handler: (req: Req, res: Response) => Promise<unknown>
@@ -79,6 +94,12 @@ export function withFailMessage<Req extends Request = Request>(
     try {
       await handler(req, res);
     } catch (error) {
+      if (error instanceof HttpProblem) {
+        res
+          .status(error.status)
+          .json({ error: error.message, code: error.code });
+        return;
+      }
       console.error(error);
       res.status(500).json({ error: failMessage });
     }

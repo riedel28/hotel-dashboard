@@ -99,6 +99,13 @@
       "when": 1791872827876,
       "tag": "0013_rooms_number_floor",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1791960560427,
+      "tag": "0014_mobile_cms",
+      "breakpoints": true
     }
   ]
 }

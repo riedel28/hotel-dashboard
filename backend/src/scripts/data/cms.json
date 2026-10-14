@@ -1,0 +1,141 @@
+[
+  {
+    "type": "page",
+    "de": {
+      "title": "Willkommen",
+      "subtitle": "Schön, dass Sie da sind",
+      "body": "<p>Herzlich willkommen im <strong>Overlook Hotel</strong>! Hier finden Sie alles, was Sie für Ihren Aufenthalt wissen müssen.</p><h2>Check-in &amp; Check-out</h2><ul><li>Check-in ab 15:00 Uhr</li><li>Check-out bis 11:00 Uhr</li></ul><p>Fragen? Die Rezeption ist rund um die Uhr unter <a href=\"tel:+4930123456\">+49 30 123456</a> erreichbar.</p>"
+    },
+    "en": {
+      "title": "Welcome",
+      "subtitle": "We're glad you're here",
+      "body": "<p>Welcome to <strong>The Overlook Hotel</strong>! Here you'll find everything you need for your stay.</p><h2>Check-in &amp; check-out</h2><ul><li>Check-in from 3 pm</li><li>Check-out until 11 am</li></ul><p>Questions? The front desk is available around the clock at <a href=\"tel:+4930123456\">+49 30 123456</a>.</p>"
+    },
+    "children": [
+      {
+        "type": "page",
+        "de": {
+          "title": "WLAN",
+          "subtitle": "Netzwerk „Overlook-Guest“",
+          "body": "<p>Das Passwort steht auf Ihrer Zimmerkarte. Das WLAN ist im ganzen Haus kostenlos.</p>"
+        },
+        "en": {
+          "title": "Wi-Fi",
+          "subtitle": "Network “Overlook-Guest”",
+          "body": "<p>The password is on your room key card. Wi-Fi is free throughout the hotel.</p>"
+        }
+      },
+      {
+        "type": "page",
+        "de": {
+          "title": "Parken",
+          "subtitle": "Tiefgarage, 25 € pro Tag",
+          "body": "<p>Die Einfahrt liegt in der Seitenstraße. Bitte melden Sie Ihr Kennzeichen an der Rezeption.</p>"
+        }
+      }
+    ]
+  },
+  {
+    "type": "page",
+    "de": {
+      "title": "Restaurant & Bar",
+      "subtitle": "Täglich 7–23 Uhr, mit Seeterrasse",
+      "body": "<p>Regionale Küche aus frischen Zutaten – vom Frühstücksbuffet bis zum Abendmenü.</p><h3>Öffnungszeiten</h3><ul><li>Frühstück: 7–10:30 Uhr</li><li>Mittag: 12–14 Uhr</li><li>Abendessen: 18–22 Uhr</li></ul>"
+    },
+    "en": {
+      "title": "Restaurant & Bar",
+      "subtitle": "Daily 7 am–11 pm, lakeside terrace",
+      "body": "<p>Regional cuisine made from fresh ingredients – from the breakfast buffet to the dinner menu.</p><h3>Opening hours</h3><ul><li>Breakfast: 7–10:30 am</li><li>Lunch: 12–2 pm</li><li>Dinner: 6–10 pm</li></ul>"
+    },
+    "children": [
+      {
+        "type": "page",
+        "de": {
+          "title": "Speisekarte",
+          "subtitle": "Saisonal wechselnd",
+          "body": "<h2>Vorspeisen</h2><ul><li>Kürbissuppe mit Kernöl</li><li>Feldsalat mit Speck</li></ul><h2>Hauptgerichte</h2><ul><li>Zanderfilet auf Rahmkraut</li><li>Rinderroulade mit Rotkohl</li></ul>"
+        },
+        "en": {
+          "title": "Menu",
+          "body": "<h2>Starters</h2><ul><li>Pumpkin soup with seed oil</li><li>Lamb's lettuce with bacon</li></ul><h2>Mains</h2><ul><li>Pike-perch on creamed cabbage</li><li>Beef roulade with red cabbage</li></ul>"
+        },
+        "children": [
+          {
+            "type": "page",
+            "de": {
+              "title": "Allergene",
+              "body": "<p>Eine Übersicht aller Allergene erhalten Sie beim Servicepersonal.</p>"
+            }
+          }
+        ]
+      },
+      {
+        "type": "link",
+        "url": "https://example.com/overlook/table",
+        "open_mode": "in_app",
+        "de": {
+          "title": "Tisch reservieren",
+          "subtitle": "Online in 1 Minute"
+        },
+        "en": {
+          "title": "Book a table",
+          "subtitle": "Online in a minute",
+          "url": "https://example.com/overlook/table?lang=en"
+        }
+      },
+      {
+        "type": "page",
+        "hidden": true,
+        "de": {
+          "title": "Weihnachtsmenü",
+          "subtitle": "Ab 1. Dezember",
+          "body": "<p>Unser festliches Menü in fünf Gängen – Details folgen.</p>"
+        }
+      }
+    ]
+  },
+  {
+    "type": "page",
+    "hidden": true,
+    "de": {
+      "title": "Spa & Wellness",
+      "subtitle": "Wird gerade renoviert",
+      "body": "<p>Unser Spa öffnet im Frühjahr wieder.</p>"
+    },
+    "en": {
+      "title": "Spa & Wellness",
+      "subtitle": "Currently being renovated",
+      "body": "<p>Our spa reopens in spring.</p>"
+    },
+    "children": [
+      {
+        "type": "page",
+        "de": {
+          "title": "Sauna",
+          "body": "<p>Finnische Sauna und Dampfbad, täglich 14–21 Uhr.</p>"
+        },
+        "en": {
+          "title": "Sauna",
+          "body": "<p>Finnish sauna and steam room, daily 2–9 pm.</p>"
+        }
+      },
+      {
+        "type": "link",
+        "url": "https://example.com/overlook/spa-booking",
+        "open_mode": "system",
+        "de": { "title": "Massage buchen" },
+        "en": { "title": "Book a massage" }
+      }
+    ]
+  },
+  {
+    "type": "link",
+    "url": "https://example.com/overlook/city-guide",
+    "open_mode": "system",
+    "de": {
+      "title": "Stadtführer",
+      "subtitle": "Sehenswürdigkeiten, Museen und Touren"
+    },
+    "en": { "title": "City guide" }
+  }
+]

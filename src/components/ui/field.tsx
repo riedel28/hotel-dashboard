@@ -1,5 +1,6 @@
 'use client';
 
+import { Trans } from '@lingui/react/macro';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useMemo } from 'react';
 
@@ -109,6 +110,15 @@ function FieldLabel({
       )}
       {...props}
     />
+  );
+}
+
+// "(optional)" after a FieldLabel's text, in the label's quieter colour.
+function FieldOptional() {
+  return (
+    <span className="-ml-1 font-normal text-muted-foreground">
+      (<Trans>optional</Trans>)
+    </span>
   );
 }
 
@@ -229,6 +239,7 @@ export {
   FieldGroup,
   FieldLabel,
   FieldLegend,
+  FieldOptional,
   FieldSeparator,
   FieldSet,
   FieldTitle

@@ -10,12 +10,15 @@ import StarterKit from '@tiptap/starter-kit';
 import {
   BoldIcon,
   ChevronDownIcon,
+  CodeIcon,
   ImageIcon,
   ItalicIcon,
   LinkIcon,
   ListIcon,
   ListOrderedIcon,
-  UnderlineIcon
+  Redo2Icon,
+  UnderlineIcon,
+  Undo2Icon
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -32,6 +35,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
 import { Toggle, toggleVariants } from '@/components/ui/toggle';
 import { cn } from '@/lib/utils';
 
@@ -45,6 +49,9 @@ interface RichTextEditorProps {
   'aria-invalid'?: boolean;
   'aria-label'?: string;
   className?: string;
+  // 'cms': the Mobile CMS text — H2/H3 only, no images, undo/redo and a raw
+  // HTML mode (see shared/cms-html.ts for what is kept).
+  variant?: 'default' | 'cms';
 }
 
 // Paragraph or heading (H1–H6), bold, italic, underline, lists, links and
@@ -66,14 +73,51 @@ export const richTextExtensions = [
   Image
 ];
 
+// What shared/cms-html.ts keeps: no images, headings H2/H3.
+export const cmsRichTextExtensions = [
+  StarterKit.configure({
+    blockquote: false,
+    code: false,
+    codeBlock: false,
+    horizontalRule: false,
+    strike: false,
+    heading: { levels: [2, 3] },
+    // It appends an empty paragraph after a closing list or heading, which
+    // reads as an edit and marks a just-opened form as unsaved.
+    trailingNode: false,
+    link: {
+      openOnClick: false,
+      protocols: ['http', 'https', 'mailto', 'tel'],
+      // The app decides how links open; the sanitizer drops these anyway.
+      HTMLAttributes: { target: null, rel: null }
+    }
+  })
+];
+
+const variants = {
+  default: {
+    extensions: richTextExtensions,
+    headingLevels: [1, 2, 3, 4, 5, 6],
+    images: true,
+    history: false,
+    htmlMode: false
+  },
+  cms: {
+    extensions: cmsRichTextExtensions,
+    headingLevels: [2, 3],
+    images: false,
+    // Undo/redo buttons and editing the HTML source.
+    history: true,
+    htmlMode: true
+  }
+} as const;
+
 // Toolbar buttons are grey until hovered. An active one keeps the hover text
 // colour on a darker grey fill, so "on" reads differently from "hovered".
 const toolbarButtonClassName = cn(
   toggleVariants({ size: 'sm' }),
   'text-muted-foreground aria-pressed:bg-foreground/10 aria-pressed:text-foreground aria-pressed:hover:bg-foreground/10'
 );
-
-const headingLevels = [1, 2, 3, 4, 5, 6] as const;
 
 // How rich text looks: headings, lists, links and images. Used by the editor
 // and its style menu; apply it wherever saved rich text is rendered.
@@ -88,11 +132,13 @@ export const richTextClassName = cn(
 // Paragraph / Heading 1–6 for the current block.
 function TextStyleMenu({
   editor,
-  level
+  level,
+  headingLevels
 }: {
   editor: Editor;
   // The current block's heading level; null for a paragraph.
   level: number | null;
+  headingLevels: readonly (1 | 2 | 3 | 4 | 5 | 6)[];
 }) {
   const { t } = useLingui();
   return (
@@ -137,6 +183,9 @@ function TextStyleMenu({
     </DropdownMenu>
   );
 }
+
+// An empty document is reported as '' rather than '<p></p>'.
+const htmlOf = (editor: Editor) => (editor.isEmpty ? '' : editor.getHTML());
 
 // A bare "example.com" would otherwise become a relative URL.
 function withScheme(url: string) {
@@ -222,7 +271,17 @@ function UrlControl({
   );
 }
 
-function Toolbar({ editor }: { editor: Editor }) {
+function Toolbar({
+  editor,
+  variant,
+  htmlMode,
+  onHtmlModeChange
+}: {
+  editor: Editor;
+  variant: (typeof variants)[keyof typeof variants];
+  htmlMode: boolean;
+  onHtmlModeChange: (htmlMode: boolean) => void;
+}) {
   const { t } = useLingui();
   const active = useEditorState({
     editor,
@@ -235,7 +294,9 @@ function Toolbar({ editor }: { editor: Editor }) {
       underline: editor.isActive('underline'),
       bulletList: editor.isActive('bulletList'),
       orderedList: editor.isActive('orderedList'),
-      link: editor.isActive('link')
+      link: editor.isActive('link'),
+      canUndo: editor.can().undo(),
+      canRedo: editor.can().redo()
     })
   });
 
@@ -278,7 +339,43 @@ function Toolbar({ editor }: { editor: Editor }) {
       aria-label={t`Formatting`}
       className="flex flex-wrap items-center gap-0.5 border-b border-input p-1"
     >
-      <TextStyleMenu editor={editor} level={active.headingLevel} />
+      {variant.history && (
+        <>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            className="text-muted-foreground"
+            aria-label={t`Undo`}
+            title={t`Undo`}
+            disabled={htmlMode || !active.canUndo}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => editor.chain().focus().undo().run()}
+          >
+            <Undo2Icon />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            className="text-muted-foreground"
+            aria-label={t`Redo`}
+            title={t`Redo`}
+            disabled={htmlMode || !active.canRedo}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => editor.chain().focus().redo().run()}
+          >
+            <Redo2Icon />
+          </Button>
+        </>
+      )}
+      <fieldset disabled={htmlMode} className="contents">
+        <TextStyleMenu
+          editor={editor}
+          level={active.headingLevel}
+          headingLevels={variant.headingLevels}
+        />
+      </fieldset>
       {toggles.map(({ label, icon: Icon, pressed, run }) => (
         <Toggle
           key={label}
@@ -286,6 +383,7 @@ function Toolbar({ editor }: { editor: Editor }) {
           aria-label={label}
           title={label}
           pressed={pressed}
+          disabled={htmlMode}
           onPressedChange={run}
           // Keep the selection in the editor while clicking the toolbar.
           onMouseDown={(event) => event.preventDefault()}
@@ -307,15 +405,28 @@ function Toolbar({ editor }: { editor: Editor }) {
           }
         }}
       />
-      <UrlControl
-        label={t`Image`}
-        icon={ImageIcon}
-        onApply={(src) => {
-          if (src) {
-            editor.chain().focus().setImage({ src }).run();
-          }
-        }}
-      />
+      {variant.images && (
+        <UrlControl
+          label={t`Image`}
+          icon={ImageIcon}
+          onApply={(src) => {
+            if (src) {
+              editor.chain().focus().setImage({ src }).run();
+            }
+          }}
+        />
+      )}
+      {variant.htmlMode && (
+        <Toggle
+          className={cn(toolbarButtonClassName, 'ms-auto')}
+          aria-label={t`Edit HTML`}
+          title={t`Edit HTML`}
+          pressed={htmlMode}
+          onPressedChange={onHtmlModeChange}
+        >
+          <CodeIcon />
+        </Toggle>
+      )}
     </div>
   );
 }
@@ -328,10 +439,17 @@ function RichTextEditor({
   disabled = false,
   'aria-invalid': invalid,
   'aria-label': ariaLabel,
-  className
+  className,
+  variant: variantName = 'default'
 }: RichTextEditorProps) {
+  const variant = variants[variantName];
+  // Raw HTML mode: the value is edited as source. The editor picks it up
+  // (and normalizes it) when switching back.
+  const [htmlMode, setHtmlMode] = React.useState(false);
+  // The editor's own HTML for the current value.
+  const shownHtml = React.useRef<string | null>(null);
   const editor = useEditor({
-    extensions: richTextExtensions,
+    extensions: variant.extensions,
     content: value,
     editable: !disabled,
     editorProps: {
@@ -346,18 +464,27 @@ function RichTextEditor({
         )
       }
     },
-    onUpdate: ({ editor }) => onChange(editor.isEmpty ? '' : editor.getHTML()),
+    // The editor rewrites stored HTML into its own form (a list item gets a
+    // <p>, …) and reports that as an update. Only a change from that form is
+    // an edit; otherwise a form would turn dirty just by being opened.
+    onCreate: ({ editor }) => {
+      shownHtml.current = htmlOf(editor);
+    },
+    onUpdate: ({ editor }) => {
+      const html = htmlOf(editor);
+      if (html !== shownHtml.current) onChange(html);
+    },
     onBlur
   });
 
   // Follow value changes that didn't come from typing (e.g. a form reset).
   React.useEffect(() => {
-    if (!editor) return;
-    const current = editor.isEmpty ? '' : editor.getHTML();
-    if (value !== current) {
+    if (!editor || htmlMode) return;
+    if (value !== htmlOf(editor)) {
       editor.commands.setContent(value, { emitUpdate: false });
     }
-  }, [editor, value]);
+    shownHtml.current = htmlOf(editor);
+  }, [editor, value, htmlMode]);
 
   React.useEffect(() => {
     editor?.setEditable(!disabled);
@@ -377,8 +504,26 @@ function RichTextEditor({
         className
       )}
     >
-      {editor && <Toolbar editor={editor} />}
-      <EditorContent editor={editor} />
+      {editor && (
+        <Toolbar
+          editor={editor}
+          variant={variant}
+          htmlMode={htmlMode}
+          onHtmlModeChange={setHtmlMode}
+        />
+      )}
+      {htmlMode ? (
+        <Textarea
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          onBlur={onBlur}
+          aria-label={ariaLabel}
+          spellCheck={false}
+          className="max-h-96 min-h-40 rounded-none border-0 font-mono text-xs shadow-none focus-visible:ring-0 dark:bg-transparent"
+        />
+      ) : (
+        <EditorContent editor={editor} />
+      )}
     </div>
   );
 }

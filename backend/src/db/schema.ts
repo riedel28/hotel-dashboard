@@ -4,6 +4,7 @@ import {
   bigint,
   boolean,
   check,
+  customType,
   index,
   integer,
   jsonb,
@@ -18,6 +19,11 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
+import type {
+  CmsLocale,
+  CmsNodeType,
+  CmsOpenMode
+} from '../../../shared/types/cms';
 import type { Provider, ProviderKind } from '../../../shared/types/providers';
 import {
   type GuestAgeGroup,
@@ -396,6 +402,121 @@ export const guestAbcEntries = pgTable(
   (table) => [
     index('guest_abc_entries_property_id_idx').on(table.property_id),
     index('guest_abc_entries_letter_idx').on(table.letter)
+  ]
+);
+
+// Mobile CMS: the content of the hotel's mobile app, a tree of nodes per
+// property (see shared/types/cms.ts). Deleting a node deletes its subtree.
+export const cmsNodes = pgTable(
+  'cms_nodes',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    parent_id: bigint('parent_id', { mode: 'number' }).references(
+      (): AnyPgColumn => cmsNodes.id,
+      { onDelete: 'cascade' }
+    ),
+    // Order among siblings; the server keeps it 0..n-1.
+    position: integer('position').notNull(),
+    type: text('type').notNull().$type<CmsNodeType>(),
+    // The node's own flag. A hidden ancestor hides it too without touching
+    // it; a schedule (visible_from/visible_until) can join it later.
+    hidden: boolean('hidden').notNull().default(false),
+    // Links only, both set exactly for a link.
+    url: text('url'),
+    open_mode: text('open_mode').$type<CmsOpenMode>(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('cms_nodes_property_id_parent_id_idx').on(
+      table.property_id,
+      table.parent_id
+    ),
+    check('cms_nodes_type_check', sql`${table.type} IN ('page', 'link')`),
+    check(
+      'cms_nodes_open_mode_check',
+      sql`${table.open_mode} IN ('in_app', 'system')`
+    ),
+    check(
+      'cms_nodes_link_fields_check',
+      sql`(${table.type} = 'link') = (${table.url} IS NOT NULL AND ${table.open_mode} IS NOT NULL)`
+    )
+  ]
+);
+
+// One row per node and locale that has any text. The primary locale's row
+// always exists and has a title (checked on write).
+export const cmsNodeTranslations = pgTable(
+  'cms_node_translations',
+  {
+    node_id: bigint('node_id', { mode: 'number' })
+      .notNull()
+      .references(() => cmsNodes.id, { onDelete: 'cascade' }),
+    locale: text('locale').notNull().$type<CmsLocale>(),
+    title: text('title'),
+    subtitle: text('subtitle'),
+    body: text('body'),
+    // Overrides the node's URL in this locale (links only).
+    url: text('url')
+  },
+  (table) => [
+    primaryKey({ columns: [table.node_id, table.locale] }),
+    check(
+      'cms_node_translations_locale_check',
+      sql`${table.locale} IN ('de', 'en')`
+    ),
+    check(
+      'cms_node_translations_subtitle_check',
+      sql`char_length(${table.subtitle}) <= 80`
+    )
+  ]
+);
+
+const bytea = customType<{ data: Buffer }>({ dataType: () => 'bytea' });
+
+// ponytail: images live in Postgres, fine for a few hundred small images per
+// property; move them to object storage when the database size starts to hurt.
+export const cmsImages = pgTable(
+  'cms_images',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    mime: text('mime').notNull(),
+    data: bytea('data').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [index('cms_images_property_id_idx').on(table.property_id)]
+);
+
+// A node's images in order. Images nothing refers to are swept a day after
+// their upload (see the CMS controller).
+export const cmsNodeImages = pgTable(
+  'cms_node_images',
+  {
+    node_id: bigint('node_id', { mode: 'number' })
+      .notNull()
+      .references(() => cmsNodes.id, { onDelete: 'cascade' }),
+    image_id: uuid('image_id')
+      .notNull()
+      .references(() => cmsImages.id),
+    position: integer('position').notNull()
+  },
+  (table) => [
+    primaryKey({ columns: [table.node_id, table.position] }),
+    index('cms_node_images_image_id_idx').on(table.image_id)
   ]
 );
 

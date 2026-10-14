@@ -25,7 +25,6 @@ import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes
 import { Route as DashboardLayoutuserViewCompanyRouteImport } from './routes/_dashboard-layout/(user-view)/company'
 import { Route as DashboardLayoutuserViewDoorLocksRouteImport } from './routes/_dashboard-layout/(user-view)/door-locks'
 import { Route as DashboardLayoutuserViewEventsRouteImport } from './routes/_dashboard-layout/(user-view)/events'
-import { Route as DashboardLayoutuserViewMobileCmsRouteImport } from './routes/_dashboard-layout/(user-view)/mobile-cms'
 import { Route as DashboardLayoutuserViewPaymentProviderRouteImport } from './routes/_dashboard-layout/(user-view)/payment-provider'
 import { Route as DashboardLayoutuserViewPmsProviderRouteImport } from './routes/_dashboard-layout/(user-view)/pms-provider'
 import { Route as DashboardLayoutuserViewProfileRouteImport } from './routes/_dashboard-layout/(user-view)/profile'
@@ -44,6 +43,7 @@ import { Route as DashboardLayoutAdminCustomersCustomerIdRouteImport } from './r
 import { Route as DashboardLayoutAdminPropertiesIndexRouteImport } from './routes/_dashboard-layout/admin/properties/index'
 import { Route as DashboardLayoutAdminPropertiesPropertyIdRouteImport } from './routes/_dashboard-layout/admin/properties/$propertyId'
 import { Route as DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index'
+import { Route as DashboardLayoutuserViewcontentManagerMobileCmsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index'
 import { Route as DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/index'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsReservationIdRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
@@ -135,12 +135,6 @@ const DashboardLayoutuserViewEventsRoute =
   DashboardLayoutuserViewEventsRouteImport.update({
     id: '/(user-view)/events',
     path: '/events',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewMobileCmsRoute =
-  DashboardLayoutuserViewMobileCmsRouteImport.update({
-    id: '/(user-view)/mobile-cms',
-    path: '/mobile-cms',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewPaymentProviderRoute =
@@ -251,6 +245,12 @@ const DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute =
     path: '/guest-abc/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
+const DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute =
+  DashboardLayoutuserViewcontentManagerMobileCmsIndexRouteImport.update({
+    id: '/(user-view)/(content-manager)/mobile-cms/',
+    path: '/mobile-cms/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 const DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute =
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport.update({
     id: '/(user-view)/(front-office)/monitoring/',
@@ -293,7 +293,6 @@ export interface FileRoutesByFullPath {
   '/company': typeof DashboardLayoutuserViewCompanyRoute
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/events': typeof DashboardLayoutuserViewEventsRoute
-  '/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/profile': typeof DashboardLayoutuserViewProfileRoute
@@ -314,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   '/reservations/new': typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
   '/guest-abc/': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
+  '/mobile-cms/': typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   '/monitoring/': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   '/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -331,7 +331,6 @@ export interface FileRoutesByTo {
   '/company': typeof DashboardLayoutuserViewCompanyRoute
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/events': typeof DashboardLayoutuserViewEventsRoute
-  '/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/profile': typeof DashboardLayoutuserViewProfileRoute
@@ -352,6 +351,7 @@ export interface FileRoutesByTo {
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   '/reservations/new': typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
   '/guest-abc': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
+  '/mobile-cms': typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   '/monitoring': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   '/reservations': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -373,7 +373,6 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/company': typeof DashboardLayoutuserViewCompanyRoute
   '/_dashboard-layout/(user-view)/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/_dashboard-layout/(user-view)/events': typeof DashboardLayoutuserViewEventsRoute
-  '/_dashboard-layout/(user-view)/mobile-cms': typeof DashboardLayoutuserViewMobileCmsRoute
   '/_dashboard-layout/(user-view)/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/_dashboard-layout/(user-view)/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/_dashboard-layout/(user-view)/profile': typeof DashboardLayoutuserViewProfileRoute
@@ -394,6 +393,7 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   '/_dashboard-layout/(user-view)/(front-office)/reservations/new': typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
   '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
+  '/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/': typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -414,7 +414,6 @@ export interface FileRouteTypes {
     | '/company'
     | '/door-locks'
     | '/events'
-    | '/mobile-cms'
     | '/payment-provider'
     | '/pms-provider'
     | '/profile'
@@ -435,6 +434,7 @@ export interface FileRouteTypes {
     | '/reservations/$reservationId'
     | '/reservations/new'
     | '/guest-abc/'
+    | '/mobile-cms/'
     | '/monitoring/'
     | '/reservations/'
   fileRoutesByTo: FileRoutesByTo
@@ -452,7 +452,6 @@ export interface FileRouteTypes {
     | '/company'
     | '/door-locks'
     | '/events'
-    | '/mobile-cms'
     | '/payment-provider'
     | '/pms-provider'
     | '/profile'
@@ -473,6 +472,7 @@ export interface FileRouteTypes {
     | '/reservations/$reservationId'
     | '/reservations/new'
     | '/guest-abc'
+    | '/mobile-cms'
     | '/monitoring'
     | '/reservations'
   id:
@@ -493,7 +493,6 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/company'
     | '/_dashboard-layout/(user-view)/door-locks'
     | '/_dashboard-layout/(user-view)/events'
-    | '/_dashboard-layout/(user-view)/mobile-cms'
     | '/_dashboard-layout/(user-view)/payment-provider'
     | '/_dashboard-layout/(user-view)/pms-provider'
     | '/_dashboard-layout/(user-view)/profile'
@@ -514,6 +513,7 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/new'
     | '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
+    | '/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/'
     | '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/'
   fileRoutesById: FileRoutesById
@@ -635,13 +635,6 @@ declare module '@tanstack/react-router' {
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof DashboardLayoutuserViewEventsRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/mobile-cms': {
-      id: '/_dashboard-layout/(user-view)/mobile-cms'
-      path: '/mobile-cms'
-      fullPath: '/mobile-cms'
-      preLoaderRoute: typeof DashboardLayoutuserViewMobileCmsRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/payment-provider': {
@@ -770,6 +763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
+    '/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/': {
+      id: '/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/'
+      path: '/mobile-cms'
+      fullPath: '/mobile-cms/'
+      preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
     '/_dashboard-layout/(user-view)/(front-office)/monitoring/': {
       id: '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
       path: '/monitoring'
@@ -855,7 +855,6 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewCompanyRoute: typeof DashboardLayoutuserViewCompanyRoute
   DashboardLayoutuserViewDoorLocksRoute: typeof DashboardLayoutuserViewDoorLocksRoute
   DashboardLayoutuserViewEventsRoute: typeof DashboardLayoutuserViewEventsRoute
-  DashboardLayoutuserViewMobileCmsRoute: typeof DashboardLayoutuserViewMobileCmsRoute
   DashboardLayoutuserViewPaymentProviderRoute: typeof DashboardLayoutuserViewPaymentProviderRoute
   DashboardLayoutuserViewPmsProviderRoute: typeof DashboardLayoutuserViewPmsProviderRoute
   DashboardLayoutuserViewProfileRoute: typeof DashboardLayoutuserViewProfileRoute
@@ -871,6 +870,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   DashboardLayoutuserViewfrontOfficeReservationsNewRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
   DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute: typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
+  DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute: typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute: typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
   DashboardLayoutuserViewfrontOfficeReservationsIndexRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
@@ -885,7 +885,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutuserViewCompanyRoute: DashboardLayoutuserViewCompanyRoute,
   DashboardLayoutuserViewDoorLocksRoute: DashboardLayoutuserViewDoorLocksRoute,
   DashboardLayoutuserViewEventsRoute: DashboardLayoutuserViewEventsRoute,
-  DashboardLayoutuserViewMobileCmsRoute: DashboardLayoutuserViewMobileCmsRoute,
   DashboardLayoutuserViewPaymentProviderRoute:
     DashboardLayoutuserViewPaymentProviderRoute,
   DashboardLayoutuserViewPmsProviderRoute:
@@ -914,6 +913,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewfrontOfficeReservationsNewRoute,
   DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute:
     DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute,
+  DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute:
+    DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute,
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute:
     DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute,
   DashboardLayoutuserViewfrontOfficeReservationsIndexRoute:
