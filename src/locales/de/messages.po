@@ -278,7 +278,7 @@ msgstr "Konto aktiviert!"
 msgid "Accounting codes reported to your PMS per payment method and channel."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:80
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:51
 msgid "Actions"
 msgstr "Aktionen"
@@ -344,13 +344,13 @@ msgstr "Gast hinzufügen"
 msgid "Add Guest"
 msgstr "Gast hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:204
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:207
 msgid "Add image"
 msgstr "Bild hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:204
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:207
 msgid "Add images"
 msgstr "Bilder hinzufügen"
 
@@ -358,7 +358,7 @@ msgstr "Bilder hinzufügen"
 msgid "Add item"
 msgstr "Eintrag hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:135
 msgid "Add nested"
 msgstr "Untereintrag hinzufügen"
 
@@ -785,7 +785,7 @@ msgstr "Verfügbar"
 
 #: src/components/provider-setup/provider-form-card.tsx:121
 #: src/components/provider-setup/provider-picker.tsx:86
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:131
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:149
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:55
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-step.tsx:163
@@ -864,6 +864,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/delete-node-dialog.tsx:73
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/move-node-dialog.tsx:132
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:84
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:303
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:84
@@ -1070,7 +1071,7 @@ msgstr "Kinder"
 msgid "Choose a door lock system"
 msgstr "Türschließsystem auswählen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:339
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:341
 msgid "Choose a page or link in the tree, or tap one in the preview."
 msgstr "Wähle eine Seite oder einen Link im Baum oder tippe in der Vorschau darauf."
 
@@ -1262,7 +1263,7 @@ msgstr "Kontakt"
 #~ msgid "Contains an uppercase letter"
 #~ msgstr "Enthält einen Großbuchstaben"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:422
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:424
 msgid "Content"
 msgstr "Inhalt"
 
@@ -1271,7 +1272,7 @@ msgstr "Inhalt"
 msgid "Content Manager"
 msgstr "Content Manager"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:389
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:391
 msgid "Content of the hotel’s mobile app. Saved changes are live at once."
 msgstr "Inhalt der Hotel-App. Gespeicherte Änderungen sind sofort live."
 
@@ -1405,7 +1406,7 @@ msgstr "Reservierung erstellen"
 msgid "Create the first category to start adding products."
 msgstr "Lege die erste Kategorie an, um Produkte hinzuzufügen."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:292
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:294
 msgid "Create the first item"
 msgstr "Ersten Eintrag anlegen"
 
@@ -1501,7 +1502,7 @@ msgstr "Datum"
 #~ msgstr "DE +49"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:82
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:182
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/delete-node-dialog.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:49
@@ -1634,7 +1635,7 @@ msgstr "Änderungen verwerfen"
 msgid "Discard changes?"
 msgstr "Änderungen verwerfen?"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:180
 msgid "Dismiss"
 msgstr "Verwerfen"
 
@@ -1701,7 +1702,7 @@ msgstr "Ziehen Sie eine .csv- oder .xlsx-Datei hierher, bis zu 5 MB"
 msgid "Drop an image here or choose one. It's resized automatically, so any size is fine."
 msgstr "Bild hierher ziehen oder auswählen. Die Größe wird automatisch angepasst, jede Auflösung ist in Ordnung."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:151
 msgid "Duplicate"
 msgstr "Duplizieren"
 
@@ -1802,7 +1803,7 @@ msgstr "bearbeitet {editedAt}"
 msgid "edited {editedAt} by {editorName}"
 msgstr "bearbeitet {editedAt} von {editorName}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:312
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:314
 msgid "Editor"
 msgstr "Editor"
 
@@ -2098,8 +2099,8 @@ msgstr "Ereignis"
 #~ msgid "Expected columns, in any order. Rooms are matched by their number."
 #~ msgstr "Erwartete Spalten, in beliebiger Reihenfolge. Zimmer werden über ihre Nummer zugeordnet."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:107
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:305
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:144
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:341
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:129
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/nested-items.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:163
@@ -2618,16 +2619,16 @@ msgstr "Hallo von About!"
 msgid "Hidden"
 msgstr "Ausgeblendet"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:349
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:385
 msgid "Hidden — click to show"
 msgstr "Ausgeblendet – klicken zum Einblenden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:347
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:383
 msgid "Hidden because a parent is hidden"
 msgstr "Ausgeblendet, weil ein übergeordneter Eintrag ausgeblendet ist"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:137
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:343
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:379
 msgid "Hide"
 msgstr "Ausblenden"
 
@@ -2646,7 +2647,7 @@ msgstr "Passwort ausblenden"
 #: src/components/provider-setup/provider-page.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:108
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:371
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:373
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:50
@@ -2739,7 +2740,7 @@ msgstr "Bild oder Icon"
 #~ msgstr "Bild oder Icon (optional)"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:258
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:341
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:361
 msgid "Images"
 msgstr "Bilder"
 
@@ -2814,15 +2815,15 @@ msgstr "iOS App"
 msgid "Italic"
 msgstr "Kursiv"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:526
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:530
 msgid "Item"
 msgstr "Eintrag"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:170
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:188
 msgid "Items"
 msgstr "Einträge"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:285
 msgid "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 msgstr "Einträge sind die Seiten und Links, die Gäste in der Hotel-App sehen. Leg den ersten an."
 
@@ -2855,7 +2856,7 @@ msgstr "Einrichtung fortsetzen"
 msgid "Language"
 msgstr "Sprache"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:542
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:546
 msgid "Language of the titles"
 msgstr "Sprache der Titel"
 
@@ -2960,7 +2961,7 @@ msgstr "Zeile"
 msgid "Link"
 msgstr "Link"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:93
 msgid "Link: {url}"
 msgstr "Link: {url}"
 
@@ -2968,7 +2969,7 @@ msgstr "Link: {url}"
 msgid "Links, the item itself and its nested items can’t be chosen."
 msgstr "Links, der Eintrag selbst und seine Untereinträge sind nicht wählbar."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:123
 msgid "List"
 msgstr "Liste"
 
@@ -3183,8 +3184,8 @@ msgstr "Mobile App (PWA)"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:99
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:83
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:377
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:386
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:379
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:388
 msgid "Mobile CMS"
 msgstr "Mobile CMS"
 
@@ -3228,7 +3229,7 @@ msgstr "Verschieben"
 msgid "Move “{title}” to…"
 msgstr "„{title}“ verschieben nach…"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:170
 msgid "Move down"
 msgstr "Nach unten"
 
@@ -3236,11 +3237,11 @@ msgstr "Nach unten"
 msgid "Move here"
 msgstr "Hierher verschieben"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:112
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:114
 msgid "Move left"
 msgstr "Nach links"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:123
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:125
 msgid "Move right"
 msgstr "Nach rechts"
 
@@ -3256,11 +3257,11 @@ msgstr "Nach links verschieben"
 msgid "Move to Right"
 msgstr "Nach rechts verschieben"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:155
 msgid "Move to…"
 msgstr "Verschieben nach…"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:126
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/nested-items.tsx:113
 msgid "Move up"
 msgstr "Nach oben"
@@ -3385,7 +3386,7 @@ msgstr "Noch keine Kategorien"
 #~ msgid "No categories yet. Add a category to get started."
 #~ msgstr "Noch keine Kategorien. Fügen Sie eine Kategorie hinzu, um zu starten."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:280
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:282
 msgid "No content yet"
 msgstr "Noch kein Inhalt"
 
@@ -3454,7 +3455,7 @@ msgstr "Ohne Etage"
 msgid "No guests found"
 msgstr "Keine Gäste gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:335
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:337
 msgid "No item selected"
 msgstr "Kein Eintrag ausgewählt"
 
@@ -3613,11 +3614,11 @@ msgstr "Notizen Ihres Teams zu dieser Unterkunft werden hier aufgelistet."
 msgid "Nothing found"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:554
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:558
 msgid "Nothing matches"
 msgstr "Keine Treffer"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:242
 msgid "Nothing to show yet"
 msgstr "Noch nichts anzuzeigen"
 
@@ -3643,7 +3644,6 @@ msgstr "Belegt"
 msgid "Offline"
 msgstr "Offline"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:101
 msgid "OK"
@@ -3670,8 +3670,8 @@ msgstr "Es sind nur Bilder erlaubt."
 msgid "Only the first image was used"
 msgstr "Es wurde nur das erste Bild verwendet"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:533
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:538
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:537
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:542
 msgid "Only untranslated"
 msgstr "Nur unübersetzte"
 
@@ -3698,11 +3698,11 @@ msgstr "Öffnen Sie Ihre Authenticator-App und scannen Sie den Code unten."
 msgid "Opens in"
 msgstr "Öffnet im"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:97
 msgid "Opens in the in-app browser"
 msgstr "Öffnet im In-App-Browser"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:96
 msgid "Opens in the system browser"
 msgstr "Öffnet im Systembrowser"
 
@@ -3740,12 +3740,12 @@ msgstr ""
 msgid "Out of Order"
 msgstr "Außer Betrieb"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:101
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:311
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:347
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:128
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/nested-items.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:162
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:126
 msgid "Page"
 msgstr "Seite"
 
@@ -4011,17 +4011,17 @@ msgstr ""
 msgid "Position your photo"
 msgstr "Foto ausrichten"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:358
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:410
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:433
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:360
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:412
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:435
 msgid "Preview"
 msgstr "Vorschau"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:90
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:108
 msgid "Preview language"
 msgstr "Sprache der Vorschau"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:118
 msgid "Preview mode"
 msgstr "Ansicht der Vorschau"
 
@@ -4390,7 +4390,7 @@ msgstr ""
 msgid "Remove from reservation"
 msgstr "Aus Reservierung entfernen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:140
 msgid "Remove image"
 msgstr "Bild entfernen"
 
@@ -4538,7 +4538,7 @@ msgstr "Reset-Link gesendet"
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:170
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:287
 msgid "Retry"
 msgstr "Erneut versuchen"
@@ -4860,7 +4860,7 @@ msgstr "Reservierungen suchen"
 msgid "Search rooms"
 msgstr "Zimmer suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:521
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:525
 msgid "Search titles"
 msgstr "Titel durchsuchen"
 
@@ -5074,8 +5074,8 @@ msgid "SHIP-URL is required"
 msgstr ""
 
 #: src/components/ui/data-grid-pagination.tsx:39
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:137
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:343
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:379
 msgid "Show"
 msgstr "Anzeigen"
 
@@ -5100,7 +5100,7 @@ msgstr "Alle Rollen anzeigen"
 #~ msgid "Show API key"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:351
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:353
 msgid "Show content tree"
 msgstr "Inhaltsbaum anzeigen"
 
@@ -5108,8 +5108,8 @@ msgstr "Inhaltsbaum anzeigen"
 #~ msgid "Show details"
 #~ msgstr "Details anzeigen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:117
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:122
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:135
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:140
 msgid "Show hidden"
 msgstr "Ausgeblendete zeigen"
 
@@ -5463,7 +5463,7 @@ msgstr "Die Buchungsnummer, das Zimmer und der Reisezweck."
 msgid "The code is shown on the device screen"
 msgstr "Der Code wird auf dem Bildschirm des Geräts angezeigt"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:266
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:268
 msgid "The content could not be loaded"
 msgstr "Der Inhalt konnte nicht geladen werden"
 
@@ -5674,11 +5674,11 @@ msgstr "Dieser Einladungslink ist ungültig."
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:333
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:335
 msgid "This item doesn’t exist (anymore)"
 msgstr "Diesen Eintrag gibt es (nicht mehr)"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:151
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:169
 msgid "This link is hidden and not visible to guests."
 msgstr "Dieser Link ist ausgeblendet und für Gäste nicht sichtbar."
 
@@ -5690,7 +5690,7 @@ msgstr ""
 msgid "This page has nested items"
 msgstr "Diese Seite hat Untereinträge"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:153
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:171
 msgid "This page is hidden and not visible to guests."
 msgstr "Diese Seite ist ausgeblendet und für Gäste nicht sichtbar."
 
@@ -5815,14 +5815,14 @@ msgstr "Zu viele Versuche. Erneut versuchen in {cooldown} Sekunden."
 msgid "Top level"
 msgstr "Oberste Ebene"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:328
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:330
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:364
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:366
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:82
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:86
 msgid "Translation missing"
 msgstr "Übersetzung fehlt"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:402
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:404
 msgid "Tree"
 msgstr "Baum"
 
@@ -6058,7 +6058,7 @@ msgstr "Upload fehlgeschlagen."
 #~ msgstr "Bild hochladen"
 
 #. placeholder {0}: entry.file.name
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:193
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/image-field.tsx:195
 msgid "Uploading {0}"
 msgstr "{0} wird hochgeladen"
 
@@ -6200,7 +6200,7 @@ msgstr "Kundenkonten, Profile und Verlauf anzeigen und verwalten"
 msgid "View and manage guest reservations, check-ins, and booking details"
 msgstr "Gästereservierungen, Check-ins und Buchungsdetails anzeigen und verwalten"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:350
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:386
 msgid "Visible — click to hide"
 msgstr "Sichtbar – klicken zum Ausblenden"
 
