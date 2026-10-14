@@ -49,6 +49,8 @@ export function PhonePreview({
   const [locale, setLocale] = React.useState<CmsLocale>(cmsPrimaryLocale);
   const [mode, setMode] = React.useState<Mode>('page');
   const [showHidden, setShowHidden] = React.useState(false);
+  // Rendered twice (column and drawer): ids must differ for the label.
+  const showHiddenId = React.useId();
 
   const selected = nodes.find((node) => node.id === selectedId) ?? null;
   // A link has no page of its own; nothing selected is the start screen.
@@ -110,13 +112,13 @@ export function PhonePreview({
         />
         <div className="ms-auto flex items-center gap-2">
           <Switch
-            id="cms-preview-hidden"
+            id={showHiddenId}
             size="sm"
             aria-label={t`Show hidden`}
             checked={showHidden}
             onCheckedChange={setShowHidden}
           />
-          <Label htmlFor="cms-preview-hidden" className="text-xs font-normal">
+          <Label htmlFor={showHiddenId} className="text-xs font-normal">
             <Trans>Show hidden</Trans>
           </Label>
         </div>

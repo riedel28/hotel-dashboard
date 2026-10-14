@@ -509,6 +509,8 @@ function TreePanel({
   onAddSection: () => void;
 }) {
   const { t } = useLingui();
+  // Rendered twice (column and sheet): ids must differ for the label.
+  const onlyMissingId = React.useId();
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
@@ -527,12 +529,12 @@ function TreePanel({
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Checkbox
-            id="cms-only-missing"
+            id={onlyMissingId}
             aria-label={t`Only untranslated`}
             checked={onlyMissing}
             onCheckedChange={(checked) => onOnlyMissingChange(checked === true)}
           />
-          <Label htmlFor="cms-only-missing" className="font-normal">
+          <Label htmlFor={onlyMissingId} className="font-normal">
             <Trans>Only untranslated</Trans>
           </Label>
         </div>
