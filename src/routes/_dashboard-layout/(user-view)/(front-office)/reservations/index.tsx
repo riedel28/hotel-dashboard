@@ -71,7 +71,7 @@ function ReservationsPage() {
 
       <QueryBoundary
         className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching reservations</Trans>}
+        title={<Trans>Couldn't load reservations</Trans>}
         fallback={
           <ReservationsTable
             data={[]}

@@ -32,7 +32,9 @@ interface ErrorStateProps {
 
 /**
  * The standard "failed to load" state. Used by `QueryBoundary` for suspense
- * queries, and directly by components that handle `isError` themselves.
+ * queries, by the route error screens, and directly by components that handle
+ * `isError` themselves. A neutral card: a failed load is usually a dropped
+ * connection, not an emergency, so only the icon is red.
  */
 function ErrorState({
   title,
@@ -46,8 +48,9 @@ function ErrorState({
 
   return (
     <Empty
-      variant="destructive"
-      className={cn(isSmall && 'gap-4 p-5 md:p-5', className)}
+      // Announced, as it replaces what the user was waiting for
+      role="alert"
+      className={cn('border-solid', isSmall && 'gap-4 p-5 md:p-5', className)}
     >
       <EmptyHeader className={cn(isSmall && 'gap-1')}>
         {/* Default (transparent) media: the disc is its own shape, and the
@@ -69,13 +72,13 @@ function ErrorState({
       </EmptyHeader>
       <EmptyContent>
         <Button
-          variant={isSmall ? 'outline' : 'destructive'}
+          variant="outline"
           size={isSmall ? 'sm' : 'default'}
           onClick={onRetry}
           disabled={isRetrying}
         >
           <RefreshCwIcon className={cn(isRetrying && 'animate-spin')} />
-          <Trans>Refresh</Trans>
+          <Trans>Try again</Trans>
         </Button>
       </EmptyContent>
     </Empty>

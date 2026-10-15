@@ -367,7 +367,7 @@ msgstr "Eintrag hinzufügen"
 msgid "Add guest"
 msgstr "Gast hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:302
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:301
 msgid "Add Guest"
 msgstr "Gast hinzufügen"
 
@@ -495,9 +495,9 @@ msgstr "Fügt Zimmer hinzu und aktualisiert sie. Zimmer, die nicht in der Datei 
 
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:36
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:41
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:142
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:151
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:704
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:738
 msgid "Admin"
 msgstr "Admin"
 
@@ -639,12 +639,12 @@ msgid "An empty cell names the room by its number."
 msgstr "Eine leere Zelle benennt das Zimmer nach seiner Nummer."
 
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:172
-msgid "An error occurred while fetching customers"
-msgstr "Beim Abrufen der Kunden ist ein Fehler aufgetreten"
+#~ msgid "An error occurred while fetching customers"
+#~ msgstr "Beim Abrufen der Kunden ist ein Fehler aufgetreten"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:128
-msgid "An error occurred while fetching devices"
-msgstr "Beim Laden der Geräte ist ein Fehler aufgetreten"
+#~ msgid "An error occurred while fetching devices"
+#~ msgstr "Beim Laden der Geräte ist ein Fehler aufgetreten"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:92
 msgid "An error occurred while fetching monitoring logs"
@@ -655,12 +655,12 @@ msgid "An error occurred while fetching payments"
 msgstr "Beim Laden der Zahlungen ist ein Fehler aufgetreten"
 
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:734
-msgid "An error occurred while fetching properties"
-msgstr "Beim Abrufen der Unterkünfte ist ein Fehler aufgetreten"
+#~ msgid "An error occurred while fetching properties"
+#~ msgstr "Beim Abrufen der Unterkünfte ist ein Fehler aufgetreten"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:74
-msgid "An error occurred while fetching reservations"
-msgstr "Es ist ein Fehler beim Abrufen der Reservierungen aufgetreten"
+#~ msgid "An error occurred while fetching reservations"
+#~ msgstr "Es ist ein Fehler beim Abrufen der Reservierungen aufgetreten"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:212
 msgid "An error occurred while fetching rooms"
@@ -670,8 +670,7 @@ msgstr "Es ist ein Fehler beim Abrufen der Zimmer aufgetreten"
 msgid "An error occurred while fetching users"
 msgstr "Es ist ein Fehler beim Abrufen der Benutzer aufgetreten"
 
-#: src/components/error-state.tsx:67
-#: src/routes/__root.tsx:62
+#: src/components/error-state.tsx:70
 msgid "An unexpected error occurred"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
@@ -912,6 +911,10 @@ msgstr "Aufzählung"
 msgid "Business"
 msgstr "Geschäftlich"
 
+#: src/lib/load-error.ts:35
+msgid "Can't reach the server. Check your connection and try again."
+msgstr "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:414
 msgid "Can't scan the code? Enter the key manually"
 msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
@@ -929,7 +932,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:84
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:320
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:85
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:299
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:298
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:91
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:99
@@ -1187,7 +1190,7 @@ msgstr "Stadt"
 msgid "City is required"
 msgstr ""
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:270
+#: src/components/ui/data-grid-checkbox-filter.tsx:267
 msgid "Clear all"
 msgstr "Alle zurücksetzen"
 
@@ -1423,6 +1426,30 @@ msgstr "Die API ist nicht erreichbar – Zeitüberschreitung nach 5000 ms."
 msgid "Couldn't generate new recovery codes"
 msgstr "Neue Wiederherstellungscodes konnten nicht erzeugt werden"
 
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:183
+msgid "Couldn't load customers"
+msgstr "Kunden konnten nicht geladen werden"
+
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:128
+msgid "Couldn't load devices"
+msgstr "Geräte konnten nicht geladen werden"
+
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:659
+msgid "Couldn't load properties"
+msgstr "Objekte konnten nicht geladen werden"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:74
+msgid "Couldn't load reservations"
+msgstr "Reservierungen konnten nicht geladen werden"
+
+#: src/components/route-error.tsx:45
+msgid "Couldn't load this page"
+msgstr "Diese Seite konnte nicht geladen werden"
+
+#: src/main.tsx:42
+msgid "Couldn't refresh"
+msgstr "Aktualisierung fehlgeschlagen"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:249
 msgid "Couldn't send the email. Try again."
 msgstr "E-Mail konnte nicht gesendet werden. Bitte erneut versuchen."
@@ -1545,8 +1572,8 @@ msgstr "Aktuelles Passwort ist erforderlich"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:25
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:158
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:151
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:282
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:309
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:286
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:313
 msgid "Customer"
 msgstr "Kunde"
 
@@ -1564,9 +1591,9 @@ msgstr "Kunde erfolgreich aktualisiert"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:172
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:47
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:128
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:148
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:159
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:137
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:157
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:168
 #: src/routes/_dashboard-layout/admin/index.tsx:25
 msgid "Customers"
 msgstr "Kunden"
@@ -1602,7 +1629,7 @@ msgstr "Datum"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:81
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:157
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:167
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1623,7 +1650,7 @@ msgstr "Kategorie löschen?"
 msgid "Delete entry?"
 msgstr "Eintrag löschen?"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:90
 msgid "Delete product"
 msgstr "Produkt löschen"
 
@@ -1631,7 +1658,7 @@ msgstr "Produkt löschen"
 msgid "Delete product?"
 msgstr "Produkt löschen?"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:100
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:104
 msgid "Delete property"
 msgstr "Unterkunft löschen"
 
@@ -1659,7 +1686,7 @@ msgstr "Reservierung {reservationNr} löschen?"
 msgid "Delete room"
 msgstr "Zimmer löschen"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:73
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:74
 msgid "Deleted user"
 msgstr "Gelöschter Benutzer"
 
@@ -1830,7 +1857,7 @@ msgstr ""
 #~ msgstr "Jeder Code funktioniert einmal."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:150
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:160
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -1868,11 +1895,11 @@ msgid "Edit item"
 msgstr "Eintrag bearbeiten"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:80
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:82
 msgid "Edit product"
 msgstr "Produkt bearbeiten"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:90
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:94
 msgid "Edit property"
 msgstr "Unterkunft bearbeiten"
 
@@ -1901,7 +1928,7 @@ msgstr "Zimmer bearbeiten"
 msgid "Edit user"
 msgstr "Benutzer bearbeiten"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:128
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:137
 msgid "edited"
 msgstr "bearbeitet"
 
@@ -1909,7 +1936,7 @@ msgstr "bearbeitet"
 #~ msgid "edited {editedAt}"
 #~ msgstr "bearbeitet {editedAt}"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:136
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:145
 msgid "Edited {editedAt}"
 msgstr "Bearbeitet {editedAt}"
 
@@ -1917,7 +1944,7 @@ msgstr "Bearbeitet {editedAt}"
 #~ msgid "edited {editedAt} by {editorName}"
 #~ msgstr "bearbeitet {editedAt} von {editorName}"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:132
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:141
 msgid "Edited {editedAt} by {editorName}"
 msgstr "Bearbeitet {editedAt} von {editorName}"
 
@@ -2406,7 +2433,7 @@ msgid "Failed to update customer. Please try again."
 msgstr "Kunde konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:70
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:67
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:68
 msgid "Failed to update entry. Please try again."
 msgstr "Eintrag konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
@@ -2470,7 +2497,7 @@ msgstr "Datei"
 msgid "Filter by reservation"
 msgstr ""
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:629
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:615
 msgid "Filters"
 msgstr "Filter"
 
@@ -2562,7 +2589,7 @@ msgstr "Allgemein"
 #~ msgstr "Deutschland"
 
 #: src/components/ui/not-found.tsx:164
-#: src/routes/__root.tsx:103
+#: src/routes/__root.tsx:46
 msgid "Go back"
 msgstr "Zurück"
 
@@ -2570,7 +2597,7 @@ msgstr "Zurück"
 msgid "Go home"
 msgstr "Zum Dashboard"
 
-#: src/routes/__root.tsx:102
+#: src/routes/__root.tsx:45
 msgid "Go to Dashboard"
 msgstr "Zum Dashboard"
 
@@ -2808,9 +2835,9 @@ msgstr "Inhaber"
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:136
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:145
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:698
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:732
 msgid "Home"
 msgstr "Start"
 
@@ -2827,7 +2854,7 @@ msgid "Hotel"
 msgstr "Hotel"
 
 #: src/routes/_dashboard-layout.tsx:38
-#: src/routes/_dashboard-layout.tsx:138
+#: src/routes/_dashboard-layout.tsx:140
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:52
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -2958,6 +2985,10 @@ msgstr "Benutzer einladen"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:155
 msgid "iOS App"
 msgstr "iOS App"
+
+#: src/lib/load-error.ts:41
+msgid "It may have been deleted or moved."
+msgstr "Möglicherweise wurde es gelöscht oder verschoben."
 
 #: src/components/ui/rich-text-editor.tsx:311
 msgid "Italic"
@@ -3208,7 +3239,7 @@ msgstr "Hotelunterkünfte verwalten, Details anzeigen und Einstellungen konfigur
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Bestellungen verwalten, Lieferungen verfolgen, Bestellhistorie einsehen und Retouren effizient bearbeiten"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:726
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:760
 msgid "Manage properties, their stage and the customers that own them."
 msgstr "Verwalten Sie Unterkünfte, ihre Phase und die Kunden, denen sie gehören."
 
@@ -3216,7 +3247,7 @@ msgstr "Verwalten Sie Unterkünfte, ihre Phase und die Kunden, denen sie gehöre
 msgid "Manage room inventory, availability, and room type configurations"
 msgstr "Zimmerbestand, Verfügbarkeit und Zimmertypkonfigurationen verwalten"
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:164
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:173
 msgid "Manage the customers that own properties and their contact details."
 msgstr "Verwalten Sie die Kunden, denen Unterkünfte gehören, und ihre Kontaktdaten."
 
@@ -3575,13 +3606,13 @@ msgstr "Kein Kunde"
 msgid "No customer found."
 msgstr "Kein Kunde gefunden."
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:118
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:127
 msgid "No customers match the filters"
 msgstr "Keine Kunden entsprechen den Filtern"
 
 #: src/components/ui/data-grid-table.tsx:419
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:189
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:147
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:151
 msgid "No data available"
 msgstr "Keine Daten verfügbar"
 
@@ -3682,7 +3713,7 @@ msgstr "Keine Properties gefunden"
 #~ msgid "No properties found."
 #~ msgstr "Keine Objekte gefunden."
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:680
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:689
 msgid "No properties match the filters"
 msgstr "Keine Unterkünfte entsprechen den Filtern"
 
@@ -3953,7 +3984,7 @@ msgstr "Seite {0} von {1}"
 #~ msgstr "Seite {0} von {pageCount}"
 
 #: src/components/ui/not-found.tsx:143
-#: src/routes/__root.tsx:96
+#: src/routes/__root.tsx:39
 msgid "Page not found"
 msgstr "Seite nicht gefunden"
 
@@ -4391,9 +4422,9 @@ msgstr "Profil aktualisiert"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:122
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:63
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:690
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:710
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:721
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:724
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:744
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:755
 msgid "Properties"
 msgstr "Properties"
 
@@ -4405,8 +4436,8 @@ msgstr "Properties"
 #~ msgstr "Properties aktualisiert"
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:41
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:239
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:269
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:243
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:273
 msgid "Property"
 msgstr "Unterkunft"
 
@@ -4548,7 +4579,6 @@ msgstr "Referenz"
 msgid "Reference copied"
 msgstr "Referenz kopiert"
 
-#: src/components/error-state.tsx:78
 #: src/components/load-error.tsx:41
 #: src/components/ui/data-grid-refresh-button.tsx:38
 #: src/components/ui/data-grid-refresh-button.tsx:51
@@ -4754,7 +4784,7 @@ msgstr "Reservierung erfolgreich aktualisiert"
 msgid "Reservations"
 msgstr "Reservierungen"
 
-#: src/components/ui/data-grid-radio-filter.tsx:134
+#: src/components/ui/data-grid-radio-filter.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
@@ -5038,7 +5068,7 @@ msgstr "Kategorien durchsuchen"
 msgid "Search country..."
 msgstr "Land suchen..."
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:62
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:64
 #: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:89
 msgid "Search customers"
 msgstr "Kunden suchen"
@@ -5167,7 +5197,7 @@ msgstr "Zimmer auswählen"
 #~ msgid "Select a room..."
 #~ msgstr "Zimmer auswählen..."
 
-#: src/components/ui/data-grid-checkbox-filter.tsx:288
+#: src/components/ui/data-grid-checkbox-filter.tsx:285
 #: src/components/ui/data-grid-table.tsx:494
 msgid "Select all"
 msgstr "Alle auswählen"
@@ -5381,6 +5411,10 @@ msgstr "Ergebnisse für: <0>\"{q}\"</0>"
 #~ msgid "Show results for: <0>\"{searchQuery}\"</0>"
 #~ msgstr "Ergebnisse für: <0>\"{searchQuery}\"</0>"
 
+#: src/main.tsx:44
+msgid "Showing data from {time}."
+msgstr "Angezeigt werden Daten von {time}."
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:405
 #~ msgid "Showing only logs for reservation <0>{booking_nr}</0>"
 #~ msgstr ""
@@ -5425,8 +5459,8 @@ msgstr "SMS"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:362
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:25
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:344
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:354
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:348
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:358
 msgid "Solutions"
 msgstr "Lösungen"
 
@@ -5438,16 +5472,19 @@ msgstr "Jemand — vermutlich ein Administrator — hat Ihren Datensatz geänder
 msgid "Someone else changed this item meanwhile"
 msgstr "Jemand anderes hat diesen Eintrag inzwischen geändert"
 
+#: src/lib/load-error.ts:43
+msgid "Something unexpected happened. Try again."
+msgstr "Etwas Unerwartetes ist passiert. Versuchen Sie es erneut."
+
 #: src/components/details-drawer.tsx:123
-#: src/components/error-state.tsx:64
+#: src/components/error-state.tsx:67
 #: src/components/load-error.tsx:33
-#: src/routes/__root.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:162
 msgid "Something went wrong"
 msgstr "Etwas ist schiefgelaufen"
 
 #: src/components/ui/not-found.tsx:150
-#: src/routes/__root.tsx:98
+#: src/routes/__root.tsx:41
 msgid "Sorry, we couldn't find the page you're looking for."
 msgstr "Entschuldigung, wir konnten die gesuchte Seite nicht finden."
 
@@ -5462,8 +5499,8 @@ msgstr ""
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:195
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:182
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:22
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:321
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:332
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:325
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:336
 msgid "Stage"
 msgstr "Phase"
 
@@ -5863,6 +5900,10 @@ msgstr "Das Zimmer hat eine aktive Reservierung, daher kann sein Name nicht geä
 msgid "The rooms have changed since this preview was made. Nothing was imported."
 msgstr "Die Zimmer haben sich seit dieser Vorschau geändert. Es wurde nichts importiert."
 
+#: src/lib/load-error.ts:38
+msgid "The server ran into a problem. Try again in a moment."
+msgstr "Auf dem Server ist ein Problem aufgetreten. Versuchen Sie es gleich noch einmal."
+
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:39
 msgid "The user {userName} has been deleted"
 msgstr "Der Benutzer {userName} wurde gelöscht"
@@ -6083,13 +6124,15 @@ msgstr "Übersetzung fehlt"
 msgid "Tree"
 msgstr "Baum"
 
+#: src/components/error-state.tsx:81
 #: src/components/provider-setup/provider-screens.tsx:42
+#: src/main.tsx:46
 msgid "Try again"
 msgstr "Erneut versuchen"
 
 #: src/routes/__root.tsx:76
-msgid "Try Again"
-msgstr "Erneut versuchen"
+#~ msgid "Try Again"
+#~ msgstr "Erneut versuchen"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:184
 msgid "Turn off"
@@ -6274,10 +6317,10 @@ msgstr "Ohne Titel"
 #~ msgstr "Nicht bestätigt"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:157
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:302
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:301
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:332
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:168
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:178
 msgid "Update"
 msgstr "Aktualisieren"
 

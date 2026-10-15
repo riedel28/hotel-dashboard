@@ -1,5 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useIsFetching,
+  useQueryClient,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import {
   createFileRoute,
   Link as RouterLink,
@@ -467,19 +471,7 @@ function PropertiesContent() {
     options?.length
   ].filter(Boolean).length;
   const queryClient = useQueryClient();
-
-  const propertiesQuery = useSuspenseQuery(
-    propertiesQueryOptions({
-      page,
-      per_page,
-      q,
-      stage,
-      country_code,
-      options,
-      sort_by,
-      sort_order
-    })
-  );
+  const isFetching = useIsFetching({ queryKey: ['properties'] }) > 0;
 
   const sorting: SortingState = sort_by
     ? [{ id: sort_by, desc: sort_order === 'desc' }]
@@ -603,14 +595,7 @@ function PropertiesContent() {
   };
 
   return (
-    <div
-      className={cn(
-        'flex flex-col gap-3 opacity-100 transition-opacity duration-300 ease-in-out',
-        {
-          'opacity-70': propertiesQuery.isFetching
-        }
-      )}
-    >
+    <div className="flex flex-col gap-3">
       {/* Narrow screens: the search, a button for the other filters and
           refresh on one row, the filters folded under it. From `xl` up: one
           row that never wraps, its filters narrowing to fit. */}
@@ -636,7 +621,7 @@ function PropertiesContent() {
         </Button>
         <DataGridRefreshButton
           className="shrink-0 xl:order-last"
-          isRefreshing={propertiesQuery.isFetching}
+          isRefreshing={isFetching}
           onRefresh={handleRefresh}
         />
         <div
@@ -667,20 +652,68 @@ function PropertiesContent() {
           </div>
         </div>
       </div>
-      <PropertiesTable
-        data={propertiesQuery.data.index}
-        pageIndex={(page ?? 1) - 1}
-        pageSize={per_page ?? PER_PAGE}
-        totalCount={propertiesQuery.data.total}
-        pageCount={propertiesQuery.data.page_count}
-        onPaginationChange={handlePaginationChange}
-        sorting={sorting}
-        onSortingChange={handleSortingChange}
-        emptyMessage={
-          hasActiveFilters ? (
-            <Trans>No properties match the filters</Trans>
-          ) : undefined
+      {/* Only the list is replaced by a failed load: the filters above
+          stay, to change or to refresh */}
+      <QueryBoundary
+        className="min-h-[40vh] items-center justify-center"
+        title={<Trans>Couldn't load properties</Trans>}
+        fallback={
+          <PropertiesTable
+            data={[]}
+            isLoading={true}
+            pageIndex={0}
+            pageSize={PER_PAGE}
+            totalCount={0}
+            pageCount={0}
+          />
         }
+      >
+        <PropertiesResults
+          params={{
+            page,
+            per_page,
+            q,
+            stage,
+            country_code,
+            options,
+            sort_by,
+            sort_order
+          }}
+          pageIndex={(page ?? 1) - 1}
+          pageSize={per_page ?? PER_PAGE}
+          onPaginationChange={handlePaginationChange}
+          sorting={sorting}
+          onSortingChange={handleSortingChange}
+          emptyMessage={
+            hasActiveFilters ? (
+              <Trans>No properties match the filters</Trans>
+            ) : undefined
+          }
+        />
+      </QueryBoundary>
+    </div>
+  );
+}
+
+function PropertiesResults({
+  params,
+  ...tableProps
+}: {
+  params: Parameters<typeof propertiesQueryOptions>[0];
+} & Omit<PropertiesTableProps, 'data' | 'totalCount' | 'pageCount'>) {
+  const { data, isFetching } = useSuspenseQuery(propertiesQueryOptions(params));
+
+  return (
+    <div
+      className={cn('transition-opacity duration-300 ease-in-out', {
+        'opacity-70': isFetching
+      })}
+    >
+      <PropertiesTable
+        {...tableProps}
+        data={data.index}
+        totalCount={data.total}
+        pageCount={data.page_count}
       />
     </div>
   );
@@ -730,22 +763,7 @@ function PropertiesPage() {
         </p>
       </div>
 
-      <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching properties</Trans>}
-        fallback={
-          <PropertiesTable
-            data={[]}
-            isLoading={true}
-            pageIndex={0}
-            pageSize={PER_PAGE}
-            totalCount={0}
-            pageCount={0}
-          />
-        }
-      >
-        <PropertiesContent />
-      </QueryBoundary>
+      <PropertiesContent />
     </div>
   );
 }
@@ -756,8 +774,9 @@ export const Route = createFileRoute('/_dashboard-layout/admin/properties/')({
       .extend({ per_page: perPageSchema.default(PER_PAGE).optional() })
       .parse(search),
   loaderDeps: ({ search }) => search,
-  loader: ({ context: { queryClient }, deps }) => {
-    return queryClient.ensureQueryData(propertiesQueryOptions(deps));
-  },
+  // Waited for, but a failure isn't thrown here: it would take the whole page
+  // down. The query keeps the error, and the list shows it under the filters.
+  loader: ({ context: { queryClient }, deps }) =>
+    queryClient.prefetchQuery(propertiesQueryOptions(deps)),
   component: PropertiesPage
 });

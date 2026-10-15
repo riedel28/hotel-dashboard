@@ -125,7 +125,7 @@ function DevicesPage() {
 
       <QueryBoundary
         className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching devices</Trans>}
+        title={<Trans>Couldn't load devices</Trans>}
         fallback={
           // The table under an empty row as tall as the filters, so it does
           // not move when the devices arrive and the filters appear above it
