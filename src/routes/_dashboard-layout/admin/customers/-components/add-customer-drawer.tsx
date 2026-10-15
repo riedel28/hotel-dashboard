@@ -1,6 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
+import { Loader2Icon, PlusIcon } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
 
@@ -26,6 +27,7 @@ export function AddCustomerDrawer() {
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
   const { t } = useLingui();
+  const navigate = useNavigate();
   const form = useCustomerForm();
 
   const handleOpenChange = (open: boolean) => {
@@ -37,10 +39,15 @@ export function AddCustomerDrawer() {
 
   const createCustomerMutation = useMutation({
     mutationFn: createCustomer,
-    onSuccess: () => {
+    onSuccess: (customer) => {
       queryClient.invalidateQueries({ queryKey: ['customers'] });
       handleOpenChange(false);
       toast.success(t`Customer created successfully`);
+      // Opened like a new property is, to check it or add to it
+      void navigate({
+        to: '/admin/customers/$customerId',
+        params: { customerId: customer.id }
+      });
     },
     onError: (error) => {
       if (showEmailTakenError(form, error)) return;
@@ -54,15 +61,21 @@ export function AddCustomerDrawer() {
 
   return (
     <>
-      <Button onClick={() => handleOpenChange(true)}>
-        <PlusCircleIcon className="mr-1 size-3.5" />
-        <Trans>Add Customer</Trans>
+      {/* Just the icon on a phone; its name stays for screen readers */}
+      <Button
+        className="max-sm:size-9 max-sm:p-0"
+        onClick={() => handleOpenChange(true)}
+      >
+        <PlusIcon />
+        <span className="max-sm:sr-only">
+          <Trans>Add customer</Trans>
+        </span>
       </Button>
       <Drawer open={isOpen} onOpenChange={handleOpenChange}>
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>
-              <Trans>Add new customer</Trans>
+              <Trans>New customer</Trans>
             </DrawerTitle>
           </DrawerHeader>
           <form
@@ -85,7 +98,7 @@ export function AddCustomerDrawer() {
                 {createCustomerMutation.isPending && (
                   <Loader2Icon className="animate-spin" />
                 )}
-                <Trans>Create</Trans>
+                <Trans>Create customer</Trans>
               </Button>
             </DrawerFooter>
           </form>

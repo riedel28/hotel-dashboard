@@ -1,5 +1,5 @@
-import { Trans, useLingui } from '@lingui/react/macro';
-import { Link as RouterLink } from '@tanstack/react-router';
+import { Plural, Trans, useLingui } from '@lingui/react/macro';
+import { Link as RouterLink, useNavigate } from '@tanstack/react-router';
 import {
   type ColumnDef,
   functionalUpdate,
@@ -8,7 +8,7 @@ import {
   useTable
 } from '@tanstack/react-table';
 import { PencilIcon } from 'lucide-react';
-import { type ReactNode, useMemo } from 'react';
+import { type MouseEvent, type ReactNode, useMemo } from 'react';
 import {
   type Customer,
   type CustomerSortableColumn,
@@ -40,6 +40,7 @@ import {
 } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import { type Page, paginate } from '@/lib/paginate';
+import { cn } from '@/lib/utils';
 
 export interface CustomerSort {
   by: CustomerSortableColumn;
@@ -60,7 +61,7 @@ function RowActions({ customer }: { customer: Customer }) {
               preload="intent"
             >
               <PencilIcon className="mr-2 h-4 w-4" />
-              <Trans>Edit Customer</Trans>
+              <Trans>Edit customer</Trans>
             </RouterLink>
           )}
         />
@@ -69,7 +70,11 @@ function RowActions({ customer }: { customer: Customer }) {
   );
 }
 
-const propertyLinkClass = 'truncate underline-offset-4 hover:underline';
+const propertyLinkClass =
+  'truncate text-link underline-offset-4 hover:underline';
+
+// Links and the popover inside a row keep their clicks from opening the row
+const stopRowClick = (event: MouseEvent) => event.stopPropagation();
 
 /** The first Property by name, and a "+N" badge that lists all of them. */
 function PropertiesCell({
@@ -91,6 +96,7 @@ function PropertiesCell({
         params={{ propertyId: first.id }}
         className={propertyLinkClass}
         title={first.name}
+        onClick={stopRowClick}
       >
         {first.name}
       </RouterLink>
@@ -100,6 +106,7 @@ function PropertiesCell({
             openOnHover
             delay={150}
             className="shrink-0 cursor-pointer rounded-md"
+            onClick={stopRowClick}
             aria-label={t`Show all ${properties.length} properties`}
           >
             <Badge
@@ -111,7 +118,12 @@ function PropertiesCell({
               +{rest.length}
             </Badge>
           </PopoverTrigger>
-          <PopoverContent align="start" className="w-auto max-w-72 p-3">
+          {/* Portalled, but its clicks still bubble to the row in React */}
+          <PopoverContent
+            align="start"
+            className="w-auto max-w-72 p-3"
+            onClick={stopRowClick}
+          >
             <ul className="flex flex-col gap-1.5">
               {properties.map((property) => (
                 <li
@@ -138,6 +150,90 @@ function PropertiesCell({
         </Popover>
       )}
     </div>
+  );
+}
+
+/**
+ * Phones get the rows as cards: name, company, where they are and how many
+ * properties they own, the whole card opening the customer.
+ */
+function CustomerCards({
+  rows,
+  isLoading,
+  emptyMessage,
+  className
+}: {
+  rows: Customer[];
+  isLoading: boolean;
+  emptyMessage?: ReactNode;
+  className?: string;
+}) {
+  if (isLoading) {
+    return (
+      <div className={cn('space-y-2', className)}>
+        {[0, 1, 2, 3, 4].map((key) => (
+          <Skeleton key={key} className="h-20 w-full rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
+  if (rows.length === 0) {
+    return (
+      <div
+        className={cn(
+          'rounded-lg border px-4 py-8 text-center text-sm text-muted-foreground',
+          className
+        )}
+      >
+        {emptyMessage || <Trans>No data available</Trans>}
+      </div>
+    );
+  }
+
+  return (
+    <ul className={cn('divide-y rounded-lg border', className)}>
+      {rows.map((customer) => (
+        <li
+          key={customer.id}
+          className="relative flex items-start gap-3 p-4 hover:bg-muted/40"
+        >
+          <div className="min-w-0 flex-1 space-y-1">
+            <RouterLink
+              to="/admin/customers/$customerId"
+              params={{ customerId: customer.id }}
+              preload="intent"
+              // Stretched over the card, so all of it opens the customer
+              className="block truncate font-medium after:absolute after:inset-0"
+            >
+              {customer.first_name} {customer.last_name}
+            </RouterLink>
+            {customer.company_name && (
+              <div className="truncate text-sm text-muted-foreground">
+                {customer.company_name}
+              </div>
+            )}
+            <div className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
+              <span className="truncate">{customer.city}</span>
+              <span aria-hidden>·</span>
+              <CountryName code={customer.country_code} />
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <Plural
+                value={customer.properties.length}
+                _0="No properties"
+                one="# property"
+                other="# properties"
+              />
+            </div>
+          </div>
+          {/* Above the stretched link */}
+          <div className="relative">
+            <RowActions customer={customer} />
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -170,6 +266,7 @@ export function CustomersTable({
   emptyMessage
 }: CustomersTableProps) {
   const { t } = useLingui();
+  const navigate = useNavigate();
 
   // The table library's shapes for what the page keeps as a sort and a page
   const sorting = useMemo<SortingState>(
@@ -199,9 +296,18 @@ export function CustomersTable({
           const company = row.original.company_name;
           return (
             <div className="min-w-0">
-              <div className="truncate font-medium" title={name}>
+              {/* The keyboard way into the customer; a click anywhere on the
+                  row opens it too */}
+              <RouterLink
+                to="/admin/customers/$customerId"
+                params={{ customerId: row.original.id }}
+                preload="intent"
+                onClick={stopRowClick}
+                className="block w-fit max-w-full truncate font-medium underline-offset-4 hover:underline"
+                title={name}
+              >
                 {name}
-              </div>
+              </RouterLink>
               {company && (
                 <div
                   className="truncate text-xs text-muted-foreground"
@@ -217,7 +323,7 @@ export function CustomersTable({
           skeleton: <Skeleton className="h-8 w-40" />,
           headerTitle: t`Customer`
         },
-        size: 240,
+        size: 220,
         enableSorting: true,
         enableHiding: false,
         enableResizing: true
@@ -241,7 +347,7 @@ export function CustomersTable({
           skeleton: <Skeleton className="h-6 w-40" />,
           headerTitle: t`Email`
         },
-        size: 240,
+        size: 220,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -275,7 +381,7 @@ export function CustomersTable({
           skeleton: <Skeleton className="h-8 w-36" />,
           headerTitle: t`Address`
         },
-        size: 220,
+        size: 200,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -297,7 +403,7 @@ export function CustomersTable({
           skeleton: <Skeleton className="h-6 w-40" />,
           headerTitle: t`Properties`
         },
-        size: 260,
+        size: 240,
         enableSorting: true,
         enableHiding: true,
         enableResizing: true
@@ -306,7 +412,8 @@ export function CustomersTable({
         id: 'actions',
         header: () => null,
         cell: ({ row }) => (
-          <div className="flex justify-center">
+          // The menu keeps its clicks from opening the row
+          <div className="flex justify-center" onClick={stopRowClick}>
             <RowActions customer={row.original} />
           </div>
         ),
@@ -317,7 +424,7 @@ export function CustomersTable({
             </div>
           )
         },
-        size: 70,
+        size: 60,
         enableSorting: false,
         enableHiding: false,
         enableResizing: false
@@ -357,6 +464,12 @@ export function CustomersTable({
     <DataGrid
       table={table}
       recordCount={page.totalCount}
+      onRowClick={(customer) =>
+        void navigate({
+          to: '/admin/customers/$customerId',
+          params: { customerId: customer.id }
+        })
+      }
       tableClassNames={{ edgeCell: 'px-5' }}
       tableLayout={{
         columnsPinnable: false,
@@ -367,9 +480,15 @@ export function CustomersTable({
       emptyMessage={emptyMessage}
     >
       <div className="w-full space-y-2.5">
-        <DataGridContainer>
+        <DataGridContainer className="hidden sm:block">
           <DataGridTable />
         </DataGridContainer>
+        <CustomerCards
+          className="sm:hidden"
+          rows={page.rows}
+          isLoading={isLoading}
+          emptyMessage={emptyMessage}
+        />
         <DataGridPagination />
       </div>
     </DataGrid>

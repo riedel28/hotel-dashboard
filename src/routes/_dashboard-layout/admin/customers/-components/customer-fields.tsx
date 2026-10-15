@@ -31,10 +31,8 @@ function createCustomerFormSchema() {
     first_name: required,
     last_name: required,
     company_name: z.string(),
-    email: z
-      .string()
-      .trim()
-      .pipe(z.email(t`Invalid email address`)),
+    // Empty is a missing email, not a wrong one
+    email: required.pipe(z.email(t`Invalid email address`)),
     address_line_1: required,
     address_line_2: z.string(),
     zip: required,
@@ -231,7 +229,12 @@ export function CustomerAddressFields({ control }: FieldsProps) {
 export function CustomerFields({ control }: FieldsProps) {
   return (
     <div className="space-y-6">
-      <CustomerContactFields control={control} />
+      <FieldSet className="gap-4">
+        <FieldLegend>
+          <Trans>Contact</Trans>
+        </FieldLegend>
+        <CustomerContactFields control={control} />
+      </FieldSet>
       <FieldSet className="gap-4">
         <FieldLegend>
           <Trans>Address</Trans>
