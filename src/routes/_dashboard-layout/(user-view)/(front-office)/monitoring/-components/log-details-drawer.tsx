@@ -9,6 +9,7 @@ import {
   monitoringLogQueryOptions,
   monitoringQueryOptions
 } from '@/api/monitoring';
+import { ReservationLink } from '@/components/reservation-link';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
   Drawer,
@@ -22,7 +23,6 @@ import { cn } from '@/lib/utils';
 
 import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
-import { ReservationLink } from './reservation-link';
 
 const RELATED_LOGS_COUNT = 5;
 const RELATED_LOGS_SKELETON_ROWS = 3;
