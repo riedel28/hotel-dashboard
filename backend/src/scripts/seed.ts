@@ -19,6 +19,7 @@ import {
   guestAbcEntries,
   guests,
   monitoringLogs,
+  payments as paymentsTable,
   productCategories,
   products,
   properties,
@@ -496,6 +497,116 @@ async function seedMonitoringLogs() {
   return count;
 }
 
+const cardBrands = ['visa', 'mastercard', 'amex'] as const;
+const paymentTypes = ['prepayment', 'final', 'no_show'] as const;
+
+/**
+ * One payment per reservation, cycling through every stage, partial captures
+ * and stale authorizations, plus a deposit on every third one. Derived from
+ * the index only, so every seed looks the same; dates are relative to now so
+ * the stale ones stay stale.
+ */
+async function seedPayments() {
+  const rows = await db
+    .select({
+      id: reservations.id,
+      guest: reservations.primary_guest_name
+    })
+    .from(reservations)
+    .orderBy(reservations.id);
+
+  const payments = rows.flatMap(({ id, guest }, i) => {
+    // Every seventh card ran out two months ago, the rest in coming years
+    const expiry = new Date();
+    if (i % 7 === 2) {
+      expiry.setMonth(expiry.getMonth() - 2, 1);
+    } else {
+      expiry.setFullYear(expiry.getFullYear() + 1 + (i % 4), i % 12, 1);
+    }
+    const card = {
+      card_brand: cardBrands[i % cardBrands.length]!,
+      card_last4: String(1000 + ((i * 7919) % 9000)),
+      card_exp_month: expiry.getMonth() + 1,
+      card_exp_year: expiry.getFullYear(),
+      card_holder: guest || 'Card Holder'
+    };
+    // 24 pseudo-random letters and digits, the same for the same n
+    const reference = (n: number) => {
+      let x = n;
+      return Array.from({ length: 24 }, () => {
+        x = (x * 1103515245 + 12345) % 2 ** 31;
+        return (x % 36).toString(36);
+      })
+        .join('')
+        .toUpperCase();
+    };
+    const amount = 120 + ((i * 137) % 900) + 0.5;
+    // Older reservations' payments are further along
+    const authorizedAt = Date.now() - (2 + i) * DAY_MS;
+
+    const stageByKind = [
+      { captured: 1, paid: true },
+      { captured: 1, paid: false },
+      { captured: null, paid: false },
+      { captured: 0.7, paid: true },
+      // Authorized eight days ago and never captured: stale
+      { captured: null, paid: false, authorizedAt: Date.now() - 8 * DAY_MS },
+      { captured: 0.5, paid: false }
+    ] as const;
+    const kind = stageByKind[i % stageByKind.length]!;
+    const authorized_at = new Date(
+      'authorizedAt' in kind ? kind.authorizedAt : authorizedAt
+    );
+    const captured_at =
+      kind.captured === null
+        ? null
+        : new Date(authorized_at.getTime() + DAY_MS / 2);
+
+    const main = {
+      reservation_id: id,
+      type: paymentTypes[i % paymentTypes.length]!,
+      // A few in Swiss francs, to show the currency comes with the payment
+      currency: i % 9 === 4 ? 'CHF' : 'EUR',
+      authorized_amount: amount.toFixed(2),
+      authorized_at,
+      captured_amount:
+        kind.captured === null ? null : (amount * kind.captured).toFixed(2),
+      captured_at,
+      paid_at:
+        kind.paid && captured_at
+          ? new Date(captured_at.getTime() + DAY_MS)
+          : null,
+      reference: reference(i + 1),
+      ...card
+    };
+
+    if (i % 3 !== 0) {
+      return [main];
+    }
+
+    // A deposit held on the same card, authorized the day before yesterday
+    return [
+      main,
+      {
+        ...card,
+        reservation_id: id,
+        type: 'deposit' as const,
+        currency: 'EUR',
+        authorized_amount: '200.00',
+        authorized_at: new Date(Date.now() - 2 * DAY_MS),
+        captured_amount: null,
+        captured_at: null,
+        paid_at: null,
+        reference: reference(i + 101)
+      }
+    ];
+  });
+
+  await db.insert(paymentsTable).values(payments);
+
+  return payments.length;
+}
+
 async function seed() {
   console.log('🌱 Starting database seed...');
 
@@ -511,6 +622,7 @@ async function seed() {
     const cmsCount = await seedCms();
     await seedRoomsAndDevices();
     const logCount = await seedMonitoringLogs();
+    const paymentCount = await seedPayments();
 
     // Point the demo users at The Overlook Hotel so its seeded content is
     // visible immediately after logging in.
@@ -524,6 +636,7 @@ async function seed() {
     console.log(`- ${guestAbcCount} Guest ABC entries`);
     console.log(`- ${cmsCount} mobile CMS nodes`);
     console.log(`- ${logCount} monitoring logs`);
+    console.log(`- ${paymentCount} payments`);
   } catch (error) {
     console.error('❌ Seed failed:', error);
     throw error;

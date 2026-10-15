@@ -25,6 +25,7 @@ export const propertyStageSchema = z.enum([
 export const navItemIdSchema = z.enum([
   'monitoring',
   'reservations',
+  'payments',
   'rooms',
   'guest-abc',
   'products',

@@ -2,6 +2,7 @@ import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import type { LinkProps } from '@tanstack/react-router';
 import {
+  BanknoteIcon,
   BedDoubleIcon,
   BookAIcon,
   BuildingIcon,
@@ -73,6 +74,12 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     to: '/reservations',
     icon: BedDoubleIcon,
     label: msg`Reservations`
+  },
+  payments: {
+    group: 'front-office',
+    to: '/payments',
+    icon: BanknoteIcon,
+    label: msg`Payments`
   },
   rooms: {
     group: 'front-office',
