@@ -13,14 +13,9 @@ import {
 import { BrandMark } from '@/components/brand-mark';
 import { Badge } from '@/components/ui/badge';
 import { CopyButton } from '@/components/ui/copy-button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-import { maskCardNumber, truncateMiddle } from '../-lib/format';
+import { maskCardNumber } from '../-lib/format';
 import { dangerText, flagTones, stageTones } from '../-lib/tones';
 
 export const stageLabels = {
@@ -85,8 +80,8 @@ export function CardSummary({ payment }: { payment: Payment }) {
 }
 
 /**
- * A reference cut in the middle, whole in a tooltip, with a copy button.
- * Clicks stay here so they do not open the row's payment.
+ * A reference with a copy button. Clicks stay here so they do not open the
+ * row's payment.
  */
 export function ReferenceValue({ reference }: { reference: string }) {
   const { t } = useLingui();
@@ -96,16 +91,7 @@ export function ReferenceValue({ reference }: { reference: string }) {
       className="inline-flex items-center gap-1"
       onClick={(event) => event.stopPropagation()}
     >
-      <Tooltip>
-        <TooltipTrigger
-          type="button"
-          className="rounded-sm font-mono text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label={reference}
-        >
-          {truncateMiddle(reference)}
-        </TooltipTrigger>
-        <TooltipContent className="font-mono">{reference}</TooltipContent>
-      </Tooltip>
+      <span className="font-mono text-xs whitespace-nowrap">{reference}</span>
       <CopyButton
         text={reference}
         size="icon-xs"
