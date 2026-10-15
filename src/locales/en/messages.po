@@ -203,6 +203,10 @@ msgstr "{total, plural, one {# property} other {# properties}}"
 msgid "<0>{0}</0> will no longer belong to room <1>{1}</1>. You can assign it again at any time."
 msgstr "<0>{0}</0> will no longer belong to room <1>{1}</1>. You can assign it again at any time."
 
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:125
+msgid "<0>{MOD_KEY}</0><1>↵</1> to save"
+msgstr "<0>{MOD_KEY}</0><1>↵</1> to save"
+
 #. placeholder {0}: room && roomLabel(room)
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-control.tsx:89
 #~ msgid "<0>{name}</0> will no longer belong to room <1>{0}</1>. You can assign it again at any time."
@@ -344,7 +348,7 @@ msgstr "Add device"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:88
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:56
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:95
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:94
 msgid "Add entry"
 msgstr "Add entry"
 
@@ -627,11 +631,11 @@ msgstr "An error occurred while fetching customers"
 msgid "An error occurred while fetching devices"
 msgstr "An error occurred while fetching devices"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:92
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:81
 msgid "An error occurred while fetching payments"
 msgstr "An error occurred while fetching payments"
 
@@ -941,7 +945,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:71
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:102
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:138
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -1600,7 +1604,7 @@ msgstr "Date"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:81
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:131
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:150
 msgid "Delete"
 msgstr "Delete"
 
@@ -1653,7 +1657,7 @@ msgstr "Delete reservation {reservationNr}?"
 msgid "Delete room"
 msgstr "Delete room"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:58
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:57
 msgid "Deleted user"
 msgstr "Deleted user"
 
@@ -1825,7 +1829,7 @@ msgstr "Each code works once"
 #~ msgstr "Each code works once."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:124
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:143
 msgid "Edit"
 msgstr "Edit"
 
@@ -1889,13 +1893,25 @@ msgstr "Edit room"
 msgid "Edit user"
 msgstr "Edit user"
 
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:121
+msgid "edited"
+msgstr "edited"
+
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:113
-msgid "edited {editedAt}"
-msgstr "edited {editedAt}"
+#~ msgid "edited {editedAt}"
+#~ msgstr "edited {editedAt}"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:129
+msgid "Edited {editedAt}"
+msgstr "Edited {editedAt}"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:109
-msgid "edited {editedAt} by {editorName}"
-msgstr "edited {editedAt} by {editorName}"
+#~ msgid "edited {editedAt} by {editorName}"
+#~ msgstr "edited {editedAt} by {editorName}"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:125
+msgid "Edited {editedAt} by {editorName}"
+msgstr "Edited {editedAt} by {editorName}"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:313
 msgid "Editor"
@@ -2233,7 +2249,7 @@ msgid "Failed to activate account. The link may have expired."
 msgstr "Failed to activate account. The link may have expired."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:75
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:85
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:84
 msgid "Failed to add entry. Please try again."
 msgstr "Failed to add entry. Please try again."
 
@@ -2397,7 +2413,7 @@ msgid "Failed to update customer. Please try again."
 msgstr "Failed to update customer. Please try again."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:70
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:52
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:51
 msgid "Failed to update entry. Please try again."
 msgstr "Failed to update entry. Please try again."
 
@@ -2793,8 +2809,8 @@ msgstr "Holder"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:372
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:50
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:43
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:50
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/new.tsx:27
@@ -3302,7 +3318,7 @@ msgstr "Merge"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:200
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:84
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:112
 msgid "Message"
 msgstr "Message"
 
@@ -3362,12 +3378,12 @@ msgid "Monitor daily operations, track occupancy, and oversee front-office activ
 msgstr "Monitor daily operations, track occupancy, and oversee front-office activity"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:70
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:39
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:56
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:55
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:65
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:64
 msgid "Monitoring Logs"
 msgstr "Monitoring Logs"
 
@@ -3594,7 +3610,7 @@ msgstr "No devices yet"
 #~ msgstr "No email"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:113
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:108
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:107
 msgid "No entries yet"
 msgstr "No entries yet"
 
@@ -3626,11 +3642,11 @@ msgstr "No guests found"
 msgid "No item selected"
 msgstr "No item selected"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:176
 msgid "No logs in the last 24 hours"
 msgstr "No logs in the last 24 hours"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:188
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:187
 msgid "No logs match the current filters."
 msgstr "No logs match the current filters."
 
@@ -3642,11 +3658,11 @@ msgstr "No name"
 msgid "No nested items."
 msgstr "No nested items."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:146
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:141
 msgid "No payments match the current filters."
 msgstr "No payments match the current filters."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:135
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:130
 msgid "No payments yet"
 msgstr "No payments yet"
 
@@ -3785,7 +3801,7 @@ msgstr "Not verified yet."
 msgid "Not yet"
 msgstr "Not yet"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:111
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:110
 msgid "Notes your team adds about this property will be listed here."
 msgstr "Notes your team adds about this property will be listed here."
 
@@ -4071,13 +4087,13 @@ msgid "Payment recipient"
 msgstr "Payment recipient"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:82
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:37
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:54
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:63
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:32
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:58
 msgid "Payments"
 msgstr "Payments"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:133
 msgid "Payments appear here once the gateway authorizes them."
 msgstr "Payments appear here once the gateway authorizes them."
 
@@ -4119,7 +4135,7 @@ msgstr "Photo updated"
 msgid "Pick a date range"
 msgstr "Pick a date range"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:180
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:179
 msgid "Pick a longer period to see older logs."
 msgstr "Pick a longer period to see older logs."
 
@@ -5365,7 +5381,7 @@ msgstr "Show all"
 msgid "Show all {0} properties"
 msgstr "Show all {0} properties"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:158
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:157
 msgid "Show all logs"
 msgstr "Show all logs"
 
@@ -5418,7 +5434,7 @@ msgstr "Show results for: <0>\"{q}\"</0>"
 #~ msgid "Showing only logs for reservation <0>{bookingNr}</0>"
 #~ msgstr "Showing only logs for reservation <0>{bookingNr}</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:148
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:147
 msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr "Showing only logs for reservation <0>{reservation}</0>"
 
@@ -5464,7 +5480,7 @@ msgstr "Someone — most likely an administrator — changed your record while t
 msgid "Someone else changed this item meanwhile"
 msgstr "Someone else changed this item meanwhile"
 
-#: src/components/details-drawer.tsx:118
+#: src/components/details-drawer.tsx:123
 #: src/components/error-state.tsx:64
 #: src/components/load-error.tsx:33
 #: src/routes/__root.tsx:58
@@ -6069,7 +6085,7 @@ msgstr "To delete"
 msgid "To update"
 msgstr "To update"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:43
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:42
 msgid "Today"
 msgstr "Today"
 
@@ -6321,7 +6337,7 @@ msgstr "Untitled"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:302
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:332
-#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:141
+#: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:161
 msgid "Update"
 msgstr "Update"
 
@@ -6627,7 +6643,7 @@ msgstr "Who owns this property."
 msgid "Work log"
 msgstr "Work log"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:94
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:93
 msgid "Write a note about this property…"
 msgstr "Write a note about this property…"
 
@@ -6635,7 +6651,7 @@ msgstr "Write a note about this property…"
 msgid "XLSX template"
 msgstr "XLSX template"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:45
+#: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:44
 msgid "Yesterday"
 msgstr "Yesterday"
 

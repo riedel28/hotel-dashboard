@@ -17,7 +17,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem
 } from '@/components/ui/dropdown-menu';
-import { Item } from '@/components/ui/item';
 import {
   Tooltip,
   TooltipContent,
@@ -31,6 +30,22 @@ import { WorklogMessageForm } from './worklog-message-form';
 
 // A user without a name goes by their email.
 const displayName = (user: WorklogUser) => getFullName(user) || user.email;
+
+type AvatarUser = Pick<WorklogUser, 'first_name' | 'last_name' | 'email'> & {
+  avatar_url?: string | null;
+};
+
+/** A small avatar by photo, initials or email; "?" for a deleted user. */
+export function WorklogAvatar({ user }: { user: AvatarUser | null }) {
+  return (
+    <Avatar size="sm">
+      {user?.avatar_url && <AvatarImage src={user.avatar_url} alt="" />}
+      <AvatarFallback>
+        {user ? getInitials(user) || user.email.charAt(0).toUpperCase() : '?'}
+      </AvatarFallback>
+    </Avatar>
+  );
+}
 
 export function WorklogCard({ worklog }: { worklog: Worklog }) {
   const { t } = useLingui();
@@ -68,29 +83,23 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
 
   return (
     <>
-      <Item
-        variant="outline"
-        className="flex-col flex-nowrap items-stretch gap-2 p-4"
-      >
-        <div className="flex min-h-7 items-center gap-2">
-          <Avatar size="sm">
-            {author?.avatar_url && (
-              <AvatarImage src={author.avatar_url} alt="" />
-            )}
-            <AvatarFallback>
-              {author
-                ? getInitials(author) || author.email.charAt(0).toUpperCase()
-                : '?'}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2">
+      {/* Avatar in its own column; the day's timeline line runs down it */}
+      <div className="group/entry grid grid-cols-[1.5rem_1fr] gap-x-3 gap-y-1">
+        <div className="flex h-7 items-center">
+          <WorklogAvatar user={author} />
+        </div>
+        <div className="flex min-h-7 min-w-0 items-center gap-2">
+          <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-1.5">
             <span className="truncate text-sm font-medium">{authorName}</span>
+            <span aria-hidden="true" className="text-xs text-muted-foreground">
+              ·
+            </span>
             <Tooltip>
               <TooltipTrigger
                 render={
                   <time
                     dateTime={worklog.created_at}
-                    className="text-xs text-muted-foreground"
+                    className="text-xs text-muted-foreground tabular-nums"
                   />
                 }
               >
@@ -104,20 +113,37 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
               </TooltipContent>
             </Tooltip>
             {editedAt && (
-              <span className="text-xs text-muted-foreground">
-                {editorName ? (
-                  <Trans>
-                    edited {editedAt} by {editorName}
-                  </Trans>
-                ) : (
-                  <Trans>edited {editedAt}</Trans>
-                )}
-              </span>
+              <>
+                <span
+                  aria-hidden="true"
+                  className="text-xs text-muted-foreground"
+                >
+                  ·
+                </span>
+                {/* Just the word; when and by whom in the tooltip */}
+                <Tooltip>
+                  <TooltipTrigger
+                    render={<span className="text-xs text-muted-foreground" />}
+                  >
+                    <Trans>edited</Trans>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {editorName ? (
+                      <Trans>
+                        Edited {editedAt} by {editorName}
+                      </Trans>
+                    ) : (
+                      <Trans>Edited {editedAt}</Trans>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+              </>
             )}
           </div>
           {!isEditing && (
             <DropdownMenu>
-              <DataGridRowActions />
+              {/* Shown on hover where there is one; always on touch screens */}
+              <DataGridRowActions className="focus-visible:opacity-100 aria-expanded:opacity-100 pointer-fine:opacity-0 pointer-fine:group-hover/entry:opacity-100" />
               <DropdownMenuContent align="end" className="w-auto min-w-0">
                 <DropdownMenuItem onClick={() => setIsEditing(true)}>
                   <PencilIcon className="mr-2 h-4 w-4" />
@@ -135,20 +161,22 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
           )}
         </div>
 
-        {isEditing ? (
-          <WorklogMessageForm
-            message={worklog.message}
-            submitLabel={<Trans>Update</Trans>}
-            isPending={updateMutation.isPending}
-            onSubmit={updateMutation.mutate}
-            onCancel={() => setIsEditing(false)}
-          />
-        ) : (
-          <p className="text-[13px] wrap-break-word whitespace-pre-wrap">
-            {worklog.message}
-          </p>
-        )}
-      </Item>
+        <div className="col-start-2 min-w-0">
+          {isEditing ? (
+            <WorklogMessageForm
+              message={worklog.message}
+              submitLabel={<Trans>Update</Trans>}
+              isPending={updateMutation.isPending}
+              onSubmit={updateMutation.mutate}
+              onCancel={() => setIsEditing(false)}
+            />
+          ) : (
+            <p className="text-sm wrap-break-word whitespace-pre-wrap">
+              {worklog.message}
+            </p>
+          )}
+        </div>
+      </div>
 
       <DeleteWorklogDialog
         open={deleteOpen}
