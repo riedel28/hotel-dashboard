@@ -128,11 +128,10 @@ export function PaymentsTable({
       {
         id: 'amount',
         header: ({ column }) => (
-          <DataGridColumnHeader
-            title={t`Amount`}
-            column={column}
-            className="justify-end"
-          />
+          // Right-aligned like the amounts, as the reservations' balance
+          <div className="flex justify-end">
+            <DataGridColumnHeader title={t`Amount`} column={column} />
+          </div>
         ),
         cell: ({ row }) => (
           <CurrencyFormatter
