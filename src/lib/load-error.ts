@@ -1,5 +1,12 @@
 import { t } from '@lingui/core/macro';
 import { isAxiosError } from 'axios';
+import {
+  CircleAlertIcon,
+  FileQuestionMarkIcon,
+  type LucideIcon,
+  ServerCrashIcon,
+  WifiOffIcon
+} from 'lucide-react';
 
 import { ApiError } from '@/api/client';
 
@@ -22,6 +29,15 @@ export function isTransientError(error: unknown) {
   if (!isRequestError(error)) return false;
   const status = statusOf(error);
   return status === undefined || status >= 500;
+}
+
+/** The same causes as `describeLoadError`, as a picture. */
+export function loadErrorIcon(error: unknown): LucideIcon {
+  const status = statusOf(error);
+  if (isRequestError(error) && status === undefined) return WifiOffIcon;
+  if (status !== undefined && status >= 500) return ServerCrashIcon;
+  if (status === 404) return FileQuestionMarkIcon;
+  return CircleAlertIcon;
 }
 
 /**

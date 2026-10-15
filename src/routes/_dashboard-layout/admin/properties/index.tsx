@@ -655,7 +655,6 @@ function PropertiesContent() {
       {/* Only the list is replaced by a failed load: the filters above
           stay, to change or to refresh */}
       <QueryBoundary
-        className="min-h-[40vh] items-center justify-center"
         title={<Trans>Couldn't load properties</Trans>}
         fallback={
           <PropertiesTable

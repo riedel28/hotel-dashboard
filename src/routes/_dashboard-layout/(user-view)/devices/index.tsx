@@ -124,7 +124,6 @@ function DevicesPage() {
       </div>
 
       <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
         title={<Trans>Couldn't load devices</Trans>}
         fallback={
           // The table under an empty row as tall as the filters, so it does

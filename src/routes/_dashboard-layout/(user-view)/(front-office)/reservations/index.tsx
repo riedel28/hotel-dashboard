@@ -70,7 +70,6 @@ function ReservationsPage() {
       </div>
 
       <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
         title={<Trans>Couldn't load reservations</Trans>}
         fallback={
           <ReservationsTable

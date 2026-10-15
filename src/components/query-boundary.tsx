@@ -5,8 +5,7 @@ import {
 import { type ReactNode, Suspense, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { describeLoadError } from '@/lib/load-error';
-import { cn } from '@/lib/utils';
+import { describeLoadError, loadErrorIcon } from '@/lib/load-error';
 
 import { ErrorState } from './error-state';
 
@@ -16,7 +15,7 @@ interface QueryBoundaryProps {
   fallback: ReactNode;
   /** What failed to load, e.g. "Couldn't load customers". */
   title?: ReactNode;
-  /** Layout for the error card — list pages center it in the viewport. */
+  /** Extra classes for the error card, which fills the boundary's width. */
   className?: string;
 }
 
@@ -38,14 +37,13 @@ function BoundaryError({
   );
 
   return (
-    <div className={cn('flex', className)}>
-      <ErrorState
-        className="w-md max-w-md"
-        title={title}
-        message={describeLoadError(error)}
-        onRetry={onRetry}
-      />
-    </div>
+    <ErrorState
+      className={className}
+      title={title}
+      message={describeLoadError(error)}
+      icon={loadErrorIcon(error)}
+      onRetry={onRetry}
+    />
   );
 }
 

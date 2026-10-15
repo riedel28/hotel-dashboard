@@ -8,6 +8,7 @@ import {
   fetchDisabledNavItems,
   selectablePropertiesQueryOptions
 } from '@/api/properties';
+import { RouteError } from '@/components/route-error';
 import {
   Sidebar,
   SidebarGroup,
@@ -126,6 +127,10 @@ export const Route = createFileRoute('/_dashboard-layout')({
     }
   },
   pendingComponent: DashboardPending,
+  // The layout itself failed, so there is no sidebar to keep: the whole screen
+  errorComponent: ({ error }) => (
+    <RouteError error={error} className="min-h-screen p-4" />
+  ),
   component: DashboardLayout
 });
 

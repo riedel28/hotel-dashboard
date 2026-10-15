@@ -179,7 +179,6 @@ function CustomersPage() {
       <div className="flex flex-col gap-3">
         <CustomersFilters />
         <QueryBoundary
-          className="min-h-[40vh] items-center justify-center"
           title={<Trans>Couldn't load customers</Trans>}
           fallback={<CustomersTableSkeleton />}
         >

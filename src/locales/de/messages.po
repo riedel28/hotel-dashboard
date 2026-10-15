@@ -328,7 +328,7 @@ msgstr "Aktive Reservierung – wird übersprungen"
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:163
 msgid "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 msgstr "Fügen Sie ein Tablet, Telefon oder TV-Gerät mit seiner Seriennummer und der auf dem Bildschirm angezeigten PIN hinzu."
 
@@ -353,7 +353,7 @@ msgstr "Kunde hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:135
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:122
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:173
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:172
 msgid "Add device"
 msgstr "Gerät hinzufügen"
 
@@ -497,7 +497,7 @@ msgstr "Fügt Zimmer hinzu und aktualisiert sie. Zimmer, die nicht in der Datei 
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:41
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:151
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:738
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:737
 msgid "Admin"
 msgstr "Admin"
 
@@ -670,7 +670,7 @@ msgstr "Es ist ein Fehler beim Abrufen der Zimmer aufgetreten"
 msgid "An error occurred while fetching users"
 msgstr "Es ist ein Fehler beim Abrufen der Benutzer aufgetreten"
 
-#: src/components/error-state.tsx:70
+#: src/components/error-state.tsx:90
 msgid "An unexpected error occurred"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
@@ -911,7 +911,7 @@ msgstr "Aufzählung"
 msgid "Business"
 msgstr "Geschäftlich"
 
-#: src/lib/load-error.ts:35
+#: src/lib/load-error.ts:51
 msgid "Can't reach the server. Check your connection and try again."
 msgstr "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
 
@@ -1426,23 +1426,23 @@ msgstr "Die API ist nicht erreichbar – Zeitüberschreitung nach 5000 ms."
 msgid "Couldn't generate new recovery codes"
 msgstr "Neue Wiederherstellungscodes konnten nicht erzeugt werden"
 
-#: src/routes/_dashboard-layout/admin/customers/index.tsx:183
+#: src/routes/_dashboard-layout/admin/customers/index.tsx:182
 msgid "Couldn't load customers"
 msgstr "Kunden konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:128
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:127
 msgid "Couldn't load devices"
 msgstr "Geräte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:659
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:658
 msgid "Couldn't load properties"
 msgstr "Objekte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:74
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:73
 msgid "Couldn't load reservations"
 msgstr "Reservierungen konnten nicht geladen werden"
 
-#: src/components/route-error.tsx:45
+#: src/components/route-error.tsx:49
 msgid "Couldn't load this page"
 msgstr "Diese Seite konnte nicht geladen werden"
 
@@ -2837,7 +2837,7 @@ msgstr "Inhaber"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:145
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:732
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:731
 msgid "Home"
 msgstr "Start"
 
@@ -2853,8 +2853,8 @@ msgstr ""
 msgid "Hotel"
 msgstr "Hotel"
 
-#: src/routes/_dashboard-layout.tsx:38
-#: src/routes/_dashboard-layout.tsx:140
+#: src/routes/_dashboard-layout.tsx:39
+#: src/routes/_dashboard-layout.tsx:145
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:52
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -2986,7 +2986,7 @@ msgstr "Benutzer einladen"
 msgid "iOS App"
 msgstr "iOS App"
 
-#: src/lib/load-error.ts:41
+#: src/lib/load-error.ts:57
 msgid "It may have been deleted or moved."
 msgstr "Möglicherweise wurde es gelöscht oder verschoben."
 
@@ -3212,7 +3212,7 @@ msgstr "Anmelden"
 msgid "main"
 msgstr "Hauptsprache"
 
-#: src/routes/_dashboard-layout.tsx:56
+#: src/routes/_dashboard-layout.tsx:57
 msgid "Main navigation"
 msgstr "Hauptnavigation"
 
@@ -3239,7 +3239,7 @@ msgstr "Hotelunterkünfte verwalten, Details anzeigen und Einstellungen konfigur
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Bestellungen verwalten, Lieferungen verfolgen, Bestellhistorie einsehen und Retouren effizient bearbeiten"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:760
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:759
 msgid "Manage properties, their stage and the customers that own them."
 msgstr "Verwalten Sie Unterkünfte, ihre Phase und die Kunden, denen sie gehören."
 
@@ -3620,11 +3620,11 @@ msgstr "Keine Daten verfügbar"
 #~ msgid "No device with this serial number was found"
 #~ msgstr "Es wurde kein Gerät mit dieser Seriennummer gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:216
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:215
 msgid "No devices match the filters"
 msgstr "Keine Geräte entsprechen den Filtern"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:161
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:160
 msgid "No devices yet"
 msgstr "Noch keine Geräte"
 
@@ -3713,7 +3713,7 @@ msgstr "Keine Properties gefunden"
 #~ msgid "No properties found."
 #~ msgstr "Keine Objekte gefunden."
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:689
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:688
 msgid "No properties match the filters"
 msgstr "Keine Unterkünfte entsprechen den Filtern"
 
@@ -4422,9 +4422,9 @@ msgstr "Profil aktualisiert"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:122
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:63
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:724
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:744
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:755
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:723
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:743
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:754
 msgid "Properties"
 msgstr "Properties"
 
@@ -5442,7 +5442,7 @@ msgid "Sign Up"
 msgstr "Registrieren"
 
 #: src/routes/_auth-layout.tsx:17
-#: src/routes/_dashboard-layout.tsx:71
+#: src/routes/_dashboard-layout.tsx:72
 msgid "Skip to main content"
 msgstr "Zum Hauptinhalt springen"
 
@@ -5472,12 +5472,12 @@ msgstr "Jemand — vermutlich ein Administrator — hat Ihren Datensatz geänder
 msgid "Someone else changed this item meanwhile"
 msgstr "Jemand anderes hat diesen Eintrag inzwischen geändert"
 
-#: src/lib/load-error.ts:43
+#: src/lib/load-error.ts:59
 msgid "Something unexpected happened. Try again."
 msgstr "Etwas Unerwartetes ist passiert. Versuchen Sie es erneut."
 
 #: src/components/details-drawer.tsx:123
-#: src/components/error-state.tsx:67
+#: src/components/error-state.tsx:87
 #: src/components/load-error.tsx:33
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:162
 msgid "Something went wrong"
@@ -5900,7 +5900,7 @@ msgstr "Das Zimmer hat eine aktive Reservierung, daher kann sein Name nicht geä
 msgid "The rooms have changed since this preview was made. Nothing was imported."
 msgstr "Die Zimmer haben sich seit dieser Vorschau geändert. Es wurde nichts importiert."
 
-#: src/lib/load-error.ts:38
+#: src/lib/load-error.ts:54
 msgid "The server ran into a problem. Try again in a moment."
 msgstr "Auf dem Server ist ein Problem aufgetreten. Versuchen Sie es gleich noch einmal."
 
@@ -6124,7 +6124,7 @@ msgstr "Übersetzung fehlt"
 msgid "Tree"
 msgstr "Baum"
 
-#: src/components/error-state.tsx:81
+#: src/components/error-state.tsx:101
 #: src/components/provider-setup/provider-screens.tsx:42
 #: src/main.tsx:46
 msgid "Try again"

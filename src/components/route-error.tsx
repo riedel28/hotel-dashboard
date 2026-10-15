@@ -6,7 +6,7 @@ import {
 import { type ErrorComponentProps, useRouter } from '@tanstack/react-router';
 import { useCallback, useEffect, useState } from 'react';
 
-import { describeLoadError } from '@/lib/load-error';
+import { describeLoadError, loadErrorIcon } from '@/lib/load-error';
 import { cn } from '@/lib/utils';
 
 import { ErrorState } from './error-state';
@@ -44,9 +44,11 @@ function RouteError({
       className={cn('flex min-h-[60vh] items-center justify-center', className)}
     >
       <ErrorState
-        className="w-md max-w-md"
+        // No table to stand in for: a card of its own
+        className="max-w-lg flex-none"
         title={<Trans>Couldn't load this page</Trans>}
         message={describeLoadError(error)}
+        icon={loadErrorIcon(error)}
         onRetry={retry}
         isRetrying={isRetrying}
       />
