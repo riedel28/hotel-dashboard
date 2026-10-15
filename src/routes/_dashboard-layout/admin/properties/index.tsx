@@ -615,7 +615,8 @@ function PropertiesContent() {
           refresh on one row, the filters folded under it. From `xl` up: one
           row that never wraps, its filters narrowing to fit. */}
       <div className="flex flex-wrap items-center gap-2 xl:flex-nowrap">
-        <div className="min-w-0 flex-1 xl:max-w-[250px] xl:min-w-36">
+        {/* As wide as the Customers search, so it doesn't jump between them */}
+        <div className="min-w-0 flex-1 sm:max-w-[250px] xl:w-[250px] xl:flex-none">
           <PropertySearch value={q} onChange={handleSearchChange} />
         </div>
         <Button

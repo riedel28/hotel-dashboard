@@ -80,10 +80,12 @@ function DashboardLayout() {
             `overflow-hidden` wrapper a few hundred pixels it can be scrolled
             to — which `scrollIntoView` promptly does, sliding the page under
             the sticky header and clipping its bottom edge. */}
+        {/* The scrollbar's room is kept on short pages too, so going from a
+            long page to a short one doesn't shift everything sideways */}
         <main
           id="main-content"
           tabIndex={-1}
-          className="relative min-h-0 flex-1 overflow-auto px-3 py-2 pb-4 focus:outline-none md:px-6 md:py-4 md:pb-8"
+          className="relative min-h-0 flex-1 [scrollbar-gutter:stable] overflow-auto px-3 py-2 pb-4 focus:outline-none md:px-6 md:py-4 md:pb-8"
         >
           <Outlet />
         </main>
