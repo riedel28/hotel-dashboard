@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import type { NavItemId } from 'shared/types/properties';
 
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,8 +22,22 @@ export function NavItemsField({ disabled, onChange }: NavItemsFieldProps) {
     onChange(shown ? others : [...others, ...ids]);
   };
 
+  const allIds = navItemGroups.flatMap((group) => group.ids);
+  const total = allIds.length;
+  const shown = allIds.filter((id) => !disabled.includes(id)).length;
+
   return (
     <div className="flex flex-col gap-5">
+      {/* With every box ticked, what is off is easy to miss */}
+      <p className="text-xs text-muted-foreground" aria-live="polite">
+        {shown === total ? (
+          <Trans>All {total} shown</Trans>
+        ) : (
+          <Trans>
+            {shown} of {total} shown
+          </Trans>
+        )}
+      </p>
       {navItemGroups.map((group) => {
         const shownCount = group.ids.filter(
           (id) => !disabled.includes(id)

@@ -1,6 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { customerLabel } from 'shared/types/customers';
 import { z } from 'zod';
 
 import { propertyByIdQueryOptions } from '@/api/properties';
@@ -15,6 +16,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
+import { StageBadge } from '@/components/ui/stage-badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
@@ -67,7 +69,21 @@ function PropertyPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="truncate text-xl font-bold">{name}</h1>
+        {/* What to know before changing anything: how live it is, and whose */}
+        <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+          <h1 className="truncate text-xl font-bold">{name}</h1>
+          {data && <StageBadge stage={data.stage} size="sm" />}
+          {data?.customer && (
+            <Link
+              to="/admin/customers/$customerId"
+              params={{ customerId: data.customer.id }}
+              preload="intent"
+              className="truncate text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              {customerLabel(data.customer)}
+            </Link>
+          )}
+        </div>
       </div>
 
       <Tabs

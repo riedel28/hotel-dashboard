@@ -40,7 +40,7 @@ import {
 
 import { CustomerPicker } from './customer-picker';
 import { NavItemsField } from './nav-items-field';
-import { propertyOptionLabels, propertyOptions } from './property-options';
+import { propertyOptionGroups, propertyOptions } from './property-options';
 
 interface EditPropertyFormData {
   name: string;
@@ -103,7 +103,7 @@ export function EditPropertyForm({
       sections={PROPERTY_FORM_SECTIONS}
       onSubmit={(data) => updatePropertyMutation.mutate(data)}
       isSaving={updatePropertyMutation.isPending}
-      submitLabel={<Trans>Update Property</Trans>}
+      submitLabel={<Trans>Save changes</Trans>}
     />
   );
 }
@@ -132,6 +132,23 @@ function GeneralFields({ form }: PropertyFieldsProps) {
               aria-invalid={fieldState.invalid}
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        control={form.control}
+        name="customer"
+        render={({ field }) => (
+          <Field className="gap-2">
+            <FieldLabel id="property-customer-label">
+              <Trans>Customer</Trans>
+            </FieldLabel>
+            <CustomerPicker
+              value={field.value}
+              onValueChange={field.onChange}
+              aria-labelledby="property-customer-label"
+            />
           </Field>
         )}
       />
@@ -200,81 +217,139 @@ function SolutionsFields({ form }: PropertyFieldsProps) {
   const hasPwa = form.watch('options').includes('mobile_app_pwa');
 
   return (
-    <FieldGroup className="gap-4">
-      <Controller
-        control={form.control}
-        name="options"
-        render={({ field }) => (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-            {propertyOptions.map((option) => (
-              <Field key={option} orientation="horizontal" className="gap-2">
-                <Checkbox
-                  id={`option-${option}`}
-                  checked={field.value.includes(option)}
-                  onCheckedChange={(checked) =>
-                    field.onChange(
-                      // Catalog order, whatever the click order.
-                      propertyOptions.filter((id) =>
-                        id === option ? checked : field.value.includes(id)
-                      )
-                    )
-                  }
-                />
-                <FieldLabel
-                  htmlFor={`option-${option}`}
-                  className="cursor-pointer text-sm font-normal"
-                >
-                  {t(propertyOptionLabels[option])}
-                </FieldLabel>
-              </Field>
-            ))}
-          </div>
-        )}
-      />
+    <Controller
+      control={form.control}
+      name="options"
+      render={({ field }) => {
+        const setChecked = (ids: PropertyOption[], checked: boolean) =>
+          field.onChange(
+            // Catalog order, whatever the click order.
+            propertyOptions.filter((id) =>
+              ids.includes(id) ? checked : field.value.includes(id)
+            )
+          );
 
-      {hasPwa && (
-        <Controller
-          control={form.control}
-          name="pwa_domain"
-          rules={{
-            validate: (value) =>
-              !value.trim()
-                ? t`PWA domain is required`
-                : pwaDomainSchema.safeParse(value).success ||
-                  t`Enter a domain without a path, e.g. app.example.com`
-          }}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid} className="gap-2">
-              <FieldLabel htmlFor={field.name}>
-                <Trans>PWA Domain</Trans>
-              </FieldLabel>
-              <InputGroup>
-                <InputGroupAddon>
-                  <InputGroupText>https://</InputGroupText>
-                </InputGroupAddon>
-                <InputGroupInput
-                  {...field}
-                  // The protocol is already shown: drop a pasted one.
-                  onChange={(event) =>
-                    field.onChange(
-                      event.target.value.replace(/^https?:\/\//i, '')
-                    )
-                  }
-                  id={field.name}
-                  placeholder="app.example.com"
-                  inputMode="url"
-                  autoCapitalize="none"
-                  spellCheck={false}
-                  required
-                  aria-invalid={fieldState.invalid}
-                />
-              </InputGroup>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
+        return (
+          <div className="flex flex-col gap-5">
+            {propertyOptionGroups.map((group) => {
+              const ids = group.options.map((option) => option.id);
+              const checkedCount = ids.filter((id) =>
+                field.value.includes(id)
+              ).length;
+
+              const items = (
+                <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+                  {group.options.map((option) => (
+                    <Field
+                      key={option.id}
+                      orientation="horizontal"
+                      className="gap-2"
+                    >
+                      <Checkbox
+                        id={`option-${option.id}`}
+                        checked={field.value.includes(option.id)}
+                        onCheckedChange={(checked) =>
+                          setChecked([option.id], checked)
+                        }
+                      />
+                      <FieldLabel
+                        htmlFor={`option-${option.id}`}
+                        className="cursor-pointer text-sm font-normal"
+                      >
+                        {t(option.label)}
+                      </FieldLabel>
+                    </Field>
+                  ))}
+                </div>
+              );
+
+              if (!group.label) return <div key={group.key}>{items}</div>;
+
+              const groupId = `option-group-${group.key}`;
+
+              return (
+                <div
+                  key={group.key}
+                  role="group"
+                  aria-labelledby={`${groupId}-label`}
+                  className="flex flex-col gap-3"
+                >
+                  <Field orientation="horizontal" className="gap-2">
+                    <Checkbox
+                      id={groupId}
+                      checked={checkedCount === ids.length}
+                      indeterminate={
+                        checkedCount > 0 && checkedCount < ids.length
+                      }
+                      onCheckedChange={(checked) => setChecked(ids, checked)}
+                    />
+                    <FieldLabel
+                      id={`${groupId}-label`}
+                      htmlFor={groupId}
+                      className="cursor-pointer text-sm font-medium"
+                    >
+                      {t(group.label)}
+                    </FieldLabel>
+                  </Field>
+                  <div className="flex flex-col gap-3 pl-6">
+                    {items}
+                    {/* The PWA's domain right under it */}
+                    {group.key === 'mobile-app' && hasPwa && (
+                      <PwaDomainField form={form} />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }}
+    />
+  );
+}
+
+function PwaDomainField({ form }: PropertyFieldsProps) {
+  const { t } = useLingui();
+
+  return (
+    <Controller
+      control={form.control}
+      name="pwa_domain"
+      rules={{
+        validate: (value) =>
+          !value.trim()
+            ? t`PWA domain is required`
+            : pwaDomainSchema.safeParse(value).success ||
+              t`Enter a domain without a path, e.g. app.example.com`
+      }}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid} className="gap-2">
+          <FieldLabel htmlFor={field.name}>
+            <Trans>PWA Domain</Trans>
+          </FieldLabel>
+          <InputGroup>
+            <InputGroupAddon>
+              <InputGroupText>https://</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput
+              {...field}
+              // The protocol is already shown: drop a pasted one.
+              onChange={(event) =>
+                field.onChange(event.target.value.replace(/^https?:\/\//i, ''))
+              }
+              id={field.name}
+              placeholder="app.example.com"
+              inputMode="url"
+              autoCapitalize="none"
+              spellCheck={false}
+              required
+              aria-invalid={fieldState.invalid}
+            />
+          </InputGroup>
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
       )}
-    </FieldGroup>
+    />
   );
 }
 
@@ -284,35 +359,12 @@ const PROPERTY_FORM_SECTIONS: FormSectionDef<EditPropertyFormData>[] = [
     label: <Trans>General</Trans>,
     description: (
       <Trans>
-        What the property is called, where it is and how far along it is.
+        What the property is called, who owns it, where it is and how far along
+        it is.
       </Trans>
     ),
-    fields: ['name', 'country_code', 'stage'],
+    fields: ['name', 'customer', 'country_code', 'stage'],
     render: (form) => <GeneralFields form={form} />
-  },
-  {
-    id: 'customer',
-    label: <Trans>Customer</Trans>,
-    description: <Trans>Who owns this property.</Trans>,
-    fields: ['customer'],
-    render: (form) => (
-      <Controller
-        control={form.control}
-        name="customer"
-        render={({ field }) => (
-          <Field className="gap-2">
-            <FieldLabel id="property-customer-label">
-              <Trans>Customer</Trans>
-            </FieldLabel>
-            <CustomerPicker
-              value={field.value}
-              onValueChange={field.onChange}
-              aria-labelledby="property-customer-label"
-            />
-          </Field>
-        )}
-      />
-    )
   },
   {
     id: 'solutions',
