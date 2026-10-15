@@ -695,7 +695,7 @@ msgstr "Anwenden"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:61
 msgid "Apply custom range"
-msgstr ""
+msgstr "Eigenen Zeitraum anwenden"
 
 #~ msgid "Approved"
 #~ msgstr "Genehmigt"
@@ -1373,7 +1373,7 @@ msgstr "Aus Deutsch kopieren"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:143
 msgid "Copy message"
-msgstr ""
+msgstr "Nachricht kopieren"
 
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:209
 msgid "Copy Public Key"
@@ -2448,7 +2448,7 @@ msgstr "Datei"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:60
 msgid "Filter by reservation"
-msgstr ""
+msgstr "Nach Reservierung filtern"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:107
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:629
@@ -2991,19 +2991,19 @@ msgstr "Sprache der Titel"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:17
 msgid "Last 24 hours"
-msgstr ""
+msgstr "Letzte 24 Stunden"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:19
 msgid "Last 30 days"
-msgstr ""
+msgstr "Letzte 30 Tage"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:18
 msgid "Last 7 days"
-msgstr ""
+msgstr "Letzte 7 Tage"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:16
 msgid "Last hour"
-msgstr ""
+msgstr "Letzte Stunde"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:197
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:148
@@ -3117,7 +3117,7 @@ msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:52
 msgid "Loading log…"
-msgstr ""
+msgstr "Protokoll wird geladen…"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:47
 msgid "Loading payment…"
@@ -3140,7 +3140,7 @@ msgstr "Lädt..."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:53
 msgid "Log not found"
-msgstr ""
+msgstr "Protokoll nicht gefunden"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:74
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:206
@@ -3283,7 +3283,7 @@ msgstr "Nachricht"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:144
 msgid "Message copied"
-msgstr ""
+msgstr "Nachricht kopiert"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options.ts:54
 msgid "Messaging"
@@ -3624,11 +3624,11 @@ msgstr "Kein Eintrag ausgewählt"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:177
 msgid "No logs in the last 24 hours"
-msgstr ""
+msgstr "Keine Protokolle in den letzten 24 Stunden"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:188
 msgid "No logs match the current filters."
-msgstr ""
+msgstr "Keine Protokolle entsprechen den aktuellen Filtern."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:110
 msgid "No name"
@@ -4111,7 +4111,7 @@ msgstr "Datumsbereich auswählen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:180
 msgid "Pick a longer period to see older logs."
-msgstr ""
+msgstr "Wählen Sie einen längeren Zeitraum, um ältere Protokolle zu sehen."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:365
 #~ msgid "Pick an item to edit"
@@ -4615,7 +4615,7 @@ msgstr "Kunde entfernen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:56
 msgid "Remove filter by reservation {bookingNr}"
-msgstr ""
+msgstr "Filter nach Reservierung {bookingNr} entfernen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:106
 msgid "Remove from reservation"
@@ -4635,7 +4635,7 @@ msgstr "Bild entfernen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:60
 msgid "Remove reservation filter"
-msgstr ""
+msgstr "Reservierungsfilter entfernen"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:257
 #~ msgid "Remove your photo and go back to initials?"
@@ -5049,7 +5049,7 @@ msgstr "Geräte suchen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:94
 msgid "Search event, message, reservation number"
-msgstr ""
+msgstr "Ereignis, Nachricht, Reservierungsnummer suchen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-search-combobox.tsx:104
 msgid "Search for a guest"
@@ -5064,7 +5064,7 @@ msgstr "Nach einem Gast suchen..."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:93
 msgid "Search logs"
-msgstr ""
+msgstr "Protokolle suchen"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:54
 msgid "Search name, serial number, room"
@@ -5334,7 +5334,7 @@ msgstr "Alle {0} Unterkünfte anzeigen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:158
 msgid "Show all logs"
-msgstr ""
+msgstr "Alle Protokolle anzeigen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:287
 msgid "Show all logs for {bookingNr}"
@@ -5367,7 +5367,7 @@ msgstr "Ausgeblendete zeigen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/booking-cell.tsx:57
 msgid "Show only logs of reservation {bookingNr}"
-msgstr ""
+msgstr "Nur Protokolle der Reservierung {bookingNr} anzeigen"
 
 #: src/components/ui/password-input.tsx:37
 msgid "Show password"
@@ -5391,7 +5391,7 @@ msgstr "Ergebnisse für: <0>\"{q}\"</0>"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:148
 msgid "Showing only logs for reservation <0>{reservation}</0>"
-msgstr ""
+msgstr "Nur Protokolle der Reservierung <0>{reservation}</0>"
 
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:37
 msgid "Sidebar"
@@ -5453,7 +5453,7 @@ msgstr "Entschuldigung, wir konnten die gesuchte Seite nicht finden."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:123
 msgid "Source"
-msgstr ""
+msgstr "Quelle"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:49
 #~ msgid "Spain"
@@ -5937,7 +5937,7 @@ msgstr "Dieser Link ist ausgeblendet und für Gäste nicht sichtbar."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:54
 msgid "This log does not exist or was removed."
-msgstr ""
+msgstr "Dieses Protokoll existiert nicht oder wurde entfernt."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:41
 msgid "This page has nested items"
