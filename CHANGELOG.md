@@ -1,3 +1,45 @@
+# [1.29.0](https://github.com/riedel28/hotel-dashboard/compare/v1.28.0...v1.29.0) (2026-10-15)
+
+
+### Bug Fixes
+
+* **cms:** accessibility of the tree, editor and preview ([70e848e](https://github.com/riedel28/hotel-dashboard/commit/70e848ea633ccc74031eb98aff56679d3a17c47b))
+* **cms:** apply the editor's draft only to its own node ([19d1803](https://github.com/riedel28/hotel-dashboard/commit/19d18035416203bf6b7a6665574647600706412c))
+* **cms:** balance tree and form on laptops, eye icon for the preview ([eccd135](https://github.com/riedel28/hotel-dashboard/commit/eccd135acc90ad723903f5898606a761380b73a4))
+* **cms:** cap the tree column at 22rem on laptops ([058baf1](https://github.com/riedel28/hotel-dashboard/commit/058baf1fbae5cabba4de70c4ed130a9cf3ab02b1))
+* **cms:** give the editor room on laptops and space the header like Products ([e9488a0](https://github.com/riedel28/hotel-dashboard/commit/e9488a0babe3dc775da6d005d94690e37b4892c8))
+* **cms:** keep a dialog's content while it closes ([adf612b](https://github.com/riedel28/hotel-dashboard/commit/adf612b839c2e16a74a92424c756fdc268a9ca68))
+* **cms:** labels of the twice-rendered preview and tree controls ([3390590](https://github.com/riedel28/hotel-dashboard/commit/3390590392853dbe11ac1238b8038202a6d1c6e0))
+* **cms:** make drag and drop in the tree reorder the grabbed row ([98d1c92](https://github.com/riedel28/hotel-dashboard/commit/98d1c92cddef97d3c33a91d030361de981607039))
+* **cms:** narrow the form column to 38rem on laptops ([bb60f98](https://github.com/riedel28/hotel-dashboard/commit/bb60f987829fe497ff243da4a7edbcc4757a1e1d))
+* **cms:** same tree and form widths on wide screens as on laptops ([798a948](https://github.com/riedel28/hotel-dashboard/commit/798a9487187579f2292a99f5dbc9daf2053ba966))
+* **cms:** use the arrow icon for links and pin the save bar to the bottom ([0835227](https://github.com/riedel28/hotel-dashboard/commit/08352271438f09c8ed4e5529157c06268e5ce937))
+* **cms:** use the shared breadcrumbs like the other pages ([62b0784](https://github.com/riedel28/hotel-dashboard/commit/62b0784bd502a9368e94775f9c5e6ad68ca410dd))
+
+
+### Features
+
+* **cms:** add mobile CMS tables ([98b912e](https://github.com/riedel28/hotel-dashboard/commit/98b912ea5c09bdddb45f9ea9ac60c7403c3e2a0e))
+* **cms:** add the mobile CMS API ([93373d9](https://github.com/riedel28/hotel-dashboard/commit/93373d98258cf11f9b264f89c45a8aadab536fd0))
+* **cms:** add the Mobile CMS page ([7dc8ea5](https://github.com/riedel28/hotel-dashboard/commit/7dc8ea5c155144cbb6ac8651bcd41f602d872eb2))
+* **cms:** editor card header with the path and the open item's title ([b236ced](https://github.com/riedel28/hotel-dashboard/commit/b236ced8f5f999e2a81bb8732f13c5527d339fb0))
+* **cms:** loading state that mirrors the page ([176e50a](https://github.com/riedel28/hotel-dashboard/commit/176e50af5e5cdd778994f1b2417bc99e77abc7b1))
+* **cms:** name the saved item in the toast ([5989259](https://github.com/riedel28/hotel-dashboard/commit/598925973916bf3b88b640f0ce7ef86d9f873672))
+* **cms:** seed mobile CMS content for The Overlook Hotel ([ca93e08](https://github.com/riedel28/hotel-dashboard/commit/ca93e08cb4b2974011e3aed949d9d7d34f9ade8f))
+* **cms:** thumbnail or grey square for every item in the preview list ([453e5a0](https://github.com/riedel28/hotel-dashboard/commit/453e5a01427aea42480782437aaa9a855f503853))
+* **cms:** thumbnails for pages in the preview list ([979af2c](https://github.com/riedel28/hotel-dashboard/commit/979af2cb3b2c0d1141e27ab6146b00125c765192))
+* **rich-text:** add a CMS variant of the editor ([93ffcc8](https://github.com/riedel28/hotel-dashboard/commit/93ffcc84104c2a6fb49d783dfe5240438c918f84))
+* **segmented-control:** add a small size; use it above the CMS preview ([ddfc6ca](https://github.com/riedel28/hotel-dashboard/commit/ddfc6ca3b44442c534ba3ae19513c4906d5b1e2a))
+
+
+### Performance Improvements
+
+* **cms:** check for text without sanitize-html ([4af0d46](https://github.com/riedel28/hotel-dashboard/commit/4af0d467f580bd942c3945b7ff8d51767d28284f))
+* **cms:** duplicate a branch with one insert per table ([557a791](https://github.com/riedel28/hotel-dashboard/commit/557a7914a4b17c05540c80596a865e9eae162052))
+* **cms:** keep the tree from redrawing while typing ([0f9b41b](https://github.com/riedel28/hotel-dashboard/commit/0f9b41bd9e0c1caadc45ff4ba03ba8ffaad8e9f6))
+* **cms:** load the preview's sanitizer on demand, lazy thumbnails ([8c84d47](https://github.com/riedel28/hotel-dashboard/commit/8c84d47b9bc6131bcc62672c36b73bff7d2d0bc7))
+* **cms:** one actions menu for the whole tree ([9a06672](https://github.com/riedel28/hotel-dashboard/commit/9a06672a7215cfeb44afbf157c0319450aeefa87))
+
 # [1.28.0](https://github.com/riedel28/hotel-dashboard/compare/v1.27.0...v1.28.0) (2026-10-13)
 
 
