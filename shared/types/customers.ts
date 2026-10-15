@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { perPageSchema, sortOrderSchema } from './list-params';
+import {
+  pageSchema,
+  perPageSchema,
+  searchQuerySchema,
+  sortOrderSchema
+} from './list-params';
 import { countryCodeSchema, propertyStageSchema } from './properties';
 
 // Empty input means "no value" for the optional text fields.
@@ -58,9 +63,9 @@ export const customerSortableColumnsSchema = z.enum([
 ]);
 
 export const fetchCustomersParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1).optional(),
+  page: pageSchema.default(1).optional(),
   per_page: perPageSchema.default(10).optional(),
-  q: z.string().max(200).optional(),
+  q: searchQuerySchema.optional(),
   country_code: countryCodeSchema.optional(),
   sort_by: customerSortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.optional()

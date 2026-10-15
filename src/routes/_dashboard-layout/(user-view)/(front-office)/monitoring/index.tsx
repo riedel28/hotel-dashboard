@@ -23,7 +23,6 @@ import { LogDetailsDrawer } from './-components/log-details-drawer';
 import { MonitoringFilters } from './-components/monitoring-filters';
 import { MonitoringTable } from './-components/monitoring-table';
 import {
-  DEFAULT_PAGE_SIZE,
   DEFAULT_PERIOD,
   useMonitoringSearch,
   useReservationFilter
@@ -199,12 +198,10 @@ export const Route = createFileRoute(
   // Keep default values out of the URL
   search: {
     middlewares: [
+      // Parsing nothing gives exactly the schema's defaults
       stripSearchParams({
-        page: 1,
-        per_page: DEFAULT_PAGE_SIZE,
-        period: DEFAULT_PERIOD,
-        sort_by: 'logged_at',
-        sort_order: 'desc'
+        ...fetchMonitoringLogsParamsSchema.parse({}),
+        period: DEFAULT_PERIOD
       })
     ]
   },

@@ -2,7 +2,9 @@ import { z } from 'zod';
 
 import {
   isoDateStringSchema,
+  pageSchema,
   perPageSchema,
+  searchQuerySchema,
   sortOrderSchema
 } from './list-params';
 import { ADYEN_METHOD_IDS } from './providers';
@@ -47,10 +49,10 @@ export const paymentSchema = z.object({
 export const sortablePaymentColumnsSchema = z.enum(['updated_at', 'amount']);
 
 export const fetchPaymentsParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1),
+  page: pageSchema.default(1),
   per_page: perPageSchema.default(50),
   // Reservation number or reference (partial), or a card's last four digits
-  q: z.string().max(200).optional(),
+  q: searchQuerySchema.optional(),
   status: paymentStageSchema.optional(),
   // ISO date or datetime, both bounds inclusive, on the latest stage's date
   from: isoDateStringSchema.optional(),

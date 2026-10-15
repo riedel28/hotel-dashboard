@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { perPageSchema, sortOrderSchema } from './list-params';
+import {
+  pageSchema,
+  perPageSchema,
+  searchQuerySchema,
+  sortOrderSchema
+} from './list-params';
 
 export const roomStatusSchema = z.enum([
   'available',
@@ -40,9 +45,9 @@ export const roomSortColumns = [
 ] as const;
 
 export const fetchRoomsParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1),
+  page: pageSchema.default(1),
   per_page: perPageSchema.default(10),
-  q: z.string().optional(),
+  q: searchQuerySchema.optional(),
   status: roomStatusSchema.optional(),
   // '' stands for rooms without a type
   room_type: listOf(z.string()),

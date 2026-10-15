@@ -2,7 +2,9 @@ import { z } from 'zod';
 
 import {
   isoDateStringSchema,
+  pageSchema,
   perPageSchema,
+  searchQuerySchema,
   sortOrderSchema
 } from './list-params';
 
@@ -34,9 +36,9 @@ export const sortableMonitoringColumnsSchema = z.enum([
 ]);
 
 export const fetchMonitoringLogsParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1),
+  page: pageSchema.default(1),
   per_page: perPageSchema.default(50),
-  q: z.string().max(200).optional(),
+  q: searchQuerySchema.optional(),
   status: monitoringStatusSchema.optional(),
   // A list; a query string spells it comma-separated ("pms,payment")
   type: z

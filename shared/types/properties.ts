@@ -2,7 +2,12 @@ import countries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';
 import { z } from 'zod';
 
-import { perPageSchema, sortOrderSchema } from './list-params';
+import {
+  pageSchema,
+  perPageSchema,
+  searchQuerySchema,
+  sortOrderSchema
+} from './list-params';
 
 countries.registerLocale(en);
 
@@ -92,9 +97,9 @@ export const propertySortableColumnsSchema = z.enum([
 ]);
 
 export const fetchPropertiesParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1).optional(),
+  page: pageSchema.default(1).optional(),
   per_page: perPageSchema.default(10).optional(),
-  q: z.string().max(200).optional(),
+  q: searchQuerySchema.optional(),
   // A list in the URL search params, a comma-separated string on the wire.
   // 'all' is the legacy spelling of "no filter".
   stage: z.preprocess(

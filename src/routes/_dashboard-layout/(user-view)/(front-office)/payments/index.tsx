@@ -20,15 +20,10 @@ import { cn } from '@/lib/utils';
 import { PaymentDetailsDrawer } from './-components/payment-details-drawer';
 import { PaymentsFilters } from './-components/payments-filters';
 import { PaymentsTable } from './-components/payments-table';
-import {
-  DEFAULT_PAGE_SIZE,
-  usePaymentsSearch
-} from './-hooks/use-payments-search';
+import { usePaymentsSearch } from './-hooks/use-payments-search';
 
 // The page's own state on top of the list filters: the payment in the drawer
 const paymentsSearchSchema = fetchPaymentsParamsSchema.extend({
-  // The router reads ?q=1704 as a number; card digits are searched as text
-  q: z.coerce.string().max(200).optional(),
   payment: z.coerce.number().int().positive().optional()
 });
 
@@ -157,12 +152,8 @@ export const Route = createFileRoute(
   // Keep default values out of the URL
   search: {
     middlewares: [
-      stripSearchParams({
-        page: 1,
-        per_page: DEFAULT_PAGE_SIZE,
-        sort_by: 'updated_at',
-        sort_order: 'desc'
-      })
+      // Parsing nothing gives exactly the schema's defaults
+      stripSearchParams(fetchPaymentsParamsSchema.parse({}))
     ]
   },
   component: PaymentsPage

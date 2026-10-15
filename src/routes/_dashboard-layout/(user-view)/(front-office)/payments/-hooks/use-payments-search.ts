@@ -24,8 +24,6 @@ const routeApi = getRouteApi(
   '/_dashboard-layout/(user-view)/(front-office)/payments/'
 );
 
-const DEFAULT_PAGE_SIZE = 50;
-
 // Everything "Clear filters" resets. Sorting and page size are not filters.
 const filterKeys = [
   'q',
@@ -112,4 +110,4 @@ function usePaymentsSearch() {
 
 type PaymentsSearch = ReturnType<typeof usePaymentsSearch>;
 
-export { DEFAULT_PAGE_SIZE, type PaymentsSearch, usePaymentsSearch };
+export { type PaymentsSearch, usePaymentsSearch };

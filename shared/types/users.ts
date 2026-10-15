@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { perPageSchema, sortOrderSchema } from './list-params';
+import {
+  pageSchema,
+  perPageSchema,
+  searchQuerySchema,
+  sortOrderSchema
+} from './list-params';
 
 export const MIN_PASSWORD_LENGTH = 12;
 export const MAX_PASSWORD_LENGTH = 128;
@@ -55,9 +60,9 @@ export const sortableColumnsSchema = z.enum([
 ]);
 
 export const fetchUsersParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1).optional(),
+  page: pageSchema.default(1).optional(),
   per_page: perPageSchema.default(10).optional(),
-  q: z.string().max(200).optional(),
+  q: searchQuerySchema.optional(),
   sort_by: sortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.default('desc').optional()
 });

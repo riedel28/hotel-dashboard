@@ -2,6 +2,15 @@ import { z } from 'zod';
 
 // Search params every paged list shares.
 
+/** 1-based page number. */
+export const pageSchema = z.coerce.number().int().positive();
+
+/**
+ * Free-text search. Coerced: the router reads a search that looks like a
+ * number (?q=1704, card digits) as one.
+ */
+export const searchQuerySchema = z.coerce.string().max(200);
+
 /** Rows per page: one of the sizes the tables offer. */
 export const perPageSchema = z.coerce
   .number()

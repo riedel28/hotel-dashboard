@@ -30,7 +30,6 @@ const routeApi = getRouteApi(
 );
 
 const DEFAULT_PERIOD: MonitoringPeriod = '24h';
-const DEFAULT_PAGE_SIZE = 50;
 
 // Everything "Clear filters" resets. Sorting and page size are not filters.
 const filterKeys = [
@@ -175,7 +174,6 @@ function useMonitoringSearch() {
 type MonitoringSearch = ReturnType<typeof useMonitoringSearch>;
 
 export {
-  DEFAULT_PAGE_SIZE,
   DEFAULT_PERIOD,
   type MonitoringSearch,
   useMonitoringSearch,
