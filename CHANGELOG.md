@@ -1,3 +1,21 @@
+# [1.30.0](https://github.com/riedel28/hotel-dashboard/compare/v1.29.0...v1.30.0) (2026-10-15)
+
+
+### Bug Fixes
+
+* **lists:** a numeric search survives the URL on every list ([e5bb12a](https://github.com/riedel28/hotel-dashboard/commit/e5bb12a13897804f7ee271ea3290001638de1653))
+* **payments:** right-align the amount header over its amounts ([dbd7ae6](https://github.com/riedel28/hotel-dashboard/commit/dbd7ae60dada9dcff527e1379b04612e61f93508))
+
+
+### Features
+
+* **payments:** read-only payments screen with details drawer ([78707eb](https://github.com/riedel28/hotel-dashboard/commit/78707eb0940d61732c56340a013125c156d256b1))
+
+
+### Reverts
+
+* Revert "style(payments): show the whole reference" ([d093651](https://github.com/riedel28/hotel-dashboard/commit/d0936516a810ef54a0ad57a4083bbd41c5cb347f))
+
 # [1.29.0](https://github.com/riedel28/hotel-dashboard/compare/v1.28.0...v1.29.0) (2026-10-15)
 
 
