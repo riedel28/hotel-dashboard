@@ -16,6 +16,7 @@ import {
   ComboboxTrigger,
   ComboboxValue
 } from '@/components/ui/combobox';
+import { fieldTriggerClassName } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/use-debounce';
 
 // Search results also carry an email, which tells apart two Customers with
@@ -68,7 +69,8 @@ export function CustomerPicker({
       isItemEqualToValue={(a, b) => a.id === b.id}
     >
       <ComboboxTrigger
-        className="flex h-9 items-center justify-between overflow-hidden rounded-lg border border-input px-3 py-2 text-sm ring-offset-background dark:bg-input/30"
+        // The box, focus and error states every field has
+        className={fieldTriggerClassName}
         aria-labelledby={ariaLabelledby}
         showClear
         clearLabel={t`Remove customer`}
