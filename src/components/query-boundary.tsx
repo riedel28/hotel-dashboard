@@ -17,6 +17,11 @@ interface QueryBoundaryProps {
   title?: ReactNode;
   /** Extra classes for the error card, which fills the boundary's width. */
   className?: string;
+  /**
+   * Puts the error somewhere of the caller's choosing, such as in the body of
+   * the table that failed to load. Gets the error, unframed, to place.
+   */
+  renderError?: (error: ReactNode) => ReactNode;
 }
 
 /** Tries again by itself once the browser is back online. */
@@ -24,11 +29,13 @@ function BoundaryError({
   error,
   title,
   className,
+  renderError,
   onRetry
 }: {
   error: unknown;
   title?: ReactNode;
   className?: string;
+  renderError?: (error: ReactNode) => ReactNode;
   onRetry: () => void;
 }) {
   useEffect(
@@ -36,8 +43,9 @@ function BoundaryError({
     [onRetry]
   );
 
-  return (
+  const state = (
     <ErrorState
+      variant={renderError ? 'inline' : 'card'}
       className={className}
       title={title}
       message={describeLoadError(error)}
@@ -45,6 +53,7 @@ function BoundaryError({
       onRetry={onRetry}
     />
   );
+  return renderError ? renderError(state) : state;
 }
 
 /**
@@ -60,7 +69,8 @@ function QueryBoundary({
   children,
   fallback,
   title,
-  className
+  className,
+  renderError
 }: QueryBoundaryProps) {
   const { reset } = useQueryErrorResetBoundary();
 
@@ -73,6 +83,7 @@ function QueryBoundary({
             error={error}
             title={title}
             className={className}
+            renderError={renderError}
             onRetry={resetErrorBoundary}
           />
         )}

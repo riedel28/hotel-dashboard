@@ -196,6 +196,8 @@ function PropertyCards({
 interface PropertiesTableProps {
   /** Shown in place of the rows when there are none. */
   emptyMessage?: React.ReactNode;
+  /** A failed load, shown in place of the rows; hides the pagination. */
+  error?: React.ReactNode;
   data: Property[];
   isLoading?: boolean;
   pageIndex?: number;
@@ -215,6 +217,7 @@ interface PropertiesTableProps {
 
 function PropertiesTable({
   emptyMessage,
+  error,
   data,
   isLoading = false,
   pageIndex = 0,
@@ -432,7 +435,7 @@ function PropertiesTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
-      emptyMessage={emptyMessage}
+      emptyMessage={error ?? emptyMessage}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer className="hidden sm:block">
@@ -442,9 +445,10 @@ function PropertiesTable({
           className="sm:hidden"
           data={data}
           isLoading={isLoading}
-          emptyMessage={emptyMessage}
+          emptyMessage={error ?? emptyMessage}
         />
-        <DataGridPagination />
+        {/* Nothing to page through when nothing came back */}
+        {!error && <DataGridPagination />}
       </div>
     </DataGrid>
   );
@@ -666,6 +670,9 @@ function PropertiesContent() {
             pageCount={0}
           />
         }
+        // In the table, where the rows would be: the same place as "no
+        // properties match"
+        renderError={(error) => <PropertiesTable data={[]} error={error} />}
       >
         <PropertiesResults
           params={{

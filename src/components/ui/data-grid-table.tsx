@@ -416,7 +416,11 @@ function DataGridTableEmpty() {
         colSpan={totalColumns}
         className="py-6 text-center text-muted-foreground"
       >
-        {props.emptyMessage || <Trans>No data available</Trans>}
+        {/* Centred in the visible part of a table wider than the screen,
+            not across all of its columns */}
+        <div className="sticky left-0 w-[100cqw]">
+          {props.emptyMessage || <Trans>No data available</Trans>}
+        </div>
       </td>
     </tr>
   );

@@ -28,6 +28,11 @@ interface ErrorStateProps {
    * down, for use inside an existing card.
    */
   size?: 'default' | 'sm';
+  /**
+   * `card` is a framed card of its own. `inline` has no frame, for a slot
+   * that already has one, such as the body of the table that failed to load.
+   */
+  variant?: 'card' | 'inline';
   className?: string;
 }
 
@@ -47,18 +52,25 @@ function ErrorState({
   onRetry,
   isRetrying = false,
   size = 'default',
+  variant = 'card',
   className
 }: ErrorStateProps) {
   const isSmall = size === 'sm';
+  const isInline = variant === 'inline';
 
   return (
     <Empty
       // Announced, as it replaces what the user was waiting for
       role="alert"
       className={cn(
-        'w-full gap-5 border-solid bg-card',
+        'w-full gap-5',
         'animate-in duration-300 fade-in-0 slide-in-from-bottom-1 motion-reduce:animate-none',
-        isSmall ? 'gap-4 p-5 md:p-5' : 'min-h-72 md:p-10',
+        isInline
+          ? 'border-0 bg-transparent p-4 md:p-6'
+          : cn(
+              'border-solid bg-card',
+              isSmall ? 'gap-4 p-5 md:p-5' : 'min-h-72 md:p-10'
+            ),
         className
       )}
     >
@@ -81,7 +93,8 @@ function ErrorState({
         </EmptyMedia>
         <EmptyTitle
           className={cn(
-            'font-semibold tracking-normal',
+            // Its own colour: a table cell around it may set a muted one
+            'font-semibold tracking-normal text-foreground',
             isSmall ? 'text-sm' : 'text-base'
           )}
         >

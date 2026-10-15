@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils';
 import { AddCustomerDrawer } from './-components/add-customer-drawer';
 import {
   CustomersTable,
+  CustomersTableError,
   CustomersTableSkeleton
 } from './-components/customers-table';
 
@@ -181,6 +182,11 @@ function CustomersPage() {
         <QueryBoundary
           title={<Trans>Couldn't load customers</Trans>}
           fallback={<CustomersTableSkeleton />}
+          // In the table, where the rows would be: the same place as "no
+          // customers match"
+          renderError={(error) => (
+            <CustomersTableError>{error}</CustomersTableError>
+          )}
         >
           <CustomersResults />
         </QueryBoundary>

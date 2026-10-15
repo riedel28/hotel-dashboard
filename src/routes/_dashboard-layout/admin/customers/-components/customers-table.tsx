@@ -245,6 +245,11 @@ export function CustomersTableSkeleton() {
   return <CustomersTable page={loadingPage} isLoading />;
 }
 
+/** The table's frame and headings, with a failed load where the rows go. */
+export function CustomersTableError({ children }: { children: ReactNode }) {
+  return <CustomersTable page={loadingPage} error={children} />;
+}
+
 interface CustomersTableProps {
   /** One page of the customers, as the server filtered and ordered them. */
   page: Page<Customer>;
@@ -255,6 +260,8 @@ interface CustomersTableProps {
   isLoading?: boolean;
   /** Shown in place of the rows when there are none. */
   emptyMessage?: ReactNode;
+  /** A failed load, shown in place of the rows; hides the pagination. */
+  error?: ReactNode;
 }
 
 export function CustomersTable({
@@ -263,7 +270,8 @@ export function CustomersTable({
   onSortChange,
   onPageChange,
   isLoading = false,
-  emptyMessage
+  emptyMessage,
+  error
 }: CustomersTableProps) {
   const { t } = useLingui();
   const navigate = useNavigate();
@@ -477,7 +485,7 @@ export function CustomersTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
-      emptyMessage={emptyMessage}
+      emptyMessage={error ?? emptyMessage}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer className="hidden sm:block">
@@ -487,9 +495,10 @@ export function CustomersTable({
           className="sm:hidden"
           rows={page.rows}
           isLoading={isLoading}
-          emptyMessage={emptyMessage}
+          emptyMessage={error ?? emptyMessage}
         />
-        <DataGridPagination />
+        {/* Nothing to page through when nothing came back */}
+        {!error && <DataGridPagination />}
       </div>
     </DataGrid>
   );
