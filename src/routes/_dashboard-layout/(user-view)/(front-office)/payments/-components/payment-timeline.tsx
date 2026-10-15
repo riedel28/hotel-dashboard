@@ -1,5 +1,4 @@
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
-import { CheckIcon } from 'lucide-react';
 import {
   isPartialCapture,
   isStaleAuthorization,
@@ -88,37 +87,30 @@ export function PaymentTimeline({ payment }: { payment: Payment }) {
               <span
                 aria-hidden="true"
                 className={cn(
-                  'absolute top-6 bottom-1 left-2.5 -translate-x-1/2 border-l',
+                  'absolute top-[18px] -bottom-0.5 left-1 -translate-x-1/2 border-l',
                   index < latest
                     ? 'border-foreground/25'
                     : 'border-dashed border-muted-foreground/50'
                 )}
               />
             )}
+            {/* A dot centred on the first text line: filled once reached,
+                ringed where the payment is now, an empty outline ahead */}
             <span
               aria-hidden="true"
               className={cn(
-                'relative mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full',
+                'mt-1.5 size-2 shrink-0 rounded-full',
                 isReached
-                  ? [
-                      'text-white dark:text-background',
-                      step.warning
-                        ? 'bg-orange-500 dark:bg-orange-400'
-                        : stageDot[stage]
-                    ]
-                  : 'border-[1.5px] border-dashed border-muted-foreground/70 bg-background',
+                  ? step.warning
+                    ? 'bg-danger'
+                    : stageDot[stage]
+                  : 'border border-muted-foreground/60',
                 isCurrent && [
-                  'ring-4',
-                  step.warning
-                    ? 'ring-orange-500/20 dark:ring-orange-400/25'
-                    : stageRing[stage]
+                  'ring-[3px]',
+                  step.warning ? 'ring-danger/25' : stageRing[stage]
                 ]
               )}
-            >
-              {isReached && !isCurrent && (
-                <CheckIcon className="size-3" strokeWidth={3} />
-              )}
-            </span>
+            />
 
             <div
               className={cn(

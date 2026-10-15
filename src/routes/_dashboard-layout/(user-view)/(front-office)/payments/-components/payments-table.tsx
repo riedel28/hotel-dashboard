@@ -109,7 +109,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-20" />,
           headerTitle: t`Type`
         },
-        size: 130,
+        size: 110,
         enableSorting: false
       },
       {
@@ -122,7 +122,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-20" />,
           headerTitle: t`Status`
         },
-        size: 150,
+        size: 120,
         enableSorting: false
       },
       {
@@ -182,7 +182,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-24" />,
           headerTitle: t`Card`
         },
-        size: 130,
+        size: 170,
         enableSorting: false
       },
       {
@@ -197,7 +197,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-32" />,
           headerTitle: t`Reference`
         },
-        size: 180,
+        size: 240,
         enableSorting: false
       }
     ],

@@ -111,7 +111,7 @@ function DateRangeFilter({
 
   return (
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
-      <PopoverTrigger className="inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap dark:border-input dark:bg-input/30">
+      <PopoverTrigger className="inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap sm:w-56 dark:border-input dark:bg-input/30">
         <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
         {applied ? (
           `${dayjs(applied.from).format('DD.MM.YYYY')} - ${dayjs(applied.to).format('DD.MM.YYYY')}`

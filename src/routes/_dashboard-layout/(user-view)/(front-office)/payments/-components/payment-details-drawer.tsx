@@ -139,13 +139,6 @@ function PaymentDetails({
       </DrawerHeader>
 
       <DrawerBody className="space-y-6">
-        <section className="space-y-3">
-          <h3 className="text-sm font-medium">
-            <Trans>History</Trans>
-          </h3>
-          <PaymentTimeline payment={payment} />
-        </section>
-
         <DetailSection title={<Trans>Details</Trans>}>
           <DetailRow label={<Trans>Reservation</Trans>}>
             <ReservationLink
@@ -212,6 +205,13 @@ function PaymentDetails({
               buttonClassName="absolute top-1/2 right-2 -translate-y-1/2"
             />
           </div>
+        </section>
+
+        <section className="space-y-3">
+          <h3 className="text-sm font-medium">
+            <Trans>History</Trans>
+          </h3>
+          <PaymentTimeline payment={payment} />
         </section>
       </DrawerBody>
     </>

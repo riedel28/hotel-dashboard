@@ -44,8 +44,8 @@ const typeLabels = {
   no_show: msg`No-show fee`
 } satisfies Record<PaymentType, MessageDescriptor>;
 
-// Warnings read in orange, in both themes
-export const warningText = 'text-orange-700 dark:text-orange-300';
+// The red the other tables use for a negative balance
+export const warningText = 'text-danger';
 
 export function PaymentTypeLabel({ type }: { type: PaymentType }) {
   const { t } = useLingui();
@@ -53,8 +53,8 @@ export function PaymentTypeLabel({ type }: { type: PaymentType }) {
 }
 
 /**
- * The latest stage as a badge: orange while an authorization hangs, with a
- * "partial" note once less was captured than authorized.
+ * The latest stage as a badge: red while an authorization hangs, with a
+ * "partial" note while less was captured than authorized.
  */
 export function PaymentStatusBadge({ payment }: { payment: Payment }) {
   const { t } = useLingui();
@@ -66,7 +66,7 @@ export function PaymentStatusBadge({ payment }: { payment: Payment }) {
       <Badge
         size="sm"
         variant="outline"
-        color={isStale ? 'orange' : stageColors[stage]}
+        color={isStale ? 'rose' : stageColors[stage]}
         className="rounded-md"
         title={
           isStale ? t`Authorized long ago and not captured yet` : undefined
@@ -79,7 +79,7 @@ export function PaymentStatusBadge({ payment }: { payment: Payment }) {
         )}
         {t(stageLabels[stage])}
       </Badge>
-      {isPartialCapture(payment) && (
+      {stage === 'captured' && isPartialCapture(payment) && (
         <span className={cn('text-xs', warningText)}>
           <Trans>partial</Trans>
         </span>
@@ -102,7 +102,7 @@ export function Money({
   );
 }
 
-/** Brand and last four digits, orange once the card has expired. */
+/** Brand and last four digits, red once the card has expired. */
 export function CardSummary({ payment }: { payment: Payment }) {
   const { t } = useLingui();
   const expired = isCardExpired(payment);
