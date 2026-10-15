@@ -67,8 +67,9 @@ function ErrorState({
             without alarm */}
         <EmptyMedia
           className={cn(
-            // The card's own colour: neither sunk into it nor lifted off it
-            'mb-2 rounded-lg border text-muted-foreground',
+            // A shade lighter than the card in the dark, like the button
+            // under it, so it stands out a little without a shadow
+            'mb-2 rounded-lg border text-muted-foreground dark:border-input dark:bg-input/30',
             isSmall ? 'size-9' : 'size-11'
           )}
         >
