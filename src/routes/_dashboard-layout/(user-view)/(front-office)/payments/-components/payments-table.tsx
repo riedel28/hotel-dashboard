@@ -172,19 +172,6 @@ export function PaymentsTable({
         enableSorting: true
       },
       {
-        id: 'card',
-        header: ({ column }) => (
-          <DataGridColumnHeader title={t`Card`} column={column} />
-        ),
-        cell: ({ row }) => <CardSummary payment={row.original} />,
-        meta: {
-          skeleton: <Skeleton className="h-5 w-24" />,
-          headerTitle: t`Card`
-        },
-        size: 170,
-        enableSorting: false
-      },
-      {
         id: 'reference',
         header: ({ column }) => (
           <DataGridColumnHeader title={t`Reference`} column={column} />
@@ -197,6 +184,19 @@ export function PaymentsTable({
           headerTitle: t`Reference`
         },
         size: 240,
+        enableSorting: false
+      },
+      {
+        id: 'card',
+        header: ({ column }) => (
+          <DataGridColumnHeader title={t`Card`} column={column} />
+        ),
+        cell: ({ row }) => <CardSummary payment={row.original} />,
+        meta: {
+          skeleton: <Skeleton className="h-5 w-24" />,
+          headerTitle: t`Card`
+        },
+        size: 170,
         enableSorting: false
       }
     ],
