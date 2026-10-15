@@ -485,7 +485,8 @@ export function CustomersTable({
         columnsVisibility: false
       }}
       isLoading={isLoading}
-      emptyMessage={error ?? emptyMessage}
+      emptyMessage={emptyMessage}
+      error={error}
     >
       <div className="w-full space-y-2.5">
         <DataGridContainer className="hidden sm:block">
@@ -497,8 +498,7 @@ export function CustomersTable({
           isLoading={isLoading}
           emptyMessage={error ?? emptyMessage}
         />
-        {/* Nothing to page through when nothing came back */}
-        {!error && <DataGridPagination />}
+        <DataGridPagination />
       </div>
     </DataGrid>
   );

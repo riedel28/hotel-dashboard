@@ -110,6 +110,11 @@ export interface DataGridProps<TData extends RowData> {
   skeletonRowCount?: number;
   loadingMessage?: ReactNode | string;
   emptyMessage?: ReactNode | string;
+  /**
+   * A failed load, e.g. a `LoadErrorState`. Shown where the rows go, in place
+   * of `emptyMessage`, with no pagination under the table.
+   */
+  error?: ReactNode;
   tableLayout?: {
     dense?: boolean;
     cellBorder?: boolean;

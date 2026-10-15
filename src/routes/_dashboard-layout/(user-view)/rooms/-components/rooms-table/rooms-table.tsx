@@ -37,6 +37,8 @@ interface RoomsTableProps {
   /** Set for those who may edit rooms; adds the row actions */
   onEdit?: (roomId: number) => void;
   emptyMessage?: ReactNode;
+  /** A failed load (`LoadErrorState`), shown where the rows go. */
+  error?: ReactNode;
 }
 
 export default function RoomsTable({
@@ -50,7 +52,8 @@ export default function RoomsTable({
   onSortChange,
   onPageChange,
   onEdit,
-  emptyMessage
+  emptyMessage,
+  error
 }: RoomsTableProps) {
   const { t } = useLingui();
 
@@ -150,6 +153,7 @@ export default function RoomsTable({
 
   return (
     <DataGrid
+      error={error}
       table={table}
       recordCount={totalCount}
       tableClassNames={{ edgeCell: 'px-5' }}

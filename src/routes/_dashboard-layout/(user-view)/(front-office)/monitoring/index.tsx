@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
 import { EmptyFilterResult } from '@/components/empty-filter-result';
-import { LoadError } from '@/components/load-error';
+import { listLoadError, LoadErrorState } from '@/components/load-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -38,7 +38,9 @@ function MonitoringPage() {
   useDocumentTitle(t`Monitoring`);
   const search = useMonitoringSearch();
   const { logsQuery, filters } = search;
-  const logs = logsQuery.data?.index ?? [];
+  // A failed load leaves no rows: the error shows where they would be
+  const loadError = listLoadError(logsQuery);
+  const logs = loadError === undefined ? (logsQuery.data?.index ?? []) : [];
 
   return (
     <div className="space-y-1">
@@ -85,35 +87,34 @@ function MonitoringPage() {
             'opacity-70': logsQuery.isFetching
           })}
         >
-          {logsQuery.isError ? (
-            <LoadError
-              message={logsQuery.error.message}
-              fallbackMessage={
-                <Trans>An error occurred while fetching monitoring logs</Trans>
-              }
-              isRetrying={logsQuery.isFetching}
-              onRetry={() => logsQuery.refetch()}
-            />
-          ) : (
-            <MonitoringTable
-              data={logs}
-              isLoading={logsQuery.isLoading}
-              totalCount={logsQuery.data?.total ?? 0}
-              pageCount={logsQuery.data?.page_count ?? 0}
-              pagination={search.pagination}
-              onPaginationChange={search.onPaginationChange}
-              sorting={search.sorting}
-              onSortingChange={search.onSortingChange}
-              selectedLogId={search.openLogId}
-              onLogOpen={search.openLog}
-              emptyMessage={
-                <EmptyLogs
-                  isFiltered={search.hasActiveFilters}
-                  onClearFilters={search.clearFilters}
+          <MonitoringTable
+            error={
+              loadError !== undefined ? (
+                <LoadErrorState
+                  error={loadError}
+                  title={<Trans>Couldn't load monitoring logs</Trans>}
+                  isRetrying={logsQuery.isFetching}
+                  onRetry={() => void logsQuery.refetch()}
                 />
-              }
-            />
-          )}
+              ) : undefined
+            }
+            data={logs}
+            isLoading={logsQuery.isLoading}
+            totalCount={logsQuery.data?.total ?? 0}
+            pageCount={logsQuery.data?.page_count ?? 0}
+            pagination={search.pagination}
+            onPaginationChange={search.onPaginationChange}
+            sorting={search.sorting}
+            onSortingChange={search.onSortingChange}
+            selectedLogId={search.openLogId}
+            onLogOpen={search.openLog}
+            emptyMessage={
+              <EmptyLogs
+                isFiltered={search.hasActiveFilters}
+                onClearFilters={search.clearFilters}
+              />
+            }
+          />
         </div>
       </div>
 

@@ -1,13 +1,8 @@
-import {
-  onlineManager,
-  useQueryErrorResetBoundary
-} from '@tanstack/react-query';
-import { type ReactNode, Suspense, useEffect } from 'react';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { type ReactNode, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { describeLoadError, loadErrorIcon } from '@/lib/load-error';
-
-import { ErrorState } from './error-state';
+import { LoadErrorState } from './load-error';
 
 interface QueryBoundaryProps {
   children: ReactNode;
@@ -22,38 +17,6 @@ interface QueryBoundaryProps {
    * the table that failed to load. Gets the error, unframed, to place.
    */
   renderError?: (error: ReactNode) => ReactNode;
-}
-
-/** Tries again by itself once the browser is back online. */
-function BoundaryError({
-  error,
-  title,
-  className,
-  renderError,
-  onRetry
-}: {
-  error: unknown;
-  title?: ReactNode;
-  className?: string;
-  renderError?: (error: ReactNode) => ReactNode;
-  onRetry: () => void;
-}) {
-  useEffect(
-    () => onlineManager.subscribe((isOnline) => isOnline && onRetry()),
-    [onRetry]
-  );
-
-  const state = (
-    <ErrorState
-      variant={renderError ? 'inline' : 'card'}
-      className={className}
-      title={title}
-      message={describeLoadError(error)}
-      icon={loadErrorIcon(error)}
-      onRetry={onRetry}
-    />
-  );
-  return renderError ? renderError(state) : state;
 }
 
 /**
@@ -78,15 +41,18 @@ function QueryBoundary({
     <Suspense fallback={fallback}>
       <ErrorBoundary
         onReset={reset}
-        fallbackRender={({ error, resetErrorBoundary }) => (
-          <BoundaryError
-            error={error}
-            title={title}
-            className={className}
-            renderError={renderError}
-            onRetry={resetErrorBoundary}
-          />
-        )}
+        fallbackRender={({ error, resetErrorBoundary }) => {
+          const state = (
+            <LoadErrorState
+              error={error}
+              title={title}
+              variant={renderError ? 'inline' : 'card'}
+              className={className}
+              onRetry={resetErrorBoundary}
+            />
+          );
+          return renderError ? renderError(state) : state;
+        }}
       >
         {children}
       </ErrorBoundary>

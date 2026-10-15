@@ -16,7 +16,7 @@ import { z } from 'zod';
 
 import { roomFilterOptionsQueryOptions, roomsQueryOptions } from '@/api/rooms';
 import { useAuth } from '@/auth';
-import { ErrorState } from '@/components/error-state';
+import { listLoadError, LoadErrorState } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -173,7 +173,9 @@ function RoomsContent({
   const { data: options = { room_types: [], floors: [] } } = useQuery(
     roomFilterOptionsQueryOptions()
   );
-  const rooms = roomsQuery.data?.index ?? [];
+  // A failed load leaves no rows: the error shows where they would be
+  const loadError = listLoadError(roomsQuery);
+  const rooms = loadError === undefined ? (roomsQuery.data?.index ?? []) : [];
   // Only those who may edit have a form to open
   const form = useEditingRoom(canManage ? search.formTarget : undefined, rooms);
 
@@ -205,31 +207,29 @@ function RoomsContent({
               'opacity-70': roomsQuery.isFetching
             })}
           >
-            {roomsQuery.isError ? (
-              <ErrorState
-                message={
-                  roomsQuery.error.message || (
-                    <Trans>An error occurred while fetching rooms</Trans>
-                  )
-                }
-                isRetrying={roomsQuery.isFetching}
-                onRetry={() => roomsQuery.refetch()}
-              />
-            ) : (
-              <RoomsTable
-                data={rooms}
-                isLoading={roomsQuery.isLoading}
-                pageIndex={search.pageIndex}
-                pageSize={search.pageSize}
-                totalCount={roomsQuery.data?.total ?? 0}
-                pageCount={roomsQuery.data?.page_count ?? 0}
-                sort={search.sort}
-                onSortChange={search.setSort}
-                onPageChange={search.setPage}
-                onEdit={canManage ? search.openForm : undefined}
-                emptyMessage={<Trans>No rooms match the filters</Trans>}
-              />
-            )}
+            <RoomsTable
+              error={
+                loadError !== undefined ? (
+                  <LoadErrorState
+                    error={loadError}
+                    title={<Trans>Couldn't load rooms</Trans>}
+                    isRetrying={roomsQuery.isFetching}
+                    onRetry={() => void roomsQuery.refetch()}
+                  />
+                ) : undefined
+              }
+              data={rooms}
+              isLoading={roomsQuery.isLoading}
+              pageIndex={search.pageIndex}
+              pageSize={search.pageSize}
+              totalCount={roomsQuery.data?.total ?? 0}
+              pageCount={roomsQuery.data?.page_count ?? 0}
+              sort={search.sort}
+              onSortChange={search.setSort}
+              onPageChange={search.setPage}
+              onEdit={canManage ? search.openForm : undefined}
+              emptyMessage={<Trans>No rooms match the filters</Trans>}
+            />
           </div>
         </div>
       )}

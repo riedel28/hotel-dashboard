@@ -45,6 +45,8 @@ interface PaymentsTableProps {
   selectedPaymentId: number | undefined;
   onPaymentOpen: (paymentId: number) => void;
   emptyMessage: ReactNode;
+  /** A failed load (`LoadErrorState`), shown where the rows go. */
+  error?: ReactNode;
 }
 
 export function PaymentsTable({
@@ -58,7 +60,8 @@ export function PaymentsTable({
   onSortingChange,
   selectedPaymentId,
   onPaymentOpen,
-  emptyMessage
+  emptyMessage,
+  error
 }: PaymentsTableProps) {
   const { t } = useLingui();
 
@@ -232,6 +235,7 @@ export function PaymentsTable({
 
   return (
     <DataGrid
+      error={error}
       table={table}
       recordCount={totalCount}
       onRowClick={(payment) => onPaymentOpen(payment.id)}

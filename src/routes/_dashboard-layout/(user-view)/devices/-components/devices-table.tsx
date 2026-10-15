@@ -52,6 +52,8 @@ interface DevicesTableProps {
   highlightedId?: number;
   emptyMessage?: ReactNode;
   onDeviceOpen?: (device: DeviceView) => void;
+  /** A failed load (`LoadErrorState`), shown where the rows go. */
+  error?: ReactNode;
 }
 
 function LastSignalCell({ device }: { device: DeviceView }) {
@@ -103,6 +105,11 @@ export function DevicesTableSkeleton() {
   return <DevicesTable page={loadingPage} isLoading />;
 }
 
+/** The table's frame and headings, with a failed load where the rows go. */
+export function DevicesTableError({ children }: { children: ReactNode }) {
+  return <DevicesTable page={loadingPage} error={children} />;
+}
+
 export function DevicesTable({
   page,
   sort,
@@ -111,7 +118,8 @@ export function DevicesTable({
   isLoading = false,
   highlightedId,
   emptyMessage,
-  onDeviceOpen
+  onDeviceOpen,
+  error
 }: DevicesTableProps) {
   const { t } = useLingui();
 
@@ -258,6 +266,7 @@ export function DevicesTable({
 
   return (
     <DataGrid
+      error={error}
       table={table}
       recordCount={page.totalCount}
       isLoading={isLoading}

@@ -5,6 +5,7 @@ import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import { XIcon } from 'lucide-react';
 
 import { fetchUsersParamsSchema, usersQueryOptions } from '@/api/users';
+import { listLoadError, LoadErrorState } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,12 +15,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { SearchInput } from '@/components/ui/search-input';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
@@ -153,22 +148,23 @@ function UsersPage() {
       );
     }
 
-    if (usersQuery.isError) {
+    // A failed load leaves no rows: the error shows where they would be
+    const loadError = listLoadError(usersQuery);
+    if (loadError !== undefined) {
       return (
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <Empty variant="destructive" className="w-md max-w-md">
-            <EmptyHeader>
-              <EmptyTitle>
-                <Trans>Something went wrong</Trans>
-              </EmptyTitle>
-              <EmptyDescription>
-                {usersQuery.error.message || (
-                  <Trans>An error occurred while fetching users</Trans>
-                )}
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        </div>
+        <UsersTable
+          data={[]}
+          pageIndex={(page ?? 1) - 1}
+          pageSize={per_page ?? 10}
+          error={
+            <LoadErrorState
+              error={loadError}
+              title={<Trans>Couldn't load users</Trans>}
+              isRetrying={usersQuery.isFetching}
+              onRetry={() => void usersQuery.refetch()}
+            />
+          }
+        />
       );
     }
 

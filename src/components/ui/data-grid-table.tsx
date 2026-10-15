@@ -419,7 +419,9 @@ function DataGridTableEmpty() {
         {/* Centred in the visible part of a table wider than the screen,
             not across all of its columns */}
         <div className="sticky left-0 w-[100cqw]">
-          {props.emptyMessage || <Trans>No data available</Trans>}
+          {props.error || props.emptyMessage || (
+            <Trans>No data available</Trans>
+          )}
         </div>
       </td>
     </tr>

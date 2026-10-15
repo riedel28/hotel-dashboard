@@ -37,6 +37,7 @@ import { DeviceRoomActionsProvider } from './-components/device-room-actions';
 import { DevicesFilters } from './-components/devices-filters';
 import {
   DevicesTable,
+  DevicesTableError,
   DevicesTableSkeleton
 } from './-components/devices-table';
 import { getDevices, useDevices } from './-hooks/use-devices';
@@ -133,6 +134,13 @@ function DevicesPage() {
             <DevicesTableSkeleton />
           </div>
         }
+        // In the table, where the rows would be, laid out like the skeleton
+        renderError={(error) => (
+          <div className="space-y-2.5">
+            <div className="h-9" />
+            <DevicesTableError>{error}</DevicesTableError>
+          </div>
+        )}
       >
         <DevicesContent
           highlightedId={highlightedId}

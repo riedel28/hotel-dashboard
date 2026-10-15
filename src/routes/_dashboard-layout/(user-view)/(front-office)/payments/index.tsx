@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { fetchPaymentsParamsSchema } from '@/api/payments';
 import { EmptyFilterResult } from '@/components/empty-filter-result';
-import { LoadError } from '@/components/load-error';
+import { listLoadError, LoadErrorState } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -32,7 +32,10 @@ function PaymentsPage() {
   useDocumentTitle(t`Payments`);
   const search = usePaymentsSearch();
   const { paymentsQuery } = search;
-  const payments = paymentsQuery.data?.index ?? [];
+  // A failed load leaves no rows: the error shows where they would be
+  const loadError = listLoadError(paymentsQuery);
+  const payments =
+    loadError === undefined ? (paymentsQuery.data?.index ?? []) : [];
 
   return (
     <div className="space-y-1">
@@ -74,35 +77,34 @@ function PaymentsPage() {
             'opacity-70': paymentsQuery.isFetching
           })}
         >
-          {paymentsQuery.isError ? (
-            <LoadError
-              message={paymentsQuery.error.message}
-              fallbackMessage={
-                <Trans>An error occurred while fetching payments</Trans>
-              }
-              isRetrying={paymentsQuery.isFetching}
-              onRetry={() => paymentsQuery.refetch()}
-            />
-          ) : (
-            <PaymentsTable
-              data={payments}
-              isLoading={paymentsQuery.isLoading}
-              totalCount={paymentsQuery.data?.total ?? 0}
-              pageCount={paymentsQuery.data?.page_count ?? 0}
-              pagination={search.pagination}
-              onPaginationChange={search.onPaginationChange}
-              sorting={search.sorting}
-              onSortingChange={search.onSortingChange}
-              selectedPaymentId={search.openPaymentId}
-              onPaymentOpen={search.openPayment}
-              emptyMessage={
-                <EmptyPayments
-                  isFiltered={search.hasActiveFilters}
-                  onClearFilters={search.clearFilters}
+          <PaymentsTable
+            error={
+              loadError !== undefined ? (
+                <LoadErrorState
+                  error={loadError}
+                  title={<Trans>Couldn't load payments</Trans>}
+                  isRetrying={paymentsQuery.isFetching}
+                  onRetry={() => void paymentsQuery.refetch()}
                 />
-              }
-            />
-          )}
+              ) : undefined
+            }
+            data={payments}
+            isLoading={paymentsQuery.isLoading}
+            totalCount={paymentsQuery.data?.total ?? 0}
+            pageCount={paymentsQuery.data?.page_count ?? 0}
+            pagination={search.pagination}
+            onPaginationChange={search.onPaginationChange}
+            sorting={search.sorting}
+            onSortingChange={search.onSortingChange}
+            selectedPaymentId={search.openPaymentId}
+            onPaymentOpen={search.openPayment}
+            emptyMessage={
+              <EmptyPayments
+                isFiltered={search.hasActiveFilters}
+                onClearFilters={search.clearFilters}
+              />
+            }
+          />
         </div>
       </div>
 

@@ -270,6 +270,13 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
   );
 }
 
-const DataGridPagination = memo(DataGridPaginationComponent);
+/** Nothing to page through when the load failed: no pagination at all. */
+function DataGridPaginationUnlessFailed(props: DataGridPaginationProps) {
+  const { props: gridProps } = useDataGrid();
+  if (gridProps.error) return null;
+  return <DataGridPaginationComponent {...props} />;
+}
+
+const DataGridPagination = memo(DataGridPaginationUnlessFailed);
 
 export { DataGridPagination, type DataGridPaginationProps };

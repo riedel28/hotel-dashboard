@@ -1,47 +1,62 @@
-import { Trans } from '@lingui/react/macro';
-import { RefreshCwIcon } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { onlineManager } from '@tanstack/react-query';
+import { type ReactNode, useEffect } from 'react';
 
-import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle
-} from '@/components/ui/empty';
-import { cn } from '@/lib/utils';
+import { describeLoadError, loadErrorIcon } from '@/lib/load-error';
 
-/** In place of a list that failed to load, with a way to try again. */
-export function LoadError({
-  message,
-  fallbackMessage,
+import { ErrorState } from './error-state';
+
+/**
+ * What a list shows when its load failed: what failed, why in plain words, an
+ * icon for the cause and Try again, which it also does by itself once the
+ * browser is back online. `inline` (the default) fits a table's error slot —
+ * `<DataGrid error>` or a table's `error` prop.
+ */
+export function LoadErrorState({
+  error,
+  title,
+  onRetry,
   isRetrying,
-  onRetry
+  variant = 'inline',
+  className
 }: {
-  message: string;
-  /** Shown when the error has no message of its own. */
-  fallbackMessage: ReactNode;
-  isRetrying: boolean;
+  error: unknown;
+  /** What failed to load, e.g. "Couldn't load rooms". */
+  title?: ReactNode;
   onRetry: () => void;
+  isRetrying?: boolean;
+  variant?: 'card' | 'inline';
+  className?: string;
 }) {
-  return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <Empty variant="destructive" className="w-md max-w-md">
-        <EmptyHeader>
-          <EmptyTitle>
-            <Trans>Something went wrong</Trans>
-          </EmptyTitle>
-          <EmptyDescription>{message || fallbackMessage}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          {/* The one action here, so it says what it does */}
-          <Button variant="destructive" onClick={onRetry} disabled={isRetrying}>
-            <RefreshCwIcon className={cn(isRetrying && 'animate-spin')} />
-            <Trans>Refresh</Trans>
-          </Button>
-        </EmptyContent>
-      </Empty>
-    </div>
+  useEffect(
+    () => onlineManager.subscribe((isOnline) => isOnline && onRetry()),
+    [onRetry]
   );
+
+  return (
+    <ErrorState
+      variant={variant}
+      className={className}
+      title={title}
+      message={describeLoadError(error)}
+      icon={loadErrorIcon(error)}
+      onRetry={onRetry}
+      isRetrying={isRetrying}
+    />
+  );
+}
+
+/**
+ * The error a list should show in place of its rows: one that left it with
+ * nothing for the current filters. A refresh that failed over rows already
+ * shown is not one — those rows stay, and a toast says they are old.
+ */
+export function listLoadError(query: {
+  isError: boolean;
+  error: unknown;
+  data: unknown;
+  isPlaceholderData: boolean;
+}): unknown {
+  return query.isError && (query.data === undefined || query.isPlaceholderData)
+    ? query.error
+    : undefined;
 }
