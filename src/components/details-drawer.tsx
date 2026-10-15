@@ -4,7 +4,7 @@ import {
   useQuery,
   type UseQueryOptions
 } from '@tanstack/react-query';
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect, useRef } from 'react';
 
 import { ApiError } from '@/api/client';
 import {
@@ -49,6 +49,11 @@ export function DetailsDrawer<
   onClose,
   ...detailsProps
 }: DetailsDrawerProps<TItem, TQueryKey>) {
+  // Open with focus on the panel itself, as a dialog opens on its first
+  // field: there is no field here, and the close button would otherwise take
+  // it and show its focus ring
+  const panelRef = useRef<HTMLDivElement>(null);
+
   // ↑/↓ open the previous or next item of the page and stop at its ends
   useEffect(() => {
     if (openId === undefined) {
@@ -77,7 +82,7 @@ export function DetailsDrawer<
       open={openId !== undefined}
       onOpenChange={(open) => !open && onClose()}
     >
-      <DrawerContent>
+      <DrawerContent ref={panelRef} initialFocus={panelRef}>
         {openId !== undefined && (
           <Details
             // Remount per item so one's data never shows under another id
