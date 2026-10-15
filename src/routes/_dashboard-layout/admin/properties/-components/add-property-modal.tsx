@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
+import { Loader2Icon, PlusIcon } from 'lucide-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -113,9 +113,12 @@ export function AddPropertyModal() {
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button>
-            <PlusCircleIcon className="mr-1 size-3.5" />
-            <Trans>Add property</Trans>
+          // Just the icon on a phone; its name stays for screen readers
+          <Button className="max-sm:size-9 max-sm:p-0">
+            <PlusIcon />
+            <span className="max-sm:sr-only">
+              <Trans>Add property</Trans>
+            </span>
           </Button>
         }
       />

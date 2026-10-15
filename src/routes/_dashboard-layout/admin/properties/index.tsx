@@ -713,18 +713,20 @@ function PropertiesPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <div className="flex flex-col gap-1">
+      {/* The title and its action share a row; the description runs under
+          both, so on a phone it is not squeezed beside the button */}
+      <div className="mb-6 space-y-1">
+        <div className="flex min-h-9 items-center justify-between gap-3">
           <h1 className="text-xl font-bold">
             <Trans>Properties</Trans>
           </h1>
-          <p className="text-sm text-muted-foreground">
-            <Trans>
-              Manage properties, their stage and the customers that own them.
-            </Trans>
-          </p>
+          <AddPropertyModal />
         </div>
-        <AddPropertyModal />
+        <p className="text-sm text-muted-foreground">
+          <Trans>
+            Manage properties, their stage and the customers that own them.
+          </Trans>
+        </p>
       </div>
 
       <QueryBoundary
