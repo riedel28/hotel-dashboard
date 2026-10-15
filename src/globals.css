@@ -134,8 +134,10 @@
   --destructive-foreground: oklch(0.941 0.03 12.58);
   --danger: oklch(0.79 0.14 12.5);
   /* --primary is too dark for text here (2.5:1), so links get their own
-     lighter step of the same hue; 10:1 on the background, no opacity. */
-  --link: oklch(0.8 0.11 225);
+     light step, turned towards the brand's teal (cyan-300's hue): at this
+     lightness the primary hue reads as sky blue. 10.8:1 on the table
+     background, no opacity. */
+  --link: oklch(0.82 0.11 208);
   --badge-destructive: oklch(0.645 0.246 16.439);
   --badge-destructive-foreground: oklch(0.892 0.058 10.001);
   --border: oklch(1 0 0 / 10%);
