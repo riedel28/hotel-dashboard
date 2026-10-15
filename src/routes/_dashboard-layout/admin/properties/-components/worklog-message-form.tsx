@@ -142,12 +142,7 @@ export function WorklogMessageForm({
             type="submit"
             size="sm"
             disabled={isPending || !isDirty || !isValid}
-            // Nothing to save yet reads as a muted button with legible text, not
-            // a washed-out primary one; saving keeps the primary look
-            className={cn(
-              !isPending &&
-                'disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100'
-            )}
+            aria-busy={isPending}
           >
             {isPending && <Loader2Icon className="animate-spin" />}
             {submitLabel}
