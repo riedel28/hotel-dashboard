@@ -15,6 +15,17 @@ import { Money, stageLabels, warningText } from './payment-parts';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+// A hanging authorization only needs attention, so it is orange; a short
+// capture takes the danger red the other warnings use
+const tones = {
+  caution: {
+    dot: 'bg-orange-500 dark:bg-orange-400',
+    ring: 'ring-orange-500/25 dark:ring-orange-400/25',
+    text: 'text-orange-700 dark:text-orange-300'
+  },
+  danger: { dot: 'bg-danger', ring: 'ring-danger/25', text: warningText }
+};
+
 // Saturated fills matching the stage badges' colors
 const stageDot = {
   authorized: 'bg-sky-600 dark:bg-sky-400',
@@ -46,6 +57,7 @@ export function PaymentTimeline({ payment }: { payment: Payment }) {
     authorized: {
       amount: payment.authorized_amount,
       at: payment.authorized_at,
+      tone: tones.caution,
       warning: isStale && (
         <Plural
           value={staleDays}
@@ -57,12 +69,14 @@ export function PaymentTimeline({ payment }: { payment: Payment }) {
     captured: {
       amount: payment.captured_amount,
       at: payment.captured_at,
+      tone: tones.danger,
       warning: isPartial && <Trans>Partially captured</Trans>
     },
     // Paid out is the captured amount
     paid: {
       amount: payment.captured_amount,
       at: payment.paid_at,
+      tone: tones.danger,
       warning: false
     }
   } satisfies Record<PaymentStage, unknown>;
@@ -102,12 +116,12 @@ export function PaymentTimeline({ payment }: { payment: Payment }) {
                 'mt-1.5 size-2 shrink-0 rounded-full',
                 isReached
                   ? step.warning
-                    ? 'bg-danger'
+                    ? step.tone.dot
                     : stageDot[stage]
                   : 'border border-muted-foreground/60',
                 isCurrent && [
                   'ring-[3px]',
-                  step.warning ? 'ring-danger/25' : stageRing[stage]
+                  step.warning ? step.tone.ring : stageRing[stage]
                 ]
               )}
             />
@@ -147,7 +161,9 @@ export function PaymentTimeline({ payment }: { payment: Payment }) {
               )}
 
               {isReached && step.warning && (
-                <span className={cn('col-span-2 mt-0.5 text-xs', warningText)}>
+                <span
+                  className={cn('col-span-2 mt-0.5 text-xs', step.tone.text)}
+                >
                   {step.warning}
                 </span>
               )}

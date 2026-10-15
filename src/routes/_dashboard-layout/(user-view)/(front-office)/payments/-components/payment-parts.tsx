@@ -52,7 +52,7 @@ export function PaymentTypeLabel({ type }: { type: PaymentType }) {
 }
 
 /**
- * The latest stage as a badge, red while an authorization hangs. A partial
+ * The latest stage as a badge, orange while an authorization hangs. A partial
  * capture shows in the drawer's history only.
  */
 export function PaymentStatusBadge({ payment }: { payment: Payment }) {
@@ -64,7 +64,7 @@ export function PaymentStatusBadge({ payment }: { payment: Payment }) {
     <Badge
       size="sm"
       variant="outline"
-      color={isStale ? 'rose' : stageColors[stage]}
+      color={isStale ? 'orange' : stageColors[stage]}
       className="rounded-md"
       title={isStale ? t`Authorized long ago and not captured yet` : undefined}
     >
