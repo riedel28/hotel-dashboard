@@ -53,6 +53,7 @@ msgid "(opens in new tab)"
 msgstr "(öffnet in neuem Tab)"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:128
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:157
 msgid "(optional)"
 msgstr "(optional)"
 
@@ -392,9 +393,13 @@ msgstr "Neuen Gast hinzufügen"
 msgid "Add product"
 msgstr "Produkt hinzufügen"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:106
-msgid "Add Property"
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:118
+msgid "Add property"
 msgstr "Objekt hinzufügen"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:106
+#~ msgid "Add Property"
+#~ msgstr "Objekt hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:68
 msgid "Add Reservation"
@@ -575,7 +580,7 @@ msgstr "Alle Etagen"
 msgid "All solutions"
 msgstr "Alle Lösungen"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:25
+#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:23
 msgid "All stages"
 msgstr "Alle Phasen"
 
@@ -935,7 +940,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:82
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:209
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:226
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:71
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:138
@@ -1421,8 +1426,8 @@ msgstr "Einrichtung konnte nicht gestartet werden"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:184
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:166
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:214
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:146
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:162
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:173
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:168
 msgid "Country"
 msgstr "Land"
 
@@ -1434,7 +1439,6 @@ msgid "Country is required"
 msgstr ""
 
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:88
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:215
 msgid "Create"
 msgstr "Erstellen"
 
@@ -1452,8 +1456,8 @@ msgstr "Erstellen Sie ein Konto, um auf das Dashboard zuzugreifen"
 #~ msgstr "Neuen Kunden erstellen"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:113
-msgid "Create New Property"
-msgstr "Neues Objekt erstellen"
+#~ msgid "Create New Property"
+#~ msgstr "Neues Objekt erstellen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-modal.tsx:99
 #~ msgid "Create New Reservation"
@@ -1465,6 +1469,10 @@ msgstr "Neues Objekt erstellen"
 
 #~ msgid "Create New User"
 #~ msgstr "Neuen Benutzer erstellen"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:230
+msgid "Create property"
+msgstr "Objekt erstellen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:75
 msgid "Create reservation"
@@ -1520,8 +1528,8 @@ msgstr "Aktuelles Passwort ist erforderlich"
 
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:192
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:218
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:193
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:145
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:155
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:151
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:186
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:211
 msgid "Customer"
@@ -1636,8 +1644,7 @@ msgstr "Zimmer löschen"
 msgid "Deleted user"
 msgstr "Gelöschter Benutzer"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:48
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:200
+#: src/components/ui/stage-badge.tsx:22
 msgid "Demo"
 msgstr "Demo"
 
@@ -1938,7 +1945,7 @@ msgstr "Zwei-Faktor-Authentifizierung aktivieren"
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:323
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:314
 msgid "Enter a domain without a path, e.g. app.example.com"
 msgstr "Domain ohne Pfad eingeben, z. B. app.example.com"
 
@@ -1988,8 +1995,8 @@ msgstr "Geben Sie einen Ihrer unbenutzten Wiederherstellungscodes ein."
 #~ msgid "Enter page URL"
 #~ msgstr "Seiten-URL eingeben"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:131
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:131
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:144
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:137
 msgid "Enter property name"
 msgstr "Objektname eingeben"
 
@@ -2245,7 +2252,7 @@ msgstr "Kategorie konnte nicht erstellt werden"
 msgid "Failed to create customer"
 msgstr "Kunde konnte nicht erstellt werden"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:89
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:90
 msgid "Failed to create property"
 msgstr "Objekt konnte nicht erstellt werden"
 
@@ -2387,7 +2394,7 @@ msgstr "Produkt konnte nicht aktualisiert werden"
 msgid "Failed to update profile"
 msgstr "Profil konnte nicht aktualisiert werden"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:96
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:101
 msgid "Failed to update property. Please try again."
 msgstr "Unterkunft konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
 
@@ -2511,7 +2518,7 @@ msgstr "Front-Office"
 msgid "Full access to every property and every staff account."
 msgstr "Vollzugriff auf alle Hotels und alle Mitarbeiterkonten."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:359
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:350
 msgid "General"
 msgstr "Allgemein"
 
@@ -3397,14 +3404,19 @@ msgstr "Mein Profil"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/messages.ts:53
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:226
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:93
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:125
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:126
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:138
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:132
 msgid "Name"
 msgstr "Name"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:190
 #~ msgid "Name and contact details"
 #~ msgstr ""
+
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:63
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:128
+msgid "Name is required"
+msgstr "Name ist erforderlich"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:207
 msgid "Nationality"
@@ -3418,7 +3430,7 @@ msgstr "Nationalität ist erforderlich"
 msgid "Native"
 msgstr "Native"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:378
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:369
 msgid "Nav items"
 msgstr "Navigationspunkte"
 
@@ -3462,6 +3474,10 @@ msgstr "Neues Passwort"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:62
 msgid "New password must be different from your current one"
 msgstr "Das neue Passwort muss sich vom aktuellen unterscheiden"
+
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:125
+msgid "New property"
+msgstr "Neues Objekt"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/new.tsx:18
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/new.tsx:39
@@ -4262,8 +4278,7 @@ msgstr "Produktaktionen"
 msgid "Product categories"
 msgstr "Produktkategorien"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:49
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:194
+#: src/components/ui/stage-badge.tsx:20
 msgid "Production"
 msgstr "Production"
 
@@ -4358,7 +4373,7 @@ msgstr "Properties"
 msgid "Property"
 msgstr "Unterkunft"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:86
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:82
 msgid "Property created successfully"
 msgstr "Objekt erfolgreich erstellt"
 
@@ -4379,7 +4394,7 @@ msgstr "Property-ID ist erforderlich"
 msgid "Property not found — check its ID."
 msgstr "Unterkunft nicht gefunden – bitte die ID prüfen."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:92
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:97
 msgid "Property updated successfully"
 msgstr "Unterkunft erfolgreich aktualisiert"
 
@@ -4413,11 +4428,11 @@ msgstr "An Gerät gesendet"
 msgid "PWA"
 msgstr "PWA"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:328
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:319
 msgid "PWA Domain"
 msgstr "PWA-Domain"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:321
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:312
 msgid "PWA domain is required"
 msgstr "PWA-Domain ist erforderlich"
 
@@ -4707,7 +4722,7 @@ msgstr "Reservierungen"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:36
+#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:34
 msgid "Reset"
 msgstr "Zurücksetzen"
 
@@ -4916,7 +4931,7 @@ msgstr "Speichern"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:39
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:64
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:106
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:111
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
@@ -5155,8 +5170,8 @@ msgid "Select row"
 msgstr "Zeile auswählen"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:186
-msgid "Select stage"
-msgstr "Phase auswählen"
+#~ msgid "Select stage"
+#~ msgstr "Phase auswählen"
 
 #: src/components/ui/data-grid-radio-filter.tsx:55
 msgid "Select status"
@@ -5371,7 +5386,7 @@ msgstr "SMS"
 #~ msgid "SMS sent successfully"
 #~ msgstr "SMS erfolgreich gesendet"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:371
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:362
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:25
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:246
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:256
@@ -5407,16 +5422,15 @@ msgstr ""
 #~ msgid "Spain"
 #~ msgstr "Spanien"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:165
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:176
-#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:24
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:192
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:182
+#: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:22
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:223
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:234
 msgid "Stage"
 msgstr "Phase"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:50
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:197
+#: src/components/ui/stage-badge.tsx:21
 msgid "Staging"
 msgstr "Staging"
 
@@ -5576,8 +5590,7 @@ msgstr "TCP-Verbindung"
 msgid "Technical connection details for your Adyen account."
 msgstr ""
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:51
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:203
+#: src/components/ui/stage-badge.tsx:23
 msgid "Template"
 msgstr "Template"
 
@@ -6174,7 +6187,7 @@ msgstr "Unverändert"
 #~ msgid "Unchecked items are hidden from the sidebar for this property."
 #~ msgstr "Nicht ausgewählte Punkte werden für diese Unterkunft in der Seitenleiste ausgeblendet."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:380
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:371
 msgid "Unchecked nav items are hidden from the navigation and the Start page for this property."
 msgstr "Nicht ausgewählte Navigationspunkte werden für diese Unterkunft in der Navigation und auf der Startseite ausgeblendet."
 
@@ -6482,11 +6495,11 @@ msgstr "Willkommen zurück, {userName}!"
 #~ msgid "What the property is called, where it is and how far along it is."
 #~ msgstr "Wie die Unterkunft heißt, wo sie liegt und in welcher Phase sie ist."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:361
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:352
 msgid "What the property is called, who owns it, where it is and how far along it is."
 msgstr "Wie die Unterkunft heißt, wem sie gehört, wo sie liegt und in welcher Phase sie ist."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:372
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:363
 msgid "What this property has booked."
 msgstr "Was diese Unterkunft gebucht hat."
 
