@@ -14,7 +14,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { CountBadge } from '@/components/ui/count-badge';
 import { FormSkeleton } from '@/components/ui/form-skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDocumentTitle } from '@/hooks/use-document-title';
@@ -83,13 +82,17 @@ function PropertyPage() {
           })
         }
       >
-        <TabsList variant="pills">
+        <TabsList variant="line">
           <TabsTrigger value="settings">
             <Trans>Details</Trans>
           </TabsTrigger>
           <TabsTrigger value="work-log">
             <Trans>Work log</Trans>
-            {worklogCount !== undefined && <CountBadge count={worklogCount} />}
+            {worklogCount !== undefined && (
+              <span className="font-normal text-muted-foreground tabular-nums">
+                {worklogCount}
+              </span>
+            )}
           </TabsTrigger>
         </TabsList>
         {/* Both kept mounted so unsaved edits and drafts survive a tab switch. */}
