@@ -146,7 +146,7 @@ export function TwoFactorDisableDialog({
                 type="button"
                 variant="link"
                 size="sm"
-                className="h-auto w-full p-0 text-center text-cyan-800 dark:text-cyan-200/85"
+                className="h-auto w-full p-0 text-center"
                 onClick={() => {
                   setUseRecoveryCode((value) => !value);
                   setCode('');

@@ -26,6 +26,7 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-danger: var(--danger);
+  --color-link: var(--link);
   --color-badge-destructive: var(--badge-destructive);
   --color-badge-destructive-foreground: var(--badge-destructive-foreground);
   --color-border: var(--border);
@@ -84,6 +85,9 @@
   --destructive: oklch(0.514 0.222 16.935);
   --destructive-foreground: oklch(0.969 0.015 12.422);
   --danger: oklch(0.514 0.222 16.935);
+  /* Text links: the primary hue with more colour than body text, so a link
+     reads as one next to it; 5.5:1 on the background (WCAG AA). */
+  --link: oklch(0.5 0.12 228);
   /* Badge chips are a pale fill + dark label, unlike the solid --destructive
      button. Dark mode inverts the roles: the fill token is tinted at 20%. */
   --badge-destructive: oklch(0.969 0.015 12.422);
@@ -129,6 +133,9 @@
   --destructive: oklch(0.712 0.194 13.428);
   --destructive-foreground: oklch(0.941 0.03 12.58);
   --danger: oklch(0.79 0.14 12.5);
+  /* --primary is too dark for text here (2.5:1), so links get their own
+     lighter step of the same hue; 10:1 on the background, no opacity. */
+  --link: oklch(0.8 0.11 225);
   --badge-destructive: oklch(0.645 0.246 16.439);
   --badge-destructive-foreground: oklch(0.892 0.058 10.001);
   --border: oklch(1 0 0 / 10%);
