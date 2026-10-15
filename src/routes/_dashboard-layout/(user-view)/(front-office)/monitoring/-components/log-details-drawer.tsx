@@ -1,28 +1,21 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { type ReactNode, useEffect } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
-import { ApiError } from '@/api/client';
 import {
   monitoringLogQueryOptions,
   monitoringQueryOptions
 } from '@/api/monitoring';
+import { DetailsDrawer } from '@/components/details-drawer';
+import { ReservationLink } from '@/components/reservation-link';
 import { CopyButton } from '@/components/ui/copy-button';
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle
-} from '@/components/ui/drawer';
+import { DrawerBody, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
-import { ReservationLink } from './reservation-link';
 
 const RELATED_LOGS_COUNT = 5;
 const RELATED_LOGS_SKELETON_ROWS = 3;
@@ -30,16 +23,12 @@ const RELATED_LOGS_SKELETON_ROWS = 3;
 interface LogDetailsDrawerProps {
   /** The open log; the drawer is closed while undefined. */
   logId?: number;
-  /** Logs of the current table page: instant content and ↑/↓ navigation. */
+  /** Logs of the current table page. */
   pageLogs: MonitoringLog[];
   onSelect: (logId: number) => void;
   onClose: () => void;
   onShowReservationLogs: (bookingNr: string) => void;
 }
-
-type LogDetailsProps = Omit<LogDetailsDrawerProps, 'logId' | 'onClose'> & {
-  logId: number;
-};
 
 export function LogDetailsDrawer({
   logId,
@@ -48,68 +37,38 @@ export function LogDetailsDrawer({
   onClose,
   onShowReservationLogs
 }: LogDetailsDrawerProps) {
-  // ↑/↓ step through the current page and stop at its ends
-  useEffect(() => {
-    if (logId === undefined) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-        return;
-      }
-      const index = pageLogs.findIndex((log) => log.id === logId);
-      const next = pageLogs[index + (event.key === 'ArrowDown' ? 1 : -1)];
-      if (index !== -1 && next) {
-        event.preventDefault();
-        onSelect(next.id);
-      }
-    };
-
-    // Capture phase: the open dialog stops arrow keys from bubbling this far
-    document.addEventListener('keydown', handleKeyDown, true);
-    return () => document.removeEventListener('keydown', handleKeyDown, true);
-  }, [logId, pageLogs, onSelect]);
-
   return (
-    <Drawer
-      open={logId !== undefined}
-      onOpenChange={(open) => !open && onClose()}
+    <DetailsDrawer
+      openId={logId}
+      items={pageLogs}
+      queryOptions={monitoringLogQueryOptions}
+      onSelect={onSelect}
+      onClose={onClose}
+      loadingText={<Trans>Loading log…</Trans>}
+      notFoundTitle={<Trans>Log not found</Trans>}
+      notFoundText={<Trans>This log does not exist or was removed.</Trans>}
     >
-      <DrawerContent>
-        {logId !== undefined && (
-          <LogDetails
-            // Remount per log so one log's data never shows under another id
-            key={logId}
-            logId={logId}
-            pageLogs={pageLogs}
-            onSelect={onSelect}
-            onShowReservationLogs={onShowReservationLogs}
-          />
-        )}
-      </DrawerContent>
-    </Drawer>
+      {(log) => (
+        <LogDetails
+          log={log}
+          onSelect={onSelect}
+          onShowReservationLogs={onShowReservationLogs}
+        />
+      )}
+    </DetailsDrawer>
   );
 }
 
 function LogDetails({
-  logId,
-  pageLogs,
+  log,
   onSelect,
   onShowReservationLogs
-}: LogDetailsProps) {
+}: {
+  log: MonitoringLog;
+  onSelect: (logId: number) => void;
+  onShowReservationLogs: (bookingNr: string) => void;
+}) {
   const { t } = useLingui();
-  const logQuery = useQuery({
-    ...monitoringLogQueryOptions(logId),
-    initialData: pageLogs.find((log) => log.id === logId)
-  });
-  const log = logQuery.data;
-
-  if (!log) {
-    return (
-      <LogUnavailable isLoading={logQuery.isPending} error={logQuery.error} />
-    );
-  }
 
   return (
     <>
@@ -265,54 +224,5 @@ function RelatedLogs({
         <Trans>Show all</Trans>
       </button>
     </section>
-  );
-}
-
-/** The drawer's content while the log is loading or could not be loaded. */
-function LogUnavailable({
-  isLoading,
-  error
-}: {
-  isLoading: boolean;
-  error: Error | null;
-}) {
-  if (isLoading) {
-    return (
-      <LogNotice
-        title={<Skeleton className="h-6 w-40" />}
-        description={<Trans>Loading log…</Trans>}
-      />
-    );
-  }
-
-  if (error instanceof ApiError && error.status === 404) {
-    return (
-      <LogNotice
-        title={<Trans>Log not found</Trans>}
-        description={<Trans>This log does not exist or was removed.</Trans>}
-      />
-    );
-  }
-
-  return (
-    <LogNotice
-      title={<Trans>Something went wrong</Trans>}
-      description={error?.message}
-    />
-  );
-}
-
-function LogNotice({
-  title,
-  description
-}: {
-  title: ReactNode;
-  description: ReactNode;
-}) {
-  return (
-    <DrawerHeader className="space-y-1 pr-14">
-      <DrawerTitle>{title}</DrawerTitle>
-      <p className="text-sm font-normal text-muted-foreground">{description}</p>
-    </DrawerHeader>
   );
 }

@@ -28,5 +28,10 @@ test('a group checkbox switches its whole group on and off', async () => {
 
   rerender(<NavItemsField disabled={['users']} onChange={onChange} />);
   await user.click(screen.getByRole('checkbox', { name: 'Front Office' }));
-  expect(onChange).toHaveBeenLastCalledWith(['users', 'reservations', 'rooms']);
+  expect(onChange).toHaveBeenLastCalledWith([
+    'users',
+    'reservations',
+    'payments',
+    'rooms'
+  ]);
 });

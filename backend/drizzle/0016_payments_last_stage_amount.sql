@@ -1,0 +1,1 @@
+ALTER TABLE "payments" ADD COLUMN "last_stage_amount" numeric(10, 2) GENERATED ALWAYS AS (COALESCE(captured_amount, authorized_amount)) STORED;

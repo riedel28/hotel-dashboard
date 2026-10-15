@@ -11,6 +11,7 @@ describe('userNavSections', () => {
       '/',
       '/monitoring',
       '/reservations',
+      '/payments',
       '/rooms',
       '/guest-abc',
       '/products',

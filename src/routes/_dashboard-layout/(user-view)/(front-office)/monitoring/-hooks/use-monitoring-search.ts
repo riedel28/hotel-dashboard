@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
-import {
-  functionalUpdate,
-  type PaginationState,
-  type SortingState,
-  type Updater
+import type {
+  PaginationState,
+  SortingState,
+  Updater
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import {
@@ -18,28 +17,30 @@ import {
   type MonitoringLogsQuery,
   monitoringQueryOptions
 } from '@/api/monitoring';
+import {
+  clearedParams,
+  fromPagination,
+  fromSorting,
+  toPagination,
+  toSorting
+} from '@/lib/table-search';
 
 const routeApi = getRouteApi(
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
 );
 
 const DEFAULT_PERIOD: MonitoringPeriod = '24h';
-const DEFAULT_PAGE_SIZE = 50;
 
 // Everything "Clear filters" resets. Sorting and page size are not filters.
-const clearedFilters = {
-  q: undefined,
-  status: undefined,
-  type: undefined,
-  booking_nr: undefined,
-  period: undefined,
-  from: undefined,
-  to: undefined
-} satisfies MonitoringLogsQuery;
-
-const filterKeys = Object.keys(clearedFilters) as Array<
-  keyof typeof clearedFilters
->;
+const filterKeys = [
+  'q',
+  'status',
+  'type',
+  'booking_nr',
+  'period',
+  'from',
+  'to'
+] as const satisfies ReadonlyArray<keyof MonitoringLogsQuery>;
 
 /** Writes filters: replaces the history entry and returns to the first page. */
 function useSetFilters() {
@@ -105,13 +106,8 @@ function useMonitoringSearch() {
     return Array.isArray(value) ? value.length > 0 : value !== undefined;
   });
 
-  const pagination: PaginationState = {
-    pageIndex: search.page - 1,
-    pageSize: search.per_page
-  };
-  const sorting: SortingState = [
-    { id: search.sort_by, desc: search.sort_order === 'desc' }
-  ];
+  const pagination = toPagination(search);
+  const sorting = toSorting(search);
 
   return {
     logsQuery,
@@ -137,31 +133,21 @@ function useMonitoringSearch() {
         from: dayjs(range.from).format('YYYY-MM-DD'),
         to: dayjs(range.to).format('YYYY-MM-DD')
       }),
-    clearFilters: () => setFilters(clearedFilters),
+    clearFilters: () => setFilters(clearedParams(filterKeys)),
 
     pagination,
     sorting,
-    onPaginationChange: (updater: Updater<PaginationState>) => {
-      const next = functionalUpdate(updater, pagination);
+    onPaginationChange: (updater: Updater<PaginationState>) =>
       navigate({
-        search: (prev) => ({
-          ...prev,
-          page: next.pageIndex + 1,
-          per_page: next.pageSize
-        }),
+        search: (prev) => ({ ...prev, ...fromPagination(updater, pagination) }),
         replace: true
-      });
-    },
-    onSortingChange: (updater: Updater<SortingState>) => {
-      const [first] = functionalUpdate(updater, sorting);
-      setFilters({
-        // A column the API cannot sort by falls back to the default
-        sort_by: sortableMonitoringColumnsSchema
-          .catch('logged_at')
-          .parse(first?.id),
-        sort_order: first?.desc === false ? 'asc' : 'desc'
-      });
-    },
+      }),
+    onSortingChange: (updater: Updater<SortingState>) =>
+      setFilters(
+        fromSorting(updater, sorting, (id) =>
+          sortableMonitoringColumnsSchema.catch('logged_at').parse(id)
+        )
+      ),
 
     // Opening and closing a log push history entries, so Back closes the
     // drawer; stepping between logs replaces the current entry.
@@ -188,7 +174,6 @@ function useMonitoringSearch() {
 type MonitoringSearch = ReturnType<typeof useMonitoringSearch>;
 
 export {
-  DEFAULT_PAGE_SIZE,
   DEFAULT_PERIOD,
   type MonitoringSearch,
   useMonitoringSearch,

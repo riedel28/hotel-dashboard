@@ -1,0 +1,30 @@
+import { z } from 'zod';
+
+// Search params every paged list shares.
+
+/** 1-based page number. */
+export const pageSchema = z.coerce.number().int().positive();
+
+/**
+ * Free-text search. Coerced: the router reads a search that looks like a
+ * number (?q=1704, card digits) as one.
+ */
+export const searchQuerySchema = z.coerce.string().max(200);
+
+/** Rows per page: one of the sizes the tables offer. */
+export const perPageSchema = z.coerce
+  .number()
+  .int()
+  .positive()
+  .refine((val) => [5, 10, 25, 50, 100].includes(val), {
+    message: 'per_page must be one of: 5, 10, 25, 50, 100'
+  });
+
+export const sortOrderSchema = z.enum(['asc', 'desc']);
+
+/** An ISO date or datetime. */
+export const isoDateStringSchema = z
+  .string()
+  .refine((value) => !Number.isNaN(Date.parse(value)), {
+    message: 'must be an ISO date'
+  });
