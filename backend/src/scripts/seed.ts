@@ -10,6 +10,7 @@ import {
 } from '../../../shared/types/cms';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { propertyOptionSchema } from '../../../shared/types/properties';
+import { payments as paymentsTable } from '../db/payments-schema';
 import { db } from '../db/pool';
 import {
   cmsNodes,
@@ -19,7 +20,6 @@ import {
   guestAbcEntries,
   guests,
   monitoringLogs,
-  payments as paymentsTable,
   productCategories,
   products,
   properties,
@@ -500,6 +500,19 @@ async function seedMonitoringLogs() {
 const cardBrands = ['visa', 'mastercard', 'amex'] as const;
 const paymentTypes = ['prepayment', 'final', 'no_show'] as const;
 
+// How far each payment got, in turn: the share of the authorized amount
+// captured (null for none), whether it was paid out, and a fixed age for the
+// authorization where the reservation's own would not do
+const paymentKinds = [
+  { captured: 1, paid: true, authorizedDaysAgo: null },
+  { captured: 1, paid: false, authorizedDaysAgo: null },
+  { captured: null, paid: false, authorizedDaysAgo: null },
+  { captured: 0.7, paid: true, authorizedDaysAgo: null },
+  // Never captured and authorized eight days ago: stale
+  { captured: null, paid: false, authorizedDaysAgo: 8 },
+  { captured: 0.5, paid: false, authorizedDaysAgo: null }
+] as const;
+
 /**
  * One payment per reservation, cycling through every stage, partial captures
  * and stale authorizations, plus a deposit on every third one. Derived from
@@ -541,21 +554,10 @@ async function seedPayments() {
         .toUpperCase();
     };
     const amount = 120 + ((i * 137) % 900) + 0.5;
-    // Older reservations' payments are further along
-    const authorizedAt = Date.now() - (2 + i) * DAY_MS;
-
-    const stageByKind = [
-      { captured: 1, paid: true },
-      { captured: 1, paid: false },
-      { captured: null, paid: false },
-      { captured: 0.7, paid: true },
-      // Authorized eight days ago and never captured: stale
-      { captured: null, paid: false, authorizedAt: Date.now() - 8 * DAY_MS },
-      { captured: 0.5, paid: false }
-    ] as const;
-    const kind = stageByKind[i % stageByKind.length]!;
+    const kind = paymentKinds[i % paymentKinds.length]!;
+    // Older reservations' payments were authorized longer ago
     const authorized_at = new Date(
-      'authorizedAt' in kind ? kind.authorizedAt : authorizedAt
+      Date.now() - (kind.authorizedDaysAgo ?? 2 + i) * DAY_MS
     );
     const captured_at =
       kind.captured === null

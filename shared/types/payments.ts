@@ -101,49 +101,99 @@ type StageFields = Pick<
   | 'paid_at'
 >;
 
-/**
- * The furthest stage a payment has reached, with that stage's amount and date.
- * The database computes the same stage for filtering (payments.stage); keep
- * the two in step.
- */
-export function latestStage(payment: StageFields): {
+/** Why a reached stage needs attention. */
+export type StageFlag =
+  // Authorized and not captured for longer than STALE_AUTHORIZATION_DAYS
+  | { kind: 'stale'; days: number }
+  // Captured less than the authorized amount, which is `of`
+  | { kind: 'partial'; of: number };
+
+/** A stage the payment has reached, with its amount and date. */
+export interface ReachedStage {
   stage: PaymentStage;
   amount: number;
   at: Date;
-} {
-  // The schema's checks guarantee a captured amount once captured
-  const captured = payment.captured_amount ?? payment.authorized_amount;
+  flag: StageFlag | null;
+}
 
-  if (payment.paid_at) {
-    return { stage: 'paid', amount: captured, at: payment.paid_at };
-  }
-  if (payment.captured_at) {
-    return { stage: 'captured', amount: captured, at: payment.captured_at };
-  }
-  return {
+/** One row of a payment's history, every stage in order. */
+export type StageStep =
+  | (ReachedStage & { state: 'done' | 'current' })
+  | { stage: PaymentStage; state: 'pending' };
+
+/** The stages reached so far, in order; authorization always is. */
+function reachedStages(
+  payment: StageFields,
+  now: Date
+): [ReachedStage, ...ReachedStage[]] {
+  const age = now.getTime() - payment.authorized_at.getTime();
+  // The schema's checks pair each stage's amount with its date
+  const captured =
+    payment.captured_at && payment.captured_amount !== null
+      ? { amount: payment.captured_amount, at: payment.captured_at }
+      : null;
+
+  const authorized: ReachedStage = {
     stage: 'authorized',
     amount: payment.authorized_amount,
-    at: payment.authorized_at
+    at: payment.authorized_at,
+    flag:
+      !captured && age > STALE_AUTHORIZATION_DAYS * DAY_MS
+        ? { kind: 'stale', days: Math.floor(age / DAY_MS) }
+        : null
   };
+  if (!captured) {
+    return [authorized];
+  }
+
+  const capturedStage: ReachedStage = {
+    stage: 'captured',
+    ...captured,
+    flag:
+      captured.amount < payment.authorized_amount
+        ? { kind: 'partial', of: payment.authorized_amount }
+        : null
+  };
+  if (!payment.paid_at) {
+    return [authorized, capturedStage];
+  }
+
+  // Paid out is the captured amount
+  return [
+    authorized,
+    capturedStage,
+    { stage: 'paid', amount: captured.amount, at: payment.paid_at, flag: null }
+  ];
 }
 
-/** Less was captured than authorized; stays true once paid. */
-export function isPartialCapture(
-  payment: Pick<Payment, 'authorized_amount' | 'captured_amount'>
-) {
-  return (
-    payment.captured_amount !== null &&
-    payment.captured_amount < payment.authorized_amount
-  );
+/**
+ * Every stage in order: the reached ones done, the furthest of them current
+ * unless the payment is paid (and so finished), the rest pending.
+ */
+export function paymentStages(
+  payment: StageFields,
+  now = new Date()
+): StageStep[] {
+  const reached = reachedStages(payment, now);
+
+  return paymentStageSchema.options.map((stage, index): StageStep => {
+    const step = reached[index];
+    if (!step) {
+      return { stage, state: 'pending' };
+    }
+    const isCurrent = index === reached.length - 1 && stage !== 'paid';
+    return { ...step, state: isCurrent ? 'current' : 'done' };
+  });
 }
 
-/** Authorized only, and longer ago than STALE_AUTHORIZATION_DAYS. */
-export function isStaleAuthorization(payment: StageFields, now = new Date()) {
-  return (
-    latestStage(payment).stage === 'authorized' &&
-    now.getTime() - payment.authorized_at.getTime() >
-      STALE_AUTHORIZATION_DAYS * DAY_MS
-  );
+/**
+ * The furthest stage a payment has reached. The database computes the same
+ * for filtering and sorting (payments.stage, last_stage_at,
+ * last_stage_amount); keep the two in step.
+ */
+export function latestStage(payment: StageFields, now = new Date()) {
+  const [authorized, ...later] = reachedStages(payment, now);
+  return later.at(-1) ?? authorized;
 }
 
 /** A card is good through the last day of its expiry month. */

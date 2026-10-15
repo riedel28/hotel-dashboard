@@ -1,24 +1,19 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import dayjs from 'dayjs';
-import { CalendarIcon, XIcon } from 'lucide-react';
-import { useState } from 'react';
-import { type DateRange } from 'react-day-picker';
+import { XIcon } from 'lucide-react';
 import { paymentStageSchema } from 'shared/types/payments';
 
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
+  DateRangePopover,
+  formatDateRange
+} from '@/components/date-range-popover';
+import { Button } from '@/components/ui/button';
+import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import { SearchInput } from '@/components/ui/search-input';
 
-import type { usePaymentsSearch } from '../-hooks/use-payments-search';
-import { stageColors, stageLabels } from './payment-parts';
-
-type PaymentsSearch = ReturnType<typeof usePaymentsSearch>;
+import type { PaymentsSearch } from '../-hooks/use-payments-search';
+import { stageTones } from '../-lib/tones';
+import { stageLabels } from './payment-fields';
 
 type PaymentsFiltersProps = Pick<
   PaymentsSearch,
@@ -61,7 +56,7 @@ export function PaymentsFilters({
         className="col-span-2 w-full sm:w-fit"
         options={paymentStageSchema.options.map((stage) => ({
           value: stage,
-          color: stageColors[stage],
+          color: stageTones[stage].badge,
           label: t(stageLabels[stage])
         }))}
       />
@@ -94,71 +89,40 @@ function DateRangeFilter({
   to?: string;
   onRangeChange: (range: { from: Date; to: Date } | undefined) => void;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  // The range being picked; committed to the URL only on Apply
-  const [draft, setDraft] = useState<DateRange | undefined>();
-
-  const applied: DateRange | undefined =
+  const applied =
     from && to
       ? { from: dayjs(from).toDate(), to: dayjs(to).toDate() }
       : undefined;
-  const selected = draft ?? applied;
-
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    setDraft(undefined);
-  };
 
   return (
-    <Popover open={isOpen} onOpenChange={handleOpenChange}>
-      <PopoverTrigger className="inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap sm:w-56 dark:border-input dark:bg-input/30">
-        <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
-        {applied ? (
-          `${dayjs(applied.from).format('DD.MM.YYYY')} - ${dayjs(applied.to).format('DD.MM.YYYY')}`
+    <DateRangePopover
+      className="sm:w-56"
+      label={
+        applied ? (
+          formatDateRange(applied)
         ) : (
           <span className="text-muted-foreground">
             <Trans>All dates</Trans>
           </span>
-        )}
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="range"
-          // Future days are disabled, so end the two-month view on today
-          defaultMonth={selected?.from ?? dayjs().subtract(1, 'month').toDate()}
-          showOutsideDays={false}
-          selected={selected}
-          onSelect={setDraft}
-          disabled={{ after: new Date() }}
-          numberOfMonths={2}
-        />
-        <div className="flex items-center justify-end gap-1.5 border-t border-border p-1.5">
-          {applied && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => {
-                onRangeChange(undefined);
-                handleOpenChange(false);
-              }}
-            >
-              <Trans>All dates</Trans>
-            </Button>
-          )}
+        )
+      }
+      value={applied}
+      onApply={onRangeChange}
+      applyLabel={<Trans>Apply</Trans>}
+      actions={(close) =>
+        applied && (
           <Button
             size="sm"
-            disabled={!draft?.from || !draft.to}
+            variant="ghost"
             onClick={() => {
-              if (draft?.from && draft.to) {
-                onRangeChange({ from: draft.from, to: draft.to });
-              }
-              handleOpenChange(false);
+              onRangeChange(undefined);
+              close();
             }}
           >
-            <Trans>Apply</Trans>
+            <Trans>All dates</Trans>
           </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
+        )
+      }
+    />
   );
 }

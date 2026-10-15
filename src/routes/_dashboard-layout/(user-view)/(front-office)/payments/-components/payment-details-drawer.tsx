@@ -1,17 +1,18 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
-import { type ReactNode, useEffect } from 'react';
 import {
   isCardExpired,
   latestStage,
   type Payment
 } from 'shared/types/payments';
 
-import { ApiError } from '@/api/client';
 import { paymentQueryOptions } from '@/api/payments';
-import { BrandMark } from '@/components/brand-mark';
+import { BRAND_NAMES, BrandMark } from '@/components/brand-mark';
+import { DetailRow, DetailSection } from '@/components/detail-list';
+import { DrawerUnavailable } from '@/components/drawer-unavailable';
 import { ReservationLink } from '@/components/reservation-link';
 import { CopyButton } from '@/components/ui/copy-button';
+import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 import {
   Drawer,
   DrawerBody,
@@ -19,24 +20,14 @@ import {
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useStepThroughList } from '@/hooks/use-step-through-list';
 import { cn } from '@/lib/utils';
 import { formatDate } from '@/utils/date';
 
 import { maskCardNumber } from '../-lib/format';
-import {
-  Money,
-  PaymentStatusBadge,
-  PaymentTypeLabel,
-  warningText
-} from './payment-parts';
+import { dangerText } from '../-lib/tones';
+import { PaymentStatusBadge, PaymentTypeLabel } from './payment-fields';
 import { PaymentTimeline } from './payment-timeline';
-
-const cardBrandNames = {
-  visa: 'Visa',
-  mastercard: 'Mastercard',
-  amex: 'American Express'
-} satisfies Record<Payment['card_brand'], string>;
 
 interface PaymentDetailsDrawerProps {
   /** The open payment; the drawer is closed while undefined. */
@@ -54,28 +45,7 @@ export function PaymentDetailsDrawer({
   onSelect,
   onClose
 }: PaymentDetailsDrawerProps) {
-  // ↑/↓ step through the current page and stop at its ends
-  useEffect(() => {
-    if (paymentId === undefined) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-        return;
-      }
-      const index = pagePayments.findIndex(({ id }) => id === paymentId);
-      const next = pagePayments[index + (event.key === 'ArrowDown' ? 1 : -1)];
-      if (index !== -1 && next) {
-        event.preventDefault();
-        onSelect(next.id);
-      }
-    };
-
-    // Capture phase: the open dialog stops arrow keys from bubbling this far
-    document.addEventListener('keydown', handleKeyDown, true);
-    return () => document.removeEventListener('keydown', handleKeyDown, true);
-  }, [paymentId, pagePayments, onSelect]);
+  useStepThroughList(pagePayments, paymentId, onSelect);
 
   return (
     <Drawer
@@ -112,9 +82,12 @@ function PaymentDetails({
 
   if (!payment) {
     return (
-      <PaymentUnavailable
+      <DrawerUnavailable
         isLoading={paymentQuery.isPending}
         error={paymentQuery.error}
+        loadingText={<Trans>Loading payment…</Trans>}
+        notFoundTitle={<Trans>Payment not found</Trans>}
+        notFoundText={<Trans>This payment does not exist.</Trans>}
       />
     );
   }
@@ -131,9 +104,11 @@ function PaymentDetails({
         </DrawerTitle>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-normal text-muted-foreground">
           <PaymentStatusBadge payment={payment} />
-          <span className="text-base font-semibold text-foreground">
-            <Money amount={latest.amount} currency={payment.currency} />
-          </span>
+          <CurrencyFormatter
+            value={latest.amount}
+            currency={payment.currency}
+            className="text-base font-semibold text-foreground"
+          />
           {payment.room_name && <span>{payment.room_name}</span>}
         </div>
       </DrawerHeader>
@@ -165,7 +140,7 @@ function PaymentDetails({
           <DetailRow label={<Trans>Brand</Trans>}>
             <span className="inline-flex items-center gap-2">
               <BrandMark brand={payment.card_brand} />
-              {cardBrandNames[payment.card_brand]}
+              {BRAND_NAMES[payment.card_brand]}
             </span>
           </DetailRow>
           <DetailRow label={<Trans>Number</Trans>}>
@@ -177,7 +152,7 @@ function PaymentDetails({
             {payment.card_holder}
           </DetailRow>
           <DetailRow label={<Trans>Expires</Trans>}>
-            <span className={cn('tabular-nums', expired && warningText)}>
+            <span className={cn('tabular-nums', expired && dangerText)}>
               {String(payment.card_exp_month).padStart(2, '0')}/
               {payment.card_exp_year}
               {expired && (
@@ -215,65 +190,5 @@ function PaymentDetails({
         </section>
       </DrawerBody>
     </>
-  );
-}
-
-function DetailSection({
-  title,
-  children
-}: {
-  title: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <section className="space-y-2">
-      <h3 className="text-sm font-medium">{title}</h3>
-      {/* A fixed label column keeps the values aligned across sections */}
-      <dl className="grid grid-cols-[7rem_1fr] gap-x-6 gap-y-2 text-sm">
-        {children}
-      </dl>
-    </section>
-  );
-}
-
-function DetailRow({
-  label,
-  children
-}: {
-  label: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <>
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 wrap-break-word">{children}</dd>
-    </>
-  );
-}
-
-/** The drawer's content while the payment is loading or failed to load. */
-function PaymentUnavailable({
-  isLoading,
-  error
-}: {
-  isLoading: boolean;
-  error: Error | null;
-}) {
-  let title: ReactNode = <Trans>Something went wrong</Trans>;
-  let description: ReactNode = error?.message;
-
-  if (isLoading) {
-    title = <Skeleton className="h-6 w-40" />;
-    description = <Trans>Loading payment…</Trans>;
-  } else if (error instanceof ApiError && error.status === 404) {
-    title = <Trans>Payment not found</Trans>;
-    description = <Trans>This payment does not exist.</Trans>;
-  }
-
-  return (
-    <DrawerHeader className="space-y-1 pr-14">
-      <DrawerTitle>{title}</DrawerTitle>
-      <p className="text-sm font-normal text-muted-foreground">{description}</p>
-    </DrawerHeader>
   );
 }

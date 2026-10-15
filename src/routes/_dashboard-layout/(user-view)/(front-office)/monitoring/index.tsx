@@ -1,9 +1,10 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { ListFilterIcon, RefreshCwIcon, XIcon } from 'lucide-react';
+import { ListFilterIcon, XIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
+import { LoadError } from '@/components/load-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -14,13 +15,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
@@ -95,6 +89,9 @@ function MonitoringPage() {
           {logsQuery.isError ? (
             <LoadError
               message={logsQuery.error.message}
+              fallbackMessage={
+                <Trans>An error occurred while fetching monitoring logs</Trans>
+              }
               isRetrying={logsQuery.isFetching}
               onRetry={() => logsQuery.refetch()}
             />
@@ -202,40 +199,6 @@ function EmptyLogs({
       >
         <Trans>Clear filters</Trans>
       </Button>
-    </div>
-  );
-}
-
-function LoadError({
-  message,
-  isRetrying,
-  onRetry
-}: {
-  message: string;
-  isRetrying: boolean;
-  onRetry: () => void;
-}) {
-  return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <Empty variant="destructive" className="w-md max-w-md">
-        <EmptyHeader>
-          <EmptyTitle>
-            <Trans>Something went wrong</Trans>
-          </EmptyTitle>
-          <EmptyDescription>
-            {message || (
-              <Trans>An error occurred while fetching monitoring logs</Trans>
-            )}
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          {/* The one action here, so it says what it does */}
-          <Button variant="destructive" onClick={onRetry} disabled={isRetrying}>
-            <RefreshCwIcon className={cn(isRetrying && 'animate-spin')} />
-            <Trans>Refresh</Trans>
-          </Button>
-        </EmptyContent>
-      </Empty>
     </div>
   );
 }

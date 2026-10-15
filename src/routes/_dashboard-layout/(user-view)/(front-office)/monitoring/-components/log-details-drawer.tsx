@@ -1,14 +1,13 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { type ReactNode, useEffect } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
-import { ApiError } from '@/api/client';
 import {
   monitoringLogQueryOptions,
   monitoringQueryOptions
 } from '@/api/monitoring';
+import { DrawerUnavailable } from '@/components/drawer-unavailable';
 import { ReservationLink } from '@/components/reservation-link';
 import { CopyButton } from '@/components/ui/copy-button';
 import {
@@ -19,6 +18,7 @@ import {
   DrawerTitle
 } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useStepThroughList } from '@/hooks/use-step-through-list';
 import { cn } from '@/lib/utils';
 
 import { StatusCell } from './cells/status-cell';
@@ -48,28 +48,7 @@ export function LogDetailsDrawer({
   onClose,
   onShowReservationLogs
 }: LogDetailsDrawerProps) {
-  // ↑/↓ step through the current page and stop at its ends
-  useEffect(() => {
-    if (logId === undefined) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-        return;
-      }
-      const index = pageLogs.findIndex((log) => log.id === logId);
-      const next = pageLogs[index + (event.key === 'ArrowDown' ? 1 : -1)];
-      if (index !== -1 && next) {
-        event.preventDefault();
-        onSelect(next.id);
-      }
-    };
-
-    // Capture phase: the open dialog stops arrow keys from bubbling this far
-    document.addEventListener('keydown', handleKeyDown, true);
-    return () => document.removeEventListener('keydown', handleKeyDown, true);
-  }, [logId, pageLogs, onSelect]);
+  useStepThroughList(pageLogs, logId, onSelect);
 
   return (
     <Drawer
@@ -107,7 +86,13 @@ function LogDetails({
 
   if (!log) {
     return (
-      <LogUnavailable isLoading={logQuery.isPending} error={logQuery.error} />
+      <DrawerUnavailable
+        isLoading={logQuery.isPending}
+        error={logQuery.error}
+        loadingText={<Trans>Loading log…</Trans>}
+        notFoundTitle={<Trans>Log not found</Trans>}
+        notFoundText={<Trans>This log does not exist or was removed.</Trans>}
+      />
     );
   }
 
@@ -265,54 +250,5 @@ function RelatedLogs({
         <Trans>Show all</Trans>
       </button>
     </section>
-  );
-}
-
-/** The drawer's content while the log is loading or could not be loaded. */
-function LogUnavailable({
-  isLoading,
-  error
-}: {
-  isLoading: boolean;
-  error: Error | null;
-}) {
-  if (isLoading) {
-    return (
-      <LogNotice
-        title={<Skeleton className="h-6 w-40" />}
-        description={<Trans>Loading log…</Trans>}
-      />
-    );
-  }
-
-  if (error instanceof ApiError && error.status === 404) {
-    return (
-      <LogNotice
-        title={<Trans>Log not found</Trans>}
-        description={<Trans>This log does not exist or was removed.</Trans>}
-      />
-    );
-  }
-
-  return (
-    <LogNotice
-      title={<Trans>Something went wrong</Trans>}
-      description={error?.message}
-    />
-  );
-}
-
-function LogNotice({
-  title,
-  description
-}: {
-  title: ReactNode;
-  description: ReactNode;
-}) {
-  return (
-    <DrawerHeader className="space-y-1 pr-14">
-      <DrawerTitle>{title}</DrawerTitle>
-      <p className="text-sm font-normal text-muted-foreground">{description}</p>
-    </DrawerHeader>
   );
 }

@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react/macro';
 import { CircleAlertIcon } from 'lucide-react';
 import {
   isCardExpired,
-  isStaleAuthorization,
   latestStage,
   type Payment,
   type PaymentStage,
@@ -12,9 +11,8 @@ import {
 } from 'shared/types/payments';
 
 import { BrandMark } from '@/components/brand-mark';
-import { Badge, type BadgeColorProps } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { CopyButton } from '@/components/ui/copy-button';
-import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 import {
   Tooltip,
   TooltipContent,
@@ -23,6 +21,7 @@ import {
 import { cn } from '@/lib/utils';
 
 import { maskCardNumber, truncateMiddle } from '../-lib/format';
+import { dangerText, flagTones, stageTones } from '../-lib/tones';
 
 export const stageLabels = {
   authorized: msg`Authorized`,
@@ -30,21 +29,12 @@ export const stageLabels = {
   paid: msg`Paid`
 } satisfies Record<PaymentStage, MessageDescriptor>;
 
-export const stageColors = {
-  authorized: 'sky',
-  captured: 'indigo',
-  paid: 'emerald'
-} satisfies Record<PaymentStage, BadgeColorProps>;
-
 const typeLabels = {
   prepayment: msg`Prepayment`,
   deposit: msg`Deposit`,
   final: msg`Final payment`,
   no_show: msg`No-show fee`
 } satisfies Record<PaymentType, MessageDescriptor>;
-
-// The red the other tables use for a negative balance
-export const warningText = 'text-danger';
 
 export function PaymentTypeLabel({ type }: { type: PaymentType }) {
   const { t } = useLingui();
@@ -57,34 +47,20 @@ export function PaymentTypeLabel({ type }: { type: PaymentType }) {
  */
 export function PaymentStatusBadge({ payment }: { payment: Payment }) {
   const { t } = useLingui();
-  const { stage } = latestStage(payment);
-  const isStale = isStaleAuthorization(payment);
+  const { stage, flag } = latestStage(payment);
+  const isStale = flag?.kind === 'stale';
 
   return (
     <Badge
       size="sm"
       variant="outline"
-      color={isStale ? 'orange' : stageColors[stage]}
+      color={isStale ? flagTones.stale.badge : stageTones[stage].badge}
       className="rounded-md"
       title={isStale ? t`Authorized long ago and not captured yet` : undefined}
     >
       <span className="mr-0.5 size-1.25 rounded-full bg-current/80" />
       {t(stageLabels[stage])}
     </Badge>
-  );
-}
-
-export function Money({
-  amount,
-  currency
-}: {
-  amount: number;
-  currency: string;
-}) {
-  return (
-    <span className="tabular-nums">
-      <CurrencyFormatter value={amount} currency={currency} />
-    </span>
   );
 }
 
@@ -97,7 +73,7 @@ export function CardSummary({ payment }: { payment: Payment }) {
     <span
       className={cn(
         'inline-flex items-center gap-2 whitespace-nowrap tabular-nums',
-        expired && warningText
+        expired && dangerText
       )}
       title={expired ? t`Card expired` : undefined}
     >

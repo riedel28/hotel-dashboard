@@ -1,9 +1,9 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { RefreshCwIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { fetchPaymentsParamsSchema } from '@/api/payments';
+import { LoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,13 +13,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
@@ -89,6 +82,9 @@ function PaymentsPage() {
           {paymentsQuery.isError ? (
             <LoadError
               message={paymentsQuery.error.message}
+              fallbackMessage={
+                <Trans>An error occurred while fetching payments</Trans>
+              }
               isRetrying={paymentsQuery.isFetching}
               onRetry={() => paymentsQuery.refetch()}
             />
@@ -161,39 +157,6 @@ function EmptyPayments({
       >
         <Trans>Clear filters</Trans>
       </Button>
-    </div>
-  );
-}
-
-function LoadError({
-  message,
-  isRetrying,
-  onRetry
-}: {
-  message: string;
-  isRetrying: boolean;
-  onRetry: () => void;
-}) {
-  return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <Empty variant="destructive" className="w-md max-w-md">
-        <EmptyHeader>
-          <EmptyTitle>
-            <Trans>Something went wrong</Trans>
-          </EmptyTitle>
-          <EmptyDescription>
-            {message || (
-              <Trans>An error occurred while fetching payments</Trans>
-            )}
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button variant="destructive" onClick={onRetry} disabled={isRetrying}>
-            <RefreshCwIcon className={cn(isRetrying && 'animate-spin')} />
-            <Trans>Refresh</Trans>
-          </Button>
-        </EmptyContent>
-      </Empty>
     </div>
   );
 }

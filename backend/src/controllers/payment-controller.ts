@@ -8,47 +8,43 @@ import {
   gte,
   ilike,
   lte,
-  or,
-  sql
+  or
 } from 'drizzle-orm';
+import type { SelectedFields } from 'drizzle-orm/pg-core';
 import type { Request, Response } from 'express';
 
 import type { FetchPaymentsParams } from '../../../shared/types/payments';
+import { payments as paymentsTable } from '../db/payments-schema';
 import { db } from '../db/pool';
-import {
-  payments as paymentsTable,
-  reservations as reservationsTable
-} from '../db/schema';
+import { reservations as reservationsTable } from '../db/schema';
 import { escapeLikePattern } from '../utils/sql';
 
-// The generated stage columns are for filtering here; clients derive the
-// stage themselves
-const {
-  stage: _stage,
-  last_stage_at: _lastStageAt,
-  ...paymentColumns
-} = getTableColumns(paymentsTable);
-
+// The latest stage's date and amount are generated columns
 const sortColumns = {
   updated_at: paymentsTable.last_stage_at,
-  // The latest stage's amount: paid and captured share the captured one
-  amount: sql`COALESCE(${paymentsTable.captured_amount}, ${paymentsTable.authorized_amount})`
+  amount: paymentsTable.last_stage_amount
 } satisfies Record<FetchPaymentsParams['sort_by'], unknown>;
 
-// Payments with their reservation's number and room
-function selectPayments() {
+// Payments joined to their reservation: the list, its count and a single
+// payment all read from here
+function fromPayments<TSelection extends SelectedFields>(
+  selection: TSelection
+) {
   return db
-    .select({
-      ...paymentColumns,
-      booking_nr: reservationsTable.booking_nr,
-      room_name: reservationsTable.room_name
-    })
+    .select(selection)
     .from(paymentsTable)
     .innerJoin(
       reservationsTable,
       eq(reservationsTable.id, paymentsTable.reservation_id)
     );
 }
+
+// The payment with its reservation's number and room
+const paymentFields = {
+  ...getTableColumns(paymentsTable),
+  booking_nr: reservationsTable.booking_nr,
+  room_name: reservationsTable.room_name
+};
 
 function buildConditions({ q, status, from, to }: FetchPaymentsParams) {
   const conditions = [];
@@ -91,19 +87,12 @@ async function getPayments(req: Request, res: Response) {
       sort_order === 'asc' ? asc(orderByColumn) : desc(orderByColumn);
 
     const [rows, [{ total }]] = await Promise.all([
-      selectPayments()
+      fromPayments(paymentFields)
         .where(where)
         .orderBy(orderBy, desc(paymentsTable.id))
         .limit(per_page)
         .offset((page - 1) * per_page),
-      db
-        .select({ total: count() })
-        .from(paymentsTable)
-        .innerJoin(
-          reservationsTable,
-          eq(reservationsTable.id, paymentsTable.reservation_id)
-        )
-        .where(where)
+      fromPayments({ total: count() }).where(where)
     ]);
 
     res.status(200).json({
@@ -121,7 +110,7 @@ async function getPayments(req: Request, res: Response) {
 
 async function getPaymentById(req: Request, res: Response) {
   try {
-    const [payment] = await selectPayments().where(
+    const [payment] = await fromPayments(paymentFields).where(
       eq(paymentsTable.id, Number(req.params.id))
     );
 

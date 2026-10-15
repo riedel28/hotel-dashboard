@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
-import {
-  functionalUpdate,
-  type PaginationState,
-  type SortingState,
-  type Updater
+import type {
+  PaginationState,
+  SortingState,
+  Updater
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import {
@@ -13,6 +12,12 @@ import {
 } from 'shared/types/payments';
 
 import { type PaymentsQuery, paymentsQueryOptions } from '@/api/payments';
+import {
+  fromPagination,
+  fromSorting,
+  toPagination,
+  toSorting
+} from '@/lib/table-search';
 
 const routeApi = getRouteApi(
   '/_dashboard-layout/(user-view)/(front-office)/payments/'
@@ -53,13 +58,8 @@ function usePaymentsSearch() {
     })
   );
 
-  const pagination: PaginationState = {
-    pageIndex: search.page - 1,
-    pageSize: search.per_page
-  };
-  const sorting: SortingState = [
-    { id: search.sort_by, desc: search.sort_order === 'desc' }
-  ];
+  const pagination = toPagination(search);
+  const sorting = toSorting(search);
 
   return {
     paymentsQuery,
@@ -70,8 +70,8 @@ function usePaymentsSearch() {
       from: search.from,
       to: search.to
     },
-    hasActiveFilters: Object.keys(clearedFilters).some(
-      (key) => search[key as keyof typeof clearedFilters] !== undefined
+    hasActiveFilters: [search.q, search.status, search.from, search.to].some(
+      (value) => value !== undefined
     ),
     setQuery: (query: string) => setFilters({ q: query || undefined }),
     setStatus: (status: PaymentStage | undefined) => setFilters({ status }),
@@ -84,27 +84,17 @@ function usePaymentsSearch() {
 
     pagination,
     sorting,
-    onPaginationChange: (updater: Updater<PaginationState>) => {
-      const next = functionalUpdate(updater, pagination);
+    onPaginationChange: (updater: Updater<PaginationState>) =>
       navigate({
-        search: (prev) => ({
-          ...prev,
-          page: next.pageIndex + 1,
-          per_page: next.pageSize
-        }),
+        search: (prev) => ({ ...prev, ...fromPagination(updater, pagination) }),
         replace: true
-      });
-    },
-    onSortingChange: (updater: Updater<SortingState>) => {
-      const [first] = functionalUpdate(updater, sorting);
-      setFilters({
-        // A column the API cannot sort by falls back to the default
-        sort_by: sortablePaymentColumnsSchema
-          .catch('updated_at')
-          .parse(first?.id),
-        sort_order: first?.desc === false ? 'asc' : 'desc'
-      });
-    },
+      }),
+    onSortingChange: (updater: Updater<SortingState>) =>
+      setFilters(
+        fromSorting(updater, sorting, (id) =>
+          sortablePaymentColumnsSchema.catch('updated_at').parse(id)
+        )
+      ),
 
     // Opening and closing a payment push history entries, so Back closes the
     // drawer; stepping between payments replaces the current entry.
@@ -121,4 +111,6 @@ function usePaymentsSearch() {
   };
 }
 
-export { DEFAULT_PAGE_SIZE, usePaymentsSearch };
+type PaymentsSearch = ReturnType<typeof usePaymentsSearch>;
+
+export { DEFAULT_PAGE_SIZE, type PaymentsSearch, usePaymentsSearch };

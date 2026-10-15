@@ -11,6 +11,7 @@ import { type ReactNode, useMemo } from 'react';
 import { latestStage, type Payment } from 'shared/types/payments';
 
 import { ReservationLink } from '@/components/reservation-link';
+import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 import {
   DataGrid,
   DataGridContainer,
@@ -26,11 +27,10 @@ import { formatDate } from '@/utils/date';
 
 import {
   CardSummary,
-  Money,
   PaymentStatusBadge,
   PaymentTypeLabel,
   ReferenceValue
-} from './payment-parts';
+} from './payment-fields';
 
 interface PaymentsTableProps {
   data: Payment[];
@@ -135,12 +135,11 @@ export function PaymentsTable({
           />
         ),
         cell: ({ row }) => (
-          <div className="text-right">
-            <Money
-              amount={latestStage(row.original).amount}
-              currency={row.original.currency}
-            />
-          </div>
+          <CurrencyFormatter
+            value={latestStage(row.original).amount}
+            currency={row.original.currency}
+            className="block text-right"
+          />
         ),
         meta: {
           skeleton: <Skeleton className="ml-auto h-5 w-20" />,

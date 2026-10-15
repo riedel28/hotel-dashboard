@@ -2,6 +2,13 @@ import type { AdyenMethodId } from 'shared/types/providers';
 
 import { cn } from '@/lib/utils';
 
+export const BRAND_NAMES: Record<AdyenMethodId, string> = {
+  mastercard: 'Mastercard',
+  visa: 'Visa',
+  amex: 'American Express',
+  paypal: 'PayPal'
+};
+
 /** A payment method's logo as a small card-shaped chip. */
 export function BrandMark({ brand }: { brand: AdyenMethodId }) {
   const chip =

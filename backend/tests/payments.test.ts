@@ -2,8 +2,9 @@ import request from 'supertest';
 
 import { latestStage, paymentSchema } from '../../shared/types/payments';
 import app from '../src/app';
+import { payments } from '../src/db/payments-schema';
 import { db } from '../src/db/pool';
-import { payments, reservations } from '../src/db/schema';
+import { reservations } from '../src/db/schema';
 import { createTestUser } from './helpers/db-helpers';
 
 const card = {

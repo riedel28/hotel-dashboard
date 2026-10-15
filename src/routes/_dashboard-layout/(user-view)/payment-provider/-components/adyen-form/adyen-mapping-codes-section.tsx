@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { type Control, Controller, useFormState } from 'react-hook-form';
 import { ADYEN_METHOD_IDS, type AdyenMethodId } from 'shared/types/providers';
 
-import { BrandMark } from '@/components/brand-mark';
+import { BRAND_NAMES, BrandMark } from '@/components/brand-mark';
 import { FormSection } from '@/components/form-section';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-import { ADYEN_METHOD_NAMES, type AdyenFormData } from './adyen-form-types';
+import type { AdyenFormData } from './adyen-form-types';
 
 interface AdyenMappingCodesSectionProps {
   control: Control<AdyenFormData>;
@@ -68,7 +68,7 @@ export function AdyenMappingCodesSection({
                 <TableCell className="max-md:col-span-2 max-md:p-0">
                   <div className="flex items-center gap-2.5 md:h-8">
                     <BrandMark brand={id} />
-                    <span className="text-sm">{ADYEN_METHOD_NAMES[id]}</span>
+                    <span className="text-sm">{BRAND_NAMES[id]}</span>
                   </div>
                 </TableCell>
                 <TableCell className="max-md:p-0">
