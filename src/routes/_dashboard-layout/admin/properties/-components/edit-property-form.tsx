@@ -37,6 +37,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import {
+  type PropertyStage,
+  propertyStages,
+  stageLabels
+} from '@/components/ui/stage-badge';
 
 import { CustomerPicker } from './customer-picker';
 import { NavItemsField } from './nav-items-field';
@@ -120,6 +125,7 @@ function GeneralFields({ form }: PropertyFieldsProps) {
       <Controller
         control={form.control}
         name="name"
+        rules={{ validate: (value) => !!value.trim() || t`Name is required` }}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-2">
             <FieldLabel htmlFor={field.name}>
@@ -178,30 +184,15 @@ function GeneralFields({ form }: PropertyFieldsProps) {
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
                 <SelectValue>
-                  {(value) =>
-                    value ? (
-                      <span className="capitalize">{value}</span>
-                    ) : (
-                      <span className="text-muted-foreground">
-                        {t`Select stage`}
-                      </span>
-                    )
-                  }
+                  {(value: PropertyStage) => t(stageLabels[value])}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="production">
-                  <Trans>Production</Trans>
-                </SelectItem>
-                <SelectItem value="staging">
-                  <Trans>Staging</Trans>
-                </SelectItem>
-                <SelectItem value="demo">
-                  <Trans>Demo</Trans>
-                </SelectItem>
-                <SelectItem value="template">
-                  <Trans>Template</Trans>
-                </SelectItem>
+                {propertyStages.map((stage) => (
+                  <SelectItem key={stage} value={stage}>
+                    {t(stageLabels[stage])}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

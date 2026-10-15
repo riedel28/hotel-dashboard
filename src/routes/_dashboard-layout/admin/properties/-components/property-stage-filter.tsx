@@ -6,9 +6,7 @@ import {
   DataGridCheckboxFilterClear,
   DataGridCheckboxFilterFooter
 } from '@/components/ui/data-grid-checkbox-filter';
-import { StageBadge } from '@/components/ui/stage-badge';
-
-const stages: PropertyStage[] = ['production', 'staging', 'demo', 'template'];
+import { propertyStages, StageBadge } from '@/components/ui/stage-badge';
 
 interface PropertyStageFilterProps {
   value: PropertyStage[];
@@ -23,7 +21,7 @@ export function PropertyStageFilter({
     <DataGridCheckboxFilter
       label={<Trans>Stage</Trans>}
       placeholder={<Trans>All stages</Trans>}
-      options={stages.map((stage) => ({
+      options={propertyStages.map((stage) => ({
         value: stage,
         label: <StageBadge stage={stage} size="sm" />
       }))}
