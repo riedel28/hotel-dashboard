@@ -16,16 +16,59 @@ import {
   type DataGridFeatures,
   dataGridFeatures
 } from '@/components/ui/data-grid';
+import { DataGridCards } from '@/components/ui/data-grid-cards';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 
 import { BookingCell } from './cells/booking-cell';
 import { DateCell } from './cells/date-cell';
 import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
+
+/**
+ * A log as a phone card, led by the event the table would push off screen.
+ * The event is a button stretched over the card, so all of it opens the log.
+ */
+function LogCard({
+  log,
+  onLogOpen
+}: {
+  log: MonitoringLog;
+  onLogOpen: (logId: number) => void;
+}) {
+  return (
+    <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="flex items-baseline gap-3">
+        <button
+          type="button"
+          onClick={() => onLogOpen(log.id)}
+          className="min-w-0 flex-1 cursor-pointer truncate text-left font-medium outline-none after:absolute after:inset-0 focus-visible:after:ring-2 focus-visible:after:ring-ring focus-visible:after:ring-inset"
+        >
+          {log.event}
+        </button>
+        <DateCell date={log.logged_at} />
+      </div>
+      <div className="flex min-w-0 items-center gap-2">
+        <StatusCell status={log.status} />
+        <TypeCell type={log.type} />
+        {log.booking_nr && (
+          <span className="truncate text-xs text-muted-foreground">
+            {log.booking_nr}
+          </span>
+        )}
+      </div>
+      {log.log_message && (
+        <code className="block truncate font-mono text-xs text-muted-foreground">
+          {log.log_message}
+        </code>
+      )}
+    </div>
+  );
+}
 
 interface MonitoringTableProps {
   data: MonitoringLog[];
@@ -195,7 +238,7 @@ export function MonitoringTable({
             title={row.original.log_message ?? undefined}
             className="block truncate font-mono text-xs text-foreground"
           >
-            {row.original.log_message || '-'}
+            {row.original.log_message || '—'}
           </code>
         ),
         meta: {
@@ -245,8 +288,13 @@ export function MonitoringTable({
       onRowClick={(log) => onLogOpen(log.id)}
       tableClassNames={{
         edgeCell: 'px-5',
-        // Lets cells reveal controls while their row is hovered
-        bodyRow: 'group/row'
+        // Lets cells reveal controls while their row is hovered. The open log
+        // is tinted and marked with a bar on its left edge, so it stays easy
+        // to find beside the drawer.
+        bodyRow: cn(
+          'group/row data-[state=selected]:bg-primary/10',
+          'data-[state=selected]:*:first:before:absolute data-[state=selected]:*:first:before:inset-y-0 data-[state=selected]:*:first:before:left-0 data-[state=selected]:*:first:before:w-0.5 data-[state=selected]:*:first:before:bg-primary'
+        )
       }}
       emptyMessage={emptyMessage}
       tableLayout={{
@@ -258,12 +306,16 @@ export function MonitoringTable({
       skeletonRowCount={5}
     >
       <div className="w-full space-y-2.5">
-        <DataGridContainer>
+        <DataGridContainer className="hidden sm:block">
           <ScrollArea>
             <DataGridTable />
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </DataGridContainer>
+        <DataGridCards<MonitoringLog>
+          className="sm:hidden"
+          renderCard={(log) => <LogCard log={log} onLogOpen={onLogOpen} />}
+        />
         <DataGridPagination />
       </div>
     </DataGrid>

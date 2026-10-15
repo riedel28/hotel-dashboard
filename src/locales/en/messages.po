@@ -501,7 +501,7 @@ msgstr "Adds and updates rooms. Rooms that are not in the file stay as they are.
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:41
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:142
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:228
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:232
 msgid "Admin"
 msgstr "Admin"
 
@@ -560,7 +560,7 @@ msgid "Age group"
 msgstr "Age group"
 
 #: src/components/ui/data-grid-segmented-filter.tsx:41
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:141
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:134
 msgid "All"
@@ -615,7 +615,7 @@ msgstr "All statuses"
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:168
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:60
 msgid "All types"
 msgstr "All types"
@@ -1221,7 +1221,6 @@ msgstr "Clear all"
 
 #: src/components/clear-filters-button.tsx:33
 #: src/components/empty-filter-result.tsx:26
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:141
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
@@ -1250,7 +1249,7 @@ msgid "Client Key is required"
 msgstr "Client Key is required"
 
 #: src/components/provider-setup/test-connection-dialog.tsx:296
-#: src/components/ui/drawer.tsx:55
+#: src/components/ui/drawer.tsx:56
 #: src/components/ui/sheet.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 msgid "Close"
@@ -1410,7 +1409,7 @@ msgstr "Copy Client Key"
 msgid "Copy from German"
 msgstr "Copy from German"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:143
 msgid "Copy message"
 msgstr "Copy message"
 
@@ -1464,7 +1463,7 @@ msgstr "Couldn't load customers"
 msgid "Couldn't load devices"
 msgstr "Couldn't load devices"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:92
 msgid "Couldn't load monitoring logs"
 msgstr "Couldn't load monitoring logs"
 
@@ -1476,7 +1475,7 @@ msgstr "Couldn't load payments"
 msgid "Couldn't load products"
 msgstr "Couldn't load products"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:176
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:180
 msgid "Couldn't load properties"
 msgstr "Couldn't load properties"
 
@@ -1668,8 +1667,8 @@ msgstr "Dark"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:90
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:141
 msgid "Date"
 msgstr "Date"
 
@@ -2234,7 +2233,7 @@ msgid "Environment mismatch — these credentials belong to a different environm
 msgstr "Environment mismatch — these credentials belong to a different environment."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:159
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/messages.ts:46
 msgid "Error"
 msgstr "Error"
@@ -2300,8 +2299,8 @@ msgstr "Error updating room"
 msgid "Errors"
 msgstr "Errors"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:131
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:192
 msgid "Event"
 msgstr "Event"
 
@@ -2575,7 +2574,8 @@ msgstr "File"
 msgid "Filter by reservation"
 msgstr "Filter by reservation"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:113
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:108
 msgid "Filters"
 msgstr "Filters"
 
@@ -2925,7 +2925,7 @@ msgstr "Holder"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:136
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:222
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:226
 msgid "Home"
 msgstr "Home"
 
@@ -3259,7 +3259,7 @@ msgstr "Live"
 msgid "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 msgstr "Live mode processes real payments with real cards. Make sure your credentials are production credentials before switching."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:47
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:52
 msgid "Loading log…"
 msgstr "Loading log…"
 
@@ -3283,7 +3283,7 @@ msgstr "Loading..."
 #~ msgid "Location"
 #~ msgstr "Location"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:53
 msgid "Log not found"
 msgstr "Log not found"
 
@@ -3302,6 +3302,10 @@ msgstr "Login"
 #: src/routes/_auth-layout/auth/login.tsx:112
 #~ msgid "Login into account"
 #~ msgstr "Login into account"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:238
+msgid "Logs for reservation {bookingNr}"
+msgstr "Logs for reservation {bookingNr}"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:73
 msgid "main"
@@ -3335,7 +3339,7 @@ msgstr "Manage hotel properties, view details, and configure settings"
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Manage orders, track shipments, view order history, and process returns efficiently"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:250
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:254
 msgid "Manage properties, their stage and the customers that own them."
 msgstr "Manage properties, their stage and the customers that own them."
 
@@ -3420,14 +3424,14 @@ msgstr "Merchant ID is required"
 msgid "Merge"
 msgstr "Merge"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:123
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:188
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:133
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:231
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:246
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:112
 msgid "Message"
 msgstr "Message"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:144
 msgid "Message copied"
 msgstr "Message copied"
 
@@ -3492,7 +3496,7 @@ msgstr "Monitor daily operations, track occupancy, and oversee front-office acti
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:65
 msgid "Monitoring Logs"
 msgstr "Monitoring Logs"
 
@@ -3674,6 +3678,14 @@ msgstr "New type"
 msgid "Next"
 msgstr "Next"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:206
+msgid "Next log"
+msgstr "Next log"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:207
+msgid "Next log (↓)"
+msgstr "Next log (↓)"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:362
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:363
 msgid "Next reservation"
@@ -3769,11 +3781,11 @@ msgstr "No guests found"
 msgid "No item selected"
 msgstr "No item selected"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:169
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:170
 msgid "No logs in the last 24 hours"
 msgstr "No logs in the last 24 hours"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:180
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:181
 msgid "No logs match the current filters."
 msgstr "No logs match the current filters."
 
@@ -3817,7 +3829,7 @@ msgstr "No properties found"
 #~ msgid "No properties found."
 #~ msgstr "No properties found."
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:203
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:207
 msgid "No properties match the filters"
 msgstr "No properties match the filters"
 
@@ -3972,7 +3984,7 @@ msgid "Offline"
 msgstr "Offline"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:149
 msgid "OK"
 msgstr "OK"
 
@@ -4057,8 +4069,8 @@ msgstr "Optional JSON or certificates passed to the Adyen SDK."
 #~ msgstr "Other logs for reservation {0}"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:178
-msgid "Other logs for reservation {bookingNr}"
-msgstr "Other logs for reservation {bookingNr}"
+#~ msgid "Other logs for reservation {bookingNr}"
+#~ msgstr "Other logs for reservation {bookingNr}"
 
 #: src/components/provider-setup/test-connection-dialog.tsx:178
 msgid "Our server"
@@ -4262,7 +4274,7 @@ msgstr "Photo updated"
 msgid "Pick a date range"
 msgstr "Pick a date range"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:173
 msgid "Pick a longer period to see older logs."
 msgstr "Pick a longer period to see older logs."
 
@@ -4398,6 +4410,14 @@ msgstr "Preview mode"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:216
 msgid "Previous"
 msgstr "Previous"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:196
+msgid "Previous log"
+msgstr "Previous log"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:197
+msgid "Previous log (↑)"
+msgstr "Previous log (↑)"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:352
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:353
@@ -4541,9 +4561,9 @@ msgstr "Profile updated"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:122
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:63
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:214
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:234
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:245
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:218
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:238
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:249
 msgid "Properties"
 msgstr "Properties"
 
@@ -4837,9 +4857,9 @@ msgstr "Resend invitation"
 msgid "Resend verification email"
 msgstr "Resend verification email"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:96
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:161
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:106
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:204
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:217
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:93
@@ -4910,7 +4930,7 @@ msgid "Reservations"
 msgstr "Reservations"
 
 #: src/components/ui/data-grid-radio-filter.tsx:131
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:123
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservation-date-filter.tsx:210
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
@@ -5212,7 +5232,7 @@ msgstr "Search devices"
 #~ msgid "Search event, message, booking number"
 #~ msgstr "Search event, message, booking number"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:96
 msgid "Search event, message, reservation number"
 msgstr "Search event, message, reservation number"
 
@@ -5228,7 +5248,7 @@ msgstr "Search for a guest..."
 #~ msgid "Search for property"
 #~ msgstr "Search for property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:95
 msgid "Search logs"
 msgstr "Search logs"
 
@@ -5502,17 +5522,21 @@ msgid "Show"
 msgstr "Show"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:224
-msgid "Show all"
-msgstr "Show all"
+#~ msgid "Show all"
+#~ msgstr "Show all"
 
 #. placeholder {0}: properties.length
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:107
 msgid "Show all {0} properties"
 msgstr "Show all {0} properties"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:151
 msgid "Show all logs"
 msgstr "Show all logs"
+
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:287
+msgid "Show all logs for {bookingNr}"
+msgstr "Show all logs for {bookingNr}"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:124
 msgid "Show all roles"
@@ -5567,7 +5591,7 @@ msgstr "Showing data from {time}."
 #~ msgid "Showing only logs for reservation <0>{bookingNr}</0>"
 #~ msgstr "Showing only logs for reservation <0>{bookingNr}</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:141
 msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr "Showing only logs for reservation <0>{reservation}</0>"
 
@@ -5621,7 +5645,7 @@ msgstr "Someone else changed this item meanwhile"
 msgid "Something unexpected happened. Try again."
 msgstr "Something unexpected happened. Try again."
 
-#: src/components/details-drawer.tsx:123
+#: src/components/details-drawer.tsx:129
 #: src/components/load-error.tsx:71
 msgid "Something went wrong"
 msgstr "Something went wrong"
@@ -5631,7 +5655,7 @@ msgstr "Something went wrong"
 msgid "Sorry, we couldn't find the page you're looking for."
 msgstr "Sorry, we couldn't find the page you're looking for."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:123
 msgid "Source"
 msgstr "Source"
 
@@ -5668,9 +5692,9 @@ msgstr "Start empty"
 msgid "Station"
 msgstr "Station"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:87
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:70
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:121
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:52
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:128
@@ -6128,7 +6152,7 @@ msgstr "This item doesn’t exist (anymore)"
 msgid "This link is hidden and not visible to guests."
 msgstr "This link is hidden and not visible to guests."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:54
 msgid "This log does not exist or was removed."
 msgstr "This log does not exist or was removed."
 
@@ -6388,9 +6412,9 @@ msgstr "Two-step verification"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:121
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:158
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:114
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:111
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:167
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:92
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:115

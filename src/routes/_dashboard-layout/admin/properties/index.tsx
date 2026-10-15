@@ -95,7 +95,11 @@ function PropertiesContent() {
         </div>
         <Button
           variant="outline"
-          className="xl:hidden"
+          // Greyed while any of the folded filters is set
+          className={cn(
+            'xl:hidden',
+            activeFilterCount > 0 && 'bg-muted dark:bg-input/50'
+          )}
           aria-expanded={filtersOpen}
           aria-controls={filtersId}
           onClick={() => setFiltersOpen((open) => !open)}
