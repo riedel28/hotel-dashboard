@@ -8,7 +8,7 @@ import {
   useTable
 } from '@tanstack/react-table';
 import { PencilIcon } from 'lucide-react';
-import { type MouseEvent, type ReactNode, useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import {
   type Customer,
   type CustomerSortableColumn,
@@ -24,6 +24,7 @@ import {
   type DataGridFeatures,
   dataGridFeatures
 } from '@/components/ui/data-grid';
+import { DataGridCards, stopRowClick } from '@/components/ui/data-grid-cards';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
@@ -39,8 +40,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
-import { type Page, paginate } from '@/lib/paginate';
-import { cn } from '@/lib/utils';
+import type { Page } from '@/lib/paginate';
 
 export interface CustomerSort {
   by: CustomerSortableColumn;
@@ -72,9 +72,6 @@ function RowActions({ customer }: { customer: Customer }) {
 
 const propertyLinkClass =
   'truncate text-link underline-offset-4 hover:underline';
-
-// Links and the popover inside a row keep their clicks from opening the row
-const stopRowClick = (event: MouseEvent) => event.stopPropagation();
 
 /** The first Property by name, and a "+N" badge that lists all of them. */
 function PropertiesCell({
@@ -154,100 +151,47 @@ function PropertiesCell({
 }
 
 /**
- * Phones get the rows as cards: name, company, where they are and how many
+ * A customer as a phone card: name, company, where they are and how many
  * properties they own, the whole card opening the customer.
  */
-function CustomerCards({
-  rows,
-  isLoading,
-  emptyMessage,
-  className
-}: {
-  rows: Customer[];
-  isLoading: boolean;
-  emptyMessage?: ReactNode;
-  className?: string;
-}) {
-  if (isLoading) {
-    return (
-      <div className={cn('space-y-2', className)}>
-        {[0, 1, 2, 3, 4].map((key) => (
-          <Skeleton key={key} className="h-20 w-full rounded-lg" />
-        ))}
-      </div>
-    );
-  }
-
-  if (rows.length === 0) {
-    return (
-      <div
-        className={cn(
-          'rounded-lg border px-4 py-8 text-center text-sm text-muted-foreground',
-          className
-        )}
-      >
-        {emptyMessage || <Trans>No data available</Trans>}
-      </div>
-    );
-  }
-
+function CustomerCard({ customer }: { customer: Customer }) {
   return (
-    <ul className={cn('divide-y rounded-lg border', className)}>
-      {rows.map((customer) => (
-        <li
-          key={customer.id}
-          className="relative flex items-start gap-3 p-4 hover:bg-muted/40"
+    <>
+      <div className="min-w-0 flex-1 space-y-1">
+        <RouterLink
+          to="/admin/customers/$customerId"
+          params={{ customerId: customer.id }}
+          preload="intent"
+          // Stretched over the card, so all of it opens the customer
+          className="block truncate font-medium after:absolute after:inset-0"
         >
-          <div className="min-w-0 flex-1 space-y-1">
-            <RouterLink
-              to="/admin/customers/$customerId"
-              params={{ customerId: customer.id }}
-              preload="intent"
-              // Stretched over the card, so all of it opens the customer
-              className="block truncate font-medium after:absolute after:inset-0"
-            >
-              {customer.first_name} {customer.last_name}
-            </RouterLink>
-            {customer.company_name && (
-              <div className="truncate text-sm text-muted-foreground">
-                {customer.company_name}
-              </div>
-            )}
-            <div className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
-              <span className="truncate">{customer.city}</span>
-              <span aria-hidden>·</span>
-              <CountryName code={customer.country_code} />
-            </div>
-            <div className="text-xs text-muted-foreground">
-              <Plural
-                value={customer.properties.length}
-                _0="No properties"
-                one="# property"
-                other="# properties"
-              />
-            </div>
+          {customer.first_name} {customer.last_name}
+        </RouterLink>
+        {customer.company_name && (
+          <div className="truncate text-sm text-muted-foreground">
+            {customer.company_name}
           </div>
-          {/* Above the stretched link */}
-          <div className="relative">
-            <RowActions customer={customer} />
-          </div>
-        </li>
-      ))}
-    </ul>
+        )}
+        <div className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
+          <span className="truncate">{customer.city}</span>
+          <span aria-hidden>·</span>
+          <CountryName code={customer.country_code} />
+        </div>
+        <div className="text-xs text-muted-foreground">
+          <Plural
+            value={customer.properties.length}
+            _0="No properties"
+            one="# property"
+            other="# properties"
+          />
+        </div>
+      </div>
+      {/* Above the stretched link */}
+      <div className="relative">
+        <RowActions customer={customer} />
+      </div>
+    </>
   );
-}
-
-// What the table shows while the customers load: ten placeholder rows
-const loadingPage = paginate<Customer>([], 0, 10);
-
-/** The table's shape while the customers load. */
-export function CustomersTableSkeleton() {
-  return <CustomersTable page={loadingPage} isLoading />;
-}
-
-/** The table's frame and headings, with a failed load where the rows go. */
-export function CustomersTableError({ children }: { children: ReactNode }) {
-  return <CustomersTable page={loadingPage} error={children} />;
 }
 
 interface CustomersTableProps {
@@ -260,7 +204,7 @@ interface CustomersTableProps {
   isLoading?: boolean;
   /** Shown in place of the rows when there are none. */
   emptyMessage?: ReactNode;
-  /** A failed load, shown in place of the rows; hides the pagination. */
+  /** A failed load (`tableLoadError`), shown in place of the rows. */
   error?: ReactNode;
 }
 
@@ -492,11 +436,9 @@ export function CustomersTable({
         <DataGridContainer className="hidden sm:block">
           <DataGridTable />
         </DataGridContainer>
-        <CustomerCards
+        <DataGridCards<Customer>
           className="sm:hidden"
-          rows={page.rows}
-          isLoading={isLoading}
-          emptyMessage={error ?? emptyMessage}
+          renderCard={(customer) => <CustomerCard customer={customer} />}
         />
         <DataGridPagination />
       </div>

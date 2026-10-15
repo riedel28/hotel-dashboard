@@ -105,11 +105,6 @@ export function DevicesTableSkeleton() {
   return <DevicesTable page={loadingPage} isLoading />;
 }
 
-/** The table's frame and headings, with a failed load where the rows go. */
-export function DevicesTableError({ children }: { children: ReactNode }) {
-  return <DevicesTable page={loadingPage} error={children} />;
-}
-
 export function DevicesTable({
   page,
   sort,

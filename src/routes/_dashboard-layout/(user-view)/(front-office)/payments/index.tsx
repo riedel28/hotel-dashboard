@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { fetchPaymentsParamsSchema } from '@/api/payments';
 import { EmptyFilterResult } from '@/components/empty-filter-result';
-import { listLoadError, LoadErrorState } from '@/components/load-error';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -32,10 +32,7 @@ function PaymentsPage() {
   useDocumentTitle(t`Payments`);
   const search = usePaymentsSearch();
   const { paymentsQuery } = search;
-  // A failed load leaves no rows: the error shows where they would be
-  const loadError = listLoadError(paymentsQuery);
-  const payments =
-    loadError === undefined ? (paymentsQuery.data?.index ?? []) : [];
+  const payments = paymentsQuery.data?.index ?? [];
 
   return (
     <div className="space-y-1">
@@ -78,16 +75,10 @@ function PaymentsPage() {
           })}
         >
           <PaymentsTable
-            error={
-              loadError !== undefined ? (
-                <LoadErrorState
-                  error={loadError}
-                  title={<Trans>Couldn't load payments</Trans>}
-                  isRetrying={paymentsQuery.isFetching}
-                  onRetry={() => void paymentsQuery.refetch()}
-                />
-              ) : undefined
-            }
+            error={tableLoadError(
+              paymentsQuery,
+              <Trans>Couldn't load payments</Trans>
+            )}
             data={payments}
             isLoading={paymentsQuery.isLoading}
             totalCount={paymentsQuery.data?.total ?? 0}

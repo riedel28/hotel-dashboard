@@ -559,7 +559,7 @@ function DataGridTable<TData extends RowData>() {
               })}
             </DataGridTableBodyRowSkeleton>
           ))
-        ) : table.getRowModel().rows.length ? (
+        ) : !props.error && table.getRowModel().rows.length ? (
           table.getRowModel().rows.map((row, index) => {
             const typedRow = row as Row<DataGridFeatures, TData>;
             return (

@@ -11,7 +11,7 @@ const TanStackRouterDevtools = import.meta.env.PROD
       }))
     );
 
-import { RouteError } from '@/components/route-error';
+import { FullScreenRouteError } from '@/components/route-error';
 import { NotFound } from '@/components/ui/not-found';
 
 import type { AuthContext } from '../auth';
@@ -29,9 +29,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     </>
   ),
   // Nothing above it to keep, so the whole screen
-  errorComponent: ({ error }) => (
-    <RouteError error={error} className="min-h-screen p-4" />
-  ),
+  errorComponent: FullScreenRouteError,
   notFoundComponent: () => {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">

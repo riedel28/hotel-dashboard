@@ -16,7 +16,7 @@ import { z } from 'zod';
 
 import { roomFilterOptionsQueryOptions, roomsQueryOptions } from '@/api/rooms';
 import { useAuth } from '@/auth';
-import { listLoadError, LoadErrorState } from '@/components/load-error';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -173,9 +173,7 @@ function RoomsContent({
   const { data: options = { room_types: [], floors: [] } } = useQuery(
     roomFilterOptionsQueryOptions()
   );
-  // A failed load leaves no rows: the error shows where they would be
-  const loadError = listLoadError(roomsQuery);
-  const rooms = loadError === undefined ? (roomsQuery.data?.index ?? []) : [];
+  const rooms = roomsQuery.data?.index ?? [];
   // Only those who may edit have a form to open
   const form = useEditingRoom(canManage ? search.formTarget : undefined, rooms);
 
@@ -208,16 +206,10 @@ function RoomsContent({
             })}
           >
             <RoomsTable
-              error={
-                loadError !== undefined ? (
-                  <LoadErrorState
-                    error={loadError}
-                    title={<Trans>Couldn't load rooms</Trans>}
-                    isRetrying={roomsQuery.isFetching}
-                    onRetry={() => void roomsQuery.refetch()}
-                  />
-                ) : undefined
-              }
+              error={tableLoadError(
+                roomsQuery,
+                <Trans>Couldn't load rooms</Trans>
+              )}
               data={rooms}
               isLoading={roomsQuery.isLoading}
               pageIndex={search.pageIndex}

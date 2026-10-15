@@ -5,7 +5,7 @@ import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import { XIcon } from 'lucide-react';
 
 import { fetchUsersParamsSchema, usersQueryOptions } from '@/api/users';
-import { listLoadError, LoadErrorState } from '@/components/load-error';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -148,22 +148,17 @@ function UsersPage() {
       );
     }
 
-    // A failed load leaves no rows: the error shows where they would be
-    const loadError = listLoadError(usersQuery);
-    if (loadError !== undefined) {
+    const error = tableLoadError(
+      usersQuery,
+      <Trans>Couldn't load users</Trans>
+    );
+    if (error) {
       return (
         <UsersTable
           data={[]}
           pageIndex={(page ?? 1) - 1}
           pageSize={per_page ?? 10}
-          error={
-            <LoadErrorState
-              error={loadError}
-              title={<Trans>Couldn't load users</Trans>}
-              isRetrying={usersQuery.isFetching}
-              onRetry={() => void usersQuery.refetch()}
-            />
-          }
+          error={error}
         />
       );
     }

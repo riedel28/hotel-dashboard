@@ -7,7 +7,7 @@ import {
   fetchReservationsParamsSchema,
   reservationsQueryOptions
 } from '@/api/reservations';
-import { listLoadError, LoadErrorState } from '@/components/load-error';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -96,10 +96,7 @@ function ReservationsContent() {
     clearFilters,
     refresh
   } = useReservationsSearch();
-  // A failed load leaves no rows: the error shows where they would be
-  const loadError = listLoadError(reservationsQuery);
-  const reservations =
-    loadError === undefined ? (reservationsQuery.data?.index ?? []) : [];
+  const reservations = reservationsQuery.data?.index ?? [];
 
   return (
     <div className="space-y-2.5">
@@ -137,16 +134,10 @@ function ReservationsContent() {
         <ReservationsTable
           data={reservations}
           isLoading={reservationsQuery.isLoading}
-          error={
-            loadError !== undefined ? (
-              <LoadErrorState
-                error={loadError}
-                title={<Trans>Couldn't load reservations</Trans>}
-                isRetrying={reservationsQuery.isFetching}
-                onRetry={() => void reservationsQuery.refetch()}
-              />
-            ) : undefined
-          }
+          error={tableLoadError(
+            reservationsQuery,
+            <Trans>Couldn't load reservations</Trans>
+          )}
           pageIndex={pageIndex}
           pageSize={pageSize}
           totalCount={reservationsQuery.data?.total ?? 0}

@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
 import { EmptyFilterResult } from '@/components/empty-filter-result';
-import { listLoadError, LoadErrorState } from '@/components/load-error';
+import { tableLoadError } from '@/components/load-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -38,9 +38,7 @@ function MonitoringPage() {
   useDocumentTitle(t`Monitoring`);
   const search = useMonitoringSearch();
   const { logsQuery, filters } = search;
-  // A failed load leaves no rows: the error shows where they would be
-  const loadError = listLoadError(logsQuery);
-  const logs = loadError === undefined ? (logsQuery.data?.index ?? []) : [];
+  const logs = logsQuery.data?.index ?? [];
 
   return (
     <div className="space-y-1">
@@ -88,16 +86,10 @@ function MonitoringPage() {
           })}
         >
           <MonitoringTable
-            error={
-              loadError !== undefined ? (
-                <LoadErrorState
-                  error={loadError}
-                  title={<Trans>Couldn't load monitoring logs</Trans>}
-                  isRetrying={logsQuery.isFetching}
-                  onRetry={() => void logsQuery.refetch()}
-                />
-              ) : undefined
-            }
+            error={tableLoadError(
+              logsQuery,
+              <Trans>Couldn't load monitoring logs</Trans>
+            )}
             data={logs}
             isLoading={logsQuery.isLoading}
             totalCount={logsQuery.data?.total ?? 0}

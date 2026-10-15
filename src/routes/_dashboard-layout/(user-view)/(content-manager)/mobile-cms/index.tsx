@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { type CmsNode, cmsNodesQueryOptions } from '@/api/cms';
 import { selectablePropertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
-import { ErrorState } from '@/components/error-state';
+import { LoadErrorState } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -262,11 +262,12 @@ function MobileCmsPage() {
   let content: React.ReactNode;
   if (nodesQuery.isPending) {
     content = <CmsLoadingState columnsClassName={columnsClassName} />;
-  } else if (nodesQuery.isError) {
+  } else if (nodesQuery.isLoadingError) {
     content = (
-      <ErrorState
-        title={<Trans>The content could not be loaded</Trans>}
-        message={nodesQuery.error.message}
+      <LoadErrorState
+        variant="card"
+        error={nodesQuery.error}
+        title={<Trans>Couldn't load the content</Trans>}
         onRetry={() => void nodesQuery.refetch()}
         isRetrying={nodesQuery.isFetching}
       />
