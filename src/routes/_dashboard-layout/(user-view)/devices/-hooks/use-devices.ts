@@ -1,4 +1,4 @@
-import { type QueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { type QueryClient, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { devicesQueryOptions } from '@/api/devices';
@@ -6,17 +6,20 @@ import { devicesQueryOptions } from '@/api/devices';
 import { type DeviceView, withConnection } from '../-lib/devices';
 
 /**
- * The property's devices, each with its connection status. Statuses are
- * computed for the moment the list was fetched, which the query's refetch
- * interval keeps within a minute of now.
+ * The property's devices, each with its connection status, and the query
+ * they come from (for its loading and error states). Statuses are computed for
+ * the moment the list was fetched, which the query's refetch interval keeps
+ * within a minute of now.
  */
 export function useDevices() {
-  const { data, dataUpdatedAt } = useSuspenseQuery(devicesQueryOptions());
+  const query = useQuery(devicesQueryOptions());
+  const { data, dataUpdatedAt } = query;
 
-  return useMemo(
-    () => data.map((device) => withConnection(device, dataUpdatedAt)),
+  const devices = useMemo(
+    () => (data ?? []).map((device) => withConnection(device, dataUpdatedAt)),
     [data, dataUpdatedAt]
   );
+  return { devices, query };
 }
 
 /**

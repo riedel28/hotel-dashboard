@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
 import { EmptyFilterResult } from '@/components/empty-filter-result';
-import { LoadError } from '@/components/load-error';
+import { tableLoadError } from '@/components/load-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -86,35 +86,28 @@ function MonitoringPage() {
             'opacity-70': logsQuery.isFetching
           })}
         >
-          {logsQuery.isError ? (
-            <LoadError
-              message={logsQuery.error.message}
-              fallbackMessage={
-                <Trans>An error occurred while fetching monitoring logs</Trans>
-              }
-              isRetrying={logsQuery.isFetching}
-              onRetry={() => logsQuery.refetch()}
-            />
-          ) : (
-            <MonitoringTable
-              data={logs}
-              isLoading={logsQuery.isLoading}
-              totalCount={logsQuery.data?.total ?? 0}
-              pageCount={logsQuery.data?.page_count ?? 0}
-              pagination={search.pagination}
-              onPaginationChange={search.onPaginationChange}
-              sorting={search.sorting}
-              onSortingChange={search.onSortingChange}
-              selectedLogId={search.openLogId}
-              onLogOpen={search.openLog}
-              emptyMessage={
-                <EmptyLogs
-                  isFiltered={search.hasActiveFilters}
-                  onClearFilters={search.clearFilters}
-                />
-              }
-            />
-          )}
+          <MonitoringTable
+            error={tableLoadError(
+              logsQuery,
+              <Trans>Couldn't load monitoring logs</Trans>
+            )}
+            data={logs}
+            isLoading={logsQuery.isLoading}
+            totalCount={logsQuery.data?.total ?? 0}
+            pageCount={logsQuery.data?.page_count ?? 0}
+            pagination={search.pagination}
+            onPaginationChange={search.onPaginationChange}
+            sorting={search.sorting}
+            onSortingChange={search.onSortingChange}
+            selectedLogId={search.openLogId}
+            onLogOpen={search.openLog}
+            emptyMessage={
+              <EmptyLogs
+                isFiltered={search.hasActiveFilters}
+                onClearFilters={search.clearFilters}
+              />
+            }
+          />
         </div>
       </div>
 

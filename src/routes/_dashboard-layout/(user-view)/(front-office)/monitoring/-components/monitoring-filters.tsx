@@ -7,6 +7,7 @@ import {
 } from 'shared/types/monitoring';
 
 import { ClearFiltersButton } from '@/components/clear-filters-button';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CountBadge } from '@/components/ui/count-badge';
 import {
@@ -110,7 +111,17 @@ export function MonitoringFilters({
       >
         <ListFilterIcon />
         <Trans>Filters</Trans>
-        {activeFilterCount > 0 && <CountBadge count={activeFilterCount} />}
+        {/* The same count badge the filters show their picks with */}
+        {activeFilterCount > 0 && (
+          <Badge
+            variant="secondary"
+            color="gray"
+            size="xs"
+            className="tabular-nums"
+          >
+            {activeFilterCount}
+          </Badge>
+        )}
       </Button>
       <div
         id={filtersId}

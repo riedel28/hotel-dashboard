@@ -154,16 +154,16 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
               {/* Faint until the entry is hovered, so it can be found without;
                   full on touch screens, which have no hover */}
               <DataGridRowActions className="focus-visible:opacity-100 aria-expanded:opacity-100 pointer-fine:opacity-40 pointer-fine:group-hover/entry:opacity-100" />
-              <DropdownMenuContent align="end" className="w-auto min-w-0">
+              <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setIsEditing(true)}>
-                  <PencilIcon className="mr-2 h-4 w-4" />
+                  <PencilIcon />
                   <Trans>Edit</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive-soft"
                   onClick={() => setDeleteOpen(true)}
                 >
-                  <Trash2Icon className="mr-2 h-4 w-4" />
+                  <Trash2Icon />
                   <Trans>Delete</Trans>
                 </DropdownMenuItem>
               </DropdownMenuContent>

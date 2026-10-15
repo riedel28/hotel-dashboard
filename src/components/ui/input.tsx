@@ -28,7 +28,9 @@ const fieldBoxClassName = cn(
  */
 const fieldTriggerClassName = cn(
   fieldBoxClassName,
-  'flex items-center justify-between gap-2 overflow-hidden text-left text-sm',
+  // Sized like the text fields beside it: 16px on a phone, where iOS zooms
+  // into anything smaller, 14px from `md` up
+  'flex items-center justify-between gap-2 overflow-hidden text-left text-base md:text-sm',
   'data-popup-open:border-primary data-popup-open:shadow-[inset_0_0_0_1px_var(--color-primary)]',
   'aria-invalid:data-popup-open:border-danger aria-invalid:data-popup-open:shadow-[inset_0_0_0_1px_var(--color-danger)]',
   'in-data-[invalid=true]:border-danger in-data-[invalid=true]:focus-visible:border-danger in-data-[invalid=true]:focus-visible:shadow-[inset_0_0_0_1px_var(--color-danger)] in-data-[invalid=true]:data-popup-open:border-danger in-data-[invalid=true]:data-popup-open:shadow-[inset_0_0_0_1px_var(--color-danger)]'

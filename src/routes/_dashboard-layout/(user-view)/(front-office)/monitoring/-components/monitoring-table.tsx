@@ -16,6 +16,7 @@ import {
   type DataGridFeatures,
   dataGridFeatures
 } from '@/components/ui/data-grid';
+import { DataGridCards } from '@/components/ui/data-grid-cards';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
@@ -29,76 +30,43 @@ import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
 
 /**
- * Phones get the rows as cards, led by the event the table would push off
- * screen: the whole card opens the log.
+ * A log as a phone card, led by the event the table would push off screen.
+ * The event is a button stretched over the card, so all of it opens the log.
  */
-function LogCards({
-  data,
-  isLoading,
-  selectedLogId,
-  onLogOpen,
-  emptyMessage,
-  className
+function LogCard({
+  log,
+  onLogOpen
 }: {
-  data: MonitoringLog[];
-  isLoading: boolean;
-  selectedLogId: number | undefined;
+  log: MonitoringLog;
   onLogOpen: (logId: number) => void;
-  emptyMessage: ReactNode;
-  className?: string;
 }) {
-  if (isLoading) {
-    return (
-      <div className={cn('space-y-2', className)}>
-        {[0, 1, 2, 3, 4].map((key) => (
-          <Skeleton key={key} className="h-20 w-full rounded-lg" />
-        ))}
-      </div>
-    );
-  }
-
-  if (data.length === 0) {
-    return (
-      <div className={cn('rounded-lg border px-4 py-2', className)}>
-        {emptyMessage}
-      </div>
-    );
-  }
-
   return (
-    <ul className={cn('divide-y overflow-hidden rounded-lg border', className)}>
-      {data.map((log) => (
-        <li key={log.id}>
-          <button
-            type="button"
-            aria-current={log.id === selectedLogId}
-            onClick={() => onLogOpen(log.id)}
-            className="block w-full cursor-pointer space-y-1.5 px-4 py-3 text-left outline-none hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset aria-[current=true]:bg-primary/10"
-          >
-            <div className="flex items-baseline gap-3">
-              <span className="min-w-0 flex-1 truncate font-medium">
-                {log.event}
-              </span>
-              <DateCell date={log.logged_at} />
-            </div>
-            <div className="flex min-w-0 items-center gap-2">
-              <StatusCell status={log.status} />
-              <TypeCell type={log.type} />
-              {log.booking_nr && (
-                <span className="truncate text-xs text-muted-foreground">
-                  {log.booking_nr}
-                </span>
-              )}
-            </div>
-            {log.log_message && (
-              <code className="block truncate font-mono text-xs text-muted-foreground">
-                {log.log_message}
-              </code>
-            )}
-          </button>
-        </li>
-      ))}
-    </ul>
+    <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="flex items-baseline gap-3">
+        <button
+          type="button"
+          onClick={() => onLogOpen(log.id)}
+          className="min-w-0 flex-1 cursor-pointer truncate text-left font-medium outline-none after:absolute after:inset-0 focus-visible:after:ring-2 focus-visible:after:ring-ring focus-visible:after:ring-inset"
+        >
+          {log.event}
+        </button>
+        <DateCell date={log.logged_at} />
+      </div>
+      <div className="flex min-w-0 items-center gap-2">
+        <StatusCell status={log.status} />
+        <TypeCell type={log.type} />
+        {log.booking_nr && (
+          <span className="truncate text-xs text-muted-foreground">
+            {log.booking_nr}
+          </span>
+        )}
+      </div>
+      {log.log_message && (
+        <code className="block truncate font-mono text-xs text-muted-foreground">
+          {log.log_message}
+        </code>
+      )}
+    </div>
   );
 }
 
@@ -115,6 +83,8 @@ interface MonitoringTableProps {
   selectedLogId: number | undefined;
   onLogOpen: (logId: number) => void;
   emptyMessage: ReactNode;
+  /** A failed load (`LoadErrorState`), shown where the rows go. */
+  error?: ReactNode;
 }
 
 export function MonitoringTable({
@@ -128,7 +98,8 @@ export function MonitoringTable({
   onSortingChange,
   selectedLogId,
   onLogOpen,
-  emptyMessage
+  emptyMessage,
+  error
 }: MonitoringTableProps) {
   const { t } = useLingui();
 
@@ -311,6 +282,7 @@ export function MonitoringTable({
 
   return (
     <DataGrid
+      error={error}
       table={table}
       recordCount={totalCount}
       onRowClick={(log) => onLogOpen(log.id)}
@@ -340,13 +312,9 @@ export function MonitoringTable({
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </DataGridContainer>
-        <LogCards
+        <DataGridCards<MonitoringLog>
           className="sm:hidden"
-          data={data}
-          isLoading={isLoading}
-          selectedLogId={selectedLogId}
-          onLogOpen={onLogOpen}
-          emptyMessage={emptyMessage}
+          renderCard={(log) => <LogCard log={log} onLogOpen={onLogOpen} />}
         />
         <DataGridPagination />
       </div>

@@ -1,4 +1,4 @@
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
 import type { PaginationState, SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
@@ -37,7 +37,7 @@ function useReservationsSearch() {
   const queryClient = useQueryClient();
 
   const { page, per_page, status, q, from, to, sort_by, sort_order } = search;
-  const reservationsQuery = useSuspenseQuery(reservationsQueryOptions(search));
+  const reservationsQuery = useQuery(reservationsQueryOptions(search));
 
   const updateSearch = (patch: Partial<FetchReservationsParams>) => {
     navigate({
