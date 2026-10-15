@@ -45,3 +45,13 @@ export function fromSorting<TColumn extends string>(
     sort_order: first?.desc === false ? ('asc' as const) : ('desc' as const)
   };
 }
+
+/** Search params that clear the given filters: each key set to undefined. */
+export function clearedParams<TKey extends string>(
+  keys: readonly TKey[]
+): Record<TKey, undefined> {
+  return Object.fromEntries(keys.map((key) => [key, undefined])) as Record<
+    TKey,
+    undefined
+  >;
+}

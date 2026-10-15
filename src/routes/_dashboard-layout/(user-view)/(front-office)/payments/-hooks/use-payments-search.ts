@@ -13,6 +13,7 @@ import {
 
 import { type PaymentsQuery, paymentsQueryOptions } from '@/api/payments';
 import {
+  clearedParams,
   fromPagination,
   fromSorting,
   toPagination,
@@ -26,12 +27,12 @@ const routeApi = getRouteApi(
 const DEFAULT_PAGE_SIZE = 50;
 
 // Everything "Clear filters" resets. Sorting and page size are not filters.
-const clearedFilters = {
-  q: undefined,
-  status: undefined,
-  from: undefined,
-  to: undefined
-} satisfies PaymentsQuery;
+const filterKeys = [
+  'q',
+  'status',
+  'from',
+  'to'
+] as const satisfies ReadonlyArray<keyof PaymentsQuery>;
 
 /**
  * Owns everything derived from the payments search params: the query they
@@ -70,9 +71,7 @@ function usePaymentsSearch() {
       from: search.from,
       to: search.to
     },
-    hasActiveFilters: [search.q, search.status, search.from, search.to].some(
-      (value) => value !== undefined
-    ),
+    hasActiveFilters: filterKeys.some((key) => search[key] !== undefined),
     setQuery: (query: string) => setFilters({ q: query || undefined }),
     setStatus: (status: PaymentStage | undefined) => setFilters({ status }),
     setRange: (range: { from: Date; to: Date } | undefined) =>
@@ -80,7 +79,7 @@ function usePaymentsSearch() {
         from: range && dayjs(range.from).format('YYYY-MM-DD'),
         to: range && dayjs(range.to).format('YYYY-MM-DD')
       }),
-    clearFilters: () => setFilters(clearedFilters),
+    clearFilters: () => setFilters(clearedParams(filterKeys)),
 
     pagination,
     sorting,

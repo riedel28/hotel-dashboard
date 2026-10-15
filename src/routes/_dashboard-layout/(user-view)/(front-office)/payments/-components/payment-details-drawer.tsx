@@ -1,5 +1,4 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQuery } from '@tanstack/react-query';
 import {
   isCardExpired,
   latestStage,
@@ -9,18 +8,11 @@ import {
 import { paymentQueryOptions } from '@/api/payments';
 import { BRAND_NAMES, BrandMark } from '@/components/brand-mark';
 import { DetailRow, DetailSection } from '@/components/detail-list';
-import { DrawerUnavailable } from '@/components/drawer-unavailable';
+import { DetailsDrawer } from '@/components/details-drawer';
 import { ReservationLink } from '@/components/reservation-link';
 import { CopyButton } from '@/components/ui/copy-button';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle
-} from '@/components/ui/drawer';
-import { useStepThroughList } from '@/hooks/use-step-through-list';
+import { DrawerBody, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { formatDate } from '@/utils/date';
 
@@ -32,7 +24,7 @@ import { PaymentTimeline } from './payment-timeline';
 interface PaymentDetailsDrawerProps {
   /** The open payment; the drawer is closed while undefined. */
   paymentId?: number;
-  /** Payments of the current table page: instant content and ↑/↓ navigation. */
+  /** Payments of the current table page. */
   pagePayments: Payment[];
   onSelect: (paymentId: number) => void;
   onClose: () => void;
@@ -45,53 +37,24 @@ export function PaymentDetailsDrawer({
   onSelect,
   onClose
 }: PaymentDetailsDrawerProps) {
-  useStepThroughList(pagePayments, paymentId, onSelect);
-
   return (
-    <Drawer
-      open={paymentId !== undefined}
-      onOpenChange={(open) => !open && onClose()}
+    <DetailsDrawer
+      openId={paymentId}
+      items={pagePayments}
+      queryOptions={paymentQueryOptions}
+      onSelect={onSelect}
+      onClose={onClose}
+      loadingText={<Trans>Loading payment…</Trans>}
+      notFoundTitle={<Trans>Payment not found</Trans>}
+      notFoundText={<Trans>This payment does not exist.</Trans>}
     >
-      <DrawerContent>
-        {paymentId !== undefined && (
-          <PaymentDetails
-            // Remount per payment so one's data never shows under another id
-            key={paymentId}
-            paymentId={paymentId}
-            pagePayments={pagePayments}
-          />
-        )}
-      </DrawerContent>
-    </Drawer>
+      {(payment) => <PaymentDetails payment={payment} />}
+    </DetailsDrawer>
   );
 }
 
-function PaymentDetails({
-  paymentId,
-  pagePayments
-}: {
-  paymentId: number;
-  pagePayments: Payment[];
-}) {
+function PaymentDetails({ payment }: { payment: Payment }) {
   const { t } = useLingui();
-  const paymentQuery = useQuery({
-    ...paymentQueryOptions(paymentId),
-    initialData: pagePayments.find(({ id }) => id === paymentId)
-  });
-  const payment = paymentQuery.data;
-
-  if (!payment) {
-    return (
-      <DrawerUnavailable
-        isLoading={paymentQuery.isPending}
-        error={paymentQuery.error}
-        loadingText={<Trans>Loading payment…</Trans>}
-        notFoundTitle={<Trans>Payment not found</Trans>}
-        notFoundText={<Trans>This payment does not exist.</Trans>}
-      />
-    );
-  }
-
   const latest = latestStage(payment);
   const expired = isCardExpired(payment);
 

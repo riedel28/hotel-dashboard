@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { perPageSchema, sortOrderSchema } from './list-params';
+
 export const roomStatusSchema = z.enum([
   'available',
   'occupied',
@@ -39,21 +41,14 @@ export const roomSortColumns = [
 
 export const fetchRoomsParamsSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
-  per_page: z.coerce
-    .number()
-    .int()
-    .positive()
-    .refine((val) => [5, 10, 25, 50, 100].includes(val), {
-      message: 'per_page must be one of: 5, 10, 25, 50, 100'
-    })
-    .default(10),
+  per_page: perPageSchema.default(10),
   q: z.string().optional(),
   status: roomStatusSchema.optional(),
   // '' stands for rooms without a type
   room_type: listOf(z.string()),
   floor: listOf(z.coerce.number().int()),
   sort_by: z.enum(roomSortColumns).optional(),
-  sort_order: z.enum(['asc', 'desc']).optional()
+  sort_order: sortOrderSchema.optional()
 });
 
 export const fetchRoomsResponseSchema = z.object({

@@ -31,18 +31,18 @@ export const stageTones = {
 export const dangerText = 'text-danger';
 
 // A hanging authorization only needs attention, so it is orange; a short
-// capture is red
+// capture is red. Only the stale one shows on the status badge.
+export const staleBadge: BadgeColorProps = 'orange';
+
 export const flagTones = {
   stale: {
-    badge: 'orange',
     dot: 'bg-orange-500 dark:bg-orange-400',
     ring: 'ring-orange-500/25 dark:ring-orange-400/25',
     text: 'text-orange-700 dark:text-orange-300'
   },
   partial: {
-    badge: 'rose',
     dot: 'bg-danger',
     ring: 'ring-danger/25',
     text: dangerText
   }
-} satisfies Record<StageFlag['kind'], Tone & { text: string }>;
+} satisfies Record<StageFlag['kind'], Omit<Tone, 'badge'> & { text: string }>;

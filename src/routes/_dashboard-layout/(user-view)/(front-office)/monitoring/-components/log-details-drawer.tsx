@@ -7,18 +7,11 @@ import {
   monitoringLogQueryOptions,
   monitoringQueryOptions
 } from '@/api/monitoring';
-import { DrawerUnavailable } from '@/components/drawer-unavailable';
+import { DetailsDrawer } from '@/components/details-drawer';
 import { ReservationLink } from '@/components/reservation-link';
 import { CopyButton } from '@/components/ui/copy-button';
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle
-} from '@/components/ui/drawer';
+import { DrawerBody, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useStepThroughList } from '@/hooks/use-step-through-list';
 import { cn } from '@/lib/utils';
 
 import { StatusCell } from './cells/status-cell';
@@ -30,16 +23,12 @@ const RELATED_LOGS_SKELETON_ROWS = 3;
 interface LogDetailsDrawerProps {
   /** The open log; the drawer is closed while undefined. */
   logId?: number;
-  /** Logs of the current table page: instant content and ↑/↓ navigation. */
+  /** Logs of the current table page. */
   pageLogs: MonitoringLog[];
   onSelect: (logId: number) => void;
   onClose: () => void;
   onShowReservationLogs: (bookingNr: string) => void;
 }
-
-type LogDetailsProps = Omit<LogDetailsDrawerProps, 'logId' | 'onClose'> & {
-  logId: number;
-};
 
 export function LogDetailsDrawer({
   logId,
@@ -48,53 +37,38 @@ export function LogDetailsDrawer({
   onClose,
   onShowReservationLogs
 }: LogDetailsDrawerProps) {
-  useStepThroughList(pageLogs, logId, onSelect);
-
   return (
-    <Drawer
-      open={logId !== undefined}
-      onOpenChange={(open) => !open && onClose()}
+    <DetailsDrawer
+      openId={logId}
+      items={pageLogs}
+      queryOptions={monitoringLogQueryOptions}
+      onSelect={onSelect}
+      onClose={onClose}
+      loadingText={<Trans>Loading log…</Trans>}
+      notFoundTitle={<Trans>Log not found</Trans>}
+      notFoundText={<Trans>This log does not exist or was removed.</Trans>}
     >
-      <DrawerContent>
-        {logId !== undefined && (
-          <LogDetails
-            // Remount per log so one log's data never shows under another id
-            key={logId}
-            logId={logId}
-            pageLogs={pageLogs}
-            onSelect={onSelect}
-            onShowReservationLogs={onShowReservationLogs}
-          />
-        )}
-      </DrawerContent>
-    </Drawer>
+      {(log) => (
+        <LogDetails
+          log={log}
+          onSelect={onSelect}
+          onShowReservationLogs={onShowReservationLogs}
+        />
+      )}
+    </DetailsDrawer>
   );
 }
 
 function LogDetails({
-  logId,
-  pageLogs,
+  log,
   onSelect,
   onShowReservationLogs
-}: LogDetailsProps) {
+}: {
+  log: MonitoringLog;
+  onSelect: (logId: number) => void;
+  onShowReservationLogs: (bookingNr: string) => void;
+}) {
   const { t } = useLingui();
-  const logQuery = useQuery({
-    ...monitoringLogQueryOptions(logId),
-    initialData: pageLogs.find((log) => log.id === logId)
-  });
-  const log = logQuery.data;
-
-  if (!log) {
-    return (
-      <DrawerUnavailable
-        isLoading={logQuery.isPending}
-        error={logQuery.error}
-        loadingText={<Trans>Loading log…</Trans>}
-        notFoundTitle={<Trans>Log not found</Trans>}
-        notFoundText={<Trans>This log does not exist or was removed.</Trans>}
-      />
-    );
-  }
 
   return (
     <>

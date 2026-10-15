@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+import {
+  isoDateStringSchema,
+  perPageSchema,
+  sortOrderSchema
+} from './list-params';
+
 export const monitoringStatusSchema = z.enum(['success', 'error']);
 
 export const monitoringTypeSchema = z.enum(['pms', 'door lock', 'payment']);
@@ -19,12 +25,6 @@ export const monitoringLogSchema = z.object({
   log_message: z.string().nullable()
 });
 
-const dateStringSchema = z
-  .string()
-  .refine((value) => !Number.isNaN(Date.parse(value)), {
-    message: 'must be an ISO date'
-  });
-
 export const sortableMonitoringColumnsSchema = z.enum([
   'logged_at',
   'status',
@@ -35,14 +35,7 @@ export const sortableMonitoringColumnsSchema = z.enum([
 
 export const fetchMonitoringLogsParamsSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
-  per_page: z.coerce
-    .number()
-    .int()
-    .positive()
-    .refine((val) => [5, 10, 25, 50, 100].includes(val), {
-      message: 'per_page must be one of: 5, 10, 25, 50, 100'
-    })
-    .default(50),
+  per_page: perPageSchema.default(50),
   q: z.string().max(200).optional(),
   status: monitoringStatusSchema.optional(),
   // A list; a query string spells it comma-separated ("pms,payment")
@@ -56,10 +49,10 @@ export const fetchMonitoringLogsParamsSchema = z.object({
   // Relative window ending now; ignored when from/to are given
   period: monitoringPeriodSchema.optional(),
   // ISO date or datetime, both bounds inclusive
-  from: dateStringSchema.optional(),
-  to: dateStringSchema.optional(),
+  from: isoDateStringSchema.optional(),
+  to: isoDateStringSchema.optional(),
   sort_by: sortableMonitoringColumnsSchema.default('logged_at'),
-  sort_order: z.enum(['asc', 'desc']).default('desc')
+  sort_order: sortOrderSchema.default('desc')
 });
 
 export const monitoringLogIdParamsSchema = z.object({

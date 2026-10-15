@@ -3,6 +3,7 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { z } from 'zod';
 
 import { fetchPaymentsParamsSchema } from '@/api/payments';
+import { EmptyFilterResult } from '@/components/empty-filter-result';
 import { LoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -12,7 +13,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
@@ -142,22 +142,10 @@ function EmptyPayments({
   }
 
   return (
-    <div className="flex flex-col items-center gap-1 py-6 text-sm">
-      <p className="font-medium text-foreground">
-        <Trans>Nothing found</Trans>
-      </p>
-      <p className="text-muted-foreground">
-        <Trans>No payments match the current filters.</Trans>
-      </p>
-      <Button
-        variant="secondary"
-        size="sm"
-        className="mt-2"
-        onClick={onClearFilters}
-      >
-        <Trans>Clear filters</Trans>
-      </Button>
-    </div>
+    <EmptyFilterResult
+      description={<Trans>No payments match the current filters.</Trans>}
+      onClearFilters={onClearFilters}
+    />
   );
 }
 

@@ -18,6 +18,7 @@ import {
   monitoringQueryOptions
 } from '@/api/monitoring';
 import {
+  clearedParams,
   fromPagination,
   fromSorting,
   toPagination,
@@ -32,19 +33,15 @@ const DEFAULT_PERIOD: MonitoringPeriod = '24h';
 const DEFAULT_PAGE_SIZE = 50;
 
 // Everything "Clear filters" resets. Sorting and page size are not filters.
-const clearedFilters = {
-  q: undefined,
-  status: undefined,
-  type: undefined,
-  booking_nr: undefined,
-  period: undefined,
-  from: undefined,
-  to: undefined
-} satisfies MonitoringLogsQuery;
-
-const filterKeys = Object.keys(clearedFilters) as Array<
-  keyof typeof clearedFilters
->;
+const filterKeys = [
+  'q',
+  'status',
+  'type',
+  'booking_nr',
+  'period',
+  'from',
+  'to'
+] as const satisfies ReadonlyArray<keyof MonitoringLogsQuery>;
 
 /** Writes filters: replaces the history entry and returns to the first page. */
 function useSetFilters() {
@@ -137,7 +134,7 @@ function useMonitoringSearch() {
         from: dayjs(range.from).format('YYYY-MM-DD'),
         to: dayjs(range.to).format('YYYY-MM-DD')
       }),
-    clearFilters: () => setFilters(clearedFilters),
+    clearFilters: () => setFilters(clearedParams(filterKeys)),
 
     pagination,
     sorting,

@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+import {
+  isoDateStringSchema,
+  perPageSchema,
+  sortOrderSchema
+} from './list-params';
 import { ADYEN_METHOD_IDS } from './providers';
 
 export const paymentTypeSchema = z.enum([
@@ -39,32 +44,19 @@ export const paymentSchema = z.object({
   card_holder: z.string()
 });
 
-const dateStringSchema = z
-  .string()
-  .refine((value) => !Number.isNaN(Date.parse(value)), {
-    message: 'must be an ISO date'
-  });
-
 export const sortablePaymentColumnsSchema = z.enum(['updated_at', 'amount']);
 
 export const fetchPaymentsParamsSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
-  per_page: z.coerce
-    .number()
-    .int()
-    .positive()
-    .refine((val) => [5, 10, 25, 50, 100].includes(val), {
-      message: 'per_page must be one of: 5, 10, 25, 50, 100'
-    })
-    .default(50),
+  per_page: perPageSchema.default(50),
   // Reservation number or reference (partial), or a card's last four digits
   q: z.string().max(200).optional(),
   status: paymentStageSchema.optional(),
   // ISO date or datetime, both bounds inclusive, on the latest stage's date
-  from: dateStringSchema.optional(),
-  to: dateStringSchema.optional(),
+  from: isoDateStringSchema.optional(),
+  to: isoDateStringSchema.optional(),
   sort_by: sortablePaymentColumnsSchema.default('updated_at'),
-  sort_order: z.enum(['asc', 'desc']).default('desc')
+  sort_order: sortOrderSchema.default('desc')
 });
 
 export const paymentIdParamsSchema = z.object({

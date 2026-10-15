@@ -21,7 +21,7 @@ import {
 import { cn } from '@/lib/utils';
 
 import { maskCardNumber, truncateMiddle } from '../-lib/format';
-import { dangerText, flagTones, stageTones } from '../-lib/tones';
+import { dangerText, stageTones, staleBadge } from '../-lib/tones';
 
 export const stageLabels = {
   authorized: msg`Authorized`,
@@ -54,7 +54,7 @@ export function PaymentStatusBadge({ payment }: { payment: Payment }) {
     <Badge
       size="sm"
       variant="outline"
-      color={isStale ? flagTones.stale.badge : stageTones[stage].badge}
+      color={isStale ? staleBadge : stageTones[stage].badge}
       className="rounded-md"
       title={isStale ? t`Authorized long ago and not captured yet` : undefined}
     >

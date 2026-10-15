@@ -1,19 +1,22 @@
+import { useIntlLocale } from '@/hooks/use-format-localized';
 import { cn } from '@/lib/utils';
 
 interface CurrencyFormatterProps {
   value: number;
   currency?: string;
-  locale?: string;
   className?: string;
 }
 
-/** An amount of money, in tabular figures so amounts line up in columns. */
+/**
+ * An amount of money in the UI language's notation, in tabular figures so
+ * amounts line up in columns.
+ */
 export function CurrencyFormatter({
   value,
   currency = 'EUR',
-  locale = 'de-DE',
   className
 }: CurrencyFormatterProps) {
+  const locale = useIntlLocale();
   const isZero = value === 0;
 
   return (

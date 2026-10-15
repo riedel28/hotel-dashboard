@@ -115,14 +115,18 @@ describe('Payments API', () => {
     }
   });
 
-  test('filters by the stage the database computes, which latestStage matches', async () => {
+  test("computes each payment's latest stage, date and amount as latestStage does", async () => {
     for (const status of ['authorized', 'captured', 'paid'] as const) {
       const response = await get(`?status=${status}`);
-
       expect(response.body.total).toBe(1);
-      expect(
-        latestStage(paymentSchema.parse(response.body.index[0])).stage
-      ).toBe(status);
+
+      const [row] = response.body.index;
+      const { stage, at, amount } = latestStage(paymentSchema.parse(row));
+      expect({
+        stage: row.stage,
+        at: new Date(row.last_stage_at),
+        amount: Number(row.last_stage_amount)
+      }).toEqual({ stage, at, amount });
     }
   });
 
