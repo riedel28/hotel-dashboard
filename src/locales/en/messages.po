@@ -184,7 +184,7 @@ msgstr "{name} unassigned from its room"
 #~ msgid "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 #~ msgstr "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:51
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:50
 msgid "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 msgstr "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 
@@ -626,7 +626,7 @@ msgstr "An error occurred while fetching devices"
 msgid "An error occurred while fetching monitoring logs"
 msgstr "An error occurred while fetching monitoring logs"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:185
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:186
 msgid "An error occurred while fetching payments"
 msgstr "An error occurred while fetching payments"
 
@@ -784,11 +784,11 @@ msgstr "Authentication code"
 msgid "Authenticator app"
 msgstr "Authenticator app"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:29
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:28
 msgid "Authorized"
 msgstr "Authorized"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:69
 msgid "Authorized long ago and not captured yet"
 msgstr "Authorized long ago and not captured yet"
 
@@ -884,7 +884,7 @@ msgstr "Bold"
 #~ msgid "Booking number is required"
 #~ msgstr "Booking number is required"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:166
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:165
 msgid "Brand"
 msgstr "Brand"
 
@@ -952,17 +952,17 @@ msgstr "Cancel setup?"
 msgid "Caps Lock is on"
 msgstr "Caps Lock is on"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:30
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:29
 msgid "Captured"
 msgstr "Captured"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:164
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:178
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:183
 msgid "Card"
 msgstr "Card"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:106
 msgid "Card expired"
 msgstr "Card expired"
 
@@ -1384,8 +1384,8 @@ msgstr "Copy message"
 msgid "Copy Public Key"
 msgstr "Copy Public Key"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:202
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:140
 msgid "Copy reference"
 msgstr "Copy reference"
 
@@ -1673,7 +1673,7 @@ msgstr "Departure Date"
 msgid "Departure must be after arrival"
 msgstr "Departure must be after arrival"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:41
 msgid "Deposit"
 msgstr "Deposit"
 
@@ -1687,7 +1687,7 @@ msgstr "Desc"
 msgid "Description"
 msgstr "Description"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:142
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:161
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:88
 msgid "Details"
@@ -2196,7 +2196,7 @@ msgstr "Event"
 #~ msgid "Everyone else staying on this reservation."
 #~ msgstr "Everyone else staying on this reservation."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:128
 msgid "Expected"
 msgstr "Expected"
 
@@ -2204,11 +2204,11 @@ msgstr "Expected"
 #~ msgid "Expected columns, in any order. Rooms are matched by their number."
 #~ msgstr "Expected columns, in any order. Rooms are matched by their number."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:185
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:186
 msgid "Expired"
 msgstr "Expired"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:179
 msgid "Expires"
 msgstr "Expires"
 
@@ -2458,7 +2458,7 @@ msgstr "File"
 msgid "Filter by reservation"
 msgstr "Filter by reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:43
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:42
 msgid "Final payment"
 msgstr "Final payment"
 
@@ -2777,11 +2777,11 @@ msgstr "Hide other roles"
 msgid "Hide password"
 msgstr "Hide password"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:212
 msgid "History"
 msgstr "History"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:176
 msgid "Holder"
 msgstr "Holder"
 
@@ -3138,7 +3138,7 @@ msgstr "Live mode processes real payments with real cards. Make sure your creden
 msgid "Loading log…"
 msgstr "Loading log…"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:259
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:267
 msgid "Loading payment…"
 msgstr "Loading payment…"
 
@@ -3751,7 +3751,7 @@ msgstr "No type"
 msgid "No unsaved changes"
 msgstr "No unsaved changes"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:44
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:43
 msgid "No-show fee"
 msgstr "No-show fee"
 
@@ -3798,7 +3798,7 @@ msgstr "Nothing matches"
 msgid "Nothing to show yet"
 msgstr "Nothing to show yet"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:171
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:155
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:173
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:90
@@ -3817,7 +3817,7 @@ msgstr "Numbered list"
 msgid "Occupied"
 msgstr "Occupied"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:139
 msgid "of <0/>"
 msgstr "of <0/>"
 
@@ -3951,15 +3951,15 @@ msgstr "Page not found"
 #~ msgid "Page URL"
 #~ msgstr "Page URL"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:31
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:30
 msgid "Paid"
 msgstr "Paid"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:82
-msgid "partial"
-msgstr "partial"
+#~ msgid "partial"
+#~ msgstr "partial"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-timeline.tsx:60
 msgid "Partially captured"
 msgstr "Partially captured"
 
@@ -4038,7 +4038,7 @@ msgid "Payment"
 msgstr "Payment"
 
 #. placeholder {0}: payment.booking_nr
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:126
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:130
 msgid "Payment for {0}"
 msgstr "Payment for {0}"
 
@@ -4051,7 +4051,7 @@ msgstr "Payment Gateway"
 msgid "Payment method"
 msgstr "Payment method"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:261
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:269
 msgid "Payment not found"
 msgstr "Payment not found"
 
@@ -4230,7 +4230,7 @@ msgstr "POS"
 msgid "Position your photo"
 msgstr "Position your photo"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:41
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:40
 msgid "Prepayment"
 msgstr "Prepayment"
 
@@ -4539,14 +4539,14 @@ msgstr "Recovery codes copied"
 msgid "Redo"
 msgstr "Redo"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:194
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:195
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:198
 msgid "Reference"
 msgstr "Reference"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:203
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:204
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-parts.tsx:141
 msgid "Reference copied"
 msgstr "Reference copied"
 
@@ -4554,7 +4554,7 @@ msgstr "Reference copied"
 #: src/components/ui/data-grid-refresh-button.tsx:38
 #: src/components/ui/data-grid-refresh-button.tsx:51
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:235
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:191
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:193
 msgid "Refresh"
 msgstr "Refresh"
 
@@ -4694,7 +4694,7 @@ msgstr "Resend verification email"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:137
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:158
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:171
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:146
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:143
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:70
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:88
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:110
@@ -4818,7 +4818,7 @@ msgstr "Roles & access"
 #~ msgid "Roles updated successfully"
 #~ msgstr "Roles updated successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:149
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:295
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:181
@@ -5466,7 +5466,7 @@ msgstr "Someone else changed this item meanwhile"
 #: src/routes/__root.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:299
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:223
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:254
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:262
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:182
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:162
 msgid "Something went wrong"
@@ -5988,7 +5988,7 @@ msgstr "This page is hidden and not visible to guests."
 msgid "This password reset link is invalid."
 msgstr "This password reset link is invalid."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:262
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:270
 msgid "This payment does not exist."
 msgstr "This payment does not exist."
 
@@ -6233,7 +6233,7 @@ msgstr "Two-step verification"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:114
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:108
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:116
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:155
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:154
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:96
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/messages.ts:54
@@ -6345,7 +6345,7 @@ msgstr "Update Reservation"
 #~ msgid "Update your personal information and contact details"
 #~ msgstr "Update your personal information and contact details"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:158
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:155
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:170
 msgid "Updated"

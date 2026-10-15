@@ -1,10 +1,9 @@
 import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import { CircleAlertIcon } from 'lucide-react';
 import {
   isCardExpired,
-  isPartialCapture,
   isStaleAuthorization,
   latestStage,
   type Payment,
@@ -53,8 +52,8 @@ export function PaymentTypeLabel({ type }: { type: PaymentType }) {
 }
 
 /**
- * The latest stage as a badge: red while an authorization hangs, with a
- * "partial" note while less was captured than authorized.
+ * The latest stage as a badge, red while an authorization hangs. A partial
+ * capture shows in the drawer's history only.
  */
 export function PaymentStatusBadge({ payment }: { payment: Payment }) {
   const { t } = useLingui();
@@ -62,29 +61,16 @@ export function PaymentStatusBadge({ payment }: { payment: Payment }) {
   const isStale = isStaleAuthorization(payment);
 
   return (
-    <span className="inline-flex items-center gap-1.5">
-      <Badge
-        size="sm"
-        variant="outline"
-        color={isStale ? 'rose' : stageColors[stage]}
-        className="rounded-md"
-        title={
-          isStale ? t`Authorized long ago and not captured yet` : undefined
-        }
-      >
-        {isStale ? (
-          <CircleAlertIcon className="size-3" aria-hidden="true" />
-        ) : (
-          <span className="mr-0.5 size-1.25 rounded-full bg-current/80" />
-        )}
-        {t(stageLabels[stage])}
-      </Badge>
-      {stage === 'captured' && isPartialCapture(payment) && (
-        <span className={cn('text-xs', warningText)}>
-          <Trans>partial</Trans>
-        </span>
-      )}
-    </span>
+    <Badge
+      size="sm"
+      variant="outline"
+      color={isStale ? 'rose' : stageColors[stage]}
+      className="rounded-md"
+      title={isStale ? t`Authorized long ago and not captured yet` : undefined}
+    >
+      <span className="mr-0.5 size-1.25 rounded-full bg-current/80" />
+      {t(stageLabels[stage])}
+    </Badge>
   );
 }
 
