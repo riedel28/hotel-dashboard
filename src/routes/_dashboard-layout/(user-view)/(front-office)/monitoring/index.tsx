@@ -58,8 +58,9 @@ function MonitoringPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      {/* As tall as the same row on pages that have an action button in it */}
-      <div className="mb-6 flex min-h-9 justify-between">
+      {/* From `sm` up as tall as the same row on pages that have an action
+          button in it; phones keep the space for the logs */}
+      <div className="mb-4 flex justify-between sm:mb-6 sm:min-h-9">
         <h1 className="text-xl font-bold">
           <Trans>Monitoring Logs</Trans>
         </h1>

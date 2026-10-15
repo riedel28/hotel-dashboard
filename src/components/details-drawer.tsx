@@ -32,6 +32,7 @@ interface DetailsDrawerProps<
   notFoundText: ReactNode;
   /** The drawer's content for the loaded item. */
   children: (item: TItem) => ReactNode;
+  className?: string;
 }
 
 /**
@@ -47,6 +48,7 @@ export function DetailsDrawer<
   items,
   onSelect,
   onClose,
+  className,
   ...detailsProps
 }: DetailsDrawerProps<TItem, TQueryKey>) {
   // Open with focus on the panel itself, as a dialog opens on its first
@@ -82,7 +84,11 @@ export function DetailsDrawer<
       open={openId !== undefined}
       onOpenChange={(open) => !open && onClose()}
     >
-      <DrawerContent ref={panelRef} initialFocus={panelRef}>
+      <DrawerContent
+        ref={panelRef}
+        initialFocus={panelRef}
+        className={className}
+      >
         {openId !== undefined && (
           <Details
             // Remount per item so one's data never shows under another id
@@ -107,7 +113,7 @@ function Details<TItem extends { id: number }, TQueryKey extends QueryKey>({
   children
 }: Omit<
   DetailsDrawerProps<TItem, TQueryKey>,
-  'openId' | 'onSelect' | 'onClose'
+  'openId' | 'onSelect' | 'onClose' | 'className'
 > & {
   id: number;
 }) {
