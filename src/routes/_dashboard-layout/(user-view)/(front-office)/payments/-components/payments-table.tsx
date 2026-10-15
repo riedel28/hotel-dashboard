@@ -62,6 +62,8 @@ export function PaymentsTable({
 }: PaymentsTableProps) {
   const { t } = useLingui();
 
+  // Each column is as wide as its widest content; together they fit a
+  // 1280px laptop (965px), and wider screens share out the rest
   const columns = useMemo<ColumnDef<DataGridFeatures, Payment>[]>(
     () => [
       {
@@ -87,7 +89,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-9 w-24" />,
           headerTitle: t`Reservation`
         },
-        size: 150,
+        size: 140,
         enableSorting: false
       },
       {
@@ -109,7 +111,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-20" />,
           headerTitle: t`Type`
         },
-        size: 110,
+        size: 120,
         enableSorting: false
       },
       {
@@ -122,7 +124,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-20" />,
           headerTitle: t`Status`
         },
-        size: 120,
+        size: 110,
         enableSorting: false
       },
       {
@@ -157,7 +159,7 @@ export function PaymentsTable({
           return (
             <time
               dateTime={at.toISOString()}
-              className="text-[13px] text-muted-foreground tabular-nums"
+              className="text-[13px] whitespace-nowrap text-muted-foreground tabular-nums"
             >
               {formatDate(at, { preset: 'dateTime' })}
             </time>
@@ -167,7 +169,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-28" />,
           headerTitle: t`Updated`
         },
-        size: 140,
+        size: 145,
         enableSorting: true
       },
       {
@@ -182,7 +184,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-32" />,
           headerTitle: t`Reference`
         },
-        size: 240,
+        size: 170,
         enableSorting: false
       },
       {
@@ -195,7 +197,7 @@ export function PaymentsTable({
           skeleton: <Skeleton className="h-5 w-24" />,
           headerTitle: t`Card`
         },
-        size: 170,
+        size: 160,
         enableSorting: false
       }
     ],
