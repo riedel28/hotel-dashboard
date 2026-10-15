@@ -40,6 +40,8 @@ interface MonitoringTableProps {
   selectedLogId: number | undefined;
   onLogOpen: (logId: number) => void;
   emptyMessage: ReactNode;
+  /** A failed load (`LoadErrorState`), shown where the rows go. */
+  error?: ReactNode;
 }
 
 export function MonitoringTable({
@@ -53,7 +55,8 @@ export function MonitoringTable({
   onSortingChange,
   selectedLogId,
   onLogOpen,
-  emptyMessage
+  emptyMessage,
+  error
 }: MonitoringTableProps) {
   const { t } = useLingui();
 
@@ -236,6 +239,7 @@ export function MonitoringTable({
 
   return (
     <DataGrid
+      error={error}
       table={table}
       recordCount={totalCount}
       onRowClick={(log) => onLogOpen(log.id)}

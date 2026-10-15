@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { fetchPaymentsParamsSchema } from '@/api/payments';
 import { EmptyFilterResult } from '@/components/empty-filter-result';
-import { LoadError } from '@/components/load-error';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -74,35 +74,28 @@ function PaymentsPage() {
             'opacity-70': paymentsQuery.isFetching
           })}
         >
-          {paymentsQuery.isError ? (
-            <LoadError
-              message={paymentsQuery.error.message}
-              fallbackMessage={
-                <Trans>An error occurred while fetching payments</Trans>
-              }
-              isRetrying={paymentsQuery.isFetching}
-              onRetry={() => paymentsQuery.refetch()}
-            />
-          ) : (
-            <PaymentsTable
-              data={payments}
-              isLoading={paymentsQuery.isLoading}
-              totalCount={paymentsQuery.data?.total ?? 0}
-              pageCount={paymentsQuery.data?.page_count ?? 0}
-              pagination={search.pagination}
-              onPaginationChange={search.onPaginationChange}
-              sorting={search.sorting}
-              onSortingChange={search.onSortingChange}
-              selectedPaymentId={search.openPaymentId}
-              onPaymentOpen={search.openPayment}
-              emptyMessage={
-                <EmptyPayments
-                  isFiltered={search.hasActiveFilters}
-                  onClearFilters={search.clearFilters}
-                />
-              }
-            />
-          )}
+          <PaymentsTable
+            error={tableLoadError(
+              paymentsQuery,
+              <Trans>Couldn't load payments</Trans>
+            )}
+            data={payments}
+            isLoading={paymentsQuery.isLoading}
+            totalCount={paymentsQuery.data?.total ?? 0}
+            pageCount={paymentsQuery.data?.page_count ?? 0}
+            pagination={search.pagination}
+            onPaginationChange={search.onPaginationChange}
+            sorting={search.sorting}
+            onSortingChange={search.onSortingChange}
+            selectedPaymentId={search.openPaymentId}
+            onPaymentOpen={search.openPayment}
+            emptyMessage={
+              <EmptyPayments
+                isFiltered={search.hasActiveFilters}
+                onClearFilters={search.clearFilters}
+              />
+            }
+          />
         </div>
       </div>
 

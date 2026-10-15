@@ -5,7 +5,7 @@ import {
   type SortingState,
   useTable
 } from '@tanstack/react-table';
-import { useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 
 import type { User } from '@/api/users';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -46,6 +46,8 @@ interface UsersTableProps {
   onSortingChange?: (
     updaterOrValue: SortingState | ((old: SortingState) => SortingState)
   ) => void;
+  /** A failed load (`LoadErrorState`), shown where the rows go. */
+  error?: ReactNode;
 }
 
 function getInitials(
@@ -66,7 +68,8 @@ export default function UsersTable({
   pageCount = 0,
   onPaginationChange,
   sorting: sortingProp,
-  onSortingChange
+  onSortingChange,
+  error
 }: UsersTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -309,6 +312,7 @@ export default function UsersTable({
 
   return (
     <DataGrid
+      error={error}
       table={table}
       recordCount={totalCount}
       tableClassNames={{

@@ -236,12 +236,12 @@ function ReservationDetails({
               >
                 <ChevronDownIcon />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-auto min-w-40">
+              <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   variant="destructive-soft"
                   onClick={() => setShowDeleteDialog(true)}
                 >
-                  <Trash2Icon className="mr-1 h-4 w-4" />
+                  <Trash2Icon />
                   <Trans>Delete reservation</Trans>
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -7,7 +7,7 @@ import {
   fetchReservationsParamsSchema,
   reservationsQueryOptions
 } from '@/api/reservations';
-import { QueryBoundary } from '@/components/query-boundary';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -69,22 +69,7 @@ function ReservationsPage() {
         </Button>
       </div>
 
-      <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching reservations</Trans>}
-        fallback={
-          <ReservationsTable
-            data={[]}
-            isLoading={true}
-            pageIndex={0}
-            pageSize={25}
-            totalCount={0}
-            pageCount={0}
-          />
-        }
-      >
-        <ReservationsContent />
-      </QueryBoundary>
+      <ReservationsContent />
     </div>
   );
 }
@@ -111,6 +96,7 @@ function ReservationsContent() {
     clearFilters,
     refresh
   } = useReservationsSearch();
+  const reservations = reservationsQuery.data?.index ?? [];
 
   return (
     <div className="space-y-2.5">
@@ -146,11 +132,16 @@ function ReservationsContent() {
         )}
       >
         <ReservationsTable
-          data={reservationsQuery.data.index}
+          data={reservations}
+          isLoading={reservationsQuery.isLoading}
+          error={tableLoadError(
+            reservationsQuery,
+            <Trans>Couldn't load reservations</Trans>
+          )}
           pageIndex={pageIndex}
           pageSize={pageSize}
-          totalCount={reservationsQuery.data.total}
-          pageCount={reservationsQuery.data.page_count}
+          totalCount={reservationsQuery.data?.total ?? 0}
+          pageCount={reservationsQuery.data?.page_count ?? 0}
           onPaginationChange={setPagination}
           sorting={sorting}
           onSortingChange={setSorting}
@@ -161,7 +152,7 @@ function ReservationsContent() {
 
       <ReservationDetailsDrawer
         reservationId={openReservationId}
-        pageReservations={reservationsQuery.data.index}
+        pageReservations={reservations}
         onSelect={selectReservation}
         onClose={closeReservation}
       />
@@ -175,8 +166,9 @@ export const Route = createFileRoute(
   validateSearch: (search) => reservationsSearchSchema.parse(search),
   // Opening the drawer is not a reason to rerun the loader
   loaderDeps: ({ search: { reservation: _reservation, ...deps } }) => deps,
-  loader: ({ context: { queryClient }, deps }) => {
-    return queryClient.ensureQueryData(reservationsQueryOptions(deps));
-  },
+  // Waited for, but a failure isn't thrown here: it would take the whole page
+  // down. The query keeps the error, and the table shows it under the filters.
+  loader: ({ context: { queryClient }, deps }) =>
+    queryClient.prefetchQuery(reservationsQueryOptions(deps)),
   component: ReservationsPage
 });

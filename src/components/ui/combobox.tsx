@@ -116,7 +116,7 @@ function ComboboxInput({
           render={
             <InputGroupInput
               disabled={disabled}
-              className="h-11 py-3 text-sm outline-none placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none"
+              className="h-11 py-3 text-base outline-none placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none md:text-sm"
             />
           }
           {...props}
@@ -306,7 +306,7 @@ function ComboboxChips({
     <ComboboxPrimitive.Chips
       data-slot="combobox-chips"
       className={cn(
-        'flex min-h-9 flex-wrap items-center gap-1.5 rounded-lg border border-input bg-transparent bg-clip-padding px-2.5 py-1.5 text-sm transition-[color,box-shadow] focus-within:border-primary focus-within:shadow-[inset_0_0_0_1px_var(--color-primary)] has-aria-invalid:border-danger has-aria-invalid:focus-within:border-danger has-aria-invalid:focus-within:shadow-[inset_0_0_0_1px_var(--color-danger)] has-data-[slot=combobox-chip]:px-1.5 dark:bg-input/30',
+        'flex min-h-9 flex-wrap items-center gap-1.5 rounded-lg border border-input bg-transparent bg-clip-padding px-2.5 py-1.5 text-base transition-[color,box-shadow] focus-within:border-primary focus-within:shadow-[inset_0_0_0_1px_var(--color-primary)] has-aria-invalid:border-danger has-aria-invalid:focus-within:border-danger has-aria-invalid:focus-within:shadow-[inset_0_0_0_1px_var(--color-danger)] has-data-[slot=combobox-chip]:px-1.5 md:text-sm dark:bg-input/30',
         className
       )}
       {...props}

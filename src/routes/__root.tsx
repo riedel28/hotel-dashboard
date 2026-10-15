@@ -1,8 +1,5 @@
 import { Trans } from '@lingui/react/macro';
-import {
-  type QueryClient,
-  useQueryErrorResetBoundary
-} from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import React from 'react';
 
@@ -14,16 +11,7 @@ const TanStackRouterDevtools = import.meta.env.PROD
       }))
     );
 
-import { RefreshCwIcon } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle
-} from '@/components/ui/empty';
+import { FullScreenRouteError } from '@/components/route-error';
 import { NotFound } from '@/components/ui/not-found';
 
 import type { AuthContext } from '../auth';
@@ -33,54 +21,6 @@ interface MyRouterContext {
   queryClient: QueryClient;
 }
 
-/**
- * Reached when an error escapes the route's own boundary — a failed loader, or
- * a render error outside a `QueryBoundary`. `useQueryErrorResetBoundary` reads
- * the same module-level context the pages read, so clearing it here lets the
- * retried route refetch instead of re-throwing its cached error. Rendering a
- * `QueryErrorResetBoundary` provider here would not work: no query runs inside
- * this subtree, since it replaces the route that owns them.
- */
-function RootErrorComponent({
-  error,
-  reset
-}: {
-  error: unknown;
-  reset: () => void;
-}) {
-  const { reset: resetQueries } = useQueryErrorResetBoundary();
-
-  return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Empty variant="destructive" className="w-md max-w-md">
-        <EmptyHeader>
-          <EmptyTitle>
-            <Trans>Something went wrong</Trans>
-          </EmptyTitle>
-          <EmptyDescription>
-            {(error instanceof Error ? error.message : null) || (
-              <Trans>An unexpected error occurred</Trans>
-            )}
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button
-            variant="destructive"
-            size="lg"
-            onClick={() => {
-              resetQueries();
-              reset();
-            }}
-          >
-            <RefreshCwIcon className="mr-2 h-4 w-4" />
-            <Trans>Try Again</Trans>
-          </Button>
-        </EmptyContent>
-      </Empty>
-    </div>
-  );
-}
-
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
@@ -88,7 +28,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <TanStackRouterDevtools position="bottom-right" initialIsOpen={false} />
     </>
   ),
-  errorComponent: RootErrorComponent,
+  // Nothing above it to keep, so the whole screen
+  errorComponent: FullScreenRouteError,
   notFoundComponent: () => {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">

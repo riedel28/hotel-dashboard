@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import { productCategoriesQueryOptions } from '@/api/product-categories';
 import { productsByCategoryQueryOptions } from '@/api/products';
-import { ErrorState } from '@/components/error-state';
+import { LoadErrorState } from '@/components/load-error';
 import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/search-input';
 
@@ -115,15 +115,14 @@ export function ProductCategoriesTree() {
     return <CategoriesLoadingState />;
   }
 
-  if (categoriesQuery.isError) {
+  if (categoriesQuery.isLoadingError) {
     return (
       <CategoriesCard>
-        <ErrorState
-          size="sm"
-          title={<Trans>Failed to load categories</Trans>}
-          message={categoriesQuery.error?.message}
-          onRetry={() => categoriesQuery.refetch()}
-          isRetrying={categoriesQuery.isRefetching}
+        <LoadErrorState
+          error={categoriesQuery.error}
+          title={<Trans>Couldn't load categories</Trans>}
+          onRetry={() => void categoriesQuery.refetch()}
+          isRetrying={categoriesQuery.isFetching}
         />
       </CategoriesCard>
     );

@@ -32,13 +32,13 @@ export function RowActions({ row }: RowActionsProps) {
       <DropdownMenu>
         {/* 24px keeps the row as low as its text cells allow */}
         <DataGridRowActions className="size-6" />
-        <DropdownMenuContent align="end" className="w-auto min-w-40">
+        <DropdownMenuContent align="end">
           <DropdownMenuItem
             onClick={() => {
               toast.info(t`Pushed to device`);
             }}
           >
-            <MessageSquareDotIcon className="mr-1 h-4 w-4" />
+            <MessageSquareDotIcon />
             <Trans>Push to device</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -51,7 +51,7 @@ export function RowActions({ row }: RowActionsProps) {
                 }}
                 preload="intent"
               >
-                <PencilIcon className="mr-1 h-4 w-4" />
+                <PencilIcon />
                 <Trans>Edit Reservation</Trans>
               </RouterLink>
             )}
@@ -61,7 +61,7 @@ export function RowActions({ row }: RowActionsProps) {
             variant="destructive-soft"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <TrashIcon className="mr-1 h-4 w-4" />
+            <TrashIcon />
             <Trans>Delete Reservation</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>

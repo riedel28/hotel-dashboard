@@ -16,7 +16,7 @@ import { z } from 'zod';
 
 import { roomFilterOptionsQueryOptions, roomsQueryOptions } from '@/api/rooms';
 import { useAuth } from '@/auth';
-import { ErrorState } from '@/components/error-state';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -205,31 +205,23 @@ function RoomsContent({
               'opacity-70': roomsQuery.isFetching
             })}
           >
-            {roomsQuery.isError ? (
-              <ErrorState
-                message={
-                  roomsQuery.error.message || (
-                    <Trans>An error occurred while fetching rooms</Trans>
-                  )
-                }
-                isRetrying={roomsQuery.isFetching}
-                onRetry={() => roomsQuery.refetch()}
-              />
-            ) : (
-              <RoomsTable
-                data={rooms}
-                isLoading={roomsQuery.isLoading}
-                pageIndex={search.pageIndex}
-                pageSize={search.pageSize}
-                totalCount={roomsQuery.data?.total ?? 0}
-                pageCount={roomsQuery.data?.page_count ?? 0}
-                sort={search.sort}
-                onSortChange={search.setSort}
-                onPageChange={search.setPage}
-                onEdit={canManage ? search.openForm : undefined}
-                emptyMessage={<Trans>No rooms match the filters</Trans>}
-              />
-            )}
+            <RoomsTable
+              error={tableLoadError(
+                roomsQuery,
+                <Trans>Couldn't load rooms</Trans>
+              )}
+              data={rooms}
+              isLoading={roomsQuery.isLoading}
+              pageIndex={search.pageIndex}
+              pageSize={search.pageSize}
+              totalCount={roomsQuery.data?.total ?? 0}
+              pageCount={roomsQuery.data?.page_count ?? 0}
+              sort={search.sort}
+              onSortChange={search.setSort}
+              onPageChange={search.setPage}
+              onEdit={canManage ? search.openForm : undefined}
+              emptyMessage={<Trans>No rooms match the filters</Trans>}
+            />
           </div>
         </div>
       )}

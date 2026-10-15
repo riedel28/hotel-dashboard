@@ -7,7 +7,7 @@ import {
   useTable
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 
 import type { Reservation } from '@/api/reservations';
 import {
@@ -64,6 +64,8 @@ interface ReservationsTableProps {
   /** The reservation open in the details drawer, marked as the selected row. */
   selectedReservationId?: number;
   onReservationOpen?: (reservationId: number) => void;
+  /** A failed load (`LoadErrorState`), shown where the rows go. */
+  error?: ReactNode;
 }
 
 export default function ReservationsTable({
@@ -77,7 +79,8 @@ export default function ReservationsTable({
   sorting: sortingProp,
   onSortingChange,
   selectedReservationId,
-  onReservationOpen
+  onReservationOpen,
+  error
 }: ReservationsTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -337,6 +340,7 @@ export default function ReservationsTable({
 
   return (
     <DataGrid
+      error={error}
       table={table}
       recordCount={totalCount}
       onRowClick={(reservation) => onReservationOpen?.(reservation.id)}
