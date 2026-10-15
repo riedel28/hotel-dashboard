@@ -1,16 +1,21 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, Link as RouterLink } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link as RouterLink,
+  useNavigate
+} from '@tanstack/react-router';
 import {
   type ColumnDef,
   type PaginationState,
   type SortingState,
   useTable
 } from '@tanstack/react-table';
-import { PencilIcon, Trash2Icon } from 'lucide-react';
+import { ListFilterIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { customerLabel } from 'shared/types/customers';
+import { perPageSchema } from 'shared/types/list-params';
 import type {
   Property,
   PropertyOption,
@@ -22,7 +27,6 @@ import { fetchPropertiesParamsSchema } from 'shared/types/properties';
 import { propertiesQueryOptions } from '@/api/properties';
 import { ClearFiltersButton } from '@/components/clear-filters-button';
 import { CountryName } from '@/components/country-name';
-import { FiltersBar } from '@/components/filters-bar';
 import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
@@ -32,6 +36,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import {
   DataGrid,
   DataGridContainer,
@@ -62,6 +67,9 @@ import { PropertyOptionsFilter } from './-components/property-options-filter';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
 
+// A page holds every property most installations have
+const PER_PAGE = 25;
+
 function RowActions({ row }: { row: { original: Property } }) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
@@ -79,7 +87,7 @@ function RowActions({ row }: { row: { original: Property } }) {
                 preload="intent"
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
-                <Trans>Edit Property</Trans>
+                <Trans>Edit property</Trans>
               </RouterLink>
             )}
           />
@@ -89,7 +97,7 @@ function RowActions({ row }: { row: { original: Property } }) {
             onClick={() => setShowDeleteDialog(true)}
           >
             <Trash2Icon className="mr-2 h-4 w-4" />
-            <Trans>Delete Property</Trans>
+            <Trans>Delete property</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -100,6 +108,84 @@ function RowActions({ row }: { row: { original: Property } }) {
         propertyId={row.original.id}
       />
     </>
+  );
+}
+
+/**
+ * Phones get the rows as cards: name, stage, country and customer, the whole
+ * card opening the property.
+ */
+function PropertyCards({
+  data,
+  isLoading,
+  emptyMessage,
+  className
+}: {
+  data: Property[];
+  isLoading: boolean;
+  emptyMessage?: React.ReactNode;
+  className?: string;
+}) {
+  if (isLoading) {
+    return (
+      <div className={cn('space-y-2', className)}>
+        {[0, 1, 2, 3, 4].map((key) => (
+          <Skeleton key={key} className="h-20 w-full rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <div
+        className={cn(
+          'rounded-lg border px-4 py-8 text-center text-sm text-muted-foreground',
+          className
+        )}
+      >
+        {emptyMessage || <Trans>No data available</Trans>}
+      </div>
+    );
+  }
+
+  return (
+    <ul className={cn('divide-y rounded-lg border', className)}>
+      {data.map((property) => (
+        <li
+          key={property.id}
+          className="relative flex items-start gap-3 p-4 hover:bg-muted/40"
+        >
+          <div className="min-w-0 flex-1 space-y-1">
+            <div className="flex min-w-0 items-center gap-2">
+              <RouterLink
+                to="/admin/properties/$propertyId"
+                params={{ propertyId: property.id }}
+                preload="intent"
+                // Stretched over the card, so all of it opens the property
+                className="truncate font-medium after:absolute after:inset-0"
+              >
+                {property.name}
+              </RouterLink>
+              <StageBadge stage={property.stage} size="sm" />
+            </div>
+            <CountryName
+              code={property.country_code}
+              className="text-xs text-muted-foreground"
+            />
+            {property.customer && (
+              <div className="truncate text-sm text-muted-foreground">
+                {customerLabel(property.customer)}
+              </div>
+            )}
+          </div>
+          {/* Above the stretched link */}
+          <div className="relative">
+            <RowActions row={{ original: property }} />
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -128,7 +214,7 @@ function PropertiesTable({
   data,
   isLoading = false,
   pageIndex = 0,
-  pageSize = 10,
+  pageSize = PER_PAGE,
   totalCount = 0,
   pageCount = 0,
   onPaginationChange,
@@ -141,6 +227,7 @@ function PropertiesTable({
   );
 
   const { i18n, t } = useLingui();
+  const navigate = useNavigate();
 
   const columns = useMemo<ColumnDef<DataGridFeatures, Property>[]>(
     () => [
@@ -158,9 +245,18 @@ function PropertiesTable({
           const { name, country_code } = row.original;
           return (
             <div className="min-w-0">
-              <div className="truncate font-medium" title={name}>
+              {/* The keyboard way into the property; a click anywhere on the
+                  row opens it too */}
+              <RouterLink
+                to="/admin/properties/$propertyId"
+                params={{ propertyId: row.original.id }}
+                preload="intent"
+                onClick={(event) => event.stopPropagation()}
+                className="block w-fit max-w-full truncate font-medium underline-offset-4 hover:underline"
+                title={name}
+              >
                 {name}
-              </div>
+              </RouterLink>
               <CountryName
                 code={country_code}
                 className="text-xs text-muted-foreground"
@@ -199,7 +295,9 @@ function PropertiesTable({
               to="/admin/customers/$customerId"
               params={{ customerId: customer.id }}
               preload="intent"
-              className="line-clamp-1 underline-offset-4 hover:underline"
+              onClick={(event) => event.stopPropagation()}
+              // As wide as its text: the rest of the cell is the row
+              className="block w-fit max-w-full truncate text-link underline-offset-4 hover:underline"
               title={label}
             >
               {label}
@@ -264,7 +362,11 @@ function PropertiesTable({
         id: 'actions',
         header: () => null,
         cell: ({ row }) => (
-          <div className="flex justify-center">
+          // The menu and its dialog keep their clicks from opening the row
+          <div
+            className="flex justify-center"
+            onClick={(event) => event.stopPropagation()}
+          >
             <RowActions row={row} />
           </div>
         ),
@@ -313,6 +415,12 @@ function PropertiesTable({
     <DataGrid
       table={table}
       recordCount={totalCount}
+      onRowClick={(property) =>
+        void navigate({
+          to: '/admin/properties/$propertyId',
+          params: { propertyId: property.id }
+        })
+      }
       tableClassNames={{ edgeCell: 'px-5' }}
       tableLayout={{
         columnsPinnable: false,
@@ -323,9 +431,15 @@ function PropertiesTable({
       emptyMessage={emptyMessage}
     >
       <div className="w-full space-y-2.5">
-        <DataGridContainer>
+        <DataGridContainer className="hidden sm:block">
           <DataGridTable />
         </DataGridContainer>
+        <PropertyCards
+          className="sm:hidden"
+          data={data}
+          isLoading={isLoading}
+          emptyMessage={emptyMessage}
+        />
         <DataGridPagination />
       </div>
     </DataGrid>
@@ -344,6 +458,14 @@ function PropertiesContent() {
     sort_order
   } = Route.useSearch();
   const navigate = Route.useNavigate();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const filtersId = useId();
+  // What the folded filters hold; the search shows for itself
+  const activeFilterCount = [
+    country_code,
+    stage?.length,
+    options?.length
+  ].filter(Boolean).length;
   const queryClient = useQueryClient();
 
   const propertiesQuery = useSuspenseQuery(
@@ -416,7 +538,7 @@ function PropertiesContent() {
       to: '/admin/properties',
       search: {
         page: 1,
-        per_page: per_page ?? 10
+        per_page: per_page ?? PER_PAGE
       }
     });
   };
@@ -466,7 +588,7 @@ function PropertiesContent() {
       typeof updaterOrValue === 'function'
         ? updaterOrValue({
             pageIndex: (page ?? 1) - 1,
-            pageSize: per_page ?? 10
+            pageSize: per_page ?? PER_PAGE
           })
         : updaterOrValue;
 
@@ -489,30 +611,64 @@ function PropertiesContent() {
         }
       )}
     >
-      <FiltersBar>
-        <PropertySearch value={q} onChange={handleSearchChange} />
-        <PropertyCountryFilter
-          value={country_code}
-          onChange={handleCountryChange}
-        />
-        <PropertyStageFilter value={stage ?? []} onChange={handleStageChange} />
-        <PropertyOptionsFilter
-          value={options ?? []}
-          onChange={handleOptionsChange}
-        />
-        <ClearFiltersButton
-          hasActiveFilters={hasActiveFilters}
-          onClear={handleClearFilters}
-        />
+      {/* Phones: the search, a button for the other filters and refresh on
+          one row, the filters folded under it. From `sm` up: one row. */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="min-w-0 flex-1 sm:flex-none">
+          <PropertySearch value={q} onChange={handleSearchChange} />
+        </div>
+        <Button
+          variant="outline"
+          className="sm:hidden"
+          aria-expanded={filtersOpen}
+          aria-controls={filtersId}
+          onClick={() => setFiltersOpen((open) => !open)}
+        >
+          <ListFilterIcon />
+          <Trans>Filters</Trans>
+          {activeFilterCount > 0 && (
+            <span className="rounded-full bg-primary px-1.5 text-xs leading-5 text-primary-foreground tabular-nums">
+              {activeFilterCount}
+            </span>
+          )}
+        </Button>
         <DataGridRefreshButton
+          className="sm:order-last"
           isRefreshing={propertiesQuery.isFetching}
           onRefresh={handleRefresh}
         />
-      </FiltersBar>
+        <div
+          id={filtersId}
+          className={cn(
+            'w-full flex-col gap-2 sm:flex sm:w-auto sm:flex-row sm:items-center',
+            filtersOpen ? 'flex' : 'hidden'
+          )}
+        >
+          <PropertyCountryFilter
+            value={country_code}
+            onChange={handleCountryChange}
+          />
+          <PropertyStageFilter
+            value={stage ?? []}
+            onChange={handleStageChange}
+          />
+          <PropertyOptionsFilter
+            value={options ?? []}
+            onChange={handleOptionsChange}
+          />
+          {/* Its kept place only matters on the one-row bar */}
+          <div className={cn(!hasActiveFilters && 'max-sm:hidden')}>
+            <ClearFiltersButton
+              hasActiveFilters={hasActiveFilters}
+              onClear={handleClearFilters}
+            />
+          </div>
+        </div>
+      </div>
       <PropertiesTable
         data={propertiesQuery.data.index}
         pageIndex={(page ?? 1) - 1}
-        pageSize={per_page ?? 10}
+        pageSize={per_page ?? PER_PAGE}
         totalCount={propertiesQuery.data.total}
         pageCount={propertiesQuery.data.page_count}
         onPaginationChange={handlePaginationChange}
@@ -578,7 +734,7 @@ function PropertiesPage() {
             data={[]}
             isLoading={true}
             pageIndex={0}
-            pageSize={10}
+            pageSize={PER_PAGE}
             totalCount={0}
             pageCount={0}
           />
@@ -591,7 +747,10 @@ function PropertiesPage() {
 }
 
 export const Route = createFileRoute('/_dashboard-layout/admin/properties/')({
-  validateSearch: (search) => fetchPropertiesParamsSchema.parse(search),
+  validateSearch: (search) =>
+    fetchPropertiesParamsSchema
+      .extend({ per_page: perPageSchema.default(PER_PAGE).optional() })
+      .parse(search),
   loaderDeps: ({ search }) => search,
   loader: ({ context: { queryClient }, deps }) => {
     return queryClient.ensureQueryData(propertiesQueryOptions(deps));

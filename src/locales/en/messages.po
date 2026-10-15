@@ -492,7 +492,7 @@ msgstr "Adds and updates rooms. Rooms that are not in the file stay as they are.
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:36
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:129
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:547
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:703
 msgid "Admin"
 msgstr "Admin"
 
@@ -652,7 +652,7 @@ msgstr "An error occurred while fetching monitoring logs"
 msgid "An error occurred while fetching payments"
 msgstr "An error occurred while fetching payments"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:575
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:731
 msgid "An error occurred while fetching properties"
 msgstr "An error occurred while fetching properties"
 
@@ -1560,8 +1560,8 @@ msgstr "Current password is required"
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:218
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:155
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:151
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:186
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:211
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:282
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:309
 msgid "Customer"
 msgstr "Customer"
 
@@ -1648,9 +1648,13 @@ msgstr "Delete product"
 msgid "Delete product?"
 msgstr "Delete product?"
 
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:100
+msgid "Delete property"
+msgstr "Delete property"
+
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:92
-msgid "Delete Property"
-msgstr "Delete Property"
+#~ msgid "Delete Property"
+#~ msgstr "Delete Property"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:53
 msgid "Delete property?"
@@ -1881,9 +1885,13 @@ msgstr "Edit item"
 msgid "Edit product"
 msgstr "Edit product"
 
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:90
+msgid "Edit property"
+msgstr "Edit property"
+
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:82
-msgid "Edit Property"
-msgstr "Edit Property"
+#~ msgid "Edit Property"
+#~ msgstr "Edit Property"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:223
 msgid "Edit reservation"
@@ -2493,6 +2501,10 @@ msgstr "File"
 msgid "Filter by reservation"
 msgstr "Filter by reservation"
 
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:628
+msgid "Filters"
+msgstr "Filters"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:35
 msgid "Final payment"
 msgstr "Final payment"
@@ -2839,7 +2851,7 @@ msgstr "Holder"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:30
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:123
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:541
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:697
 msgid "Home"
 msgstr "Home"
 
@@ -3245,7 +3257,7 @@ msgstr "Manage hotel properties, view details, and configure settings"
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Manage orders, track shipments, view order history, and process returns efficiently"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:565
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:721
 msgid "Manage properties, their stage and the customers that own them."
 msgstr "Manage properties, their stage and the customers that own them."
 
@@ -3609,11 +3621,11 @@ msgstr "No content yet"
 msgid "No country found."
 msgstr "No country found."
 
-#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:80
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:82
 msgid "No customer"
 msgstr "No customer"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:97
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:99
 msgid "No customer found."
 msgstr "No customer found."
 
@@ -3622,6 +3634,7 @@ msgid "No customers match the filters"
 msgstr "No customers match the filters"
 
 #: src/components/ui/data-grid-table.tsx:419
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:147
 msgid "No data available"
 msgstr "No data available"
 
@@ -3722,7 +3735,7 @@ msgstr "No properties found"
 #~ msgid "No properties found."
 #~ msgstr "No properties found."
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:523
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:679
 msgid "No properties match the filters"
 msgstr "No properties match the filters"
 
@@ -4446,9 +4459,9 @@ msgstr "Profile updated"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:137
 #: src/routes/_dashboard-layout/admin/index.tsx:19
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:63
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:533
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:553
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:562
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:689
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:709
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:718
 msgid "Properties"
 msgstr "Properties"
 
@@ -4461,8 +4474,8 @@ msgstr "Properties"
 #~ msgstr "Properties updated"
 
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:41
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:152
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:173
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:239
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:269
 msgid "Property"
 msgstr "Property"
 
@@ -4658,7 +4671,7 @@ msgstr "Remove"
 #~ msgid "Remove booking filter"
 #~ msgstr "Remove booking filter"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:74
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:76
 msgid "Remove customer"
 msgstr "Remove customer"
 
@@ -5107,7 +5120,7 @@ msgid "Search country..."
 msgstr "Search country..."
 
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:87
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:89
 msgid "Search customers"
 msgstr "Search customers"
 
@@ -5185,7 +5198,7 @@ msgstr "Search titles"
 msgid "Search users"
 msgstr "Search users"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:97
+#: src/routes/_dashboard-layout/admin/properties/-components/customer-picker.tsx:99
 msgid "Searching..."
 msgstr "Searching..."
 
@@ -5507,8 +5520,8 @@ msgstr "SMS"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:362
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:25
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:246
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:256
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:344
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:354
 msgid "Solutions"
 msgstr "Solutions"
 
@@ -5544,8 +5557,8 @@ msgstr "Source"
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:192
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:182
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:22
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:223
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:234
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:321
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:332
 msgid "Stage"
 msgstr "Stage"
 
