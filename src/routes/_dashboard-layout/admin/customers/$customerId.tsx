@@ -53,22 +53,13 @@ function CustomerPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        {/* Who this is and how to reach them, as a property shows its owner */}
+        {/* Who this is: the name, and the company they act for */}
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
           <h1 className="truncate text-xl font-bold">{name}</h1>
           {data?.company_name && (
             <span className="truncate text-sm text-muted-foreground">
               {data.company_name}
             </span>
-          )}
-          {data && (
-            <a
-              href={`mailto:${data.email}`}
-              // Styled as the owner link in a property's header
-              className="truncate text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-            >
-              {data.email}
-            </a>
           )}
         </div>
       </div>
