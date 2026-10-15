@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { createWorklog, worklogsQueryOptions } from '@/api/worklogs';
+import { useAuth } from '@/auth';
 import {
   Empty,
   EmptyDescription,
@@ -17,7 +18,6 @@ import {
   EmptyMedia,
   EmptyTitle
 } from '@/components/ui/empty';
-import { Item } from '@/components/ui/item';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Tooltip,
@@ -26,13 +26,12 @@ import {
 } from '@/components/ui/tooltip';
 import { useFormatLocalized } from '@/hooks/use-format-localized';
 
-import { WorklogCard } from './worklog-card';
+import { WorklogAvatar, WorklogCard } from './worklog-card';
 import { dayKind, groupByDay } from './worklog-days';
 import { WorklogMessageForm } from './worklog-message-form';
 
-// Inset like the Details card's content. `box-content` keeps the 620px for
-// the entries themselves, with the padding outside it.
-const WRAP = 'box-content max-w-[620px] space-y-8 px-4 pt-2';
+// Flush with the title and the tabs, as the Details card is.
+const WRAP = 'max-w-[620px] space-y-6 pt-2';
 
 function DayHeading({ date }: { date: Date }) {
   const { t } = useLingui();
@@ -71,6 +70,7 @@ function DayHeading({ date }: { date: Date }) {
 export function WorkLog({ propertyId }: { propertyId: string }) {
   const { t } = useLingui();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const { data: worklogs } = useSuspenseQuery(worklogsQueryOptions(propertyId));
 
   const [formKey, setFormKey] = useState(0);
@@ -88,15 +88,21 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
 
   return (
     <div className={WRAP}>
-      <WorklogMessageForm
-        // Remounted after each save, which clears the draft.
-        key={formKey}
-        placeholder={t`Write a note about this property…`}
-        submitLabel={<Trans>Add entry</Trans>}
-        isPending={createMutation.isPending}
-        onSubmit={createMutation.mutate}
-        textareaClassName="min-h-21"
-      />
+      {/* On the entries' grid: the writer's avatar over their column */}
+      <div className="grid grid-cols-[1.5rem_1fr] gap-x-3">
+        <div className="flex h-9 items-center">
+          <WorklogAvatar user={user} />
+        </div>
+        <WorklogMessageForm
+          // Remounted after each save, which clears the draft.
+          key={formKey}
+          placeholder={t`Write a note about this property…`}
+          submitLabel={<Trans>Add entry</Trans>}
+          isPending={createMutation.isPending}
+          onSubmit={createMutation.mutate}
+          textareaClassName="min-h-21"
+        />
+      </div>
 
       {worklogs.length === 0 ? (
         <Empty className="border">
@@ -120,9 +126,20 @@ export function WorkLog({ propertyId }: { propertyId: string }) {
             <h2>
               <DayHeading date={date} />
             </h2>
-            {entries.map((worklog) => (
-              <WorklogCard key={worklog.id} worklog={worklog} />
-            ))}
+            <ol>
+              {entries.map((worklog, index) => (
+                <li key={worklog.id} className="relative pb-5 last:pb-0">
+                  {/* The line down to the day's next entry, under the avatars */}
+                  {index < entries.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-8 bottom-1 left-3 -translate-x-1/2 border-l"
+                    />
+                  )}
+                  <WorklogCard worklog={worklog} />
+                </li>
+              ))}
+            </ol>
           </section>
         ))
       )}
@@ -137,17 +154,14 @@ export function WorkLogSkeleton() {
       <div className="space-y-3">
         <Skeleton className="h-5 w-20" />
         {[0, 1, 2].map((key) => (
-          <Item
+          <div
             key={key}
-            variant="outline"
-            className="flex-col items-stretch gap-2 p-4"
+            className="grid grid-cols-[1.5rem_1fr] gap-x-3 gap-y-1 pb-5"
           >
-            <div className="flex h-7 items-center gap-2">
-              <Skeleton className="size-6 rounded-full" />
-              <Skeleton className="h-3.5 w-40" />
-            </div>
-            <Skeleton className="h-3.5 w-4/5" />
-          </Item>
+            <Skeleton className="mt-0.5 size-6 rounded-full" />
+            <Skeleton className="mt-2 h-3.5 w-40" />
+            <Skeleton className="col-start-2 h-4 w-4/5" />
+          </div>
         ))}
       </div>
     </div>

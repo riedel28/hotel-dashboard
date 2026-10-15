@@ -73,6 +73,7 @@ export function AddReservationForm() {
       onSubmit={(data) => createReservationMutation.mutate(data)}
       isSaving={isSaving}
       submitLabel={<Trans>Create reservation</Trans>}
+      isNew
       status={isSaving ? <Trans>Creating reservation…</Trans> : null}
       secondaryAction={
         <Button

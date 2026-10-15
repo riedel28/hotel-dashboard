@@ -1,16 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Loader2Icon, PlusCircleIcon } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
+import { Loader2Icon, PlusIcon } from 'lucide-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   type CreatePropertyData,
   createPropertySchema,
-  type PropertyCustomer
+  type PropertyCustomer,
+  type PropertyStage
 } from 'shared/types/properties';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { createProperty } from '@/api/properties';
 import { Button } from '@/components/ui/button';
@@ -38,30 +40,33 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { propertyStages, stageLabels } from '@/components/ui/stage-badge';
 
 import { CustomerPicker } from './customer-picker';
 
-const stageValues = ['demo', 'production', 'staging', 'template'] as const;
-
-function getStageLabel(stage: string) {
-  const map: Record<string, () => string> = {
-    demo: () => t`Demo`,
-    production: () => t`Production`,
-    staging: () => t`Staging`,
-    template: () => t`Template`
-  };
-  return map[stage]?.() ?? stage;
-}
-
 export function AddPropertyModal() {
+  const { t } = useLingui();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
   const queryClient = useQueryClient();
   // Held beside the form: the picker works with the whole Customer, the
   // request only sends its id.
   const [customer, setCustomer] = React.useState<PropertyCustomer | null>(null);
 
+  // The shared schema with a message a person can read
+  const schema = React.useMemo(
+    () =>
+      createPropertySchema.extend({
+        name: z
+          .string()
+          .trim()
+          .min(1, t`Name is required`)
+      }),
+    [t]
+  );
+
   const form = useForm<CreatePropertyData>({
-    resolver: zodResolver(createPropertySchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: '',
       country_code: 'DE',
@@ -69,26 +74,33 @@ export function AddPropertyModal() {
     }
   });
 
+  const createPropertyMutation = useMutation({
+    mutationFn: createProperty,
+    onSuccess: (property) => {
+      queryClient.invalidateQueries({ queryKey: ['properties'] });
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      toast.success(t`Property created successfully`);
+      // Its solutions and nav items are set up there, so that is next
+      void navigate({
+        to: '/admin/properties/$propertyId',
+        params: { propertyId: property.id }
+      });
+    },
+    onError: () => {
+      toast.error(t`Failed to create property`);
+    }
+  });
+  const isSaving = createPropertyMutation.isPending;
+
   const handleOpenChange = (open: boolean) => {
+    // Not closed under a request still on its way
+    if (isSaving) return;
     setIsOpen(open);
     if (!open) {
       form.reset();
       setCustomer(null);
     }
   };
-
-  const createPropertyMutation = useMutation({
-    mutationFn: createProperty,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['properties'] });
-      queryClient.invalidateQueries({ queryKey: ['customers'] });
-      handleOpenChange(false);
-      toast.success(t`Property created successfully`);
-    },
-    onError: () => {
-      toast.error(t`Failed to create property`);
-    }
-  });
 
   const onSubmit = (data: CreatePropertyData) => {
     createPropertyMutation.mutate({
@@ -101,20 +113,24 @@ export function AddPropertyModal() {
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button>
-            <PlusCircleIcon className="mr-1 size-3.5" />
-            <Trans>Add Property</Trans>
+          // Just the icon on a phone; its name stays for screen readers
+          <Button className="max-sm:size-9 max-sm:p-0">
+            <PlusIcon />
+            <span className="max-sm:sr-only">
+              <Trans>Add property</Trans>
+            </span>
           </Button>
         }
       />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            <Trans>Create New Property</Trans>
+            <Trans>New property</Trans>
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          <FieldSet className="gap-6">
+          {/* The same fields in the same order as the property's Details */}
+          <FieldSet className="gap-6" disabled={isSaving}>
             <FieldGroup className="gap-4">
               <Controller
                 control={form.control}
@@ -136,6 +152,20 @@ export function AddPropertyModal() {
                   </Field>
                 )}
               />
+
+              <Field className="gap-2">
+                <FieldLabel id="new-property-customer-label">
+                  <Trans>Customer</Trans>
+                  <span className="font-normal text-muted-foreground">
+                    <Trans>(optional)</Trans>
+                  </span>
+                </FieldLabel>
+                <CustomerPicker
+                  value={customer}
+                  onValueChange={setCustomer}
+                  aria-labelledby="new-property-customer-label"
+                />
+              </Field>
 
               <Controller
                 control={form.control}
@@ -170,13 +200,13 @@ export function AddPropertyModal() {
                         aria-invalid={fieldState.invalid}
                       >
                         <SelectValue>
-                          {(value) => <span>{getStageLabel(value)}</span>}
+                          {(value: PropertyStage) => t(stageLabels[value])}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        {stageValues.map((stage) => (
+                        {propertyStages.map((stage) => (
                           <SelectItem key={stage} value={stage}>
-                            {getStageLabel(stage)}
+                            {t(stageLabels[stage])}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -187,17 +217,6 @@ export function AddPropertyModal() {
                   </Field>
                 )}
               />
-
-              <Field className="gap-2">
-                <FieldLabel id="new-property-customer-label">
-                  <Trans>Customer</Trans>
-                </FieldLabel>
-                <CustomerPicker
-                  value={customer}
-                  onValueChange={setCustomer}
-                  aria-labelledby="new-property-customer-label"
-                />
-              </Field>
             </FieldGroup>
           </FieldSet>
           <DialogFooter>
@@ -205,14 +224,13 @@ export function AddPropertyModal() {
               type="button"
               variant="outline"
               onClick={() => handleOpenChange(false)}
+              disabled={isSaving}
             >
               <Trans>Cancel</Trans>
             </Button>
-            <Button type="submit" disabled={createPropertyMutation.isPending}>
-              {createPropertyMutation.isPending && (
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              <Trans>Create</Trans>
+            <Button type="submit" disabled={isSaving} aria-busy={isSaving}>
+              {isSaving && <Loader2Icon className="animate-spin" />}
+              <Trans>Create property</Trans>
             </Button>
           </DialogFooter>
         </form>

@@ -1,36 +1,38 @@
+import type { MessageDescriptor } from '@lingui/core';
+import { msg } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react/macro';
+import type { PropertyStage } from 'shared/types/properties';
+
 import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-export type PropertyStage = 'demo' | 'production' | 'staging' | 'template';
+export type { PropertyStage };
+
+/** The stages in the order every list of them shows: live ones first. */
+export const propertyStages: PropertyStage[] = [
+  'production',
+  'staging',
+  'demo',
+  'template'
+];
+
+export const stageLabels: Record<PropertyStage, MessageDescriptor> = {
+  production: msg`Production`,
+  staging: msg`Staging`,
+  demo: msg`Demo`,
+  template: msg`Template`
+};
 
 type StageBadgeProps = Omit<BadgeProps, 'children' | 'color' | 'variant'> & {
   stage: PropertyStage;
 };
 
-const stageBadgeConfig = {
-  demo: {
-    label: 'Demo',
-    color: 'gray'
-  },
-  production: {
-    label: 'Production',
-    color: 'emerald'
-  },
-  staging: {
-    label: 'Staging',
-    color: 'sky'
-  },
-  template: {
-    label: 'Template',
-    color: 'indigo'
-  }
-} satisfies Record<
-  PropertyStage,
-  {
-    label: string;
-    color: BadgeProps['color'];
-  }
->;
+const stageColors = {
+  demo: 'gray',
+  production: 'emerald',
+  staging: 'sky',
+  template: 'indigo'
+} satisfies Record<PropertyStage, BadgeProps['color']>;
 
 export function StageBadge({
   stage,
@@ -38,16 +40,16 @@ export function StageBadge({
   className,
   ...props
 }: StageBadgeProps) {
-  const config = stageBadgeConfig[stage];
+  const { t } = useLingui();
 
   return (
     <Badge
-      color={config.color}
+      color={stageColors[stage]}
       size={size}
-      className={cn('shrink-0 rounded-md capitalize', className)}
+      className={cn('shrink-0 rounded-md', className)}
       {...props}
     >
-      {config.label}
+      {t(stageLabels[stage])}
     </Badge>
   );
 }

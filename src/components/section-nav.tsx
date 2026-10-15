@@ -327,7 +327,7 @@ export function SectionNav({
                 onClick={(event) => handleClick(event, id)}
                 className={cn(
                   'flex items-center gap-2 border-s-2 border-transparent px-3 py-1.25 font-normal text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
-                  isActive && 'border-primary font-semibold text-foreground'
+                  isActive && 'border-indicator font-semibold text-foreground'
                 )}
               >
                 <span className="min-w-0 flex-1 truncate">{label}</span>

@@ -27,6 +27,7 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-danger: var(--danger);
   --color-link: var(--link);
+  --color-indicator: var(--indicator);
   --color-badge-destructive: var(--badge-destructive);
   --color-badge-destructive-foreground: var(--badge-destructive-foreground);
   --color-border: var(--border);
@@ -88,6 +89,9 @@
   /* Text links: the primary hue with more colour than body text, so a link
      reads as one next to it; 5.5:1 on the background (WCAG AA). */
   --link: oklch(0.5 0.12 228);
+  /* The mark on the active tab or section link: --primary itself here,
+     5.3:1 on the background. */
+  --indicator: var(--primary);
   /* Badge chips are a pale fill + dark label, unlike the solid --destructive
      button. Dark mode inverts the roles: the fill token is tinted at 20%. */
   --badge-destructive: oklch(0.969 0.015 12.422);
@@ -134,10 +138,15 @@
   --destructive-foreground: oklch(0.941 0.03 12.58);
   --danger: oklch(0.79 0.14 12.5);
   /* --primary is too dark for text here (2.5:1), so links get their own
-     light step, turned towards the brand's teal (between cyan and teal):
-     at this lightness the primary hue reads as sky blue. 10.8:1 on the
-     table background, no opacity. */
-  --link: oklch(0.82 0.11 196);
+     light step, turned towards the brand's teal: at this lightness the
+     primary hue reads as sky blue. The hue of the sidebar's active item at
+     a moderate chroma (57% of what the gamut allows), not a neon one; as
+     light as before, so 10.2:1 on the table background and as far from
+     body text, no opacity. */
+  --link: oklch(0.82 0.08 205);
+  /* --primary is 2.7:1 here, under the 3:1 a state mark needs; this is its
+     hue one step lighter, 5.6:1, calmer than the links' teal. */
+  --indicator: oklch(0.62 0.105 223);
   --badge-destructive: oklch(0.645 0.246 16.439);
   --badge-destructive-foreground: oklch(0.892 0.058 10.001);
   --border: oklch(1 0 0 / 10%);

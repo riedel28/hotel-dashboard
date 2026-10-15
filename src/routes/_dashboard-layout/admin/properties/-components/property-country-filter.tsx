@@ -18,7 +18,7 @@ export function PropertyCountryFilter({
       value={value}
       onValueChange={onChange}
       placeholder={t`All countries`}
-      className="w-full sm:w-45"
+      className="w-full min-w-0 sm:w-auto sm:flex-1 xl:max-w-45"
     />
   );
 }
