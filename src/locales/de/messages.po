@@ -3160,7 +3160,7 @@ msgstr "Anmelden"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:238
 msgid "Logs for reservation {bookingNr}"
-msgstr ""
+msgstr "Protokolle der Reservierung {bookingNr}"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:73
 msgid "main"
@@ -3521,11 +3521,11 @@ msgstr "Weiter"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:206
 msgid "Next log"
-msgstr ""
+msgstr "Nächstes Protokoll"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:207
 msgid "Next log (↓)"
-msgstr ""
+msgstr "Nächstes Protokoll (↓)"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:362
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:363
@@ -4241,11 +4241,11 @@ msgstr "Zurück"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:196
 msgid "Previous log"
-msgstr ""
+msgstr "Vorheriges Protokoll"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:197
 msgid "Previous log (↑)"
-msgstr ""
+msgstr "Vorheriges Protokoll (↑)"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:352
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:353
@@ -5338,7 +5338,7 @@ msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:287
 msgid "Show all logs for {bookingNr}"
-msgstr ""
+msgstr "Alle Protokolle für {bookingNr} anzeigen"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:124
 msgid "Show all roles"
