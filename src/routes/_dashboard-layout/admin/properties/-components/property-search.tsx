@@ -15,7 +15,7 @@ export function PropertySearch({ value, onChange }: PropertySearchProps) {
       value={value || ''}
       onChange={onChange}
       placeholder={t`Search properties`}
-      wrapperClassName="w-full sm:w-[250px]"
+      wrapperClassName="w-full"
       debounceMs={500}
     />
   );

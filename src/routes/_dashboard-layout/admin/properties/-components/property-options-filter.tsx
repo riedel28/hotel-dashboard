@@ -31,7 +31,7 @@ export function PropertyOptionsFilter({
       value={value}
       onValueChange={onChange}
       // min-w-0 lets a long selection truncate instead of widening the trigger.
-      className="w-full min-w-0 sm:w-[260px]"
+      className="w-full min-w-0 sm:w-auto sm:flex-[1.5] xl:max-w-[260px]"
     >
       <DataGridCheckboxFilterFooter>
         <DataGridCheckboxFilterClear>

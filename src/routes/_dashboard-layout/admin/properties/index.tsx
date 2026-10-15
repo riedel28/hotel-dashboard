@@ -611,15 +611,16 @@ function PropertiesContent() {
         }
       )}
     >
-      {/* Phones: the search, a button for the other filters and refresh on
-          one row, the filters folded under it. From `sm` up: one row. */}
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="min-w-0 flex-1 sm:flex-none">
+      {/* Narrow screens: the search, a button for the other filters and
+          refresh on one row, the filters folded under it. From `xl` up: one
+          row that never wraps, its filters narrowing to fit. */}
+      <div className="flex flex-wrap items-center gap-2 xl:flex-nowrap">
+        <div className="min-w-0 flex-1 xl:max-w-[250px] xl:min-w-36">
           <PropertySearch value={q} onChange={handleSearchChange} />
         </div>
         <Button
           variant="outline"
-          className="sm:hidden"
+          className="xl:hidden"
           aria-expanded={filtersOpen}
           aria-controls={filtersId}
           onClick={() => setFiltersOpen((open) => !open)}
@@ -633,14 +634,14 @@ function PropertiesContent() {
           )}
         </Button>
         <DataGridRefreshButton
-          className="sm:order-last"
+          className="shrink-0 xl:order-last"
           isRefreshing={propertiesQuery.isFetching}
           onRefresh={handleRefresh}
         />
         <div
           id={filtersId}
           className={cn(
-            'w-full flex-col gap-2 sm:flex sm:w-auto sm:flex-row sm:items-center',
+            'w-full flex-col gap-2 sm:flex-row sm:items-center xl:flex xl:w-auto xl:min-w-0 xl:flex-[3]',
             filtersOpen ? 'flex' : 'hidden'
           )}
         >
@@ -657,7 +658,7 @@ function PropertiesContent() {
             onChange={handleOptionsChange}
           />
           {/* Its kept place only matters on the one-row bar */}
-          <div className={cn(!hasActiveFilters && 'max-sm:hidden')}>
+          <div className={cn('shrink-0', !hasActiveFilters && 'max-xl:hidden')}>
             <ClearFiltersButton
               hasActiveFilters={hasActiveFilters}
               onClear={handleClearFilters}
