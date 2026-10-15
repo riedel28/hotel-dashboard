@@ -23,6 +23,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 import { useFormatLocalized } from '@/hooks/use-format-localized';
+import { cn } from '@/lib/utils';
 import { getFullName, getInitials } from '@/utils/user';
 
 import { DeleteWorklogDialog } from './delete-worklog-dialog';
@@ -84,7 +85,15 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
   return (
     <>
       {/* Avatar in its own column; the day's timeline line runs down it */}
-      <div className="group/entry grid grid-cols-[1.5rem_1fr] gap-x-3 gap-y-1">
+      {/* On hover a soft fill frames the entry, so its menu at the far end
+          reads as part of it. The negative margins keep the avatar on the
+          day's timeline line. */}
+      <div
+        className={cn(
+          'group/entry -mx-2 -my-1.5 grid grid-cols-[1.5rem_1fr] gap-x-3 gap-y-1 rounded-lg px-2 py-1.5 transition-colors',
+          !isEditing && 'hover:bg-muted/40'
+        )}
+      >
         <div className="flex h-7 items-center">
           <WorklogAvatar user={author} />
         </div>
@@ -142,8 +151,9 @@ export function WorklogCard({ worklog }: { worklog: Worklog }) {
           </div>
           {!isEditing && (
             <DropdownMenu>
-              {/* Shown on hover where there is one; always on touch screens */}
-              <DataGridRowActions className="focus-visible:opacity-100 aria-expanded:opacity-100 pointer-fine:opacity-0 pointer-fine:group-hover/entry:opacity-100" />
+              {/* Faint until the entry is hovered, so it can be found without;
+                  full on touch screens, which have no hover */}
+              <DataGridRowActions className="focus-visible:opacity-100 aria-expanded:opacity-100 pointer-fine:opacity-40 pointer-fine:group-hover/entry:opacity-100" />
               <DropdownMenuContent align="end" className="w-auto min-w-0">
                 <DropdownMenuItem onClick={() => setIsEditing(true)}>
                   <PencilIcon className="mr-2 h-4 w-4" />
