@@ -51,7 +51,7 @@ function RowActions({ customer }: { customer: Customer }) {
   return (
     <DropdownMenu>
       <DataGridRowActions />
-      <DropdownMenuContent align="end" className="w-auto min-w-0">
+      <DropdownMenuContent align="end">
         <DropdownMenuItem
           render={(props) => (
             <RouterLink
@@ -60,7 +60,7 @@ function RowActions({ customer }: { customer: Customer }) {
               params={{ customerId: customer.id }}
               preload="intent"
             >
-              <PencilIcon className="mr-2 h-4 w-4" />
+              <PencilIcon />
               <Trans>Edit customer</Trans>
             </RouterLink>
           )}

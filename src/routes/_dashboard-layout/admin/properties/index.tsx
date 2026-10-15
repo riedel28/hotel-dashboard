@@ -77,7 +77,7 @@ function RowActions({ row }: { row: { original: Property } }) {
     <>
       <DropdownMenu>
         <DataGridRowActions />
-        <DropdownMenuContent align="end" className="w-auto min-w-0">
+        <DropdownMenuContent align="end">
           <DropdownMenuItem
             render={(props) => (
               <RouterLink
@@ -86,7 +86,7 @@ function RowActions({ row }: { row: { original: Property } }) {
                 params={{ propertyId: row.original.id }}
                 preload="intent"
               >
-                <PencilIcon className="mr-2 h-4 w-4" />
+                <PencilIcon />
                 <Trans>Edit property</Trans>
               </RouterLink>
             )}
@@ -96,7 +96,7 @@ function RowActions({ row }: { row: { original: Property } }) {
             variant="destructive-soft"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <Trash2Icon className="mr-2 h-4 w-4" />
+            <Trash2Icon />
             <Trans>Delete property</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>

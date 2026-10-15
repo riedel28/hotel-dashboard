@@ -169,10 +169,7 @@ function DataGridCheckboxFilter<TValue extends string>({
           </Button>
         )}
       />
-      <DropdownMenuContent
-        align="start"
-        className="w-auto min-w-(--anchor-width)"
-      >
+      <DropdownMenuContent align="start">
         {header}
         {options.map((option) => (
           <DropdownMenuCheckboxItem

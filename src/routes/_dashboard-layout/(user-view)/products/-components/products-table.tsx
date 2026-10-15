@@ -76,12 +76,9 @@ export function ProductsTable({
                 >
                   <MoreHorizontalIcon className="size-4 text-muted-foreground" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="w-auto max-w-72 min-w-40"
-                >
+                <DropdownMenuContent align="end" className="max-w-72">
                   <DropdownMenuItem onClick={() => onEdit(product)}>
-                    <PencilIcon className="mr-2 size-4" />
+                    <PencilIcon />
                     <Trans>Edit product</Trans>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -89,7 +86,7 @@ export function ProductsTable({
                     variant="destructive-soft"
                     onClick={() => onDelete(product)}
                   >
-                    <Trash2Icon className="mr-2 size-4" />
+                    <Trash2Icon />
                     <Trans>Delete product</Trans>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

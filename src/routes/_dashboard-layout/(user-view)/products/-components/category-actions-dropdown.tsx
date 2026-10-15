@@ -83,7 +83,7 @@ function MoveTargets({
     return (
       <DropdownMenuSub key={itemId}>
         <DropdownMenuSubTrigger>{title}</DropdownMenuSubTrigger>
-        <DropdownMenuSubContent className="w-auto max-w-72 min-w-40">
+        <DropdownMenuSubContent className="max-w-72">
           <DropdownMenuItem
             disabled={id === parentId}
             onClick={() => onMove(id)}
@@ -132,23 +132,23 @@ export function CategoryActionsDropdown({
           align="end"
           side="right"
           onClick={(e) => e.stopPropagation()}
-          className="w-auto max-w-72 min-w-40"
+          className="max-w-72"
         >
           <DropdownMenuItem onClick={onAddSubcategory}>
-            <PlusIcon className="mr-2 size-4" />
+            <PlusIcon />
             <Trans>Add subcategory</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onRenameCategory}>
-            <PencilIcon className="mr-2 size-4" />
+            <PencilIcon />
             <Trans>Rename category</Trans>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <CornerUpRightIcon className="mr-2 size-4" />
+              <CornerUpRightIcon />
               <Trans>Move to category</Trans>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent
-              className="w-auto max-w-72 min-w-40"
+              className="max-w-72"
               onClick={(e) => e.stopPropagation()}
             >
               <DropdownMenuItem
@@ -172,7 +172,7 @@ export function CategoryActionsDropdown({
             variant="destructive-soft"
             onClick={onDeleteCategory}
           >
-            <Trash2Icon className="mr-2 size-4" />
+            <Trash2Icon />
             <Trans>Delete category</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
