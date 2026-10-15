@@ -21,7 +21,7 @@ const buttonVariants = cva(
         // A quieter destructive action: tinted, not filled.
         'destructive-soft':
           'border-destructive/20 bg-destructive/10 text-danger hover:bg-destructive/20 hover:text-danger dark:hover:bg-destructive/30',
-        link: 'text-primary underline-offset-4 hover:underline'
+        link: 'text-link underline-offset-4 hover:underline'
       },
       size: {
         default:
