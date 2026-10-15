@@ -37,6 +37,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { CountBadge } from '@/components/ui/count-badge';
 import {
   DataGrid,
   DataGridContainer,
@@ -620,18 +621,18 @@ function PropertiesContent() {
         </div>
         <Button
           variant="outline"
-          className="xl:hidden"
+          // Greyed while any of the folded filters is set
+          className={cn(
+            'xl:hidden',
+            activeFilterCount > 0 && 'bg-muted dark:bg-input/50'
+          )}
           aria-expanded={filtersOpen}
           aria-controls={filtersId}
           onClick={() => setFiltersOpen((open) => !open)}
         >
           <ListFilterIcon />
           <Trans>Filters</Trans>
-          {activeFilterCount > 0 && (
-            <span className="rounded-full bg-primary px-1.5 text-xs leading-5 text-primary-foreground tabular-nums">
-              {activeFilterCount}
-            </span>
-          )}
+          {activeFilterCount > 0 && <CountBadge count={activeFilterCount} />}
         </Button>
         <DataGridRefreshButton
           className="shrink-0 xl:order-last"
