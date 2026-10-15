@@ -1,3 +1,24 @@
+# [1.31.0](https://github.com/riedel28/hotel-dashboard/compare/v1.30.0...v1.31.0) (2026-10-15)
+
+
+### Bug Fixes
+
+* **properties:** filters stay on one row on desktop ([d34bd02](https://github.com/riedel28/hotel-dashboard/commit/d34bd029dc727799010657c0a1bc976ae470bdf3))
+* **property:** customer picker looks and focuses like the other fields ([7a9793a](https://github.com/riedel28/hotel-dashboard/commit/7a9793ab5f03d20a036143145f9a17e5dd7b8500))
+* **property:** one translated list of stages; name can't be emptied ([515458f](https://github.com/riedel28/hotel-dashboard/commit/515458ffe82d939db1a1fd5ea0fb5324474d1e6d))
+
+
+### Features
+
+* **button:** disabled primary button reads as muted, not washed out ([0089e95](https://github.com/riedel28/hotel-dashboard/commit/0089e95042d7847faa32ac20e34779fb96651bad))
+* **forms:** edit forms can't be saved before anything changed ([b7db092](https://github.com/riedel28/hotel-dashboard/commit/b7db0927b6b993ebae202f8f365a902ea499a9a7))
+* **properties:** header fits a phone ([4375eb3](https://github.com/riedel28/hotel-dashboard/commit/4375eb31d9b21abcee55dc4f4f072d7295edea74))
+* **properties:** open a property from its row; grouped solutions; phones ([5bf0293](https://github.com/riedel28/hotel-dashboard/commit/5bf0293e01ec1bbfd35a7a504dd552557eddf435))
+* **property:** clearer details tab and page header ([3dcbd52](https://github.com/riedel28/hotel-dashboard/commit/3dcbd5213c63d75b1755a1ef8e6edbd4a4a12fa2))
+* **property:** new property dialog opens the property it creates ([63922eb](https://github.com/riedel28/hotel-dashboard/commit/63922eb947ef7541ef48d3f7f347f9877fef4f8d))
+* **tabs:** underlined section tabs on the property page ([a1d488b](https://github.com/riedel28/hotel-dashboard/commit/a1d488bfc08e3b38bd73f4cab7342727bd9ecd74))
+* **work-log:** show entries as a feed with a compact composer ([ac2cd55](https://github.com/riedel28/hotel-dashboard/commit/ac2cd55ffdb0b46cb46c8a9bc19cb374bb7d256b))
+
 # [1.30.0](https://github.com/riedel28/hotel-dashboard/compare/v1.29.0...v1.30.0) (2026-10-15)
 
 
