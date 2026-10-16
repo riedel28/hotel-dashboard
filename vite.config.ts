@@ -28,7 +28,8 @@ export default defineConfig({
     })
   ],
   server: {
-    open: true
+    // No browser to open on a CI runner (or when Playwright starts Vite)
+    open: !process.env.CI
   },
   resolve: {
     alias: {
