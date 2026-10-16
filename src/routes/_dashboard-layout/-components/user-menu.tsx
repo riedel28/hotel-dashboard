@@ -86,7 +86,7 @@ function LanguageSubmenu({
     <DropdownMenuSub>
       <DropdownMenuSubTrigger hasChevron={false}>
         <div className="flex w-full items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <GlobeIcon />
             <Trans>Language</Trans>
           </div>
@@ -159,7 +159,7 @@ function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
     <DropdownMenuSub>
       <DropdownMenuSubTrigger hasChevron={false}>
         <div className="flex w-full items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <ThemeIcon />
             <Trans>Theme</Trans>
           </div>

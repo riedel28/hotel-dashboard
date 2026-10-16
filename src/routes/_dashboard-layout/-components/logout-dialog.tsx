@@ -67,10 +67,8 @@ export function LogoutDialog({
             disabled={isLoggingOut}
             onClick={handleLogout}
           >
-            {isLoggingOut && (
-              <Loader2Icon className="mr-1 size-4 animate-spin" />
-            )}
-            <LogOutIcon className="mr-1 size-4" />
+            {isLoggingOut && <Loader2Icon className="animate-spin" />}
+            <LogOutIcon />
             <Trans>Log out</Trans>
           </Button>
         </AlertDialogFooter>
