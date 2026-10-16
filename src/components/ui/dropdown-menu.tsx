@@ -177,7 +177,7 @@ function DropdownMenuCheckboxItem({
       {...props}
     >
       <span
-        className="pointer-events-none absolute left-2 flex size-4 items-center justify-center rounded-lg border border-input bg-popover"
+        className="pointer-events-none absolute left-2 flex size-4 items-center justify-center rounded-[4px] border border-input bg-popover"
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <MenuPrimitive.CheckboxItemIndicator>
