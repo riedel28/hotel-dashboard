@@ -1,3 +1,10 @@
+## [1.32.1](https://github.com/riedel28/hotel-dashboard/compare/v1.32.0...v1.32.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **e2e:** start Vite on one address and wait for that one ([5ab73d1](https://github.com/riedel28/hotel-dashboard/commit/5ab73d1266f772a2e2c832a1cacf0d33dfc9f9f0))
+
 # [1.32.0](https://github.com/riedel28/hotel-dashboard/compare/v1.31.0...v1.32.0) (2026-10-16)
 
 
