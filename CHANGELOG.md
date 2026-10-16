@@ -1,3 +1,10 @@
+# [1.33.0](https://github.com/riedel28/hotel-dashboard/compare/v1.32.1...v1.33.0) (2026-10-16)
+
+
+### Features
+
+* **header:** clearer property selector trigger ([09b9978](https://github.com/riedel28/hotel-dashboard/commit/09b9978449bc87a67b80f14285a2aef3c07b7ebc))
+
 ## [1.32.1](https://github.com/riedel28/hotel-dashboard/compare/v1.32.0...v1.32.1) (2026-10-16)
 
 
