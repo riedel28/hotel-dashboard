@@ -6,7 +6,7 @@ import {
   type PaginationState,
   type SortingState
 } from '@tanstack/react-table';
-import { ListFilterIcon } from 'lucide-react';
+import { BuildingIcon, ListFilterIcon } from 'lucide-react';
 import { useId, useState } from 'react';
 import { perPageSchema } from 'shared/types/list-params';
 import {
@@ -16,6 +16,10 @@ import {
 
 import { propertiesQueryOptions } from '@/api/properties';
 import { ClearFiltersButton } from '@/components/clear-filters-button';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -64,6 +68,16 @@ function PropertiesContent() {
     options?.length
   ].filter(Boolean).length;
   const hasActiveFilters = Boolean(q || activeFilterCount);
+  // Back to the plain list: the sort goes too
+  const clearFilters = () =>
+    setSearch({
+      q: undefined,
+      stage: undefined,
+      country_code: undefined,
+      options: undefined,
+      sort_by: undefined,
+      sort_order: undefined
+    });
 
   // Every change but a page turn goes back to the first page
   const setSearch = (changes: Partial<typeof search>) =>
@@ -152,17 +166,7 @@ function PropertiesContent() {
           <div className={cn('shrink-0', !hasActiveFilters && 'max-xl:hidden')}>
             <ClearFiltersButton
               hasActiveFilters={hasActiveFilters}
-              // Back to the plain list: the sort goes too
-              onClear={() =>
-                setSearch({
-                  q: undefined,
-                  stage: undefined,
-                  country_code: undefined,
-                  options: undefined,
-                  sort_by: undefined,
-                  sort_order: undefined
-                })
-              }
+              onClear={clearFilters}
             />
           </div>
         </div>
@@ -204,8 +208,16 @@ function PropertiesContent() {
           }}
           emptyMessage={
             hasActiveFilters ? (
-              <Trans>No properties match the filters</Trans>
-            ) : undefined
+              <EmptyFilterResult
+                description={<Trans>No properties match the filters.</Trans>}
+                onClearFilters={clearFilters}
+              />
+            ) : (
+              <EmptyTableState
+                icon={<BuildingIcon />}
+                title={<Trans>No properties yet</Trans>}
+              />
+            )
           }
         />
       </div>

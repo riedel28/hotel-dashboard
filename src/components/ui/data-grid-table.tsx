@@ -9,9 +9,11 @@ import {
   type RowData
 } from '@tanstack/react-table';
 import { cva } from 'class-variance-authority';
+import { InboxIcon } from 'lucide-react';
 import * as React from 'react';
 import { type CSSProperties, Fragment, type ReactNode } from 'react';
 
+import { EmptyTableState } from '@/components/empty-table-state';
 import { Checkbox } from '@/components/ui/checkbox';
 import { type DataGridFeatures, useDataGrid } from '@/components/ui/data-grid';
 import { cn } from '@/lib/utils';
@@ -420,7 +422,10 @@ function DataGridTableEmpty() {
             not across all of its columns */}
         <div className="sticky left-0 w-[100cqw]">
           {props.error || props.emptyMessage || (
-            <Trans>No data available</Trans>
+            <EmptyTableState
+              icon={<InboxIcon />}
+              title={<Trans>No data available</Trans>}
+            />
           )}
         </div>
       </td>
