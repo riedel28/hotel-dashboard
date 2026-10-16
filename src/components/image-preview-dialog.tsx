@@ -71,13 +71,15 @@ export function ImagePreviewDialog({
       onOpenChange={(open) => !open && onIndexChange(null)}
     >
       <DialogContent
-        className="gap-3 p-3 sm:max-w-4xl"
+        // The padding matches the close button's offset, so the header row
+        // lines up with it and keeps clear of the image
+        className="gap-4 p-4 sm:max-w-4xl"
         onKeyDown={(event) => {
           if (event.key === 'ArrowLeft') step(-1);
           if (event.key === 'ArrowRight') step(1);
         }}
       >
-        <DialogTitle className="flex items-center gap-2 pr-10 text-sm font-medium">
+        <DialogTitle className="flex min-h-7 items-center gap-2 pr-10 text-sm font-medium">
           <Trans>
             Image {(shown ?? 0) + 1} of {ids.length}
           </Trans>

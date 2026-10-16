@@ -327,8 +327,9 @@ function ComboboxChip({
       data-slot="combobox-chip"
       className={cn(
         // The chosen segment of a SegmentedControl: as tall within the
-        // field's p-1 frame, and the same surface in both themes
-        'flex h-7 w-fit items-center justify-center gap-1 rounded-md border border-foreground/2 bg-muted px-2.5 text-sm font-normal whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0.5 dark:border-transparent dark:bg-input/50',
+        // field's p-1 frame (so a chip never grows the field), and the same
+        // surface in both themes
+        'flex h-6.5 w-fit items-center justify-center gap-1 rounded-md border border-foreground/2 bg-muted px-2.5 text-sm font-normal whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0.5 dark:border-transparent dark:bg-input/50',
         className
       )}
       {...props}

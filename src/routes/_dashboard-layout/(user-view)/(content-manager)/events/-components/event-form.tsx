@@ -132,12 +132,12 @@ export function EventForm({
   const mutation = useMutation({
     mutationFn: (values: EventFormValues) =>
       save(formValuesToSaveData(values, property.timezone)),
-    onSuccess: event => {
+    onSuccess: (event) => {
       queryClient.setQueryData(eventByIdQueryOptions(event.id).queryKey, event);
       void invalidateEvents(queryClient);
       onSaved(event);
     },
-    onError: error => {
+    onError: (error) => {
       console.error('Failed to save event:', error);
       toast.error(t`Failed to save event`, { description: error.message });
     }
@@ -151,7 +151,7 @@ export function EventForm({
       <SectionedForm
         form={form}
         sections={sections}
-        onSubmit={values => mutation.mutate(values)}
+        onSubmit={(values) => mutation.mutate(values)}
         isSaving={isSaving}
         isNew={isNew}
         submitLabel={submitLabel}
@@ -183,7 +183,7 @@ const eventSections = (
     label: <Trans>Basics</Trans>,
     description: <Trans>Title, description and categories.</Trans>,
     fields: ['title', 'description', 'categories'],
-    render: form => <BasicsFields form={form} />
+    render: (form) => <BasicsFields form={form} />
   },
   {
     id: 'date-time',
@@ -195,7 +195,7 @@ const eventSections = (
       </Trans>
     ),
     fields: ['start', 'end', 'doors_time'],
-    render: form => <DateTimeFields form={form} zone={property.timezone} />
+    render: (form) => <DateTimeFields form={form} zone={property.timezone} />
   },
   {
     id: 'location',
@@ -209,7 +209,7 @@ const eventSections = (
       'city',
       'country_code'
     ],
-    render: form => <LocationFields form={form} property={property} />
+    render: (form) => <LocationFields form={form} property={property} />
   },
   {
     id: 'images',
@@ -221,7 +221,7 @@ const eventSections = (
       </Trans>
     ),
     fields: ['image_ids'],
-    render: form => (
+    render: (form) => (
       <Controller
         control={form.control}
         name="image_ids"
@@ -362,7 +362,7 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
               id={field.name}
               label={t`Start`}
               value={field.value}
-              onChange={next => {
+              onChange={(next) => {
                 field.onChange(next);
                 // An end not picked yet starts on the same day
                 const endNow = form.getValues('end');
@@ -422,7 +422,7 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
             </div>
             {/* Quick picks from the start time; the field keeps the time */}
             <div className="mt-1 flex flex-wrap gap-1.5">
-              {doorsPresets.map(minutes => {
+              {doorsPresets.map((minutes) => {
                 const time = doorsTimeBefore(start.time, minutes);
                 return (
                   <Toggle
@@ -431,7 +431,7 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
                     disabled={!time}
                     pressed={time !== null && field.value === time}
                     // Pressed again, it takes the doors time back out
-                    onPressedChange={pressed =>
+                    onPressedChange={(pressed) =>
                       field.onChange(pressed && time ? time : '')
                     }
                   >
@@ -551,7 +551,7 @@ function LocationFields({
             </FieldLabel>
             <CountryPicker
               value={field.value}
-              onValueChange={code => field.onChange(code ?? '')}
+              onValueChange={(code) => field.onChange(code ?? '')}
               placeholder={t`Select country`}
               aria-labelledby="event-country-label"
               aria-invalid={fieldState.invalid}

@@ -112,11 +112,17 @@ const variants = {
   }
 } as const;
 
-// Toolbar buttons are grey until hovered. An active one keeps the hover text
-// colour on a darker grey fill, so "on" reads differently from "hovered".
+// Toolbar buttons are grey until hovered, then get a fill of the input token:
+// muted sits too close to the editor's own surface to show, most of all on
+// the dark theme. An active one keeps a darker fill still, so "on" reads
+// differently from "hovered".
+const toolbarHoverClassName =
+  'text-muted-foreground hover:bg-input/70 hover:text-foreground dark:hover:bg-input/50';
+
 const toolbarButtonClassName = cn(
   toggleVariants({ size: 'sm' }),
-  'text-muted-foreground aria-pressed:bg-foreground/10 aria-pressed:text-foreground aria-pressed:hover:bg-foreground/10'
+  toolbarHoverClassName,
+  'aria-pressed:bg-foreground/10 aria-pressed:text-foreground aria-pressed:hover:bg-foreground/10 dark:aria-pressed:bg-foreground/15 dark:aria-pressed:hover:bg-foreground/15'
 );
 
 // How rich text looks: headings, lists, links and images. Used by the editor
@@ -345,7 +351,7 @@ function Toolbar({
             type="button"
             variant="ghost"
             size="icon-sm"
-            className="text-muted-foreground"
+            className={toolbarHoverClassName}
             aria-label={t`Undo`}
             title={t`Undo`}
             disabled={htmlMode || !active.canUndo}
@@ -358,7 +364,7 @@ function Toolbar({
             type="button"
             variant="ghost"
             size="icon-sm"
-            className="text-muted-foreground"
+            className={toolbarHoverClassName}
             aria-label={t`Redo`}
             title={t`Redo`}
             disabled={htmlMode || !active.canRedo}
