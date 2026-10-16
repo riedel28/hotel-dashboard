@@ -25,8 +25,11 @@ function ComboboxTrigger({
   showClear = false,
   clearLabel,
   wrapperClassName,
+  icon,
   ...props
 }: ComboboxPrimitive.Trigger.Props & {
+  /** Replaces the chevron, e.g. with a spinner while a change is saving. */
+  icon?: React.ReactNode;
   /** Adds a clear button inside the trigger, left of the chevron, while a value is selected. */
   showClear?: boolean;
   /** Accessible name of the clear button. */
@@ -46,7 +49,9 @@ function ComboboxTrigger({
       {...props}
     >
       {children}
-      <ChevronDownIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
+      {icon ?? (
+        <ChevronDownIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
+      )}
     </ComboboxPrimitive.Trigger>
   );
 

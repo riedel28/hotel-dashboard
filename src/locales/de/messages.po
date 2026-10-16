@@ -152,6 +152,11 @@ msgstr "{0} Rollen insgesamt"
 #~ msgid "{0}, {1}"
 #~ msgstr "{0}, {1}"
 
+#. placeholder {0}: selected.name
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:72
+msgid "{0}, property"
+msgstr "{0}, Objekt"
+
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-step.tsx:186
 msgid "{changeCount, plural, one {Import # change} other {Import # changes}}"
 msgstr "{changeCount, plural, one {# Änderung importieren} other {# Änderungen importieren}}"
@@ -223,7 +228,7 @@ msgstr "{shown} von {total} sichtbar"
 #~ msgid "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 #~ msgstr "{staleDays, plural, one {Seit # Tag nicht erfasst} other {Seit # Tagen nicht erfasst}}"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:116
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:137
 msgid "{total, plural, one {# property} other {# properties}}"
 msgstr ""
 
@@ -2596,7 +2601,7 @@ msgstr "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden. Bit
 #~ msgstr "SMS konnte nicht gesendet werden"
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:46
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:49
 msgid "Failed to switch to {0}"
 msgstr "Wechsel zu {0} fehlgeschlagen"
 
@@ -2687,7 +2692,7 @@ msgid "Final payment"
 msgstr "Schlusszahlung"
 
 #. placeholder {0}: properties.length
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:112
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:133
 msgid "First {0} of {total} properties"
 msgstr "Erste {0} von {total} Unterkünften"
 
@@ -3041,7 +3046,7 @@ msgid "Hotel"
 msgstr "Hotel"
 
 #: src/routes/_dashboard-layout.tsx:39
-#: src/routes/_dashboard-layout.tsx:144
+#: src/routes/_dashboard-layout.tsx:149
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:52
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -3428,7 +3433,7 @@ msgstr "Protokolle der Reservierung {bookingNr}"
 msgid "main"
 msgstr "Hauptsprache"
 
-#: src/routes/_dashboard-layout.tsx:57
+#: src/routes/_dashboard-layout.tsx:60
 msgid "Main navigation"
 msgstr "Hauptnavigation"
 
@@ -3968,7 +3973,7 @@ msgstr "Keine Produkte in dieser Kategorie"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "Keine Produkte in dieser Kategorie. Fügen Sie Produkte zu dieser Kategorie hinzu, indem Sie unten auf die Schaltfläche klicken."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:90
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:111
 msgid "No properties found"
 msgstr "Keine Properties gefunden"
 
@@ -5466,7 +5471,7 @@ msgstr "Produkte durchsuchen"
 msgid "Search properties"
 msgstr "Unterkünfte suchen"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:80
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:101
 msgid "Search property"
 msgstr "Nach Property-Namen suchen"
 
@@ -5574,8 +5579,8 @@ msgstr "Eine oder mehrere Rollen zum Zuweisen auswählen"
 #~ msgid "Select one or more roles to assign."
 #~ msgstr "Wählen Sie eine oder mehrere Rollen aus."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:65
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:71
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:72
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:92
 msgid "Select property"
 msgstr "Objekt auswählen"
 
@@ -5801,7 +5806,7 @@ msgid "Sign Up"
 msgstr "Registrieren"
 
 #: src/routes/_auth-layout.tsx:17
-#: src/routes/_dashboard-layout.tsx:72
+#: src/routes/_dashboard-layout.tsx:77
 msgid "Skip to main content"
 msgstr "Zum Hauptinhalt springen"
 
@@ -6006,7 +6011,7 @@ msgstr "Ansicht wechseln"
 #~ msgstr "Gewechselt zu \"{propertyName}\""
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:44
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:47
 msgid "Switched to {0}"
 msgstr "Gewechselt zu {0}"
 

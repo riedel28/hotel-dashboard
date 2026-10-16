@@ -1,5 +1,6 @@
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
-import { SearchIcon } from 'lucide-react';
+import { BuildingIcon, LoaderCircleIcon, SearchIcon } from 'lucide-react';
+import * as React from 'react';
 import type { Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
@@ -15,6 +16,7 @@ import {
   ComboboxValue
 } from '@/components/ui/combobox';
 import { StageBadge } from '@/components/ui/stage-badge';
+import { useDelayedFlag } from '@/hooks/use-delayed-flag';
 
 interface PropertySelectorProps {
   properties: Property[];
@@ -37,13 +39,19 @@ function PropertySelector({
 }: PropertySelectorProps) {
   const { t } = useLingui();
   const selected = properties.find((property) => property.id === value) ?? null;
+  const [switching, setSwitching] = React.useState(false);
+  // A quick switch is over before a spinner could register as one
+  const showSpinner = useDelayedFlag(switching, 300);
 
   const switchTo = async (property: Property) => {
+    setSwitching(true);
     try {
       await onValueChange(property.id);
       toast.info(t`Switched to ${property.name}`);
     } catch {
       toast.error(t`Failed to switch to ${property.name}`);
+    } finally {
+      setSwitching(false);
     }
   };
 
@@ -61,9 +69,25 @@ function PropertySelector({
       isItemEqualToValue={(a: Property, b: Property) => a.id === b.id}
     >
       <ComboboxTrigger
-        className="flex max-w-full min-w-0 items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-foreground hover:bg-accent data-popup-open:bg-accent"
-        aria-label={t`Select property`}
+        className="focus-visible:outline-offset-0.5 flex max-w-full min-w-0 items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-foreground outline-none hover:bg-accent focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid data-popup-open:bg-accent"
+        // Starts with the visible text, as WCAG 2.5.3 asks
+        aria-label={
+          selected ? t`${selected.name}, property` : t`Select property`
+        }
+        aria-busy={switching}
+        icon={
+          showSpinner ? (
+            <LoaderCircleIcon
+              className="size-4 shrink-0 animate-spin text-muted-foreground"
+              aria-hidden="true"
+            />
+          ) : undefined
+        }
       >
+        <BuildingIcon
+          className="size-4 shrink-0 text-muted-foreground"
+          aria-hidden="true"
+        />
         <ComboboxValue>
           <span className="max-w-[40ch] truncate text-sm">
             {selected?.name ?? (
