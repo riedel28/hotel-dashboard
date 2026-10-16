@@ -478,8 +478,10 @@ function RichTextEditor({
   });
 
   // Follow value changes that didn't come from typing (e.g. a form reset).
+  // A destroyed editor is skipped: hidden by a suspending route and shown
+  // again, the component keeps it until useEditor hands over a new one.
   React.useEffect(() => {
-    if (!editor || htmlMode) return;
+    if (!editor || editor.isDestroyed || htmlMode) return;
     if (value !== htmlOf(editor)) {
       editor.commands.setContent(value, { emitUpdate: false });
     }
@@ -487,7 +489,7 @@ function RichTextEditor({
   }, [editor, value, htmlMode]);
 
   React.useEffect(() => {
-    editor?.setEditable(!disabled);
+    if (editor && !editor.isDestroyed) editor.setEditable(!disabled);
   }, [editor, disabled]);
 
   return (
