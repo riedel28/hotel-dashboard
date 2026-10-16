@@ -134,15 +134,22 @@ interface TimeInputProps extends Omit<
 > {
   /** `HH:mm`, 24-hour. */
   value: string;
-  /** Only ever called with a complete, valid `HH:mm`. */
+  /** Only ever called with a complete, valid `HH:mm`, or '' when cleared. */
   onValueChange: (value: string) => void;
+  /** An optional time: a clear button inside the field empties it. */
+  clearable?: boolean;
 }
 
 /**
  * A 24-hour time field: type a time freely or pick a quarter-hour from the
  * list. Anything that isn't a time snaps back to the last valid value on blur.
  */
-function TimeInput({ value, onValueChange, ...props }: TimeInputProps) {
+function TimeInput({
+  value,
+  onValueChange,
+  clearable = false,
+  ...props
+}: TimeInputProps) {
   const [text, setText] = React.useState(value);
   const [isEditing, setIsEditing] = React.useState(false);
 
@@ -157,6 +164,11 @@ function TimeInput({ value, onValueChange, ...props }: TimeInputProps) {
     setIsEditing(true);
     const formatted = formatTimeInput(next);
     setText(formatted);
+
+    if (clearable && formatted === '' && value !== '') {
+      onValueChange('');
+      return;
+    }
 
     // List picks and completed HH:mm only — avoid committing mid-typing ("2:1" → 02:01)
     if (/^\d{2}:\d{2}$/.test(formatted) && formatted !== value) {
@@ -191,6 +203,7 @@ function TimeInput({ value, onValueChange, ...props }: TimeInputProps) {
         maxLength={5}
         placeholder="HH:mm"
         startAddon={<ClockIcon aria-hidden="true" />}
+        showClear={clearable && value !== ''}
         {...props}
         onBlur={handleBlur}
         onFocus={(event) => {
