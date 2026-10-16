@@ -1,3 +1,37 @@
+# [1.32.0](https://github.com/riedel28/hotel-dashboard/compare/v1.31.0...v1.32.0) (2026-10-16)
+
+
+### Bug Fixes
+
+* **date-filter:** bring back the quick picks and one month on phones ([b467681](https://github.com/riedel28/hotel-dashboard/commit/b4676813e009ec9a4b6f8cb220ab1a6cf608c547))
+* **date-filter:** quick variant as before; grey range in the calendar ([526a5be](https://github.com/riedel28/hotel-dashboard/commit/526a5be6b74875e1d2fbfd013a5134e84e0c8180))
+* **errors:** a failed load stays in its place and can be retried ([d3488cd](https://github.com/riedel28/hotel-dashboard/commit/d3488cde50c805163dc65703dd9140d1eca6a0f1))
+* **fields:** pickers and selects match text fields on a phone ([52ac68f](https://github.com/riedel28/hotel-dashboard/commit/52ac68f59b8c5eb62ba5a9a50c55fdd449fecd77))
+* **i18n:** German for the monitoring drawer's new strings ([798f906](https://github.com/riedel28/hotel-dashboard/commit/798f906d37ef50f48b2fe12fb14ee64c48bbc53d))
+* **i18n:** German for the rest of the monitoring page ([7303893](https://github.com/riedel28/hotel-dashboard/commit/7303893805a8af66c55daf3caaf8b943ee135232))
+* **layout:** Customers and Properties headers line up ([812d1c7](https://github.com/riedel28/hotel-dashboard/commit/812d1c768480e42d205bab5d330a3dace0618dff))
+* **rich-text:** skip effects while the editor is destroyed ([c4cac2e](https://github.com/riedel28/hotel-dashboard/commit/c4cac2ed4c6900f5c3cd302d2017ab83f9d4215f))
+* **sidebar:** let the menu scroll on short screens ([bd5e101](https://github.com/riedel28/hotel-dashboard/commit/bd5e10167429a73a83a04af8033901e42968dcea))
+* **ui:** even icon spacing in menus and buttons ([b076bc0](https://github.com/riedel28/hotel-dashboard/commit/b076bc084558e4d9af7deacdef92e24bb1108caa))
+* **ui:** steady chip field, visible toolbar hover, matching time icon ([cfda126](https://github.com/riedel28/hotel-dashboard/commit/cfda12606e51156288a47442629906e940554b52))
+
+
+### Features
+
+* **customers:** open a customer from its row; phone cards; name as title ([eac5102](https://github.com/riedel28/hotel-dashboard/commit/eac51029a962013965c886f9503acdcf7b666076))
+* **errors:** a failed list load shows inside the table, like an empty one ([040ac7b](https://github.com/riedel28/hotel-dashboard/commit/040ac7b5d0e8f7b74b4fce6462ba039aadfcaf40))
+* **errors:** every list shows a failed load inside its table ([3551153](https://github.com/riedel28/hotel-dashboard/commit/355115341f5023cc2d73c60a179ba95d70a6214d))
+* **events:** add events API with property address and timezone ([046cb81](https://github.com/riedel28/hotel-dashboard/commit/046cb81d0e418f5e9825803c2c47c981c2cefceb))
+* **events:** events list and form in the Content Manager ([9f937b3](https://github.com/riedel28/hotel-dashboard/commit/9f937b3cc4569493300dd36350e64294bcc1c956))
+* **monitoring:** phone cards, folded filters and a steppable drawer ([a638ced](https://github.com/riedel28/hotel-dashboard/commit/a638ced3cf65f328195758b77d66f6af01ca066d))
+* **tables:** one empty state for every table ([2aa7c4b](https://github.com/riedel28/hotel-dashboard/commit/2aa7c4ba5b07512f28a2e29e76a3a407d7df3340))
+* **ui:** richer image gallery, clearable time input, segment-style chips ([b5f1439](https://github.com/riedel28/hotel-dashboard/commit/b5f14399d5b76f3b8ba7741103f9dcc24d4e4a3c))
+
+
+### Reverts
+
+* **tooltip:** keep an unrelated tooltip restyle out of this PR ([061114b](https://github.com/riedel28/hotel-dashboard/commit/061114b5b9238cefe3998b2668a685dd9bf04e81))
+
 # [1.31.0](https://github.com/riedel28/hotel-dashboard/compare/v1.30.0...v1.31.0) (2026-10-15)
 
 
