@@ -54,7 +54,12 @@ function DashboardSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeaderComponent />
       <SidebarViewToggle />
-      <nav aria-label={t`Main navigation`}>
+      {/* A flex child that may shrink, so the menu scrolls inside the
+          sidebar instead of running past the bottom of a short screen */}
+      <nav
+        aria-label={t`Main navigation`}
+        className="flex min-h-0 flex-1 flex-col"
+      >
         <DashboardNav />
       </nav>
     </Sidebar>
