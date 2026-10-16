@@ -58,7 +58,7 @@ function Calendar({
         range_end: 'range-end',
         range_middle: 'range-middle',
         today:
-          '*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 rtl:*:after:translate-x-1/2 *:after:rounded-full *:after:bg-primary dark:*:after:bg-primary [&[data-selected]:not(.range-middle)>*]:after:bg-foreground [&[data-disabled]>*]:after:bg-foreground/30 *:after:transition-colors',
+          '*:after:pointer-events-none *:after:absolute *:after:bottom-1 *:after:start-1/2 *:after:z-10 *:after:size-[3px] *:after:-translate-x-1/2 rtl:*:after:translate-x-1/2 *:after:rounded-full *:after:bg-foreground/50 [&[data-selected]:not(.range-middle)>*]:after:bg-foreground [&[data-disabled]>*]:after:bg-foreground/30 *:after:transition-colors',
         outside:
           'text-muted-foreground data-selected:bg-accent/50 data-selected:text-muted-foreground',
         hidden: 'invisible',

@@ -614,8 +614,8 @@ msgstr "All countries"
 
 #: src/components/date-range-filter.tsx:128
 #: src/components/date-range-filter.tsx:185
-msgid "All dates"
-msgstr "All dates"
+#~ msgid "All dates"
+#~ msgstr "All dates"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:79
 msgid "All floors"
@@ -735,7 +735,7 @@ msgstr "API Key is required"
 msgid "App version"
 msgstr "App version"
 
-#: src/components/date-range-filter.tsx:135
+#: src/components/date-range-filter.tsx:124
 #: src/components/ui/rich-text-editor.tsx:273
 msgid "Apply"
 msgstr "Apply"
@@ -1534,7 +1534,7 @@ msgstr "Couldn't load products"
 msgid "Couldn't load properties"
 msgstr "Couldn't load properties"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:141
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:140
 msgid "Couldn't load reservations"
 msgstr "Couldn't load reservations"
 
@@ -4543,7 +4543,7 @@ msgstr "Photo updated"
 msgid "Pick a date"
 msgstr "Pick a date"
 
-#: src/components/date-range-filter.tsx:126
+#: src/components/date-range-filter.tsx:118
 msgid "Pick a date range"
 msgstr "Pick a date range"
 
@@ -5219,7 +5219,7 @@ msgstr "Reservation updated successfully"
 msgid "Reservations"
 msgstr "Reservations"
 
-#: src/components/date-range-filter.tsx:173
+#: src/components/date-range-filter.tsx:159
 #: src/components/ui/data-grid-radio-filter.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67

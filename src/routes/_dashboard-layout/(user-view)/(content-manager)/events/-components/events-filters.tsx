@@ -84,7 +84,6 @@ export function EventsFilters({
         to={filters.to}
         onRangeChange={setDateRange}
         allowFuture
-        variant="quick"
         className="w-full xl:w-[208px]"
       />
       {/* Below xl the two share the grid's last row; from xl they are

@@ -81,20 +81,15 @@ const sameDays = (a: DayRange, b: DayRange) =>
   dayjs(a.from).isSame(b.from, 'day') && dayjs(a.to).isSame(b.to, 'day');
 
 /**
- * A list filter on a range of days, kept in the URL as YYYY-MM-DD.
- *
- * - `apply` (payments): "All dates" while none is set, Apply commits the
- *   range, and "All dates" again takes it off.
- * - `quick` (reservations, events): quick picks beside the calendar, a
- *   complete range applies at once, "Pick a date range" while none is set
- *   and Reset to take it off.
+ * A list filter on a range of days, kept in the URL as YYYY-MM-DD: quick
+ * picks beside the calendar, a complete range applies as soon as it is
+ * picked, and Reset takes it off.
  */
 export function DateRangeFilter({
   from,
   to,
   onRangeChange,
   allowFuture,
-  variant = 'apply',
   className
 }: {
   from?: string;
@@ -102,10 +97,8 @@ export function DateRangeFilter({
   onRangeChange: (range: DayRange | undefined) => void;
   /** Days after today can be picked too, e.g. for what is planned. */
   allowFuture?: boolean;
-  variant?: 'apply' | 'quick';
   className?: string;
 }) {
-  const quick = variant === 'quick';
   const { t } = useLingui();
   const applied =
     from && to
@@ -116,77 +109,56 @@ export function DateRangeFilter({
     <DateRangePopover
       className={className}
       allowFuture={allowFuture}
-      applyOnSelect={quick}
+      applyOnSelect
       label={
         applied ? (
           formatDateRange(applied)
         ) : (
           <span className="text-muted-foreground">
-            {quick ? (
-              <Trans>Pick a date range</Trans>
-            ) : (
-              <Trans>All dates</Trans>
-            )}
+            <Trans>Pick a date range</Trans>
           </span>
         )
       }
       value={applied}
       onApply={onRangeChange}
       applyLabel={<Trans>Apply</Trans>}
-      presets={
-        quick
-          ? (close) =>
-              rangePresets.map((preset) => {
-                const range = preset.range();
-                const isActive = applied && sameDays(applied, range);
-                return (
-                  <Button
-                    key={preset.label.id}
-                    type="button"
-                    variant="ghost"
-                    aria-pressed={Boolean(isActive)}
-                    className={cn(
-                      'h-7 w-full justify-start px-2 text-xs font-normal',
-                      isActive && 'bg-accent'
-                    )}
-                    onClick={() => {
-                      onRangeChange(range);
-                      close();
-                    }}
-                  >
-                    {t(preset.label)}
-                  </Button>
-                );
-              })
-          : undefined
-      }
-      actions={(close) =>
-        quick ? (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => {
-              onRangeChange(undefined);
-              close();
-            }}
-          >
-            <Trans>Reset</Trans>
-          </Button>
-        ) : (
-          applied && (
+      presets={(close) =>
+        rangePresets.map((preset) => {
+          const range = preset.range();
+          const isActive = Boolean(applied && sameDays(applied, range));
+          return (
             <Button
-              size="sm"
+              key={preset.label.id}
+              type="button"
               variant="ghost"
+              aria-pressed={isActive}
+              className={cn(
+                'h-7 w-full justify-start px-2 text-xs font-normal',
+                // The grey of a picked range's ends
+                isActive && 'bg-foreground/10 dark:bg-foreground/15'
+              )}
               onClick={() => {
-                onRangeChange(undefined);
+                onRangeChange(range);
                 close();
               }}
             >
-              <Trans>All dates</Trans>
+              {t(preset.label)}
             </Button>
-          )
-        )
+          );
+        })
       }
+      actions={(close) => (
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => {
+            onRangeChange(undefined);
+            close();
+          }}
+        >
+          <Trans>Reset</Trans>
+        </Button>
+      )}
     />
   );
 }
