@@ -8,6 +8,7 @@ import {
   type CmsNodeType,
   type CmsOpenMode
 } from '../../../shared/types/cms';
+import type { EventCategory } from '../../../shared/types/events';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { propertyOptionSchema } from '../../../shared/types/properties';
 import { payments as paymentsTable } from '../db/payments-schema';
@@ -17,6 +18,7 @@ import {
   cmsNodeTranslations,
   customers,
   devices,
+  events as eventsTable,
   guestAbcEntries,
   guests,
   monitoringLogs,
@@ -372,6 +374,88 @@ async function seedCms(
  * rooms, a tablet in every room, a TV in most, and a few devices not assigned
  * to a room yet. Devices without a property are waiting to be claimed.
  */
+/** The instant a wall-clock time shows in `zone`, `day` days from today. */
+function zonedInstant(day: number, time: string, zone: string) {
+  const date = new Date(Date.now() + day * DAY_MS).toISOString().slice(0, 10);
+  const guess = new Date(`${date}T${time}:00Z`);
+  // How far the zone's clock is ahead of UTC at that moment
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: zone,
+      hourCycle: 'h23',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+      .formatToParts(guess)
+      .map((part) => [part.type, part.value])
+  );
+  const shown = Date.UTC(
+    Number(parts.year),
+    Number(parts.month) - 1,
+    Number(parts.day),
+    Number(parts.hour),
+    Number(parts.minute)
+  );
+  return new Date(guess.getTime() - (shown - guess.getTime()));
+}
+
+interface EventSeed {
+  title: string;
+  description: string | null;
+  categories: EventCategory[];
+  day: number;
+  start: string;
+  minutes: number;
+  doors_before: number | null;
+  venue_name: string;
+  // At the hotel: its own address, where it has one
+  at_hotel?: boolean;
+  address_line_1?: string;
+  zip?: string;
+  city?: string;
+  country_code?: string;
+}
+
+// The same programme at every property, past and upcoming, in its timezone.
+// No images: those are uploaded by hand.
+async function seedEvents() {
+  const seeds = loadData<EventSeed[]>('events');
+  const hotels = await db.select().from(properties);
+  const rows = hotels.flatMap((hotel) =>
+    seeds.map((event) => {
+      const startsAt = zonedInstant(event.day, event.start, hotel.timezone);
+      const atHotel = event.at_hotel && hotel.address_line_1;
+      return {
+        property_id: hotel.id,
+        title: event.title,
+        description: event.description,
+        categories: event.categories,
+        starts_at: startsAt,
+        ends_at: new Date(startsAt.getTime() + event.minutes * 60_000),
+        doors_open_at:
+          event.doors_before === null
+            ? null
+            : new Date(startsAt.getTime() - event.doors_before * 60_000),
+        venue_name: event.venue_name,
+        address_line_1: atHotel
+          ? hotel.address_line_1!
+          : (event.address_line_1 ?? 'Main Street 1'),
+        address_line_2: atHotel ? hotel.address_line_2 : null,
+        zip: atHotel ? hotel.zip! : (event.zip ?? '00000'),
+        city: atHotel ? hotel.city! : (event.city ?? 'Springfield'),
+        country_code: atHotel
+          ? hotel.country_code
+          : (event.country_code ?? hotel.country_code)
+      };
+    })
+  );
+  await db.insert(eventsTable).values(rows);
+  return rows.length;
+}
+
 async function seedRoomsAndDevices() {
   const demoRooms = await db
     .insert(rooms)
@@ -622,6 +706,7 @@ async function seed() {
     await seedWorklogs(demoUsers);
     await seedProducts();
     const cmsCount = await seedCms();
+    const eventCount = await seedEvents();
     await seedRoomsAndDevices();
     const logCount = await seedMonitoringLogs();
     const paymentCount = await seedPayments();
@@ -637,6 +722,7 @@ async function seed() {
     console.log(`- ${propertyCount} properties`);
     console.log(`- ${guestAbcCount} Guest ABC entries`);
     console.log(`- ${cmsCount} mobile CMS nodes`);
+    console.log(`- ${eventCount} events`);
     console.log(`- ${logCount} monitoring logs`);
     console.log(`- ${paymentCount} payments`);
   } catch (error) {

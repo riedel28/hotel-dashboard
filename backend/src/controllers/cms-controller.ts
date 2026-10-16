@@ -27,7 +27,8 @@ import {
   cmsImages,
   cmsNodeImages,
   cmsNodes,
-  cmsNodeTranslations
+  cmsNodeTranslations,
+  eventImages
 } from '../db/schema';
 import {
   HttpProblem,
@@ -132,9 +133,9 @@ function lockNodes(tx: Tx, propertyId: string) {
 }
 
 // Images nobody refers to: abandoned uploads, replaced or removed ones and
-// those of deleted nodes. A day of grace keeps an upload alive while it sits
-// in an unsaved form.
-function sweepImages(
+// those of deleted nodes and events. A day of grace keeps an upload alive
+// while it sits in an unsaved form.
+export function sweepImages(
   ex: Pick<typeof db, 'delete' | 'select'>,
   propertyId: string
 ) {
@@ -147,6 +148,12 @@ function sweepImages(
           .select({ one: sql`1` })
           .from(cmsNodeImages)
           .where(eq(cmsNodeImages.image_id, cmsImages.id))
+      ),
+      notExists(
+        ex
+          .select({ one: sql`1` })
+          .from(eventImages)
+          .where(eq(eventImages.image_id, cmsImages.id))
       )
     )
   );

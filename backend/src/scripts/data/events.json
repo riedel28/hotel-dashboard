@@ -1,0 +1,85 @@
+[
+  {
+    "title": "Jazz in the Gold Room",
+    "description": "<p>Live jazz trio every Friday night. Cocktails at the bar.</p>",
+    "categories": ["music", "party"],
+    "day": 2,
+    "start": "20:00",
+    "minutes": 210,
+    "doors_before": 60,
+    "venue_name": "The Gold Room",
+    "at_hotel": true
+  },
+  {
+    "title": "Wine tasting",
+    "description": "<p>Six wines from the region, with cheese.</p>",
+    "categories": ["food_drink"],
+    "day": 4,
+    "start": "18:30",
+    "minutes": 120,
+    "doors_before": 30,
+    "venue_name": "Wine cellar",
+    "at_hotel": true
+  },
+  {
+    "title": "Morning yoga",
+    "description": null,
+    "categories": ["wellness", "sports"],
+    "day": 1,
+    "start": "07:30",
+    "minutes": 60,
+    "doors_before": null,
+    "venue_name": "Garden terrace",
+    "at_hotel": true
+  },
+  {
+    "title": "Hedge maze tour for kids",
+    "description": "<p>A guided tour through the hedge maze. Warm clothes recommended.</p>",
+    "categories": ["kids", "tour"],
+    "day": 6,
+    "start": "10:00",
+    "minutes": 90,
+    "doors_before": null,
+    "venue_name": "Hedge maze",
+    "at_hotel": true
+  },
+  {
+    "title": "Winter festival",
+    "description": "<p>Three days of music, food and fireworks in town.</p>",
+    "categories": ["music", "food_drink", "culture", "party"],
+    "day": 9,
+    "start": "16:00",
+    "minutes": 3240,
+    "doors_before": 120,
+    "venue_name": "Town square",
+    "address_line_1": "Main Street 10",
+    "zip": "80517",
+    "city": "Sidewinder",
+    "country_code": "US"
+  },
+  {
+    "title": "Cooking class",
+    "description": "<p>Learn the chef's signature dish.</p>",
+    "categories": ["food_drink"],
+    "day": -3,
+    "start": "17:00",
+    "minutes": 150,
+    "doors_before": null,
+    "venue_name": "Kitchen",
+    "at_hotel": true
+  },
+  {
+    "title": "Museum night",
+    "description": null,
+    "categories": ["culture"],
+    "day": -10,
+    "start": "19:00",
+    "minutes": 240,
+    "doors_before": 30,
+    "venue_name": "City museum",
+    "address_line_1": "Museum Lane 3",
+    "zip": "80517",
+    "city": "Sidewinder",
+    "country_code": "US"
+  }
+]

@@ -24,6 +24,7 @@ import type {
   CmsNodeType,
   CmsOpenMode
 } from '../../../shared/types/cms';
+import type { EventCategory } from '../../../shared/types/events';
 import type { Provider, ProviderKind } from '../../../shared/types/providers';
 import {
   type GuestAgeGroup,
@@ -206,6 +207,14 @@ export const properties = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     name: text('name').notNull(),
     country_code: text('country_code').notNull().default('DE'),
+    // The hotel's own address, offered to forms (e.g. an event's location).
+    // Null until an Administrator fills it in.
+    address_line_1: text('address_line_1'),
+    address_line_2: text('address_line_2'),
+    zip: text('zip'),
+    city: text('city'),
+    // IANA zone the property's times are entered and shown in.
+    timezone: text('timezone').notNull().default('Europe/Berlin'),
     stage: text('stage')
       .notNull()
       .$type<'demo' | 'production' | 'staging' | 'template'>(),
@@ -517,6 +526,75 @@ export const cmsNodeImages = pgTable(
   (table) => [
     primaryKey({ columns: [table.node_id, table.position] }),
     index('cms_node_images_image_id_idx').on(table.image_id)
+  ]
+);
+
+// Events a property runs for its guests: concerts, tastings, tours.
+export const events = pgTable(
+  'events',
+  {
+    id: bigint('id', { mode: 'number' })
+      .primaryKey()
+      .generatedAlwaysAsIdentity(),
+    property_id: uuid('property_id')
+      .notNull()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    // HTML, sanitized on write like the CMS text.
+    description: text('description'),
+    categories: text('categories')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`)
+      .$type<EventCategory[]>(),
+    starts_at: timestamp('starts_at', { withTimezone: true }).notNull(),
+    ends_at: timestamp('ends_at', { withTimezone: true }).notNull(),
+    doors_open_at: timestamp('doors_open_at', { withTimezone: true }),
+    venue_name: text('venue_name').notNull(),
+    address_line_1: text('address_line_1').notNull(),
+    address_line_2: text('address_line_2'),
+    zip: text('zip').notNull(),
+    city: text('city').notNull(),
+    country_code: text('country_code').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    index('events_property_id_starts_at_idx').on(
+      table.property_id,
+      table.starts_at
+    ),
+    check(
+      'events_ends_after_start_check',
+      sql`${table.ends_at} > ${table.starts_at}`
+    ),
+    check(
+      'events_doors_before_start_check',
+      sql`${table.doors_open_at} IS NULL OR ${table.doors_open_at} <= ${table.starts_at}`
+    )
+  ]
+);
+
+// An event's images in order, the first being its cover. The images
+// themselves are the CMS's, so the CMS sweep counts these references too.
+export const eventImages = pgTable(
+  'event_images',
+  {
+    event_id: bigint('event_id', { mode: 'number' })
+      .notNull()
+      .references(() => events.id, { onDelete: 'cascade' }),
+    image_id: uuid('image_id')
+      .notNull()
+      .references(() => cmsImages.id),
+    position: integer('position').notNull()
+  },
+  (table) => [
+    primaryKey({ columns: [table.event_id, table.position] }),
+    index('event_images_image_id_idx').on(table.image_id)
   ]
 );
 

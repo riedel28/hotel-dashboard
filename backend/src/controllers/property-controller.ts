@@ -43,6 +43,11 @@ function toPropertyResponse(req: Request, property: PropertyRow) {
     id: property.id,
     name: property.name,
     country_code: property.country_code,
+    address_line_1: property.address_line_1,
+    address_line_2: property.address_line_2,
+    zip: property.zip,
+    city: property.city,
+    timezone: property.timezone,
     stage: property.stage,
     // The column is plain text[]: keep only ids still in the catalog, since
     // the client parses the response strictly.
@@ -214,7 +219,12 @@ async function updateProperty(req: Request, res: Response) {
       stage,
       disabled_nav_items,
       options,
-      customer_id
+      customer_id,
+      address_line_1,
+      address_line_2,
+      zip,
+      city,
+      timezone
     } = req.body ?? {};
     // No PWA, no domain: it is dropped along with the option.
     const pwa_domain =
@@ -231,7 +241,12 @@ async function updateProperty(req: Request, res: Response) {
         disabled_nav_items,
         options,
         pwa_domain,
-        customer_id
+        customer_id,
+        address_line_1,
+        address_line_2,
+        zip,
+        city,
+        timezone
       }).filter(([, v]) => v !== undefined)
     );
 
