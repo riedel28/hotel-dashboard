@@ -7,9 +7,8 @@ import { render } from '@/test-utils';
 
 import { ImageField } from './image-field';
 
-vi.mock('@/api/cms', () => ({
-  cmsImageUrl: (id: string) => `/images/${id}`,
-  uploadCmsImage: vi.fn()
+vi.mock('@/api/images', () => ({
+  imageUrl: (id: string) => `/images/${id}`
 }));
 
 function Gallery({

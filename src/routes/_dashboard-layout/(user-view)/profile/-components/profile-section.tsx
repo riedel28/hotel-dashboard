@@ -1,19 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useBlocker } from '@tanstack/react-router';
 import { Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 
 import { sectionHeadingId } from '@/components/section-nav';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -173,46 +162,6 @@ export function ProfileSectionForm({
         </Button>
       </CardFooter>
     </form>
-  );
-}
-
-/**
- * Blocks navigation while any section holds unsaved edits. One guard for the
- * whole page rather than one per card, so leaving with two dirty sections
- * prompts once.
- */
-export function UnsavedChangesGuard({ when }: { when: boolean }) {
-  const { proceed, reset, status } = useBlocker({
-    shouldBlockFn: () => when,
-    // Also catches a tab close or a hard reload, not just in-app navigation.
-    enableBeforeUnload: () => when,
-    withResolver: true
-  });
-
-  return (
-    <AlertDialog open={status === 'blocked'} onOpenChange={() => reset?.()}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            <Trans>Discard changes?</Trans>
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            <Trans>
-              You have unsaved changes on this page. If you leave now they'll be
-              lost.
-            </Trans>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => reset?.()}>
-            <Trans>Keep editing</Trans>
-          </AlertDialogCancel>
-          <AlertDialogAction onClick={() => proceed?.()}>
-            <Trans>Discard changes</Trans>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   );
 }
 

@@ -3,9 +3,10 @@ import { ArrowUpIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 import { Controller } from 'react-hook-form';
 import { cmsChildren, cmsLineage, cmsVisibility } from 'shared/cms-tree';
-import type { CmsNodeType } from 'shared/types/cms';
+import { cmsImageMaxBytes, type CmsNodeType } from 'shared/types/cms';
 
-import type { CmsNode } from '@/api/cms';
+import { type CmsNode, uploadCmsImage } from '@/api/cms';
+import { ImageField } from '@/components/image-field';
 import { StickyCardFooter } from '@/components/sticky-card-footer';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
@@ -40,7 +41,6 @@ import {
   type TypeChange
 } from '../-lib/cms-content';
 import { useNodeTitle } from '../-lib/use-node-title';
-import { ImageField } from './image-field';
 import { NestedItems } from './nested-items';
 import { TypeChangeDialog, UnsavedChangesDialog } from './node-editor-dialogs';
 import { TranslationTabs } from './translation-tabs';
@@ -244,6 +244,8 @@ export function NodeEditor({
                     </FieldLabel>
                     <ImageField
                       max={1}
+                      maxBytes={cmsImageMaxBytes}
+                      upload={uploadCmsImage}
                       value={field.value ? [field.value] : []}
                       onChange={(ids) => field.onChange(ids[0] ?? null)}
                     />
@@ -265,7 +267,12 @@ export function NodeEditor({
                       JPG, PNG or WebP up to 2 MB. Drag to change the order.
                     </Trans>
                   </FieldDescription>
-                  <ImageField value={field.value} onChange={field.onChange} />
+                  <ImageField
+                    value={field.value}
+                    onChange={field.onChange}
+                    maxBytes={cmsImageMaxBytes}
+                    upload={uploadCmsImage}
+                  />
                 </Field>
               )}
             />

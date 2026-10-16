@@ -17,9 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { moveItem, useDragReorder } from '@/hooks/use-drag-reorder';
 import { cn } from '@/lib/utils';
-
-import { moveItem, useDragReorder } from '../-lib/use-drag-reorder';
 
 // A page's children: open, reorder (drag or Move up) or add one.
 export function NestedItems({

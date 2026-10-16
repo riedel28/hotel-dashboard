@@ -7,6 +7,7 @@ import {
   fetchReservationsParamsSchema,
   reservationsQueryOptions
 } from '@/api/reservations';
+import { DateRangeFilter } from '@/components/date-range-filter';
 import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -26,7 +27,6 @@ import { ReservationSearch } from '../reservations/-components/reservation-searc
 import { ReservationStatusFilter } from '../reservations/-components/reservation-status-filter';
 import { ReservationsFilters } from '../reservations/-components/reservations-filters';
 import { ReservationDetailsDrawer } from '../reservations/-components/reservations-table/-components/reservation-details-drawer';
-import { ReservationDateFilter } from '../reservations/-components/reservations-table/reservation-date-filter';
 import ReservationsTable from '../reservations/-components/reservations-table/reservations-table';
 import { useReservationsSearch } from '../reservations/-hooks/use-reservations-search';
 
@@ -107,7 +107,7 @@ function ReservationsContent() {
           onValueChange={setStatuses}
           className="lg:w-[180px]"
         />
-        <ReservationDateFilter
+        <DateRangeFilter
           from={dateRange.from}
           to={dateRange.to}
           onDateChange={setDateRange}

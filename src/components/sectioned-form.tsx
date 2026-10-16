@@ -90,7 +90,9 @@ export function SectionedFormShell<T extends FieldValues>({
                 status
               ) : isSaving ? (
                 <Trans>Saving changes…</Trans>
-              ) : isDirty ? null : (
+              ) : isDirty ? (
+                <Trans>Unsaved changes</Trans>
+              ) : (
                 <Trans>No unsaved changes</Trans>
               )}
             </div>

@@ -16,19 +16,19 @@ import {
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
-interface ReservationDateFilterProps {
+interface DateRangeFilterProps {
   from?: Date;
   to?: Date;
   className?: string;
   onDateChange?: (dateRange: { from?: Date; to?: Date } | undefined) => void;
 }
 
-function ReservationDateFilter({
+function DateRangeFilter({
   from,
   to,
   className = '',
   onDateChange
-}: ReservationDateFilterProps) {
+}: DateRangeFilterProps) {
   const today = new Date();
   const isMobile = useIsMobile();
 
@@ -218,4 +218,4 @@ function ReservationDateFilter({
   );
 }
 
-export { ReservationDateFilter };
+export { DateRangeFilter };

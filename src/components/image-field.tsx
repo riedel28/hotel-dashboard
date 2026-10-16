@@ -9,15 +9,14 @@ import {
   XIcon
 } from 'lucide-react';
 import * as React from 'react';
-import { cmsImageExtensions, cmsImageMaxBytes } from 'shared/types/cms';
+import { cmsImageExtensions } from 'shared/types/cms';
 
-import { cmsImageUrl, uploadCmsImage } from '@/api/cms';
+import { imageUrl } from '@/api/images';
+import { ImagePreviewDialog } from '@/components/image-preview-dialog';
 import { Button } from '@/components/ui/button';
+import { moveItem, useDragReorder } from '@/hooks/use-drag-reorder';
 import { formatBytes } from '@/lib/image';
 import { cn } from '@/lib/utils';
-
-import { moveItem, useDragReorder } from '../-lib/use-drag-reorder';
-import { ImagePreviewDialog } from './image-preview-dialog';
 
 interface Upload {
   key: number;
@@ -30,8 +29,9 @@ interface ImageFieldProps {
   onChange: (ids: string[]) => void;
   // 1 for a link's icon; a page's gallery takes many.
   max?: number;
-  maxBytes?: number;
-  upload?: (file: File) => Promise<string>;
+  maxBytes: number;
+  /** Uploads into the image store through the feature's own endpoint. */
+  upload: (file: File) => Promise<string>;
   /** Marks the first image as the cover. */
   cover?: boolean;
 }
@@ -48,8 +48,8 @@ export function ImageField({
   value,
   onChange,
   max = 30,
-  maxBytes = cmsImageMaxBytes,
-  upload: uploadFile = uploadCmsImage,
+  maxBytes,
+  upload: uploadFile,
   cover = false
 }: ImageFieldProps) {
   const { t } = useLingui();
@@ -153,7 +153,7 @@ export function ImageField({
             onClick={() => setPreview(index)}
           >
             <img
-              src={cmsImageUrl(id)}
+              src={imageUrl(id)}
               alt={t`Image ${index + 1}`}
               loading="lazy"
               decoding="async"

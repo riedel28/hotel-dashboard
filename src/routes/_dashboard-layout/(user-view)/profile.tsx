@@ -34,14 +34,12 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
+import { UnsavedChangesGuard } from '@/components/unsaved-changes-guard';
 import { useDocumentTitle, useOnlineStatus } from '@/hooks';
 
 import { PasswordSection } from './profile/-components/password-section';
 import { PersonalSection } from './profile/-components/personal-section';
-import {
-  MobileSaveBar,
-  UnsavedChangesGuard
-} from './profile/-components/profile-section';
+import { MobileSaveBar } from './profile/-components/profile-section';
 import { RolesSection } from './profile/-components/roles-section';
 import { TwoFactorSection } from './profile/-components/two-factor-section';
 

@@ -14,7 +14,8 @@ import { cmsChildren, cmsVisibility } from 'shared/cms-tree';
 import { type CmsLocale, cmsLocales, cmsPrimaryLocale } from 'shared/types/cms';
 import { toast } from 'sonner';
 
-import { cmsImageUrl, type CmsNode } from '@/api/cms';
+import { type CmsNode } from '@/api/cms';
+import { imageUrl } from '@/api/images';
 import { Label } from '@/components/ui/label';
 import { SegmentedControl } from '@/components/ui/segmented-control';
 import { Switch } from '@/components/ui/switch';
@@ -207,7 +208,7 @@ export function PhonePreview({
                         without one. */}
                     {node.image_ids[0] ? (
                       <img
-                        src={cmsImageUrl(node.image_ids[0])}
+                        src={imageUrl(node.image_ids[0])}
                         alt=""
                         loading="lazy"
                         decoding="async"
@@ -368,7 +369,7 @@ function PageContent({
             {images.map((id) => (
               <img
                 key={id}
-                src={cmsImageUrl(id)}
+                src={imageUrl(id)}
                 alt=""
                 loading="lazy"
                 decoding="async"

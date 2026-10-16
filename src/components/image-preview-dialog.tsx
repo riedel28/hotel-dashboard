@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from 'lucide-react';
 
-import { cmsImageUrl } from '@/api/cms';
+import { imageUrl } from '@/api/images';
 import {
   Dialog,
   DialogContent,
@@ -96,7 +96,7 @@ export function ImagePreviewDialog({
           {id && (
             <img
               key={id}
-              src={cmsImageUrl(id)}
+              src={imageUrl(id)}
               alt={t`Image ${(shown ?? 0) + 1}`}
               className="max-h-[75vh] w-auto max-w-full rounded-lg object-contain"
             />

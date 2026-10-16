@@ -7,9 +7,9 @@ import {
   type MoveCmsNodeData,
   type SaveCmsNodeData
 } from 'shared/types/cms';
-import { z } from 'zod';
 
 import { client, handleApiError } from './client';
+import { uploadImage } from './images';
 
 export type { CmsNode };
 
@@ -67,27 +67,9 @@ async function deleteCmsNode(id: number): Promise<void> {
   }
 }
 
-async function uploadCmsImage(file: File): Promise<string> {
-  try {
-    const body = new FormData();
-    body.append('file', file);
-    const response = await client.post('/cms/images', body, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 60_000
-    });
-    return z.object({ id: z.uuid() }).parse(response.data).id;
-  } catch (err) {
-    handleApiError(err, 'uploadCmsImage');
-  }
-}
-
-/** Where an uploaded image is served (publicly, for the app too). */
-function cmsImageUrl(id: string) {
-  return `${import.meta.env.VITE_API_BASE_URL}/cms/images/${id}`;
-}
+const uploadCmsImage = (file: File) => uploadImage('/cms/images', file);
 
 export {
-  cmsImageUrl,
   cmsNodesQueryOptions,
   createCmsNode,
   deleteCmsNode,
