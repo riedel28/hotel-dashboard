@@ -73,12 +73,7 @@ export function LoadErrorState({
         <EmptyDescription className="max-w-xs">{message}</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onRetry}
-          disabled={isRetrying}
-        >
+        <Button variant="outline" onClick={onRetry} disabled={isRetrying}>
           <RefreshCwIcon className={cn(isRetrying && 'animate-spin')} />
           <Trans>Try again</Trans>
         </Button>
