@@ -18,10 +18,8 @@ import {
 const values = (patch: Partial<EventFormValues> = {}): EventFormValues => ({
   ...emptyEventValues('DE'),
   title: 'Jazz night',
-  start_date: '2026-11-20',
-  start_time: '20:00',
-  end_date: '2026-11-20',
-  end_time: '23:30',
+  start: { date: '2026-11-20', time: '20:00' },
+  end: { date: '2026-11-20', time: '23:30' },
   venue_name: 'Lobby bar',
   address_line_1: 'Hauptstraße 1',
   zip: '10115',
@@ -47,18 +45,25 @@ describe('date validation', () => {
   });
 
   test('start and end need both a date and a time', () => {
-    expect(errorsOf(values({ start_time: '', end_date: '' }))).toMatchObject({
-      start_date: 'start_required',
-      end_date: 'end_required'
+    expect(
+      errorsOf(
+        values({
+          start: { date: '2026-11-20', time: '' },
+          end: { date: '', time: '23:30' }
+        })
+      )
+    ).toMatchObject({
+      start: 'event_start_required',
+      end: 'event_end_required'
     });
   });
 
   test('the end must come after the start', () => {
-    expect(errorsOf(values({ end_time: '20:00' }))).toEqual({
-      end_date: 'event_end_order'
-    });
     expect(
-      errorsOf(values({ end_date: '2026-11-21', end_time: '02:00' }))
+      errorsOf(values({ end: { date: '2026-11-20', time: '20:00' } }))
+    ).toEqual({ end: 'event_end_order' });
+    expect(
+      errorsOf(values({ end: { date: '2026-11-21', time: '02:00' } }))
     ).toEqual({});
   });
 
@@ -69,9 +74,9 @@ describe('date validation', () => {
     });
   });
 
-  test('the required fields', () => {
+  test('the required fields, with the codes the API uses', () => {
     expect(
-      Object.keys(
+      Object.values(
         errorsOf(
           values({
             title: ' ',
@@ -85,12 +90,12 @@ describe('date validation', () => {
       ).sort()
     ).toEqual(
       [
-        'address_line_1',
-        'city',
-        'country_code',
-        'title',
-        'venue_name',
-        'zip'
+        'event_city_required',
+        'event_country_required',
+        'event_street_required',
+        'event_title_required',
+        'event_venue_required',
+        'event_zip_required'
       ].sort()
     );
   });
@@ -127,12 +132,8 @@ describe('timezone', () => {
     // Berlin leaves summer time at 03:00 on 25 October 2026.
     expect(
       durationMinutes(
-        values({
-          start_date: '2026-10-25',
-          start_time: '01:00',
-          end_date: '2026-10-25',
-          end_time: '04:00'
-        }),
+        { date: '2026-10-25', time: '01:00' },
+        { date: '2026-10-25', time: '04:00' },
         'Europe/Berlin'
       )
     ).toBe(4 * 60);
@@ -152,8 +153,8 @@ describe('doors chips', () => {
   });
 
   test('the hint measures the lead whichever way the doors were set', () => {
-    expect(doorsLeadMinutes(values({ doors_time: '19:15' }))).toBe(45);
-    expect(doorsLeadMinutes(values())).toBeNull();
+    expect(doorsLeadMinutes('20:00', '19:15')).toBe(45);
+    expect(doorsLeadMinutes('20:00', '')).toBeNull();
   });
 
   test('durations split into days, hours and minutes', () => {
@@ -209,7 +210,7 @@ describe('duplicate', () => {
     };
     expect(duplicateValues(event, 'UTC')).toMatchObject({
       title: 'Wine tasting (copy)',
-      start_time: '18:00',
+      start: { date: '2026-11-20', time: '18:00' },
       image_ids: ['a', 'b']
     });
   });

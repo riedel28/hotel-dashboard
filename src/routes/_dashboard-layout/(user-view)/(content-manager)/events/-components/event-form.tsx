@@ -8,23 +8,27 @@ import { MapPinIcon } from 'lucide-react';
 import { type ReactNode, useMemo } from 'react';
 import {
   Controller,
-  type FieldPath,
   useForm,
   type UseFormReturn,
   useWatch
 } from 'react-hook-form';
-import { eventImageMaxBytes, eventImagesMax } from 'shared/types/events';
+import {
+  eventErrorCodes,
+  eventImageMaxBytes,
+  eventImagesMax,
+  type HotelEvent,
+  type SaveEventData
+} from 'shared/types/events';
 import type { Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
 import {
-  createEvent,
   eventByIdQueryOptions,
   invalidateEvents,
-  updateEvent,
   uploadEventImage
 } from '@/api/events';
-import { scrollPageToTop } from '@/components/section-nav';
+import { DateTimeField } from '@/components/date-time-field';
+import { ImageField } from '@/components/image-field';
 import {
   type FormSectionDef,
   SectionedForm
@@ -42,23 +46,20 @@ import { Input } from '@/components/ui/input';
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 import { TimeInput } from '@/components/ui/time-input';
 import { Toggle } from '@/components/ui/toggle';
+import { UnsavedChangesGuard } from '@/components/unsaved-changes-guard';
 
 import {
   doorsLeadMinutes,
   doorsPresets,
   doorsTimeBefore,
   durationMinutes,
-  eventFormErrors,
   eventFormSchema,
   type EventFormValues,
   formValuesToSaveData,
   hotelAddress,
   splitMinutes
 } from '../-lib/event-form';
-import { UnsavedChangesGuard } from '../../../profile/-components/profile-section';
-import { ImageField } from '../../mobile-cms/-components/image-field';
 import { CategoryPicker } from './category-picker';
-import { WallClockField } from './wall-clock-field';
 
 type EventForm = UseFormReturn<EventFormValues>;
 type HotelInfo = Pick<
@@ -71,101 +72,78 @@ type HotelInfo = Pick<
   | 'country_code'
 >;
 
-/** The schema's codes in words: "required" by field, the rest as they are. */
-const requiredMessages: Partial<
-  Record<FieldPath<EventFormValues>, MessageDescriptor>
-> = {
-  title: msg`Title is required`,
-  venue_name: msg`Venue name is required`,
-  address_line_1: msg`Street is required`,
-  zip: msg`Postal code is required`,
-  city: msg`City is required`,
-  country_code: msg`Country is required`
+/** The schemas' codes in words. */
+const errorMessages: Record<string, MessageDescriptor> = {
+  [eventErrorCodes.titleRequired]: msg`Title is required`,
+  [eventErrorCodes.venueRequired]: msg`Venue name is required`,
+  [eventErrorCodes.streetRequired]: msg`Street is required`,
+  [eventErrorCodes.zipRequired]: msg`Postal code is required`,
+  [eventErrorCodes.cityRequired]: msg`City is required`,
+  [eventErrorCodes.countryRequired]: msg`Country is required`,
+  [eventErrorCodes.startRequired]: msg`Start date and time are required`,
+  [eventErrorCodes.endRequired]: msg`End date and time are required`,
+  [eventErrorCodes.endOrder]: msg`The end must be after the start`,
+  [eventErrorCodes.doorsOrder]: msg`Doors must open before the start`
 };
 
-const ruleMessages: Record<string, MessageDescriptor> = {
-  [eventFormErrors.startRequired]: msg`Start date and time are required`,
-  [eventFormErrors.endRequired]: msg`End date and time are required`,
-  [eventFormErrors.endOrder]: msg`The end must be after the start`,
-  [eventFormErrors.doorsOrder]: msg`Doors must open before the start`
-};
-
-function EventFieldError({
-  name,
-  error
-}: {
-  name: FieldPath<EventFormValues>;
-  error?: { message?: string };
-}) {
+function EventFieldError({ error }: { error?: { message?: string } }) {
   const { t } = useLingui();
   const message = error?.message;
   if (!message) return null;
-  const known =
-    message === eventFormErrors.required
-      ? requiredMessages[name]
-      : ruleMessages[message];
+  const known = errorMessages[message];
 
   return <FieldError>{known ? t(known) : message}</FieldError>;
 }
 
 interface EventFormProps {
   property: HotelInfo;
-  /** Absent for a new event. */
-  eventId?: number;
   /** The event's values, or what a new one starts with (e.g. a duplicate). */
   initialValues: EventFormValues;
+  /** Saves the form's data; the page knows whether that creates or updates. */
+  save: (data: SaveEventData) => Promise<HotelEvent>;
+  onSaved: (event: HotelEvent) => void;
+  submitLabel: ReactNode;
+  /**
+   * An event not saved yet: it can be submitted untouched, Cancel leaves for
+   * the list, and the form stays busy until the page moves on.
+   */
+  isNew?: boolean;
 }
 
-/** Creates or updates an event; one form for both. */
+/** An event's form, for a new one and an existing one alike. */
 export function EventForm({
   property,
-  eventId,
-  initialValues
+  initialValues,
+  save,
+  onSaved,
+  submitLabel,
+  isNew = false
 }: EventFormProps) {
-  const isNew = eventId === undefined;
   const { t } = useLingui();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const zone = property.timezone;
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
-    // An edit form follows the saved event, so it is clean again after Update
-    ...(isNew ? { defaultValues: initialValues } : { values: initialValues })
+    // Follows the saved event, so the form is clean again after a save
+    values: initialValues
   });
 
-  const save = useMutation({
-    mutationFn: (values: EventFormValues) => {
-      const data = formValuesToSaveData(values, zone);
-      return isNew ? createEvent(data) : updateEvent(eventId, data);
-    },
-    onSuccess: (event) => {
+  const mutation = useMutation({
+    mutationFn: (values: EventFormValues) =>
+      save(formValuesToSaveData(values, property.timezone)),
+    onSuccess: event => {
       queryClient.setQueryData(eventByIdQueryOptions(event.id).queryKey, event);
       void invalidateEvents(queryClient);
-      if (isNew) {
-        toast.success(t`Event created`);
-        scrollPageToTop();
-        void navigate({
-          to: '/events/$eventId',
-          params: { eventId: String(event.id) },
-          ignoreBlocker: true
-        });
-      } else {
-        toast.success(t`Event updated`);
-      }
+      onSaved(event);
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Failed to save event:', error);
-      toast.error(
-        isNew ? t`Failed to create event` : t`Failed to update event`,
-        { description: error.message }
-      );
+      toast.error(t`Failed to save event`, { description: error.message });
     }
   });
 
-  // A created event keeps the form disabled until its own page takes over
-  const isSaving = save.isPending || (isNew && save.isSuccess);
-  const isDirty = form.formState.isDirty;
+  const isSaving = mutation.isPending || (isNew && mutation.isSuccess);
   const sections = useMemo(() => eventSections(property), [property]);
 
   return (
@@ -173,22 +151,10 @@ export function EventForm({
       <SectionedForm
         form={form}
         sections={sections}
-        onSubmit={(values) => save.mutate(values)}
+        onSubmit={values => mutation.mutate(values)}
         isSaving={isSaving}
         isNew={isNew}
-        submitLabel={
-          isNew ? <Trans>Create event</Trans> : <Trans>Update event</Trans>
-        }
-        status={
-          isSaving ? (
-            <Trans>Saving changes…</Trans>
-          ) : isDirty ? (
-            <Trans>Unsaved changes</Trans>
-          ) : (
-            <Trans>No unsaved changes</Trans>
-          )
-        }
-        // A new event has nothing to go back to: Cancel leaves for the list
+        submitLabel={submitLabel}
         {...(isNew && {
           secondaryAction: (
             <Button
@@ -204,7 +170,7 @@ export function EventForm({
           )
         })}
       />
-      <UnsavedChangesGuard when={isDirty && !isSaving} />
+      <UnsavedChangesGuard when={form.formState.isDirty && !isSaving} />
     </>
   );
 }
@@ -217,7 +183,7 @@ const eventSections = (
     label: <Trans>Basics</Trans>,
     description: <Trans>Title, description and categories.</Trans>,
     fields: ['title', 'description', 'categories'],
-    render: (form) => <BasicsFields form={form} />
+    render: form => <BasicsFields form={form} />
   },
   {
     id: 'date-time',
@@ -228,8 +194,8 @@ const eventSections = (
         the hotel’s timezone, {property.timezone.replaceAll('_', ' ')}.
       </Trans>
     ),
-    fields: ['start_date', 'start_time', 'end_date', 'end_time', 'doors_time'],
-    render: (form) => <DateTimeFields form={form} zone={property.timezone} />
+    fields: ['start', 'end', 'doors_time'],
+    render: form => <DateTimeFields form={form} zone={property.timezone} />
   },
   {
     id: 'location',
@@ -243,7 +209,7 @@ const eventSections = (
       'city',
       'country_code'
     ],
-    render: (form) => <LocationFields form={form} property={property} />
+    render: form => <LocationFields form={form} property={property} />
   },
   {
     id: 'images',
@@ -255,7 +221,7 @@ const eventSections = (
       </Trans>
     ),
     fields: ['image_ids'],
-    render: (form) => (
+    render: form => (
       <Controller
         control={form.control}
         name="image_ids"
@@ -304,7 +270,7 @@ function TextField({
             autoComplete={autoComplete}
             aria-invalid={fieldState.invalid}
           />
-          <EventFieldError name={name} error={fieldState.error} />
+          <EventFieldError error={fieldState.error} />
         </Field>
       )}
     />
@@ -372,76 +338,66 @@ function DurationText({ minutes }: { minutes: number }) {
 
 function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
   const { t } = useLingui();
-  const values = useWatch({ control: form.control }) as EventFormValues;
-  const duration = durationMinutes(values, zone);
-  const doorsLead = doorsLeadMinutes(values);
-  // Later fields are checked again as earlier ones change, once submitted
-  const touch = {
-    shouldDirty: true,
-    shouldValidate: form.formState.isSubmitted
-  };
+  const [start, end, doorsTime] = useWatch({
+    control: form.control,
+    name: ['start', 'end', 'doors_time']
+  });
+  const duration = durationMinutes(start, end, zone);
+  const doorsLead = doorsLeadMinutes(start.time, doorsTime);
 
   return (
     <FieldGroup className="gap-4">
       <Controller
         control={form.control}
-        name="start_date"
+        name="start"
+        // The end and the doors are checked against the start
+        rules={{ deps: ['end', 'doors_time'] }}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-2">
             <FieldLabel htmlFor={field.name}>
               <Trans>Start</Trans>
             </FieldLabel>
-            <WallClockField
+            <DateTimeField
               ref={field.ref}
               id={field.name}
               label={t`Start`}
-              date={field.value}
-              time={values.start_time}
-              onDateChange={(date) => {
-                field.onChange(date);
+              value={field.value}
+              onChange={next => {
+                field.onChange(next);
                 // An end not picked yet starts on the same day
-                if (!form.getValues('end_date')) {
-                  form.setValue('end_date', date, touch);
-                }
-                if (form.formState.isSubmitted) {
-                  void form.trigger(['end_date', 'doors_time']);
-                }
-              }}
-              onTimeChange={(time) => {
-                form.setValue('start_time', time, touch);
-                if (form.formState.isSubmitted) {
-                  void form.trigger(['start_date', 'end_date', 'doors_time']);
+                const endNow = form.getValues('end');
+                if (next.date && !endNow.date) {
+                  form.setValue(
+                    'end',
+                    { ...endNow, date: next.date },
+                    { shouldDirty: true }
+                  );
                 }
               }}
               invalid={fieldState.invalid}
             />
-            <EventFieldError name="start_date" error={fieldState.error} />
+            <EventFieldError error={fieldState.error} />
           </Field>
         )}
       />
 
       <Controller
         control={form.control}
-        name="end_date"
+        name="end"
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-2">
             <FieldLabel htmlFor={field.name}>
               <Trans>End</Trans>
             </FieldLabel>
-            <WallClockField
+            <DateTimeField
               ref={field.ref}
               id={field.name}
               label={t`End`}
-              date={field.value}
-              time={values.end_time}
-              onDateChange={field.onChange}
-              onTimeChange={(time) => {
-                form.setValue('end_time', time, touch);
-                if (form.formState.isSubmitted) void form.trigger('end_date');
-              }}
+              value={field.value}
+              onChange={field.onChange}
               invalid={fieldState.invalid}
             />
-            <EventFieldError name="end_date" error={fieldState.error} />
+            <EventFieldError error={fieldState.error} />
           </Field>
         )}
       />
@@ -466,8 +422,8 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
             </div>
             {/* Quick picks from the start time; the field keeps the time */}
             <div className="mt-1 flex flex-wrap gap-1.5">
-              {doorsPresets.map((minutes) => {
-                const time = doorsTimeBefore(values.start_time, minutes);
+              {doorsPresets.map(minutes => {
+                const time = doorsTimeBefore(start.time, minutes);
                 return (
                   <Toggle
                     key={minutes}
@@ -475,7 +431,7 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
                     disabled={!time}
                     pressed={time !== null && field.value === time}
                     // Pressed again, it takes the doors time back out
-                    onPressedChange={(pressed) =>
+                    onPressedChange={pressed =>
                       field.onChange(pressed && time ? time : '')
                     }
                   >
@@ -488,7 +444,7 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
                 );
               })}
             </div>
-            <EventFieldError name="doors_time" error={fieldState.error} />
+            <EventFieldError error={fieldState.error} />
           </Field>
         )}
       />
@@ -526,7 +482,7 @@ function LocationFields({
 
   return (
     <FieldGroup className="gap-4">
-      <div className="flex flex-col items-start gap-1">
+      <div className="flex flex-col items-start gap-2">
         <Button
           type="button"
           variant="outline"
@@ -595,12 +551,12 @@ function LocationFields({
             </FieldLabel>
             <CountryPicker
               value={field.value}
-              onValueChange={(code) => field.onChange(code ?? '')}
+              onValueChange={code => field.onChange(code ?? '')}
               placeholder={t`Select country`}
               aria-labelledby="event-country-label"
               aria-invalid={fieldState.invalid}
             />
-            <EventFieldError name="country_code" error={fieldState.error} />
+            <EventFieldError error={fieldState.error} />
           </Field>
         )}
       />

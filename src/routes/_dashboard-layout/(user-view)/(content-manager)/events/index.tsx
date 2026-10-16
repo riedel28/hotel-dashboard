@@ -5,16 +5,16 @@ import {
   stripSearchParams,
   useNavigate
 } from '@tanstack/react-router';
-import { BuildingIcon, CalendarDaysIcon, PlusIcon } from 'lucide-react';
+import { CalendarDaysIcon, PlusIcon } from 'lucide-react';
 import {
   eventCategorySchema,
   eventPeriodSchema,
   eventSortColumns
 } from 'shared/types/events';
+import type { Property } from 'shared/types/properties';
 import { z } from 'zod';
 
 import { eventsQueryOptions, invalidateEvents } from '@/api/events';
-import { useAuth } from '@/auth';
 import {
   EmptyFilterResult,
   EmptyTableState
@@ -29,21 +29,15 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
+import { useSelectedProperty } from '@/routes/_dashboard-layout/-hooks/use-selected-property';
 
 import { EventsFilters } from './-components/events-filters';
 import { EventsTable } from './-components/events-table';
+import { NoPropertySelected } from './-components/no-property-selected';
 import { useEventsSearch } from './-hooks/use-events-search';
-import { ensureHotel, useHotel } from './-lib/use-hotel';
 
 const PAGE_SIZES = [5, 10, 25, 50, 100];
 const DEFAULT_PAGE_SIZE = 25;
@@ -67,7 +61,7 @@ function EventsPage() {
   const { t } = useLingui();
   useDocumentTitle(t`Events`);
   const navigate = useNavigate();
-  const hasProperty = Boolean(useAuth().user?.selected_property_id);
+  const property = useSelectedProperty();
 
   return (
     <div className="space-y-1">
@@ -91,7 +85,7 @@ function EventsPage() {
         <h1 className="text-xl font-bold">
           <Trans>Events</Trans>
         </h1>
-        {hasProperty && (
+        {property && (
           <Button onClick={() => void navigate({ to: '/events/new' })}>
             <PlusIcon aria-hidden="true" />
             <Trans>New event</Trans>
@@ -99,43 +93,25 @@ function EventsPage() {
         )}
       </div>
 
-      {hasProperty ? (
-        <EventsContent />
+      {property ? (
+        <EventsContent property={property} />
       ) : (
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <BuildingIcon />
-            </EmptyMedia>
-            <EmptyTitle>
-              <Trans>No property selected</Trans>
-            </EmptyTitle>
-            <EmptyDescription>
-              <Trans>
-                Select a property at the top of the page to see its events.
-              </Trans>
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+        <NoPropertySelected />
       )}
     </div>
   );
 }
 
-function EventsContent() {
+function EventsContent({ property }: { property: Property }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const search = useEventsSearch();
-  const hotel = useHotel();
   // A plain query: a change of filter, sorting or page keeps the rows on
   // screen (dimmed) until the new ones arrive.
   const eventsQuery = useQuery(eventsQueryOptions(search.params));
   const events = eventsQuery.data?.index ?? [];
   // The property has no events at all (not: none match the filters)
-  const hasNoEvents =
-    eventsQuery.data?.total === 0 &&
-    !search.hasActiveFilters &&
-    search.filters.period === 'upcoming';
+  const hasNoEvents = eventsQuery.data?.total === 0 && !search.hasActiveFilters;
 
   return (
     <div className="space-y-2.5">
@@ -160,8 +136,8 @@ function EventsContent() {
             <Trans>Couldn't load events</Trans>
           )}
           data={events}
-          zone={hotel?.timezone ?? 'Europe/Berlin'}
-          isLoading={eventsQuery.isLoading || !hotel}
+          zone={property.timezone}
+          isLoading={eventsQuery.isLoading}
           pageIndex={search.pageIndex}
           pageSize={search.pageSize}
           totalCount={eventsQuery.data?.total ?? 0}
@@ -223,10 +199,7 @@ export const Route = createFileRoute(
   },
   loaderDeps: ({ search }) => search,
   // Waited for, but a failure isn't thrown here: the table shows it
-  loader: ({ context: { queryClient, auth }, deps }) =>
-    Promise.all([
-      queryClient.prefetchQuery(eventsQueryOptions(deps)),
-      ensureHotel(queryClient, auth.user?.selected_property_id)
-    ]),
+  loader: ({ context: { queryClient }, deps }) =>
+    queryClient.prefetchQuery(eventsQueryOptions(deps)),
   component: EventsPage
 });

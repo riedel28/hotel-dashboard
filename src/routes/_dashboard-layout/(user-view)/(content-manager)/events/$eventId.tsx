@@ -3,8 +3,9 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { CopyIcon, EllipsisIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
-import { eventByIdQueryOptions } from '@/api/events';
+import { eventByIdQueryOptions, updateEvent } from '@/api/events';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,25 +14,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { FormSkeleton } from '@/components/ui/form-skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
+import { useSelectedProperty } from '@/routes/_dashboard-layout/-hooks/use-selected-property';
 
 import { DeleteEventDialog } from './-components/delete-event-dialog';
 import { EventForm } from './-components/event-form';
 import { EventPageHeader } from './-components/event-page-header';
+import { NoPropertySelected } from './-components/no-property-selected';
 import { eventToFormValues } from './-lib/event-form';
-import { ensureHotel, useHotel } from './-lib/use-hotel';
 
 function EventPage() {
   const { t } = useLingui();
   const navigate = useNavigate();
   const eventId = Number(Route.useParams().eventId);
   const { data: event } = useSuspenseQuery(eventByIdQueryOptions(eventId));
-  const hotel = useHotel();
+  const property = useSelectedProperty();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   useDocumentTitle(event.title);
 
-  const zone = hotel?.timezone;
+  const zone = property?.timezone;
+  // Recomputed from the saved event, so a save leaves the form clean
   const initialValues = useMemo(
     () => (zone ? eventToFormValues(event, zone) : null),
     [event, zone]
@@ -78,14 +80,16 @@ function EventPage() {
           </DropdownMenu>
         }
       />
-      {hotel && initialValues ? (
+      {property && initialValues ? (
         <EventForm
-          property={hotel}
-          eventId={eventId}
+          property={property}
           initialValues={initialValues}
+          save={(data) => updateEvent(eventId, data)}
+          onSaved={() => toast.success(t`Event updated`)}
+          submitLabel={<Trans>Update event</Trans>}
         />
       ) : (
-        <FormSkeleton />
+        <NoPropertySelected />
       )}
       <DeleteEventDialog
         open={showDeleteDialog}
@@ -100,10 +104,7 @@ function EventPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(content-manager)/events/$eventId'
 )({
-  loader: ({ context: { queryClient, auth }, params: { eventId } }) =>
-    Promise.all([
-      queryClient.ensureQueryData(eventByIdQueryOptions(Number(eventId))),
-      ensureHotel(queryClient, auth.user?.selected_property_id)
-    ]),
+  loader: ({ context: { queryClient }, params: { eventId } }) =>
+    queryClient.ensureQueryData(eventByIdQueryOptions(Number(eventId))),
   component: EventPage
 });

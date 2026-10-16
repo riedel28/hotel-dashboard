@@ -9,8 +9,8 @@ import dayjs from 'dayjs';
 import { ImageIcon } from 'lucide-react';
 import { type ReactNode, useMemo } from 'react';
 
-import { cmsImageUrl } from '@/api/cms';
 import type { HotelEvent } from '@/api/events';
+import { imageUrl } from '@/api/images';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import {
   DataGrid,
@@ -46,7 +46,7 @@ function EventCell({ event }: { event: HotelEvent }) {
       <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md border bg-muted text-muted-foreground">
         {cover ? (
           <img
-            src={cmsImageUrl(cover)}
+            src={imageUrl(cover)}
             alt=""
             loading="lazy"
             decoding="async"

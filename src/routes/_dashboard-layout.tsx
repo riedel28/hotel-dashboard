@@ -5,7 +5,7 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { LoaderCircleIcon, MessageCircleIcon } from 'lucide-react';
 
 import {
-  fetchDisabledNavItems,
+  fetchSelectedProperty,
   selectablePropertiesQueryOptions
 } from '@/api/properties';
 import { FullScreenRouteError } from '@/components/route-error';
@@ -106,16 +106,17 @@ export const Route = createFileRoute('/_dashboard-layout')({
       });
     }
 
-    const disabledNavItems = await fetchDisabledNavItems(
+    const selectedProperty = await fetchSelectedProperty(
       context.queryClient,
       context.auth.user?.selected_property_id
     );
+    const disabledNavItems = selectedProperty?.disabled_nav_items ?? [];
 
     if (isNavPathDisabled(location.pathname, disabledNavItems)) {
       throw redirect({ to: '/' });
     }
 
-    return { disabledNavItems };
+    return { disabledNavItems, selectedProperty };
   },
   // No auth check here: `beforeLoad` above always runs first, and its redirect
   // throws, so an unauthenticated request never reaches this loader.

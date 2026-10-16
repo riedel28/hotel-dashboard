@@ -5,29 +5,29 @@ import {
   type EventCategory,
   eventCategorySchema,
   eventErrorCodes,
+  eventTextFields,
   type HotelEvent,
   type SaveEventData
 } from 'shared/types/events';
 import type { Property } from 'shared/types/properties';
 import { z } from 'zod';
 
+import type { WallClock } from '@/components/date-time-field';
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 /**
- * The form holds times as the property's wall clock: dates YYYY-MM-DD and
- * times HH:mm, '' while not entered. They turn into instants only on save,
- * in the property's timezone rather than the browser's.
+ * The form holds times as the property's wall clock. They turn into instants
+ * only on save, in the property's timezone rather than the browser's.
  */
 export interface EventFormValues {
   title: string;
   description: string;
   categories: EventCategory[];
-  start_date: string;
-  start_time: string;
-  end_date: string;
-  end_time: string;
-  // On the start's date.
+  start: WallClock;
+  end: WallClock;
+  // HH:mm on the start's date, '' for none.
   doors_time: string;
   venue_name: string;
   address_line_1: string;
@@ -39,77 +39,43 @@ export interface EventFormValues {
   image_ids: string[];
 }
 
-/** The rules the form checks, by code; the form words them. */
-export const eventFormErrors = {
-  required: 'required',
-  startRequired: 'start_required',
-  endRequired: 'end_required',
-  endOrder: eventErrorCodes.endOrder,
-  doorsOrder: eventErrorCodes.doorsOrder
-} as const;
+const wallClockSchema = z.object({ date: z.string(), time: z.string() });
 
-const required = z.string().trim().min(1, eventFormErrors.required);
-
+// The text fields are checked as the API checks them, with the same codes.
 export const eventFormSchema = z
   .object({
-    title: required,
+    ...eventTextFields,
     description: z.string(),
     categories: z.array(eventCategorySchema),
-    start_date: z.string(),
-    start_time: z.string(),
-    end_date: z.string(),
-    end_time: z.string(),
+    start: wallClockSchema,
+    end: wallClockSchema,
     doors_time: z.string(),
-    venue_name: required,
-    address_line_1: required,
     address_line_2: z.string(),
-    zip: required,
-    city: required,
-    country_code: required,
+    country_code: z.string().min(1, eventErrorCodes.countryRequired),
     image_ids: z.array(z.string())
   })
   .superRefine((values, ctx) => {
-    const start = wallClock(values.start_date, values.start_time);
-    const end = wallClock(values.end_date, values.end_time);
-    const doors = wallClock(values.start_date, values.doors_time);
+    const start = stamp(values.start);
+    const end = stamp(values.end);
+    const doors = stamp({ date: values.start.date, time: values.doors_time });
+    const issue = (path: keyof EventFormValues, message: string) =>
+      ctx.addIssue({ code: 'custom', path: [path], message });
 
-    if (!start) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['start_date'],
-        message: eventFormErrors.startRequired
-      });
-    }
-    if (!end) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['end_date'],
-        message: eventFormErrors.endRequired
-      });
-    }
+    if (!start) issue('start', eventErrorCodes.startRequired);
+    if (!end) issue('end', eventErrorCodes.endRequired);
     // Wall clocks of one zone compare as strings.
-    if (start && end && end <= start) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['end_date'],
-        message: eventFormErrors.endOrder
-      });
-    }
+    if (start && end && end <= start) issue('end', eventErrorCodes.endOrder);
     if (start && doors && doors > start) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['doors_time'],
-        message: eventFormErrors.doorsOrder
-      });
+      issue('doors_time', eventErrorCodes.doorsOrder);
     }
   });
 
 /** "YYYY-MM-DDTHH:mm", or null while either half is missing. */
-function wallClock(date: string, time: string) {
+function stamp({ date, time }: WallClock) {
   return date && time ? `${date}T${time}` : null;
 }
 
-function toInstant(date: string, time: string, zone: string) {
+function toInstant({ date, time }: WallClock, zone: string) {
   return dayjs.tz(`${date}T${time}`, zone).toISOString();
 }
 
@@ -117,10 +83,12 @@ function toInstant(date: string, time: string, zone: string) {
 export const inZone = (instant: string, zone: string) =>
   dayjs(instant).tz(zone);
 
-function fromInstant(instant: string, zone: string) {
+function fromInstant(instant: string, zone: string): WallClock {
   const local = inZone(instant, zone);
   return { date: local.format('YYYY-MM-DD'), time: local.format('HH:mm') };
 }
+
+const noTime: WallClock = { date: '', time: '' };
 
 /** A new event: nothing but the hotel's country. */
 export function emptyEventValues(countryCode: string): EventFormValues {
@@ -128,10 +96,8 @@ export function emptyEventValues(countryCode: string): EventFormValues {
     title: '',
     description: '',
     categories: [],
-    start_date: '',
-    start_time: '',
-    end_date: '',
-    end_time: '',
+    start: noTime,
+    end: noTime,
     doors_time: '',
     venue_name: '',
     address_line_1: '',
@@ -147,16 +113,12 @@ export function eventToFormValues(
   event: HotelEvent,
   zone: string
 ): EventFormValues {
-  const start = fromInstant(event.starts_at, zone);
-  const end = fromInstant(event.ends_at, zone);
   return {
     title: event.title,
     description: event.description ?? '',
     categories: event.categories,
-    start_date: start.date,
-    start_time: start.time,
-    end_date: end.date,
-    end_time: end.time,
+    start: fromInstant(event.starts_at, zone),
+    end: fromInstant(event.ends_at, zone),
     doors_time: event.doors_open_at
       ? fromInstant(event.doors_open_at, zone).time
       : '',
@@ -181,43 +143,36 @@ export function duplicateValues(
 
 /** The values of a valid form, as the API takes them. */
 export function formValuesToSaveData(
-  values: EventFormValues,
+  { start, end, doors_time, ...values }: EventFormValues,
   zone: string
 ): SaveEventData {
   return {
-    title: values.title,
+    ...values,
     // The editor reports an empty document as ''.
     description: values.description || null,
-    categories: values.categories,
-    starts_at: toInstant(values.start_date, values.start_time, zone),
-    ends_at: toInstant(values.end_date, values.end_time, zone),
-    doors_open_at: values.doors_time
-      ? toInstant(values.start_date, values.doors_time, zone)
+    starts_at: toInstant(start, zone),
+    ends_at: toInstant(end, zone),
+    doors_open_at: doors_time
+      ? toInstant({ date: start.date, time: doors_time }, zone)
       : null,
-    venue_name: values.venue_name,
-    address_line_1: values.address_line_1,
-    address_line_2: values.address_line_2 || null,
-    zip: values.zip,
-    city: values.city,
-    country_code: values.country_code,
-    image_ids: values.image_ids
+    address_line_2: values.address_line_2 || null
   };
 }
 
 /** Minutes from the start to the end, counted in real time (DST-aware). */
-export function durationMinutes(values: EventFormValues, zone: string) {
-  if (!wallClock(values.start_date, values.start_time)) return null;
-  if (!wallClock(values.end_date, values.end_time)) return null;
-  return dayjs(toInstant(values.end_date, values.end_time, zone)).diff(
-    toInstant(values.start_date, values.start_time, zone),
-    'minute'
-  );
+export function durationMinutes(
+  start: WallClock,
+  end: WallClock,
+  zone: string
+) {
+  if (!stamp(start) || !stamp(end)) return null;
+  return dayjs(toInstant(end, zone)).diff(toInstant(start, zone), 'minute');
 }
 
 /** Minutes the doors open before the start, or null without both times. */
-export function doorsLeadMinutes(values: EventFormValues) {
-  if (!values.start_time || !values.doors_time) return null;
-  return minutesOf(values.start_time) - minutesOf(values.doors_time);
+export function doorsLeadMinutes(startTime: string, doorsTime: string) {
+  if (!startTime || !doorsTime) return null;
+  return minutesOf(startTime) - minutesOf(doorsTime);
 }
 
 export const doorsPresets = [30, 60, 120] as const;
@@ -259,10 +214,7 @@ type AddressFields = Pick<
  * alone. Null when the hotel has no address yet.
  */
 export function hotelAddress(
-  property: Pick<
-    Property,
-    'address_line_1' | 'address_line_2' | 'zip' | 'city' | 'country_code'
-  >
+  property: Pick<Property, keyof AddressFields>
 ): AddressFields | null {
   if (!property.address_line_1 || !property.zip || !property.city) {
     return null;

@@ -2,6 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { eventCategorySchema, type EventPeriod } from 'shared/types/events';
 
 import { ClearFiltersButton } from '@/components/clear-filters-button';
+import { DateRangeFilter } from '@/components/date-range-filter';
 import {
   DataGridCheckboxFilter,
   DataGridCheckboxFilterClear,
@@ -13,7 +14,6 @@ import { SegmentedControl } from '@/components/ui/segmented-control';
 
 import type { EventsSearch } from '../-hooks/use-events-search';
 import { eventCategoryLabels } from '../-lib/event-categories';
-import { ReservationDateFilter } from '../../../(front-office)/reservations/-components/reservations-table/reservation-date-filter';
 
 interface EventsFiltersProps extends Pick<
   EventsSearch,
@@ -81,7 +81,7 @@ export function EventsFilters({
           <DataGridCheckboxFilterClear />
         </DataGridCheckboxFilterFooter>
       </DataGridCheckboxFilter>
-      <ReservationDateFilter
+      <DateRangeFilter
         from={dateRange.from}
         to={dateRange.to}
         onDateChange={setDateRange}

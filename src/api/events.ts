@@ -13,9 +13,9 @@ import {
   type SaveEventData,
   saveEventSchema
 } from 'shared/types/events';
-import { z } from 'zod';
 
 import { client, handleApiError } from './client';
+import { uploadImage } from './images';
 
 export type { HotelEvent };
 
@@ -96,17 +96,6 @@ export async function deleteEvent(id: number): Promise<void> {
   }
 }
 
-/** Into the CMS image store; shown with `cmsImageUrl`. */
-export async function uploadEventImage(file: File): Promise<string> {
-  try {
-    const body = new FormData();
-    body.append('file', file);
-    const response = await client.post('/events/images', body, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 60_000
-    });
-    return z.object({ id: z.uuid() }).parse(response.data).id;
-  } catch (err) {
-    handleApiError(err, 'uploadEventImage');
-  }
-}
+/** Into the image store, up to the larger event limit. */
+export const uploadEventImage = (file: File) =>
+  uploadImage('/events/images', file);
