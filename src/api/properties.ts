@@ -8,7 +8,6 @@ import {
   createPropertySchema,
   type FetchPropertiesParams,
   fetchPropertiesResponseSchema,
-  type NavItemId,
   type Property,
   propertySchema,
   type UpdatePropertyData,
@@ -68,22 +67,19 @@ async function fetchPropertyById(id: string): Promise<Property> {
 }
 
 /**
- * The nav items switched off for a Property. None when no Property is selected
- * or it has since been deleted (404); any other failure propagates — treating
- * it as "nothing disabled" would open switched-off pages on a transient error.
+ * The Property the user works in. Null when none is selected or it has since
+ * been deleted (404); any other failure propagates — treating it as "no
+ * property" would open switched-off pages on a transient error.
  */
-async function fetchDisabledNavItems(
+async function fetchSelectedProperty(
   queryClient: QueryClient,
   propertyId: string | null | undefined
-): Promise<NavItemId[]> {
-  if (!propertyId) return [];
+): Promise<Property | null> {
+  if (!propertyId) return null;
   try {
-    const property = await queryClient.fetchQuery(
-      propertyByIdQueryOptions(propertyId)
-    );
-    return property.disabled_nav_items;
+    return await queryClient.fetchQuery(propertyByIdQueryOptions(propertyId));
   } catch (error) {
-    if (error instanceof ApiError && error.status === 404) return [];
+    if (error instanceof ApiError && error.status === 404) return null;
     throw error;
   }
 }
@@ -122,7 +118,7 @@ async function deletePropertyById(id: string): Promise<void> {
 export {
   createProperty,
   deletePropertyById,
-  fetchDisabledNavItems,
+  fetchSelectedProperty,
   fetchProperties,
   fetchPropertyById,
   propertyByIdQueryOptions,

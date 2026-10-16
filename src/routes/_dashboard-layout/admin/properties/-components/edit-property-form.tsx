@@ -1,5 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type * as React from 'react';
 import { Controller, useForm, type UseFormReturn } from 'react-hook-form';
 import {
   type NavItemId,
@@ -46,6 +47,7 @@ import {
 import { CustomerPicker } from './customer-picker';
 import { NavItemsField } from './nav-items-field';
 import { propertyOptionGroups, propertyOptions } from './property-options';
+import { TimezonePicker } from './timezone-picker';
 
 interface EditPropertyFormData {
   name: string;
@@ -55,6 +57,11 @@ interface EditPropertyFormData {
   options: PropertyOption[];
   pwa_domain: string;
   customer: PropertyCustomer | null;
+  address_line_1: string;
+  address_line_2: string;
+  zip: string;
+  city: string;
+  timezone: string;
 }
 
 interface EditPropertyFormProps {
@@ -77,7 +84,12 @@ export function EditPropertyForm({
       disabled_nav_items: propertyData.disabled_nav_items,
       options: propertyData.options,
       pwa_domain: propertyData.pwa_domain ?? '',
-      customer: propertyData.customer
+      customer: propertyData.customer,
+      address_line_1: propertyData.address_line_1 ?? '',
+      address_line_2: propertyData.address_line_2 ?? '',
+      zip: propertyData.zip ?? '',
+      city: propertyData.city ?? '',
+      timezone: propertyData.timezone
     }
   });
 
@@ -161,14 +173,17 @@ function GeneralFields({ form }: PropertyFieldsProps) {
 
       <Controller
         control={form.control}
-        name="country_code"
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="gap-2">
+        name="timezone"
+        render={({ field }) => (
+          <Field className="gap-2">
             <FieldLabel htmlFor={field.name}>
-              <Trans>Country</Trans>
+              <Trans>Timezone</Trans>
             </FieldLabel>
-            <CountryPicker value={field.value} onValueChange={field.onChange} />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            <TimezonePicker
+              id={field.name}
+              value={field.value}
+              onValueChange={field.onChange}
+            />
           </Field>
         )}
       />
@@ -195,6 +210,49 @@ function GeneralFields({ form }: PropertyFieldsProps) {
                 ))}
               </SelectContent>
             </Select>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+    </FieldGroup>
+  );
+}
+
+function AddressFields({ form }: PropertyFieldsProps) {
+  const { t } = useLingui();
+  const text = (
+    name: 'address_line_1' | 'address_line_2' | 'zip' | 'city',
+    label: React.ReactNode,
+    autoComplete: string
+  ) => (
+    <Field className="gap-2">
+      <FieldLabel htmlFor={name}>{label}</FieldLabel>
+      <Input id={name} autoComplete={autoComplete} {...form.register(name)} />
+    </Field>
+  );
+
+  return (
+    <FieldGroup className="gap-4">
+      {text('address_line_1', <Trans>Street</Trans>, 'address-line1')}
+      {text('address_line_2', <Trans>Address line 2</Trans>, 'address-line2')}
+      <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        {text('zip', <Trans>Postal code</Trans>, 'postal-code')}
+        {text('city', <Trans>City</Trans>, 'address-level2')}
+      </div>
+      <Controller
+        control={form.control}
+        name="country_code"
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid} className="gap-2">
+            <FieldLabel id="property-country-label">
+              <Trans>Country</Trans>
+            </FieldLabel>
+            <CountryPicker
+              value={field.value}
+              onValueChange={field.onChange}
+              placeholder={t`Select country`}
+              aria-labelledby="property-country-label"
+            />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -350,12 +408,21 @@ const PROPERTY_FORM_SECTIONS: FormSectionDef<EditPropertyFormData>[] = [
     label: <Trans>General</Trans>,
     description: (
       <Trans>
-        What the property is called, who owns it, where it is and how far along
+        What the property is called, who owns it, its timezone and how far along
         it is.
       </Trans>
     ),
-    fields: ['name', 'customer', 'country_code', 'stage'],
+    fields: ['name', 'customer', 'timezone', 'stage'],
     render: (form) => <GeneralFields form={form} />
+  },
+  {
+    id: 'address',
+    label: <Trans>Address</Trans>,
+    description: (
+      <Trans>Where the hotel is. Forms such as events can fill it in.</Trans>
+    ),
+    fields: ['address_line_1', 'address_line_2', 'zip', 'city', 'country_code'],
+    render: (form) => <AddressFields form={form} />
   },
   {
     id: 'solutions',

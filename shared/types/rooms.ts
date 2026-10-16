@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   pageSchema,
   perPageSchema,
+  queryListSchema,
   searchQuerySchema,
   sortOrderSchema
 } from './list-params';
@@ -29,13 +30,6 @@ export const roomSchema = z.object({
   updated_at: z.string().datetime()
 });
 
-// A repeated query key arrives as an array, a single one as a string
-const listOf = <T extends z.ZodType>(item: T) =>
-  z.preprocess(
-    (value) => (value === undefined || Array.isArray(value) ? value : [value]),
-    z.array(item).optional()
-  );
-
 export const roomSortColumns = [
   'room_number',
   'name',
@@ -50,8 +44,8 @@ export const fetchRoomsParamsSchema = z.object({
   q: searchQuerySchema.optional(),
   status: roomStatusSchema.optional(),
   // '' stands for rooms without a type
-  room_type: listOf(z.string()),
-  floor: listOf(z.coerce.number().int()),
+  room_type: queryListSchema(z.string()),
+  floor: queryListSchema(z.coerce.number().int()),
   sort_by: z.enum(roomSortColumns).optional(),
   sort_order: sortOrderSchema.optional()
 });

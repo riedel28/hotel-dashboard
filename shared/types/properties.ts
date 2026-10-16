@@ -20,6 +20,29 @@ export const countryCodeSchema = z
     message: 'Invalid country code'
   });
 
+// An IANA zone the runtime knows, e.g. Europe/Berlin.
+export const timezoneSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (zone) => {
+      try {
+        new Intl.DateTimeFormat('en', { timeZone: zone });
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    { message: 'Invalid timezone' }
+  );
+
+const optionalAddressText = z
+  .string()
+  .trim()
+  .max(200)
+  .nullable()
+  .transform((value) => value || null);
+
 export const propertyStageSchema = z.enum([
   'demo',
   'production',
@@ -37,6 +60,7 @@ export const navItemIdSchema = z.enum([
   'guest-abc',
   'products',
   'mobile-cms',
+  'events',
   'pms-provider',
   'door-locks',
   'payment-provider',
@@ -80,6 +104,12 @@ export const propertySchema = z.object({
   id: z.uuid(),
   name: z.string().min(1),
   country_code: countryCodeSchema,
+  // The hotel's address; null until filled in.
+  address_line_1: z.string().nullable(),
+  address_line_2: z.string().nullable(),
+  zip: z.string().nullable(),
+  city: z.string().nullable(),
+  timezone: z.string(),
   stage: propertyStageSchema,
   disabled_nav_items: z.array(navItemIdSchema),
   options: z.array(propertyOptionSchema),
@@ -145,7 +175,12 @@ export const updatePropertySchema = propertySchema
     options: z
       .array(propertyOptionSchema)
       .transform((ids) => [...new Set(ids)]),
-    pwa_domain: pwaDomainSchema.nullable()
+    pwa_domain: pwaDomainSchema.nullable(),
+    address_line_1: optionalAddressText,
+    address_line_2: optionalAddressText,
+    zip: optionalAddressText,
+    city: optionalAddressText,
+    timezone: timezoneSchema
   })
   .partial()
   // The two travel together, so a request can be checked without the stored

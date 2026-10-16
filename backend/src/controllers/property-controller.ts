@@ -17,7 +17,8 @@ import {
   type PropertyOption,
   propertyOptionSchema,
   type PropertySortableColumn,
-  type PropertyStage
+  type PropertyStage,
+  type UpdatePropertyData
 } from '../../../shared/types/properties';
 import { db } from '../db/pool';
 import {
@@ -43,6 +44,11 @@ function toPropertyResponse(req: Request, property: PropertyRow) {
     id: property.id,
     name: property.name,
     country_code: property.country_code,
+    address_line_1: property.address_line_1,
+    address_line_2: property.address_line_2,
+    zip: property.zip,
+    city: property.city,
+    timezone: property.timezone,
     stage: property.stage,
     // The column is plain text[]: keep only ids still in the catalog, since
     // the client parses the response strictly.
@@ -208,32 +214,15 @@ async function getPropertyById(req: Request, res: Response) {
 async function updateProperty(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const {
-      name,
-      country_code,
-      stage,
-      disabled_nav_items,
-      options,
-      customer_id
-    } = req.body ?? {};
-    // No PWA, no domain: it is dropped along with the option.
-    const pwa_domain =
-      options && !options.includes('mobile_app_pwa')
-        ? null
-        : req.body?.pwa_domain;
-
-    // customer_id: null unassigns the Customer, so only undefined is dropped.
-    const updates = Object.fromEntries(
-      Object.entries({
-        name,
-        country_code,
-        stage,
-        disabled_nav_items,
-        options,
-        pwa_domain,
-        customer_id
-      }).filter(([, v]) => v !== undefined)
-    );
+    // validateBody has parsed it: only the keys sent, each one valid.
+    // customer_id: null unassigns the Customer.
+    const body: UpdatePropertyData = req.body;
+    const updates = {
+      ...body,
+      // No PWA, no domain: it is dropped along with the option.
+      ...(body.options &&
+        !body.options.includes('mobile_app_pwa') && { pwa_domain: null })
+    };
 
     const [updated] = await db
       .update(propertiesTable)

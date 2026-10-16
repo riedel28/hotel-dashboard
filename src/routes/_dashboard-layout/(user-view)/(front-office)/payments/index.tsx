@@ -1,9 +1,13 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
+import { BanknoteIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { fetchPaymentsParamsSchema } from '@/api/payments';
-import { EmptyFilterResult } from '@/components/empty-filter-result';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -118,14 +122,13 @@ function EmptyPayments({
 }) {
   if (!isFiltered) {
     return (
-      <div className="flex flex-col items-center gap-1 py-6 text-sm">
-        <p className="font-medium text-foreground">
-          <Trans>No payments yet</Trans>
-        </p>
-        <p className="text-muted-foreground">
+      <EmptyTableState
+        icon={<BanknoteIcon />}
+        title={<Trans>No payments yet</Trans>}
+        description={
           <Trans>Payments appear here once the gateway authorizes them.</Trans>
-        </p>
-      </div>
+        }
+      />
     );
   }
 

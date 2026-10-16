@@ -1,7 +1,9 @@
 import { Trans } from '@lingui/react/macro';
 import type { RowData } from '@tanstack/react-table';
+import { InboxIcon } from 'lucide-react';
 import type { MouseEvent, ReactNode } from 'react';
 
+import { EmptyTableState } from '@/components/empty-table-state';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
@@ -44,7 +46,12 @@ function DataGridCards<TData extends RowData>({
           className
         )}
       >
-        {props.error || props.emptyMessage || <Trans>No data available</Trans>}
+        {props.error || props.emptyMessage || (
+          <EmptyTableState
+            icon={<InboxIcon />}
+            title={<Trans>No data available</Trans>}
+          />
+        )}
       </div>
     );
   }

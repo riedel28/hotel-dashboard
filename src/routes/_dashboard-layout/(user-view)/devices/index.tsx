@@ -9,6 +9,7 @@ import {
 } from 'shared/types/devices';
 import { z } from 'zod';
 
+import { EmptyFilterResult } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -219,7 +220,12 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
           onSortChange={search.setSort}
           onPageChange={search.setPage}
           highlightedId={highlightedId}
-          emptyMessage={<Trans>No devices match the filters</Trans>}
+          emptyMessage={
+            <EmptyFilterResult
+              description={<Trans>No devices match the filters.</Trans>}
+              onClearFilters={search.clearFilters}
+            />
+          }
           onDeviceOpen={(device) => search.openDevice(device.id)}
         />
 

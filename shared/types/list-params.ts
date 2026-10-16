@@ -20,6 +20,16 @@ export const perPageSchema = z.coerce
     message: 'per_page must be one of: 5, 10, 25, 50, 100'
   });
 
+/**
+ * A list filter: a repeated query key arrives as an array, a single one as a
+ * string.
+ */
+export const queryListSchema = <T extends z.ZodType>(item: T) =>
+  z.preprocess(
+    (value) => (value === undefined || Array.isArray(value) ? value : [value]),
+    z.array(item).optional()
+  );
+
 export const sortOrderSchema = z.enum(['asc', 'desc']);
 
 /** An ISO date or datetime. */

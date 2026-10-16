@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 interface DateRangePopoverProps {
@@ -23,12 +24,17 @@ interface DateRangePopoverProps {
   presets?: (close: () => void) => ReactNode;
   /** More footer buttons, left of Apply; they call `close` once done. */
   actions?: (close: () => void) => ReactNode;
+  /** Days after today can be picked too, e.g. for what is planned. */
+  allowFuture?: boolean;
+  /** A complete range applies as soon as it is picked, without Apply. */
+  applyOnSelect?: boolean;
   className?: string;
 }
 
 /**
- * A filter button opening a two-month calendar to pick a range of past days.
- * The range is committed only on Apply.
+ * A filter button opening a two-month calendar to pick a range of days, past
+ * ones unless `allowFuture`. The range is committed on Apply, or as soon as
+ * both ends are picked with `applyOnSelect`.
  */
 export function DateRangePopover({
   label,
@@ -37,8 +43,11 @@ export function DateRangePopover({
   applyLabel,
   presets,
   actions,
+  allowFuture = false,
+  applyOnSelect = false,
   className
 }: DateRangePopoverProps) {
+  const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   const [draft, setDraft] = useState<DateRange | undefined>();
   const selected = draft ?? value;
@@ -69,15 +78,21 @@ export function DateRangePopover({
           )}
           <Calendar
             mode="range"
-            // Future days are disabled, so end the two-month view on today
+            // Without future days, the view ends on today
             defaultMonth={
-              selected?.from ?? dayjs().subtract(1, 'month').toDate()
+              selected?.from ??
+              (allowFuture ? new Date() : dayjs().subtract(1, 'month').toDate())
             }
             showOutsideDays={false}
             selected={selected}
-            onSelect={setDraft}
-            disabled={{ after: new Date() }}
-            numberOfMonths={2}
+            onSelect={(range) => {
+              setDraft(range);
+              if (applyOnSelect && range?.from && range.to) {
+                onApply({ from: range.from, to: range.to });
+              }
+            }}
+            disabled={allowFuture ? undefined : { after: new Date() }}
+            numberOfMonths={isMobile ? 1 : 2}
           />
         </div>
         <div className="flex items-center justify-end gap-1.5 border-t border-border p-1.5">

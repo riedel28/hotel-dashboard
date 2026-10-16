@@ -6,6 +6,7 @@ import {
   BedDoubleIcon,
   BookAIcon,
   BuildingIcon,
+  CalendarDaysIcon,
   CreditCardIcon,
   DoorOpenIcon,
   HomeIcon,
@@ -104,6 +105,12 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     to: '/mobile-cms',
     icon: SmartphoneIcon,
     label: msg`Mobile CMS`
+  },
+  events: {
+    group: 'content-manager',
+    to: '/events',
+    icon: CalendarDaysIcon,
+    label: msg`Events`
   },
   'pms-provider': {
     group: 'integrations',

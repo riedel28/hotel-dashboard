@@ -1,10 +1,13 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { ListFilterIcon, XIcon } from 'lucide-react';
+import { ListFilterIcon, SquareActivityIcon, XIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
-import { EmptyFilterResult } from '@/components/empty-filter-result';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
@@ -165,14 +168,11 @@ function EmptyLogs({
 }) {
   if (!isFiltered) {
     return (
-      <div className="flex flex-col items-center gap-1 py-6 text-sm">
-        <p className="font-medium text-foreground">
-          <Trans>No logs in the last 24 hours</Trans>
-        </p>
-        <p className="text-muted-foreground">
-          <Trans>Pick a longer period to see older logs.</Trans>
-        </p>
-      </div>
+      <EmptyTableState
+        icon={<SquareActivityIcon />}
+        title={<Trans>No logs in the last 24 hours</Trans>}
+        description={<Trans>Pick a longer period to see older logs.</Trans>}
+      />
     );
   }
 

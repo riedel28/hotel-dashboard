@@ -1,11 +1,16 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+import { UsersIcon } from 'lucide-react';
 import { fetchCustomersParamsSchema } from 'shared/types/customers';
 import { perPageSchema } from 'shared/types/list-params';
 
 import { customersQueryOptions } from '@/api/customers';
 import { ClearFiltersButton } from '@/components/clear-filters-button';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -42,6 +47,14 @@ function CustomersContent() {
       to: '/admin/customers',
       search: (prev) => ({ ...prev, page: 1, ...changes })
     });
+  // Back to the plain list: the sort goes too
+  const clearFilters = () =>
+    setSearch({
+      q: undefined,
+      country_code: undefined,
+      sort_by: undefined,
+      sort_order: undefined
+    });
 
   return (
     <div className="flex flex-col gap-3">
@@ -69,15 +82,7 @@ function CustomersContent() {
         >
           <ClearFiltersButton
             hasActiveFilters={Boolean(q || country_code)}
-            // Back to the plain list: the sort goes too
-            onClear={() =>
-              setSearch({
-                q: undefined,
-                country_code: undefined,
-                sort_by: undefined,
-                sort_order: undefined
-              })
-            }
+            onClear={clearFilters}
           />
         </div>
         <DataGridRefreshButton
@@ -114,8 +119,16 @@ function CustomersContent() {
           }
           emptyMessage={
             q || country_code ? (
-              <Trans>No customers match the filters</Trans>
-            ) : undefined
+              <EmptyFilterResult
+                description={<Trans>No customers match the filters.</Trans>}
+                onClearFilters={clearFilters}
+              />
+            ) : (
+              <EmptyTableState
+                icon={<UsersIcon />}
+                title={<Trans>No customers yet</Trans>}
+              />
+            )
           }
         />
       </div>

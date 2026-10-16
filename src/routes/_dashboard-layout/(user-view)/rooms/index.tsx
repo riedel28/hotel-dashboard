@@ -16,6 +16,7 @@ import { z } from 'zod';
 
 import { roomFilterOptionsQueryOptions, roomsQueryOptions } from '@/api/rooms';
 import { useAuth } from '@/auth';
+import { EmptyFilterResult } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -220,7 +221,12 @@ function RoomsContent({
               onSortChange={search.setSort}
               onPageChange={search.setPage}
               onEdit={canManage ? search.openForm : undefined}
-              emptyMessage={<Trans>No rooms match the filters</Trans>}
+              emptyMessage={
+                <EmptyFilterResult
+                  description={<Trans>No rooms match the filters.</Trans>}
+                  onClearFilters={search.clearFilters}
+                />
+              }
             />
           </div>
         </div>

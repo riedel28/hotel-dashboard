@@ -2,12 +2,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { sql } from 'drizzle-orm';
+
 import { sanitizeCmsHtml } from '../../../shared/cms-html';
 import {
   cmsLocales,
   type CmsNodeType,
   type CmsOpenMode
 } from '../../../shared/types/cms';
+import type { EventCategory } from '../../../shared/types/events';
 import { deriveLetter } from '../../../shared/types/guest-abc';
 import { propertyOptionSchema } from '../../../shared/types/properties';
 import { payments as paymentsTable } from '../db/payments-schema';
@@ -17,6 +20,7 @@ import {
   cmsNodeTranslations,
   customers,
   devices,
+  events as eventsTable,
   guestAbcEntries,
   guests,
   monitoringLogs,
@@ -372,6 +376,63 @@ async function seedCms(
  * rooms, a tablet in every room, a TV in most, and a few devices not assigned
  * to a room yet. Devices without a property are waiting to be claimed.
  */
+interface EventSeed {
+  title: string;
+  description: string | null;
+  categories: EventCategory[];
+  day: number;
+  start: string;
+  minutes: number;
+  doors_before: number | null;
+  venue_name: string;
+  // At the hotel: its own address, where it has one
+  at_hotel?: boolean;
+  address_line_1?: string;
+  zip?: string;
+  city?: string;
+  country_code?: string;
+}
+
+// The same programme at every property, past and upcoming, in its timezone.
+// No images: those are uploaded by hand.
+async function seedEvents() {
+  const seeds = loadData<EventSeed[]>('events');
+  const hotels = await db.select().from(properties);
+  const rows = hotels.flatMap((hotel) =>
+    seeds.map((event) => {
+      // The wall-clock start in the hotel's own timezone, `day` days on
+      const startsAt = sql`((current_date + ${event.day}::int) + ${event.start}::time) at time zone ${hotel.timezone}`;
+      const minutesFromStart = (minutes: number) =>
+        sql`${startsAt} + make_interval(mins => ${minutes})`;
+      const atHotel = event.at_hotel && hotel.address_line_1;
+      return {
+        property_id: hotel.id,
+        title: event.title,
+        description: event.description,
+        categories: event.categories,
+        starts_at: startsAt,
+        ends_at: minutesFromStart(event.minutes),
+        doors_open_at:
+          event.doors_before === null
+            ? null
+            : minutesFromStart(-event.doors_before),
+        venue_name: event.venue_name,
+        address_line_1: atHotel
+          ? hotel.address_line_1!
+          : (event.address_line_1 ?? 'Main Street 1'),
+        address_line_2: atHotel ? hotel.address_line_2 : null,
+        zip: atHotel ? hotel.zip! : (event.zip ?? '00000'),
+        city: atHotel ? hotel.city! : (event.city ?? 'Springfield'),
+        country_code: atHotel
+          ? hotel.country_code
+          : (event.country_code ?? hotel.country_code)
+      };
+    })
+  );
+  await db.insert(eventsTable).values(rows);
+  return rows.length;
+}
+
 async function seedRoomsAndDevices() {
   const demoRooms = await db
     .insert(rooms)
@@ -622,6 +683,7 @@ async function seed() {
     await seedWorklogs(demoUsers);
     await seedProducts();
     const cmsCount = await seedCms();
+    const eventCount = await seedEvents();
     await seedRoomsAndDevices();
     const logCount = await seedMonitoringLogs();
     const paymentCount = await seedPayments();
@@ -637,6 +699,7 @@ async function seed() {
     console.log(`- ${propertyCount} properties`);
     console.log(`- ${guestAbcCount} Guest ABC entries`);
     console.log(`- ${cmsCount} mobile CMS nodes`);
+    console.log(`- ${eventCount} events`);
     console.log(`- ${logCount} monitoring logs`);
     console.log(`- ${paymentCount} payments`);
   } catch (error) {
