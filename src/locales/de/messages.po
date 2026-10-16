@@ -605,8 +605,8 @@ msgstr "Alle Kategorien"
 msgid "All countries"
 msgstr "Alle Länder"
 
-#: src/components/date-range-filter.tsx:119
-#: src/components/date-range-filter.tsx:163
+#: src/components/date-range-filter.tsx:128
+#: src/components/date-range-filter.tsx:185
 msgid "All dates"
 msgstr "Alle Daten"
 
@@ -728,7 +728,7 @@ msgstr "API-Schlüssel ist erforderlich"
 msgid "App version"
 msgstr "App-Version"
 
-#: src/components/date-range-filter.tsx:125
+#: src/components/date-range-filter.tsx:135
 #: src/components/ui/rich-text-editor.tsx:273
 msgid "Apply"
 msgstr "Anwenden"
@@ -4461,9 +4461,9 @@ msgstr "Foto aktualisiert"
 msgid "Pick a date"
 msgstr "Datum wählen"
 
-#: src/components/date-range-filter.tsx:168
-#~ msgid "Pick a date range"
-#~ msgstr "Datumsbereich auswählen"
+#: src/components/date-range-filter.tsx:126
+msgid "Pick a date range"
+msgstr "Datumsbereich auswählen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:174
 msgid "Pick a longer period to see older logs."
@@ -5121,6 +5121,7 @@ msgstr "Reservierung erfolgreich aktualisiert"
 msgid "Reservations"
 msgstr "Reservierungen"
 
+#: src/components/date-range-filter.tsx:173
 #: src/components/ui/data-grid-radio-filter.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67

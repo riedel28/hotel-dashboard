@@ -26,12 +26,15 @@ interface DateRangePopoverProps {
   actions?: (close: () => void) => ReactNode;
   /** Days after today can be picked too, e.g. for what is planned. */
   allowFuture?: boolean;
+  /** A complete range applies as soon as it is picked, without Apply. */
+  applyOnSelect?: boolean;
   className?: string;
 }
 
 /**
  * A filter button opening a two-month calendar to pick a range of days, past
- * ones unless `allowFuture`. The range is committed only on Apply.
+ * ones unless `allowFuture`. The range is committed on Apply, or as soon as
+ * both ends are picked with `applyOnSelect`.
  */
 export function DateRangePopover({
   label,
@@ -41,6 +44,7 @@ export function DateRangePopover({
   presets,
   actions,
   allowFuture = false,
+  applyOnSelect = false,
   className
 }: DateRangePopoverProps) {
   const isMobile = useIsMobile();
@@ -81,7 +85,12 @@ export function DateRangePopover({
             }
             showOutsideDays={false}
             selected={selected}
-            onSelect={setDraft}
+            onSelect={(range) => {
+              setDraft(range);
+              if (applyOnSelect && range?.from && range.to) {
+                onApply({ from: range.from, to: range.to });
+              }
+            }}
             disabled={allowFuture ? undefined : { after: new Date() }}
             numberOfMonths={isMobile ? 1 : 2}
           />

@@ -81,15 +81,20 @@ const sameDays = (a: DayRange, b: DayRange) =>
   dayjs(a.from).isSame(b.from, 'day') && dayjs(a.to).isSame(b.to, 'day');
 
 /**
- * A list filter on a range of days, kept in the URL as YYYY-MM-DD: "All
- * dates" while none is set, and a way back to that.
+ * A list filter on a range of days, kept in the URL as YYYY-MM-DD.
+ *
+ * - `apply` (payments): "All dates" while none is set, Apply commits the
+ *   range, and "All dates" again takes it off.
+ * - `quick` (reservations, events): quick picks beside the calendar, a
+ *   complete range applies at once, "Pick a date range" while none is set
+ *   and Reset to take it off.
  */
 export function DateRangeFilter({
   from,
   to,
   onRangeChange,
   allowFuture,
-  withPresets = false,
+  variant = 'apply',
   className
 }: {
   from?: string;
@@ -97,10 +102,10 @@ export function DateRangeFilter({
   onRangeChange: (range: DayRange | undefined) => void;
   /** Days after today can be picked too, e.g. for what is planned. */
   allowFuture?: boolean;
-  /** Quick picks (Today, Last 7 days, …) beside the calendar. */
-  withPresets?: boolean;
+  variant?: 'apply' | 'quick';
   className?: string;
 }) {
+  const quick = variant === 'quick';
   const { t } = useLingui();
   const applied =
     from && to
@@ -111,12 +116,17 @@ export function DateRangeFilter({
     <DateRangePopover
       className={className}
       allowFuture={allowFuture}
+      applyOnSelect={quick}
       label={
         applied ? (
           formatDateRange(applied)
         ) : (
           <span className="text-muted-foreground">
-            <Trans>All dates</Trans>
+            {quick ? (
+              <Trans>Pick a date range</Trans>
+            ) : (
+              <Trans>All dates</Trans>
+            )}
           </span>
         )
       }
@@ -124,7 +134,7 @@ export function DateRangeFilter({
       onApply={onRangeChange}
       applyLabel={<Trans>Apply</Trans>}
       presets={
-        withPresets
+        quick
           ? (close) =>
               rangePresets.map((preset) => {
                 const range = preset.range();
@@ -151,17 +161,30 @@ export function DateRangeFilter({
           : undefined
       }
       actions={(close) =>
-        applied && (
+        quick ? (
           <Button
             size="sm"
-            variant="ghost"
+            variant="outline"
             onClick={() => {
               onRangeChange(undefined);
               close();
             }}
           >
-            <Trans>All dates</Trans>
+            <Trans>Reset</Trans>
           </Button>
+        ) : (
+          applied && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                onRangeChange(undefined);
+                close();
+              }}
+            >
+              <Trans>All dates</Trans>
+            </Button>
+          )
         )
       }
     />
