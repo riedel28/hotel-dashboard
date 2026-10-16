@@ -243,6 +243,7 @@ export default function UserMenu() {
         <DropdownMenuTrigger
           aria-label={t`User menu`}
           nativeButton={false}
+          className="focus-visible:outline-offset-0.5 outline-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid"
           render={
             <Avatar size="default">
               <AvatarFallback>{avatarFallback}</AvatarFallback>

@@ -151,6 +151,11 @@ msgstr "{0} roles total"
 #~ msgid "{0}, {1}"
 #~ msgstr "{0}, {1}"
 
+#. placeholder {0}: selected.name
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:72
+msgid "{0}, property"
+msgstr "{0}, property"
+
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-step.tsx:186
 msgid "{changeCount, plural, one {Import # change} other {Import # changes}}"
 msgstr "{changeCount, plural, one {Import # change} other {Import # changes}}"
@@ -224,7 +229,7 @@ msgstr "{shown} of {total} shown"
 #~ msgid "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 #~ msgstr "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:116
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:137
 msgid "{total, plural, one {# property} other {# properties}}"
 msgstr "{total, plural, one {# property} other {# properties}}"
 
@@ -2645,7 +2650,7 @@ msgstr "Failed to send password reset email. Please try again."
 #~ msgstr "Failed to send SMS"
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:46
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:49
 msgid "Failed to switch to {0}"
 msgstr "Failed to switch to {0}"
 
@@ -2737,7 +2742,7 @@ msgid "Final payment"
 msgstr "Final payment"
 
 #. placeholder {0}: properties.length
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:112
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:133
 msgid "First {0} of {total} properties"
 msgstr "First {0} of {total} properties"
 
@@ -3101,7 +3106,7 @@ msgid "Hotel"
 msgstr "Hotel"
 
 #: src/routes/_dashboard-layout.tsx:39
-#: src/routes/_dashboard-layout.tsx:144
+#: src/routes/_dashboard-layout.tsx:149
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:52
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -3494,7 +3499,7 @@ msgstr "Logs for reservation {bookingNr}"
 msgid "main"
 msgstr "main"
 
-#: src/routes/_dashboard-layout.tsx:57
+#: src/routes/_dashboard-layout.tsx:60
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -4044,7 +4049,7 @@ msgstr "No products in this category"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "No products in this category. Add products to this category by clicking the button below."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:90
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:111
 msgid "No properties found"
 msgstr "No properties found"
 
@@ -5571,7 +5576,7 @@ msgstr "Search products"
 msgid "Search properties"
 msgstr "Search properties"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:80
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:101
 msgid "Search property"
 msgstr "Search property"
 
@@ -5681,8 +5686,8 @@ msgstr "Select one or more roles to assign"
 #~ msgid "Select one or more roles to assign."
 #~ msgstr "Select one or more roles to assign."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:65
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:71
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:72
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:92
 msgid "Select property"
 msgstr "Select property"
 
@@ -5918,7 +5923,7 @@ msgid "Sign Up"
 msgstr "Sign Up"
 
 #: src/routes/_auth-layout.tsx:17
-#: src/routes/_dashboard-layout.tsx:72
+#: src/routes/_dashboard-layout.tsx:77
 msgid "Skip to main content"
 msgstr "Skip to main content"
 
@@ -6127,7 +6132,7 @@ msgstr "Switch view"
 #~ msgstr "Switched to \"{propertyName}\""
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:44
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:47
 msgid "Switched to {0}"
 msgstr "Switched to {0}"
 

@@ -16,8 +16,13 @@ const PROPERTIES = {
   KELLERMANS: "Kellerman's Resort"
 };
 
+// Named "Select property" until one is chosen, then "<name>, property"
+function propertySelector(page: Page) {
+  return page.getByRole('combobox', { name: /^Select property$|, property$/ });
+}
+
 async function openPropertySelector(page: Page) {
-  await page.getByLabel('Select property').click();
+  await propertySelector(page).click();
 }
 
 async function selectProperty(page: Page, propertyName: string) {
@@ -37,7 +42,7 @@ test.describe('Property Selector', () => {
   });
 
   test('should display property selector in the header', async ({ page }) => {
-    await expect(page.getByLabel('Select property')).toBeVisible();
+    await expect(propertySelector(page)).toBeVisible();
   });
 
   test('should open dropdown and show available properties', async ({
@@ -103,9 +108,7 @@ test.describe('Property Selector', () => {
     ).toBeVisible();
 
     // Selected property name should be displayed in the trigger
-    await expect(page.getByLabel('Select property')).toContainText(
-      PROPERTIES.OVERLOOK
-    );
+    await expect(propertySelector(page)).toContainText(PROPERTIES.OVERLOOK);
   });
 
   test('should persist selected property after page reload', async ({
@@ -118,13 +121,13 @@ test.describe('Property Selector', () => {
     await selectProperty(page, PROPERTIES.GRAND_BUDAPEST);
     await responsePromise;
 
-    await expect(page.getByLabel('Select property')).toContainText(
+    await expect(propertySelector(page)).toContainText(
       PROPERTIES.GRAND_BUDAPEST
     );
 
     await page.reload();
 
-    await expect(page.getByLabel('Select property')).toContainText(
+    await expect(propertySelector(page)).toContainText(
       PROPERTIES.GRAND_BUDAPEST,
       { timeout: 10000 }
     );
@@ -133,16 +136,14 @@ test.describe('Property Selector', () => {
   test('should switch between properties', async ({ page }) => {
     // Select first property
     await selectProperty(page, PROPERTIES.OVERLOOK);
-    await expect(page.getByLabel('Select property')).toContainText(
-      PROPERTIES.OVERLOOK
-    );
+    await expect(propertySelector(page)).toContainText(PROPERTIES.OVERLOOK);
 
     // Switch to another property
     await selectProperty(page, PROPERTIES.FAWLTY_TOWERS);
     await expect(
       page.getByText(`Switched to ${PROPERTIES.FAWLTY_TOWERS}`)
     ).toBeVisible();
-    await expect(page.getByLabel('Select property')).toContainText(
+    await expect(propertySelector(page)).toContainText(
       PROPERTIES.FAWLTY_TOWERS
     );
   });
@@ -174,9 +175,7 @@ test.describe('Property Selector', () => {
     await expect(
       page.getByText(`Switched to ${PROPERTIES.TRANSYLVANIA}`)
     ).toBeVisible();
-    await expect(page.getByLabel('Select property')).toContainText(
-      PROPERTIES.TRANSYLVANIA
-    );
+    await expect(propertySelector(page)).toContainText(PROPERTIES.TRANSYLVANIA);
   });
 
   test('should close dropdown after selecting a property', async ({ page }) => {

@@ -41,7 +41,7 @@ function renderSelector(
 
 async function open() {
   const user = userEvent.setup();
-  await user.click(screen.getByLabelText(/select property/i));
+  await user.click(screen.getByLabelText(/property/i));
   await screen.findByPlaceholderText(/search property/i);
   return user;
 }
@@ -62,6 +62,28 @@ describe('PropertySelector', () => {
       renderSelector({ value: '2' });
       expect(screen.getByText('Hotel B')).toBeInTheDocument();
       expect(screen.queryByText('Select property')).not.toBeInTheDocument();
+    });
+
+    test('names the trigger after the selected property', () => {
+      renderSelector({ value: '2' });
+      expect(screen.getByLabelText('Hotel B, property')).toBeInTheDocument();
+    });
+
+    test('is busy while the switch is saving', async () => {
+      let finish = () => {};
+      const onValueChange = vi.fn(
+        () => new Promise<void>((resolve) => (finish = resolve))
+      );
+      renderSelector({ value: '1', onValueChange });
+      const user = await open();
+      await user.click(screen.getByRole('option', { name: /Hotel B/ }));
+
+      const trigger = screen.getByLabelText(/property/i);
+      expect(trigger).toHaveAttribute('aria-busy', 'true');
+      finish();
+      await waitFor(() =>
+        expect(trigger).toHaveAttribute('aria-busy', 'false')
+      );
     });
 
     test('shows the placeholder when the selected id is not in the list', () => {
