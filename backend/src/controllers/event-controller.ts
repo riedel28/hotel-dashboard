@@ -7,7 +7,6 @@ import {
   eq,
   gte,
   ilike,
-  inArray,
   lt,
   type SQL,
   sql
@@ -19,19 +18,19 @@ import type {
   ParsedEventsParams,
   ParsedSaveEventData
 } from '../../../shared/types/events';
-import { db } from '../db/pool';
-import { cmsImages, eventImages, events, properties } from '../db/schema';
 import {
-  HttpProblem,
-  isForeignKeyViolation,
-  withFailMessage
-} from '../middleware/error';
+  assertImagesOwned,
+  rethrowGoneImage,
+  sweepImages
+} from '../db/image-queries';
+import { db } from '../db/pool';
+import { eventImages, events, properties } from '../db/schema';
+import { HttpProblem, withFailMessage } from '../middleware/error';
 import {
   requireSelectedProperty,
   type SelectedPropertyRequest
 } from '../middleware/selected-property';
 import { escapeLikePattern } from '../utils/sql';
-import { sweepImages } from './cms-controller';
 
 // Property scope is resolved by attachSelectedProperty. Without a selected
 // property the list is empty and writes are 400. An event of another
@@ -41,8 +40,6 @@ const handle = withFailMessage<SelectedPropertyRequest>;
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 const eventNotFound = () => new HttpProblem(404, 'Event not found');
-const imageNotFound = () =>
-  new HttpProblem(400, 'An image was not found', 'IMAGE_NOT_FOUND');
 
 // The image ids of each event, in order
 const imageIds = sql<string[]>`coalesce((
@@ -204,18 +201,7 @@ async function setImages(
   ids: string[]
 ) {
   const unique = [...new Set(ids)];
-  if (unique.length > 0) {
-    const owned = await tx
-      .select({ id: cmsImages.id })
-      .from(cmsImages)
-      .where(
-        and(
-          eq(cmsImages.property_id, propertyId),
-          inArray(cmsImages.id, unique)
-        )
-      );
-    if (owned.length !== unique.length) throw imageNotFound();
-  }
+  await assertImagesOwned(tx, propertyId, unique);
 
   await tx.delete(eventImages).where(eq(eventImages.event_id, eventId));
   if (unique.length > 0) {
@@ -228,12 +214,6 @@ async function setImages(
     );
   }
 }
-
-// An image swept between the check and the insert (a form left open for
-// over a day) fails the foreign key: the same "not found".
-const imageGone = (error: unknown) => {
-  throw isForeignKeyViolation(error) ? imageNotFound() : error;
-};
 
 const createEvent = handle('Failed to create event', async (req, res) => {
   const propertyId = requireSelectedProperty(req, res);
@@ -249,7 +229,7 @@ const createEvent = handle('Failed to create event', async (req, res) => {
       await setImages(tx, propertyId, created!.id, data.image_ids);
       return created!.id;
     })
-    .catch(imageGone);
+    .catch(rethrowGoneImage);
 
   await sendEvent(res, 201, propertyId, id);
 });
@@ -270,7 +250,7 @@ const updateEvent = handle('Failed to update event', async (req, res) => {
       if (!updated) throw eventNotFound();
       await setImages(tx, propertyId, id, data.image_ids);
     })
-    .catch(imageGone);
+    .catch(rethrowGoneImage);
 
   await sweepImages(db, propertyId);
   await sendEvent(res, 200, propertyId, id);

@@ -17,7 +17,8 @@ import {
   type PropertyOption,
   propertyOptionSchema,
   type PropertySortableColumn,
-  type PropertyStage
+  type PropertyStage,
+  type UpdatePropertyData
 } from '../../../shared/types/properties';
 import { db } from '../db/pool';
 import {
@@ -213,42 +214,15 @@ async function getPropertyById(req: Request, res: Response) {
 async function updateProperty(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const {
-      name,
-      country_code,
-      stage,
-      disabled_nav_items,
-      options,
-      customer_id,
-      address_line_1,
-      address_line_2,
-      zip,
-      city,
-      timezone
-    } = req.body ?? {};
-    // No PWA, no domain: it is dropped along with the option.
-    const pwa_domain =
-      options && !options.includes('mobile_app_pwa')
-        ? null
-        : req.body?.pwa_domain;
-
-    // customer_id: null unassigns the Customer, so only undefined is dropped.
-    const updates = Object.fromEntries(
-      Object.entries({
-        name,
-        country_code,
-        stage,
-        disabled_nav_items,
-        options,
-        pwa_domain,
-        customer_id,
-        address_line_1,
-        address_line_2,
-        zip,
-        city,
-        timezone
-      }).filter(([, v]) => v !== undefined)
-    );
+    // validateBody has parsed it: only the keys sent, each one valid.
+    // customer_id: null unassigns the Customer.
+    const body: UpdatePropertyData = req.body;
+    const updates = {
+      ...body,
+      // No PWA, no domain: it is dropped along with the option.
+      ...(body.options &&
+        !body.options.includes('mobile_app_pwa') && { pwa_domain: null })
+    };
 
     const [updated] = await db
       .update(propertiesTable)

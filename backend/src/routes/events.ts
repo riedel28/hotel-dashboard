@@ -1,13 +1,12 @@
 import { Router } from 'express';
 
+import { cmsImageExtensions } from '../../../shared/types/cms';
 import {
   eventIdParamsSchema,
-  eventImageExtensions,
   eventImageMaxBytes,
   fetchEventsParamsSchema,
   saveEventSchema
 } from '../../../shared/types/events';
-import { uploadCmsImage } from '../controllers/cms-controller';
 import {
   createEvent,
   deleteEvent,
@@ -15,6 +14,7 @@ import {
   getEvents,
   updateEvent
 } from '../controllers/event-controller';
+import { uploadImage } from '../controllers/image-controller';
 import { authenticateToken } from '../middleware/auth';
 import { attachSelectedProperty } from '../middleware/selected-property';
 import { upload } from '../middleware/upload';
@@ -30,12 +30,12 @@ const router = Router();
 router.use(authenticateToken);
 router.use(attachSelectedProperty);
 
-// Into the CMS image store, served by GET /cms/images/:id; event photos may
-// be larger than the CMS's own.
+// Into the image store, served by GET /cms/images/:id; event photos may be
+// larger than the CMS's own.
 router.post(
   '/images',
-  upload({ maxBytes: eventImageMaxBytes, extensions: eventImageExtensions }),
-  uploadCmsImage
+  upload({ maxBytes: eventImageMaxBytes, extensions: cmsImageExtensions }),
+  uploadImage
 );
 
 router.get('/', validateQuery(fetchEventsParamsSchema), getEvents);

@@ -4,6 +4,7 @@ import {
   isoDateStringSchema,
   pageSchema,
   perPageSchema,
+  queryListSchema,
   searchQuerySchema,
   sortOrderSchema
 } from './list-params';
@@ -27,11 +28,18 @@ export const eventCategorySchema = z.enum([
 ]);
 
 export const eventImageMaxBytes = 5 * 1024 * 1024;
-export const eventImageExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 export const eventImagesMax = 30;
 
-/** The rules the save schema checks, by code; the admin words them. */
+/** What the schemas report, by code; the admin words each one. */
 export const eventErrorCodes = {
+  titleRequired: 'event_title_required',
+  venueRequired: 'event_venue_required',
+  streetRequired: 'event_street_required',
+  zipRequired: 'event_zip_required',
+  cityRequired: 'event_city_required',
+  countryRequired: 'event_country_required',
+  startRequired: 'event_start_required',
+  endRequired: 'event_end_required',
   endOrder: 'event_end_order',
   doorsOrder: 'event_doors_order'
 } as const;
@@ -56,15 +64,23 @@ export const eventSchema = z.object({
   updated_at: z.string()
 });
 
-const requiredText = (message: string) =>
-  z.string().trim().min(1, message).max(200);
+const requiredText = (code: string) => z.string().trim().min(1, code).max(200);
+
+/** The text fields, checked alike by the form and the API. */
+export const eventTextFields = {
+  title: requiredText(eventErrorCodes.titleRequired),
+  venue_name: requiredText(eventErrorCodes.venueRequired),
+  address_line_1: requiredText(eventErrorCodes.streetRequired),
+  zip: requiredText(eventErrorCodes.zipRequired),
+  city: requiredText(eventErrorCodes.cityRequired)
+};
 
 const instantSchema = z.iso.datetime({ offset: true });
 
 // Create and update both send the whole event.
 export const saveEventSchema = z
   .object({
-    title: requiredText('Title is required'),
+    ...eventTextFields,
     // HTML; the server sanitizes it on write. The limit counts the markup.
     description: z.string().max(20_000).nullable(),
     categories: z
@@ -73,16 +89,12 @@ export const saveEventSchema = z
     starts_at: instantSchema,
     ends_at: instantSchema,
     doors_open_at: instantSchema.nullable(),
-    venue_name: requiredText('Venue name is required'),
-    address_line_1: requiredText('Street is required'),
     address_line_2: z
       .string()
       .trim()
       .max(200)
       .nullable()
       .transform((value) => value || null),
-    zip: requiredText('Postal code is required'),
-    city: requiredText('City is required'),
     country_code: countryCodeSchema,
     image_ids: z.array(z.uuid()).max(eventImagesMax)
   })
@@ -104,13 +116,6 @@ export const saveEventSchema = z
     }
   });
 
-// A repeated query key arrives as an array, a single one as a string
-const listOf = <T extends z.ZodType>(item: T) =>
-  z.preprocess(
-    (value) => (value === undefined || Array.isArray(value) ? value : [value]),
-    z.array(item).optional()
-  );
-
 export const eventPeriodSchema = z.enum(['upcoming', 'past', 'all']);
 export const eventSortColumns = ['starts_at', 'title'] as const;
 
@@ -118,7 +123,7 @@ export const fetchEventsParamsSchema = z.object({
   page: pageSchema.default(1),
   per_page: perPageSchema.default(25),
   q: searchQuerySchema.optional(),
-  category: listOf(eventCategorySchema),
+  category: queryListSchema(eventCategorySchema),
   // Upcoming takes in what is running now: it has not ended yet.
   period: eventPeriodSchema.default('upcoming'),
   // Calendar days (YYYY-MM-DD) in the property's timezone; an event touching

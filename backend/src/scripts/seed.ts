@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { sql } from 'drizzle-orm';
+
 import { sanitizeCmsHtml } from '../../../shared/cms-html';
 import {
   cmsLocales,
@@ -374,34 +376,6 @@ async function seedCms(
  * rooms, a tablet in every room, a TV in most, and a few devices not assigned
  * to a room yet. Devices without a property are waiting to be claimed.
  */
-/** The instant a wall-clock time shows in `zone`, `day` days from today. */
-function zonedInstant(day: number, time: string, zone: string) {
-  const date = new Date(Date.now() + day * DAY_MS).toISOString().slice(0, 10);
-  const guess = new Date(`${date}T${time}:00Z`);
-  // How far the zone's clock is ahead of UTC at that moment
-  const parts = Object.fromEntries(
-    new Intl.DateTimeFormat('en-US', {
-      timeZone: zone,
-      hourCycle: 'h23',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-      .formatToParts(guess)
-      .map((part) => [part.type, part.value])
-  );
-  const shown = Date.UTC(
-    Number(parts.year),
-    Number(parts.month) - 1,
-    Number(parts.day),
-    Number(parts.hour),
-    Number(parts.minute)
-  );
-  return new Date(guess.getTime() - (shown - guess.getTime()));
-}
-
 interface EventSeed {
   title: string;
   description: string | null;
@@ -426,7 +400,10 @@ async function seedEvents() {
   const hotels = await db.select().from(properties);
   const rows = hotels.flatMap((hotel) =>
     seeds.map((event) => {
-      const startsAt = zonedInstant(event.day, event.start, hotel.timezone);
+      // The wall-clock start in the hotel's own timezone, `day` days on
+      const startsAt = sql`((current_date + ${event.day}::int) + ${event.start}::time) at time zone ${hotel.timezone}`;
+      const minutesFromStart = (minutes: number) =>
+        sql`${startsAt} + make_interval(mins => ${minutes})`;
       const atHotel = event.at_hotel && hotel.address_line_1;
       return {
         property_id: hotel.id,
@@ -434,11 +411,11 @@ async function seedEvents() {
         description: event.description,
         categories: event.categories,
         starts_at: startsAt,
-        ends_at: new Date(startsAt.getTime() + event.minutes * 60_000),
+        ends_at: minutesFromStart(event.minutes),
         doors_open_at:
           event.doors_before === null
             ? null
-            : new Date(startsAt.getTime() - event.doors_before * 60_000),
+            : minutesFromStart(-event.doors_before),
         venue_name: event.venue_name,
         address_line_1: atHotel
           ? hotel.address_line_1!
