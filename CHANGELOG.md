@@ -1,3 +1,10 @@
+## [1.33.1](https://github.com/riedel28/hotel-dashboard/compare/v1.33.0...v1.33.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **menus:** square corners on the menu checkbox again ([7e58db4](https://github.com/riedel28/hotel-dashboard/commit/7e58db447e8c1789469cbf404b884c49c6c595da))
+
 # [1.33.0](https://github.com/riedel28/hotel-dashboard/compare/v1.32.1...v1.33.0) (2026-10-16)
 
 
