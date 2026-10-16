@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 interface DateRangePopoverProps {
@@ -42,6 +43,7 @@ export function DateRangePopover({
   allowFuture = false,
   className
 }: DateRangePopoverProps) {
+  const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   const [draft, setDraft] = useState<DateRange | undefined>();
   const selected = draft ?? value;
@@ -72,7 +74,7 @@ export function DateRangePopover({
           )}
           <Calendar
             mode="range"
-            // Without future days, the two-month view ends on today
+            // Without future days, the view ends on today
             defaultMonth={
               selected?.from ??
               (allowFuture ? new Date() : dayjs().subtract(1, 'month').toDate())
@@ -81,7 +83,7 @@ export function DateRangePopover({
             selected={selected}
             onSelect={setDraft}
             disabled={allowFuture ? undefined : { after: new Date() }}
-            numberOfMonths={2}
+            numberOfMonths={isMobile ? 1 : 2}
           />
         </div>
         <div className="flex items-center justify-end gap-1.5 border-t border-border p-1.5">

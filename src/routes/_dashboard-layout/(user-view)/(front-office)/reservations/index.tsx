@@ -112,6 +112,7 @@ function ReservationsContent() {
           to={dateRange.to}
           onRangeChange={setDateRange}
           allowFuture
+          withPresets
           className="w-full lg:w-[208px]"
         />
         <ReservationClearFilters

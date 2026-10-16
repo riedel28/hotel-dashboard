@@ -612,8 +612,8 @@ msgstr "All categories"
 msgid "All countries"
 msgstr "All countries"
 
-#: src/components/date-range-filter.tsx:42
-#: src/components/date-range-filter.tsx:59
+#: src/components/date-range-filter.tsx:119
+#: src/components/date-range-filter.tsx:163
 msgid "All dates"
 msgstr "All dates"
 
@@ -735,7 +735,7 @@ msgstr "API Key is required"
 msgid "App version"
 msgstr "App version"
 
-#: src/components/date-range-filter.tsx:48
+#: src/components/date-range-filter.tsx:125
 #: src/components/ui/rich-text-editor.tsx:273
 msgid "Apply"
 msgstr "Apply"
@@ -1534,7 +1534,7 @@ msgstr "Couldn't load products"
 msgid "Couldn't load properties"
 msgstr "Couldn't load properties"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:141
 msgid "Couldn't load reservations"
 msgstr "Couldn't load reservations"
 
@@ -3307,10 +3307,12 @@ msgstr "Language of the titles"
 msgid "Last 24 hours"
 msgstr "Last 24 hours"
 
+#: src/components/date-range-filter.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:19
 msgid "Last 30 days"
 msgstr "Last 30 days"
 
+#: src/components/date-range-filter.tsx:31
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:18
 msgid "Last 7 days"
 msgstr "Last 7 days"
@@ -3318,6 +3320,10 @@ msgstr "Last 7 days"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:16
 msgid "Last hour"
 msgstr "Last hour"
+
+#: src/components/date-range-filter.tsx:52
+msgid "Last month"
+msgstr "Last month"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:197
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:146
@@ -3381,6 +3387,10 @@ msgstr "Last updated {date}"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:126
 msgid "Last used {0}"
 msgstr "Last used {0}"
+
+#: src/components/date-range-filter.tsx:69
+msgid "Last year"
+msgstr "Last year"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:275
 msgid "Leave empty to use the main URL."
@@ -3460,7 +3470,7 @@ msgstr "Location"
 msgid "Log not found"
 msgstr "Log not found"
 
-#: src/routes/_dashboard-layout/-components/logout-dialog.tsx:74
+#: src/routes/_dashboard-layout/-components/logout-dialog.tsx:72
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:206
 msgid "Log out"
 msgstr "Log out"
@@ -3672,6 +3682,10 @@ msgstr "Monitoring"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:68
 msgid "Monitoring Logs"
 msgstr "Monitoring Logs"
+
+#: src/components/date-range-filter.tsx:45
+msgid "Month to date"
+msgstr "Month to date"
 
 #: src/components/ui/breadcrumb.tsx:93
 msgid "More"
@@ -6597,6 +6611,7 @@ msgstr "To delete"
 msgid "To update"
 msgstr "To update"
 
+#: src/components/date-range-filter.tsx:20
 #: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:42
 msgid "Today"
 msgstr "Today"
@@ -7223,6 +7238,11 @@ msgstr "Write a note about this property…"
 msgid "XLSX template"
 msgstr "XLSX template"
 
+#: src/components/date-range-filter.tsx:62
+msgid "Year to date"
+msgstr "Year to date"
+
+#: src/components/date-range-filter.tsx:24
 #: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:44
 msgid "Yesterday"
 msgstr "Yesterday"
