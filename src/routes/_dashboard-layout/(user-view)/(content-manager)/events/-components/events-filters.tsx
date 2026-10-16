@@ -21,7 +21,6 @@ interface EventsFiltersProps extends Pick<
   | 'hasActiveFilters'
   | 'setFilters'
   | 'clearFilters'
-  | 'dateRange'
   | 'setDateRange'
 > {
   isRefreshing: boolean;
@@ -33,7 +32,6 @@ export function EventsFilters({
   hasActiveFilters,
   setFilters,
   clearFilters,
-  dateRange,
   setDateRange,
   isRefreshing,
   onRefresh
@@ -82,9 +80,10 @@ export function EventsFilters({
         </DataGridCheckboxFilterFooter>
       </DataGridCheckboxFilter>
       <DateRangeFilter
-        from={dateRange.from}
-        to={dateRange.to}
-        onDateChange={setDateRange}
+        from={filters.from}
+        to={filters.to}
+        onRangeChange={setDateRange}
+        allowFuture
         className="w-full xl:w-[208px]"
       />
       {/* Below xl the two share the grid's last row; from xl they are

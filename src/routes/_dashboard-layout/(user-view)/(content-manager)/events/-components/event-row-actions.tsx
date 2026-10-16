@@ -16,7 +16,7 @@ import { DeleteEventDialog } from './delete-event-dialog';
 
 export function EventRowActions({ event }: { event: HotelEvent }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const eventId = String(event.id);
+  const eventId = event.id;
 
   return (
     <>

@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
-import { cmsImageExtensions } from '../../../shared/types/cms';
 import {
   eventIdParamsSchema,
   eventImageMaxBytes,
   fetchEventsParamsSchema,
   saveEventSchema
 } from '../../../shared/types/events';
+import { imageExtensions } from '../../../shared/types/images';
 import {
   createEvent,
   deleteEvent,
@@ -34,7 +34,7 @@ router.use(attachSelectedProperty);
 // larger than the CMS's own.
 router.post(
   '/images',
-  upload({ maxBytes: eventImageMaxBytes, extensions: cmsImageExtensions }),
+  upload({ maxBytes: eventImageMaxBytes, extensions: imageExtensions }),
   uploadImage
 );
 

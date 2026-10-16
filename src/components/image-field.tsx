@@ -9,7 +9,7 @@ import {
   XIcon
 } from 'lucide-react';
 import * as React from 'react';
-import { cmsImageExtensions } from 'shared/types/cms';
+import { imageExtensions } from 'shared/types/images';
 
 import { imageUrl } from '@/api/images';
 import { ImagePreviewDialog } from '@/components/image-preview-dialog';
@@ -37,9 +37,7 @@ interface ImageFieldProps {
 }
 
 const hasImageExtension = (name: string) =>
-  cmsImageExtensions.some((extension) =>
-    name.toLowerCase().endsWith(extension)
-  );
+  imageExtensions.some((extension) => name.toLowerCase().endsWith(extension));
 
 // Uploaded images in order. A file is uploaded as soon as it's picked (each
 // slot shows its own progress and error); the node refers to it only once
@@ -284,7 +282,7 @@ export function ImageField({
         type="file"
         hidden
         multiple={max > 1}
-        accept={cmsImageExtensions.join(',')}
+        accept={imageExtensions.join(',')}
         onChange={(event) => {
           pick(event.target.files);
           event.target.value = '';

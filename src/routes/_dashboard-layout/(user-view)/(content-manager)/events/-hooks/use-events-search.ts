@@ -57,11 +57,7 @@ export function useEventsSearch() {
     ),
     setFilters,
     // Picked as calendar days, which the API reads in the hotel's timezone
-    dateRange: {
-      from: from ? dayjs(from).toDate() : undefined,
-      to: to ? dayjs(to).toDate() : undefined
-    },
-    setDateRange: (range: { from?: Date; to?: Date } | undefined) =>
+    setDateRange: (range: { from: Date; to: Date } | undefined) =>
       setFilters({
         from: range?.from && dayjs(range.from).format('YYYY-MM-DD'),
         to: range?.to && dayjs(range.to).format('YYYY-MM-DD')

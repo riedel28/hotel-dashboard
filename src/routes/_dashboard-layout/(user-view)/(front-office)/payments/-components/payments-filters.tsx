@@ -1,12 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import dayjs from 'dayjs';
 import { XIcon } from 'lucide-react';
 import { paymentStageSchema } from 'shared/types/payments';
 
-import {
-  DateRangePopover,
-  formatDateRange
-} from '@/components/date-range-popover';
+import { DateRangeFilter } from '@/components/date-range-filter';
 import { Button } from '@/components/ui/button';
 import { DataGridSegmentedFilter } from '@/components/ui/data-grid-segmented-filter';
 import { SearchInput } from '@/components/ui/search-input';
@@ -64,6 +60,7 @@ export function PaymentsFilters({
         from={filters.from}
         to={filters.to}
         onRangeChange={setRange}
+        className="sm:w-56"
       />
       {hasActiveFilters && (
         <Button
@@ -76,53 +73,5 @@ export function PaymentsFilters({
         </Button>
       )}
     </div>
-  );
-}
-
-/** Days of the payments' latest stage; any range up to today. */
-function DateRangeFilter({
-  from,
-  to,
-  onRangeChange
-}: {
-  from?: string;
-  to?: string;
-  onRangeChange: (range: { from: Date; to: Date } | undefined) => void;
-}) {
-  const applied =
-    from && to
-      ? { from: dayjs(from).toDate(), to: dayjs(to).toDate() }
-      : undefined;
-
-  return (
-    <DateRangePopover
-      className="sm:w-56"
-      label={
-        applied ? (
-          formatDateRange(applied)
-        ) : (
-          <span className="text-muted-foreground">
-            <Trans>All dates</Trans>
-          </span>
-        )
-      }
-      value={applied}
-      onApply={onRangeChange}
-      applyLabel={<Trans>Apply</Trans>}
-      actions={(close) =>
-        applied && (
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => {
-              onRangeChange(undefined);
-              close();
-            }}
-          >
-            <Trans>All dates</Trans>
-          </Button>
-        )
-      }
-    />
   );
 }

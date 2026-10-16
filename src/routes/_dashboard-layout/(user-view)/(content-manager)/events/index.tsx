@@ -120,7 +120,6 @@ function EventsContent({ property }: { property: Property }) {
         hasActiveFilters={search.hasActiveFilters}
         setFilters={search.setFilters}
         clearFilters={search.clearFilters}
-        dateRange={search.dateRange}
         setDateRange={search.setDateRange}
         isRefreshing={eventsQuery.isFetching}
         onRefresh={() => void invalidateEvents(queryClient)}
@@ -148,7 +147,7 @@ function EventsContent({ property }: { property: Property }) {
           onOpen={(eventId) =>
             void navigate({
               to: '/events/$eventId',
-              params: { eventId: String(eventId) }
+              params: { eventId }
             })
           }
           emptyMessage={

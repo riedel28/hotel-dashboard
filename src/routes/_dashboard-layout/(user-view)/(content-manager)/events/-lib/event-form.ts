@@ -204,10 +204,16 @@ export function splitMinutes(total: number) {
   };
 }
 
-type AddressFields = Pick<
-  EventFormValues,
-  'address_line_1' | 'address_line_2' | 'zip' | 'city' | 'country_code'
->;
+/** The fields "Use hotel address" fills. */
+export const addressFieldNames = [
+  'address_line_1',
+  'address_line_2',
+  'zip',
+  'city',
+  'country_code'
+] as const;
+
+type AddressFields = Pick<EventFormValues, (typeof addressFieldNames)[number]>;
 
 /**
  * The hotel's address in the event's address fields, the venue name left

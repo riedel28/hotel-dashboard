@@ -3,6 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { CopyIcon, EllipsisIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { eventIdParamsSchema } from 'shared/types/events';
 import { toast } from 'sonner';
 
 import { eventByIdQueryOptions, updateEvent } from '@/api/events';
@@ -26,7 +27,7 @@ import { eventToFormValues } from './-lib/event-form';
 function EventPage() {
   const { t } = useLingui();
   const navigate = useNavigate();
-  const eventId = Number(Route.useParams().eventId);
+  const { eventId } = Route.useParams();
   const { data: event } = useSuspenseQuery(eventByIdQueryOptions(eventId));
   const property = useSelectedProperty();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -104,7 +105,14 @@ function EventPage() {
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/(content-manager)/events/$eventId'
 )({
+  // A malformed id is a bad link, answered by the route's error page
+  params: {
+    parse: ({ eventId }) => ({
+      eventId: eventIdParamsSchema.parse({ id: eventId }).id
+    }),
+    stringify: ({ eventId }) => ({ eventId: String(eventId) })
+  },
   loader: ({ context: { queryClient }, params: { eventId } }) =>
-    queryClient.ensureQueryData(eventByIdQueryOptions(Number(eventId))),
+    queryClient.ensureQueryData(eventByIdQueryOptions(eventId)),
   component: EventPage
 });

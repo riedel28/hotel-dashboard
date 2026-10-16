@@ -64,6 +64,24 @@ export function invalidateEvents(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: ['events'] });
 }
 
+const invalidateEventLists = (queryClient: QueryClient) =>
+  queryClient.invalidateQueries({ queryKey: ['events', 'list'] });
+
+/** After a create or update: its page shows it at once, lists refetch. */
+export function onEventSaved(queryClient: QueryClient, event: HotelEvent) {
+  queryClient.setQueryData(eventByIdQueryOptions(event.id).queryKey, event);
+  return invalidateEventLists(queryClient);
+}
+
+/**
+ * After a delete. Its own query is dropped rather than refetched: the
+ * event's page may still be on its way out.
+ */
+export function onEventDeleted(queryClient: QueryClient, id: number) {
+  queryClient.removeQueries({ queryKey: ['events', id], exact: true });
+  return invalidateEventLists(queryClient);
+}
+
 export async function createEvent(data: SaveEventData): Promise<HotelEvent> {
   try {
     const response = await client.post('/events', saveEventSchema.parse(data));

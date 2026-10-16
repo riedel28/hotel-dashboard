@@ -20,9 +20,6 @@ type SortBy = NonNullable<FetchReservationsParams['sort_by']>;
 const defaultPageSize = 25;
 const defaultSorting: SortingState = [{ id: 'received_at', desc: true }];
 
-const toDate = (value: string | undefined) =>
-  value ? new Date(value) : undefined;
-
 const toDateParam = (value: Date | undefined) =>
   value ? dayjs(value).format('YYYY-MM-DD') : undefined;
 
@@ -57,7 +54,7 @@ function useReservationsSearch() {
     reservationsQuery,
     searchTerm: q,
     selectedStatuses,
-    dateRange: { from: toDate(from), to: toDate(to) },
+    dateRange: { from, to },
     sorting,
     pageIndex,
     pageSize,
@@ -71,7 +68,7 @@ function useReservationsSearch() {
     setStatuses: (statuses: ReservationState[]) =>
       updateSearch({ page: 1, status: fromReservationStates(statuses) }),
 
-    setDateRange: (range: { from?: Date; to?: Date } | undefined) =>
+    setDateRange: (range: { from: Date; to: Date } | undefined) =>
       updateSearch({
         page: 1,
         from: toDateParam(range?.from),

@@ -23,12 +23,14 @@ interface DateRangePopoverProps {
   presets?: (close: () => void) => ReactNode;
   /** More footer buttons, left of Apply; they call `close` once done. */
   actions?: (close: () => void) => ReactNode;
+  /** Days after today can be picked too, e.g. for what is planned. */
+  allowFuture?: boolean;
   className?: string;
 }
 
 /**
- * A filter button opening a two-month calendar to pick a range of past days.
- * The range is committed only on Apply.
+ * A filter button opening a two-month calendar to pick a range of days, past
+ * ones unless `allowFuture`. The range is committed only on Apply.
  */
 export function DateRangePopover({
   label,
@@ -37,6 +39,7 @@ export function DateRangePopover({
   applyLabel,
   presets,
   actions,
+  allowFuture = false,
   className
 }: DateRangePopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -69,14 +72,15 @@ export function DateRangePopover({
           )}
           <Calendar
             mode="range"
-            // Future days are disabled, so end the two-month view on today
+            // Without future days, the two-month view ends on today
             defaultMonth={
-              selected?.from ?? dayjs().subtract(1, 'month').toDate()
+              selected?.from ??
+              (allowFuture ? new Date() : dayjs().subtract(1, 'month').toDate())
             }
             showOutsideDays={false}
             selected={selected}
             onSelect={setDraft}
-            disabled={{ after: new Date() }}
+            disabled={allowFuture ? undefined : { after: new Date() }}
             numberOfMonths={2}
           />
         </div>

@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { deleteEvent, type HotelEvent } from '@/api/events';
+import { deleteEvent, type HotelEvent, onEventDeleted } from '@/api/events';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -42,11 +42,7 @@ export function DeleteEventDialog({
       onOpenChange(false);
       // Off the event's own page first: it would refetch the deleted event
       await onDeleted?.();
-      queryClient.removeQueries({
-        queryKey: ['events', event.id],
-        exact: true
-      });
-      await queryClient.invalidateQueries({ queryKey: ['events', 'list'] });
+      await onEventDeleted(queryClient, event.id);
       toast.success(t`The event “${title}” has been deleted`);
     },
     onError: () => {

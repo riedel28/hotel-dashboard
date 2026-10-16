@@ -24,6 +24,7 @@ function NewEventPage() {
   const navigate = useNavigate();
   const property = useSelectedProperty();
   const initialValues = Route.useLoaderData();
+  const { duplicate } = Route.useSearch();
 
   return (
     <div className="space-y-6">
@@ -31,7 +32,7 @@ function NewEventPage() {
       {property && initialValues ? (
         <EventForm
           // Another duplicate source starts the form afresh
-          key={Route.useSearch().duplicate ?? 'new'}
+          key={duplicate ?? 'new'}
           property={property}
           initialValues={initialValues}
           save={createEvent}
@@ -41,7 +42,7 @@ function NewEventPage() {
             scrollPageToTop();
             void navigate({
               to: '/events/$eventId',
-              params: { eventId: String(event.id) },
+              params: { eventId: event.id },
               ignoreBlocker: true
             });
           }}

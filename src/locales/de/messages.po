@@ -118,7 +118,7 @@ msgstr "{0}"
 #~ msgstr "{0} Gäste insgesamt"
 
 #. placeholder {0}: minutes / 60
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:441
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:437
 msgid "{0} h before"
 msgstr "{0} Std. vorher"
 
@@ -156,7 +156,7 @@ msgstr "{0} Rollen insgesamt"
 msgid "{changeCount, plural, one {Import # change} other {Import # changes}}"
 msgstr "{changeCount, plural, one {# Änderung importieren} other {# Änderungen importieren}}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:331
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:327
 msgid "{days} d"
 msgstr "{days} T"
 
@@ -181,7 +181,7 @@ msgstr "{from} - {to} von {count}"
 msgid "{from} - {to} of {recordCount}"
 msgstr "{from} - {to} von {recordCount}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:332
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:328
 msgid "{hours} h"
 msgstr "{hours} Std."
 
@@ -192,7 +192,7 @@ msgstr "{label} – Uhrzeit"
 #~ msgid "{lastName}, {firstName}"
 #~ msgstr "{lastName}, {firstName}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:439
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:435
 msgid "{minutes} min before"
 msgstr "{minutes} Min. vorher"
 
@@ -211,7 +211,7 @@ msgstr "Zimmerzuweisung von {name} aufgehoben"
 #~ msgid "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 #~ msgstr "{productCount, plural, =0 {Keine Produkte in dieser Kategorie} one {# Produkt in dieser Kategorie} other {# Produkte in dieser Kategorie}}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:333
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:329
 msgid "{rest} min"
 msgstr "{rest} Min."
 
@@ -396,13 +396,13 @@ msgstr "Gast hinzufügen"
 msgid "Add Guest"
 msgstr "Gast hinzufügen"
 
-#: src/components/image-field.tsx:274
-#: src/components/image-field.tsx:275
+#: src/components/image-field.tsx:272
+#: src/components/image-field.tsx:273
 msgid "Add image"
 msgstr "Bild hinzufügen"
 
-#: src/components/image-field.tsx:274
-#: src/components/image-field.tsx:275
+#: src/components/image-field.tsx:272
+#: src/components/image-field.tsx:273
 msgid "Add images"
 msgstr "Bilder hinzufügen"
 
@@ -502,7 +502,7 @@ msgstr ""
 msgid "Address line 1"
 msgstr "Adresszeile 1"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:527
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:523
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:67
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:187
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:237
@@ -581,7 +581,7 @@ msgid "Age group"
 msgstr "Altersgruppe"
 
 #: src/components/ui/data-grid-segmented-filter.tsx:41
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:141
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:64
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:134
@@ -592,7 +592,7 @@ msgstr "Alle"
 msgid "All {total} shown"
 msgstr "Alle {total} sichtbar"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:67
 msgid "All categories"
 msgstr "Alle Kategorien"
 
@@ -605,8 +605,8 @@ msgstr "Alle Kategorien"
 msgid "All countries"
 msgstr "Alle Länder"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:105
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:122
+#: src/components/date-range-filter.tsx:42
+#: src/components/date-range-filter.tsx:59
 msgid "All dates"
 msgstr "Alle Daten"
 
@@ -728,9 +728,8 @@ msgstr "API-Schlüssel ist erforderlich"
 msgid "App version"
 msgstr "App-Version"
 
-#: src/components/date-range-filter.tsx:213
-#: src/components/ui/rich-text-editor.tsx:267
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:111
+#: src/components/date-range-filter.tsx:48
+#: src/components/ui/rich-text-editor.tsx:273
 msgid "Apply"
 msgstr "Anwenden"
 
@@ -904,7 +903,7 @@ msgstr "Zurück zur Anmeldung"
 msgid "Balance"
 msgstr "Betrag"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:179
 msgid "Basics"
 msgstr "Grunddaten"
 
@@ -912,7 +911,7 @@ msgstr "Grunddaten"
 msgid "becomes"
 msgstr "wird zu"
 
-#: src/components/ui/rich-text-editor.tsx:305
+#: src/components/ui/rich-text-editor.tsx:311
 msgid "Bold"
 msgstr "Fett"
 
@@ -940,7 +939,7 @@ msgstr "Fett"
 msgid "Brand"
 msgstr "Marke"
 
-#: src/components/ui/rich-text-editor.tsx:323
+#: src/components/ui/rich-text-editor.tsx:329
 msgid "Bulleted list"
 msgstr "Aufzählung"
 
@@ -960,8 +959,8 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/components/provider-setup/use-provider-form.tsx:221
 #: src/components/sectioned-form.tsx:108
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:70
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:168
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:66
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:164
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:144
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:146
@@ -1028,13 +1027,13 @@ msgstr "Karte abgelaufen"
 #~ msgid "Casablanca"
 #~ msgstr "Casablanca"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:311
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:236
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:307
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:82
 msgid "Categories"
 msgstr "Kategorien"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:66
 msgid "Category"
 msgstr "Kategorie"
 
@@ -1226,14 +1225,14 @@ msgstr "Wählen Sie dies, wenn Ihre SALTO-Installation über SHIP, das Host-Inte
 #~ msgid "Choose this to connect through SALTO's host interface protocol (SHIP) with a user name and password."
 #~ msgstr "Wählen Sie dies, um die Verbindung über das Host-Interface-Protokoll von SALTO (SHIP) mit Benutzername und Passwort herzustellen."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:540
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:536
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:108
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:202
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:240
 msgid "City"
 msgstr "Stadt"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:78
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:38
 msgid "City is required"
 msgstr ""
@@ -1248,7 +1247,7 @@ msgstr "Alle zurücksetzen"
 
 #: src/components/clear-filters-button.tsx:33
 #: src/components/empty-table-state.tsx:74
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:226
@@ -1489,7 +1488,7 @@ msgstr "Kunden konnten nicht geladen werden"
 msgid "Couldn't load devices"
 msgstr "Geräte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:135
 msgid "Couldn't load events"
 msgstr "Events konnten nicht geladen werden"
 
@@ -1509,7 +1508,7 @@ msgstr "Produkte konnten nicht geladen werden"
 msgid "Couldn't load properties"
 msgstr "Objekte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:139
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:140
 msgid "Couldn't load reservations"
 msgstr "Reservierungen konnten nicht geladen werden"
 
@@ -1541,7 +1540,7 @@ msgstr "E-Mail konnte nicht gesendet werden. Bitte erneut versuchen."
 msgid "Couldn't start setup"
 msgstr "Einrichtung konnte nicht gestartet werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:550
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:546
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:222
 #: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:184
@@ -1555,17 +1554,17 @@ msgstr "Land"
 #~ msgid "Country code"
 #~ msgstr "Ländervorwahl"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:39
 msgid "Country is required"
 msgstr ""
 
-#: src/components/image-field.tsx:170
-#: src/components/image-preview-dialog.tsx:87
+#: src/components/image-field.tsx:168
+#: src/components/image-preview-dialog.tsx:89
 msgid "Cover"
 msgstr "Titelbild"
 
-#: src/components/image-field.tsx:167
+#: src/components/image-field.tsx:165
 msgid "Cover image"
 msgstr "Titelbild"
 
@@ -1586,7 +1585,7 @@ msgstr "Erstellen Sie ein Konto, um auf das Dashboard zuzugreifen"
 msgid "Create customer"
 msgstr "Kunde erstellen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:49
 msgid "Create event"
 msgstr "Event erstellen"
 
@@ -1717,16 +1716,16 @@ msgstr "Dashboard"
 msgid "Date"
 msgstr "Datum"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:190
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:186
 msgid "Date & time"
 msgstr "Datum & Uhrzeit"
 
 #~ msgid "DE +49"
 #~ msgstr "DE +49"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-row-actions.tsx:58
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:77
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:78
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:82
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:182
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/delete-node-dialog.tsx:76
@@ -1759,7 +1758,7 @@ msgstr "Kategorie löschen?"
 msgid "Delete entry?"
 msgstr "Eintrag löschen?"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:58
 msgid "Delete event “{title}”?"
 msgstr "Event „{title}“ löschen?"
 
@@ -1830,8 +1829,8 @@ msgstr "Kaution"
 msgid "Desc"
 msgstr "Abst."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:292
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:300
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:288
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:296
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:120
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:120
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:116
@@ -1875,7 +1874,7 @@ msgstr "Änderungen verwerfen"
 msgid "Discard changes?"
 msgstr "Änderungen verwerfen?"
 
-#: src/components/image-field.tsx:248
+#: src/components/image-field.tsx:246
 msgid "Dismiss"
 msgstr "Verwerfen"
 
@@ -1907,27 +1906,27 @@ msgid "Door Locks"
 msgstr ""
 
 #. placeholder {0}: doors.format('HH:mm')
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:144
 msgid "doors {0}"
 msgstr "Einlass {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:83
 msgid "Doors must open before the start"
 msgstr "Der Einlass muss vor dem Beginn liegen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:411
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:407
 msgid "Doors open"
 msgstr "Einlass"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:463
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:459
 msgid "doors open <0/> before start"
 msgstr "Einlass <0/> vor Beginn"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:461
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:457
 msgid "doors open at the start"
 msgstr "Einlass zum Beginn"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:416
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:412
 msgid "Doors open time"
 msgstr "Einlasszeit"
 
@@ -1968,7 +1967,7 @@ msgid "Drop an image here or choose one. It's resized automatically, so any size
 msgstr "Bild hierher ziehen oder auswählen. Die Größe wird automatisch angepasst, jede Auflösung ist in Ordnung."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-row-actions.tsx:48
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:70
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:151
 msgid "Duplicate"
 msgstr "Duplizieren"
@@ -2028,8 +2027,8 @@ msgstr "Gast bearbeiten"
 msgid "Edit Guest"
 msgstr "Gast bearbeiten"
 
-#: src/components/ui/rich-text-editor.tsx:422
-#: src/components/ui/rich-text-editor.tsx:423
+#: src/components/ui/rich-text-editor.tsx:428
+#: src/components/ui/rich-text-editor.tsx:429
 msgid "Edit HTML"
 msgstr "HTML bearbeiten"
 
@@ -2142,12 +2141,12 @@ msgstr "Zwei-Faktor-Authentifizierung aktivieren"
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:390
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:395
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:386
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:391
 msgid "End"
 msgstr "Ende"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:81
 msgid "End date and time are required"
 msgstr "Enddatum und -uhrzeit sind erforderlich"
 
@@ -2333,7 +2332,7 @@ msgstr "Fehler"
 msgid "Error creating room"
 msgstr "Fehler beim Erstellen des Zimmers"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:49
 msgid "Error deleting event"
 msgstr "Fehler beim Löschen des Events"
 
@@ -2384,17 +2383,17 @@ msgstr "Fehler beim Aktualisieren des Zimmers"
 msgid "Errors"
 msgstr "Fehler"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:231
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:243
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:174
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:192
 msgid "Event"
 msgstr "Ereignis"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:39
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:40
 msgid "Event created"
 msgstr "Event erstellt"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:89
 msgid "Event updated"
 msgstr "Event aktualisiert"
 
@@ -2578,7 +2577,7 @@ msgstr "Speichern fehlgeschlagen"
 msgid "Failed to save configuration"
 msgstr "Konfiguration konnte nicht gespeichert werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:142
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:138
 msgid "Failed to save event"
 msgstr "Event konnte nicht gespeichert werden"
 
@@ -2746,7 +2745,7 @@ msgstr "Passwort vergessen?"
 msgid "Forgot your current password?"
 msgstr "Aktuelles Passwort vergessen?"
 
-#: src/components/ui/rich-text-editor.tsx:339
+#: src/components/ui/rich-text-editor.tsx:345
 msgid "Formatting"
 msgstr "Formatierung"
 
@@ -2877,11 +2876,11 @@ msgstr "Enthält Fehler"
 #~ msgid "Heading"
 #~ msgstr "Überschrift"
 
-#: src/components/ui/rich-text-editor.tsx:178
+#: src/components/ui/rich-text-editor.tsx:184
 msgid "Heading {headingLevel}"
 msgstr "Überschrift {headingLevel}"
 
-#: src/components/ui/rich-text-editor.tsx:154
+#: src/components/ui/rich-text-editor.tsx:160
 msgid "Heading {level}"
 msgstr "Überschrift {level}"
 
@@ -3085,20 +3084,20 @@ msgstr "Ich habe mein Telefon nicht — Wiederherstellungscode verwenden"
 msgid "I've saved my recovery codes in a safe place"
 msgstr "Ich habe meine Wiederherstellungscodes sicher gespeichert"
 
-#: src/components/ui/rich-text-editor.tsx:410
+#: src/components/ui/rich-text-editor.tsx:416
 msgid "Image"
 msgstr "Bild"
 
 #. placeholder {0}: (shown ?? 0) + 1
 #. placeholder {0}: index + 1
-#: src/components/image-field.tsx:157
-#: src/components/image-preview-dialog.tsx:100
+#: src/components/image-field.tsx:155
+#: src/components/image-preview-dialog.tsx:102
 msgid "Image {0}"
 msgstr "Bild {0}"
 
 #. placeholder {0}: (shown ?? 0) + 1
 #. placeholder {1}: ids.length
-#: src/components/image-preview-dialog.tsx:81
+#: src/components/image-preview-dialog.tsx:83
 msgid "Image {0} of {1}"
 msgstr "Bild {0} von {1}"
 
@@ -3110,7 +3109,7 @@ msgstr "Bild oder Icon"
 #~ msgid "Image or icon (optional)"
 #~ msgstr "Bild oder Icon (optional)"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:216
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:212
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:362
 msgid "Images"
@@ -3187,7 +3186,7 @@ msgstr "iOS App"
 msgid "It may have been deleted or moved."
 msgstr "Möglicherweise wurde es gelöscht oder verschoben."
 
-#: src/components/ui/rich-text-editor.tsx:311
+#: src/components/ui/rich-text-editor.tsx:317
 msgid "Italic"
 msgstr "Kursiv"
 
@@ -3337,7 +3336,7 @@ msgstr "Hell"
 msgid "Line"
 msgstr "Zeile"
 
-#: src/components/ui/rich-text-editor.tsx:395
+#: src/components/ui/rich-text-editor.tsx:401
 msgid "Link"
 msgstr "Link"
 
@@ -3386,8 +3385,8 @@ msgstr "Zimmer werden geladen…"
 msgid "Loading..."
 msgstr "Lädt..."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:202
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:246
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:250
 msgid "Location"
 msgstr "Standort"
 
@@ -3605,7 +3604,7 @@ msgstr "Monitoring-Protokolle"
 msgid "More"
 msgstr "Mehr"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:54
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:232
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:233
@@ -3632,11 +3631,11 @@ msgstr "Nach unten"
 msgid "Move here"
 msgstr "Hierher verschieben"
 
-#: src/components/image-field.tsx:181
+#: src/components/image-field.tsx:179
 msgid "Move left"
 msgstr "Nach links"
 
-#: src/components/image-field.tsx:192
+#: src/components/image-field.tsx:190
 msgid "Move right"
 msgstr "Nach rechts"
 
@@ -3734,9 +3733,9 @@ msgid "New customer"
 msgstr "Neuer Kunde"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:91
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:164
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:23
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:30
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:31
 msgid "New event"
 msgstr "Neues Event"
 
@@ -3788,7 +3787,7 @@ msgstr "Neuer Typ"
 msgid "Next"
 msgstr "Weiter"
 
-#: src/components/image-preview-dialog.tsx:113
+#: src/components/image-preview-dialog.tsx:115
 msgid "Next image"
 msgstr "Nächstes Bild"
 
@@ -3883,7 +3882,7 @@ msgstr "Noch keine Geräte"
 msgid "No entries yet"
 msgstr "Noch keine Einträge"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:171
 msgid "No events match the filters."
 msgstr "Keine Events entsprechen den Filtern."
 
@@ -4061,7 +4060,7 @@ msgstr "Ohne Typ"
 msgid "No unsaved changes"
 msgstr "Keine ungespeicherten Änderungen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:158
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:157
 msgid "No upcoming events"
 msgstr "Keine anstehenden Events"
 
@@ -4122,7 +4121,7 @@ msgstr "Nummer"
 #~ msgid "Number of People"
 #~ msgstr "Anzahl der Personen"
 
-#: src/components/ui/rich-text-editor.tsx:329
+#: src/components/ui/rich-text-editor.tsx:335
 msgid "Numbered list"
 msgstr "Nummerierte Liste"
 
@@ -4160,7 +4159,7 @@ msgstr "Es können nur .csv- und .xlsx-Dateien importiert werden."
 msgid "Only images are allowed."
 msgstr "Es sind nur Bilder erlaubt."
 
-#: src/components/image-field.tsx:98
+#: src/components/image-field.tsx:96
 msgid "Only JPG, PNG and WebP images"
 msgstr "Nur JPG-, PNG- und WebP-Bilder"
 
@@ -4178,7 +4177,7 @@ msgstr "Nur unübersetzte"
 #~ msgstr "Gast-Menü öffnen"
 
 #. placeholder {0}: index + 1
-#: src/components/image-field.tsx:152
+#: src/components/image-field.tsx:150
 msgid "Open image {0}"
 msgstr "Bild {0} öffnen"
 
@@ -4355,7 +4354,7 @@ msgstr "Passwort aktualisiert"
 msgid "Passwords don't match"
 msgstr "Passwörter stimmen nicht überein"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:63
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:61
 msgid "Past"
 msgstr "Vergangen"
 
@@ -4417,7 +4416,7 @@ msgstr "Ausstehend"
 msgid "Per page"
 msgstr "pro Seite"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:57
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:55
 msgid "Period"
 msgstr "Zeitraum"
 
@@ -4449,8 +4448,8 @@ msgid "Pick a date"
 msgstr "Datum wählen"
 
 #: src/components/date-range-filter.tsx:168
-msgid "Pick a date range"
-msgstr "Datumsbereich auswählen"
+#~ msgid "Pick a date range"
+#~ msgstr "Datumsbereich auswählen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:174
 msgid "Pick a longer period to see older logs."
@@ -4472,7 +4471,7 @@ msgstr "Links anheften"
 msgid "Pin to right"
 msgstr "Rechts anheften"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:160
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:159
 msgid "Plan what is on for guests: concerts, tastings, tours."
 msgstr "Planen Sie, was Gäste erwartet: Konzerte, Verkostungen, Touren."
 
@@ -4563,12 +4562,12 @@ msgstr ""
 msgid "Position your photo"
 msgstr "Foto ausrichten"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:534
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:530
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:239
 msgid "Postal code"
 msgstr "Postleitzahl"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:77
 msgid "Postal code is required"
 msgstr "Postleitzahl ist erforderlich"
 
@@ -4595,7 +4594,7 @@ msgstr "Ansicht der Vorschau"
 msgid "Previous"
 msgstr "Zurück"
 
-#: src/components/image-preview-dialog.tsx:108
+#: src/components/image-preview-dialog.tsx:110
 msgid "Previous image"
 msgstr "Vorheriges Bild"
 
@@ -4888,8 +4887,8 @@ msgstr "Wiederherstellungscodes"
 msgid "Recovery codes copied"
 msgstr "Wiederherstellungscodes kopiert"
 
-#: src/components/ui/rich-text-editor.tsx:362
-#: src/components/ui/rich-text-editor.tsx:363
+#: src/components/ui/rich-text-editor.tsx:368
+#: src/components/ui/rich-text-editor.tsx:369
 msgid "Redo"
 msgstr "Wiederholen"
 
@@ -4946,7 +4945,7 @@ msgstr "Neu laden, um die andere Fassung zu sehen. Bis dahin bleiben deine Ände
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
-#: src/components/ui/rich-text-editor.tsx:267
+#: src/components/ui/rich-text-editor.tsx:273
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:264
 msgid "Remove"
 msgstr "Entfernen"
@@ -4979,7 +4978,7 @@ msgstr "Filter nach Reservierung {bookingNr} entfernen"
 msgid "Remove from reservation"
 msgstr "Aus Reservierung entfernen"
 
-#: src/components/image-field.tsx:207
+#: src/components/image-field.tsx:205
 msgid "Remove image"
 msgstr "Bild entfernen"
 
@@ -5108,7 +5107,6 @@ msgstr "Reservierung erfolgreich aktualisiert"
 msgid "Reservations"
 msgstr "Reservierungen"
 
-#: src/components/date-range-filter.tsx:210
 #: src/components/ui/data-grid-radio-filter.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
@@ -5130,7 +5128,7 @@ msgstr "Reset-Link gesendet"
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
-#: src/components/image-field.tsx:238
+#: src/components/image-field.tsx:236
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:287
 msgid "Retry"
 msgstr "Erneut versuchen"
@@ -5383,7 +5381,7 @@ msgstr "Diesen QR-Code scannen"
 msgid "Search"
 msgstr "Suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:51
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:49
 msgid "Search by title"
 msgstr "Nach Titel suchen"
 
@@ -5413,7 +5411,7 @@ msgstr "Geräte suchen"
 msgid "Search event, message, reservation number"
 msgstr "Ereignis, Nachricht, Reservierungsnummer suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:50
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:48
 msgid "Search events"
 msgstr "Events suchen"
 
@@ -5440,7 +5438,7 @@ msgstr "Name, Seriennummer, Zimmer suchen"
 msgid "Search number or name"
 msgstr "Nummer oder Name suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:45
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:41
 msgid "Search payments"
 msgstr "Zahlungen suchen"
 
@@ -5457,7 +5455,7 @@ msgstr "Unterkünfte suchen"
 msgid "Search property"
 msgstr "Nach Property-Namen suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:46
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:42
 msgid "Search reservation number, reference, last four card digits"
 msgstr "Reservierungsnummer, Referenz oder letzte vier Kartenziffern suchen"
 
@@ -5544,7 +5542,7 @@ msgstr "Alle auswählen"
 
 #: src/components/ui/country-picker.tsx:90
 #: src/components/ui/country-picker.tsx:109
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:555
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:551
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:253
 msgid "Select country"
 msgstr "Land auswählen"
@@ -5858,12 +5856,12 @@ msgstr "Staging"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:54
 #: src/routes/_dashboard-layout/-components/nav-items.ts:177
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:358
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:363
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:354
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:359
 msgid "Start"
 msgstr "Start"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:83
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:80
 msgid "Start date and time are required"
 msgstr "Startdatum und -uhrzeit sind erforderlich"
 
@@ -5882,7 +5880,7 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:121
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:128
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:48
@@ -5926,12 +5924,12 @@ msgstr ""
 msgid "STP is deprecated"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:521
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:517
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:236
 msgid "Street"
 msgstr "Straße"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:76
 msgid "Street is required"
 msgstr "Straße ist erforderlich"
 
@@ -6064,14 +6062,14 @@ msgstr "Getestet um {0}"
 #~ msgid "Testing the Test environment for {0}."
 #~ msgstr ""
 
-#: src/components/ui/rich-text-editor.tsx:154
-#: src/components/ui/rich-text-editor.tsx:167
+#: src/components/ui/rich-text-editor.tsx:160
+#: src/components/ui/rich-text-editor.tsx:173
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:242
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:247
 msgid "Text"
 msgstr "Text"
 
-#: src/components/ui/rich-text-editor.tsx:148
+#: src/components/ui/rich-text-editor.tsx:154
 msgid "Text style"
 msgstr "Textstil"
 
@@ -6124,11 +6122,11 @@ msgstr "Der Code wird auf dem Bildschirm des Geräts angezeigt"
 msgid "The device could not be added. Please try again."
 msgstr "Das Gerät konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:82
 msgid "The end must be after the start"
 msgstr "Das Ende muss nach dem Beginn liegen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:50
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:46
 msgid "The event “{title}” has been deleted"
 msgstr "Das Event „{title}“ wurde gelöscht"
 
@@ -6149,7 +6147,7 @@ msgid "The file has no rows."
 msgstr "Die Datei enthält keine Zeilen."
 
 #. placeholder {0}: formatBytes(maxBytes)
-#: src/components/image-field.tsx:100
+#: src/components/image-field.tsx:98
 msgid "The file is larger than {0}"
 msgstr "Die Datei ist größer als {0}"
 
@@ -6165,7 +6163,7 @@ msgstr "Die Datei ist größer als 5 MB."
 msgid "The file needs the columns \"number\" and \"type\"."
 msgstr "Die Datei benötigt die Spalten „number“ und „type“."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:218
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:214
 msgid "The first image is the cover. Drag the images to change their order. JPG, PNG or WebP, up to 5 MB each."
 msgstr "Das erste Bild ist das Titelbild. Ziehen Sie die Bilder, um ihre Reihenfolge zu ändern. JPG, PNG oder WebP, jeweils bis 5 MB."
 
@@ -6173,7 +6171,7 @@ msgstr "Das erste Bild ist das Titelbild. Ziehen Sie die Bilder, um ihre Reihenf
 msgid "The floor is not a whole number"
 msgstr "Die Etage ist keine ganze Zahl"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:506
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:502
 msgid "The hotel has no address yet. An administrator can add it in the property settings."
 msgstr "Das Hotel hat noch keine Adresse. Ein Administrator kann sie in den Unterkunftseinstellungen hinzufügen."
 
@@ -6304,7 +6302,7 @@ msgstr "Design"
 #~ msgid "There was an error loading the product categories. Please try again."
 #~ msgstr "Beim Laden der Produktkategorien ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:65
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:86
 msgid "This action cannot be undone."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
@@ -6405,7 +6403,7 @@ msgstr ""
 msgid "This will permanently delete the entry by <0>{authorName}</0>. This action cannot be undone."
 msgstr "Der Eintrag von <0>{authorName}</0> wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:241
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:247
 msgid "Time"
 msgstr "Zeit"
 
@@ -6417,7 +6415,7 @@ msgstr "Zeitbasiert (TOTP) · 6 Ziffern · 30 Sekunden"
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:285
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:187
@@ -6434,13 +6432,13 @@ msgstr "Titel (Deutsch)"
 #~ msgid "Title (optional)"
 #~ msgstr "Titel (optional)"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:77
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-lib/use-form-rules.ts:15
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:44
 msgid "Title is required"
 msgstr "Titel ist erforderlich"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:184
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:180
 msgid "Title, description and categories."
 msgstr "Titel, Beschreibung und Kategorien."
 
@@ -6674,12 +6672,12 @@ msgstr "Unverändert"
 msgid "Unchecked nav items are hidden from the navigation and the Start page for this property."
 msgstr "Nicht ausgewählte Navigationspunkte werden für diese Unterkunft in der Navigation und auf der Startseite ausgeblendet."
 
-#: src/components/ui/rich-text-editor.tsx:317
+#: src/components/ui/rich-text-editor.tsx:323
 msgid "Underline"
 msgstr "Unterstrichen"
 
-#: src/components/ui/rich-text-editor.tsx:349
-#: src/components/ui/rich-text-editor.tsx:350
+#: src/components/ui/rich-text-editor.tsx:355
+#: src/components/ui/rich-text-editor.tsx:356
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:85
 msgid "Undo"
 msgstr "Rückgängig"
@@ -6720,7 +6718,7 @@ msgstr "Ohne Titel"
 #~ msgid "Unverified"
 #~ msgstr "Nicht bestätigt"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:60
 msgid "Upcoming"
 msgstr "Anstehend"
 
@@ -6736,7 +6734,7 @@ msgstr "Aktualisieren"
 #~ msgid "Update config"
 #~ msgstr "Konfig aktualisieren"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId.tsx:90
 msgid "Update event"
 msgstr "Event aktualisieren"
 
@@ -6779,7 +6777,7 @@ msgstr "Upload fehlgeschlagen."
 #~ msgstr "Bild hochladen"
 
 #. placeholder {0}: entry.file.name
-#: src/components/image-field.tsx:263
+#: src/components/image-field.tsx:261
 msgid "Uploading {0}"
 msgstr "{0} wird hochgeladen"
 
@@ -6820,11 +6818,11 @@ msgstr "Apaleo Payment für POS-Zahlungen nutzen"
 msgid "Use at least {MIN_PASSWORD_LENGTH} characters. A passphrase of a few unrelated words beats a short, complicated one."
 msgstr "Verwenden Sie mindestens {MIN_PASSWORD_LENGTH} Zeichen. Eine Passphrase aus mehreren zusammenhanglosen Wörtern ist besser als ein kurzes, kompliziertes Passwort."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:502
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:498
 msgid "Use hotel address"
 msgstr "Hoteladresse übernehmen"
 
-#: src/components/image-preview-dialog.tsx:92
+#: src/components/image-preview-dialog.tsx:94
 msgid "Use the arrow keys to move between the images."
 msgstr "Mit den Pfeiltasten wechseln Sie zwischen den Bildern."
 
@@ -6883,11 +6881,11 @@ msgstr "Benutzer"
 msgid "v{version}"
 msgstr "v{version}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:516
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:512
 msgid "Venue name"
 msgstr "Name des Veranstaltungsorts"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:75
 msgid "Venue name is required"
 msgstr "Name des Veranstaltungsorts ist erforderlich"
 
@@ -7037,7 +7035,7 @@ msgstr "WhatsApp"
 #~ msgstr "WhatsApp geöffnet"
 
 #. placeholder {0}: property.timezone.replaceAll('_', ' ')
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:192
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:188
 msgid "When it starts, when it ends and when guests are let in. Times are in the hotel’s timezone, {0}."
 msgstr "Wann es beginnt, wann es endet und wann Gäste eingelassen werden. Die Zeiten gelten in der Zeitzone des Hotels, {0}."
 
@@ -7053,7 +7051,7 @@ msgstr "Wann die Gäste anreisen, wann sie abreisen und in welchem Zimmer sie wo
 msgid "Where the customer is registered."
 msgstr "Wo der Kunde gemeldet ist."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:199
 msgid "Where the event takes place."
 msgstr "Wo das Event stattfindet."
 

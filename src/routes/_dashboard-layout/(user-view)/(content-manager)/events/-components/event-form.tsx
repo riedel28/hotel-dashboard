@@ -22,11 +22,7 @@ import {
 import type { Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
-import {
-  eventByIdQueryOptions,
-  invalidateEvents,
-  uploadEventImage
-} from '@/api/events';
+import { onEventSaved, uploadEventImage } from '@/api/events';
 import { DateTimeField } from '@/components/date-time-field';
 import { ImageField } from '@/components/image-field';
 import {
@@ -49,6 +45,7 @@ import { Toggle } from '@/components/ui/toggle';
 import { UnsavedChangesGuard } from '@/components/unsaved-changes-guard';
 
 import {
+  addressFieldNames,
   doorsLeadMinutes,
   doorsPresets,
   doorsTimeBefore,
@@ -133,8 +130,7 @@ export function EventForm({
     mutationFn: (values: EventFormValues) =>
       save(formValuesToSaveData(values, property.timezone)),
     onSuccess: (event) => {
-      queryClient.setQueryData(eventByIdQueryOptions(event.id).queryKey, event);
-      void invalidateEvents(queryClient);
+      void onEventSaved(queryClient, event);
       onSaved(event);
     },
     onError: (error) => {
@@ -490,8 +486,8 @@ function LocationFields({
           disabled={!address}
           onClick={() => {
             if (!address) return;
-            for (const [name, value] of Object.entries(address)) {
-              form.setValue(name as keyof typeof address, value, {
+            for (const name of addressFieldNames) {
+              form.setValue(name, address[name], {
                 shouldDirty: true,
                 shouldValidate: form.formState.isSubmitted
               });

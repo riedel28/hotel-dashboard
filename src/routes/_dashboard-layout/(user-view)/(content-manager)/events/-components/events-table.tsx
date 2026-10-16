@@ -8,6 +8,7 @@ import {
 import dayjs from 'dayjs';
 import { ImageIcon } from 'lucide-react';
 import { type ReactNode, useMemo } from 'react';
+import { eventSortColumns } from 'shared/types/events';
 
 import type { HotelEvent } from '@/api/events';
 import { imageUrl } from '@/api/images';
@@ -37,6 +38,9 @@ import { inZone } from '../-lib/event-form';
 import { EventRowActions } from './event-row-actions';
 
 const VISIBLE_CATEGORIES = 2;
+
+const sortColumnOf = (id: string): EventSortColumn | undefined =>
+  eventSortColumns.find((column) => column === id);
 
 function EventCell({ event }: { event: HotelEvent }) {
   const cover = event.image_ids[0];
@@ -202,47 +206,47 @@ export function EventsTable({
   );
 
   const columns = useMemo<ColumnDef<DataGridFeatures, HotelEvent>[]>(() => {
+    // The sortable ones read their value: the table sorts only what it can
+    // access, though the server does the sorting
     const column = (
-      id: string,
+      id: EventSortColumn | 'categories' | 'location',
       title: string,
       size: number,
-      render: (event: HotelEvent) => ReactNode,
-      sortable = false
-    ): ColumnDef<DataGridFeatures, HotelEvent> => ({
-      id,
-      ...(sortable && { accessorKey: id as keyof HotelEvent }),
-      header: ({ column }) => (
-        <DataGridColumnHeader title={title} visibility={true} column={column} />
-      ),
-      cell: ({ row }) => render(row.original),
-      meta: {
-        skeleton: <Skeleton className="h-8 w-28" />,
-        headerTitle: title
-      },
-      size,
-      enableSorting: sortable,
-      enableHiding: true,
-      enableResizing: true
-    });
+      render: (event: HotelEvent) => ReactNode
+    ): ColumnDef<DataGridFeatures, HotelEvent> => {
+      const sortColumn = sortColumnOf(id);
+      return {
+        id,
+        ...(sortColumn && {
+          accessorFn: (event: HotelEvent) => event[sortColumn]
+        }),
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={title}
+            visibility={true}
+            column={column}
+          />
+        ),
+        cell: ({ row }) => render(row.original),
+        meta: {
+          skeleton: <Skeleton className="h-8 w-28" />,
+          headerTitle: title
+        },
+        size,
+        enableSorting: sortColumn !== undefined,
+        enableHiding: true,
+        enableResizing: true
+      };
+    };
 
     return [
-      column(
-        'title',
-        t`Event`,
-        280,
-        (event) => <EventCell event={event} />,
-        true
-      ),
+      column('title', t`Event`, 280, (event) => <EventCell event={event} />),
       column('categories', t`Categories`, 200, (event) => (
         <CategoriesCell event={event} />
       )),
-      column(
-        'starts_at',
-        t`Time`,
-        320,
-        (event) => <TimeCell event={event} zone={zone} />,
-        true
-      ),
+      column('starts_at', t`Time`, 320, (event) => (
+        <TimeCell event={event} zone={zone} />
+      )),
       column('location', t`Location`, 200, (event) => (
         <LocationCell event={event} />
       )),
@@ -287,9 +291,8 @@ export function EventsTable({
     },
     onSortingChange: (updater) => {
       const [next] = typeof updater === 'function' ? updater(sorting) : updater;
-      if (next) {
-        onSortChange(next.id as EventSortColumn, next.desc ? 'desc' : 'asc');
-      }
+      const by = next && sortColumnOf(next.id);
+      if (by) onSortChange(by, next.desc ? 'desc' : 'asc');
     },
     manualPagination: true,
     manualSorting: true,
