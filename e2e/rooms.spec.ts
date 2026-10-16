@@ -8,7 +8,9 @@ async function selectProperty(page: Page) {
   const responsePromise = page.waitForResponse(
     (resp) => resp.url().includes('/selected-property') && resp.status() === 200
   );
-  await page.getByLabel('Select property').click();
+  await page
+    .getByRole('combobox', { name: /^Select property$|, property$/ })
+    .click();
   await page.getByRole('option', { name: TEST_PROPERTY_NAME }).click();
   await responsePromise;
 }
