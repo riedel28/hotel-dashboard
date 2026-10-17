@@ -6,6 +6,7 @@ import {
   BedDoubleIcon,
   BookAIcon,
   BuildingIcon,
+  CalendarCheckIcon,
   CalendarDaysIcon,
   CreditCardIcon,
   DoorOpenIcon,
@@ -40,7 +41,7 @@ type NavGroupKey =
   | 'front-office'
   | 'content-manager'
   | 'integrations'
-  | 'setup';
+  | 'settings';
 
 // Start is not a nav item: it cannot be switched off, so it is pinned to its
 // group instead of living in the catalog.
@@ -56,7 +57,7 @@ const navGroups: {
   { key: 'front-office', label: msg`Front Office` },
   { key: 'content-manager', label: msg`Content Manager` },
   { key: 'integrations', label: msg`Integrations` },
-  { key: 'setup', label: msg`Setup` }
+  { key: 'settings', label: msg`Settings` }
 ];
 
 // The nav item catalog: the single source for the sidebar, the mobile menu,
@@ -131,16 +132,22 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     label: msg`Payment Gateway`
   },
   devices: {
-    group: 'setup',
+    group: 'settings',
     to: '/devices',
     icon: TabletSmartphoneIcon,
     label: msg`Devices`
   },
   users: {
-    group: 'setup',
+    group: 'settings',
     to: '/users',
     icon: UsersIcon,
     label: msg`Users`
+  },
+  'checkin-page': {
+    group: 'settings',
+    to: '/checkin-page',
+    icon: CalendarCheckIcon,
+    label: msg`Check-in Page`
   }
 };
 

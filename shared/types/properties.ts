@@ -65,7 +65,8 @@ export const navItemIdSchema = z.enum([
   'door-locks',
   'payment-provider',
   'devices',
-  'users'
+  'users',
+  'checkin-page'
 ]);
 
 // Solutions a Property has booked. Listed in display order.
