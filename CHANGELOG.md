@@ -1,3 +1,18 @@
+# [1.35.0](https://github.com/riedel28/hotel-dashboard/compare/v1.34.0...v1.35.0) (2026-10-17)
+
+
+### Bug Fixes
+
+* **button:** solid destructive button with a matching border ([18c29d1](https://github.com/riedel28/hotel-dashboard/commit/18c29d10c397185cda56fe89e987bceec8edb452))
+* **user-menu:** keep the language and theme chips on hover ([9c99f78](https://github.com/riedel28/hotel-dashboard/commit/9c99f787172938b8e4695348e90a53d65c403dfd))
+
+
+### Features
+
+* **brand:** concierge bell logo in one AppLogo component ([a1b8e5c](https://github.com/riedel28/hotel-dashboard/commit/a1b8e5c87f83bc6836f78516d92b989f7c7c03d8))
+* **loading:** app-shell skeleton and no white flash on load ([c42ea2b](https://github.com/riedel28/hotel-dashboard/commit/c42ea2b7e248ad552cbf62b62af5755230cec5a8))
+* **not-found:** a 404 in the project's style, inside the dashboard ([74a70c3](https://github.com/riedel28/hotel-dashboard/commit/74a70c35888964ce41ed2229ce1f40ab52283260))
+
 # [1.34.0](https://github.com/riedel28/hotel-dashboard/compare/v1.33.1...v1.34.0) (2026-10-17)
 
 
