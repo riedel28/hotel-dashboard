@@ -13,8 +13,8 @@ const statusDiscVariants = cva(
         error: ''
       },
       variant: {
-        /** Saturated fill, white glyph — for a single focal status. */
-        solid: 'text-white',
+        /** Saturated fill, contrasting glyph — for a single focal status. */
+        solid: '',
         /** Tinted fill, saturated glyph — for lists and dense layouts. */
         soft: 'border border-border/20'
       },
@@ -29,27 +29,22 @@ const statusDiscVariants = cva(
       {
         status: 'success',
         variant: 'solid',
-        // Measured: white on emerald-500 is 2.47:1, under the 3:1 WCAG 1.4.11
-        // asks of a graphic that carries meaning. emerald-600 gives 3.65:1 if
-        // that matters more than the lighter green.
-        class: 'bg-emerald-500 dark:bg-emerald-600'
+        class: 'bg-success-solid text-success-solid-foreground'
       },
       {
         status: 'error',
         variant: 'solid',
-        class: 'bg-rose-500 dark:bg-rose-700'
+        class: 'bg-danger-solid text-danger-solid-foreground'
       },
       {
         status: 'success',
         variant: 'soft',
-        class:
-          'bg-emerald-100 text-emerald-600 dark:bg-emerald-800/30 dark:text-emerald-400'
+        class: 'bg-success-soft text-success'
       },
       {
         status: 'error',
         variant: 'soft',
-        class:
-          'bg-rose-100 text-rose-600 dark:bg-rose-800/30 dark:text-rose-400'
+        class: 'bg-danger-soft text-danger'
       }
     ],
     defaultVariants: {

@@ -23,7 +23,7 @@ export function LetterSection({
       }}
       className="flex max-w-lg scroll-mt-24 flex-col gap-4 p-4"
     >
-      <span className="text-2xl font-semibold text-foreground/80 uppercase">
+      <span className="text-2xl font-semibold text-foreground uppercase">
         {letter}
       </span>
 

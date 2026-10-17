@@ -268,7 +268,7 @@ function DataGridTableBodyRowSkeletonCell<TData extends RowData>({
         column.columnDef.meta?.cellClassName,
         props.tableLayout?.columnsPinnable &&
           column.getCanPin() &&
-          'data-pinned:backdrop-blur-xs" data-pinned:bg-background/90 [&[data-pinned=end][data-last-col=end]]:border-s! [&[data-pinned=start][data-last-col=start]]:border-e! [&[data-pinned][data-last-col]]:border-border',
+          'data-pinned:backdrop-blur-xs" data-pinned:bg-card/90 [&[data-pinned=end][data-last-col=end]]:border-s! [&[data-pinned=start][data-last-col=start]]:border-e! [&[data-pinned][data-last-col]]:border-border',
         column.getIndex() === 0 ||
           column.getIndex() === table.getVisibleFlatColumns().length - 1
           ? props.tableClassNames?.edgeCell
@@ -396,7 +396,7 @@ function DataGridTableBodyRowCell<TData extends RowData>({
         cell.column.columnDef.meta?.cellClassName,
         props.tableLayout?.columnsPinnable &&
           column.getCanPin() &&
-          'data-pinned:backdrop-blur-xs" data-pinned:bg-background/90 [&[data-pinned=end][data-last-col=end]]:border-s! [&[data-pinned=start][data-last-col=start]]:border-e! [&[data-pinned][data-last-col]]:border-border',
+          'data-pinned:backdrop-blur-xs" data-pinned:bg-card/90 [&[data-pinned=end][data-last-col=end]]:border-s! [&[data-pinned=start][data-last-col=start]]:border-e! [&[data-pinned][data-last-col]]:border-border',
         column.getIndex() === 0 ||
           column.getIndex() === row.getVisibleCells().length - 1
           ? props.tableClassNames?.edgeCell

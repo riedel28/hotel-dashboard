@@ -93,7 +93,7 @@ function LanguageSubmenu({
 
           <Badge
             variant="outline"
-            className="flex h-5 min-w-5 items-center gap-2 px-1.5 text-[11px]"
+            className="flex h-5 min-w-5 items-center gap-2 bg-popover px-1.5 text-[11px]"
           >
             {currentLanguage?.label}
             <CountryFlag
@@ -165,7 +165,7 @@ function ThemeSubmenu({ currentTheme, onThemeChange }: ThemeSubmenuProps) {
           </div>
           <Badge
             variant="outline"
-            className="flex h-5 min-w-5 items-center gap-2 px-1.5 text-[11px]"
+            className="flex h-5 min-w-5 items-center gap-2 bg-popover px-1.5 text-[11px]"
           >
             <Trans>{themeLabels[currentTheme]}</Trans>
           </Badge>

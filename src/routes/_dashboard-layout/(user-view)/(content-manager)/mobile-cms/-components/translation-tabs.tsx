@@ -31,12 +31,11 @@ import {
 } from '../-lib/cms-content';
 
 // Buttons inside the blue "no translation" note, in the note's own colours
-// (Alert info: sky-50 / sky-800, dark sky-800/20 / sky-300) instead of the
-// neutral ones that stood out on it.
+// (Alert info: info-soft / info) instead of the neutral ones that stood out
+// on it.
 const noteButtonClassName =
-  'border-sky-800/20 bg-transparent text-sky-800 hover:bg-sky-100 hover:text-sky-900 dark:border-sky-300/20 dark:bg-transparent dark:text-sky-300 dark:hover:bg-sky-800/40 dark:hover:text-sky-200';
-const noteGhostButtonClassName =
-  'text-sky-800 hover:bg-sky-100 hover:text-sky-900 dark:text-sky-300 dark:hover:bg-sky-800/40 dark:hover:text-sky-200';
+  'border-info/20 bg-transparent text-info hover:bg-info/10 hover:text-info dark:bg-transparent';
+const noteGhostButtonClassName = 'text-info hover:bg-info/10 hover:text-info';
 
 const localeNames: Record<CmsLocale, string> = { de: 'Deutsch', en: 'English' };
 
@@ -77,7 +76,7 @@ export function TranslationTabs({
                 <span
                   className={cn(
                     'size-1.25 rounded-full',
-                    invalid ? 'bg-danger' : 'bg-amber-500'
+                    invalid ? 'bg-danger' : 'bg-warning'
                   )}
                   title={invalid ? t`Has errors` : t`Translation missing`}
                 >

@@ -21,6 +21,17 @@ import {
 
 type Score = 0 | 1 | 2 | 3 | 4;
 
+const danger = { bar: 'bg-danger', text: 'text-danger' };
+const warning = { bar: 'bg-warning', text: 'text-warning' };
+const success = { bar: 'bg-success', text: 'text-success' };
+const scoreTones: Record<Score, { bar: string; text: string }> = {
+  0: danger,
+  1: danger,
+  2: warning,
+  3: success,
+  4: success
+};
+
 interface Estimator {
   check: (
     password: string,
@@ -149,23 +160,9 @@ export function PasswordStrengthMeter({
     4: t`Strong`
   };
 
-  const segmentColors: Record<Score, string> = {
-    0: 'bg-rose-500/90',
-    1: 'bg-rose-500/90',
-    2: 'bg-amber-500',
-    3: 'bg-emerald-500',
-    4: 'bg-emerald-500'
-  };
-
-  // Same reading as the bars. Darker than the fills in light mode: a 500 that
-  // reads fine as a 4px bar drops under 4.5:1 as 12px text.
-  const labelColors: Record<Score, string> = {
-    0: 'text-rose-600 dark:text-rose-400',
-    1: 'text-rose-600 dark:text-rose-400',
-    2: 'text-amber-600 dark:text-amber-400',
-    3: 'text-emerald-700 dark:text-emerald-400',
-    4: 'text-emerald-700 dark:text-emerald-400'
-  };
+  // One status per score, in its ink: the bars and the label read the same
+  // (>= 4.5:1 as text).
+  const tone = score === null ? undefined : scoreTones[score];
 
   const filled = score === null ? 0 : score + 1;
 
@@ -190,9 +187,7 @@ export function PasswordStrengthMeter({
               key={segment}
               className={cn(
                 'h-1 flex-1 rounded-full transition-colors duration-300',
-                segment < filled && score !== null
-                  ? segmentColors[score]
-                  : 'bg-border'
+                segment < filled && tone ? tone.bar : 'bg-border'
               )}
             />
           ))}
@@ -200,7 +195,7 @@ export function PasswordStrengthMeter({
         <span
           className={cn(
             'w-20 shrink-0 text-right text-xs font-medium transition-colors duration-300',
-            score === null ? 'text-muted-foreground' : labelColors[score]
+            tone?.text ?? 'text-muted-foreground'
           )}
         >
           {score !== null && labels[score]}
@@ -217,7 +212,7 @@ export function PasswordStrengthMeter({
 
       {/* Always rendered, for the reason above: warnings come and go as the
           password changes, and an appearing line would move the checklist. */}
-      <p className="text-xs text-amber-600 dark:text-amber-500">
+      <p className="text-xs text-warning">
         {warning && score !== null && score < 3 ? warning : null}
       </p>
 
@@ -226,22 +221,20 @@ export function PasswordStrengthMeter({
           <li key={index} className="flex items-center gap-2 text-xs">
             {requirement.met ? (
               <CheckIcon
-                className="size-3.5 shrink-0 animate-in text-emerald-600 duration-150 zoom-in-50 dark:text-emerald-500"
+                className="size-3.5 shrink-0 animate-in text-success duration-150 zoom-in-50"
                 aria-hidden="true"
               />
             ) : (
               // A neutral dash, not a red cross: an unwritten password hasn't
               // failed anything yet.
               <MinusIcon
-                className="size-3.5 shrink-0 text-muted-foreground/50"
+                className="size-3.5 shrink-0 text-subtle-foreground"
                 aria-hidden="true"
               />
             )}
             <span
               className={cn(
-                requirement.met
-                  ? 'text-emerald-700 dark:text-emerald-500'
-                  : 'text-muted-foreground'
+                requirement.met ? 'text-success' : 'text-muted-foreground'
               )}
             >
               {requirement.label}

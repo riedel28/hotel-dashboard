@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom/client';
 
 import { setUnauthorizedHandler } from './api/client';
 import { AuthProvider, useAuth } from './auth';
-import { RouteError } from './components/route-error';
+import { RouteError } from './components/route-state';
 import { ThemeProvider } from './components/theme-provider';
 
 import './globals.css';
@@ -92,7 +92,7 @@ function App() {
         <AuthProvider>
           <InnerApp />
         </AuthProvider>
-        <Toaster richColors />
+        <Toaster />
       </ThemeProvider>
     </I18nProvider>
   );

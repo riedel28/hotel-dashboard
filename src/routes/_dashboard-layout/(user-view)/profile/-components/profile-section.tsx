@@ -234,7 +234,7 @@ export function useSuccessFlash() {
     flash,
     flashClass: cn(
       'transition-shadow duration-300',
-      flashing && 'ring-2 ring-emerald-500/70'
+      flashing && 'ring-2 ring-success/70'
     )
   };
 }

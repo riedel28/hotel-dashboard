@@ -173,7 +173,7 @@ export function PasswordSection({ user }: PasswordSectionProps) {
                   }
                 />
                 {capsLockOn && (
-                  <FieldDescription className="flex items-center gap-1.5 text-amber-600 dark:text-amber-500">
+                  <FieldDescription className="flex items-center gap-1.5 text-warning">
                     <TriangleAlertIcon
                       className="size-3.5"
                       aria-hidden="true"
@@ -238,7 +238,7 @@ export function PasswordSection({ user }: PasswordSectionProps) {
                   />
                   {field.value.length > 0 && field.value === newPassword && (
                     <CheckIcon
-                      className="pointer-events-none absolute inset-e-9 top-1/2 size-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-500"
+                      className="pointer-events-none absolute inset-e-9 top-1/2 size-4 -translate-y-1/2 text-success"
                       aria-hidden="true"
                     />
                   )}

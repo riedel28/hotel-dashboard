@@ -241,7 +241,7 @@ export function BackgroundPicker({
       {tooSmall && (
         <p
           role="status"
-          className="flex items-start gap-2 text-sm text-amber-600 dark:text-amber-400"
+          className="flex items-start gap-2 text-sm text-warning"
         >
           <TriangleAlertIcon
             className="mt-0.5 size-4 shrink-0"

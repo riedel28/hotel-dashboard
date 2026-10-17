@@ -89,7 +89,7 @@ function SegmentedControl<TValue extends string>({
                     // as chosen; the input token at the outline button's
                     // hover strength stands out without glaring
                     'border-foreground/2 bg-muted text-foreground dark:border-transparent dark:bg-input/50'
-                  : 'text-foreground/60 hover:text-foreground',
+                  : 'text-muted-foreground hover:text-foreground',
               size === 'sm' && 'px-2 text-xs'
             )}
           >

@@ -2,18 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import {
-  CheckIcon,
-  Loader2Icon,
-  MessageCircleIcon,
-  RefreshCwIcon
-} from 'lucide-react';
+import { CheckIcon, Loader2Icon, RefreshCwIcon } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { resendVerification, signUp } from '@/api/auth';
+import { AppLogo } from '@/components/app-logo';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -67,7 +63,7 @@ function SuccessView({ email }: SuccessViewProps) {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col items-center gap-8">
         <div className="space-y-4 text-center">
-          <div className="inline-flex rounded-full bg-green-200 p-2 text-green-800">
+          <div className="inline-flex rounded-full bg-success-soft p-2 text-success">
             <CheckIcon className="size-7" aria-hidden="true" />
           </div>
           <h1 className="text-2xl font-semibold">
@@ -143,9 +139,7 @@ function SignUpPage() {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary dark:bg-cyan-950 dark:text-cyan-200/90">
-            <MessageCircleIcon aria-hidden="true" />
-          </div>
+          <AppLogo size="lg" tone="tint" />
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold">
               <Trans>Sign Up</Trans>

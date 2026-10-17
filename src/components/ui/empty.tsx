@@ -13,9 +13,8 @@ const emptyVariants = cva(
         // body text. The title is tinted the same way so the card reads as
         // one destructive message.
         destructive:
-          'border-destructive/10 bg-destructive/5 [&_[data-slot=empty-description]]:text-destructive/90 [&_[data-slot=empty-title]]:text-destructive/90',
-        warning:
-          'border-yellow-200/50 bg-yellow-50/50 dark:border-yellow-800/30 dark:bg-yellow-950/10'
+          'border-danger/10 bg-danger-soft [&_[data-slot=empty-description]]:text-danger [&_[data-slot=empty-title]]:text-danger',
+        warning: 'border-warning/20 bg-warning-soft'
       }
     },
     defaultVariants: {
@@ -66,7 +65,7 @@ const emptyMediaVariants = cva(
         default: 'bg-transparent',
         icon: "flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-6",
         destructive:
-          "flex size-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10 text-destructive [&_svg:not([class*='size-'])]:size-6"
+          "flex size-10 shrink-0 items-center justify-center rounded-lg bg-danger/10 text-danger [&_svg:not([class*='size-'])]:size-6"
       }
     },
     defaultVariants: {

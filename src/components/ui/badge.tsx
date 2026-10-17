@@ -7,22 +7,22 @@ import { cn } from '@/lib/utils';
 // Shared with components that take on a badge's color, e.g. a selected
 // segment of SegmentedControl.
 const badgeColors = {
-  gray: 'border-foreground/10 bg-gray-50 text-gray-800 dark:bg-gray-600/20 dark:text-gray-300 [a]:hover:bg-gray-100 dark:[a]:hover:bg-gray-800/30',
-  red: 'border-foreground/10 bg-red-50 text-red-800 dark:bg-red-800/20 dark:text-red-300 [a]:hover:bg-red-100 dark:[a]:hover:bg-red-800/30',
+  gray: 'border-foreground/10 bg-gray-100/70 text-gray-800 dark:bg-gray-600/30 dark:text-gray-300 [a]:hover:bg-gray-100 dark:[a]:hover:bg-gray-600/40',
+  red: 'border-foreground/10 bg-red-100/70 text-red-800 dark:bg-red-800/30 dark:text-red-300 [a]:hover:bg-red-100 dark:[a]:hover:bg-red-800/40',
   yellow:
-    'border-foreground/10 bg-yellow-50 text-yellow-800 dark:bg-yellow-800/20 dark:text-yellow-300 [a]:hover:bg-yellow-100 dark:[a]:hover:bg-yellow-800/30',
+    'border-foreground/10 bg-yellow-100/70 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-300 [a]:hover:bg-yellow-100 dark:[a]:hover:bg-yellow-800/40',
   emerald:
-    'border-foreground/10 bg-emerald-50 text-emerald-800 dark:bg-emerald-800/20 dark:text-emerald-300 [a]:hover:bg-emerald-100 dark:[a]:hover:bg-emerald-800/30',
-  sky: 'border-foreground/10 bg-sky-50 text-sky-700 dark:bg-sky-800/20 dark:text-sky-300 [a]:hover:bg-sky-100 dark:[a]:hover:bg-sky-800/30',
+    'border-foreground/10 bg-emerald-100/70 text-emerald-800 dark:bg-emerald-800/30 dark:text-emerald-300 [a]:hover:bg-emerald-100 dark:[a]:hover:bg-emerald-800/40',
+  sky: 'border-foreground/10 bg-sky-100/70 text-sky-800 dark:bg-sky-800/30 dark:text-sky-300 [a]:hover:bg-sky-100 dark:[a]:hover:bg-sky-800/40',
   indigo:
-    'border-foreground/10 bg-indigo-50 text-indigo-800 dark:bg-indigo-800/20 dark:text-indigo-300 [a]:hover:bg-indigo-100 dark:[a]:hover:bg-indigo-800/30',
+    'border-foreground/10 bg-indigo-100/70 text-indigo-800 dark:bg-indigo-800/30 dark:text-indigo-300 [a]:hover:bg-indigo-100 dark:[a]:hover:bg-indigo-800/40',
   orange:
-    'border-foreground/10 bg-orange-50 text-orange-800 dark:bg-orange-800/20 dark:text-orange-300 [a]:hover:bg-orange-100 dark:[a]:hover:bg-orange-800/30',
-  teal: 'border-foreground/10 bg-teal-50 text-teal-800 dark:bg-teal-800/20 dark:text-teal-300 [a]:hover:bg-teal-100 dark:[a]:hover:bg-teal-800/30',
+    'border-foreground/10 bg-orange-100/70 text-orange-800 dark:bg-orange-800/30 dark:text-orange-300 [a]:hover:bg-orange-100 dark:[a]:hover:bg-orange-800/40',
+  teal: 'border-foreground/10 bg-teal-100/70 text-teal-800 dark:bg-teal-800/30 dark:text-teal-300 [a]:hover:bg-teal-100 dark:[a]:hover:bg-teal-800/40',
   fuchsia:
-    'border-foreground/10 bg-fuchsia-50 text-fuchsia-800 dark:bg-fuchsia-800/20 dark:text-fuchsia-300 [a]:hover:bg-fuchsia-100 dark:[a]:hover:bg-fuchsia-800/30',
-  pink: 'border-foreground/10 bg-pink-50 text-pink-800 dark:bg-pink-800/20 dark:text-pink-300 [a]:hover:bg-pink-100 dark:[a]:hover:bg-pink-800/30',
-  rose: 'border-foreground/10 bg-rose-50 text-rose-700 dark:bg-rose-800/20 dark:text-rose-300 [a]:hover:bg-rose-100 dark:[a]:hover:bg-rose-800/30'
+    'border-foreground/10 bg-fuchsia-100/70 text-fuchsia-800 dark:bg-fuchsia-800/30 dark:text-fuchsia-300 [a]:hover:bg-fuchsia-100 dark:[a]:hover:bg-fuchsia-800/40',
+  pink: 'border-foreground/10 bg-pink-100/70 text-pink-800 dark:bg-pink-800/30 dark:text-pink-300 [a]:hover:bg-pink-100 dark:[a]:hover:bg-pink-800/40',
+  rose: 'border-foreground/10 bg-rose-100/70 text-rose-800 dark:bg-rose-800/30 dark:text-rose-300 [a]:hover:bg-rose-100 dark:[a]:hover:bg-rose-800/40'
 };
 
 const badgeVariants = cva(
@@ -35,7 +35,7 @@ const badgeVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80',
         destructive:
-          'border-badge-destructive-foreground/25 bg-badge-destructive text-badge-destructive-foreground focus-visible:ring-destructive/20 dark:border-badge-destructive-foreground/35 dark:bg-badge-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-badge-destructive/80',
+          'border-danger/25 bg-danger-soft text-danger focus-visible:ring-danger/20 dark:border-danger/35 dark:focus-visible:ring-danger/40 [a]:hover:bg-danger/10',
         outline: 'border-border text-foreground [a]:hover:bg-muted',
         ghost:
           'hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50',

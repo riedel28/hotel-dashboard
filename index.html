@@ -8,7 +8,44 @@
       name="description"
       content="Hotel management dashboard for front-office operations, reservations, and administrative functions."
     />
-    <meta name="theme-color" content="#162455" />
+    <meta
+      name="theme-color"
+      content="#fcfcfc"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0d0f10"
+      media="(prefers-color-scheme: dark)"
+    />
+
+    <!-- Theme before first paint: the app's CSS and ThemeProvider arrive with
+         the JS bundle, so until then the page would be blank white, a flash
+         on every load in the dark theme. Same storage key and rule as
+         ThemeProvider; the colours are --background in each theme. -->
+    <script>
+      (function () {
+        var theme = 'system';
+        try {
+          theme = localStorage.getItem('tanstack.theme') || 'system';
+        } catch (e) {}
+        var dark =
+          theme === 'dark' ||
+          (theme === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.add(dark ? 'dark' : 'light');
+      })();
+    </script>
+    <style>
+      html {
+        background: #fcfcfc;
+        color-scheme: light;
+      }
+      html.dark {
+        background: #0d0f10;
+        color-scheme: dark;
+      }
+    </style>
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

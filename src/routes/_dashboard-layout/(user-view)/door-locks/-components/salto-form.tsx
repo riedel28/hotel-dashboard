@@ -108,7 +108,7 @@ export function SaltoForm({
         render={({ field }) => (
           <Tabs value={field.value} onValueChange={field.onChange}>
             <TabsList className="h-9! w-full">
-              <TabsTrigger value="pms" className="flex-1 text-foreground/70!">
+              <TabsTrigger value="pms" className="flex-1">
                 <Trans>PMS interface</Trans>
                 <InterfaceHint>
                   <Trans>
@@ -118,7 +118,7 @@ export function SaltoForm({
                   </Trans>
                 </InterfaceHint>
               </TabsTrigger>
-              <TabsTrigger value="ship" className="flex-1 text-foreground/70!">
+              <TabsTrigger value="ship" className="flex-1">
                 <Trans>SHIP interface</Trans>
                 <InterfaceHint>
                   <Trans>
