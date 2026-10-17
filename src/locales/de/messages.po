@@ -3146,8 +3146,7 @@ msgstr ""
 msgid "Hotel"
 msgstr "Hotel"
 
-#: src/routes/_dashboard-layout.tsx:38
-#: src/routes/_dashboard-layout.tsx:146
+#: src/routes/_dashboard-layout.tsx:39
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -3523,6 +3522,7 @@ msgid "Loading rooms…"
 msgstr "Zimmer werden geladen…"
 
 #: src/components/ui/data-grid-table.tsx:462
+#: src/routes/_dashboard-layout.tsx:169
 msgid "Loading..."
 msgstr "Lädt..."
 
@@ -3563,7 +3563,7 @@ msgstr "Protokolle der Reservierung {bookingNr}"
 msgid "main"
 msgstr "Hauptsprache"
 
-#: src/routes/_dashboard-layout.tsx:59
+#: src/routes/_dashboard-layout.tsx:60
 msgid "Main navigation"
 msgstr "Hauptnavigation"
 
@@ -6002,7 +6002,7 @@ msgid "Sign Up"
 msgstr "Registrieren"
 
 #: src/routes/_auth-layout.tsx:17
-#: src/routes/_dashboard-layout.tsx:76
+#: src/routes/_dashboard-layout.tsx:77
 msgid "Skip to main content"
 msgstr "Zum Hauptinhalt springen"
 

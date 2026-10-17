@@ -3206,8 +3206,7 @@ msgstr "Host is required"
 msgid "Hotel"
 msgstr "Hotel"
 
-#: src/routes/_dashboard-layout.tsx:38
-#: src/routes/_dashboard-layout.tsx:146
+#: src/routes/_dashboard-layout.tsx:39
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -3589,6 +3588,7 @@ msgid "Loading rooms…"
 msgstr "Loading rooms…"
 
 #: src/components/ui/data-grid-table.tsx:462
+#: src/routes/_dashboard-layout.tsx:169
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -3629,7 +3629,7 @@ msgstr "Logs for reservation {bookingNr}"
 msgid "main"
 msgstr "main"
 
-#: src/routes/_dashboard-layout.tsx:59
+#: src/routes/_dashboard-layout.tsx:60
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -6119,7 +6119,7 @@ msgid "Sign Up"
 msgstr "Sign Up"
 
 #: src/routes/_auth-layout.tsx:17
-#: src/routes/_dashboard-layout.tsx:76
+#: src/routes/_dashboard-layout.tsx:77
 msgid "Skip to main content"
 msgstr "Skip to main content"
 
