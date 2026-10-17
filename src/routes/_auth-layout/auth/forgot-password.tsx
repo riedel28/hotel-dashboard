@@ -2,12 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { CheckIcon, Loader2Icon, MessageCircleIcon } from 'lucide-react';
+import { CheckIcon, Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type z from 'zod';
 
 import { forgotPassword } from '@/api/auth';
+import { AppLogo } from '@/components/app-logo';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -94,9 +95,7 @@ function ForgotPasswordPage() {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary dark:bg-cyan-950 dark:text-cyan-200/90">
-            <MessageCircleIcon aria-hidden="true" />
-          </div>
+          <AppLogo size="lg" tone="solid" />
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold">
               <Trans>Forgot Password</Trans>

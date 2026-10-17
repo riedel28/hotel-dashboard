@@ -2,17 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import {
-  CheckIcon,
-  Loader2Icon,
-  MessageCircleIcon,
-  XCircleIcon
-} from 'lucide-react';
+import { CheckIcon, Loader2Icon, XCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { acceptInvitation } from '@/api/auth';
+import { AppLogo } from '@/components/app-logo';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -134,9 +130,7 @@ function AcceptInvitationPage() {
   return (
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
-        <div className="inline-block rounded-lg bg-primary p-2 text-primary-foreground">
-          <MessageCircleIcon className="size-10" aria-hidden="true" />
-        </div>
+        <AppLogo size="lg" tone="solid" className="mx-auto" />
 
         <h1 className="text-2xl font-bold">
           <Trans>Accept Invitation</Trans>

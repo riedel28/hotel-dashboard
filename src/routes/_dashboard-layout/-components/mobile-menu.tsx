@@ -1,8 +1,9 @@
 'use client';
 
 import { Trans } from '@lingui/react/macro';
-import { MessageCircleIcon, XIcon } from 'lucide-react';
+import { XIcon } from 'lucide-react';
 
+import { AppLogo } from '@/components/app-logo';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -45,9 +46,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
             <SidebarMenu>
               <SidebarGroup>
                 <SidebarMenuItem className="flex items-center gap-2">
-                  <div className="inline-block rounded-md bg-primary p-1 text-primary-foreground">
-                    <MessageCircleIcon className="size-4" />
-                  </div>
+                  <AppLogo />
                   <span className="text-sm font-semibold whitespace-nowrap">
                     <Trans>Hotel Dashboard</Trans>
                   </span>

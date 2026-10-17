@@ -2,12 +2,13 @@
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-import { LoaderCircleIcon, MessageCircleIcon } from 'lucide-react';
+import { LoaderCircleIcon } from 'lucide-react';
 
 import {
   fetchSelectedProperty,
   selectablePropertiesQueryOptions
 } from '@/api/properties';
+import { AppLogo } from '@/components/app-logo';
 import { FullScreenRouteError } from '@/components/route-error';
 import {
   Sidebar,
@@ -32,9 +33,7 @@ function SidebarHeaderComponent() {
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-            <div className="flex size-6.5 items-center justify-center rounded-md bg-primary/10 text-sm font-bold text-primary transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0 dark:bg-cyan-950 dark:text-cyan-200/90">
-              <MessageCircleIcon className="size-4" />
-            </div>
+            <AppLogo className="transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0" />
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
               <Trans>Hotel Dashboard</Trans>
             </span>
@@ -142,9 +141,7 @@ function DashboardPending() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
       <div className="flex items-center gap-2">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <MessageCircleIcon className="size-4" />
-        </div>
+        <AppLogo />
         <span className="text-lg font-semibold">
           <Trans>Hotel Dashboard</Trans>
         </span>

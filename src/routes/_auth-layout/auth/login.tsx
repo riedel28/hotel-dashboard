@@ -5,7 +5,6 @@ import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 import {
   AlertTriangleIcon,
   Loader2Icon,
-  MessageCircleIcon,
   RefreshCwIcon,
   ShieldCheckIcon
 } from 'lucide-react';
@@ -17,6 +16,7 @@ import { z } from 'zod';
 import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { useAuth } from '@/auth';
+import { AppLogo } from '@/components/app-logo';
 import { OtpField } from '@/components/otp-field';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -126,9 +126,7 @@ function LoginPage() {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary dark:bg-cyan-950 dark:text-cyan-200/90">
-            <MessageCircleIcon />
-          </div>
+          <AppLogo size="lg" tone="solid" />
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold">
               <Trans>Login</Trans>
@@ -338,7 +336,7 @@ function TwoFactorStep({
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-cyan-950 dark:text-cyan-200/90">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-primary/25 dark:text-indicator">
             <ShieldCheckIcon />
           </div>
           <div className="space-y-1.5">
