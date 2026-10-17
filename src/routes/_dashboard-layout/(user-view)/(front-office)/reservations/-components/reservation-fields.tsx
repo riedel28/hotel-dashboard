@@ -9,6 +9,7 @@ import {
 } from 'shared/types/reservations';
 
 import { deviceRoomOptionsQueryOptions } from '@/api/devices';
+import { CodedFieldError } from '@/components/coded-field-error';
 import {
   dateOf,
   DateTimeField,
@@ -33,14 +34,6 @@ const errorMessages: Record<string, MessageDescriptor> = {
   [reservationErrorCodes.roomRequired]: msg`Room selection is required`,
   [reservationErrorCodes.stayOrder]: msg`Departure must be after arrival`
 };
-
-function ReservationFieldError({ error }: { error?: { message?: string } }) {
-  const { t } = useLingui();
-  const message = error?.message;
-  const known = message ? errorMessages[message] : undefined;
-
-  return <FieldError>{known ? t(known) : message}</FieldError>;
-}
 
 /**
  * The fields the add and the edit form share. The form's schema decides what
@@ -97,7 +90,10 @@ export function RoomField({ form }: ReservationFieldProps) {
                 )}
               </span>
             </RoomPicker>
-            <ReservationFieldError error={fieldState.error} />
+            <CodedFieldError
+              error={fieldState.error}
+              messages={errorMessages}
+            />
           </Field>
         );
       }}
@@ -190,7 +186,10 @@ export function StayFields({ form }: ReservationFieldProps) {
               invalid={fieldState.invalid}
             />
             {fieldState.invalid ? (
-              <ReservationFieldError error={fieldState.error} />
+              <CodedFieldError
+                error={fieldState.error}
+                messages={errorMessages}
+              />
             ) : (
               <FieldDescription aria-live="polite">
                 <Plural

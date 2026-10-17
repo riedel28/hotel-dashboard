@@ -2,7 +2,12 @@ import { and, eq, inArray, lt, notExists, sql } from 'drizzle-orm';
 
 import { HttpProblem, isForeignKeyViolation } from '../middleware/error';
 import { db } from './pool';
-import { cmsImages, cmsNodeImages, eventImages } from './schema';
+import {
+  checkinSettings,
+  cmsImages,
+  cmsNodeImages,
+  eventImages
+} from './schema';
 
 // The property's image store (cms_images): uploads served publicly by id and
 // referred to, in order, by CMS nodes and events.
@@ -12,7 +17,8 @@ type Executor = Pick<typeof db, 'select' | 'delete'>;
 // Every table that refers to an image: the sweep keeps what any of them names.
 const imageReferences = [
   { table: cmsNodeImages, imageId: cmsNodeImages.image_id },
-  { table: eventImages, imageId: eventImages.image_id }
+  { table: eventImages, imageId: eventImages.image_id },
+  { table: checkinSettings, imageId: checkinSettings.custom_image_id }
 ];
 
 export const imageNotFound = () =>

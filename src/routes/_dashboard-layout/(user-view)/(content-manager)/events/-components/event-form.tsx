@@ -23,6 +23,7 @@ import type { Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
 import { onEventSaved, uploadEventImage } from '@/api/events';
+import { CodedFieldError } from '@/components/coded-field-error';
 import { DateTimeField } from '@/components/date-time-field';
 import { ImageField } from '@/components/image-field';
 import {
@@ -34,7 +35,6 @@ import { CountryPicker } from '@/components/ui/country-picker';
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel
 } from '@/components/ui/field';
@@ -82,15 +82,6 @@ const errorMessages: Record<string, MessageDescriptor> = {
   [eventErrorCodes.endOrder]: msg`The end must be after the start`,
   [eventErrorCodes.doorsOrder]: msg`Doors must open before the start`
 };
-
-function EventFieldError({ error }: { error?: { message?: string } }) {
-  const { t } = useLingui();
-  const message = error?.message;
-  if (!message) return null;
-  const known = errorMessages[message];
-
-  return <FieldError>{known ? t(known) : message}</FieldError>;
-}
 
 interface EventFormProps {
   property: HotelInfo;
@@ -266,7 +257,7 @@ function TextField({
             autoComplete={autoComplete}
             aria-invalid={fieldState.invalid}
           />
-          <EventFieldError error={fieldState.error} />
+          <CodedFieldError error={fieldState.error} messages={errorMessages} />
         </Field>
       )}
     />
@@ -372,7 +363,10 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
               }}
               invalid={fieldState.invalid}
             />
-            <EventFieldError error={fieldState.error} />
+            <CodedFieldError
+              error={fieldState.error}
+              messages={errorMessages}
+            />
           </Field>
         )}
       />
@@ -393,7 +387,10 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
               onChange={field.onChange}
               invalid={fieldState.invalid}
             />
-            <EventFieldError error={fieldState.error} />
+            <CodedFieldError
+              error={fieldState.error}
+              messages={errorMessages}
+            />
           </Field>
         )}
       />
@@ -440,7 +437,10 @@ function DateTimeFields({ form, zone }: { form: EventForm; zone: string }) {
                 );
               })}
             </div>
-            <EventFieldError error={fieldState.error} />
+            <CodedFieldError
+              error={fieldState.error}
+              messages={errorMessages}
+            />
           </Field>
         )}
       />
@@ -552,7 +552,10 @@ function LocationFields({
               aria-labelledby="event-country-label"
               aria-invalid={fieldState.invalid}
             />
-            <EventFieldError error={fieldState.error} />
+            <CodedFieldError
+              error={fieldState.error}
+              messages={errorMessages}
+            />
           </Field>
         )}
       />

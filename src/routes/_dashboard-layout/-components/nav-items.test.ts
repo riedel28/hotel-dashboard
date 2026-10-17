@@ -21,7 +21,8 @@ describe('userNavSections', () => {
       '/door-locks',
       '/payment-provider',
       '/devices',
-      '/users'
+      '/users',
+      '/checkin-page'
     ]);
   });
 
@@ -44,7 +45,7 @@ describe('userNavSections', () => {
       'main',
       'front-office',
       'integrations',
-      'setup'
+      'settings'
     ]);
   });
 });

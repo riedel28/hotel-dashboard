@@ -20,6 +20,10 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import type {
+  CheckinBackground,
+  CheckinPaymentMode
+} from '../../../shared/types/checkin';
+import type {
   CmsLocale,
   CmsNodeType,
   CmsOpenMode
@@ -627,6 +631,54 @@ export const providerConfigs = pgTable(
       'provider_configs_kind_check',
       sql`${table.kind} IN ('payment', 'pms', 'door_lock')`
     )
+  ]
+);
+
+// A property's online check-in, a row from its first activation on. Switching
+// it off keeps the row, so the settings are back when it is switched on again.
+export const checkinSettings = pgTable(
+  'checkin_settings',
+  {
+    property_id: uuid('property_id')
+      .primaryKey()
+      .references(() => properties.id, { onDelete: 'cascade' }),
+    enabled: boolean('enabled').notNull(),
+    payment_mode: text('payment_mode').notNull().$type<CheckinPaymentMode>(),
+    auto_send: boolean('auto_send').notNull(),
+    first_send_days: integer('first_send_days').notNull(),
+    // Null: no reminder.
+    reminder_days: integer('reminder_days'),
+    background: text('background').notNull().$type<CheckinBackground>(),
+    // SET NULL is never reached: the image sweep keeps what this names.
+    custom_image_id: uuid('custom_image_id').references(() => cmsImages.id, {
+      onDelete: 'set null'
+    }),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow()
+  },
+  (table) => [
+    check(
+      'checkin_settings_first_send_days_check',
+      sql`${table.first_send_days} IN (1, 2, 3, 5, 7, 14)`
+    ),
+    check(
+      'checkin_settings_reminder_days_check',
+      sql`${table.reminder_days} IN (1, 2, 3)`
+    ),
+    // Checked only while links go out, as in the form.
+    check(
+      'checkin_settings_reminder_before_first_send_check',
+      sql`NOT ${table.auto_send} OR ${table.reminder_days} IS NULL OR ${table.reminder_days} < ${table.first_send_days}`
+    ),
+    check(
+      'checkin_settings_custom_background_check',
+      sql`${table.background} <> 'custom' OR ${table.custom_image_id} IS NOT NULL`
+    ),
+    index('checkin_settings_custom_image_id_idx').on(table.custom_image_id)
   ]
 );
 
