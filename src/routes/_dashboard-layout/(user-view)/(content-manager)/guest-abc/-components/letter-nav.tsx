@@ -57,7 +57,7 @@ export function LetterNav({
                 )}
               >
                 {letter}
-                <span className="absolute right-1 bottom-0.5 text-[9px] text-muted-foreground/90">
+                <span className="absolute right-1 bottom-0.5 text-[9px] text-muted-foreground">
                   {items.length || null}
                 </span>
               </Button>

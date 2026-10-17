@@ -69,7 +69,7 @@ function ResetPasswordPage() {
     return (
       <div className="w-full max-w-lg space-y-8">
         <div className="space-y-4 text-center">
-          <div className="inline-block rounded-full bg-red-200 p-2 text-red-800">
+          <div className="inline-block rounded-full bg-danger-soft p-2 text-danger">
             <XCircleIcon className="size-7" />
           </div>
           <h1 className="text-2xl font-bold">
@@ -95,7 +95,7 @@ function ResetPasswordPage() {
     return (
       <div className="w-full max-w-lg space-y-8">
         <div className="space-y-4 text-center">
-          <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
+          <div className="inline-block rounded-full bg-success-soft p-2 text-success">
             <CheckIcon className="size-7" />
           </div>
           <h1 className="text-2xl font-bold">
@@ -123,7 +123,7 @@ function ResetPasswordPage() {
   return (
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
-        <div className="inline-block rounded-lg bg-primary p-2 text-white">
+        <div className="inline-block rounded-lg bg-primary p-2 text-primary-foreground">
           <MessageCircleIcon className="size-10" aria-hidden="true" />
         </div>
 

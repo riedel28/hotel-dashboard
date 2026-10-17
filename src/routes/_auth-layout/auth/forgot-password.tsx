@@ -31,7 +31,7 @@ function SuccessView({ email }: SuccessViewProps) {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-center gap-4">
-          <div className="flex size-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-600 dark:bg-emerald-900 dark:text-emerald-200/90">
+          <div className="flex size-10 items-center justify-center rounded-full bg-success-soft text-sm font-bold text-success">
             <CheckIcon aria-hidden="true" />
           </div>
           <div className="space-y-1.5">

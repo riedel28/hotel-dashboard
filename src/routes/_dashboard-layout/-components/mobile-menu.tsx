@@ -45,7 +45,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
             <SidebarMenu>
               <SidebarGroup>
                 <SidebarMenuItem className="flex items-center gap-2">
-                  <div className="inline-block rounded-md bg-primary p-1 text-white">
+                  <div className="inline-block rounded-md bg-primary p-1 text-primary-foreground">
                     <MessageCircleIcon className="size-4" />
                   </div>
                   <span className="text-sm font-semibold whitespace-nowrap">

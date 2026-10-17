@@ -194,7 +194,7 @@ export function TwoFactorSetupDialog({
               {step === 'codes' && (
                 <span className="flex items-center gap-2">
                   <ShieldCheckIcon
-                    className="size-5 text-emerald-600 dark:text-emerald-500"
+                    className="size-5 text-success"
                     aria-hidden="true"
                   />
                   <Trans>Two-factor authentication is on</Trans>

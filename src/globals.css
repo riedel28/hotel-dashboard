@@ -21,15 +21,23 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
   --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-solid: var(--danger-solid);
+  --color-danger-solid-foreground: var(--danger-solid-foreground);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-solid: var(--success-solid);
+  --color-success-solid-foreground: var(--success-solid-foreground);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
   --color-link: var(--link);
   --color-indicator: var(--indicator);
-  --color-badge-destructive: var(--badge-destructive);
-  --color-badge-destructive-foreground: var(--badge-destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -69,74 +77,94 @@
   --background: oklch(0.99 0 0);
   --foreground: oklch(0.27 0.045 255);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.27 0.045 255);
+  --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.27 0.045 255);
+  --popover-foreground: var(--foreground);
   --primary: oklch(0.52 0.105 223.128);
   --primary-foreground: oklch(0.984 0.019 200.873);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.963 0.002 197.1);
-  --muted-foreground: oklch(0.52 0.021 213.5);
-  --accent: oklch(0.963 0.002 197.1);
-  --accent-foreground: oklch(0.218 0.008 223.9);
-  /* --destructive fills (buttons, borders, rings); --danger writes text and
-     icons on a neutral surface. Split because one rose step can't do both:
-     see .dark below. */
-  --destructive: oklch(0.514 0.222 16.935);
-  --destructive-foreground: oklch(0.969 0.015 12.422);
-  --danger: oklch(0.514 0.222 16.935);
+  --secondary: oklch(0.967 0.001 255);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.963 0.002 255);
+  --muted-foreground: oklch(0.52 0.021 255);
+  /* Three text levels, no opacity in between: foreground, muted-foreground
+     (secondary text, >= 4.5:1) and subtle-foreground, for what WCAG leaves
+     out: separators, placeholders, disabled and decorative marks (~3:1). */
+  --subtle-foreground: oklch(0.65 0.016 255);
+  --accent: oklch(0.963 0.002 255);
+  --accent-foreground: var(--foreground);
+  /* Status colours. Each has an ink (--danger, --success, ...) for text,
+     icons, borders and dots, >= 4.5:1 on every surface and on its own
+     -soft tint, and a -soft tint for chips, notes and quiet buttons.
+     Danger and success also have a -solid fill with its own foreground (the
+     destructive button, the status disc), one value for both themes: a
+     large area in the ink's lightness glares in dark mode.
+     The pair is tuned to the cold brand: green at hue 155 (between grass
+     and emerald's mint, which would merge with the teal primary), red at
+     hue 14 (rose-cherry, not terracotta). Fills share one lightness and a
+     moderate chroma so neither shouts over the other; white on either is
+     >= 4.5:1. */
+  --danger: oklch(0.5 0.17 14);
+  --danger-soft: oklch(0.965 0.02 14);
+  --danger-solid: oklch(0.54 0.18 14);
+  --danger-solid-foreground: oklch(0.99 0 0);
+  --success: oklch(0.5 0.115 155);
+  --success-soft: oklch(0.968 0.025 155);
+  --success-solid: oklch(0.54 0.13 155);
+  --success-solid-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.555 0.163 48.998);
+  --warning-soft: oklch(0.987 0.022 95.277);
+  --info: oklch(0.5 0.134 242.749);
+  --info-soft: oklch(0.977 0.013 236.62);
   /* Text links: the primary hue with more colour than body text, so a link
      reads as one next to it; 5.5:1 on the background (WCAG AA). */
   --link: oklch(0.5 0.12 228);
   /* The mark on the active tab or section link: --primary itself here,
      5.3:1 on the background. */
   --indicator: var(--primary);
-  /* Badge chips are a pale fill + dark label, unlike the solid --destructive
-     button. Dark mode inverts the roles: the fill token is tinted at 20%. */
-  --badge-destructive: oklch(0.969 0.015 12.422);
-  --badge-destructive-foreground: oklch(0.455 0.188 13.697);
-  --border: oklch(0.925 0.005 214.3);
-  --input: oklch(0.925 0.005 214.3);
-  --ring: oklch(0.723 0.014 214.4);
-  --chart-1: oklch(0.872 0.007 219.6);
-  --chart-2: oklch(0.56 0.021 213.5);
-  --chart-3: oklch(0.45 0.017 213.2);
-  --chart-4: oklch(0.378 0.015 216);
-  --chart-5: oklch(0.275 0.011 216.9);
+  --border: oklch(0.925 0.005 255);
+  --input: oklch(0.925 0.005 255);
+  --ring: oklch(0.723 0.014 255);
+  --chart-1: oklch(0.872 0.007 255);
+  --chart-2: oklch(0.56 0.021 255);
+  --chart-3: oklch(0.45 0.017 255);
+  --chart-4: oklch(0.378 0.015 255);
+  --chart-5: oklch(0.275 0.011 255);
   --radius: 0.45rem;
-  --sidebar: oklch(0.985 0.002 197.1);
-  --sidebar-foreground: oklch(0.27 0.045 255);
+  --sidebar: oklch(0.985 0.002 255);
+  --sidebar-foreground: var(--foreground);
   --sidebar-primary: oklch(0.609 0.126 221.723);
   --sidebar-primary-foreground: oklch(0.984 0.019 200.873);
-  --sidebar-accent: oklch(0.963 0.002 197.1);
-  --sidebar-accent-foreground: oklch(0.218 0.008 223.9);
-  --sidebar-border: oklch(0.925 0.005 214.3);
-  --sidebar-ring: oklch(0.723 0.014 214.4);
+  --sidebar-accent: oklch(0.963 0.002 255);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: oklch(0.925 0.005 255);
+  --sidebar-ring: oklch(0.723 0.014 255);
 }
 
 .dark {
-  --background: oklch(0.148 0.004 228.8);
-  --foreground: oklch(0.987 0.002 197.1);
-  --card: oklch(0.218 0.008 223.9);
-  --card-foreground: oklch(0.987 0.002 197.1);
-  --popover: oklch(0.218 0.008 223.9);
-  --popover-foreground: oklch(0.987 0.002 197.1);
+  --background: oklch(0.148 0.004 255);
+  --foreground: oklch(0.987 0.002 255);
+  --card: oklch(0.218 0.008 255);
+  --popover: oklch(0.218 0.008 255);
   --primary: oklch(0.45 0.085 224.283);
   --primary-foreground: oklch(0.984 0.019 200.873);
-  --secondary: oklch(0.275 0.011 216.9);
-  --secondary-foreground: oklch(0.987 0.002 197.1);
-  --muted: oklch(0.275 0.011 216.9);
-  --muted-foreground: oklch(0.723 0.014 214.4);
-  --accent: oklch(0.275 0.011 216.9);
-  --accent-foreground: oklch(0.987 0.002 197.1);
-  /* --danger is one step lighter than --destructive: at the fill's lightness
-     the text only reached 3.8:1 on a destructive/30 tint (soft delete button
-     on hover). This tone keeps >= 4.5:1 (WCAG AA) on every dark surface it's
-     used on, while staying clearly red rather than drifting to rose-200. */
-  --destructive: oklch(0.712 0.194 13.428);
-  --destructive-foreground: oklch(0.941 0.03 12.58);
-  --danger: oklch(0.79 0.14 12.5);
+  --secondary: oklch(0.275 0.011 255);
+  --muted: oklch(0.275 0.011 255);
+  --muted-foreground: oklch(0.723 0.014 255);
+  --subtle-foreground: oklch(0.53 0.016 255);
+  --accent: oklch(0.275 0.011 255);
+  /* Tints are translucent here, so they sit on any dark surface. The ink is
+     one step lighter than the solid fill's hue: at the fill's lightness text
+     only reached 3.8:1 on a tint. The solid fills are inherited from light
+     mode, for the status disc; the destructive button and menu item keep a
+     tint of the ink here instead, a red block being too loud for them. */
+  --danger: oklch(0.75 0.135 14);
+  --danger-soft: oklch(0.54 0.18 14 / 15%);
+  --success: oklch(0.77 0.13 155);
+  --success-soft: oklch(0.54 0.13 155 / 15%);
+  --warning: oklch(0.879 0.169 91.605);
+  --warning-soft: oklch(0.473 0.137 46.201 / 20%);
+  --info: oklch(0.828 0.111 230.318);
+  --info-soft: oklch(0.443 0.11 240.79 / 20%);
   /* --primary is too dark for text here (2.5:1), so links get their own
      light step, turned towards the brand's teal: at this lightness the
      primary hue reads as sky blue. The hue of the sidebar's active item at
@@ -147,24 +175,20 @@
   /* --primary is 2.7:1 here, under the 3:1 a state mark needs; this is its
      hue one step lighter, 5.6:1, calmer than the links' teal. */
   --indicator: oklch(0.62 0.105 223);
-  --badge-destructive: oklch(0.645 0.246 16.439);
-  --badge-destructive-foreground: oklch(0.892 0.058 10.001);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.56 0.021 213.5);
-  --chart-1: oklch(0.872 0.007 219.6);
-  --chart-2: oklch(0.56 0.021 213.5);
-  --chart-3: oklch(0.45 0.017 213.2);
-  --chart-4: oklch(0.378 0.015 216);
-  --chart-5: oklch(0.275 0.011 216.9);
-  --sidebar: oklch(0.218 0.008 223.9);
-  --sidebar-foreground: oklch(0.987 0.002 197.1);
+  --ring: oklch(0.56 0.021 255);
+  --chart-1: oklch(0.872 0.007 255);
+  --chart-2: oklch(0.56 0.021 255);
+  --chart-3: oklch(0.45 0.017 255);
+  --chart-4: oklch(0.378 0.015 255);
+  --chart-5: oklch(0.275 0.011 255);
+  --sidebar: oklch(0.218 0.008 255);
   --sidebar-primary: oklch(0.715 0.143 215.221);
   --sidebar-primary-foreground: oklch(0.302 0.056 229.695);
-  --sidebar-accent: oklch(0.275 0.011 216.9);
-  --sidebar-accent-foreground: oklch(0.987 0.002 197.1);
+  --sidebar-accent: oklch(0.275 0.011 255);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.56 0.021 213.5);
+  --sidebar-ring: oklch(0.56 0.021 255);
 }
 
 @layer base {

@@ -120,7 +120,7 @@ export function AvatarCropperDialog({
             </div>
 
             {image.lowResolution && (
-              <p className="text-sm text-amber-600 dark:text-amber-500">
+              <p className="text-sm text-warning">
                 <Trans>
                   This image is small, so it may look blurry once cropped.
                 </Trans>

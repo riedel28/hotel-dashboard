@@ -20,10 +20,10 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted',
         destructive:
-          'border border-destructive-foreground/20! bg-destructive text-destructive-foreground hover:bg-destructive/20 hover:bg-destructive/80! focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:hover:bg-destructive/30! dark:focus-visible:ring-destructive/40',
+          'border border-danger-solid-foreground/20! bg-danger-solid text-danger-solid-foreground hover:bg-danger! focus-visible:border-danger/40 focus-visible:ring-danger/20 dark:bg-danger/20 dark:hover:bg-danger/25! dark:focus-visible:ring-danger/40',
         // A quieter destructive action: tinted, not filled.
         'destructive-soft':
-          'border-destructive/20 bg-destructive/10 text-danger hover:bg-destructive/20 hover:text-danger dark:hover:bg-destructive/30',
+          'border-danger/20 bg-danger-soft text-danger hover:bg-danger/10 hover:text-danger dark:hover:bg-danger/20',
         link: 'text-link underline-offset-4 hover:underline'
       },
       size: {

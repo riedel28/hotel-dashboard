@@ -30,7 +30,7 @@ const matches: Record<RowFilter, (row: RoomImportRow) => boolean> = {
 
 // The summary tiles' colors; a change is plain text, as its tile is
 const statusColors: Record<RoomImportRow['status'], string> = {
-  new: 'text-emerald-600 dark:text-emerald-400',
+  new: 'text-success',
   changed: '',
   unchanged: 'text-muted-foreground',
   error: 'text-danger'

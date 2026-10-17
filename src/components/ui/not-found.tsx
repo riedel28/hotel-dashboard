@@ -45,7 +45,7 @@ const notFoundVariants = cva(
     variants: {
       variant: {
         default: 'border-border',
-        destructive: 'border-destructive/10 bg-destructive/5'
+        destructive: 'border-danger/10 bg-danger-soft'
       },
       size: {
         sm: 'max-w-md p-8',
@@ -64,7 +64,7 @@ const iconVariants = cva('flex items-center justify-center rounded-full', {
   variants: {
     variant: {
       default: 'bg-muted/50',
-      destructive: 'bg-destructive/10 text-destructive'
+      destructive: 'bg-danger/10 text-danger'
     },
     size: {
       sm: 'size-10',

@@ -4,9 +4,9 @@ import type { DeviceConnectionStatus } from 'shared/types/devices';
 import { cn } from '@/lib/utils';
 
 const dotColors: Record<DeviceConnectionStatus, string> = {
-  online: 'bg-emerald-500',
-  recently_offline: 'bg-yellow-500',
-  offline: 'bg-gray-400 dark:bg-gray-500'
+  online: 'bg-success',
+  recently_offline: 'bg-warning',
+  offline: 'bg-subtle-foreground'
 };
 
 export function ConnectionStatusDot({

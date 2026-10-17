@@ -194,9 +194,8 @@ export function useHashSectionJump() {
 function ErrorDot() {
   return (
     // Plain red rather than the muted danger tone: it has to catch the eye.
-    // A step darker on light surfaces and a step lighter on dark ones, where
-    // red-500 sits too close to the background to stand out at this size.
-    <span className="size-2 shrink-0 rounded-full bg-red-600 dark:bg-red-400">
+    // The danger ink: >= 4.5:1 on either theme, so it stands out at this size.
+    <span className="size-2 shrink-0 rounded-full bg-danger">
       <span className="sr-only">
         <Trans>Has errors</Trans>
       </span>

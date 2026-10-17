@@ -150,21 +150,20 @@ export function PasswordStrengthMeter({
   };
 
   const segmentColors: Record<Score, string> = {
-    0: 'bg-rose-500/90',
-    1: 'bg-rose-500/90',
-    2: 'bg-amber-500',
-    3: 'bg-emerald-500',
-    4: 'bg-emerald-500'
+    0: 'bg-danger',
+    1: 'bg-danger',
+    2: 'bg-warning',
+    3: 'bg-success',
+    4: 'bg-success'
   };
 
-  // Same reading as the bars. Darker than the fills in light mode: a 500 that
-  // reads fine as a 4px bar drops under 4.5:1 as 12px text.
+  // Same reading as the bars, in the same status inks (>= 4.5:1 as text).
   const labelColors: Record<Score, string> = {
-    0: 'text-rose-600 dark:text-rose-400',
-    1: 'text-rose-600 dark:text-rose-400',
-    2: 'text-amber-600 dark:text-amber-400',
-    3: 'text-emerald-700 dark:text-emerald-400',
-    4: 'text-emerald-700 dark:text-emerald-400'
+    0: 'text-danger',
+    1: 'text-danger',
+    2: 'text-warning',
+    3: 'text-success',
+    4: 'text-success'
   };
 
   const filled = score === null ? 0 : score + 1;
@@ -217,7 +216,7 @@ export function PasswordStrengthMeter({
 
       {/* Always rendered, for the reason above: warnings come and go as the
           password changes, and an appearing line would move the checklist. */}
-      <p className="text-xs text-amber-600 dark:text-amber-500">
+      <p className="text-xs text-warning">
         {warning && score !== null && score < 3 ? warning : null}
       </p>
 
@@ -226,22 +225,20 @@ export function PasswordStrengthMeter({
           <li key={index} className="flex items-center gap-2 text-xs">
             {requirement.met ? (
               <CheckIcon
-                className="size-3.5 shrink-0 animate-in text-emerald-600 duration-150 zoom-in-50 dark:text-emerald-500"
+                className="size-3.5 shrink-0 animate-in text-success duration-150 zoom-in-50"
                 aria-hidden="true"
               />
             ) : (
               // A neutral dash, not a red cross: an unwritten password hasn't
               // failed anything yet.
               <MinusIcon
-                className="size-3.5 shrink-0 text-muted-foreground/50"
+                className="size-3.5 shrink-0 text-subtle-foreground"
                 aria-hidden="true"
               />
             )}
             <span
               className={cn(
-                requirement.met
-                  ? 'text-emerald-700 dark:text-emerald-500'
-                  : 'text-muted-foreground'
+                requirement.met ? 'text-success' : 'text-muted-foreground'
               )}
             >
               {requirement.label}
