@@ -1,193 +1,63 @@
-/**
- * NotFound Component
- *
- * A reusable 404 not found component that follows the app's design system.
- *
- * @example
- * // Basic not found display
- * <NotFound />
- *
- * @example
- * // Custom not found with specific message
- * <NotFound
- *   title="Reservation not found"
- *   message="The reservation you're looking for doesn't exist"
- *   showBackButton
- *   backButtonText="Back to reservations"
- *   onBack={() => navigate('/reservations')}
- * />
- *
- * @example
- * // Not found with custom actions
- * <NotFound
- *   title="Page not found"
- *   message="The page you're looking for doesn't exist"
- *   showHomeButton
- *   showBackButton
- *   onHome={() => navigate('/')}
- *   onBack={() => navigate(-1)}
- * />
- */
-
 import { Trans } from '@lingui/react/macro';
 import { useNavigate, useRouter } from '@tanstack/react-router';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { ArrowLeft, Home, Search } from 'lucide-react';
-import * as React from 'react';
+import { SearchIcon } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty';
 import { cn } from '@/lib/utils';
 
-const notFoundVariants = cva(
-  'flex flex-col items-center justify-center rounded-xl border bg-card text-center',
-  {
-    variants: {
-      variant: {
-        default: 'border-border',
-        destructive: 'border-danger/10 bg-danger-soft'
-      },
-      size: {
-        sm: 'max-w-md p-8',
-        md: 'max-w-lg p-12',
-        lg: 'max-w-xl p-16'
-      }
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md'
-    }
-  }
-);
-
-const iconVariants = cva('flex items-center justify-center rounded-full', {
-  variants: {
-    variant: {
-      default: 'bg-muted/50',
-      destructive: 'bg-danger/10 text-danger'
-    },
-    size: {
-      sm: 'size-10',
-      md: 'size-16',
-      lg: 'size-20'
-    }
-  },
-  defaultVariants: {
-    variant: 'default',
-    size: 'md'
-  }
-});
-
-const iconSizes = {
-  sm: 16,
-  md: 32,
-  lg: 36
-} as const;
-
-export interface NotFoundProps
-  extends
-    Omit<React.ComponentProps<'div'>, 'title'>,
-    VariantProps<typeof notFoundVariants> {
-  title?: React.ReactNode;
-  message?: React.ReactNode;
-  statusCode?: string | number;
-  showHomeButton?: boolean;
-  showBackButton?: boolean;
-  showSearchButton?: boolean;
-  homeButtonText?: React.ReactNode;
-  backButtonText?: React.ReactNode;
-  searchButtonText?: React.ReactNode;
-  children?: React.ReactNode;
-}
-
-function NotFound({
-  className,
-  variant = 'default',
-  size = 'md',
-  title,
-  message,
-  statusCode = 404,
-  showHomeButton = true,
-  showBackButton = true,
-  showSearchButton = false,
-  homeButtonText,
-  backButtonText,
-  searchButtonText,
-  children,
-  ...props
-}: NotFoundProps) {
-  const navigate = useNavigate();
+/**
+ * The app's 404, in the route error's card (framed icon tile, plain title,
+ * muted description), with a way back and a way to the start page instead of
+ * Try again. Like the route error, by default inside the layouts above it,
+ * so the sidebar stays usable; `fullScreen` when there is no layout left.
+ */
+function NotFound({ fullScreen = false }: { fullScreen?: boolean }) {
   const router = useRouter();
-
-  const iconSize = iconSizes[size as keyof typeof iconSizes] || 24;
+  const navigate = useNavigate();
 
   return (
     <div
-      className={cn(notFoundVariants({ variant, size, className }))}
-      {...props}
+      className={cn(
+        'flex items-center justify-center',
+        fullScreen ? 'min-h-screen p-4' : 'min-h-[60vh]'
+      )}
     >
-      <div className={cn(iconVariants({ variant, size }), 'mb-8')}>
-        <Search size={iconSize} />
-      </div>
-
-      {statusCode && (
-        <div className="mb-4">
-          <Badge variant="outline" className="bg-accent text-xl font-medium">
-            {statusCode}
-          </Badge>
-        </div>
-      )}
-
-      {title && (
-        <h3 className="mb-2 text-xl font-semibold text-card-foreground">
-          {title || <Trans>Page not found</Trans>}
-        </h3>
-      )}
-
-      {message && (
-        <p className="mb-8 text-base leading-relaxed text-card-foreground">
-          {message || (
+      <Empty className="min-h-72 w-full max-w-lg flex-none gap-5 border-solid bg-card md:p-10">
+        <EmptyHeader className="gap-1.5">
+          <EmptyMedia className="mb-2 size-11 rounded-lg border text-muted-foreground dark:border-input dark:bg-input/30">
+            <SearchIcon className="size-5" strokeWidth={1.75} aria-hidden />
+          </EmptyMedia>
+          <EmptyTitle className="text-base font-semibold tracking-normal text-foreground">
+            <Trans>Page not found</Trans>
+          </EmptyTitle>
+          <EmptyDescription className="max-w-xs">
             <Trans>Sorry, we couldn't find the page you're looking for.</Trans>
-          )}
-        </p>
-      )}
-
-      {(showHomeButton || showBackButton || showSearchButton) && (
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          {showBackButton && (
-            <Button
-              variant="outline"
-              onClick={() => router.history.back()}
-              className="gap-2"
-            >
-              <ArrowLeft size={16} />
-              {backButtonText || <Trans>Go back</Trans>}
-            </Button>
-          )}
-
-          {showHomeButton && (
-            <Button onClick={() => navigate({ to: '/' })} className="gap-2">
-              <Home size={16} />
-              {homeButtonText || <Trans>Go home</Trans>}
-            </Button>
-          )}
-
-          {showSearchButton && (
-            <Button
-              variant="outline"
-              onClick={() => navigate({ to: '/' })}
-              className="gap-2"
-            >
-              <Search size={16} />
-              {searchButtonText || <Trans>Search</Trans>}
-            </Button>
-          )}
-        </div>
-      )}
-
-      {children}
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent className="flex-row justify-center gap-2">
+          <Button variant="outline" onClick={() => router.history.back()}>
+            <Trans>Go back</Trans>
+          </Button>
+          <Button onClick={() => void navigate({ to: '/' })}>
+            <Trans>Go to Start</Trans>
+          </Button>
+        </EmptyContent>
+      </Empty>
     </div>
   );
 }
 
-export { NotFound, notFoundVariants };
+/** For a path no layout matches. */
+function FullScreenNotFound() {
+  return <NotFound fullScreen />;
+}
+
+export { FullScreenNotFound, NotFound };

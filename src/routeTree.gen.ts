@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthLayoutRouteImport } from './routes/_auth-layout'
 import { Route as DashboardLayoutRouteImport } from './routes/_dashboard-layout'
 import { Route as DashboardLayoutIndexRouteImport } from './routes/_dashboard-layout/index'
+import { Route as DashboardLayoutSplatRouteImport } from './routes/_dashboard-layout/$'
 import { Route as DashboardLayoutAdminRouteImport } from './routes/_dashboard-layout/admin'
 import { Route as AuthLayoutAuthAcceptInvitationRouteImport } from './routes/_auth-layout/auth/accept-invitation'
 import { Route as AuthLayoutAuthForgotPasswordRouteImport } from './routes/_auth-layout/auth/forgot-password'
@@ -62,6 +63,11 @@ const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
 const DashboardLayoutIndexRoute = DashboardLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutSplatRoute = DashboardLayoutSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
 const DashboardLayoutAdminRoute = DashboardLayoutAdminRouteImport.update({
@@ -294,6 +300,7 @@ const DashboardLayoutuserViewfrontOfficeReservationsNewRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof DashboardLayoutIndexRoute
+  '/$': typeof DashboardLayoutSplatRoute
   '/admin': typeof DashboardLayoutAdminRouteWithChildren
   '/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
@@ -335,6 +342,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof DashboardLayoutIndexRoute
+  '/$': typeof DashboardLayoutSplatRoute
   '/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
   '/auth/forgot-password': typeof AuthLayoutAuthForgotPasswordRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
@@ -377,6 +385,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth-layout': typeof AuthLayoutRouteWithChildren
   '/_dashboard-layout': typeof DashboardLayoutRouteWithChildren
+  '/_dashboard-layout/$': typeof DashboardLayoutSplatRoute
   '/_dashboard-layout/admin': typeof DashboardLayoutAdminRouteWithChildren
   '/_dashboard-layout/': typeof DashboardLayoutIndexRoute
   '/_auth-layout/auth/accept-invitation': typeof AuthLayoutAuthAcceptInvitationRoute
@@ -421,6 +430,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$'
     | '/admin'
     | '/auth/accept-invitation'
     | '/auth/forgot-password'
@@ -462,6 +472,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$'
     | '/auth/accept-invitation'
     | '/auth/forgot-password'
     | '/auth/login'
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth-layout'
     | '/_dashboard-layout'
+    | '/_dashboard-layout/$'
     | '/_dashboard-layout/admin'
     | '/_dashboard-layout/'
     | '/_auth-layout/auth/accept-invitation'
@@ -570,6 +582,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof DashboardLayoutIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/$': {
+      id: '/_dashboard-layout/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof DashboardLayoutSplatRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/admin': {
@@ -887,6 +906,7 @@ const DashboardLayoutAdminRouteWithChildren =
   DashboardLayoutAdminRoute._addFileChildren(DashboardLayoutAdminRouteChildren)
 
 interface DashboardLayoutRouteChildren {
+  DashboardLayoutSplatRoute: typeof DashboardLayoutSplatRoute
   DashboardLayoutAdminRoute: typeof DashboardLayoutAdminRouteWithChildren
   DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
   DashboardLayoutuserViewAboutRoute: typeof DashboardLayoutuserViewAboutRoute
@@ -918,6 +938,7 @@ interface DashboardLayoutRouteChildren {
 }
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardLayoutSplatRoute: DashboardLayoutSplatRoute,
   DashboardLayoutAdminRoute: DashboardLayoutAdminRouteWithChildren,
   DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
   DashboardLayoutuserViewAboutRoute: DashboardLayoutuserViewAboutRoute,
