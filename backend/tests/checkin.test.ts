@@ -63,8 +63,8 @@ describe('Check-in settings API', () => {
   test('a property that never switched it on gets the defaults, off', async () => {
     expect(await settings()).toEqual({
       enabled: false,
-      ...defaultCheckinSettings,
-      guest_url: null
+      guest_url: null,
+      settings: defaultCheckinSettings
     });
   });
 
@@ -84,13 +84,15 @@ describe('Check-in settings API', () => {
     await save({ first_send_days: 7, reminder_days: 2 }).expect(200);
 
     const off = (await setEnabled(false)).body as CheckinSettings;
-    expect(off).toMatchObject({ enabled: false, first_send_days: 7 });
+    expect(off).toMatchObject({
+      enabled: false,
+      settings: { first_send_days: 7 }
+    });
 
     const on = (await setEnabled(true)).body as CheckinSettings;
     expect(on).toMatchObject({
       enabled: true,
-      first_send_days: 7,
-      reminder_days: 2
+      settings: { first_send_days: 7, reminder_days: 2 }
     });
   });
 
@@ -98,7 +100,10 @@ describe('Check-in settings API', () => {
     await setEnabled(true);
     const saved = (await save({ auto_send: false }).expect(200))
       .body as CheckinSettings;
-    expect(saved).toMatchObject({ enabled: true, auto_send: false });
+    expect(saved).toMatchObject({
+      enabled: true,
+      settings: { auto_send: false }
+    });
   });
 
   test('refuses a reminder no closer to arrival than the first send', async () => {
@@ -132,7 +137,7 @@ describe('Check-in settings API', () => {
     const saved = (
       await save({ background: 'custom', custom_image_id: image }).expect(200)
     ).body as CheckinSettings;
-    expect(saved).toMatchObject({
+    expect(saved.settings).toMatchObject({
       background: 'custom',
       custom_image_id: image
     });
@@ -143,7 +148,7 @@ describe('Check-in settings API', () => {
     const saved = (
       await save({ background: 'corridor', custom_image_id: image }).expect(200)
     ).body as CheckinSettings;
-    expect(saved).toMatchObject({
+    expect(saved.settings).toMatchObject({
       background: 'corridor',
       custom_image_id: image
     });

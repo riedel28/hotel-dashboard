@@ -3,7 +3,8 @@ import {
   type CheckinSettings,
   checkinSettingsSchema,
   type SaveCheckinSettingsData,
-  saveCheckinSettingsSchema
+  saveCheckinSettingsSchema,
+  setCheckinEnabledSchema
 } from 'shared/types/checkin';
 
 import { client, handleApiError } from './client';
@@ -43,7 +44,8 @@ export async function setCheckinEnabled(
   enabled: boolean
 ): Promise<CheckinSettings> {
   try {
-    const response = await client.put('/checkin-settings/enabled', { enabled });
+    const validated = setCheckinEnabledSchema.parse({ enabled });
+    const response = await client.put('/checkin-settings/enabled', validated);
     return checkinSettingsSchema.parse(response.data);
   } catch (err) {
     handleApiError(err, 'setCheckinEnabled');

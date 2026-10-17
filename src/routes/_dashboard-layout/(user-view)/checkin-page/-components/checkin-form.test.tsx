@@ -3,7 +3,8 @@ import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   type CheckinSettings,
-  defaultCheckinSettings
+  defaultCheckinSettings,
+  type SaveCheckinSettingsData
 } from 'shared/types/checkin';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -27,16 +28,23 @@ vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const settings: CheckinSettings = {
   enabled: true,
-  ...defaultCheckinSettings,
-  guest_url: 'https://hotel.example.com/checkin'
+  guest_url: 'https://hotel.example.com/checkin',
+  settings: defaultCheckinSettings
 };
 
-function renderForm(overrides: Partial<CheckinSettings> = {}) {
+function renderForm(
+  overrides: Partial<SaveCheckinSettingsData> = {},
+  guestUrl: string | null = settings.guest_url
+) {
   const onDeactivate = vi.fn(async () => {});
   render(
     <QueryClientProvider client={new QueryClient()}>
       <CheckinForm
-        settings={{ ...settings, ...overrides }}
+        settings={{
+          ...settings,
+          guest_url: guestUrl,
+          settings: { ...defaultCheckinSettings, ...overrides }
+        }}
         onSaved={vi.fn()}
         onDeactivate={onDeactivate}
         isDeactivating={false}
@@ -53,7 +61,7 @@ describe('CheckinForm', () => {
   beforeEach(() => {
     vi.mocked(saveCheckinSettings)
       .mockReset()
-      .mockImplementation(async (data) => ({ ...settings, ...data }));
+      .mockImplementation(async (data) => ({ ...settings, settings: data }));
   });
 
   test('will not save a reminder no closer to arrival than the first send', async () => {
@@ -157,7 +165,7 @@ describe('CheckinForm', () => {
   });
 
   test('explains a missing guest app domain', () => {
-    renderForm({ guest_url: null });
+    renderForm({}, null);
     expect(
       screen.queryByRole('group', { name: 'Link sent to guests' })
     ).not.toBeInTheDocument();

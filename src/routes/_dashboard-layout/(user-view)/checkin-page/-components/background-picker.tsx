@@ -45,7 +45,10 @@ async function isSmallerThanRecommended(file: File) {
   // Not in every runtime (tests); the warning is only a hint.
   if (typeof createImageBitmap !== 'function') return false;
   try {
-    const { width, height } = await createImageBitmap(file);
+    const bitmap = await createImageBitmap(file);
+    const { width, height } = bitmap;
+    // Decoded pixels are held until closed, not just until collected.
+    bitmap.close();
     return (
       width < checkinBackgroundMinSize.width ||
       height < checkinBackgroundMinSize.height
@@ -77,6 +80,10 @@ export function BackgroundPicker({
   const [uploading, setUploading] = React.useState(false);
   const [tooSmall, setTooSmall] = React.useState(false);
 
+  const maxSize = formatBytes(checkinBackgroundMaxBytes);
+  const { width: minWidth, height: minHeight } = checkinBackgroundMinSize;
+  const fileHint = t`JPG, PNG or WebP · up to ${maxSize} · ${minWidth} × ${minHeight} or larger`;
+
   const pick = async (file: File | undefined) => {
     if (!file) return;
     // A file dragged onto the picker skips its filter.
@@ -85,6 +92,7 @@ export function BackgroundPicker({
       return;
     }
     if (file.size > checkinBackgroundMaxBytes) {
+      // Worded as in ImageField, to share its translation
       toast.error(
         t`The file is larger than ${formatBytes(checkinBackgroundMaxBytes)}`
       );
@@ -110,8 +118,6 @@ export function BackgroundPicker({
   };
 
   const openPicker = () => inputRef.current?.click();
-  const maxSize = formatBytes(checkinBackgroundMaxBytes);
-  const fileHint = t`JPG, PNG or WebP · up to ${maxSize} · 1920 × 1080 or larger`;
 
   return (
     <div className="flex flex-col gap-3">
@@ -128,12 +134,13 @@ export function BackgroundPicker({
       >
         <Tile value="none" label={t`No background`}>
           {/* The guest app as it looks without one: the form on a plain page */}
-          {/* Kept faint: the plainest choice shouldn't be the loudest tile */}
-          <div className="flex size-full items-center justify-center bg-muted/60">
-            <div className="flex w-1/3 flex-col gap-1 rounded-md bg-background/70 p-1.5 ring-1 ring-foreground/5">
-              <div className="h-1 w-3/5 rounded-full bg-foreground/15" />
-              <div className="h-1 rounded-full bg-foreground/8" />
-              <div className="h-1 rounded-full bg-foreground/8" />
+          {/* Kept faint: the plainest choice shouldn't be the loudest tile.
+              The surface is ImageField's add tile's, as is the upload one's */}
+          <div className="flex size-full items-center justify-center bg-transparent dark:bg-input/30">
+            <div className="flex w-1/3 flex-col gap-1 rounded-md bg-muted p-1.5 ring-1 ring-foreground/5 dark:bg-foreground/6">
+              <div className="h-1 w-3/5 rounded-full bg-foreground/20 dark:bg-foreground/18" />
+              <div className="h-1 rounded-full bg-foreground/12 dark:bg-foreground/10" />
+              <div className="h-1 rounded-full bg-foreground/12 dark:bg-foreground/10" />
             </div>
           </div>
         </Tile>
@@ -198,8 +205,9 @@ export function BackgroundPicker({
             aria-busy={uploading}
             className="flex flex-col gap-1.5 rounded-lg text-start outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-wait"
           >
-            {/* What the file may be, where it is picked */}
-            <span className="flex aspect-video w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-foreground/15 px-4 text-center text-muted-foreground transition-colors hover:border-foreground/25 hover:bg-muted/50 hover:text-foreground">
+            {/* The surface of ImageField's add tile; what the file may be,
+                where it is picked */}
+            <span className="flex aspect-video w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-input bg-transparent px-4 text-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground dark:bg-input/30 dark:hover:bg-input/50">
               {uploading ? (
                 <Loader2Icon
                   className="size-5 animate-spin"
@@ -208,7 +216,7 @@ export function BackgroundPicker({
               ) : (
                 <PlusIcon className="size-5" aria-hidden="true" />
               )}
-              <span className="text-xs text-pretty">{fileHint}</span>
+              <span className="text-xs/relaxed text-pretty">{fileHint}</span>
             </span>
             <span className="text-sm font-medium text-muted-foreground">
               <Trans>Your image</Trans>
@@ -240,8 +248,8 @@ export function BackgroundPicker({
             aria-hidden="true"
           />
           <Trans>
-            This image is smaller than 1920 × 1080 pixels and may look blurry on
-            large screens.
+            This image is smaller than {minWidth} × {minHeight} pixels and may
+            look blurry on large screens.
           </Trans>
         </p>
       )}
@@ -275,8 +283,8 @@ function Tile({
           {children}
         </span>
         <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-foreground/10 ring-inset" />
-        {/* The one accent of the picker; a faint shadow keeps it off dark photos */}
-        <RadioPrimitive.Indicator className="absolute end-2 top-2 flex size-[22px] items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_1px_2px_rgb(0_0_0/0.15)] transition-[opacity,scale] duration-150 ease-out data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
+        {/* The one accent of the picker */}
+        <RadioPrimitive.Indicator className="absolute end-2 top-2 flex size-[22px] items-center justify-center rounded-full bg-primary text-primary-foreground transition-[opacity,scale] duration-150 ease-out data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
           <CheckIcon className="size-3" strokeWidth={3} aria-hidden="true" />
         </RadioPrimitive.Indicator>
       </span>

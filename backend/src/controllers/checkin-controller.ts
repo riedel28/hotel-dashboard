@@ -4,7 +4,8 @@ import {
   type CheckinSettings,
   checkinSettingsSchema,
   defaultCheckinSettings,
-  type SaveCheckinSettingsData
+  type SaveCheckinSettingsData,
+  type SetCheckinEnabledData
 } from '../../../shared/types/checkin';
 import { assertImagesOwned, rethrowGoneImage } from '../db/image-queries';
 import { db } from '../db/pool';
@@ -23,8 +24,8 @@ async function findSettings(propertyId: string): Promise<CheckinSettings> {
   const [row] = await db
     .select({
       pwa_domain: properties.pwa_domain,
+      enabled: checkinSettings.enabled,
       settings: {
-        enabled: checkinSettings.enabled,
         payment_mode: checkinSettings.payment_mode,
         auto_send: checkinSettings.auto_send,
         first_send_days: checkinSettings.first_send_days,
@@ -37,14 +38,13 @@ async function findSettings(propertyId: string): Promise<CheckinSettings> {
     .leftJoin(checkinSettings, eq(checkinSettings.property_id, properties.id))
     .where(eq(properties.id, propertyId));
 
+  // Without a row, `enabled` and `settings` come back null.
   return checkinSettingsSchema.parse({
-    enabled: false,
-    ...defaultCheckinSettings,
-    // Null without a row
-    ...row?.settings,
+    enabled: row?.enabled ?? false,
     // ponytail: the guest app's path is assumed; move it into the property
     // once the guest app exists and settles on one.
-    guest_url: row?.pwa_domain ? `https://${row.pwa_domain}/checkin` : null
+    guest_url: row?.pwa_domain ? `https://${row.pwa_domain}/checkin` : null,
+    settings: row?.settings ?? defaultCheckinSettings
   });
 }
 
@@ -89,7 +89,8 @@ const setCheckinEnabled = handle(
     const propertyId = requireSelectedProperty(req, res);
     if (!propertyId) return;
 
-    const { enabled } = req.body as { enabled: boolean };
+    // Body is validated by validateBody(setCheckinEnabledSchema).
+    const { enabled } = req.body as SetCheckinEnabledData;
     await db
       .insert(checkinSettings)
       .values({ property_id: propertyId, enabled, ...defaultCheckinSettings })

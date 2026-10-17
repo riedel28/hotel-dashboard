@@ -80,16 +80,12 @@ export const saveCheckinSettingsSchema = z
     }
   });
 
+/** As the API returns it: the form's settings beside what the page shows. */
 export const checkinSettingsSchema = z.object({
   enabled: z.boolean(),
-  payment_mode: checkinPaymentModeSchema,
-  auto_send: z.boolean(),
-  first_send_days: z.literal(firstSendDaysOptions),
-  reminder_days: z.literal(reminderDaysOptions).nullable(),
-  background: checkinBackgroundSchema,
-  custom_image_id: z.uuid().nullable(),
   // Where guests check in; null while the property has no guest app domain.
-  guest_url: z.url().nullable()
+  guest_url: z.url().nullable(),
+  settings: saveCheckinSettingsSchema
 });
 
 export const setCheckinEnabledSchema = z.object({ enabled: z.boolean() });
@@ -110,3 +106,4 @@ export type CheckinBackgroundPreset = z.infer<
 >;
 export type SaveCheckinSettingsData = z.infer<typeof saveCheckinSettingsSchema>;
 export type CheckinSettings = z.infer<typeof checkinSettingsSchema>;
+export type SetCheckinEnabledData = z.infer<typeof setCheckinEnabledSchema>;

@@ -73,7 +73,7 @@ msgid "{0, plural, one {# image is removed when you save.} other {# images are r
 msgstr "{0, plural, one {# Bild wird beim Speichern entfernt.} other {# Bilder werden beim Speichern entfernt.}}"
 
 #. placeholder {0}: Math.max(nights, 0)
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:196
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:195
 msgid "{0, plural, one {# night} other {# nights}}"
 msgstr "{0, plural, one {# Nacht} other {# Nächte}}"
 
@@ -118,7 +118,7 @@ msgstr "{0}"
 #~ msgstr "{0} Gäste insgesamt"
 
 #. placeholder {0}: minutes / 60
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:437
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:434
 msgid "{0} h before"
 msgstr "{0} Std. vorher"
 
@@ -161,11 +161,11 @@ msgstr "{0}, Objekt"
 msgid "{changeCount, plural, one {Import # change} other {Import # changes}}"
 msgstr "{changeCount, plural, one {# Änderung importieren} other {# Änderungen importieren}}"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:472
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:270
 msgid "{days, plural, one {# day before arrival} other {# days before arrival}}"
 msgstr "{days, plural, one {# Tag vor Anreise} other {# Tage vor Anreise}}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:327
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:318
 msgid "{days} d"
 msgstr "{days} T"
 
@@ -190,7 +190,7 @@ msgstr "{from} - {to} von {count}"
 msgid "{from} - {to} of {recordCount}"
 msgstr "{from} - {to} von {recordCount}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:328
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:319
 msgid "{hours} h"
 msgstr "{hours} Std."
 
@@ -201,9 +201,13 @@ msgstr "{label} – Uhrzeit"
 #~ msgid "{lastName}, {firstName}"
 #~ msgstr "{lastName}, {firstName}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:435
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:432
 msgid "{minutes} min before"
 msgstr "{minutes} Min. vorher"
+
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:224
+#~ msgid "{minWidth} × {minHeight} pixels or larger"
+#~ msgstr "{minWidth} × {minHeight} Pixel oder größer"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-hooks/use-assign-device-room.ts:50
 msgid "{name} assigned to room {label}"
@@ -220,7 +224,7 @@ msgstr "Zimmerzuweisung von {name} aufgehoben"
 #~ msgid "{productCount, plural, =0 {No products in this category} one {# product in this category} other {# products in this category}}"
 #~ msgstr "{productCount, plural, =0 {Keine Produkte in dieser Kategorie} one {# Produkt in dieser Kategorie} other {# Produkte in dieser Kategorie}}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:329
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:320
 msgid "{rest} min"
 msgstr "{rest} Min."
 
@@ -345,7 +349,7 @@ msgid "Activate Account"
 msgstr "Konto aktivieren"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:61
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:59
 msgid "Active"
 msgstr "Aktiv"
 
@@ -771,8 +775,8 @@ msgstr "Sind Sie sicher, dass Sie sich abmelden möchten?"
 msgid "Are you sure?"
 msgstr "Sind Sie sicher?"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:160
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:164
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:168
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:212
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:220
 msgid "Arrival"
@@ -917,7 +921,7 @@ msgstr "Zurück zur Anmeldung"
 msgid "Balance"
 msgstr "Betrag"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:170
 msgid "Basics"
 msgstr "Grunddaten"
 
@@ -957,11 +961,11 @@ msgstr "Marke"
 msgid "Bulleted list"
 msgstr "Aufzählung"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:134
 msgid "Business"
 msgstr "Geschäftlich"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:361
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:162
 msgid "By email, at the times set below."
 msgstr "Per E-Mail, zu den unten festgelegten Zeitpunkten."
 
@@ -978,7 +982,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/components/sectioned-form.tsx:108
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:66
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:155
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:144
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/delete-entry-dialog.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:146
@@ -990,7 +994,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:85
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:298
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:91
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:317
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:270
@@ -1046,7 +1050,7 @@ msgstr "Karte abgelaufen"
 #~ msgid "Casablanca"
 #~ msgstr "Casablanca"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:307
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:298
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:244
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:82
 msgid "Categories"
@@ -1157,7 +1161,7 @@ msgstr "Check-in-Kiosk-App"
 msgid "Check-in Page"
 msgstr "Check-in-Seite"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:84
 msgid "Check-in settings saved"
 msgstr "Check-in-Einstellungen gespeichert"
 
@@ -1463,8 +1467,8 @@ msgstr ""
 msgid "Copy from German"
 msgstr "Aus Deutsch kopieren"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:239
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:256
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:169
 msgid "Copy link"
 msgstr "Link kopieren"
 
@@ -1757,19 +1761,19 @@ msgstr "Dashboard"
 msgid "Date"
 msgstr "Datum"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:186
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:177
 msgid "Date & time"
 msgstr "Datum & Uhrzeit"
 
 #~ msgid "DE +49"
 #~ msgstr "DE +49"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:215
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:331
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:118
 msgid "Deactivate"
 msgstr "Deaktivieren"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:306
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:93
 msgid "Deactivate online check-in?"
 msgstr "Online-Check-in deaktivieren?"
 
@@ -1856,8 +1860,8 @@ msgstr "Gelöschter Benutzer"
 msgid "Demo"
 msgstr "Demo"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:182
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:187
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:183
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:232
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:240
 msgid "Departure"
@@ -1867,7 +1871,7 @@ msgstr "Abreise"
 msgid "Departure Date"
 msgstr "Abreisedatum"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:34
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:35
 msgid "Departure must be after arrival"
 msgstr "Die Abreise muss nach der Anreise liegen"
 
@@ -1879,8 +1883,8 @@ msgstr "Kaution"
 msgid "Desc"
 msgstr "Abst."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:288
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:296
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:279
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:287
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:120
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:120
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:116
@@ -1964,7 +1968,7 @@ msgstr "Einlass {0}"
 msgid "Doors must open before the start"
 msgstr "Der Einlass muss vor dem Beginn liegen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:407
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:404
 msgid "Doors open"
 msgstr "Einlass"
 
@@ -1976,7 +1980,7 @@ msgstr "Einlass <0/> vor Beginn"
 msgid "doors open at the start"
 msgstr "Einlass zum Beginn"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:412
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:409
 msgid "Doors open time"
 msgstr "Einlasszeit"
 
@@ -2191,8 +2195,8 @@ msgstr "Zwei-Faktor-Authentifizierung aktivieren"
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:386
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:391
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:380
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:385
 msgid "End"
 msgstr "Ende"
 
@@ -2639,7 +2643,7 @@ msgstr "Passwort konnte nicht zurückgesetzt werden. Der Link ist möglicherweis
 msgid "Failed to save"
 msgstr "Speichern fehlgeschlagen"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:132
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:89
 msgid "Failed to save check-in settings"
 msgstr "Check-in-Einstellungen konnten nicht gespeichert werden"
 
@@ -2647,7 +2651,7 @@ msgstr "Check-in-Einstellungen konnten nicht gespeichert werden"
 msgid "Failed to save configuration"
 msgstr "Konfiguration konnte nicht gespeichert werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:129
 msgid "Failed to save event"
 msgstr "Event konnte nicht gespeichert werden"
 
@@ -2714,7 +2718,7 @@ msgstr "Fehler beim Aktualisieren der Reservierung. Bitte versuchen Sie es erneu
 msgid "Failed to update user"
 msgstr "Fehler beim Aktualisieren des Benutzers"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:112
 msgid "Failed to upload the image"
 msgstr "Das Bild konnte nicht hochgeladen werden"
 
@@ -2784,7 +2788,7 @@ msgstr "Vorname"
 msgid "First name is required"
 msgstr "Vorname ist erforderlich"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:383
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:182
 msgid "First send"
 msgstr "Erster Versand"
 
@@ -2960,7 +2964,7 @@ msgstr "Gäste sehen diesen Eintrag nicht, weil „{0}“ ausgeblendet ist."
 msgid "Guests get a link by email and can check in before they arrive. The page is created automatically from your hotel’s details."
 msgstr "Gäste erhalten einen Link per E-Mail und können schon vor der Anreise einchecken. Die Seite wird automatisch aus den Daten Ihres Hotels erstellt."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:309
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:96
 msgid "Guests will no longer receive check-in links."
 msgstr "Gäste erhalten keine Check-in-Links mehr."
 
@@ -3208,7 +3212,7 @@ msgstr "Bild oder Icon"
 #~ msgid "Image or icon (optional)"
 #~ msgstr "Bild oder Icon (optional)"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:212
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:203
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:362
 msgid "Images"
@@ -3306,13 +3310,21 @@ msgstr "Einträge sind die Seiten und Links, die Gäste in der Hotel-App sehen. 
 msgid "John"
 msgstr "John"
 
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:85
+msgid "JPG, PNG or WebP · up to {maxSize} · {minWidth} × {minHeight} or larger"
+msgstr "JPG, PNG oder WebP · bis {maxSize} · ab {minWidth} × {minHeight}"
+
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:114
-msgid "JPG, PNG or WebP · up to {maxSize} · 1920 × 1080 or larger"
-msgstr "JPG, PNG oder WebP · bis {maxSize} · ab 1920 × 1080"
+#~ msgid "JPG, PNG or WebP · up to {maxSize} · 1920 × 1080 or larger"
+#~ msgstr "JPG, PNG oder WebP · bis {maxSize} · ab 1920 × 1080"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:266
 msgid "JPG, PNG or WebP up to 2 MB. Drag to change the order."
 msgstr "JPG, PNG oder WebP bis 2 MB. Zum Sortieren ziehen."
+
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:221
+#~ msgid "JPG, PNG or WebP, up to {maxSize}"
+#~ msgstr "JPG, PNG oder WebP, bis {maxSize}"
 
 #: src/components/unsaved-changes-guard.tsx:43
 msgid "Keep editing"
@@ -3457,12 +3469,12 @@ msgstr "Zeile"
 msgid "Link"
 msgstr "Link"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:239
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:241
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:154
 msgid "Link copied"
 msgstr "Link kopiert"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:136
 msgid "Link sent to guests"
 msgstr "Link, den Gäste erhalten"
 
@@ -3515,7 +3527,7 @@ msgstr "Lädt..."
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:189
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-table.tsx:250
 msgid "Location"
 msgstr "Standort"
@@ -3942,7 +3954,7 @@ msgstr ""
 #~ msgid "Next slide"
 #~ msgstr "Nächste Folie"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:135
 msgid "No background"
 msgstr "Kein Hintergrund"
 
@@ -4125,8 +4137,8 @@ msgstr "Noch keine Unterkünfte."
 msgid "No property selected"
 msgstr "Kein Objekt ausgewählt"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:434
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:443
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:229
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:238
 msgid "No reminder"
 msgstr "Keine Erinnerung"
 
@@ -4294,7 +4306,7 @@ msgstr "Auf dieser Seite"
 msgid "Online"
 msgstr "Online"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:201
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:57
 msgid "Online check-in"
 msgstr "Online-Check-in"
 
@@ -4315,7 +4327,7 @@ msgid "Only images are allowed."
 msgstr "Es sind nur Bilder erlaubt."
 
 #: src/components/image-field.tsx:96
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:91
 msgid "Only JPG, PNG and WebP images"
 msgstr "Nur JPG-, PNG- und WebP-Bilder"
 
@@ -4426,8 +4438,8 @@ msgstr "Seite {0} von {1}"
 #~ msgid "Page {0} of {pageCount}"
 #~ msgstr "Seite {0} von {pageCount}"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:119
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:125
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:129
 msgid "Page background"
 msgstr "Seitenhintergrund"
 
@@ -4747,11 +4759,11 @@ msgstr "Vorauszahlung"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:360
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:412
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:435
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:280
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:189
 msgid "Preview"
 msgstr "Vorschau"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:266
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:179
 msgid "Preview (opens in new tab)"
 msgstr "Vorschau (öffnet in neuem Tab)"
 
@@ -4813,7 +4825,7 @@ msgstr "Hauptgast"
 msgid "Print"
 msgstr "Drucken"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:125
 msgid "Private"
 msgstr "Privat"
 
@@ -4972,7 +4984,7 @@ msgstr "Schützen Sie Ihr Konto mit einem zweiten Schritt"
 msgid "Public Key"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:112
 msgid "Purpose of stay"
 msgstr "Reisezweck"
 
@@ -5123,11 +5135,11 @@ msgstr "Neu laden, um die andere Fassung zu sehen. Bis dahin bleiben deine Ände
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:417
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:212
 msgid "Reminder"
 msgstr "Erinnerung"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:461
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:259
 msgid "Reminders go only to guests who haven’t checked in yet."
 msgstr "Erinnerungen gehen nur an Gäste, die noch nicht eingecheckt haben."
 
@@ -5165,7 +5177,7 @@ msgid "Remove from reservation"
 msgstr "Aus Reservierung entfernen"
 
 #: src/components/image-field.tsx:205
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:182
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:189
 msgid "Remove image"
 msgstr "Bild entfernen"
 
@@ -5206,7 +5218,7 @@ msgstr "{replaces} durch {name} ersetzen?"
 msgid "Replace all"
 msgstr "Alle ersetzen"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:167
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:174
 msgid "Replace image"
 msgstr "Bild ersetzen"
 
@@ -5351,7 +5363,7 @@ msgstr "Rollen & Zugriff"
 #~ msgstr "Rollen erfolgreich aktualisiert"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:87
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:60
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:184
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:199
@@ -5419,7 +5431,7 @@ msgstr "Zimmernummer ist erforderlich"
 msgid "Room number, e.g. 12A. Rooms are matched by it."
 msgstr "Zimmernummer, z. B. 12A. Zimmer werden darüber zugeordnet."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:33
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:34
 msgid "Room selection is required"
 msgstr "Zimmerauswahl ist erforderlich"
 
@@ -5502,7 +5514,7 @@ msgstr "Tests laufen… ({passedCount}/{0})"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:137
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:336
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:214
@@ -5720,7 +5732,7 @@ msgstr "Wählen Sie oben auf der Seite eine Unterkunft aus, um ihre Events zu se
 msgid "Select a property at the top of the page to see its rooms."
 msgstr "Wählen Sie oben auf der Seite ein Objekt aus, um seine Zimmer zu sehen."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:88
 msgid "Select a room"
 msgstr "Zimmer auswählen"
 
@@ -5817,14 +5829,14 @@ msgstr "Rechnung über PMS senden"
 msgid "Send reset link"
 msgstr "Reset-Link senden"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:358
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:159
 msgid "Send the check-in link automatically"
 msgstr "Check-in-Link automatisch senden"
 
 #~ msgid "Sending"
 #~ msgstr "Wird gesendet"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:122
 msgid "Sending to guests"
 msgstr "Versand an Gäste"
 
@@ -6058,8 +6070,8 @@ msgstr "Staging"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:55
 #: src/routes/_dashboard-layout/-components/nav-items.ts:184
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:354
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:359
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:345
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:350
 msgid "Start"
 msgstr "Start"
 
@@ -6351,7 +6363,7 @@ msgstr "Die Datei enthält keine Zeilen."
 #. placeholder {0}: formatBytes(checkinBackgroundMaxBytes)
 #. placeholder {0}: formatBytes(maxBytes)
 #: src/components/image-field.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:97
 msgid "The file is larger than {0}"
 msgstr "Die Datei ist größer als {0}"
 
@@ -6367,7 +6379,7 @@ msgstr "Die Datei ist größer als 5 MB."
 msgid "The file needs the columns \"number\" and \"type\"."
 msgstr "Die Datei benötigt die Spalten „number“ und „type“."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:214
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:205
 msgid "The first image is the cover. Drag the images to change their order. JPG, PNG or WebP, up to 5 MB each."
 msgstr "Das erste Bild ist das Titelbild. Ziehen Sie die Bilder, um ihre Reihenfolge zu ändern. JPG, PNG oder WebP, jeweils bis 5 MB."
 
@@ -6407,7 +6419,7 @@ msgstr "Die Nummer kommt in der Datei mehrfach vor"
 msgid "The person we deal with, and the company they act for."
 msgstr "Die Ansprechperson und das Unternehmen, für das sie handelt."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:131
 msgid "The picture behind the check-in form in the guest app."
 msgstr "Das Bild hinter dem Check-in-Formular in der Gäste-App."
 
@@ -6431,7 +6443,7 @@ msgstr "Das Objekt <0>{propertyName}</0> wird gelöscht. Diese Aktion kann nic
 msgid "The property's code in Apaleo, for example MUC."
 msgstr "Der Code der Unterkunft in Apaleo, zum Beispiel MUC."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:53
 msgid "The reminder must go out closer to arrival than the first send"
 msgstr "Die Erinnerung muss näher an der Anreise liegen als der erste Versand"
 
@@ -6555,9 +6567,13 @@ msgstr "Dieses Feld ist erforderlich"
 msgid "This image is small, so it may look blurry once cropped."
 msgstr "Dieses Bild ist klein und könnte nach dem Zuschneiden unscharf wirken."
 
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:250
+msgid "This image is smaller than {minWidth} × {minHeight} pixels and may look blurry on large screens."
+msgstr "Dieses Bild ist kleiner als {minWidth} × {minHeight} Pixel und kann auf großen Bildschirmen unscharf wirken."
+
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:242
-msgid "This image is smaller than 1920 × 1080 pixels and may look blurry on large screens."
-msgstr "Dieses Bild ist kleiner als 1920 × 1080 Pixel und kann auf großen Bildschirmen unscharf wirken."
+#~ msgid "This image is smaller than 1920 × 1080 pixels and may look blurry on large screens."
+#~ msgstr "Dieses Bild ist kleiner als 1920 × 1080 Pixel und kann auf großen Bildschirmen unscharf wirken."
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:89
 msgid "This invitation link is invalid."
@@ -6599,7 +6615,7 @@ msgstr "Diese Zahlung existiert nicht."
 msgid "This profile was updated elsewhere"
 msgstr "Dieses Profil wurde an anderer Stelle geändert"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:294
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:81
 msgid "This property has no guest app domain yet, so the check-in links won’t work. An administrator sets it in the property’s settings."
 msgstr "Diese Unterkunft hat noch keine Domain für die Gäste-App, daher funktionieren die Check-in-Links nicht. Ein Administrator legt sie in den Einstellungen der Unterkunft fest."
 
@@ -6635,7 +6651,7 @@ msgstr "Zeitbasiert (TOTP) · 6 Ziffern · 30 Sekunden"
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:281
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:272
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:187
@@ -6658,7 +6674,7 @@ msgstr "Titel (Deutsch)"
 msgid "Title is required"
 msgstr "Titel ist erforderlich"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:180
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:171
 msgid "Title, description and categories."
 msgstr "Titel, Beschreibung und Kategorien."
 
@@ -6990,8 +7006,8 @@ msgstr "Hochladen"
 #~ msgstr "Laden Sie ein Profilbild hoch, um Ihr Konto zu personalisieren"
 
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:81
-msgid "Upload an image or pick another background"
-msgstr "Laden Sie ein Bild hoch oder wählen Sie einen anderen Hintergrund"
+#~ msgid "Upload an image or pick another background"
+#~ msgstr "Laden Sie ein Bild hoch oder wählen Sie einen anderen Hintergrund"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:278
 msgid "Upload failed."
@@ -7259,12 +7275,12 @@ msgstr "WhatsApp"
 #~ msgid "WhatsApp opened"
 #~ msgstr "WhatsApp geöffnet"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:166
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:123
 msgid "When guests get the check-in link by email."
 msgstr "Wann Gäste den Check-in-Link per E-Mail erhalten."
 
 #. placeholder {0}: property.timezone.replaceAll('_', ' ')
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:188
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:179
 msgid "When it starts, when it ends and when guests are let in. Times are in the hotel’s timezone, {0}."
 msgstr "Wann es beginnt, wann es endet und wann Gäste eingelassen werden. Die Zeiten gelten in der Zeitzone des Hotels, {0}."
 
@@ -7280,7 +7296,7 @@ msgstr "Wann die Gäste anreisen, wann sie abreisen und in welchem Zimmer sie wo
 msgid "Where the customer is registered."
 msgstr "Wo der Kunde gemeldet ist."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:199
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:190
 msgid "Where the event takes place."
 msgstr "Wo das Event stattfindet."
 
@@ -7323,7 +7339,7 @@ msgstr "Gestern"
 #~ msgid "You are viewing the user interface. This shows limited functionality for regular users."
 #~ msgstr "Sie sehen die Benutzeroberfläche. Dies zeigt eingeschränkte Funktionalität für normale Benutzer."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:463
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:261
 msgid "You can send the link by hand from a reservation."
 msgstr "Den Link können Sie manuell aus einer Reservierung senden."
 
@@ -7383,8 +7399,8 @@ msgstr "Ihre App erzeugt alle 30 Sekunden einen neuen Code."
 msgid "Your email has been verified successfully. You can now log in."
 msgstr "Ihre E-Mail wurde erfolgreich verifiziert. Sie können sich jetzt anmelden."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:154
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:214
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:161
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:222
 msgid "Your image"
 msgstr "Eigenes Bild"
 
@@ -7413,7 +7429,7 @@ msgstr "Ihre bisherigen Codes funktionieren nicht mehr. Bewahren Sie diese siche
 msgid "Your recovery codes will be deleted, and you'll be signed out on all other devices."
 msgstr "Ihre Wiederherstellungscodes werden gelöscht und Sie werden auf allen anderen Geräten abgemeldet."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:311
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:98
 msgid "Your unsaved changes will be lost."
 msgstr "Ihre ungespeicherten Änderungen gehen verloren."
 
