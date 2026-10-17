@@ -161,8 +161,9 @@
   /* Tints are translucent here, so they sit on any dark surface. The ink is
      one step lighter than the solid fill's hue: at the fill's lightness text
      only reached 3.8:1 on a tint. The solid fills are inherited from light
-     mode, for the status disc; the destructive button and menu item keep a
-     tint of the ink here instead, a red block being too loud for them. */
+     mode (status disc, destructive button); a translucent tint of them read
+     as muddy maroon on the dark popover. The destructive menu item keeps a
+     tint of the ink, a red block being too loud inside a menu. */
   --danger: oklch(0.75 0.135 14);
   --danger-soft: oklch(0.54 0.18 14 / 15%);
   --success: oklch(0.77 0.13 155);
