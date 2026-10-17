@@ -82,15 +82,15 @@
   --popover-foreground: var(--foreground);
   --primary: oklch(0.52 0.105 223.128);
   --primary-foreground: oklch(0.984 0.019 200.873);
-  --secondary: oklch(0.967 0.001 255);
+  --secondary: oklch(0.967 0.001 205);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.963 0.002 255);
-  --muted-foreground: oklch(0.52 0.021 255);
+  --muted: oklch(0.963 0.002 205);
+  --muted-foreground: oklch(0.52 0.021 205);
   /* Three text levels, no opacity in between: foreground, muted-foreground
      (secondary text, >= 4.5:1) and subtle-foreground, for what WCAG leaves
      out: separators, placeholders, disabled and decorative marks (~3:1). */
-  --subtle-foreground: oklch(0.65 0.016 255);
-  --accent: oklch(0.963 0.002 255);
+  --subtle-foreground: oklch(0.65 0.016 205);
+  --accent: oklch(0.963 0.002 205);
   --accent-foreground: var(--foreground);
   /* Status colours. Each has an ink (--danger, --success, ...) for text,
      icons, borders and dots, >= 4.5:1 on every surface and on its own
@@ -121,37 +121,41 @@
   /* The mark on the active tab or section link: --primary itself here,
      5.3:1 on the background. */
   --indicator: var(--primary);
-  --border: oklch(0.925 0.005 255);
-  --input: oklch(0.925 0.005 255);
-  --ring: oklch(0.723 0.014 255);
-  --chart-1: oklch(0.872 0.007 255);
-  --chart-2: oklch(0.56 0.021 255);
-  --chart-3: oklch(0.45 0.017 255);
-  --chart-4: oklch(0.378 0.015 255);
-  --chart-5: oklch(0.275 0.011 255);
+  --border: oklch(0.925 0.005 205);
+  --input: oklch(0.925 0.005 205);
+  --ring: oklch(0.723 0.014 205);
+  --chart-1: oklch(0.872 0.007 205);
+  --chart-2: oklch(0.56 0.021 205);
+  --chart-3: oklch(0.45 0.017 205);
+  --chart-4: oklch(0.378 0.015 205);
+  --chart-5: oklch(0.275 0.011 205);
   --radius: 0.45rem;
-  --sidebar: oklch(0.985 0.002 255);
+  --sidebar: oklch(0.985 0.002 205);
   --sidebar-foreground: var(--foreground);
   --sidebar-primary: oklch(0.609 0.126 221.723);
   --sidebar-primary-foreground: oklch(0.984 0.019 200.873);
-  --sidebar-accent: oklch(0.963 0.002 255);
+  --sidebar-accent: oklch(0.963 0.002 205);
   --sidebar-accent-foreground: var(--foreground);
-  --sidebar-border: oklch(0.925 0.005 255);
-  --sidebar-ring: oklch(0.723 0.014 255);
+  --sidebar-border: oklch(0.925 0.005 205);
+  --sidebar-ring: oklch(0.723 0.014 205);
 }
 
 .dark {
-  --background: oklch(0.148 0.004 255);
-  --foreground: oklch(0.987 0.002 255);
-  --card: oklch(0.218 0.008 255);
-  --popover: oklch(0.218 0.008 255);
+  /* One depth scale on the primary's teal-grey (hue 205), darkest to
+     lightest: background, sidebar, card, popover, muted. Border and input
+     are the same hue at low alpha, so field fills and hairlines don't turn
+     a hue-less graphite next to the tinted surfaces. */
+  --background: oklch(0.165 0.008 205);
+  --foreground: oklch(0.987 0.002 205);
+  --card: oklch(0.205 0.012 205);
+  --popover: oklch(0.235 0.012 205);
   --primary: oklch(0.45 0.085 224.283);
   --primary-foreground: oklch(0.984 0.019 200.873);
-  --secondary: oklch(0.275 0.011 255);
-  --muted: oklch(0.275 0.011 255);
-  --muted-foreground: oklch(0.723 0.014 255);
-  --subtle-foreground: oklch(0.53 0.016 255);
-  --accent: oklch(0.275 0.011 255);
+  --secondary: oklch(0.28 0.014 205);
+  --muted: oklch(0.28 0.014 205);
+  --muted-foreground: oklch(0.723 0.016 205);
+  --subtle-foreground: oklch(0.53 0.016 205);
+  --accent: oklch(0.28 0.014 205);
   /* Tints are translucent here, so they sit on any dark surface. The ink is
      one step lighter than the solid fill's hue: at the fill's lightness text
      only reached 3.8:1 on a tint. The solid fills are inherited from light
@@ -175,20 +179,20 @@
   /* --primary is 2.7:1 here, under the 3:1 a state mark needs; this is its
      hue one step lighter, 5.6:1, calmer than the links' teal. */
   --indicator: oklch(0.62 0.105 223);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.56 0.021 255);
-  --chart-1: oklch(0.872 0.007 255);
-  --chart-2: oklch(0.56 0.021 255);
-  --chart-3: oklch(0.45 0.017 255);
-  --chart-4: oklch(0.378 0.015 255);
-  --chart-5: oklch(0.275 0.011 255);
-  --sidebar: oklch(0.218 0.008 255);
+  --border: oklch(0.88 0.035 205 / 10%);
+  --input: oklch(0.88 0.035 205 / 15%);
+  --ring: oklch(0.56 0.021 205);
+  --chart-1: oklch(0.872 0.007 205);
+  --chart-2: oklch(0.56 0.021 205);
+  --chart-3: oklch(0.45 0.017 205);
+  --chart-4: oklch(0.378 0.015 205);
+  --chart-5: oklch(0.275 0.011 205);
+  --sidebar: oklch(0.195 0.012 205);
   --sidebar-primary: oklch(0.715 0.143 215.221);
   --sidebar-primary-foreground: oklch(0.302 0.056 229.695);
-  --sidebar-accent: oklch(0.275 0.011 255);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.56 0.021 255);
+  --sidebar-accent: oklch(0.28 0.014 205);
+  --sidebar-border: oklch(0.88 0.035 205 / 10%);
+  --sidebar-ring: oklch(0.56 0.021 205);
 }
 
 @layer base {
