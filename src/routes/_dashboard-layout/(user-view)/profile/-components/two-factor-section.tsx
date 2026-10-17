@@ -91,9 +91,7 @@ export function TwoFactorSection() {
             aria-hidden="true"
             className={cn(
               'mr-0.5 size-1.5 rounded-full',
-              status.enabled
-                ? 'bg-emerald-700 dark:bg-emerald-300'
-                : 'bg-muted-foreground/60'
+              status.enabled ? 'bg-success' : 'bg-subtle-foreground'
             )}
           />
           {status.enabled ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
@@ -147,7 +145,7 @@ export function TwoFactorSection() {
                     <span
                       className={
                         status.recovery_codes_remaining < LOW_RECOVERY_CODES
-                          ? 'text-amber-600 dark:text-amber-500'
+                          ? 'text-warning'
                           : 'text-muted-foreground'
                       }
                     >
@@ -158,7 +156,7 @@ export function TwoFactorSection() {
                       <Trans>Each code works once</Trans>
                     </span>
                   ) : (
-                    <span className="text-amber-600 dark:text-amber-500">
+                    <span className="text-warning">
                       <Trans>You haven't saved any recovery codes yet.</Trans>
                     </span>
                   )}
@@ -191,7 +189,7 @@ export function TwoFactorSection() {
             <Button
               type="button"
               variant="ghost"
-              className="text-danger hover:bg-destructive/10 hover:text-danger"
+              className="text-danger hover:bg-danger-soft hover:text-danger"
               onClick={() => setDisableOpen(true)}
             >
               <Trans>Turn off two-factor authentication</Trans>

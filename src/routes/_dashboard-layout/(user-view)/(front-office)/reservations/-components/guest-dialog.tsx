@@ -286,7 +286,7 @@ export function GuestDialog({
                 variant="ghost"
                 // Bare until hovered, then tinted like a soft destructive one;
                 // the border takes the fill's tint, so no outline shows
-                className="hover:border-destructive/10 hover:bg-destructive/10 hover:text-danger focus-visible:border-destructive/10 focus-visible:bg-destructive/10 focus-visible:text-danger dark:hover:border-destructive/20 dark:hover:bg-destructive/20 dark:focus-visible:border-destructive/20 dark:focus-visible:bg-destructive/20"
+                className="hover:border-danger/20 hover:bg-danger-soft hover:text-danger focus-visible:border-danger/20 focus-visible:bg-danger-soft focus-visible:text-danger"
                 onClick={closeAfter(onRemove)}
               >
                 {removeItem}

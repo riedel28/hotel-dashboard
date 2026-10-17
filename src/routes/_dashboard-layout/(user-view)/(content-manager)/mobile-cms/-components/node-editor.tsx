@@ -313,7 +313,7 @@ export function NodeEditor({
         <span className="me-auto text-sm" role="status">
           {isDirty && (
             <span className="flex items-center gap-2">
-              <span className="size-1.5 rounded-full bg-amber-500" />
+              <span className="size-1.5 rounded-full bg-warning" />
               <Trans>Unsaved changes</Trans>
             </span>
           )}

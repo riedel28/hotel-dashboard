@@ -176,7 +176,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
           'relative grid size-20 shrink-0 place-items-center rounded-full border-2 border-dashed border-transparent p-1 transition-transform sm:size-24',
           'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
           isDragging && 'scale-102 border-primary bg-primary/5',
-          rejection && 'border-destructive'
+          rejection && 'border-danger'
         )}
       >
         {/* Keyed on whether there's a picture at all: the root latches its

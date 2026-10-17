@@ -14,10 +14,10 @@ import { cn } from '@/lib/utils';
  */
 const fieldClassNames = {
   month_grid: 'w-full',
-  weekday: 'h-8 p-0 text-xs font-medium text-muted-foreground/80',
+  weekday: 'h-8 p-0 text-xs font-medium text-muted-foreground',
   day: 'group h-8 px-0 py-px text-sm',
   day_button:
-    'relative mx-auto flex size-8 cursor-pointer items-center justify-center rounded-md p-0 text-foreground outline-none group-data-disabled:pointer-events-none group-data-disabled:text-foreground/30 group-data-outside:text-foreground/30 group-data-selected:bg-foreground/10 group-data-selected:font-medium hover:bg-accent focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50'
+    'relative mx-auto flex size-8 cursor-pointer items-center justify-center rounded-md p-0 text-foreground outline-none group-data-disabled:pointer-events-none group-data-disabled:text-subtle-foreground group-data-outside:text-subtle-foreground group-data-selected:bg-foreground/10 group-data-selected:font-medium hover:bg-accent focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50'
 };
 
 function Calendar({
@@ -42,17 +42,17 @@ function Calendar({
         nav: 'absolute top-0 flex w-full justify-between z-10',
         button_previous: cn(
           buttonVariants({ variant: 'ghost' }),
-          'size-8 p-0 text-muted-foreground/80 hover:text-foreground'
+          'size-8 p-0 text-muted-foreground hover:text-foreground'
         ),
         button_next: cn(
           buttonVariants({ variant: 'ghost' }),
-          'size-8 p-0 text-muted-foreground/80 hover:text-foreground'
+          'size-8 p-0 text-muted-foreground hover:text-foreground'
         ),
-        weekday: 'size-8 p-0 text-xs font-medium text-muted-foreground/80',
+        weekday: 'size-8 p-0 text-xs font-medium text-muted-foreground',
         day_button:
           // A range is grey: its ends like a picked field date, the days
           // between them lighter
-          'cursor-pointer relative flex size-8 items-center justify-center whitespace-nowrap rounded-md p-0 text-foreground transition-200 group-[[data-selected]:not(.range-middle)]:[transition-property:color,background-color,border-radius,box-shadow] group-[[data-selected]:not(.range-middle)]:duration-150 group-data-disabled:pointer-events-none focus-visible:z-10 hover:not-in-data-selected:bg-accent group-data-selected:bg-foreground/10 group-data-selected:font-medium group-data-selected:text-foreground group-data-selected:dark:bg-foreground/15 hover:not-in-data-selected:text-foreground group-data-disabled:text-foreground/30 group-data-disabled:line-through group-data-outside:text-foreground/30 group-data-selected:group-data-outside:text-foreground/60 outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] group-[.range-start:not(.range-end)]:rounded-e-none group-[.range-end:not(.range-start)]:rounded-s-none group-[.range-middle]:rounded-none group-[.range-middle]:group-data-selected:bg-foreground/5 group-[.range-middle]:group-data-selected:font-normal group-[.range-middle]:group-data-selected:text-foreground group-[.range-middle]:group-data-selected:dark:bg-foreground/[0.07]',
+          'cursor-pointer relative flex size-8 items-center justify-center whitespace-nowrap rounded-md p-0 text-foreground transition-200 group-[[data-selected]:not(.range-middle)]:[transition-property:color,background-color,border-radius,box-shadow] group-[[data-selected]:not(.range-middle)]:duration-150 group-data-disabled:pointer-events-none focus-visible:z-10 hover:not-in-data-selected:bg-accent group-data-selected:bg-foreground/10 group-data-selected:font-medium group-data-selected:text-foreground group-data-selected:dark:bg-foreground/15 hover:not-in-data-selected:text-foreground group-data-disabled:text-subtle-foreground group-data-disabled:line-through group-data-outside:text-subtle-foreground group-data-selected:group-data-outside:text-muted-foreground outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] group-[.range-start:not(.range-end)]:rounded-e-none group-[.range-end:not(.range-start)]:rounded-s-none group-[.range-middle]:rounded-none group-[.range-middle]:group-data-selected:bg-foreground/5 group-[.range-middle]:group-data-selected:font-normal group-[.range-middle]:group-data-selected:text-foreground group-[.range-middle]:group-data-selected:dark:bg-foreground/[0.07]',
         day: 'group size-8 px-0 py-px text-sm',
         range_start: 'range-start',
         range_end: 'range-end',
@@ -62,7 +62,7 @@ function Calendar({
         outside:
           'text-muted-foreground data-selected:bg-accent/50 data-selected:text-muted-foreground',
         hidden: 'invisible',
-        week_number: 'size-8 p-0 text-xs font-medium text-muted-foreground/80',
+        week_number: 'size-8 p-0 text-xs font-medium text-muted-foreground',
         ...(appearance === 'field' && fieldClassNames),
         ...classNames
       }}

@@ -226,7 +226,7 @@ export function TestConnectionDialog({
               </div>
               {step.status === 'failed' && step.error && (
                 <div
-                  className="ml-7 flex items-center gap-2 rounded-lg border border-rose-200/70 bg-rose-50 px-2.5 py-1.5 text-xs text-rose-800 dark:border-rose-800/30 dark:bg-rose-800/20 dark:text-rose-300"
+                  className="ml-7 flex items-center gap-2 rounded-lg border border-danger/20 bg-danger-soft px-2.5 py-1.5 text-xs text-danger"
                   role="alert"
                 >
                   <span className="flex-1">{step.error}</span>
@@ -234,7 +234,7 @@ export function TestConnectionDialog({
                     text={step.error}
                     size="icon-xs"
                     buttonClassName="bg-transparent!"
-                    iconClassName="-my-0.5 -mr-1 text-rose-800 dark:text-rose-300"
+                    iconClassName="-my-0.5 -mr-1 text-danger"
                   />
                 </div>
               )}
@@ -250,8 +250,8 @@ export function TestConnectionDialog({
             phase === 'running'
               ? 'border-border/60 bg-muted/30 text-muted-foreground'
               : allPassed
-                ? 'border-emerald-200/70 bg-emerald-50 text-emerald-800 dark:border-emerald-800/30 dark:bg-emerald-800/20 dark:text-emerald-300'
-                : 'border-rose-200/70 bg-rose-50 text-rose-800 dark:border-rose-800/30 dark:bg-rose-800/20 dark:text-rose-300'
+                ? 'border-success/20 bg-success-soft text-success'
+                : 'border-danger/20 bg-danger-soft text-danger'
           )}
         >
           {phase === 'running' ? (
@@ -316,7 +316,7 @@ function EndpointNode({
 }) {
   return (
     <div className="flex w-16 shrink-0 flex-col items-center gap-2 text-center sm:w-24">
-      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card text-foreground/70 dark:bg-input/30">
+      <div className="flex size-11 items-center justify-center rounded-xl border border-border/60 bg-card text-muted-foreground dark:bg-input/30">
         {icon}
       </div>
       <span className="text-xs leading-tight font-medium">{label}</span>
@@ -337,10 +337,7 @@ function ConnectionLine({
         'h-0.5 flex-1 rounded-full',
         phase === 'running' &&
           'animate-connection-dash bg-[repeating-linear-gradient(90deg,var(--color-muted-foreground)_0px,var(--color-muted-foreground)_5px,transparent_5px,transparent_12px)] motion-reduce:animate-none',
-        phase === 'done' &&
-          (allPassed
-            ? 'bg-emerald-500/35 dark:bg-emerald-600/35'
-            : 'bg-rose-500/35 dark:bg-rose-700/35')
+        phase === 'done' && (allPassed ? 'bg-success/35' : 'bg-danger/35')
       )}
     />
   );
@@ -367,6 +364,6 @@ function StepStatusIcon({ status }: { status: StepStatus }) {
         </span>
       );
     default:
-      return <CircleDashedIcon className="size-4.5 text-muted-foreground/50" />;
+      return <CircleDashedIcon className="size-4.5 text-subtle-foreground" />;
   }
 }

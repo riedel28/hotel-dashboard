@@ -2,13 +2,13 @@
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-import { LoaderCircleIcon, MessageCircleIcon } from 'lucide-react';
 
 import {
   fetchSelectedProperty,
   selectablePropertiesQueryOptions
 } from '@/api/properties';
-import { FullScreenRouteError } from '@/components/route-error';
+import { AppLogo } from '@/components/app-logo';
+import { FullScreenRouteError } from '@/components/route-state';
 import {
   Sidebar,
   SidebarGroup,
@@ -16,9 +16,11 @@ import {
   SidebarInset,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar';
+import { Skeleton } from '@/components/ui/skeleton';
 import { viewOf } from '@/hooks/use-current-view';
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
@@ -32,9 +34,7 @@ function SidebarHeaderComponent() {
       <SidebarMenu>
         <SidebarGroup>
           <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-            <div className="flex size-6.5 items-center justify-center rounded-md bg-primary/10 text-sm font-bold text-primary transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0 dark:bg-cyan-950 dark:text-cyan-200/90">
-              <MessageCircleIcon className="size-4" />
-            </div>
+            <AppLogo className="transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0" />
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
               <Trans>Hotel Dashboard</Trans>
             </span>
@@ -138,18 +138,40 @@ export const Route = createFileRoute('/_dashboard-layout')({
   component: DashboardLayout
 });
 
+// The layout's own shape while its data loads (shown only after a second, so a
+// fast load never flashes it): the real sidebar frame and header, with
+// placeholders where the nav, the property selector and the page will be.
+// Nothing moves when the page arrives, unlike a spinner swapped for a screen.
 function DashboardPending() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4">
-      <div className="flex items-center gap-2">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <MessageCircleIcon className="size-4" />
-        </div>
-        <span className="text-lg font-semibold">
-          <Trans>Hotel Dashboard</Trans>
-        </span>
-      </div>
-      <LoaderCircleIcon className="size-6 animate-spin text-muted-foreground" />
-    </div>
+    <SidebarProvider className="h-svh overflow-hidden" aria-busy="true">
+      <Sidebar collapsible="icon">
+        <SidebarHeaderComponent />
+        <SidebarGroup>
+          <SidebarMenu>
+            {Array.from({ length: 8 }, (_, index) => (
+              <SidebarMenuItem key={index}>
+                <SidebarMenuSkeleton showIcon />
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </Sidebar>
+      <SidebarInset className="flex h-full min-w-0 flex-col">
+        <header className="border-b px-3 md:px-4 md:ps-3.5">
+          <div className="flex h-12 items-center justify-between gap-4">
+            <Skeleton className="h-8 w-44" />
+            <Skeleton className="size-8 rounded-full" />
+          </div>
+        </header>
+        <main className="flex flex-col gap-4 px-3 py-2 md:px-6 md:py-4">
+          <span className="sr-only">
+            <Trans>Loading...</Trans>
+          </span>
+          <Skeleton className="h-7 w-48" />
+          <Skeleton className="h-96 w-full rounded-lg" />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

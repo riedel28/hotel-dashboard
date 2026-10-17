@@ -50,7 +50,7 @@ export function DashboardNav({ onNavigate }: { onNavigate?: () => void }) {
                       activeOptions={exact ? { exact: true } : undefined}
                       activeProps={{
                         className:
-                          'bg-primary/10 text-cyan-800 hover:bg-primary/10! hover:text-cyan-800! dark:bg-primary/20! dark:text-cyan-200/90!'
+                          'bg-primary-soft text-primary-soft-foreground hover:bg-primary-soft! hover:text-primary-soft-foreground!'
                       }}
                       onClick={onNavigate}
                     >

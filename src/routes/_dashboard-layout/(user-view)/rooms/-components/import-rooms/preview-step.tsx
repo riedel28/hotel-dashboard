@@ -53,7 +53,7 @@ export function PreviewStep({
     {
       label: t`To create`,
       count: summary.create,
-      color: 'text-emerald-600 dark:text-emerald-400'
+      color: 'text-success'
     },
     { label: t`To update`, count: summary.update },
     { label: t`Unchanged`, count: summary.unchanged },

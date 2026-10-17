@@ -98,7 +98,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-sm px-1.5 py-1 text-sm select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary data-inset:pl-8 data-[variant=destructive]:hover:bg-destructive/80 data-[variant=destructive]:hover:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive/80 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:focus-visible:outline-destructive/40 data-[variant=destructive-soft]:focus:bg-destructive/10 data-[variant=destructive-soft]:focus:text-danger data-[variant=destructive-soft]:focus:**:text-danger! data-[variant=destructive]:dark:hover:bg-destructive/30 data-[variant=destructive]:dark:focus:bg-destructive/30 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:hover:[&_svg]:text-destructive-foreground data-[variant=destructive]:focus:[&_svg]:text-destructive-foreground [&_svg:not([class*='size-'])]:size-3.5",
+        "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-sm px-1.5 py-1 text-sm select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-primary data-inset:pl-8 data-[variant=destructive]:hover:bg-danger-solid data-[variant=destructive]:hover:text-danger-solid-foreground data-[variant=destructive]:focus:bg-danger-solid data-[variant=destructive]:focus:text-danger-solid-foreground data-[variant=destructive]:focus-visible:outline-danger/40 data-[variant=destructive-soft]:focus:bg-danger-soft data-[variant=destructive-soft]:focus:text-danger data-[variant=destructive-soft]:focus:**:text-danger! data-[variant=destructive]:dark:hover:bg-danger/20 data-[variant=destructive]:dark:focus:bg-danger/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:hover:[&_svg]:text-danger-solid-foreground data-[variant=destructive]:focus:[&_svg]:text-danger-solid-foreground [&_svg:not([class*='size-'])]:size-3.5",
         className
       )}
       {...props}
@@ -279,7 +279,7 @@ function DropdownMenuShortcut({
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        'ml-auto text-xs tracking-widest text-muted-foreground group-focus/dropdown-menu-item:text-accent-foreground group-data-[variant=destructive]/dropdown-menu-item:group-hover/dropdown-menu-item:text-destructive-foreground group-data-[variant=destructive]/dropdown-menu-item:group-focus/dropdown-menu-item:text-destructive-foreground',
+        'ml-auto text-xs tracking-widest text-muted-foreground group-focus/dropdown-menu-item:text-accent-foreground group-data-[variant=destructive]/dropdown-menu-item:group-hover/dropdown-menu-item:text-danger-solid-foreground group-data-[variant=destructive]/dropdown-menu-item:group-focus/dropdown-menu-item:text-danger-solid-foreground',
         className
       )}
       {...props}

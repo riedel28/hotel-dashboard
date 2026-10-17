@@ -161,7 +161,7 @@ export function RoomPicker({
                 'w-full cursor-default rounded-sm px-2 py-1.5 text-left text-sm outline-hidden',
                 // Either way it reads as a plain item until hovered or focused
                 isClearDestructive
-                  ? 'hover:bg-destructive/10 hover:text-danger focus-visible:bg-destructive/10 focus-visible:text-danger'
+                  ? 'hover:bg-danger-soft hover:text-danger focus-visible:bg-danger-soft focus-visible:text-danger'
                   : 'hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground'
               )}
               onClick={() => {

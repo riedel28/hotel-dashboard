@@ -222,7 +222,7 @@ export default function UsersTable({
               <Badge
                 size="xs"
                 variant="secondary"
-                className="shrink-0 rounded-md border border-foreground/10 text-foreground/80 capitalize"
+                className="shrink-0 rounded-md border border-foreground/10 text-foreground capitalize"
               >
                 {firstRole.name}
               </Badge>
@@ -241,7 +241,7 @@ export default function UsersTable({
                           key={role.id}
                           size="xs"
                           variant="secondary"
-                          className="shrink-0 rounded-md border border-foreground/10 text-foreground/80 capitalize"
+                          className="shrink-0 rounded-md border border-foreground/10 text-foreground capitalize"
                         >
                           {role.name}
                         </Badge>

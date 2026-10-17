@@ -60,7 +60,7 @@ export function BookingCell({ bookingNr, reservationId }: BookingCellProps) {
             isFiltered ? t`Remove reservation filter` : t`Filter by reservation`
           }
           className={cn(
-            'absolute inset-y-0 left-1 my-auto text-muted-foreground/60 opacity-0 group-hover/row:opacity-100 hover:text-foreground focus-visible:opacity-100',
+            'absolute inset-y-0 left-1 my-auto text-muted-foreground opacity-0 group-hover/row:opacity-100 hover:text-foreground focus-visible:opacity-100',
             isFiltered && 'bg-muted text-foreground opacity-100'
           )}
           onClick={(event) => {

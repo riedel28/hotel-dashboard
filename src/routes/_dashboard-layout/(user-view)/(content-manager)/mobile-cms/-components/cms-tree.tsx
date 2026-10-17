@@ -359,7 +359,7 @@ export function CmsTree({
                 </span>
                 {isAnyTranslationMissing(node.translations) && (
                   <LanguagesIcon
-                    className="size-3.5 text-amber-600 dark:text-amber-400"
+                    className="size-3.5 text-warning"
                     role="img"
                     aria-label={t`Translation missing`}
                   >

@@ -96,7 +96,7 @@ export function AdyenMappingCodesSection({
 
         {isDirty && (
           <p className="mt-1.5 flex items-center gap-2 px-4 text-xs text-muted-foreground transition-all">
-            <span className="size-1.5 rounded-full bg-amber-500 dark:bg-amber-300" />
+            <span className="size-1.5 rounded-full bg-warning" />
             <Trans>Unsaved changes</Trans>
           </p>
         )}
@@ -142,7 +142,7 @@ function MappingCell({
             />
             {dirty && (
               <InputGroupAddon align="inline-end">
-                <span className="size-1.5 rounded-full bg-amber-500 dark:bg-amber-300" />
+                <span className="size-1.5 rounded-full bg-warning" />
               </InputGroupAddon>
             )}
           </InputGroup>

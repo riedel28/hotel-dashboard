@@ -71,7 +71,9 @@ function BreadcrumbSeparator({
       className={cn('[&>svg]:size-3.5', className)}
       {...props}
     >
-      {children ?? <span className="text-[13px] text-foreground/30">/</span>}
+      {children ?? (
+        <span className="text-[13px] text-subtle-foreground">/</span>
+      )}
     </li>
   );
 }

@@ -281,13 +281,13 @@ function EmailField({ user }: { user: User }) {
             >
               {verified ? (
                 <CheckIcon
-                  className="size-4 text-emerald-500"
+                  className="size-4 text-success"
                   strokeWidth={3}
                   aria-hidden="true"
                 />
               ) : (
                 <TriangleAlertIcon
-                  className="size-4 text-amber-700 dark:text-amber-500"
+                  className="size-4 text-warning"
                   aria-hidden="true"
                 />
               )}

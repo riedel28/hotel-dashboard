@@ -69,7 +69,7 @@ function InputOTPSlot({
       {...props}
     >
       {char ?? (
-        <span className="text-muted-foreground/60">{placeholderChar}</span>
+        <span className="text-subtle-foreground">{placeholderChar}</span>
       )}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">

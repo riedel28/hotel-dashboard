@@ -2,17 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import {
-  CheckIcon,
-  Loader2Icon,
-  MessageCircleIcon,
-  XCircleIcon
-} from 'lucide-react';
+import { CheckIcon, Loader2Icon, XCircleIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { resetPassword } from '@/api/auth';
+import { AppLogo } from '@/components/app-logo';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -69,7 +65,7 @@ function ResetPasswordPage() {
     return (
       <div className="w-full max-w-lg space-y-8">
         <div className="space-y-4 text-center">
-          <div className="inline-block rounded-full bg-red-200 p-2 text-red-800">
+          <div className="inline-block rounded-full bg-danger-soft p-2 text-danger">
             <XCircleIcon className="size-7" />
           </div>
           <h1 className="text-2xl font-bold">
@@ -95,7 +91,7 @@ function ResetPasswordPage() {
     return (
       <div className="w-full max-w-lg space-y-8">
         <div className="space-y-4 text-center">
-          <div className="inline-block rounded-full bg-green-200 p-2 text-green-800">
+          <div className="inline-block rounded-full bg-success-soft p-2 text-success">
             <CheckIcon className="size-7" />
           </div>
           <h1 className="text-2xl font-bold">
@@ -123,9 +119,7 @@ function ResetPasswordPage() {
   return (
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
-        <div className="inline-block rounded-lg bg-primary p-2 text-white">
-          <MessageCircleIcon className="size-10" aria-hidden="true" />
-        </div>
+        <AppLogo size="lg" tone="tint" className="mx-auto" />
 
         <h1 className="text-2xl font-bold">
           <Trans>Reset Password</Trans>

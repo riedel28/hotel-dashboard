@@ -205,7 +205,7 @@ function DataGrid<TData extends RowData>({
       base: '',
       header: '',
       headerRow: '',
-      headerSticky: 'sticky top-0 z-10 bg-background/90 backdrop-blur-xs',
+      headerSticky: 'sticky top-0 z-10 bg-card/90 backdrop-blur-xs',
       body: '',
       bodyRow: '',
       footer: '',
@@ -254,7 +254,7 @@ function DataGridContainer({
         // A size container, so a row can span just the visible part (`cqw`)
         // of a table wider than it
         '@container grid w-full overflow-x-auto',
-        border && 'rounded-lg border border-border dark:bg-input/30',
+        border && 'rounded-lg border border-border bg-card',
         className
       )}
     >

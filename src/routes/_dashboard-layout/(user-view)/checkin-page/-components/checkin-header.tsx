@@ -157,10 +157,7 @@ function GuestLink({ url }: { url: string }) {
             }
           >
             {copied ? (
-              <CheckIcon
-                className="text-emerald-600 dark:text-emerald-300"
-                aria-hidden="true"
-              />
+              <CheckIcon className="text-success" aria-hidden="true" />
             ) : (
               <CopyIcon aria-hidden="true" />
             )}
