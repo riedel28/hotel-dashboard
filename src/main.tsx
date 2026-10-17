@@ -92,7 +92,7 @@ function App() {
         <AuthProvider>
           <InnerApp />
         </AuthProvider>
-        <Toaster richColors />
+        <Toaster />
       </ThemeProvider>
     </I18nProvider>
   );
