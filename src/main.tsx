@@ -8,9 +8,8 @@ import ReactDOM from 'react-dom/client';
 
 import { setUnauthorizedHandler } from './api/client';
 import { AuthProvider, useAuth } from './auth';
-import { RouteError } from './components/route-error';
+import { RouteError } from './components/route-state';
 import { ThemeProvider } from './components/theme-provider';
-import { NotFound } from './components/ui/not-found';
 
 import './globals.css';
 import { Toaster } from './components/ui/sonner';
@@ -31,8 +30,6 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
   // A failed page shows in its place, inside the sidebar and header
   defaultErrorComponent: RouteError,
-  // Likewise a page that doesn't exist; the root keeps a full-screen one
-  defaultNotFoundComponent: () => <NotFound />,
   context: {
     // auth will initially be undefined
     // We'll be passing down the auth state from within a React component

@@ -21,6 +21,17 @@ import {
 
 type Score = 0 | 1 | 2 | 3 | 4;
 
+const danger = { bar: 'bg-danger', text: 'text-danger' };
+const warning = { bar: 'bg-warning', text: 'text-warning' };
+const success = { bar: 'bg-success', text: 'text-success' };
+const scoreTones: Record<Score, { bar: string; text: string }> = {
+  0: danger,
+  1: danger,
+  2: warning,
+  3: success,
+  4: success
+};
+
 interface Estimator {
   check: (
     password: string,
@@ -149,22 +160,9 @@ export function PasswordStrengthMeter({
     4: t`Strong`
   };
 
-  const segmentColors: Record<Score, string> = {
-    0: 'bg-danger',
-    1: 'bg-danger',
-    2: 'bg-warning',
-    3: 'bg-success',
-    4: 'bg-success'
-  };
-
-  // Same reading as the bars, in the same status inks (>= 4.5:1 as text).
-  const labelColors: Record<Score, string> = {
-    0: 'text-danger',
-    1: 'text-danger',
-    2: 'text-warning',
-    3: 'text-success',
-    4: 'text-success'
-  };
+  // One status per score, in its ink: the bars and the label read the same
+  // (>= 4.5:1 as text).
+  const tone = score === null ? undefined : scoreTones[score];
 
   const filled = score === null ? 0 : score + 1;
 
@@ -189,9 +187,7 @@ export function PasswordStrengthMeter({
               key={segment}
               className={cn(
                 'h-1 flex-1 rounded-full transition-colors duration-300',
-                segment < filled && score !== null
-                  ? segmentColors[score]
-                  : 'bg-border'
+                segment < filled && tone ? tone.bar : 'bg-border'
               )}
             />
           ))}
@@ -199,7 +195,7 @@ export function PasswordStrengthMeter({
         <span
           className={cn(
             'w-20 shrink-0 text-right text-xs font-medium transition-colors duration-300',
-            score === null ? 'text-muted-foreground' : labelColors[score]
+            tone?.text ?? 'text-muted-foreground'
           )}
         >
           {score !== null && labels[score]}

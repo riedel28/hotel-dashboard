@@ -126,7 +126,7 @@ function LoginPage() {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <AppLogo size="lg" tone="solid" />
+          <AppLogo size="lg" tone="tint" />
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold">
               <Trans>Login</Trans>
@@ -336,7 +336,7 @@ function TwoFactorStep({
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-primary/25 dark:text-indicator">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-primary-soft text-primary-soft-foreground">
             <ShieldCheckIcon />
           </div>
           <div className="space-y-1.5">

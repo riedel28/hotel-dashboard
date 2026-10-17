@@ -22,11 +22,11 @@ msgstr ""
 #~ msgid " - Requirement not met"
 #~ msgstr " - Anforderung nicht erfüllt"
 
-#: src/components/ui/password-strength-meter.tsx:248
+#: src/components/ui/password-strength-meter.tsx:244
 msgid "— met"
 msgstr "— erfüllt"
 
-#: src/components/ui/password-strength-meter.tsx:250
+#: src/components/ui/password-strength-meter.tsx:246
 msgid "— not met yet"
 msgstr "— noch nicht erfüllt"
 
@@ -805,7 +805,7 @@ msgstr "Zugewiesen"
 #~ msgid "AT +43"
 #~ msgstr "AT +43"
 
-#: src/components/ui/password-strength-meter.tsx:75
+#: src/components/ui/password-strength-meter.tsx:86
 msgid "At least {MIN_PASSWORD_LENGTH} characters"
 msgstr "Mindestens {MIN_PASSWORD_LENGTH} Zeichen"
 
@@ -816,11 +816,11 @@ msgstr "Mindestens {MIN_PASSWORD_LENGTH} Zeichen"
 #~ msgid "At least one adult is required"
 #~ msgstr "Mindestens ein Erwachsener ist erforderlich"
 
-#: src/components/ui/password-strength-meter.tsx:83
+#: src/components/ui/password-strength-meter.tsx:94
 msgid "At least one number"
 msgstr "Mindestens eine Ziffer"
 
-#: src/components/ui/password-strength-meter.tsx:87
+#: src/components/ui/password-strength-meter.tsx:98
 msgid "At least one symbol"
 msgstr "Mindestens ein Sonderzeichen"
 
@@ -1565,7 +1565,7 @@ msgstr "Die Check-in-Einstellungen konnten nicht geladen werden"
 msgid "Couldn't load the content"
 msgstr "Der Inhalt konnte nicht geladen werden"
 
-#: src/components/route-error.tsx:46
+#: src/components/route-state.tsx:72
 msgid "Couldn't load this page"
 msgstr "Diese Seite konnte nicht geladen werden"
 
@@ -2722,7 +2722,7 @@ msgstr "Fehler beim Aktualisieren des Benutzers"
 msgid "Failed to upload the image"
 msgstr "Das Bild konnte nicht hochgeladen werden"
 
-#: src/components/ui/password-strength-meter.tsx:147
+#: src/components/ui/password-strength-meter.tsx:158
 msgid "Fair"
 msgstr "Mittel"
 
@@ -2859,7 +2859,7 @@ msgstr "Allgemein"
 #~ msgid "Germany"
 #~ msgstr "Deutschland"
 
-#: src/components/ui/not-found.tsx:47
+#: src/components/route-state.tsx:97
 msgid "Go back"
 msgstr "Zurück"
 
@@ -2891,11 +2891,11 @@ msgstr "Zum übergeordneten Eintrag"
 msgid "Go to previous page"
 msgstr "Zur vorherigen Seite"
 
-#: src/components/ui/not-found.tsx:50
+#: src/components/route-state.tsx:100
 msgid "Go to Start"
 msgstr "Zur Startseite"
 
-#: src/components/ui/password-strength-meter.tsx:148
+#: src/components/ui/password-strength-meter.tsx:159
 msgid "Good"
 msgstr "Gut"
 
@@ -4446,7 +4446,7 @@ msgstr "Seite {0} von {1}"
 msgid "Page background"
 msgstr "Seitenhintergrund"
 
-#: src/components/ui/not-found.tsx:39
+#: src/components/route-state.tsx:91
 msgid "Page not found"
 msgstr "Seite nicht gefunden"
 
@@ -4490,7 +4490,7 @@ msgstr "Passwort"
 #~ msgid "Password changed successfully"
 #~ msgstr "Passwort erfolgreich geändert"
 
-#: src/components/ui/password-strength-meter.tsx:259
+#: src/components/ui/password-strength-meter.tsx:255
 msgid "Password does not yet meet all requirements"
 msgstr "Das Passwort erfüllt noch nicht alle Anforderungen"
 
@@ -4505,7 +4505,7 @@ msgstr "Passwort ist erforderlich"
 #~ msgid "Password must be at least 8 characters long"
 #~ msgstr "Passwort muss mindestens 8 Zeichen lang sein"
 
-#: src/components/ui/password-strength-meter.tsx:223
+#: src/components/ui/password-strength-meter.tsx:219
 msgid "Password requirements"
 msgstr "Passwortanforderungen"
 
@@ -4517,7 +4517,7 @@ msgstr "E-Mail zum Zurücksetzen des Passworts erfolgreich gesendet!"
 msgid "Password reset!"
 msgstr "Passwort zurückgesetzt!"
 
-#: src/components/ui/password-strength-meter.tsx:185
+#: src/components/ui/password-strength-meter.tsx:183
 msgid "Password strength"
 msgstr "Passwortstärke"
 
@@ -6037,11 +6037,11 @@ msgid "Something unexpected happened. Try again."
 msgstr "Etwas Unerwartetes ist passiert. Versuchen Sie es erneut."
 
 #: src/components/details-drawer.tsx:129
-#: src/components/load-error.tsx:71
+#: src/components/load-error.tsx:48
 msgid "Something went wrong"
 msgstr "Etwas ist schiefgelaufen"
 
-#: src/components/ui/not-found.tsx:42
+#: src/components/route-state.tsx:93
 msgid "Sorry, we couldn't find the page you're looking for."
 msgstr "Entschuldigung, wir konnten die gesuchte Seite nicht finden."
 
@@ -6148,7 +6148,7 @@ msgstr "Straße"
 msgid "Street is required"
 msgstr "Straße ist erforderlich"
 
-#: src/components/ui/password-strength-meter.tsx:149
+#: src/components/ui/password-strength-meter.tsx:160
 msgid "Strong"
 msgstr "Stark"
 
@@ -6763,7 +6763,7 @@ msgstr "Übersetzung fehlt"
 msgid "Tree"
 msgstr "Baum"
 
-#: src/components/load-error.tsx:78
+#: src/components/load-error.tsx:53
 #: src/components/provider-setup/provider-screens.tsx:42
 #: src/lib/query-client.ts:29
 msgid "Try again"
@@ -7023,7 +7023,7 @@ msgstr "Upload fehlgeschlagen."
 msgid "Uploading {0}"
 msgstr "{0} wird hochgeladen"
 
-#: src/components/ui/password-strength-meter.tsx:79
+#: src/components/ui/password-strength-meter.tsx:90
 msgid "Upper and lowercase letters"
 msgstr "Groß- und Kleinbuchstaben"
 
@@ -7165,7 +7165,7 @@ msgstr ""
 msgid "Verifying your email..."
 msgstr "E-Mail wird verifiziert..."
 
-#: src/components/ui/password-strength-meter.tsx:145
+#: src/components/ui/password-strength-meter.tsx:156
 msgid "Very weak"
 msgstr "Sehr schwach"
 
@@ -7215,7 +7215,7 @@ msgstr "Wir haben eine Bestätigungs-E-Mail an <0>{email}</0> gesendet. Klicken 
 msgid "We've sent password reset instructions to <0>{email}</0>"
 msgstr "Wir haben Anweisungen zum Zurücksetzen des Passworts an <0>{email}</0> gesendet"
 
-#: src/components/ui/password-strength-meter.tsx:146
+#: src/components/ui/password-strength-meter.tsx:157
 msgid "Weak"
 msgstr "Schwach"
 

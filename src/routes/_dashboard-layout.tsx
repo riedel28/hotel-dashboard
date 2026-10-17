@@ -8,7 +8,7 @@ import {
   selectablePropertiesQueryOptions
 } from '@/api/properties';
 import { AppLogo } from '@/components/app-logo';
-import { FullScreenRouteError } from '@/components/route-error';
+import { FullScreenRouteError } from '@/components/route-state';
 import {
   Sidebar,
   SidebarGroup,

@@ -12,8 +12,8 @@ const sizes = {
 // so it doesn't compete with primary buttons and the active nav item.
 const tones = {
   solid: 'bg-primary text-primary-foreground',
-  // The active sidebar item's colours, so the mark reads as one with it
-  tint: 'bg-primary/10 text-cyan-800 dark:bg-primary/20 dark:text-cyan-200/90'
+  // The active nav item's --primary-soft, so the mark reads as one with it
+  tint: 'border border-primary/10 bg-primary-soft text-primary-soft-foreground dark:border-primary/30'
 };
 
 interface AppLogoProps {

@@ -130,7 +130,7 @@ function AcceptInvitationPage() {
   return (
     <div className="w-full max-w-lg space-y-8">
       <div className="space-y-2 text-center">
-        <AppLogo size="lg" tone="solid" className="mx-auto" />
+        <AppLogo size="lg" tone="tint" className="mx-auto" />
 
         <h1 className="text-2xl font-bold">
           <Trans>Accept Invitation</Trans>

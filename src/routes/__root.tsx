@@ -10,8 +10,10 @@ const TanStackRouterDevtools = import.meta.env.PROD
       }))
     );
 
-import { FullScreenRouteError } from '@/components/route-error';
-import { FullScreenNotFound } from '@/components/ui/not-found';
+import {
+  FullScreenNotFound,
+  FullScreenRouteError
+} from '@/components/route-state';
 
 import type { AuthContext } from '../auth';
 

@@ -139,7 +139,7 @@ function SignUpPage() {
     <div className="flex flex-1 items-center justify-center py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
-          <AppLogo size="lg" tone="solid" />
+          <AppLogo size="lg" tone="tint" />
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold">
               <Trans>Sign Up</Trans>

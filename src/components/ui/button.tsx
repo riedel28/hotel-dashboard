@@ -19,8 +19,10 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
         ghost:
           'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted',
+        // One fill and border in both themes; hover only shades it (darker on
+        // white, lighter on dark), so the border always matches the fill.
         destructive:
-          'border border-danger-solid! bg-danger-solid text-danger-solid-foreground hover:border-danger! hover:bg-danger! focus-visible:border-danger/40 focus-visible:ring-danger/20 dark:hover:border-danger-solid! dark:hover:bg-danger-solid! dark:hover:brightness-110 dark:focus-visible:ring-danger/40',
+          'border-danger-solid bg-danger-solid text-danger-solid-foreground hover:brightness-90 focus-visible:ring-danger/20 dark:hover:brightness-110 dark:focus-visible:ring-danger/40',
         // A quieter destructive action: tinted, not filled.
         'destructive-soft':
           'border-danger/20 bg-danger-soft text-danger hover:bg-danger/10 hover:text-danger dark:hover:bg-danger/20',
