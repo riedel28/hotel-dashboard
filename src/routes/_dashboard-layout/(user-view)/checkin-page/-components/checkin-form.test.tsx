@@ -142,12 +142,15 @@ describe('CheckinForm', () => {
     );
   });
 
-  test('shows the guest URL, or why there is none', () => {
+  test('shows the guest URL to copy and preview', () => {
     renderForm();
-    expect(screen.getByRole('textbox', { name: 'Guest page URL' })).toHaveValue(
-      settings.guest_url
-    );
-    expect(screen.getByText('Preview').closest('a')).toHaveAttribute(
+    expect(
+      screen.getByRole('group', { name: 'Link sent to guests' })
+    ).toHaveTextContent(settings.guest_url!);
+    expect(
+      screen.getByRole('button', { name: 'Copy link' })
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText('Preview (opens in new tab)')).toHaveAttribute(
       'href',
       settings.guest_url
     );
@@ -156,7 +159,7 @@ describe('CheckinForm', () => {
   test('explains a missing guest app domain', () => {
     renderForm({ guest_url: null });
     expect(
-      screen.queryByRole('textbox', { name: 'Guest page URL' })
+      screen.queryByRole('group', { name: 'Link sent to guests' })
     ).not.toBeInTheDocument();
     expect(screen.getByText(/no guest app domain yet/)).toBeVisible();
   });

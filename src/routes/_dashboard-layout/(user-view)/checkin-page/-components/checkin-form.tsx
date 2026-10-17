@@ -32,6 +32,7 @@ import {
   type FormSectionDef,
   SectionedForm
 } from '@/components/sectioned-form';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,12 +45,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  CardAction,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Field,
   FieldContent,
@@ -59,12 +55,6 @@ import {
   FieldLabel
 } from '@/components/ui/field';
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput
-} from '@/components/ui/input-group';
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -72,6 +62,11 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 import { UnsavedChangesGuard } from '@/components/unsaved-changes-guard';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
@@ -198,6 +193,7 @@ function CheckinHeader({
   const { t } = useLingui();
   const { copy, copied } = useCopyToClipboard();
   const [confirming, setConfirming] = React.useState(false);
+  const urlLabelId = React.useId();
 
   return (
     <CardHeader className="gap-4 border-b">
@@ -207,12 +203,12 @@ function CheckinHeader({
           <Trans>Active</Trans>
         </Badge>
       </CardTitle>
-      <CardDescription>
-        <Trans>Guests check in on this page.</Trans>
-      </CardDescription>
+      {/* Rarely used and undoes the page: kept quiet */}
       <CardAction>
         <Button
-          variant="outline"
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground"
           onClick={() => setConfirming(true)}
           disabled={isDeactivating}
         >
@@ -221,25 +217,31 @@ function CheckinHeader({
       </CardAction>
 
       {guestUrl ? (
-        <div className="col-span-full flex flex-wrap gap-2">
-          {/* Shown, not edited: disabled keeps it out of the tab order, and
-              the group must not fade with it. */}
-          <InputGroup className="min-w-0 flex-1 basis-64 has-disabled:opacity-100">
-            <InputGroupInput
-              readOnly
-              disabled
-              value={guestUrl}
-              aria-label={t`Guest page URL`}
-              // Disabled fades the text; a link to copy has to stay legible
-              className="disabled:opacity-100"
-            />
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton
-                size="icon-xs"
-                aria-label={copied ? t`Link copied` : t`Copy link`}
-                onClick={async () => {
-                  if (await copy(guestUrl)) toast.success(t`Link copied`);
-                }}
+        <div className="col-span-full flex flex-col gap-2">
+          <span id={urlLabelId} className="text-sm font-medium">
+            <Trans>Link sent to guests</Trans>
+          </span>
+          {/* Text in a field's frame: something to copy, not to edit */}
+          <div
+            role="group"
+            aria-labelledby={urlLabelId}
+            className="flex h-9 items-center gap-0.5 rounded-lg border border-input bg-muted/50 ps-3 pe-1 dark:bg-input/30"
+          >
+            <span className="min-w-0 flex-1 truncate text-sm" title={guestUrl}>
+              {guestUrl}
+            </span>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={copied ? t`Link copied` : t`Copy link`}
+                    onClick={async () => {
+                      if (await copy(guestUrl)) toast.success(t`Link copied`);
+                    }}
+                  />
+                }
               >
                 {copied ? (
                   <CheckIcon
@@ -249,34 +251,52 @@ function CheckinHeader({
                 ) : (
                   <CopyIcon aria-hidden="true" />
                 )}
-              </InputGroupButton>
-            </InputGroupAddon>
-          </InputGroup>
-          <Button
-            variant="outline"
-            nativeButton={false}
-            render={
-              <a href={guestUrl} target="_blank" rel="noopener noreferrer" />
-            }
-          >
-            <Trans>Preview</Trans>
-            <ArrowUpRightIcon aria-hidden="true" data-icon="inline-end" />
-            <span className="sr-only">
-              <Trans>(opens in new tab)</Trans>
-            </span>
-          </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <Trans>Copy link</Trans>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    nativeButton={false}
+                    aria-label={t`Preview (opens in new tab)`}
+                    render={
+                      <a
+                        href={guestUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                  />
+                }
+              >
+                <ArrowUpRightIcon aria-hidden="true" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <Trans>Preview</Trans>
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       ) : (
-        <p className="col-span-full flex items-start gap-2 text-sm text-amber-600 dark:text-amber-400">
-          <TriangleAlertIcon
-            className="mt-0.5 size-4 shrink-0"
-            aria-hidden="true"
-          />
-          <Trans>
-            This property has no guest app domain yet, so the check-in links
-            won’t work. An administrator sets it in the property’s settings.
-          </Trans>
-        </p>
+        // As quiet as the reservation form's info note, in the warning colour
+        <Alert
+          variant="warning"
+          role="note"
+          className="col-span-full border-foreground/10 px-3 py-2 dark:border-foreground/10 dark:bg-amber-800/20 dark:text-amber-300"
+        >
+          <TriangleAlertIcon aria-hidden="true" />
+          <AlertDescription>
+            <Trans>
+              This property has no guest app domain yet, so the check-in links
+              won’t work. An administrator sets it in the property’s settings.
+            </Trans>
+          </AlertDescription>
+        </Alert>
       )}
 
       <AlertDialog open={confirming} onOpenChange={setConfirming}>
@@ -329,11 +349,17 @@ function DeliveryFields({ form }: { form: CheckinFormApi }) {
         control={form.control}
         name="auto_send"
         render={({ field }) => (
-          <Field orientation="horizontal">
+          <Field
+            orientation="horizontal"
+            className="items-center gap-3 rounded-lg border p-3 dark:bg-input/30"
+          >
             <FieldContent>
-              <FieldLabel htmlFor={field.name}>
+              <FieldLabel htmlFor={field.name} className="cursor-pointer">
                 <Trans>Send the check-in link automatically</Trans>
               </FieldLabel>
+              <FieldDescription>
+                <Trans>By email, at the times set below.</Trans>
+              </FieldDescription>
             </FieldContent>
             <Switch
               id={field.name}
@@ -423,20 +449,20 @@ function DeliveryFields({ form }: { form: CheckinFormApi }) {
                   ))}
                 </SelectContent>
               </Select>
-              <FieldDescription>
-                <Trans>Only to guests who haven’t checked in yet.</Trans>
-              </FieldDescription>
               <CheckinFieldError error={fieldState.error} />
             </Field>
           )}
         />
       </div>
 
-      {!autoSend && (
-        <FieldDescription>
+      {/* Under both selects, so the two stay level */}
+      <FieldDescription className="-mt-3">
+        {autoSend ? (
+          <Trans>Reminders go only to guests who haven’t checked in yet.</Trans>
+        ) : (
           <Trans>You can send the link by hand from a reservation.</Trans>
-        </FieldDescription>
-      )}
+        )}
+      </FieldDescription>
     </FieldGroup>
   );
 }

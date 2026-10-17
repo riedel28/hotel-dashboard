@@ -109,7 +109,7 @@ function CheckinScreens() {
 
   if (!data.enabled) {
     return (
-      <Empty className="max-w-4xl">
+      <Empty className="max-w-2xl">
         <EmptyHeader className="max-w-lg">
           <EmptyMedia variant="icon">
             <CalendarCheckIcon aria-hidden="true" />

@@ -3,7 +3,6 @@ import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-  BanIcon,
   CheckIcon,
   Loader2Icon,
   PencilIcon,
@@ -111,6 +110,8 @@ export function BackgroundPicker({
   };
 
   const openPicker = () => inputRef.current?.click();
+  const maxSize = formatBytes(checkinBackgroundMaxBytes);
+  const fileHint = t`JPG, PNG or WebP · up to ${maxSize} · 1920 × 1080 or larger`;
 
   return (
     <div className="flex flex-col gap-3">
@@ -123,11 +124,17 @@ export function BackgroundPicker({
         onValueChange={(next) =>
           onChange(next as CheckinBackground, customImageId)
         }
-        className="grid grid-cols-2 gap-3 xl:grid-cols-3"
+        className="grid grid-cols-2 gap-x-4 gap-y-5"
       >
-        <Tile value="none" label={t`None`}>
-          <div className="flex size-full items-center justify-center bg-muted text-muted-foreground">
-            <BanIcon className="size-6" aria-hidden="true" />
+        <Tile value="none" label={t`No background`}>
+          {/* The guest app as it looks without one: the form on a plain page */}
+          {/* Kept faint: the plainest choice shouldn't be the loudest tile */}
+          <div className="flex size-full items-center justify-center bg-muted/60">
+            <div className="flex w-1/3 flex-col gap-1 rounded-md bg-background/70 p-1.5 ring-1 ring-foreground/5">
+              <div className="h-1 w-3/5 rounded-full bg-foreground/15" />
+              <div className="h-1 rounded-full bg-foreground/8" />
+              <div className="h-1 rounded-full bg-foreground/8" />
+            </div>
           </div>
         </Tile>
 
@@ -151,11 +158,12 @@ export function BackgroundPicker({
                 className="size-full object-cover"
               />
             </Tile>
-            <div className="absolute end-1.5 bottom-8 flex gap-1">
+            <div className="absolute start-2 top-2 flex gap-1">
               <Button
                 type="button"
-                size="icon-xs"
+                size="icon"
                 variant="secondary"
+                className="shadow-sm"
                 aria-label={t`Replace image`}
                 onClick={openPicker}
                 disabled={uploading}
@@ -168,8 +176,9 @@ export function BackgroundPicker({
               </Button>
               <Button
                 type="button"
-                size="icon-xs"
+                size="icon"
                 variant="secondary"
+                className="shadow-sm"
                 aria-label={t`Remove image`}
                 onClick={() => {
                   setTooSmall(false);
@@ -189,7 +198,8 @@ export function BackgroundPicker({
             aria-busy={uploading}
             className="flex flex-col gap-1.5 rounded-lg text-start outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-wait"
           >
-            <span className="flex aspect-video w-full items-center justify-center rounded-lg border border-dashed border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+            {/* What the file may be, where it is picked */}
+            <span className="flex aspect-video w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-foreground/15 px-4 text-center text-muted-foreground transition-colors hover:border-foreground/25 hover:bg-muted/50 hover:text-foreground">
               {uploading ? (
                 <Loader2Icon
                   className="size-5 animate-spin"
@@ -198,6 +208,7 @@ export function BackgroundPicker({
               ) : (
                 <PlusIcon className="size-5" aria-hidden="true" />
               )}
+              <span className="text-xs text-pretty">{fileHint}</span>
             </span>
             <span className="text-sm font-medium text-muted-foreground">
               <Trans>Your image</Trans>
@@ -219,13 +230,6 @@ export function BackgroundPicker({
         }}
       />
 
-      <p className="text-xs text-muted-foreground">
-        <Trans>
-          Your image: JPG, PNG or WebP, up to{' '}
-          {formatBytes(checkinBackgroundMaxBytes)}, at least 1920 × 1080 pixels
-          recommended.
-        </Trans>
-      </p>
       {tooSmall && (
         <p
           role="status"
@@ -245,7 +249,12 @@ export function BackgroundPicker({
   );
 }
 
-// A picture with its name below; picked, it is outlined and ticked.
+// A picture with its name below. Its edge is a hairline drawn inside it, so
+// it never doubles up with the selection; picked, a thin primary ring stands off it
+// by a gap of the card's colour, and a tick sits in its corner. Hovering
+// shows the same ring, fainter: what a click would do. No press scale: on a
+// tile this large it reads as a jolt. Keyboard focus is an outline outside
+// the ring, so it never replaces it.
 function Tile({
   value,
   label,
@@ -259,13 +268,16 @@ function Tile({
     <RadioPrimitive.Root
       value={value}
       aria-label={label}
-      className="group/tile flex w-full flex-col gap-1.5 rounded-lg text-start outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      className="group/tile flex w-full flex-col gap-1.5 rounded-lg text-start outline-none"
     >
-      {/* Picked: a quiet outline; the tick carries the choice */}
-      <span className="relative block aspect-video w-full overflow-hidden rounded-lg border border-border transition-[border-color,box-shadow] group-hover/tile:border-foreground/30 group-data-checked/tile:border-foreground/50 group-data-checked/tile:ring-1 group-data-checked/tile:ring-foreground/50">
-        {children}
-        <RadioPrimitive.Indicator className="absolute end-2 top-2 flex size-6 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm ring-1 ring-foreground/10 backdrop-blur-sm">
-          <CheckIcon className="size-3.5" strokeWidth={3} aria-hidden="true" />
+      <span className="relative block aspect-video w-full rounded-lg ring-offset-2 ring-offset-card outline-offset-[5px] transition-shadow duration-150 ease-out group-focus-visible/tile:outline-2 group-focus-visible/tile:outline-ring group-data-checked/tile:ring-[1.5px] group-data-checked/tile:ring-primary group-data-unchecked/tile:group-hover/tile:ring-[1.5px] group-data-unchecked/tile:group-hover/tile:ring-foreground/40">
+        <span className="block size-full overflow-hidden rounded-lg">
+          {children}
+        </span>
+        <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-foreground/10 ring-inset" />
+        {/* The one accent of the picker; a faint shadow keeps it off dark photos */}
+        <RadioPrimitive.Indicator className="absolute end-2 top-2 flex size-[22px] items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_1px_2px_rgb(0_0_0/0.15)] transition-[opacity,scale] duration-150 ease-out data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
+          <CheckIcon className="size-3" strokeWidth={3} aria-hidden="true" />
         </RadioPrimitive.Indicator>
       </span>
       <span

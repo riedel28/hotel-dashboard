@@ -47,7 +47,6 @@ msgstr "“{title}” has unsaved changes."
 msgid "“{title}” saved"
 msgstr "“{title}” saved"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:264
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/authenticator-apps.tsx:46
 msgid "(opens in new tab)"
 msgstr "(opens in new tab)"
@@ -161,7 +160,7 @@ msgstr "{0}, property"
 msgid "{changeCount, plural, one {Import # change} other {Import # changes}}"
 msgstr "{changeCount, plural, one {Import # change} other {Import # changes}}"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:445
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:472
 msgid "{days, plural, one {# day before arrival} other {# days before arrival}}"
 msgstr "{days, plural, one {# day before arrival} other {# days before arrival}}"
 
@@ -349,7 +348,7 @@ msgid "Activate Account"
 msgstr "Activate Account"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:61
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:207
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:203
 msgid "Active"
 msgstr "Active"
 
@@ -977,6 +976,10 @@ msgstr "Bulleted list"
 msgid "Business"
 msgstr "Business"
 
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:361
+msgid "By email, at the times set below."
+msgstr "By email, at the times set below."
+
 #: src/lib/request-error.ts:47
 msgid "Can't reach the server. Check your connection and try again."
 msgstr "Can't reach the server. Check your connection and try again."
@@ -1002,7 +1005,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:85
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:298
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:91
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:296
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:281
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-room-actions.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:270
@@ -1175,7 +1178,7 @@ msgstr "Check-in Kiosk App"
 msgid "Check-in Page"
 msgstr "Check-in Page"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:132
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:127
 msgid "Check-in settings saved"
 msgstr "Check-in settings saved"
 
@@ -1485,7 +1488,8 @@ msgstr "Copy Client Key"
 msgid "Copy from German"
 msgstr "Copy from German"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:238
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:239
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:256
 msgid "Copy link"
 msgstr "Copy link"
 
@@ -1519,7 +1523,7 @@ msgstr "Copy setup key"
 #~ msgid "Copy to clipboard"
 #~ msgstr "Copy to clipboard"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:34
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:33
 msgid "Corridor"
 msgstr "Corridor"
 
@@ -1792,12 +1796,12 @@ msgstr "Date & time"
 #~ msgid "DE +49"
 #~ msgstr "DE +49"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:219
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:310
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:215
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:331
 msgid "Deactivate"
 msgstr "Deactivate"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:285
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:306
 msgid "Deactivate online check-in?"
 msgstr "Deactivate online check-in?"
 
@@ -2376,7 +2380,7 @@ msgstr "Enter your new password below"
 msgid "Enter your password"
 msgstr "Enter your password"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:35
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:34
 msgid "Entrance"
 msgstr "Entrance"
 
@@ -2682,7 +2686,7 @@ msgstr "Failed to reset password. The link may have expired."
 msgid "Failed to save"
 msgstr "Failed to save"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:137
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:132
 msgid "Failed to save check-in settings"
 msgstr "Failed to save check-in settings"
 
@@ -2760,7 +2764,7 @@ msgstr "Failed to update reservation. Please try again."
 msgid "Failed to update user"
 msgstr "Failed to update user"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:104
 msgid "Failed to upload the image"
 msgstr "Failed to upload the image"
 
@@ -2830,7 +2834,7 @@ msgstr "First Name"
 msgid "First name is required"
 msgstr "First name is required"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:356
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:383
 msgid "First send"
 msgstr "First send"
 
@@ -2979,8 +2983,8 @@ msgstr "Guest Email"
 #~ msgstr "Guest Information"
 
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:232
-msgid "Guest page URL"
-msgstr "Guest page URL"
+#~ msgid "Guest page URL"
+#~ msgstr "Guest page URL"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:126
 #~ msgid "Guest updated successfully"
@@ -2998,8 +3002,8 @@ msgid "Guests"
 msgstr "Guests"
 
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:211
-msgid "Guests check in on this page."
-msgstr "Guests check in on this page."
+#~ msgid "Guests check in on this page."
+#~ msgstr "Guests check in on this page."
 
 #. placeholder {0}: titleOf(hiddenBy)
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:176
@@ -3010,7 +3014,7 @@ msgstr "Guests don’t see this item because “{0}” is hidden."
 msgid "Guests get a link by email and can check in before they arrive. The page is created automatically from your hotel’s details."
 msgstr "Guests get a link by email and can check in before they arrive. The page is created automatically from your hotel’s details."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:288
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:309
 msgid "Guests will no longer receive check-in links."
 msgstr "Guests will no longer receive check-in links."
 
@@ -3366,6 +3370,10 @@ msgstr "Items are the pages and links guests see in the hotel’s mobile app. St
 msgid "John"
 msgstr "John"
 
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:114
+msgid "JPG, PNG or WebP · up to {maxSize} · 1920 × 1080 or larger"
+msgstr "JPG, PNG or WebP · up to {maxSize} · 1920 × 1080 or larger"
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:266
 msgid "JPG, PNG or WebP up to 2 MB. Drag to change the order."
 msgstr "JPG, PNG or WebP up to 2 MB. Drag to change the order."
@@ -3515,10 +3523,14 @@ msgstr "Line"
 msgid "Link"
 msgstr "Link"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:238
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:240
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:239
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:241
 msgid "Link copied"
 msgstr "Link copied"
+
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:222
+msgid "Link sent to guests"
+msgstr "Link sent to guests"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:94
 msgid "Link: {url}"
@@ -3565,7 +3577,7 @@ msgstr "Loading rooms…"
 msgid "Loading..."
 msgstr "Loading..."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:32
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:31
 msgid "Lobby"
 msgstr "Lobby"
 
@@ -4006,6 +4018,10 @@ msgstr "Next reservation"
 #~ msgid "Next slide"
 #~ msgstr "Next slide"
 
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:129
+msgid "No background"
+msgstr "No background"
+
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:241
 msgid "No categories found"
 msgstr "No categories found"
@@ -4185,8 +4201,8 @@ msgstr "No properties yet."
 msgid "No property selected"
 msgstr "No property selected"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:407
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:416
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:434
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:443
 msgid "No reminder"
 msgstr "No reminder"
 
@@ -4272,8 +4288,8 @@ msgid "No-show fee"
 msgstr "No-show fee"
 
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:128
-msgid "None"
-msgstr "None"
+#~ msgid "None"
+#~ msgstr "None"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:266
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:265
@@ -4354,7 +4370,7 @@ msgstr "On this page"
 msgid "Online"
 msgstr "Online"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:201
 msgid "Online check-in"
 msgstr "Online check-in"
 
@@ -4366,12 +4382,16 @@ msgstr "Online check-in is not activated"
 msgid "Only .csv and .xlsx files can be imported."
 msgstr "Only .csv and .xlsx files can be imported."
 
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:448
+#~ msgid "Only if they haven’t checked in yet."
+#~ msgstr "Only if they haven’t checked in yet."
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:112
 msgid "Only images are allowed."
 msgstr "Only images are allowed."
 
 #: src/components/image-field.tsx:96
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:84
 msgid "Only JPG, PNG and WebP images"
 msgstr "Only JPG, PNG and WebP images"
 
@@ -4380,8 +4400,8 @@ msgid "Only the first image was used"
 msgstr "Only the first image was used"
 
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:426
-msgid "Only to guests who haven’t checked in yet."
-msgstr "Only to guests who haven’t checked in yet."
+#~ msgid "Only to guests who haven’t checked in yet."
+#~ msgstr "Only to guests who haven’t checked in yet."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:537
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:542
@@ -4483,8 +4503,8 @@ msgstr "Page {0} of {1}"
 #~ msgid "Page {0} of {pageCount}"
 #~ msgstr "Page {0} of {pageCount}"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:118
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:172
 msgid "Page background"
 msgstr "Page background"
 
@@ -4816,9 +4836,13 @@ msgstr "Prepayment"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:360
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:412
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:435
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:261
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:280
 msgid "Preview"
 msgstr "Preview"
+
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:266
+msgid "Preview (opens in new tab)"
+msgstr "Preview (opens in new tab)"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:109
 msgid "Preview language"
@@ -5115,7 +5139,7 @@ msgstr "Received At"
 msgid "Recently offline"
 msgstr "Recently offline"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:33
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:32
 msgid "Reception"
 msgstr "Reception"
 
@@ -5192,9 +5216,13 @@ msgstr "Reload to see their version. Your edits are kept until then."
 msgid "Remember me"
 msgstr "Remember me"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:390
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:417
 msgid "Reminder"
 msgstr "Reminder"
+
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:461
+msgid "Reminders go only to guests who haven’t checked in yet."
+msgstr "Reminders go only to guests who haven’t checked in yet."
 
 #: src/components/ui/rich-text-editor.tsx:273
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:264
@@ -5230,7 +5258,7 @@ msgid "Remove from reservation"
 msgstr "Remove from reservation"
 
 #: src/components/image-field.tsx:205
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:173
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:182
 msgid "Remove image"
 msgstr "Remove image"
 
@@ -5271,7 +5299,7 @@ msgstr "Replace {replaces} with {name}?"
 msgid "Replace all"
 msgstr "Replace all"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:159
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:167
 msgid "Replace image"
 msgstr "Replace image"
 
@@ -5577,7 +5605,7 @@ msgstr "Running tests… ({passedCount}/{0})"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:137
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:336
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:147
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:214
@@ -5902,7 +5930,7 @@ msgstr "Send invoice via PMS"
 msgid "Send reset link"
 msgstr "Send reset link"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:334
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:358
 msgid "Send the check-in link automatically"
 msgstr "Send the check-in link automatically"
 
@@ -5911,7 +5939,7 @@ msgstr "Send the check-in link automatically"
 #~ msgid "Sending"
 #~ msgstr "Sending"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:170
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:165
 msgid "Sending to guests"
 msgstr "Sending to guests"
 
@@ -6448,7 +6476,7 @@ msgstr "The file has no rows."
 #. placeholder {0}: formatBytes(checkinBackgroundMaxBytes)
 #. placeholder {0}: formatBytes(maxBytes)
 #: src/components/image-field.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:90
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:89
 msgid "The file is larger than {0}"
 msgstr "The file is larger than {0}"
 
@@ -6504,7 +6532,7 @@ msgstr "The number appears more than once in the file"
 msgid "The person we deal with, and the company they act for."
 msgstr "The person we deal with, and the company they act for."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:174
 msgid "The picture behind the check-in form in the guest app."
 msgstr "The picture behind the check-in form in the guest app."
 
@@ -6528,7 +6556,7 @@ msgstr "The property <0>{propertyName}</0> will be deleted. This action cannot
 msgid "The property's code in Apaleo, for example MUC."
 msgstr "The property's code in Apaleo, for example MUC."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:85
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:80
 msgid "The reminder must go out closer to arrival than the first send"
 msgstr "The reminder must go out closer to arrival than the first send"
 
@@ -6654,7 +6682,7 @@ msgstr "This field is required"
 msgid "This image is small, so it may look blurry once cropped."
 msgstr "This image is small, so it may look blurry once cropped."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:238
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:242
 msgid "This image is smaller than 1920 × 1080 pixels and may look blurry on large screens."
 msgstr "This image is smaller than 1920 × 1080 pixels and may look blurry on large screens."
 
@@ -6698,7 +6726,7 @@ msgstr "This payment does not exist."
 msgid "This profile was updated elsewhere"
 msgstr "This profile was updated elsewhere"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:274
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:294
 msgid "This property has no guest app domain yet, so the check-in links won’t work. An administrator sets it in the property’s settings."
 msgstr "This property has no guest app domain yet, so the check-in links won’t work. An administrator sets it in the property’s settings."
 
@@ -7095,7 +7123,7 @@ msgstr "Upload"
 #~ msgid "Upload a profile picture to personalize your account"
 #~ msgstr "Upload a profile picture to personalize your account"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:81
 msgid "Upload an image or pick another background"
 msgstr "Upload an image or pick another background"
 
@@ -7375,7 +7403,7 @@ msgstr "WhatsApp"
 #~ msgid "WhatsApp opened"
 #~ msgstr "WhatsApp opened"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:171
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:166
 msgid "When guests get the check-in link by email."
 msgstr "When guests get the check-in link by email."
 
@@ -7441,7 +7469,7 @@ msgstr "Yesterday"
 #~ msgid "You are viewing the user interface. This shows limited functionality for regular users."
 #~ msgstr "You are viewing the user interface. This shows limited functionality for regular users."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:436
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:463
 msgid "You can send the link by hand from a reservation."
 msgstr "You can send the link by hand from a reservation."
 
@@ -7501,15 +7529,15 @@ msgstr "Your app generates a new code every 30 seconds."
 msgid "Your email has been verified successfully. You can now log in."
 msgstr "Your email has been verified successfully. You can now log in."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:147
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:214
 msgid "Your image"
 msgstr "Your image"
 
 #. placeholder {0}: formatBytes(checkinBackgroundMaxBytes)
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:223
-msgid "Your image: JPG, PNG or WebP, up to {0}, at least 1920 × 1080 pixels recommended."
-msgstr "Your image: JPG, PNG or WebP, up to {0}, at least 1920 × 1080 pixels recommended."
+#~ msgid "Your image: JPG, PNG or WebP, up to {0}, at least 1920 × 1080 pixels recommended."
+#~ msgstr "Your image: JPG, PNG or WebP, up to {0}, at least 1920 × 1080 pixels recommended."
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:245
 msgid "Your new recovery codes"
@@ -7531,7 +7559,7 @@ msgstr "Your previous codes no longer work. Save these somewhere safe — this i
 msgid "Your recovery codes will be deleted, and you'll be signed out on all other devices."
 msgstr "Your recovery codes will be deleted, and you'll be signed out on all other devices."
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:290
+#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:311
 msgid "Your unsaved changes will be lost."
 msgstr "Your unsaved changes will be lost."
 

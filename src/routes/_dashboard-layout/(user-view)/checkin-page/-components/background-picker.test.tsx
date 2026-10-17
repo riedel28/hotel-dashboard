@@ -55,20 +55,22 @@ describe('BackgroundPicker', () => {
   test('starts on none and picks one tile', async () => {
     const user = userEvent.setup();
     render(<Picker />);
-    expect(screen.getByRole('radio', { name: 'None' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'No background' })).toBeChecked();
 
     await user.click(screen.getByRole('radio', { name: 'Corridor' }));
 
     expect(value()).toBe('corridor:-');
     expect(screen.getByRole('radio', { name: 'Corridor' })).toBeChecked();
-    expect(screen.getByRole('radio', { name: 'None' })).not.toBeChecked();
+    expect(
+      screen.getByRole('radio', { name: 'No background' })
+    ).not.toBeChecked();
   });
 
   test('picks with the keyboard', async () => {
     const user = userEvent.setup();
     render(<Picker />);
 
-    screen.getByRole('radio', { name: 'None' }).focus();
+    screen.getByRole('radio', { name: 'No background' }).focus();
     await user.keyboard('{ArrowRight}');
 
     expect(value()).toBe('lobby:-');
