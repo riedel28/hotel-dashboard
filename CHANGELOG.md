@@ -1,3 +1,10 @@
+# [1.34.0](https://github.com/riedel28/hotel-dashboard/compare/v1.33.1...v1.34.0) (2026-10-17)
+
+
+### Features
+
+* **checkin:** add the Check-in Page settings ([33cfb94](https://github.com/riedel28/hotel-dashboard/commit/33cfb940d98a9139cd21155ffcf425904e205388))
+
 ## [1.33.1](https://github.com/riedel28/hotel-dashboard/compare/v1.33.0...v1.33.1) (2026-10-16)
 
 
