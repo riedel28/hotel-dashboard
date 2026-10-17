@@ -122,7 +122,9 @@
      5.3:1 on the background. */
   --indicator: var(--primary);
   --border: oklch(0.925 0.005 224);
-  --input: oklch(0.925 0.005 224);
+  /* Field borders a step darker than --border (cards, dividers): 1.4:1 on
+     a card, so an unfilled field reads as a field, not a divider. */
+  --input: oklch(0.88 0.008 224);
   --ring: oklch(0.723 0.014 224);
   --chart-1: oklch(0.872 0.007 224);
   --chart-2: oklch(0.56 0.021 224);
