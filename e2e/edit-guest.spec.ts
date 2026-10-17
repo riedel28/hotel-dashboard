@@ -11,6 +11,10 @@ async function navigateToReservationEdit(page: Page, bookingNr: string) {
 
   // Search rather than rely on the reservation being on the first page
   await page.getByPlaceholder('Search reservations').fill(bookingNr);
+  // The search is debounced, and the row may already be on the unfiltered
+  // page: opening its menu before the results arrive lets the re-render
+  // swallow the click on Edit. Wait for the header row and the one match.
+  await expect(page.getByRole('row')).toHaveCount(2);
 
   // Open row actions for the target reservation and click Edit
   const row = page.getByRole('row').filter({ hasText: bookingNr });

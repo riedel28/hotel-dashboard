@@ -9,7 +9,8 @@ import { cn } from '@/lib/utils';
 // A modal panel for forms that need more room than a centred dialog: a
 // full-height panel on the right from `sm` up, a bottom sheet on phones.
 // Built on the same Base UI dialog as `Dialog`, so popovers and menus nest
-// inside it. The page behind is dimmed but not blurred.
+// inside it. The page behind is dimmed but not blurred; dimmed harder in the
+// dark theme, where a light veil would not show.
 
 function Drawer({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="drawer" {...props} />;
@@ -24,7 +25,7 @@ function DrawerContent({
     <DialogPrimitive.Portal>
       <DialogPrimitive.Backdrop
         data-slot="drawer-overlay"
-        className="fixed inset-0 isolate z-50 bg-black/10 duration-200 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+        className="fixed inset-0 isolate z-50 bg-black/10 duration-200 dark:bg-black/40 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
       />
       <DialogPrimitive.Popup
         data-slot="drawer-content"
@@ -45,7 +46,7 @@ function DrawerContent({
           render={
             <Button
               variant="ghost"
-              className="absolute top-3 right-4"
+              className="absolute top-4 right-4"
               size="icon-sm"
             />
           }

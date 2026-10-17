@@ -268,10 +268,9 @@ export function GuestDialog({
                   >
                     <ChevronDownIcon aria-hidden="true" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-auto min-w-0">
+                  <DropdownMenuContent align="start">
                     <DropdownMenuItem
                       variant="destructive-soft"
-                      className="gap-2"
                       onClick={closeAfter(onRemove)}
                     >
                       {removeItem}

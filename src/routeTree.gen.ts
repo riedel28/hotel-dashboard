@@ -24,14 +24,12 @@ import { Route as DashboardLayoutuserViewAnalyticsRouteImport } from './routes/_
 import { Route as DashboardLayoutuserViewCheckinPageRouteImport } from './routes/_dashboard-layout/(user-view)/checkin-page'
 import { Route as DashboardLayoutuserViewCompanyRouteImport } from './routes/_dashboard-layout/(user-view)/company'
 import { Route as DashboardLayoutuserViewDoorLocksRouteImport } from './routes/_dashboard-layout/(user-view)/door-locks'
-import { Route as DashboardLayoutuserViewEventsRouteImport } from './routes/_dashboard-layout/(user-view)/events'
 import { Route as DashboardLayoutuserViewPaymentProviderRouteImport } from './routes/_dashboard-layout/(user-view)/payment-provider'
 import { Route as DashboardLayoutuserViewPmsProviderRouteImport } from './routes/_dashboard-layout/(user-view)/pms-provider'
 import { Route as DashboardLayoutuserViewProfileRouteImport } from './routes/_dashboard-layout/(user-view)/profile'
 import { Route as DashboardLayoutuserViewTvRouteImport } from './routes/_dashboard-layout/(user-view)/tv'
 import { Route as DashboardLayoutAdminIndexRouteImport } from './routes/_dashboard-layout/admin/index'
 import { Route as DashboardLayoutuserViewfrontOfficeOrdersRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/orders'
-import { Route as DashboardLayoutuserViewfrontOfficePaymentsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/payments'
 import { Route as DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/registration-forms'
 import { Route as DashboardLayoutuserViewDevicesIndexRouteImport } from './routes/_dashboard-layout/(user-view)/devices/index'
 import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
@@ -42,9 +40,13 @@ import { Route as DashboardLayoutAdminCustomersIndexRouteImport } from './routes
 import { Route as DashboardLayoutAdminCustomersCustomerIdRouteImport } from './routes/_dashboard-layout/admin/customers/$customerId'
 import { Route as DashboardLayoutAdminPropertiesIndexRouteImport } from './routes/_dashboard-layout/admin/properties/index'
 import { Route as DashboardLayoutAdminPropertiesPropertyIdRouteImport } from './routes/_dashboard-layout/admin/properties/$propertyId'
+import { Route as DashboardLayoutuserViewcontentManagerEventsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/events/index'
+import { Route as DashboardLayoutuserViewcontentManagerEventsEventIdRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/events/$eventId'
+import { Route as DashboardLayoutuserViewcontentManagerEventsNewRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/events/new'
 import { Route as DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index'
 import { Route as DashboardLayoutuserViewcontentManagerMobileCmsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index'
 import { Route as DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index'
+import { Route as DashboardLayoutuserViewfrontOfficePaymentsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/payments/index'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/index'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsReservationIdRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
 import { Route as DashboardLayoutuserViewfrontOfficeReservationsNewRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/reservations/new'
@@ -131,12 +133,6 @@ const DashboardLayoutuserViewDoorLocksRoute =
     path: '/door-locks',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-const DashboardLayoutuserViewEventsRoute =
-  DashboardLayoutuserViewEventsRouteImport.update({
-    id: '/(user-view)/events',
-    path: '/events',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
 const DashboardLayoutuserViewPaymentProviderRoute =
   DashboardLayoutuserViewPaymentProviderRouteImport.update({
     id: '/(user-view)/payment-provider',
@@ -171,12 +167,6 @@ const DashboardLayoutuserViewfrontOfficeOrdersRoute =
   DashboardLayoutuserViewfrontOfficeOrdersRouteImport.update({
     id: '/(user-view)/(front-office)/orders',
     path: '/orders',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-const DashboardLayoutuserViewfrontOfficePaymentsRoute =
-  DashboardLayoutuserViewfrontOfficePaymentsRouteImport.update({
-    id: '/(user-view)/(front-office)/payments',
-    path: '/payments',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute =
@@ -239,6 +229,24 @@ const DashboardLayoutAdminPropertiesPropertyIdRoute =
     path: '/properties/$propertyId',
     getParentRoute: () => DashboardLayoutAdminRoute,
   } as any)
+const DashboardLayoutuserViewcontentManagerEventsIndexRoute =
+  DashboardLayoutuserViewcontentManagerEventsIndexRouteImport.update({
+    id: '/(user-view)/(content-manager)/events/',
+    path: '/events/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewcontentManagerEventsEventIdRoute =
+  DashboardLayoutuserViewcontentManagerEventsEventIdRouteImport.update({
+    id: '/(user-view)/(content-manager)/events/$eventId',
+    path: '/events/$eventId',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewcontentManagerEventsNewRoute =
+  DashboardLayoutuserViewcontentManagerEventsNewRouteImport.update({
+    id: '/(user-view)/(content-manager)/events/new',
+    path: '/events/new',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 const DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute =
   DashboardLayoutuserViewcontentManagerGuestAbcIndexRouteImport.update({
     id: '/(user-view)/(content-manager)/guest-abc/',
@@ -255,6 +263,12 @@ const DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute =
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport.update({
     id: '/(user-view)/(front-office)/monitoring/',
     path: '/monitoring/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutuserViewfrontOfficePaymentsIndexRoute =
+  DashboardLayoutuserViewfrontOfficePaymentsIndexRouteImport.update({
+    id: '/(user-view)/(front-office)/payments/',
+    path: '/payments/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 const DashboardLayoutuserViewfrontOfficeReservationsIndexRoute =
@@ -292,14 +306,12 @@ export interface FileRoutesByFullPath {
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
-  '/events': typeof DashboardLayoutuserViewEventsRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/profile': typeof DashboardLayoutuserViewProfileRoute
   '/tv': typeof DashboardLayoutuserViewTvRoute
   '/admin/': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
-  '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
@@ -310,11 +322,15 @@ export interface FileRoutesByFullPath {
   '/users/': typeof DashboardLayoutuserViewUsersIndexRoute
   '/admin/customers/': typeof DashboardLayoutAdminCustomersIndexRoute
   '/admin/properties/': typeof DashboardLayoutAdminPropertiesIndexRoute
+  '/events/$eventId': typeof DashboardLayoutuserViewcontentManagerEventsEventIdRoute
+  '/events/new': typeof DashboardLayoutuserViewcontentManagerEventsNewRoute
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   '/reservations/new': typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
+  '/events/': typeof DashboardLayoutuserViewcontentManagerEventsIndexRoute
   '/guest-abc/': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   '/mobile-cms/': typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   '/monitoring/': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
+  '/payments/': typeof DashboardLayoutuserViewfrontOfficePaymentsIndexRoute
   '/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -330,14 +346,12 @@ export interface FileRoutesByTo {
   '/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/company': typeof DashboardLayoutuserViewCompanyRoute
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
-  '/events': typeof DashboardLayoutuserViewEventsRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/profile': typeof DashboardLayoutuserViewProfileRoute
   '/tv': typeof DashboardLayoutuserViewTvRoute
   '/admin': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
-  '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
@@ -348,11 +362,15 @@ export interface FileRoutesByTo {
   '/users': typeof DashboardLayoutuserViewUsersIndexRoute
   '/admin/customers': typeof DashboardLayoutAdminCustomersIndexRoute
   '/admin/properties': typeof DashboardLayoutAdminPropertiesIndexRoute
+  '/events/$eventId': typeof DashboardLayoutuserViewcontentManagerEventsEventIdRoute
+  '/events/new': typeof DashboardLayoutuserViewcontentManagerEventsNewRoute
   '/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   '/reservations/new': typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
+  '/events': typeof DashboardLayoutuserViewcontentManagerEventsIndexRoute
   '/guest-abc': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   '/mobile-cms': typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   '/monitoring': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
+  '/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsIndexRoute
   '/reservations': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
 export interface FileRoutesById {
@@ -372,14 +390,12 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/checkin-page': typeof DashboardLayoutuserViewCheckinPageRoute
   '/_dashboard-layout/(user-view)/company': typeof DashboardLayoutuserViewCompanyRoute
   '/_dashboard-layout/(user-view)/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
-  '/_dashboard-layout/(user-view)/events': typeof DashboardLayoutuserViewEventsRoute
   '/_dashboard-layout/(user-view)/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/_dashboard-layout/(user-view)/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
   '/_dashboard-layout/(user-view)/profile': typeof DashboardLayoutuserViewProfileRoute
   '/_dashboard-layout/(user-view)/tv': typeof DashboardLayoutuserViewTvRoute
   '/_dashboard-layout/admin/': typeof DashboardLayoutAdminIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
-  '/_dashboard-layout/(user-view)/(front-office)/payments': typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   '/_dashboard-layout/(user-view)/(front-office)/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   '/_dashboard-layout/(user-view)/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/_dashboard-layout/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
@@ -390,11 +406,15 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/users/': typeof DashboardLayoutuserViewUsersIndexRoute
   '/_dashboard-layout/admin/customers/': typeof DashboardLayoutAdminCustomersIndexRoute
   '/_dashboard-layout/admin/properties/': typeof DashboardLayoutAdminPropertiesIndexRoute
+  '/_dashboard-layout/(user-view)/(content-manager)/events/$eventId': typeof DashboardLayoutuserViewcontentManagerEventsEventIdRoute
+  '/_dashboard-layout/(user-view)/(content-manager)/events/new': typeof DashboardLayoutuserViewcontentManagerEventsNewRoute
   '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId': typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   '/_dashboard-layout/(user-view)/(front-office)/reservations/new': typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
+  '/_dashboard-layout/(user-view)/(content-manager)/events/': typeof DashboardLayoutuserViewcontentManagerEventsIndexRoute
   '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/': typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   '/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/': typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/monitoring/': typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
+  '/_dashboard-layout/(user-view)/(front-office)/payments/': typeof DashboardLayoutuserViewfrontOfficePaymentsIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/reservations/': typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
 export interface FileRouteTypes {
@@ -413,14 +433,12 @@ export interface FileRouteTypes {
     | '/checkin-page'
     | '/company'
     | '/door-locks'
-    | '/events'
     | '/payment-provider'
     | '/pms-provider'
     | '/profile'
     | '/tv'
     | '/admin/'
     | '/orders'
-    | '/payments'
     | '/registration-forms'
     | '/users/$userId'
     | '/admin/customers/$customerId'
@@ -431,11 +449,15 @@ export interface FileRouteTypes {
     | '/users/'
     | '/admin/customers/'
     | '/admin/properties/'
+    | '/events/$eventId'
+    | '/events/new'
     | '/reservations/$reservationId'
     | '/reservations/new'
+    | '/events/'
     | '/guest-abc/'
     | '/mobile-cms/'
     | '/monitoring/'
+    | '/payments/'
     | '/reservations/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -451,14 +473,12 @@ export interface FileRouteTypes {
     | '/checkin-page'
     | '/company'
     | '/door-locks'
-    | '/events'
     | '/payment-provider'
     | '/pms-provider'
     | '/profile'
     | '/tv'
     | '/admin'
     | '/orders'
-    | '/payments'
     | '/registration-forms'
     | '/users/$userId'
     | '/admin/customers/$customerId'
@@ -469,11 +489,15 @@ export interface FileRouteTypes {
     | '/users'
     | '/admin/customers'
     | '/admin/properties'
+    | '/events/$eventId'
+    | '/events/new'
     | '/reservations/$reservationId'
     | '/reservations/new'
+    | '/events'
     | '/guest-abc'
     | '/mobile-cms'
     | '/monitoring'
+    | '/payments'
     | '/reservations'
   id:
     | '__root__'
@@ -492,14 +516,12 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/checkin-page'
     | '/_dashboard-layout/(user-view)/company'
     | '/_dashboard-layout/(user-view)/door-locks'
-    | '/_dashboard-layout/(user-view)/events'
     | '/_dashboard-layout/(user-view)/payment-provider'
     | '/_dashboard-layout/(user-view)/pms-provider'
     | '/_dashboard-layout/(user-view)/profile'
     | '/_dashboard-layout/(user-view)/tv'
     | '/_dashboard-layout/admin/'
     | '/_dashboard-layout/(user-view)/(front-office)/orders'
-    | '/_dashboard-layout/(user-view)/(front-office)/payments'
     | '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
     | '/_dashboard-layout/(user-view)/users/$userId'
     | '/_dashboard-layout/admin/customers/$customerId'
@@ -510,11 +532,15 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/(user-view)/users/'
     | '/_dashboard-layout/admin/customers/'
     | '/_dashboard-layout/admin/properties/'
+    | '/_dashboard-layout/(user-view)/(content-manager)/events/$eventId'
+    | '/_dashboard-layout/(user-view)/(content-manager)/events/new'
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId'
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/new'
+    | '/_dashboard-layout/(user-view)/(content-manager)/events/'
     | '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
     | '/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/'
     | '/_dashboard-layout/(user-view)/(front-office)/monitoring/'
+    | '/_dashboard-layout/(user-view)/(front-office)/payments/'
     | '/_dashboard-layout/(user-view)/(front-office)/reservations/'
   fileRoutesById: FileRoutesById
 }
@@ -630,13 +656,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewDoorLocksRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(user-view)/events': {
-      id: '/_dashboard-layout/(user-view)/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof DashboardLayoutuserViewEventsRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
     '/_dashboard-layout/(user-view)/payment-provider': {
       id: '/_dashboard-layout/(user-view)/payment-provider'
       path: '/payment-provider'
@@ -677,13 +696,6 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeOrdersRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
-    '/_dashboard-layout/(user-view)/(front-office)/payments': {
-      id: '/_dashboard-layout/(user-view)/(front-office)/payments'
-      path: '/payments'
-      fullPath: '/payments'
-      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficePaymentsRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/(front-office)/registration-forms': {
@@ -756,6 +768,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutAdminPropertiesPropertyIdRouteImport
       parentRoute: typeof DashboardLayoutAdminRoute
     }
+    '/_dashboard-layout/(user-view)/(content-manager)/events/': {
+      id: '/_dashboard-layout/(user-view)/(content-manager)/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerEventsIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/(content-manager)/events/$eventId': {
+      id: '/_dashboard-layout/(user-view)/(content-manager)/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerEventsEventIdRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/(content-manager)/events/new': {
+      id: '/_dashboard-layout/(user-view)/(content-manager)/events/new'
+      path: '/events/new'
+      fullPath: '/events/new'
+      preLoaderRoute: typeof DashboardLayoutuserViewcontentManagerEventsNewRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
     '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/': {
       id: '/_dashboard-layout/(user-view)/(content-manager)/guest-abc/'
       path: '/guest-abc'
@@ -775,6 +808,13 @@ declare module '@tanstack/react-router' {
       path: '/monitoring'
       fullPath: '/monitoring/'
       preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/_dashboard-layout/(user-view)/(front-office)/payments/': {
+      id: '/_dashboard-layout/(user-view)/(front-office)/payments/'
+      path: '/payments'
+      fullPath: '/payments/'
+      preLoaderRoute: typeof DashboardLayoutuserViewfrontOfficePaymentsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
     '/_dashboard-layout/(user-view)/(front-office)/reservations/': {
@@ -854,24 +894,26 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewCheckinPageRoute: typeof DashboardLayoutuserViewCheckinPageRoute
   DashboardLayoutuserViewCompanyRoute: typeof DashboardLayoutuserViewCompanyRoute
   DashboardLayoutuserViewDoorLocksRoute: typeof DashboardLayoutuserViewDoorLocksRoute
-  DashboardLayoutuserViewEventsRoute: typeof DashboardLayoutuserViewEventsRoute
   DashboardLayoutuserViewPaymentProviderRoute: typeof DashboardLayoutuserViewPaymentProviderRoute
   DashboardLayoutuserViewPmsProviderRoute: typeof DashboardLayoutuserViewPmsProviderRoute
   DashboardLayoutuserViewProfileRoute: typeof DashboardLayoutuserViewProfileRoute
   DashboardLayoutuserViewTvRoute: typeof DashboardLayoutuserViewTvRoute
   DashboardLayoutuserViewfrontOfficeOrdersRoute: typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
-  DashboardLayoutuserViewfrontOfficePaymentsRoute: typeof DashboardLayoutuserViewfrontOfficePaymentsRoute
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
   DashboardLayoutuserViewUsersUserIdRoute: typeof DashboardLayoutuserViewUsersUserIdRoute
   DashboardLayoutuserViewDevicesIndexRoute: typeof DashboardLayoutuserViewDevicesIndexRoute
   DashboardLayoutuserViewProductsIndexRoute: typeof DashboardLayoutuserViewProductsIndexRoute
   DashboardLayoutuserViewRoomsIndexRoute: typeof DashboardLayoutuserViewRoomsIndexRoute
   DashboardLayoutuserViewUsersIndexRoute: typeof DashboardLayoutuserViewUsersIndexRoute
+  DashboardLayoutuserViewcontentManagerEventsEventIdRoute: typeof DashboardLayoutuserViewcontentManagerEventsEventIdRoute
+  DashboardLayoutuserViewcontentManagerEventsNewRoute: typeof DashboardLayoutuserViewcontentManagerEventsNewRoute
   DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute
   DashboardLayoutuserViewfrontOfficeReservationsNewRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsNewRoute
+  DashboardLayoutuserViewcontentManagerEventsIndexRoute: typeof DashboardLayoutuserViewcontentManagerEventsIndexRoute
   DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute: typeof DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute
   DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute: typeof DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute: typeof DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute
+  DashboardLayoutuserViewfrontOfficePaymentsIndexRoute: typeof DashboardLayoutuserViewfrontOfficePaymentsIndexRoute
   DashboardLayoutuserViewfrontOfficeReservationsIndexRoute: typeof DashboardLayoutuserViewfrontOfficeReservationsIndexRoute
 }
 
@@ -884,7 +926,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewCheckinPageRoute,
   DashboardLayoutuserViewCompanyRoute: DashboardLayoutuserViewCompanyRoute,
   DashboardLayoutuserViewDoorLocksRoute: DashboardLayoutuserViewDoorLocksRoute,
-  DashboardLayoutuserViewEventsRoute: DashboardLayoutuserViewEventsRoute,
   DashboardLayoutuserViewPaymentProviderRoute:
     DashboardLayoutuserViewPaymentProviderRoute,
   DashboardLayoutuserViewPmsProviderRoute:
@@ -893,8 +934,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutuserViewTvRoute: DashboardLayoutuserViewTvRoute,
   DashboardLayoutuserViewfrontOfficeOrdersRoute:
     DashboardLayoutuserViewfrontOfficeOrdersRoute,
-  DashboardLayoutuserViewfrontOfficePaymentsRoute:
-    DashboardLayoutuserViewfrontOfficePaymentsRoute,
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute:
     DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute,
   DashboardLayoutuserViewUsersUserIdRoute:
@@ -907,16 +946,24 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewRoomsIndexRoute,
   DashboardLayoutuserViewUsersIndexRoute:
     DashboardLayoutuserViewUsersIndexRoute,
+  DashboardLayoutuserViewcontentManagerEventsEventIdRoute:
+    DashboardLayoutuserViewcontentManagerEventsEventIdRoute,
+  DashboardLayoutuserViewcontentManagerEventsNewRoute:
+    DashboardLayoutuserViewcontentManagerEventsNewRoute,
   DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute:
     DashboardLayoutuserViewfrontOfficeReservationsReservationIdRoute,
   DashboardLayoutuserViewfrontOfficeReservationsNewRoute:
     DashboardLayoutuserViewfrontOfficeReservationsNewRoute,
+  DashboardLayoutuserViewcontentManagerEventsIndexRoute:
+    DashboardLayoutuserViewcontentManagerEventsIndexRoute,
   DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute:
     DashboardLayoutuserViewcontentManagerGuestAbcIndexRoute,
   DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute:
     DashboardLayoutuserViewcontentManagerMobileCmsIndexRoute,
   DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute:
     DashboardLayoutuserViewfrontOfficeMonitoringIndexRoute,
+  DashboardLayoutuserViewfrontOfficePaymentsIndexRoute:
+    DashboardLayoutuserViewfrontOfficePaymentsIndexRoute,
   DashboardLayoutuserViewfrontOfficeReservationsIndexRoute:
     DashboardLayoutuserViewfrontOfficeReservationsIndexRoute,
 }

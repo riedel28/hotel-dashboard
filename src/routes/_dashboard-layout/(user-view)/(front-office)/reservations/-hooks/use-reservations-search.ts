@@ -1,4 +1,4 @@
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRouteApi } from '@tanstack/react-router';
 import type { PaginationState, SortingState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
@@ -20,9 +20,6 @@ type SortBy = NonNullable<FetchReservationsParams['sort_by']>;
 const defaultPageSize = 25;
 const defaultSorting: SortingState = [{ id: 'received_at', desc: true }];
 
-const toDate = (value: string | undefined) =>
-  value ? new Date(value) : undefined;
-
 const toDateParam = (value: Date | undefined) =>
   value ? dayjs(value).format('YYYY-MM-DD') : undefined;
 
@@ -37,7 +34,7 @@ function useReservationsSearch() {
   const queryClient = useQueryClient();
 
   const { page, per_page, status, q, from, to, sort_by, sort_order } = search;
-  const reservationsQuery = useSuspenseQuery(reservationsQueryOptions(search));
+  const reservationsQuery = useQuery(reservationsQueryOptions(search));
 
   const updateSearch = (patch: Partial<FetchReservationsParams>) => {
     navigate({
@@ -57,7 +54,7 @@ function useReservationsSearch() {
     reservationsQuery,
     searchTerm: q,
     selectedStatuses,
-    dateRange: { from: toDate(from), to: toDate(to) },
+    dateRange: { from, to },
     sorting,
     pageIndex,
     pageSize,
@@ -71,7 +68,7 @@ function useReservationsSearch() {
     setStatuses: (statuses: ReservationState[]) =>
       updateSearch({ page: 1, status: fromReservationStates(statuses) }),
 
-    setDateRange: (range: { from?: Date; to?: Date } | undefined) =>
+    setDateRange: (range: { from: Date; to: Date } | undefined) =>
       updateSearch({
         page: 1,
         from: toDateParam(range?.from),

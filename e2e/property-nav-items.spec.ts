@@ -9,7 +9,9 @@ async function selectProperty(page: Page, propertyName: string) {
   const responsePromise = page.waitForResponse(
     (resp) => resp.url().includes('/selected-property') && resp.status() === 200
   );
-  await page.getByLabel('Select property').click();
+  await page
+    .getByRole('combobox', { name: /^Select property$|, property$/ })
+    .click();
   await page.getByRole('option', { name: propertyName }).click();
   await responsePromise;
 }
@@ -40,7 +42,7 @@ test.describe('Property nav items', () => {
     const roomsCheckbox = page.getByRole('checkbox', { name: 'Rooms' });
     await expect(roomsCheckbox).toBeChecked();
     await roomsCheckbox.click();
-    await page.getByRole('button', { name: 'Update Property' }).click();
+    await page.getByRole('button', { name: 'Save changes' }).click();
     await expect(page.getByText('Property updated successfully')).toBeVisible();
 
     // The item and its Start page card are gone; its page redirects to Start.

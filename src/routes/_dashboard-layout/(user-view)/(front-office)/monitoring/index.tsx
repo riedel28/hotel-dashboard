@@ -1,9 +1,14 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { ListFilterIcon, RefreshCwIcon, XIcon } from 'lucide-react';
+import { ListFilterIcon, SquareActivityIcon, XIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { fetchMonitoringLogsParamsSchema } from '@/api/monitoring';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
+import { tableLoadError } from '@/components/load-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -13,14 +18,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { lenientSearch } from '@/lib/search-params';
 import { cn } from '@/lib/utils';
@@ -29,7 +26,6 @@ import { LogDetailsDrawer } from './-components/log-details-drawer';
 import { MonitoringFilters } from './-components/monitoring-filters';
 import { MonitoringTable } from './-components/monitoring-table';
 import {
-  DEFAULT_PAGE_SIZE,
   DEFAULT_PERIOD,
   useMonitoringSearch,
   useReservationFilter
@@ -65,8 +61,9 @@ function MonitoringPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      {/* As tall as the same row on pages that have an action button in it */}
-      <div className="mb-6 flex min-h-9 justify-between">
+      {/* From `sm` up as tall as the same row on pages that have an action
+          button in it; phones keep the space for the logs */}
+      <div className="mb-4 flex justify-between sm:mb-6 sm:min-h-9">
         <h1 className="text-xl font-bold">
           <Trans>Monitoring Logs</Trans>
         </h1>
@@ -92,32 +89,28 @@ function MonitoringPage() {
             'opacity-70': logsQuery.isFetching
           })}
         >
-          {logsQuery.isError ? (
-            <LoadError
-              message={logsQuery.error.message}
-              isRetrying={logsQuery.isFetching}
-              onRetry={() => logsQuery.refetch()}
-            />
-          ) : (
-            <MonitoringTable
-              data={logs}
-              isLoading={logsQuery.isLoading}
-              totalCount={logsQuery.data?.total ?? 0}
-              pageCount={logsQuery.data?.page_count ?? 0}
-              pagination={search.pagination}
-              onPaginationChange={search.onPaginationChange}
-              sorting={search.sorting}
-              onSortingChange={search.onSortingChange}
-              selectedLogId={search.openLogId}
-              onLogOpen={search.openLog}
-              emptyMessage={
-                <EmptyLogs
-                  isFiltered={search.hasActiveFilters}
-                  onClearFilters={search.clearFilters}
-                />
-              }
-            />
-          )}
+          <MonitoringTable
+            error={tableLoadError(
+              logsQuery,
+              <Trans>Couldn't load monitoring logs</Trans>
+            )}
+            data={logs}
+            isLoading={logsQuery.isLoading}
+            totalCount={logsQuery.data?.total ?? 0}
+            pageCount={logsQuery.data?.page_count ?? 0}
+            pagination={search.pagination}
+            onPaginationChange={search.onPaginationChange}
+            sorting={search.sorting}
+            onSortingChange={search.onSortingChange}
+            selectedLogId={search.openLogId}
+            onLogOpen={search.openLog}
+            emptyMessage={
+              <EmptyLogs
+                isFiltered={search.hasActiveFilters}
+                onClearFilters={search.clearFilters}
+              />
+            }
+          />
         </div>
       </div>
 
@@ -175,68 +168,19 @@ function EmptyLogs({
 }) {
   if (!isFiltered) {
     return (
-      <div className="flex flex-col items-center gap-1 py-6 text-sm">
-        <p className="font-medium text-foreground">
-          <Trans>No logs in the last 24 hours</Trans>
-        </p>
-        <p className="text-muted-foreground">
-          <Trans>Pick a longer period to see older logs.</Trans>
-        </p>
-      </div>
+      <EmptyTableState
+        icon={<SquareActivityIcon />}
+        title={<Trans>No logs in the last 24 hours</Trans>}
+        description={<Trans>Pick a longer period to see older logs.</Trans>}
+      />
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-1 py-6 text-sm">
-      <p className="font-medium text-foreground">
-        <Trans>Nothing found</Trans>
-      </p>
-      <p className="text-muted-foreground">
-        <Trans>No logs match the current filters.</Trans>
-      </p>
-      <Button
-        variant="secondary"
-        size="sm"
-        className="mt-2"
-        onClick={onClearFilters}
-      >
-        <Trans>Clear filters</Trans>
-      </Button>
-    </div>
-  );
-}
-
-function LoadError({
-  message,
-  isRetrying,
-  onRetry
-}: {
-  message: string;
-  isRetrying: boolean;
-  onRetry: () => void;
-}) {
-  return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <Empty variant="destructive" className="w-md max-w-md">
-        <EmptyHeader>
-          <EmptyTitle>
-            <Trans>Something went wrong</Trans>
-          </EmptyTitle>
-          <EmptyDescription>
-            {message || (
-              <Trans>An error occurred while fetching monitoring logs</Trans>
-            )}
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          {/* The one action here, so it says what it does */}
-          <Button variant="destructive" onClick={onRetry} disabled={isRetrying}>
-            <RefreshCwIcon className={cn(isRetrying && 'animate-spin')} />
-            <Trans>Refresh</Trans>
-          </Button>
-        </EmptyContent>
-      </Empty>
-    </div>
+    <EmptyFilterResult
+      description={<Trans>No logs match the current filters.</Trans>}
+      onClearFilters={onClearFilters}
+    />
   );
 }
 
@@ -248,12 +192,10 @@ export const Route = createFileRoute(
   // Keep default values out of the URL
   search: {
     middlewares: [
+      // Parsing nothing gives exactly the schema's defaults
       stripSearchParams({
-        page: 1,
-        per_page: DEFAULT_PAGE_SIZE,
-        period: DEFAULT_PERIOD,
-        sort_by: 'logged_at',
-        sort_order: 'desc'
+        ...fetchMonitoringLogsParamsSchema.parse({}),
+        period: DEFAULT_PERIOD
       })
     ]
   },

@@ -32,19 +32,22 @@ const IN_FLOW_CHALLENGE_CODES = new Set([
   'CHALLENGE_EXPIRED'
 ]);
 
+/** A 401/403 that means the session is gone, not a challenge in place. */
+function endsSession(status: number | undefined, code: string | undefined) {
+  return (
+    (status === 401 || status === 403) &&
+    !(code && IN_FLOW_CHALLENGE_CODES.has(code))
+  );
+}
+
 // Pass through responses and errors unchanged
 client.interceptors.response.use(
   (response) => response,
   (error) => {
     if (isAxiosError(error)) {
-      const status = error.response?.status;
       const code = (error.response?.data as { code?: string } | undefined)
         ?.code;
-
-      if (
-        (status === 401 || status === 403) &&
-        !(code && IN_FLOW_CHALLENGE_CODES.has(code))
-      ) {
+      if (endsSession(error.response?.status, code)) {
         unauthorizedHandler?.();
       }
     }
@@ -61,6 +64,11 @@ class ApiError extends Error {
     this.code = code;
     this.status = status;
   }
+}
+
+/** A failed request that signed the user out; the login page says enough. */
+function isSessionError(error: unknown) {
+  return error instanceof ApiError && endsSession(error.status, error.code);
 }
 
 function handleApiError(err: unknown, context: string): never {
@@ -83,4 +91,10 @@ function handleApiError(err: unknown, context: string): never {
   throw err instanceof Error ? err : new Error(String(err));
 }
 
-export { ApiError, client, handleApiError, setUnauthorizedHandler };
+export {
+  ApiError,
+  client,
+  handleApiError,
+  isSessionError,
+  setUnauthorizedHandler
+};

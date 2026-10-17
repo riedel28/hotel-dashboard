@@ -1,28 +1,23 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { type ReactNode, useEffect } from 'react';
+import { ChevronDownIcon, ChevronUpIcon, ListFilterIcon } from 'lucide-react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
-import { ApiError } from '@/api/client';
 import {
   monitoringLogQueryOptions,
   monitoringQueryOptions
 } from '@/api/monitoring';
+import { DetailsDrawer } from '@/components/details-drawer';
+import { ReservationLink } from '@/components/reservation-link';
+import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle
-} from '@/components/ui/drawer';
+import { DrawerBody, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 import { StatusCell } from './cells/status-cell';
 import { TypeCell } from './cells/type-cell';
-import { ReservationLink } from './reservation-link';
 
 const RELATED_LOGS_COUNT = 5;
 const RELATED_LOGS_SKELETON_ROWS = 3;
@@ -30,16 +25,12 @@ const RELATED_LOGS_SKELETON_ROWS = 3;
 interface LogDetailsDrawerProps {
   /** The open log; the drawer is closed while undefined. */
   logId?: number;
-  /** Logs of the current table page: instant content and ↑/↓ navigation. */
+  /** Logs of the current table page. */
   pageLogs: MonitoringLog[];
   onSelect: (logId: number) => void;
   onClose: () => void;
   onShowReservationLogs: (bookingNr: string) => void;
 }
-
-type LogDetailsProps = Omit<LogDetailsDrawerProps, 'logId' | 'onClose'> & {
-  logId: number;
-};
 
 export function LogDetailsDrawer({
   logId,
@@ -48,74 +39,52 @@ export function LogDetailsDrawer({
   onClose,
   onShowReservationLogs
 }: LogDetailsDrawerProps) {
-  // ↑/↓ step through the current page and stop at its ends
-  useEffect(() => {
-    if (logId === undefined) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-        return;
-      }
-      const index = pageLogs.findIndex((log) => log.id === logId);
-      const next = pageLogs[index + (event.key === 'ArrowDown' ? 1 : -1)];
-      if (index !== -1 && next) {
-        event.preventDefault();
-        onSelect(next.id);
-      }
-    };
-
-    // Capture phase: the open dialog stops arrow keys from bubbling this far
-    document.addEventListener('keydown', handleKeyDown, true);
-    return () => document.removeEventListener('keydown', handleKeyDown, true);
-  }, [logId, pageLogs, onSelect]);
-
   return (
-    <Drawer
-      open={logId !== undefined}
-      onOpenChange={(open) => !open && onClose()}
+    <DetailsDrawer
+      openId={logId}
+      items={pageLogs}
+      queryOptions={monitoringLogQueryOptions}
+      onSelect={onSelect}
+      onClose={onClose}
+      // Narrow enough to leave the table's status, date, type and event
+      // columns in view beside it
+      className="sm:max-w-md"
+      loadingText={<Trans>Loading log…</Trans>}
+      notFoundTitle={<Trans>Log not found</Trans>}
+      notFoundText={<Trans>This log does not exist or was removed.</Trans>}
     >
-      <DrawerContent>
-        {logId !== undefined && (
-          <LogDetails
-            // Remount per log so one log's data never shows under another id
-            key={logId}
-            logId={logId}
-            pageLogs={pageLogs}
-            onSelect={onSelect}
-            onShowReservationLogs={onShowReservationLogs}
-          />
-        )}
-      </DrawerContent>
-    </Drawer>
+      {(log) => (
+        <LogDetails
+          log={log}
+          pageLogs={pageLogs}
+          onSelect={onSelect}
+          onShowReservationLogs={onShowReservationLogs}
+        />
+      )}
+    </DetailsDrawer>
   );
 }
 
 function LogDetails({
-  logId,
+  log,
   pageLogs,
   onSelect,
   onShowReservationLogs
-}: LogDetailsProps) {
+}: {
+  log: MonitoringLog;
+  pageLogs: MonitoringLog[];
+  onSelect: (logId: number) => void;
+  onShowReservationLogs: (bookingNr: string) => void;
+}) {
   const { t } = useLingui();
-  const logQuery = useQuery({
-    ...monitoringLogQueryOptions(logId),
-    initialData: pageLogs.find((log) => log.id === logId)
-  });
-  const log = logQuery.data;
-
-  if (!log) {
-    return (
-      <LogUnavailable isLoading={logQuery.isPending} error={logQuery.error} />
-    );
-  }
 
   return (
     <>
       <DrawerHeader className="space-y-2">
-        {/* Only the title row shares its line with the close button */}
-        <DrawerTitle className="pr-10">{log.event}</DrawerTitle>
+        {/* Only the title row shares its line with the step and close
+            buttons */}
+        <DrawerTitle className="pr-28">{log.event}</DrawerTitle>
+        <PageStepper log={log} pageLogs={pageLogs} onSelect={onSelect} />
         <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
           <StatusCell status={log.status} />
           <TypeCell type={log.type} />
@@ -194,6 +163,56 @@ function LogDetails({
   );
 }
 
+/**
+ * Steps to the previous or next log of the table page, as ↑/↓ do, for the
+ * pointer and for phones without keys. Absent for a log not on the page.
+ */
+function PageStepper({
+  log,
+  pageLogs,
+  onSelect
+}: {
+  log: MonitoringLog;
+  pageLogs: MonitoringLog[];
+  onSelect: (logId: number) => void;
+}) {
+  const { t } = useLingui();
+  const index = pageLogs.findIndex((pageLog) => pageLog.id === log.id);
+
+  if (index === -1) {
+    return null;
+  }
+
+  const previous = pageLogs[index - 1];
+  const next = pageLogs[index + 1];
+
+  return (
+    // Left of the drawer's close button
+    <div className="absolute top-4 right-14 flex gap-0.5">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        disabled={!previous}
+        aria-label={t`Previous log`}
+        title={t`Previous log (↑)`}
+        onClick={() => previous && onSelect(previous.id)}
+      >
+        <ChevronUpIcon />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        disabled={!next}
+        aria-label={t`Next log`}
+        title={t`Next log (↓)`}
+        onClick={() => next && onSelect(next.id)}
+      >
+        <ChevronDownIcon />
+      </Button>
+    </div>
+  );
+}
+
 /** The latest logs of the same reservation, the open one marked. */
 function RelatedLogs({
   bookingNr,
@@ -216,14 +235,14 @@ function RelatedLogs({
   return (
     <section className="space-y-2">
       <h3 className="text-sm font-medium">
-        <Trans>Other logs for reservation {bookingNr}</Trans>
+        <Trans>Logs for reservation {bookingNr}</Trans>
       </h3>
       {relatedQuery.isPending ? (
         // One placeholder per row, shaped like a row: status, time, type,
         // event
-        <ul className="space-y-0.5" aria-hidden="true">
+        <ul className="-mx-2 space-y-0.5" aria-hidden="true">
           {Array.from({ length: RELATED_LOGS_SKELETON_ROWS }, (_, i) => (
-            <li key={i} className="flex items-center gap-2 py-1.5">
+            <li key={i} className="flex items-center gap-2 px-2 py-1.5">
               <Skeleton className="h-5 w-12" />
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-5 w-20" />
@@ -232,7 +251,9 @@ function RelatedLogs({
           ))}
         </ul>
       ) : (
-        <ul className="space-y-0.5">
+        // Pulled out by the rows' padding, so their content lines up with the
+        // heading while the open one's tint reaches past it
+        <ul className="-mx-2 space-y-0.5">
           {relatedQuery.data?.index.map((related) => (
             <li key={related.id}>
               <button
@@ -240,13 +261,17 @@ function RelatedLogs({
                 aria-current={related.id === currentLogId}
                 onClick={() => onSelect(related.id)}
                 className={cn(
-                  'group/related flex w-full cursor-pointer items-center gap-2 rounded-sm py-1.5 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  related.id === currentLogId && 'font-medium'
+                  'group/related flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm outline-none hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring',
+                  related.id === currentLogId &&
+                    'bg-muted font-medium hover:bg-muted'
                 )}
               >
                 <StatusCell status={related.status} />
-                <time className="text-xs text-muted-foreground tabular-nums">
-                  {dayjs(related.logged_at).format('DD.MM HH:mm')}
+                <time
+                  dateTime={dayjs(related.logged_at).toISOString()}
+                  className="shrink-0 text-xs whitespace-nowrap text-muted-foreground tabular-nums"
+                >
+                  {dayjs(related.logged_at).format('DD.MM HH:mm:ss')}
                 </time>
                 <TypeCell type={related.type} />
                 <span className="truncate underline-offset-4 group-hover/related:underline">
@@ -257,62 +282,10 @@ function RelatedLogs({
           ))}
         </ul>
       )}
-      <button
-        type="button"
-        className="cursor-pointer rounded-sm text-sm text-foreground underline decoration-dotted underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        onClick={() => onShowAll(bookingNr)}
-      >
-        <Trans>Show all</Trans>
-      </button>
+      <Button variant="outline" size="sm" onClick={() => onShowAll(bookingNr)}>
+        <ListFilterIcon />
+        <Trans>Show all logs for {bookingNr}</Trans>
+      </Button>
     </section>
-  );
-}
-
-/** The drawer's content while the log is loading or could not be loaded. */
-function LogUnavailable({
-  isLoading,
-  error
-}: {
-  isLoading: boolean;
-  error: Error | null;
-}) {
-  if (isLoading) {
-    return (
-      <LogNotice
-        title={<Skeleton className="h-6 w-40" />}
-        description={<Trans>Loading log…</Trans>}
-      />
-    );
-  }
-
-  if (error instanceof ApiError && error.status === 404) {
-    return (
-      <LogNotice
-        title={<Trans>Log not found</Trans>}
-        description={<Trans>This log does not exist or was removed.</Trans>}
-      />
-    );
-  }
-
-  return (
-    <LogNotice
-      title={<Trans>Something went wrong</Trans>}
-      description={error?.message}
-    />
-  );
-}
-
-function LogNotice({
-  title,
-  description
-}: {
-  title: ReactNode;
-  description: ReactNode;
-}) {
-  return (
-    <DrawerHeader className="space-y-1 pr-14">
-      <DrawerTitle>{title}</DrawerTitle>
-      <p className="text-sm font-normal text-muted-foreground">{description}</p>
-    </DrawerHeader>
   );
 }

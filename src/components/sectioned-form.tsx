@@ -23,6 +23,11 @@ interface SectionedFormShellProps<T extends FieldValues> {
   status?: ReactNode;
   /** The button beside submit; by default one that discards unsaved changes. */
   secondaryAction?: ReactNode;
+  /**
+   * A form for something not saved yet: it can be submitted untouched, to
+   * show what is missing. An edit form can't, there being nothing to save.
+   */
+  isNew?: boolean;
   /** The form's sections. */
   children: ReactNode;
 }
@@ -42,6 +47,7 @@ export function SectionedFormShell<T extends FieldValues>({
   header,
   status,
   secondaryAction,
+  isNew = false,
   children
 }: SectionedFormShellProps<T>) {
   const formId = useId();
@@ -84,7 +90,9 @@ export function SectionedFormShell<T extends FieldValues>({
                 status
               ) : isSaving ? (
                 <Trans>Saving changes…</Trans>
-              ) : isDirty ? null : (
+              ) : isDirty ? (
+                <Trans>Unsaved changes</Trans>
+              ) : (
                 <Trans>No unsaved changes</Trans>
               )}
             </div>
@@ -100,7 +108,12 @@ export function SectionedFormShell<T extends FieldValues>({
                   <Trans>Cancel</Trans>
                 </Button>
               )}
-              <Button type="submit" form={formId} disabled={isSaving}>
+              <Button
+                type="submit"
+                form={formId}
+                disabled={isSaving || (!isNew && !isDirty)}
+                aria-busy={isSaving}
+              >
                 {isSaving && (
                   <Loader2Icon className="animate-spin" aria-hidden="true" />
                 )}

@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+import {
+  pageSchema,
+  perPageSchema,
+  searchQuerySchema,
+  sortOrderSchema
+} from './list-params';
 import { countryCodeSchema } from './properties';
 
 // In lifecycle order.
@@ -139,20 +145,10 @@ export const sortableColumnsSchema = z.enum([
   'received_at'
 ]);
 
-export const sortOrderSchema = z.enum(['asc', 'desc']);
-
 export const fetchReservationsParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1).optional(),
-  per_page: z.coerce
-    .number()
-    .int()
-    .positive()
-    .refine((val) => [5, 10, 25, 50, 100].includes(val), {
-      message: 'per_page must be one of: 5, 10, 25, 50, 100'
-    })
-    .default(25)
-    .optional(),
-  q: z.string().max(200).optional(),
+  page: pageSchema.default(1).optional(),
+  per_page: perPageSchema.default(25).optional(),
+  q: searchQuerySchema.optional(),
   // An unknown status (e.g. a bookmark from before the states were renamed)
   // means no filter rather than a failed parse.
   status: reservationStatusFilterSchema.default('all').catch('all').optional(),

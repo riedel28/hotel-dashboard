@@ -58,7 +58,7 @@ function VerifyEmailPage() {
         <div className="text-center">
           <Link
             to="/auth/login"
-            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            className="text-sm font-medium text-link underline-offset-4 hover:underline"
           >
             <Trans>Back to login</Trans>
           </Link>
@@ -107,7 +107,7 @@ function VerifyEmailPage() {
         <div className="text-center">
           <Link
             to="/auth/login"
-            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            className="text-sm font-medium text-link underline-offset-4 hover:underline"
           >
             <Trans>Back to login</Trans>
           </Link>
@@ -134,7 +134,7 @@ function VerifyEmailPage() {
       <div className="text-center">
         <Link
           to="/auth/login"
-          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+          className="text-sm font-medium text-link underline-offset-4 hover:underline"
         >
           <Trans>Go to login</Trans>
         </Link>

@@ -1,11 +1,11 @@
 import { useLingui } from '@lingui/react/macro';
 import { ListFilterIcon } from 'lucide-react';
 
+import { ReservationLink } from '@/components/reservation-link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 import { useReservationFilter } from '../../-hooks/use-monitoring-search';
-import { ReservationLink } from '../reservation-link';
 
 interface BookingCellProps {
   bookingNr: string | null;

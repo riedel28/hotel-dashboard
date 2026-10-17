@@ -9,7 +9,8 @@ import {
 } from 'shared/types/devices';
 import { z } from 'zod';
 
-import { QueryBoundary } from '@/components/query-boundary';
+import { EmptyFilterResult } from '@/components/empty-table-state';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -123,23 +124,10 @@ function DevicesPage() {
         </Button>
       </div>
 
-      <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching devices</Trans>}
-        fallback={
-          // The table under an empty row as tall as the filters, so it does
-          // not move when the devices arrive and the filters appear above it
-          <div className="space-y-2.5">
-            <div className="h-9" />
-            <DevicesTableSkeleton />
-          </div>
-        }
-      >
-        <DevicesContent
-          highlightedId={highlightedId}
-          onAddDevice={() => setIsClaimOpen(true)}
-        />
-      </QueryBoundary>
+      <DevicesContent
+        highlightedId={highlightedId}
+        onAddDevice={() => setIsClaimOpen(true)}
+      />
 
       <ClaimDeviceModal
         open={isClaimOpen}
@@ -183,7 +171,7 @@ interface DevicesContentProps {
 }
 
 function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
-  const devices = useDevices();
+  const { devices, query } = useDevices();
   const search = useDevicesSearch();
   const { filters, sort } = search;
 
@@ -191,6 +179,25 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
     () => listDevices(devices, filters, sort),
     [devices, filters, sort]
   );
+
+  const error = tableLoadError(query, <Trans>Couldn't load devices</Trans>);
+  if (query.isLoading || error) {
+    return (
+      // The table under an empty row as tall as the filters, so it does not
+      // move when the devices arrive and the filters appear above it
+      <div className="space-y-2.5">
+        <div className="h-9" />
+        {error ? (
+          <DevicesTable
+            page={paginate([], 0, DEFAULT_DEVICE_PAGE_SIZE)}
+            error={error}
+          />
+        ) : (
+          <DevicesTableSkeleton />
+        )}
+      </div>
+    );
+  }
 
   if (devices.length === 0) {
     return <NoDevices onAddDevice={onAddDevice} />;
@@ -213,7 +220,12 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
           onSortChange={search.setSort}
           onPageChange={search.setPage}
           highlightedId={highlightedId}
-          emptyMessage={<Trans>No devices match the filters</Trans>}
+          emptyMessage={
+            <EmptyFilterResult
+              description={<Trans>No devices match the filters.</Trans>}
+              onClearFilters={search.clearFilters}
+            />
+          }
           onDeviceOpen={(device) => search.openDevice(device.id)}
         />
 

@@ -5,9 +5,10 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { LoaderCircleIcon, MessageCircleIcon } from 'lucide-react';
 
 import {
-  fetchDisabledNavItems,
+  fetchSelectedProperty,
   selectablePropertiesQueryOptions
 } from '@/api/properties';
+import { FullScreenRouteError } from '@/components/route-error';
 import {
   Sidebar,
   SidebarGroup,
@@ -53,7 +54,12 @@ function DashboardSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeaderComponent />
       <SidebarViewToggle />
-      <nav aria-label={t`Main navigation`}>
+      {/* A flex child that may shrink, so the menu scrolls inside the
+          sidebar instead of running past the bottom of a short screen */}
+      <nav
+        aria-label={t`Main navigation`}
+        className="flex min-h-0 flex-1 flex-col"
+      >
         <DashboardNav />
       </nav>
     </Sidebar>
@@ -80,10 +86,12 @@ function DashboardLayout() {
             `overflow-hidden` wrapper a few hundred pixels it can be scrolled
             to — which `scrollIntoView` promptly does, sliding the page under
             the sticky header and clipping its bottom edge. */}
+        {/* The scrollbar's room is kept on short pages too, so going from a
+            long page to a short one doesn't shift everything sideways */}
         <main
           id="main-content"
           tabIndex={-1}
-          className="relative min-h-0 flex-1 overflow-auto px-3 py-2 pb-4 focus:outline-none md:px-6 md:py-4 md:pb-8"
+          className="relative min-h-0 flex-1 [scrollbar-gutter:stable] overflow-auto px-3 py-2 pb-4 focus:outline-none md:px-6 md:py-4 md:pb-8"
         >
           <Outlet />
         </main>
@@ -103,16 +111,17 @@ export const Route = createFileRoute('/_dashboard-layout')({
       });
     }
 
-    const disabledNavItems = await fetchDisabledNavItems(
+    const selectedProperty = await fetchSelectedProperty(
       context.queryClient,
       context.auth.user?.selected_property_id
     );
+    const disabledNavItems = selectedProperty?.disabled_nav_items ?? [];
 
     if (isNavPathDisabled(location.pathname, disabledNavItems)) {
       throw redirect({ to: '/' });
     }
 
-    return { disabledNavItems };
+    return { disabledNavItems, selectedProperty };
   },
   // No auth check here: `beforeLoad` above always runs first, and its redirect
   // throws, so an unauthenticated request never reaches this loader.
@@ -124,6 +133,8 @@ export const Route = createFileRoute('/_dashboard-layout')({
     }
   },
   pendingComponent: DashboardPending,
+  // The layout itself failed, so there is no sidebar to keep: the whole screen
+  errorComponent: FullScreenRouteError,
   component: DashboardLayout
 });
 

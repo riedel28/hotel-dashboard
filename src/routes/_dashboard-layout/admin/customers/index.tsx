@@ -1,12 +1,17 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+import { UsersIcon } from 'lucide-react';
 import { fetchCustomersParamsSchema } from 'shared/types/customers';
+import { perPageSchema } from 'shared/types/list-params';
 
 import { customersQueryOptions } from '@/api/customers';
 import { ClearFiltersButton } from '@/components/clear-filters-button';
-import { FiltersBar } from '@/components/filters-bar';
-import { QueryBoundary } from '@/components/query-boundary';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
+import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,19 +27,19 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { AddCustomerDrawer } from './-components/add-customer-drawer';
-import {
-  CustomersTable,
-  CustomersTableSkeleton
-} from './-components/customers-table';
+import { CustomersTable } from './-components/customers-table';
+
+// A page holds every customer most installations have, as on Properties
+const PER_PAGE = 25;
 
 function CustomersContent() {
   const search = Route.useSearch();
-  const { q, country_code, sort_by, sort_order } = search;
+  const { q, country_code, sort_by, sort_order, page, per_page } = search;
   const navigate = Route.useNavigate();
   const queryClient = useQueryClient();
   const { t } = useLingui();
-
-  const { data, isFetching } = useSuspenseQuery(customersQueryOptions(search));
+  const customersQuery = useQuery(customersQueryOptions(search));
+  const { data } = customersQuery;
 
   // Every change but a page turn goes back to the first page
   const setSearch = (changes: Partial<typeof search>) =>
@@ -42,20 +47,25 @@ function CustomersContent() {
       to: '/admin/customers',
       search: (prev) => ({ ...prev, page: 1, ...changes })
     });
+  // Back to the plain list: the sort goes too
+  const clearFilters = () =>
+    setSearch({
+      q: undefined,
+      country_code: undefined,
+      sort_by: undefined,
+      sort_order: undefined
+    });
 
   return (
-    <div
-      className={cn(
-        'flex flex-col gap-3 opacity-100 transition-opacity duration-300 ease-in-out',
-        { 'opacity-70': isFetching }
-      )}
-    >
-      <FiltersBar>
+    <div className="flex flex-col gap-3">
+      {/* One row from `sm` up. On a phone the search shares its row with
+          refresh, the country goes under them. */}
+      <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
         <SearchInput
           value={q || ''}
           onChange={(term) => setSearch({ q: term || undefined })}
           placeholder={t`Search customers`}
-          wrapperClassName="w-full sm:w-[250px]"
+          wrapperClassName="min-w-0 flex-1 sm:max-w-[250px] sm:min-w-36"
           debounceMs={500}
         />
         <CountryPicker
@@ -64,48 +74,64 @@ function CustomersContent() {
             setSearch({ country_code: code || undefined })
           }
           placeholder={t`All countries`}
-          className="w-full sm:w-45"
+          className="order-last w-full sm:order-none sm:w-45 sm:shrink-0"
         />
-        <ClearFiltersButton
-          hasActiveFilters={Boolean(q || country_code)}
-          // Back to the plain list: the sort goes too
-          onClear={() =>
-            setSearch({
-              q: undefined,
-              country_code: undefined,
-              sort_by: undefined,
-              sort_order: undefined
-            })
-          }
-        />
+        {/* Its kept place only matters on the one-row bar */}
+        <div
+          className={cn('shrink-0', !(q || country_code) && 'max-sm:hidden')}
+        >
+          <ClearFiltersButton
+            hasActiveFilters={Boolean(q || country_code)}
+            onClear={clearFilters}
+          />
+        </div>
         <DataGridRefreshButton
-          isRefreshing={isFetching}
+          isRefreshing={customersQuery.isFetching}
           onRefresh={() =>
             queryClient.invalidateQueries({ queryKey: ['customers'] })
           }
         />
-      </FiltersBar>
-      <CustomersTable
-        page={{
-          rows: data.index,
-          pageIndex: data.page - 1,
-          pageSize: data.per_page,
-          pageCount: data.page_count,
-          totalCount: data.total
-        }}
-        sort={sort_by && { by: sort_by, order: sort_order ?? 'asc' }}
-        onSortChange={(sort) =>
-          setSearch({ sort_by: sort?.by, sort_order: sort?.order })
-        }
-        onPageChange={(pageIndex, per_page) =>
-          setSearch({ page: pageIndex + 1, per_page })
-        }
-        emptyMessage={
-          q || country_code ? (
-            <Trans>No customers match the filters</Trans>
-          ) : undefined
-        }
-      />
+      </div>
+      <div
+        className={cn('transition-opacity duration-300 ease-in-out', {
+          'opacity-70': customersQuery.isFetching && !customersQuery.isLoading
+        })}
+      >
+        <CustomersTable
+          page={{
+            rows: data?.index ?? [],
+            pageIndex: (page ?? 1) - 1,
+            pageSize: per_page ?? PER_PAGE,
+            pageCount: data?.page_count ?? 0,
+            totalCount: data?.total ?? 0
+          }}
+          isLoading={customersQuery.isLoading}
+          error={tableLoadError(
+            customersQuery,
+            <Trans>Couldn't load customers</Trans>
+          )}
+          sort={sort_by && { by: sort_by, order: sort_order ?? 'asc' }}
+          onSortChange={(sort) =>
+            setSearch({ sort_by: sort?.by, sort_order: sort?.order })
+          }
+          onPageChange={(pageIndex, per_page) =>
+            setSearch({ page: pageIndex + 1, per_page })
+          }
+          emptyMessage={
+            q || country_code ? (
+              <EmptyFilterResult
+                description={<Trans>No customers match the filters.</Trans>}
+                onClearFilters={clearFilters}
+              />
+            ) : (
+              <EmptyTableState
+                icon={<UsersIcon />}
+                title={<Trans>No customers yet</Trans>}
+              />
+            )
+          }
+        />
+      </div>
     </div>
   );
 }
@@ -138,37 +164,36 @@ function CustomersPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <div className="flex flex-col gap-1">
+      {/* The title and its action share a row; the description runs under
+          both, so on a phone it is not squeezed beside the button */}
+      <div className="mb-6 space-y-1">
+        <div className="flex min-h-9 items-center justify-between gap-3">
           <h1 className="text-xl font-bold">
             <Trans>Customers</Trans>
           </h1>
-          <p className="text-sm text-muted-foreground">
-            <Trans>
-              Manage the customers that own properties and their contact
-              details.
-            </Trans>
-          </p>
+          <AddCustomerDrawer />
         </div>
-        <AddCustomerDrawer />
+        <p className="text-sm text-muted-foreground">
+          <Trans>
+            Manage the customers that own properties and their contact details.
+          </Trans>
+        </p>
       </div>
 
-      <QueryBoundary
-        className="min-h-[60vh] items-center justify-center"
-        message={<Trans>An error occurred while fetching customers</Trans>}
-        fallback={<CustomersTableSkeleton />}
-      >
-        <CustomersContent />
-      </QueryBoundary>
+      <CustomersContent />
     </div>
   );
 }
 
 export const Route = createFileRoute('/_dashboard-layout/admin/customers/')({
-  validateSearch: (search) => fetchCustomersParamsSchema.parse(search),
+  validateSearch: (search) =>
+    fetchCustomersParamsSchema
+      .extend({ per_page: perPageSchema.default(PER_PAGE).optional() })
+      .parse(search),
   loaderDeps: ({ search }) => search,
-  loader: ({ context: { queryClient }, deps }) => {
-    return queryClient.ensureQueryData(customersQueryOptions(deps));
-  },
+  // Waited for, but a failure isn't thrown here: it would take the whole page
+  // down. The query keeps the error, and the list shows it under the filters.
+  loader: ({ context: { queryClient }, deps }) =>
+    queryClient.prefetchQuery(customersQueryOptions(deps)),
   component: CustomersPage
 });

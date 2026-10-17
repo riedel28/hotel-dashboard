@@ -2,6 +2,13 @@ import countries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';
 import { z } from 'zod';
 
+import {
+  pageSchema,
+  perPageSchema,
+  searchQuerySchema,
+  sortOrderSchema
+} from './list-params';
+
 countries.registerLocale(en);
 
 export const countryCodeSchema = z
@@ -12,6 +19,29 @@ export const countryCodeSchema = z
   .refine((code) => countries.isValid(code), {
     message: 'Invalid country code'
   });
+
+// An IANA zone the runtime knows, e.g. Europe/Berlin.
+export const timezoneSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (zone) => {
+      try {
+        new Intl.DateTimeFormat('en', { timeZone: zone });
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    { message: 'Invalid timezone' }
+  );
+
+const optionalAddressText = z
+  .string()
+  .trim()
+  .max(200)
+  .nullable()
+  .transform((value) => value || null);
 
 export const propertyStageSchema = z.enum([
   'demo',
@@ -25,15 +55,18 @@ export const propertyStageSchema = z.enum([
 export const navItemIdSchema = z.enum([
   'monitoring',
   'reservations',
+  'payments',
   'rooms',
   'guest-abc',
   'products',
   'mobile-cms',
+  'events',
   'pms-provider',
   'door-locks',
   'payment-provider',
   'devices',
-  'users'
+  'users',
+  'checkin-page'
 ]);
 
 // Solutions a Property has booked. Listed in display order.
@@ -72,6 +105,12 @@ export const propertySchema = z.object({
   id: z.uuid(),
   name: z.string().min(1),
   country_code: countryCodeSchema,
+  // The hotel's address; null until filled in.
+  address_line_1: z.string().nullable(),
+  address_line_2: z.string().nullable(),
+  zip: z.string().nullable(),
+  city: z.string().nullable(),
+  timezone: z.string(),
   stage: propertyStageSchema,
   disabled_nav_items: z.array(navItemIdSchema),
   options: z.array(propertyOptionSchema),
@@ -88,20 +127,10 @@ export const propertySortableColumnsSchema = z.enum([
   'customer'
 ]);
 
-export const sortOrderSchema = z.enum(['asc', 'desc']);
-
 export const fetchPropertiesParamsSchema = z.object({
-  page: z.coerce.number().int().positive().default(1).optional(),
-  per_page: z.coerce
-    .number()
-    .int()
-    .positive()
-    .refine((val) => [5, 10, 25, 50, 100].includes(val), {
-      message: 'per_page must be one of: 5, 10, 25, 50, 100'
-    })
-    .default(10)
-    .optional(),
-  q: z.string().max(200).optional(),
+  page: pageSchema.default(1).optional(),
+  per_page: perPageSchema.default(10).optional(),
+  q: searchQuerySchema.optional(),
   // A list in the URL search params, a comma-separated string on the wire.
   // 'all' is the legacy spelling of "no filter".
   stage: z.preprocess(
@@ -147,7 +176,12 @@ export const updatePropertySchema = propertySchema
     options: z
       .array(propertyOptionSchema)
       .transform((ids) => [...new Set(ids)]),
-    pwa_domain: pwaDomainSchema.nullable()
+    pwa_domain: pwaDomainSchema.nullable(),
+    address_line_1: optionalAddressText,
+    address_line_2: optionalAddressText,
+    zip: optionalAddressText,
+    city: optionalAddressText,
+    timezone: timezoneSchema
   })
   .partial()
   // The two travel together, so a request can be checked without the stored

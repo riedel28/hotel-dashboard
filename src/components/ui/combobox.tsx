@@ -25,8 +25,11 @@ function ComboboxTrigger({
   showClear = false,
   clearLabel,
   wrapperClassName,
+  icon,
   ...props
 }: ComboboxPrimitive.Trigger.Props & {
+  /** Replaces the chevron, e.g. with a spinner while a change is saving. */
+  icon?: React.ReactNode;
   /** Adds a clear button inside the trigger, left of the chevron, while a value is selected. */
   showClear?: boolean;
   /** Accessible name of the clear button. */
@@ -46,7 +49,9 @@ function ComboboxTrigger({
       {...props}
     >
       {children}
-      <ChevronDownIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
+      {icon ?? (
+        <ChevronDownIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
+      )}
     </ComboboxPrimitive.Trigger>
   );
 
@@ -116,7 +121,7 @@ function ComboboxInput({
           render={
             <InputGroupInput
               disabled={disabled}
-              className="h-11 py-3 text-sm outline-none placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none"
+              className="h-11 py-3 text-base outline-none placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none md:text-sm"
             />
           }
           {...props}
@@ -306,7 +311,7 @@ function ComboboxChips({
     <ComboboxPrimitive.Chips
       data-slot="combobox-chips"
       className={cn(
-        'flex min-h-9 flex-wrap items-center gap-1.5 rounded-lg border border-input bg-transparent bg-clip-padding px-2.5 py-1.5 text-sm transition-[color,box-shadow] focus-within:border-primary focus-within:shadow-[inset_0_0_0_1px_var(--color-primary)] has-aria-invalid:border-danger has-aria-invalid:focus-within:border-danger has-aria-invalid:focus-within:shadow-[inset_0_0_0_1px_var(--color-danger)] has-data-[slot=combobox-chip]:px-1.5 dark:bg-input/30',
+        'flex min-h-9 flex-wrap items-center gap-1 rounded-lg border border-input bg-transparent bg-clip-padding px-1 py-1.5 text-base transition-[color,box-shadow] focus-within:border-primary focus-within:shadow-[inset_0_0_0_1px_var(--color-primary)] has-aria-invalid:border-danger has-aria-invalid:focus-within:border-danger has-aria-invalid:focus-within:shadow-[inset_0_0_0_1px_var(--color-danger)] has-data-[slot=combobox-chip]:p-1 md:text-sm dark:bg-input/30',
         className
       )}
       {...props}
@@ -326,7 +331,10 @@ function ComboboxChip({
     <ComboboxPrimitive.Chip
       data-slot="combobox-chip"
       className={cn(
-        'flex h-[calc(--spacing(5.5))] w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0',
+        // The chosen segment of a SegmentedControl: as tall within the
+        // field's p-1 frame (so a chip never grows the field), and the same
+        // surface in both themes
+        'flex h-6.5 w-fit items-center justify-center gap-1 rounded-md border border-foreground/2 bg-muted px-2.5 text-sm font-normal whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0.5 dark:border-transparent dark:bg-input/50',
         className
       )}
       {...props}
@@ -335,7 +343,8 @@ function ComboboxChip({
       {showRemove && (
         <ComboboxPrimitive.ChipRemove
           render={<Button variant="ghost" size="icon-xs" />}
-          className="-ml-1 opacity-50 hover:opacity-100"
+          // Only the cross reacts to the pointer, not the chip behind it
+          className="opacity-50 hover:bg-transparent hover:opacity-100 aria-expanded:bg-transparent dark:hover:bg-transparent"
           data-slot="combobox-chip-remove"
         >
           <XIcon className="pointer-events-none" />
@@ -353,7 +362,7 @@ function ComboboxChipsInput({
   return (
     <ComboboxPrimitive.Input
       data-slot="combobox-chip-input"
-      className={cn('min-w-16 flex-1 outline-none', className)}
+      className={cn('min-w-16 flex-1 px-1.5 outline-none', className)}
       {...props}
     />
   );

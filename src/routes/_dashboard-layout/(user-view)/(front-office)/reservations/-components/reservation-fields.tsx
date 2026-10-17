@@ -9,6 +9,12 @@ import {
 } from 'shared/types/reservations';
 
 import { deviceRoomOptionsQueryOptions } from '@/api/devices';
+import { CodedFieldError } from '@/components/coded-field-error';
+import {
+  dateOf,
+  DateTimeField,
+  wallClockOf
+} from '@/components/date-time-field';
 import { RoomPicker } from '@/components/room-picker';
 import {
   Field,
@@ -22,21 +28,12 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { roomLabel } from '@/lib/rooms';
 
 import { countNights } from '../-lib/stay';
-import { DateTimeField } from './date-time-field';
 
 /** The schema's error codes in words; any other message is shown as it is. */
 const errorMessages: Record<string, MessageDescriptor> = {
   [reservationErrorCodes.roomRequired]: msg`Room selection is required`,
   [reservationErrorCodes.stayOrder]: msg`Departure must be after arrival`
 };
-
-function ReservationFieldError({ error }: { error?: { message?: string } }) {
-  const { t } = useLingui();
-  const message = error?.message;
-  const known = message ? errorMessages[message] : undefined;
-
-  return <FieldError>{known ? t(known) : message}</FieldError>;
-}
 
 /**
  * The fields the add and the edit form share. The form's schema decides what
@@ -93,7 +90,10 @@ export function RoomField({ form }: ReservationFieldProps) {
                 )}
               </span>
             </RoomPicker>
-            <ReservationFieldError error={fieldState.error} />
+            <CodedFieldError
+              error={fieldState.error}
+              messages={errorMessages}
+            />
           </Field>
         );
       }}
@@ -162,8 +162,8 @@ export function StayFields({ form }: ReservationFieldProps) {
             <DateTimeField
               id={field.name}
               label={t`Arrival`}
-              value={field.value}
-              onChange={field.onChange}
+              value={wallClockOf(field.value)}
+              onChange={(value) => field.onChange(dateOf(value))}
             />
           </Field>
         )}
@@ -181,12 +181,15 @@ export function StayFields({ form }: ReservationFieldProps) {
               ref={field.ref}
               id={field.name}
               label={t`Departure`}
-              value={field.value}
-              onChange={field.onChange}
+              value={wallClockOf(field.value)}
+              onChange={(value) => field.onChange(dateOf(value))}
               invalid={fieldState.invalid}
             />
             {fieldState.invalid ? (
-              <ReservationFieldError error={fieldState.error} />
+              <CodedFieldError
+                error={fieldState.error}
+                messages={errorMessages}
+              />
             ) : (
               <FieldDescription aria-live="polite">
                 <Plural

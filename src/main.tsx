@@ -1,6 +1,6 @@
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import React, { StrictMode } from 'react';
@@ -8,23 +8,17 @@ import ReactDOM from 'react-dom/client';
 
 import { setUnauthorizedHandler } from './api/client';
 import { AuthProvider, useAuth } from './auth';
+import { RouteError } from './components/route-error';
 import { ThemeProvider } from './components/theme-provider';
 
 import './globals.css';
 import { Toaster } from './components/ui/sonner';
 import { loadCatalog } from './i18n';
+import { createQueryClient } from './lib/query-client';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
-// Create a new router instance
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      staleTime: 1000 * 60 * 5 // 5 minutes
-    }
-  }
-});
+const queryClient = createQueryClient();
 
 const router = createRouter({
   routeTree,
@@ -34,6 +28,8 @@ const router = createRouter({
   // Query owns the caching (staleTime above); without this the router would
   // re-run loaders it has just preloaded moments earlier.
   defaultPreloadStaleTime: 0,
+  // A failed page shows in its place, inside the sidebar and header
+  defaultErrorComponent: RouteError,
   context: {
     // auth will initially be undefined
     // We'll be passing down the auth state from within a React component

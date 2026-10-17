@@ -9,9 +9,11 @@ import {
   type RowData
 } from '@tanstack/react-table';
 import { cva } from 'class-variance-authority';
+import { InboxIcon } from 'lucide-react';
 import * as React from 'react';
 import { type CSSProperties, Fragment, type ReactNode } from 'react';
 
+import { EmptyTableState } from '@/components/empty-table-state';
 import { Checkbox } from '@/components/ui/checkbox';
 import { type DataGridFeatures, useDataGrid } from '@/components/ui/data-grid';
 import { cn } from '@/lib/utils';
@@ -416,7 +418,16 @@ function DataGridTableEmpty() {
         colSpan={totalColumns}
         className="py-6 text-center text-muted-foreground"
       >
-        {props.emptyMessage || <Trans>No data available</Trans>}
+        {/* Centred in the visible part of a table wider than the screen,
+            not across all of its columns */}
+        <div className="sticky left-0 w-[100cqw]">
+          {props.error || props.emptyMessage || (
+            <EmptyTableState
+              icon={<InboxIcon />}
+              title={<Trans>No data available</Trans>}
+            />
+          )}
+        </div>
       </td>
     </tr>
   );
@@ -553,7 +564,7 @@ function DataGridTable<TData extends RowData>() {
               })}
             </DataGridTableBodyRowSkeleton>
           ))
-        ) : table.getRowModel().rows.length ? (
+        ) : !props.error && table.getRowModel().rows.length ? (
           table.getRowModel().rows.map((row, index) => {
             const typedRow = row as Row<DataGridFeatures, TData>;
             return (

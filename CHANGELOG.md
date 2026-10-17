@@ -1,3 +1,146 @@
+# [1.34.0](https://github.com/riedel28/hotel-dashboard/compare/v1.33.1...v1.34.0) (2026-10-17)
+
+
+### Features
+
+* **checkin:** add the Check-in Page settings ([33cfb94](https://github.com/riedel28/hotel-dashboard/commit/33cfb940d98a9139cd21155ffcf425904e205388))
+
+## [1.33.1](https://github.com/riedel28/hotel-dashboard/compare/v1.33.0...v1.33.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **menus:** square corners on the menu checkbox again ([7e58db4](https://github.com/riedel28/hotel-dashboard/commit/7e58db447e8c1789469cbf404b884c49c6c595da))
+
+# [1.33.0](https://github.com/riedel28/hotel-dashboard/compare/v1.32.1...v1.33.0) (2026-10-16)
+
+
+### Features
+
+* **header:** clearer property selector trigger ([09b9978](https://github.com/riedel28/hotel-dashboard/commit/09b9978449bc87a67b80f14285a2aef3c07b7ebc))
+
+## [1.32.1](https://github.com/riedel28/hotel-dashboard/compare/v1.32.0...v1.32.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **e2e:** start Vite on one address and wait for that one ([5ab73d1](https://github.com/riedel28/hotel-dashboard/commit/5ab73d1266f772a2e2c832a1cacf0d33dfc9f9f0))
+
+# [1.32.0](https://github.com/riedel28/hotel-dashboard/compare/v1.31.0...v1.32.0) (2026-10-16)
+
+
+### Bug Fixes
+
+* **date-filter:** bring back the quick picks and one month on phones ([b467681](https://github.com/riedel28/hotel-dashboard/commit/b4676813e009ec9a4b6f8cb220ab1a6cf608c547))
+* **date-filter:** quick variant as before; grey range in the calendar ([526a5be](https://github.com/riedel28/hotel-dashboard/commit/526a5be6b74875e1d2fbfd013a5134e84e0c8180))
+* **errors:** a failed load stays in its place and can be retried ([d3488cd](https://github.com/riedel28/hotel-dashboard/commit/d3488cde50c805163dc65703dd9140d1eca6a0f1))
+* **fields:** pickers and selects match text fields on a phone ([52ac68f](https://github.com/riedel28/hotel-dashboard/commit/52ac68f59b8c5eb62ba5a9a50c55fdd449fecd77))
+* **i18n:** German for the monitoring drawer's new strings ([798f906](https://github.com/riedel28/hotel-dashboard/commit/798f906d37ef50f48b2fe12fb14ee64c48bbc53d))
+* **i18n:** German for the rest of the monitoring page ([7303893](https://github.com/riedel28/hotel-dashboard/commit/7303893805a8af66c55daf3caaf8b943ee135232))
+* **layout:** Customers and Properties headers line up ([812d1c7](https://github.com/riedel28/hotel-dashboard/commit/812d1c768480e42d205bab5d330a3dace0618dff))
+* **rich-text:** skip effects while the editor is destroyed ([c4cac2e](https://github.com/riedel28/hotel-dashboard/commit/c4cac2ed4c6900f5c3cd302d2017ab83f9d4215f))
+* **sidebar:** let the menu scroll on short screens ([bd5e101](https://github.com/riedel28/hotel-dashboard/commit/bd5e10167429a73a83a04af8033901e42968dcea))
+* **ui:** even icon spacing in menus and buttons ([b076bc0](https://github.com/riedel28/hotel-dashboard/commit/b076bc084558e4d9af7deacdef92e24bb1108caa))
+* **ui:** steady chip field, visible toolbar hover, matching time icon ([cfda126](https://github.com/riedel28/hotel-dashboard/commit/cfda12606e51156288a47442629906e940554b52))
+
+
+### Features
+
+* **customers:** open a customer from its row; phone cards; name as title ([eac5102](https://github.com/riedel28/hotel-dashboard/commit/eac51029a962013965c886f9503acdcf7b666076))
+* **errors:** a failed list load shows inside the table, like an empty one ([040ac7b](https://github.com/riedel28/hotel-dashboard/commit/040ac7b5d0e8f7b74b4fce6462ba039aadfcaf40))
+* **errors:** every list shows a failed load inside its table ([3551153](https://github.com/riedel28/hotel-dashboard/commit/355115341f5023cc2d73c60a179ba95d70a6214d))
+* **events:** add events API with property address and timezone ([046cb81](https://github.com/riedel28/hotel-dashboard/commit/046cb81d0e418f5e9825803c2c47c981c2cefceb))
+* **events:** events list and form in the Content Manager ([9f937b3](https://github.com/riedel28/hotel-dashboard/commit/9f937b3cc4569493300dd36350e64294bcc1c956))
+* **monitoring:** phone cards, folded filters and a steppable drawer ([a638ced](https://github.com/riedel28/hotel-dashboard/commit/a638ced3cf65f328195758b77d66f6af01ca066d))
+* **tables:** one empty state for every table ([2aa7c4b](https://github.com/riedel28/hotel-dashboard/commit/2aa7c4ba5b07512f28a2e29e76a3a407d7df3340))
+* **ui:** richer image gallery, clearable time input, segment-style chips ([b5f1439](https://github.com/riedel28/hotel-dashboard/commit/b5f14399d5b76f3b8ba7741103f9dcc24d4e4a3c))
+
+
+### Reverts
+
+* **tooltip:** keep an unrelated tooltip restyle out of this PR ([061114b](https://github.com/riedel28/hotel-dashboard/commit/061114b5b9238cefe3998b2668a685dd9bf04e81))
+
+# [1.31.0](https://github.com/riedel28/hotel-dashboard/compare/v1.30.0...v1.31.0) (2026-10-15)
+
+
+### Bug Fixes
+
+* **properties:** filters stay on one row on desktop ([d34bd02](https://github.com/riedel28/hotel-dashboard/commit/d34bd029dc727799010657c0a1bc976ae470bdf3))
+* **property:** customer picker looks and focuses like the other fields ([7a9793a](https://github.com/riedel28/hotel-dashboard/commit/7a9793ab5f03d20a036143145f9a17e5dd7b8500))
+* **property:** one translated list of stages; name can't be emptied ([515458f](https://github.com/riedel28/hotel-dashboard/commit/515458ffe82d939db1a1fd5ea0fb5324474d1e6d))
+
+
+### Features
+
+* **button:** disabled primary button reads as muted, not washed out ([0089e95](https://github.com/riedel28/hotel-dashboard/commit/0089e95042d7847faa32ac20e34779fb96651bad))
+* **forms:** edit forms can't be saved before anything changed ([b7db092](https://github.com/riedel28/hotel-dashboard/commit/b7db0927b6b993ebae202f8f365a902ea499a9a7))
+* **properties:** header fits a phone ([4375eb3](https://github.com/riedel28/hotel-dashboard/commit/4375eb31d9b21abcee55dc4f4f072d7295edea74))
+* **properties:** open a property from its row; grouped solutions; phones ([5bf0293](https://github.com/riedel28/hotel-dashboard/commit/5bf0293e01ec1bbfd35a7a504dd552557eddf435))
+* **property:** clearer details tab and page header ([3dcbd52](https://github.com/riedel28/hotel-dashboard/commit/3dcbd5213c63d75b1755a1ef8e6edbd4a4a12fa2))
+* **property:** new property dialog opens the property it creates ([63922eb](https://github.com/riedel28/hotel-dashboard/commit/63922eb947ef7541ef48d3f7f347f9877fef4f8d))
+* **tabs:** underlined section tabs on the property page ([a1d488b](https://github.com/riedel28/hotel-dashboard/commit/a1d488bfc08e3b38bd73f4cab7342727bd9ecd74))
+* **work-log:** show entries as a feed with a compact composer ([ac2cd55](https://github.com/riedel28/hotel-dashboard/commit/ac2cd55ffdb0b46cb46c8a9bc19cb374bb7d256b))
+
+# [1.30.0](https://github.com/riedel28/hotel-dashboard/compare/v1.29.0...v1.30.0) (2026-10-15)
+
+
+### Bug Fixes
+
+* **lists:** a numeric search survives the URL on every list ([e5bb12a](https://github.com/riedel28/hotel-dashboard/commit/e5bb12a13897804f7ee271ea3290001638de1653))
+* **payments:** right-align the amount header over its amounts ([dbd7ae6](https://github.com/riedel28/hotel-dashboard/commit/dbd7ae60dada9dcff527e1379b04612e61f93508))
+
+
+### Features
+
+* **payments:** read-only payments screen with details drawer ([78707eb](https://github.com/riedel28/hotel-dashboard/commit/78707eb0940d61732c56340a013125c156d256b1))
+
+
+### Reverts
+
+* Revert "style(payments): show the whole reference" ([d093651](https://github.com/riedel28/hotel-dashboard/commit/d0936516a810ef54a0ad57a4083bbd41c5cb347f))
+
+# [1.29.0](https://github.com/riedel28/hotel-dashboard/compare/v1.28.0...v1.29.0) (2026-10-15)
+
+
+### Bug Fixes
+
+* **cms:** accessibility of the tree, editor and preview ([70e848e](https://github.com/riedel28/hotel-dashboard/commit/70e848ea633ccc74031eb98aff56679d3a17c47b))
+* **cms:** apply the editor's draft only to its own node ([19d1803](https://github.com/riedel28/hotel-dashboard/commit/19d18035416203bf6b7a6665574647600706412c))
+* **cms:** balance tree and form on laptops, eye icon for the preview ([eccd135](https://github.com/riedel28/hotel-dashboard/commit/eccd135acc90ad723903f5898606a761380b73a4))
+* **cms:** cap the tree column at 22rem on laptops ([058baf1](https://github.com/riedel28/hotel-dashboard/commit/058baf1fbae5cabba4de70c4ed130a9cf3ab02b1))
+* **cms:** give the editor room on laptops and space the header like Products ([e9488a0](https://github.com/riedel28/hotel-dashboard/commit/e9488a0babe3dc775da6d005d94690e37b4892c8))
+* **cms:** keep a dialog's content while it closes ([adf612b](https://github.com/riedel28/hotel-dashboard/commit/adf612b839c2e16a74a92424c756fdc268a9ca68))
+* **cms:** labels of the twice-rendered preview and tree controls ([3390590](https://github.com/riedel28/hotel-dashboard/commit/3390590392853dbe11ac1238b8038202a6d1c6e0))
+* **cms:** make drag and drop in the tree reorder the grabbed row ([98d1c92](https://github.com/riedel28/hotel-dashboard/commit/98d1c92cddef97d3c33a91d030361de981607039))
+* **cms:** narrow the form column to 38rem on laptops ([bb60f98](https://github.com/riedel28/hotel-dashboard/commit/bb60f987829fe497ff243da4a7edbcc4757a1e1d))
+* **cms:** same tree and form widths on wide screens as on laptops ([798a948](https://github.com/riedel28/hotel-dashboard/commit/798a9487187579f2292a99f5dbc9daf2053ba966))
+* **cms:** use the arrow icon for links and pin the save bar to the bottom ([0835227](https://github.com/riedel28/hotel-dashboard/commit/08352271438f09c8ed4e5529157c06268e5ce937))
+* **cms:** use the shared breadcrumbs like the other pages ([62b0784](https://github.com/riedel28/hotel-dashboard/commit/62b0784bd502a9368e94775f9c5e6ad68ca410dd))
+
+
+### Features
+
+* **cms:** add mobile CMS tables ([98b912e](https://github.com/riedel28/hotel-dashboard/commit/98b912ea5c09bdddb45f9ea9ac60c7403c3e2a0e))
+* **cms:** add the mobile CMS API ([93373d9](https://github.com/riedel28/hotel-dashboard/commit/93373d98258cf11f9b264f89c45a8aadab536fd0))
+* **cms:** add the Mobile CMS page ([7dc8ea5](https://github.com/riedel28/hotel-dashboard/commit/7dc8ea5c155144cbb6ac8651bcd41f602d872eb2))
+* **cms:** editor card header with the path and the open item's title ([b236ced](https://github.com/riedel28/hotel-dashboard/commit/b236ced8f5f999e2a81bb8732f13c5527d339fb0))
+* **cms:** loading state that mirrors the page ([176e50a](https://github.com/riedel28/hotel-dashboard/commit/176e50af5e5cdd778994f1b2417bc99e77abc7b1))
+* **cms:** name the saved item in the toast ([5989259](https://github.com/riedel28/hotel-dashboard/commit/598925973916bf3b88b640f0ce7ef86d9f873672))
+* **cms:** seed mobile CMS content for The Overlook Hotel ([ca93e08](https://github.com/riedel28/hotel-dashboard/commit/ca93e08cb4b2974011e3aed949d9d7d34f9ade8f))
+* **cms:** thumbnail or grey square for every item in the preview list ([453e5a0](https://github.com/riedel28/hotel-dashboard/commit/453e5a01427aea42480782437aaa9a855f503853))
+* **cms:** thumbnails for pages in the preview list ([979af2c](https://github.com/riedel28/hotel-dashboard/commit/979af2cb3b2c0d1141e27ab6146b00125c765192))
+* **rich-text:** add a CMS variant of the editor ([93ffcc8](https://github.com/riedel28/hotel-dashboard/commit/93ffcc84104c2a6fb49d783dfe5240438c918f84))
+* **segmented-control:** add a small size; use it above the CMS preview ([ddfc6ca](https://github.com/riedel28/hotel-dashboard/commit/ddfc6ca3b44442c534ba3ae19513c4906d5b1e2a))
+
+
+### Performance Improvements
+
+* **cms:** check for text without sanitize-html ([4af0d46](https://github.com/riedel28/hotel-dashboard/commit/4af0d467f580bd942c3945b7ff8d51767d28284f))
+* **cms:** duplicate a branch with one insert per table ([557a791](https://github.com/riedel28/hotel-dashboard/commit/557a7914a4b17c05540c80596a865e9eae162052))
+* **cms:** keep the tree from redrawing while typing ([0f9b41b](https://github.com/riedel28/hotel-dashboard/commit/0f9b41bd9e0c1caadc45ff4ba03ba8ffaad8e9f6))
+* **cms:** load the preview's sanitizer on demand, lazy thumbnails ([8c84d47](https://github.com/riedel28/hotel-dashboard/commit/8c84d47b9bc6131bcc62672c36b73bff7d2d0bc7))
+* **cms:** one actions menu for the whole tree ([9a06672](https://github.com/riedel28/hotel-dashboard/commit/9a06672a7215cfeb44afbf157c0319450aeefa87))
+
 # [1.28.0](https://github.com/riedel28/hotel-dashboard/compare/v1.27.0...v1.28.0) (2026-10-13)
 
 

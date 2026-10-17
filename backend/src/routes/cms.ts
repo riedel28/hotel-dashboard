@@ -1,8 +1,6 @@
 import { Router } from 'express';
 
 import {
-  cmsImageExtensions,
-  cmsImageIdParamsSchema,
   cmsImageMaxBytes,
   cmsNodeIdParamsSchema,
   createCmsNodeSchema,
@@ -11,16 +9,19 @@ import {
   setCmsNodeVisibilitySchema
 } from '../../../shared/types/cms';
 import {
+  imageExtensions,
+  imageIdParamsSchema
+} from '../../../shared/types/images';
+import {
   createCmsNode,
   deleteCmsNode,
   duplicateCmsNode,
-  getCmsImage,
   getCmsNodes,
   moveCmsNode,
   saveCmsNode,
-  setCmsNodeVisibility,
-  uploadCmsImage
+  setCmsNodeVisibility
 } from '../controllers/cms-controller';
+import { getImage, uploadImage } from '../controllers/image-controller';
 import { authenticateToken } from '../middleware/auth';
 import { attachSelectedProperty } from '../middleware/selected-property';
 import { upload } from '../middleware/upload';
@@ -29,7 +30,7 @@ import { validateBody, validateParams } from '../middleware/validation';
 const router = Router();
 
 // Public, before authentication: the mobile app loads images without a login.
-router.get('/images/:id', validateParams(cmsImageIdParamsSchema), getCmsImage);
+router.get('/images/:id', validateParams(imageIdParamsSchema), getImage);
 
 // Authenticate, then resolve the caller's selected property onto the request.
 // Property scope is derived server-side; the client never sends property_id.
@@ -38,8 +39,8 @@ router.use(attachSelectedProperty);
 
 router.post(
   '/images',
-  upload({ maxBytes: cmsImageMaxBytes, extensions: cmsImageExtensions }),
-  uploadCmsImage
+  upload({ maxBytes: cmsImageMaxBytes, extensions: imageExtensions }),
+  uploadImage
 );
 
 // Every node of the property, flat; the client builds the tree from parent_id

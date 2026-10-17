@@ -65,7 +65,7 @@ interface DataGridCheckboxFilterProps<TValue extends string> extends Omit<
 }
 
 const triggerClassName =
-  'hover:bg-background data-popup-open:bg-background inline-flex h-9 min-w-fit items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground';
+  'hover:bg-background data-popup-open:bg-background inline-flex h-9 min-w-fit items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2 text-base font-normal whitespace-nowrap md:text-sm hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/30 dark:hover:text-foreground';
 
 const footerActionClassName =
   'h-7 flex-1 justify-center px-2 font-normal whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground';
@@ -169,10 +169,7 @@ function DataGridCheckboxFilter<TValue extends string>({
           </Button>
         )}
       />
-      <DropdownMenuContent
-        align="start"
-        className="w-auto min-w-(--anchor-width)"
-      >
+      <DropdownMenuContent align="start">
         {header}
         {options.map((option) => (
           <DropdownMenuCheckboxItem

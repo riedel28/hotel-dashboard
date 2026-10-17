@@ -18,7 +18,7 @@ test.describe('Customers', () => {
   test('a new customer can be given a property', async ({ page }) => {
     // An administrator creates a customer.
     await page.goto('/admin/customers');
-    await page.getByRole('button', { name: 'Add Customer' }).click();
+    await page.getByRole('button', { name: 'Add customer' }).click();
 
     const dialog = page.getByRole('dialog');
     await dialog.getByLabel('First name').fill('Hans');
@@ -33,6 +33,11 @@ test.describe('Customers', () => {
     await dialog.getByLabel('City').press('Enter');
 
     await expect(page.getByText('Customer created successfully')).toBeVisible();
+    // The new customer's page opens, and the list shows it too.
+    await expect(
+      page.getByRole('heading', { name: 'Hans Gruber' })
+    ).toBeVisible();
+    await page.goto('/admin/customers');
     const customerRow = page
       .getByRole('row')
       .filter({ hasText: 'Hans Gruber' });
@@ -40,7 +45,7 @@ test.describe('Customers', () => {
     await expect(customerRow).toContainText('Los Angeles');
 
     // The same email again is refused on the field, whatever its case.
-    await page.getByRole('button', { name: 'Add Customer' }).click();
+    await page.getByRole('button', { name: 'Add customer' }).click();
     await dialog.getByLabel('First name').fill('Simon');
     await dialog.getByLabel('Last name').fill('Gruber');
     await dialog.getByLabel('Email').fill('Hans.Gruber@example.com');
@@ -63,7 +68,7 @@ test.describe('Customers', () => {
     await page.getByRole('combobox', { name: 'Customer' }).click();
     await page.getByPlaceholder('Search customers').fill('nakatomi');
     await page.getByRole('option', { name: /Nakatomi Hotels/ }).click();
-    await page.getByRole('button', { name: 'Update Property' }).click();
+    await page.getByRole('button', { name: 'Save changes' }).click();
     await expect(page.getByText('Property updated successfully')).toBeVisible();
 
     // The properties table names the customer and links to its page, which
@@ -71,10 +76,7 @@ test.describe('Customers', () => {
     await page.goto('/admin/properties');
     await propertyRow.getByRole('link', { name: 'Nakatomi Hotels' }).click();
     await expect(
-      page.getByRole('heading', { name: 'Edit Customer' })
-    ).toBeVisible();
-    await expect(
-      page.getByRole('main').getByText('Hans Gruber', { exact: true })
+      page.getByRole('heading', { name: 'Hans Gruber' })
     ).toBeVisible();
     await expect(page.getByRole('link', { name: PROPERTY })).toBeVisible();
   });

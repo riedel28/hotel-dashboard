@@ -1,6 +1,4 @@
-import { extname } from 'node:path';
-
-import { and, asc, eq, inArray, lt, notExists, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import type { Response } from 'express';
 import type { z } from 'zod';
 
@@ -22,18 +20,14 @@ import {
   type saveCmsNodeSchema,
   type setCmsNodeVisibilitySchema
 } from '../../../shared/types/cms';
+import {
+  assertImagesOwned,
+  rethrowGoneImage,
+  sweepImages
+} from '../db/image-queries';
 import { db } from '../db/pool';
-import {
-  cmsImages,
-  cmsNodeImages,
-  cmsNodes,
-  cmsNodeTranslations
-} from '../db/schema';
-import {
-  HttpProblem,
-  isForeignKeyViolation,
-  withFailMessage
-} from '../middleware/error';
+import { cmsNodeImages, cmsNodes, cmsNodeTranslations } from '../db/schema';
+import { HttpProblem, withFailMessage } from '../middleware/error';
 import {
   requireSelectedProperty,
   type SelectedPropertyRequest
@@ -45,13 +39,6 @@ const handle = withFailMessage<SelectedPropertyRequest>;
 
 type Executor = Pick<typeof db, 'select'>;
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
-
-const imageMimes: Record<string, string> = {
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.png': 'image/png',
-  '.webp': 'image/webp'
-};
 
 const copySuffix: Record<CmsLocale, string> = {
   de: ' (Kopie)',
@@ -131,27 +118,6 @@ function lockNodes(tx: Tx, propertyId: string) {
     .for('update');
 }
 
-// Images nobody refers to: abandoned uploads, replaced or removed ones and
-// those of deleted nodes. A day of grace keeps an upload alive while it sits
-// in an unsaved form.
-function sweepImages(
-  ex: Pick<typeof db, 'delete' | 'select'>,
-  propertyId: string
-) {
-  return ex.delete(cmsImages).where(
-    and(
-      eq(cmsImages.property_id, propertyId),
-      lt(cmsImages.created_at, sql`now() - interval '1 day'`),
-      notExists(
-        ex
-          .select({ one: sql`1` })
-          .from(cmsNodeImages)
-          .where(eq(cmsNodeImages.image_id, cmsImages.id))
-      )
-    )
-  );
-}
-
 const moveErrors = {
   parent_not_found: 'Parent not found',
   parent_is_link: 'A link cannot have nested items',
@@ -159,7 +125,6 @@ const moveErrors = {
 };
 
 const nodeNotFound = () => new HttpProblem(404, 'Node not found');
-const imageNotFound = () => new HttpProblem(400, 'Image not found');
 
 async function sendNode(
   res: Response,
@@ -252,18 +217,7 @@ const saveCmsNode = handle('Failed to save node', async (req, res) => {
       }
 
       const imageIds = [...new Set(data.image_ids)];
-      if (imageIds.length > 0) {
-        const owned = await tx
-          .select({ id: cmsImages.id })
-          .from(cmsImages)
-          .where(
-            and(
-              eq(cmsImages.property_id, propertyId),
-              inArray(cmsImages.id, imageIds)
-            )
-          );
-        if (owned.length !== imageIds.length) throw imageNotFound();
-      }
+      await assertImagesOwned(tx, propertyId, imageIds);
 
       await tx
         .update(cmsNodes)
@@ -307,11 +261,7 @@ const saveCmsNode = handle('Failed to save node', async (req, res) => {
         );
       }
     })
-    // An image swept between the check and the insert (a form left open for
-    // over a day) fails the foreign key: the same "not found".
-    .catch((error: unknown) => {
-      throw isForeignKeyViolation(error) ? imageNotFound() : error;
-    });
+    .catch(rethrowGoneImage);
 
   await sweepImages(db, propertyId);
   await sendNode(res, 200, propertyId, id);
@@ -487,50 +437,12 @@ const deleteCmsNode = handle('Failed to delete node', async (req, res) => {
   res.status(200).json({ message: 'Node deleted successfully' });
 });
 
-const uploadCmsImage = handle('Failed to upload image', async (req, res) => {
-  const propertyId = requireSelectedProperty(req, res);
-  if (!propertyId) return;
-
-  // upload() has checked the size and the extension.
-  const file = req.file!;
-  const [image] = await db
-    .insert(cmsImages)
-    .values({
-      property_id: propertyId,
-      mime: imageMimes[extname(file.originalname).toLowerCase()]!,
-      data: file.buffer
-    })
-    .returning({ id: cmsImages.id });
-  res.status(201).json({ id: image!.id });
-});
-
-// Public: the app shows these to guests. Ids are random UUIDs and an image
-// never changes, so it may be cached for good.
-const getCmsImage = handle('Failed to fetch image', async (req, res) => {
-  const [image] = await db
-    .select({ mime: cmsImages.mime, data: cmsImages.data })
-    .from(cmsImages)
-    .where(eq(cmsImages.id, String(req.params.id)));
-  if (!image) throw new HttpProblem(404, 'Image not found');
-  res
-    .status(200)
-    .set({
-      'Content-Type': image.mime,
-      'Cache-Control': 'public, max-age=31536000, immutable',
-      // The admin and the app load it from another origin.
-      'Cross-Origin-Resource-Policy': 'cross-origin'
-    })
-    .send(image.data);
-});
-
 export {
   createCmsNode,
   deleteCmsNode,
   duplicateCmsNode,
-  getCmsImage,
   getCmsNodes,
   moveCmsNode,
   saveCmsNode,
-  setCmsNodeVisibility,
-  uploadCmsImage
+  setCmsNodeVisibility
 };

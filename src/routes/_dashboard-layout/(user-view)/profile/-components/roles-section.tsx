@@ -114,7 +114,7 @@ export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
             type="button"
             variant="link"
             size="sm"
-            className="h-auto p-0 text-cyan-800 dark:text-cyan-200/85"
+            className="h-auto p-0"
             onClick={() => setShowAll((open) => !open)}
             aria-expanded={showAll}
           >

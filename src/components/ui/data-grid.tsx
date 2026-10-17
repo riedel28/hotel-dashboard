@@ -110,6 +110,11 @@ export interface DataGridProps<TData extends RowData> {
   skeletonRowCount?: number;
   loadingMessage?: ReactNode | string;
   emptyMessage?: ReactNode | string;
+  /**
+   * A failed load, e.g. a `LoadErrorState`. Shown where the rows go, in place
+   * of `emptyMessage`, with no pagination under the table.
+   */
+  error?: ReactNode;
   tableLayout?: {
     dense?: boolean;
     cellBorder?: boolean;
@@ -246,7 +251,9 @@ function DataGridContainer({
     <div
       data-slot="data-grid"
       className={cn(
-        'grid w-full overflow-x-auto',
+        // A size container, so a row can span just the visible part (`cqw`)
+        // of a table wider than it
+        '@container grid w-full overflow-x-auto',
         border && 'rounded-lg border border-border dark:bg-input/30',
         className
       )}

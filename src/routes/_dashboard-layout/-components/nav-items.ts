@@ -2,9 +2,12 @@ import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import type { LinkProps } from '@tanstack/react-router';
 import {
+  BanknoteIcon,
   BedDoubleIcon,
   BookAIcon,
   BuildingIcon,
+  CalendarCheckIcon,
+  CalendarDaysIcon,
   CreditCardIcon,
   DoorOpenIcon,
   HomeIcon,
@@ -38,7 +41,7 @@ type NavGroupKey =
   | 'front-office'
   | 'content-manager'
   | 'integrations'
-  | 'setup';
+  | 'settings';
 
 // Start is not a nav item: it cannot be switched off, so it is pinned to its
 // group instead of living in the catalog.
@@ -54,7 +57,7 @@ const navGroups: {
   { key: 'front-office', label: msg`Front Office` },
   { key: 'content-manager', label: msg`Content Manager` },
   { key: 'integrations', label: msg`Integrations` },
-  { key: 'setup', label: msg`Setup` }
+  { key: 'settings', label: msg`Settings` }
 ];
 
 // The nav item catalog: the single source for the sidebar, the mobile menu,
@@ -73,6 +76,12 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     to: '/reservations',
     icon: BedDoubleIcon,
     label: msg`Reservations`
+  },
+  payments: {
+    group: 'front-office',
+    to: '/payments',
+    icon: BanknoteIcon,
+    label: msg`Payments`
   },
   rooms: {
     group: 'front-office',
@@ -98,6 +107,12 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     icon: SmartphoneIcon,
     label: msg`Mobile CMS`
   },
+  events: {
+    group: 'content-manager',
+    to: '/events',
+    icon: CalendarDaysIcon,
+    label: msg`Events`
+  },
   'pms-provider': {
     group: 'integrations',
     to: '/pms-provider',
@@ -117,16 +132,22 @@ export const navItems: Record<NavItemId, NavLink & { group: NavGroupKey }> = {
     label: msg`Payment Gateway`
   },
   devices: {
-    group: 'setup',
+    group: 'settings',
     to: '/devices',
     icon: TabletSmartphoneIcon,
     label: msg`Devices`
   },
   users: {
-    group: 'setup',
+    group: 'settings',
     to: '/users',
     icon: UsersIcon,
     label: msg`Users`
+  },
+  'checkin-page': {
+    group: 'settings',
+    to: '/checkin-page',
+    icon: CalendarCheckIcon,
+    label: msg`Check-in Page`
   }
 };
 

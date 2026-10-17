@@ -14,6 +14,7 @@ import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import type { CheckinMethod, Guest, Reservation } from '@/api/reservations';
+import { DetailRow, DetailSection } from '@/components/detail-list';
 import { AndroidIcon, AppleIcon } from '@/components/ui/brand-icons';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
@@ -111,39 +112,6 @@ export function ReservationDetailsDrawer({
         )}
       </DrawerContent>
     </Drawer>
-  );
-}
-
-function DetailSection({
-  title,
-  children
-}: {
-  title: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <section className="space-y-2">
-      <h3 className="text-sm font-medium">{title}</h3>
-      {/* A fixed label column keeps the values aligned across sections */}
-      <dl className="grid grid-cols-[9rem_1fr] gap-x-6 gap-y-2 text-sm">
-        {children}
-      </dl>
-    </section>
-  );
-}
-
-function DetailRow({
-  label,
-  children
-}: {
-  label: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <>
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 wrap-break-word">{children}</dd>
-    </>
   );
 }
 
@@ -268,12 +236,12 @@ function ReservationDetails({
               >
                 <ChevronDownIcon />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-auto min-w-40">
+              <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   variant="destructive-soft"
                   onClick={() => setShowDeleteDialog(true)}
                 >
-                  <Trash2Icon className="mr-1 h-4 w-4" />
+                  <Trash2Icon />
                   <Trans>Delete reservation</Trans>
                 </DropdownMenuItem>
               </DropdownMenuContent>

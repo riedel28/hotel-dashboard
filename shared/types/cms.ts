@@ -16,8 +16,6 @@ export const cmsOpenModeSchema = z.enum(['in_app', 'system']);
 
 export const cmsSubtitleMaxLength = 80;
 export const cmsImageMaxBytes = 2 * 1024 * 1024;
-export const cmsImageExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
-
 const idSchema = z.number().int().positive();
 
 // http(s) only: the app hands the URL to a browser.
@@ -146,8 +144,6 @@ export const setCmsNodeVisibilitySchema = z.object({ hidden: z.boolean() });
 export const cmsNodeIdParamsSchema = z.object({
   id: z.coerce.number().int().positive()
 });
-
-export const cmsImageIdParamsSchema = z.object({ id: z.uuid() });
 
 export type CmsLocale = z.infer<typeof cmsLocaleSchema>;
 export type CmsNodeType = z.infer<typeof cmsNodeTypeSchema>;

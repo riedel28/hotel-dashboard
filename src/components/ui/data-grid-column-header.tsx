@@ -110,6 +110,9 @@ function DataGridColumnHeader<TData extends RowData, TValue>({
         variant="ghost"
         className={cn(
           '-ms-2 h-7 rounded-lg px-2 text-[13px] font-medium text-muted-foreground hover:bg-foreground/5 hover:text-foreground active:translate-y-0! data-[state=open]:bg-foreground/5 data-[state=open]:text-foreground',
+          // Nothing to sort is no reason to fade the heading: it keeps the
+          // colour of the headings that can't sort at all
+          'disabled:opacity-100',
           className
         )}
         disabled={isLoading || recordCount === 0}

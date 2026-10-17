@@ -9,7 +9,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
+        // Disabled reads as a muted button with legible text, not a washed-out
+        // primary one; a busy button (saving, `aria-busy`) keeps its colour
+        default:
+          'bg-primary text-primary-foreground disabled:not-aria-busy:bg-muted disabled:not-aria-busy:text-muted-foreground disabled:not-aria-busy:opacity-100 [a]:hover:bg-primary/80',
         outline:
           'border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
         secondary:
@@ -21,7 +24,7 @@ const buttonVariants = cva(
         // A quieter destructive action: tinted, not filled.
         'destructive-soft':
           'border-destructive/20 bg-destructive/10 text-danger hover:bg-destructive/20 hover:text-danger dark:hover:bg-destructive/30',
-        link: 'text-primary underline-offset-4 hover:underline'
+        link: 'text-link underline-offset-4 hover:underline'
       },
       size: {
         default:

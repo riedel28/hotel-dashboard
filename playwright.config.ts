@@ -44,15 +44,22 @@ export default defineConfig({
       url: 'http://localhost:5001/api/health',
       reuseExistingServer: !isCI,
       timeout: 30_000,
+      // Shown in the log, so a server that never gets ready says why
+      stdout: 'pipe',
       env: {
         NODE_ENV: 'test'
       }
     },
     {
-      command: 'bun run client',
-      url: 'http://localhost:5173',
+      // Pinned to one address, checked at that address: left to "localhost",
+      // Vite (under Bun) and this readiness check could each pick a different
+      // one of 127.0.0.1 and ::1, and the run timed out with Vite up. The
+      // browser still opens http://localhost:5173 (baseURL), which reaches it.
+      command: 'bun run client --host 127.0.0.1 --strictPort',
+      url: 'http://127.0.0.1:5173',
       reuseExistingServer: !isCI,
-      timeout: 30_000
+      timeout: 30_000,
+      stdout: 'pipe'
     }
   ]
 });

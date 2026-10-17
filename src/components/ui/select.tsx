@@ -45,8 +45,8 @@ function SelectTrigger({
       className={cn(
         // Base
         'flex w-fit items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 whitespace-nowrap transition-[color,box-shadow] outline-none',
-        // Typography
-        'text-sm',
+        // Typography: as the text fields, 16px on a phone
+        'text-base md:text-sm',
         // Sizes
         'data-[size=default]:h-9 data-[size=sm]:h-8',
         // Placeholder

@@ -1,6 +1,8 @@
 import { Link, useLocation } from '@tanstack/react-router';
 import type { MouseEventHandler } from 'react';
 
+import { linkClassName } from '@/components/ui/link';
+
 interface ReservationLinkProps {
   reservationId: number;
   bookingNr: string;
@@ -24,7 +26,7 @@ export function ReservationLink({
       params={{ reservationId: String(reservationId) }}
       search={{ back }}
       onClick={onClick}
-      className="rounded-sm text-cyan-800 underline-offset-4 hover:underline dark:text-cyan-200/85"
+      className={linkClassName}
     >
       {bookingNr}
     </Link>

@@ -10,7 +10,6 @@ import {
   type FormSectionDef,
   SectionedForm
 } from '@/components/sectioned-form';
-import { CardHeader, CardTitle } from '@/components/ui/card';
 import { CountryFlag } from '@/components/ui/country-flag';
 import { StageBadge } from '@/components/ui/stage-badge';
 
@@ -62,20 +61,6 @@ export function EditCustomerForm({ customer }: { customer: Customer }) {
       onSubmit={(data) => updateCustomerMutation.mutate(data)}
       isSaving={updateCustomerMutation.isPending}
       submitLabel={<Trans>Save changes</Trans>}
-      header={
-        <CardHeader>
-          <div className="flex items-start justify-between gap-4">
-            <CardTitle className="min-w-0 truncate">
-              {customer.first_name} {customer.last_name}
-            </CardTitle>
-            {customer.company_name && (
-              <div className="min-w-0 truncate text-sm font-medium text-muted-foreground">
-                {customer.company_name}
-              </div>
-            )}
-          </div>
-        </CardHeader>
-      }
     />
   );
 }
@@ -102,7 +87,7 @@ function CustomerProperties({ customer }: { customer: Customer }) {
           <RouterLink
             to="/admin/properties/$propertyId"
             params={{ propertyId: property.id }}
-            className="min-w-0 flex-1 truncate font-medium underline-offset-4 hover:underline"
+            className="min-w-0 flex-1 truncate text-link underline-offset-4 hover:underline"
           >
             {property.name}
           </RouterLink>

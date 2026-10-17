@@ -4,7 +4,7 @@ import { PlusIcon } from 'lucide-react';
 import * as React from 'react';
 
 import { type Product, productsByCategoryQueryOptions } from '@/api/products';
-import { ErrorState } from '@/components/error-state';
+import { LoadErrorState } from '@/components/load-error';
 import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/search-input';
 import { useDelayedFlag } from '@/hooks/use-delayed-flag';
@@ -85,15 +85,14 @@ function CategoryProducts({ categoryId, path }: CategoryProductsProps) {
 
   const breadcrumb = <CategoryBreadcrumb path={path} />;
 
-  if (productsQuery.isError) {
+  if (productsQuery.isLoadingError) {
     return (
       <ProductsCard breadcrumb={breadcrumb}>
         <div className="flex min-h-[140px] items-center justify-center">
-          <ErrorState
-            size="sm"
-            title={<Trans>Failed to load products</Trans>}
-            message={productsQuery.error.message}
-            onRetry={() => productsQuery.refetch()}
+          <LoadErrorState
+            error={productsQuery.error}
+            title={<Trans>Couldn't load products</Trans>}
+            onRetry={() => void productsQuery.refetch()}
             isRetrying={productsQuery.isFetching}
           />
         </div>

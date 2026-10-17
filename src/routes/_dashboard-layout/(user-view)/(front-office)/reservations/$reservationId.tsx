@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { ChevronLeftIcon } from 'lucide-react';
+import { Undo2Icon } from 'lucide-react';
 import { z } from 'zod';
 
 import { reservationByIdQueryOptions } from '@/api/reservations';
@@ -41,7 +41,8 @@ function ReservationPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        {back && (
+        {/* Arrived from another page: the way back replaces the breadcrumbs */}
+        {back ? (
           <a
             href={back}
             onClick={(event) => {
@@ -49,31 +50,32 @@ function ReservationPage() {
               event.preventDefault();
               router.history.push(back);
             }}
-            className="mb-2 inline-flex items-center gap-1 rounded-sm text-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex items-center gap-1.5 rounded-sm text-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <ChevronLeftIcon className="size-4" aria-hidden="true" />
+            <Undo2Icon className="size-4" aria-hidden="true" />
             <Trans>Back</Trans>
           </a>
+        ) : (
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink to="/">
+                  <Trans>Home</Trans>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink to="/reservations">
+                  <Trans>Reservations</Trans>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{bookingNr}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         )}
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink to="/">
-                <Trans>Home</Trans>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink to="/reservations">
-                <Trans>Reservations</Trans>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{bookingNr}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
         <div className="flex items-center gap-2">
           <h1 className="truncate text-xl font-bold">{bookingNr}</h1>
           {/* Set by the reservation's lifecycle, so shown rather than edited */}

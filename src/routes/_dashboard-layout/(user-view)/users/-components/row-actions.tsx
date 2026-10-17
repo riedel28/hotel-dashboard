@@ -41,7 +41,7 @@ export function RowActions({ row }: RowActionsProps) {
     <>
       <DropdownMenu>
         <DataGridRowActions />
-        <DropdownMenuContent align="end" className="w-auto min-w-[130px]">
+        <DropdownMenuContent align="end">
           <DropdownMenuItem
             render={(props) => (
               <RouterLink
@@ -53,7 +53,7 @@ export function RowActions({ row }: RowActionsProps) {
                 search={{}}
                 replace
               >
-                <PenSquareIcon className="mr-1 size-4" />
+                <PenSquareIcon />
                 <Trans>Edit</Trans>
               </RouterLink>
             )}
@@ -65,7 +65,7 @@ export function RowActions({ row }: RowActionsProps) {
                 onClick={() => resendMutation.mutate()}
                 disabled={resendMutation.isPending}
               >
-                <MailIcon className="mr-1 size-4" />
+                <MailIcon />
                 <Trans>Resend invitation</Trans>
               </DropdownMenuItem>
             </>
@@ -75,7 +75,7 @@ export function RowActions({ row }: RowActionsProps) {
             variant="destructive-soft"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <TrashIcon className="mr-1 size-4" />
+            <TrashIcon />
             <Trans>Delete</Trans>
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
