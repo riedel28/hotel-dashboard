@@ -28,11 +28,7 @@ import {
   strongPasswordSchema,
   type User
 } from '../../../../../../shared/types/users';
-import {
-  ProfileSection,
-  ProfileSectionForm,
-  useSuccessFlash
-} from './profile-section';
+import { ProfileSection, ProfileSectionForm } from './profile-section';
 
 interface PasswordSectionProps {
   user: User;
@@ -41,7 +37,6 @@ interface PasswordSectionProps {
 export function PasswordSection({ user }: PasswordSectionProps) {
   const { t: lingui } = useLingui();
   const twoFactorEnabled = user.two_factor_enabled ?? false;
-  const { flash, flashClass } = useSuccessFlash();
   const [capsLockOn, setCapsLockOn] = React.useState(false);
   const [signedOutElsewhere, setSignedOutElsewhere] = React.useState(false);
 
@@ -100,7 +95,6 @@ export function PasswordSection({ user }: PasswordSectionProps) {
     onSuccess: (result) => {
       form.reset(EMPTY);
       setSignedOutElsewhere(result.other_sessions_signed_out);
-      flash();
       toast.success(lingui`Password updated`);
     },
     onError: (error) => {
@@ -142,7 +136,6 @@ export function PasswordSection({ user }: PasswordSectionProps) {
           unrelated words beats a short, complicated one.
         </Trans>
       }
-      className={flashClass}
     >
       <ProfileSectionForm
         isDirty={form.formState.isDirty}

@@ -95,8 +95,9 @@ function RouteComponent() {
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
           <ProfileNav />
           {/* Capped rather than full-bleed: a form line longer than about
-              720px is measurably harder to read. */}
-          <div className="min-w-0 flex-1 lg:max-w-2xl">
+              720px is measurably harder to read. The bottom padding below
+              `lg` keeps a form's phone save bar off the card's own footer. */}
+          <div className="min-w-0 flex-1 pb-20 lg:max-w-2xl lg:pb-0">
             <Outlet />
           </div>
         </div>

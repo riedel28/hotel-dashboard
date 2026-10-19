@@ -11,6 +11,16 @@ import { z } from 'zod';
 import { resendVerification } from '@/api/auth';
 import { ApiError } from '@/api/client';
 import { profileKeys, updateMe } from '@/api/profile';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { CountryPicker } from '@/components/ui/country-picker';
 import {
@@ -35,19 +45,10 @@ import { cn } from '@/lib/utils';
 
 import type { User } from '../../../../../../shared/types/users';
 import { AvatarField } from './avatar-field';
-import {
-  ProfileSection,
-  ProfileSectionForm,
-  useSuccessFlash
-} from './profile-section';
+import { ProfileSection, ProfileSectionForm } from './profile-section';
 
 interface PersonalSectionProps {
   user: User;
-  onDirtyChange: (dirty: boolean) => void;
-  onSavingChange: (saving: boolean) => void;
-  /** Registers a save/reset handle so the mobile bottom bar can drive this form. */
-  registerControls: (controls: { save: () => void; reset: () => void }) => void;
-  onConflict: () => void;
 }
 
 /** The editable subset of a user, in the shape the form holds it. */
@@ -59,16 +60,10 @@ function toFormValues(user: User) {
   };
 }
 
-export function PersonalSection({
-  user,
-  onDirtyChange,
-  onSavingChange,
-  registerControls,
-  onConflict
-}: PersonalSectionProps) {
+export function PersonalSection({ user }: PersonalSectionProps) {
   const { t: lingui } = useLingui();
   const queryClient = useQueryClient();
-  const { flash, flashClass } = useSuccessFlash();
+  const [conflictOpen, setConflictOpen] = React.useState(false);
 
   const schema = React.useMemo(
     () =>
@@ -105,21 +100,17 @@ export function PersonalSection({
   const { reset } = form;
   React.useEffect(() => reset(defaults), [defaults, reset]);
 
-  const isDirty = form.formState.isDirty;
-  React.useEffect(() => onDirtyChange(isDirty), [isDirty, onDirtyChange]);
-
   const mutation = useMutation({
     mutationFn: (values: FormData) =>
       updateMe({ ...values, expected_updated_at: user.updated_at }),
     onSuccess: (updated) => {
       queryClient.setQueryData(profileKeys.me, updated);
       form.reset(toFormValues(updated));
-      flash();
       toast.success(lingui`Profile updated`);
     },
     onError: (error) => {
       if (error instanceof ApiError && error.code === 'STALE_PROFILE') {
-        onConflict();
+        setConflictOpen(true);
         return;
       }
       toast.error(
@@ -130,37 +121,20 @@ export function PersonalSection({
     }
   });
 
-  const isSaving = mutation.isPending;
-  React.useEffect(() => onSavingChange(isSaving), [isSaving, onSavingChange]);
-
   const submit = form.handleSubmit((values) => mutation.mutate(values));
-  const resetForm = React.useCallback(() => reset(defaults), [defaults, reset]);
-
-  // `handleSubmit` hands back a new function every render, so the handle is
-  // read through a ref — registering the closure directly would re-run the
-  // effect below on every single render.
-  const latestSubmit = React.useRef(submit);
-  latestSubmit.current = submit;
-
-  const save = React.useCallback(() => void latestSubmit.current(), []);
-
-  React.useEffect(() => {
-    registerControls({ save, reset: resetForm });
-  }, [registerControls, save, resetForm]);
 
   return (
     <ProfileSection
       id="profile"
       title={<Trans>Personal details</Trans>}
       description={<Trans>How you appear across the back-office.</Trans>}
-      className={flashClass}
     >
       <ProfileSectionForm
-        isDirty={isDirty}
+        isDirty={form.formState.isDirty}
         isSubmitting={mutation.isPending}
         submitLabel={<Trans>Save changes</Trans>}
-        onSubmit={save}
-        onReset={resetForm}
+        onSubmit={() => void submit()}
+        onReset={() => reset(defaults)}
       >
         <AvatarField user={user} />
 
@@ -231,6 +205,38 @@ export function PersonalSection({
           </div>
         </FieldGroup>
       </ProfileSectionForm>
+
+      <AlertDialog open={conflictOpen} onOpenChange={setConflictOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <Trans>This profile was updated elsewhere</Trans>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              <Trans>
+                Someone — most likely an administrator — changed your record
+                while this page was open. Reload to see their version, or keep
+                your edits and save again to overwrite it.
+              </Trans>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              <Trans>Keep my changes</Trans>
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                void queryClient.invalidateQueries({
+                  queryKey: profileKeys.me
+                });
+                setConflictOpen(false);
+              }}
+            >
+              <Trans>Reload</Trans>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </ProfileSection>
   );
 }

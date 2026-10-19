@@ -127,12 +127,12 @@ msgid "{0} of {plannedTotal} guests registered"
 msgstr "{0} of {plannedTotal} guests registered"
 
 #. placeholder {0}: status.recovery_codes_remaining
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:156
 msgid "{0} of 10 codes remaining"
 msgstr "{0} of 10 codes remaining"
 
 #. placeholder {0}: roles.length
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:248
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:252
 msgid "{0} roles total"
 msgstr "{0} roles total"
 
@@ -309,7 +309,7 @@ msgstr "A property has one provider of a kind. Connecting {name} removes the {re
 msgid "A room with this number already exists"
 msgstr "A room with this number already exists"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:86
 msgid "A second step at sign-in, from an app on your phone."
 msgstr "A second step at sign-in, from an app on your phone."
 
@@ -378,7 +378,7 @@ msgstr "Active reservation — will be skipped"
 msgid "Add"
 msgstr "Add"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:199
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:203
 msgid "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 msgstr "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 
@@ -407,7 +407,7 @@ msgstr "Add customer"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:135
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:123
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:209
 msgid "Add device"
 msgstr "Add device"
 
@@ -509,7 +509,7 @@ msgstr "Add to “{parentTitle}”"
 #~ msgstr "Add User"
 
 #. placeholder {0}: dayjs(status.enabled_at).format('D MMM YYYY')
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:121
 msgid "Added on {0}"
 msgstr "Added on {0}"
 
@@ -606,7 +606,7 @@ msgstr "Adults"
 #~ msgid "Adyen connected"
 #~ msgstr "Adyen connected"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:207
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:214
 msgid "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 msgstr "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 
@@ -617,7 +617,7 @@ msgstr "Age group"
 #: src/components/ui/data-grid-segmented-filter.tsx:41
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:141
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:71
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:134
 msgid "All"
 msgstr "All"
@@ -634,7 +634,7 @@ msgstr "All categories"
 #~ msgid "All changes saved"
 #~ msgstr "All changes saved"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:300
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:313
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:77
 #: src/routes/_dashboard-layout/admin/properties/-components/property-country-filter.tsx:20
 msgid "All countries"
@@ -652,7 +652,7 @@ msgstr "All floors"
 #~ msgid "All logs"
 #~ msgstr "All logs"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:306
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:319
 msgid "All roles"
 msgstr "All roles"
 
@@ -665,7 +665,7 @@ msgid "All stages"
 msgstr "All stages"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:90
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:99
 msgid "All statuses"
 msgstr "All statuses"
@@ -819,7 +819,7 @@ msgstr "Assign"
 msgid "Assign {name} to a room"
 msgstr "Assign {name} to a room"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:78
 msgid "Assigned"
 msgstr "Assigned"
 
@@ -869,11 +869,11 @@ msgstr "Authenticate credentials"
 msgid "Authentication"
 msgstr "Authentication"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:270
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:263
 msgid "Authentication code"
 msgstr "Authentication code"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:117
 msgid "Authenticator app"
 msgstr "Authenticator app"
 
@@ -881,7 +881,8 @@ msgstr "Authenticator app"
 msgid "Authorized"
 msgstr "Authorized"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:77
 msgid "Authorized long ago and not captured yet"
 msgstr "Authorized long ago and not captured yet"
 
@@ -921,7 +922,7 @@ msgstr "Available"
 #: src/components/provider-setup/provider-picker.tsx:86
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/preview/phone-preview.tsx:150
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:56
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:274
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-step.tsx:163
 msgid "Back"
 msgstr "Back"
@@ -997,7 +998,7 @@ msgstr "By email, at the times set below."
 msgid "Can't reach the server. Check your connection and try again."
 msgstr "Can't reach the server. Check your connection and try again."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:396
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:387
 msgid "Can't scan the code? Enter the key manually"
 msgstr "Can't scan the code? Enter the key manually"
 
@@ -1027,10 +1028,10 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:129
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:188
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:126
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:191
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:140
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:265
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:256
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/upload-step.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:308
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:104
@@ -1045,15 +1046,15 @@ msgstr "Can't scan the code? Enter the key manually"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:342
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:333
 msgid "Cancel setup"
 msgstr "Cancel setup"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:321
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:312
 msgid "Cancel setup?"
 msgstr "Cancel setup?"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:187
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:180
 msgid "Caps Lock is on"
 msgstr "Caps Lock is on"
 
@@ -1067,7 +1068,7 @@ msgstr "Captured"
 msgid "Card"
 msgstr "Card"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:96
 msgid "Card expired"
 msgstr "Card expired"
 
@@ -1320,7 +1321,7 @@ msgstr "Clear all"
 #: src/components/empty-table-state.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:115
 msgid "Clear filters"
 msgstr "Clear filters"
 
@@ -1396,7 +1397,7 @@ msgstr "Configuration updated"
 #~ msgid "Configured"
 #~ msgstr "Configured"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:240
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:233
 msgid "Confirm new password"
 msgstr "Confirm new password"
 
@@ -1523,7 +1524,7 @@ msgid "Copy Public Key"
 msgstr "Copy Public Key"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:160
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:112
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:130
 msgid "Copy reference"
 msgstr "Copy reference"
 
@@ -1536,7 +1537,7 @@ msgstr "Copy reservation number"
 msgid "Copy serial number"
 msgstr "Copy serial number"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:406
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:397
 msgid "Copy setup key"
 msgstr "Copy setup key"
 
@@ -1556,7 +1557,7 @@ msgstr "Could not reach the Adyen API — request timed out after 5000 ms."
 msgid "Could not reach the API — request timed out after 5000 ms."
 msgstr "Could not reach the API — request timed out after 5000 ms."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:72
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:76
 msgid "Couldn't generate new recovery codes"
 msgstr "Couldn't generate new recovery codes"
 
@@ -1612,7 +1613,7 @@ msgstr "Couldn't load the content"
 msgid "Couldn't load this page"
 msgstr "Couldn't load this page"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:217
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:227
 msgid "Couldn't load users"
 msgstr "Couldn't load users"
 
@@ -1620,7 +1621,7 @@ msgstr "Couldn't load users"
 msgid "Couldn't refresh"
 msgstr "Couldn't refresh"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:249
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:255
 msgid "Couldn't send the email. Try again."
 msgstr "Couldn't send the email. Try again."
 
@@ -1630,9 +1631,9 @@ msgstr "Couldn't start setup"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:546
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:136
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:196
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:245
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:185
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:212
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:176
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:248
@@ -1744,7 +1745,7 @@ msgstr "Culture"
 msgid "Current"
 msgstr "Current"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:166
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:159
 msgid "Current password"
 msgstr "Current password"
 
@@ -1752,7 +1753,7 @@ msgstr "Current password"
 #~ msgid "Current Password"
 #~ msgstr "Current Password"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:47
 msgid "Current password is required"
 msgstr "Current password is required"
 
@@ -1837,7 +1838,7 @@ msgstr "Deactivate online check-in?"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:69
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:67
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:81
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:167
@@ -1969,7 +1970,7 @@ msgstr "Devices"
 msgid "Digits only (max 12)"
 msgstr "Digits only (max 12)"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:101
 msgid "Disabled"
 msgstr "Disabled"
 
@@ -2002,8 +2003,8 @@ msgstr "Doe"
 msgid "Don’t save"
 msgstr "Don’t save"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:259
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:308
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:274
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:299
 msgid "Done"
 msgstr "Done"
 
@@ -2100,7 +2101,7 @@ msgstr "e.g. Standard, Suite"
 msgid "Each code can be used once."
 msgstr "Each code can be used once."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:156
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:160
 msgid "Each code works once"
 msgstr "Each code works once"
 
@@ -2184,7 +2185,7 @@ msgstr "Edit the booking, its guests and their check-in."
 msgid "Edit the event’s details, date and place."
 msgstr "Edit the event’s details, date and place."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:47
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:83
 msgid "Edit user"
 msgstr "Edit user"
@@ -2217,10 +2218,10 @@ msgstr "Editor"
 #: src/routes/_auth-layout/auth/login.tsx:181
 #: src/routes/_auth-layout/auth/sign-up.tsx:223
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:185
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:257
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:133
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:176
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:156
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:160
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:163
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:288
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:300
@@ -2233,7 +2234,7 @@ msgstr "Email"
 #~ msgstr "Email is required"
 
 #: src/routes/_auth-layout/auth/login.tsx:150
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:274
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:280
 msgid "Email not verified"
 msgstr "Email not verified"
 
@@ -2241,7 +2242,7 @@ msgstr "Email not verified"
 #~ msgid "Email sent successfully"
 #~ msgstr "Email sent successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:274
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:280
 msgid "Email verified"
 msgstr "Email verified"
 
@@ -2253,11 +2254,11 @@ msgstr "Email verified!"
 #~ msgid "Enable now"
 #~ msgstr "Enable now"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:223
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:233
 msgid "Enable two-factor authentication"
 msgstr "Enable two-factor authentication"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:101
 msgid "Enabled"
 msgstr "Enabled"
 
@@ -2310,7 +2311,7 @@ msgstr "Enter first name"
 msgid "Enter last name"
 msgstr "Enter last name"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:103
 msgid "Enter one of your unused recovery codes"
 msgstr "Enter one of your unused recovery codes"
 
@@ -2346,11 +2347,11 @@ msgstr "Enter property name"
 #~ msgid "Enter room type (e.g., Standard, Suite)"
 #~ msgstr "Enter room type (e.g., Standard, Suite)"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:195
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:186
 msgid "Enter the 6-digit code"
 msgstr "Enter the 6-digit code"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:66
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:61
 msgid "Enter the 6-digit code from your authenticator app"
 msgstr "Enter the 6-digit code from your authenticator app"
 
@@ -2362,7 +2363,7 @@ msgstr "Enter the 6-digit code from your authenticator app."
 msgid "Enter the booking, then add its guests."
 msgstr "Enter the booking, then add its guests."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:112
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:105
 msgid "Enter the current code from your authenticator app"
 msgstr "Enter the current code from your authenticator app"
 
@@ -2596,7 +2597,7 @@ msgstr "Failed to add entry. Please try again."
 msgid "Failed to add product"
 msgstr "Failed to add product"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:102
 msgid "Failed to change password"
 msgstr "Failed to change password"
 
@@ -2709,7 +2710,7 @@ msgstr "Failed to move the item"
 #~ msgid "Failed to reload properties"
 #~ msgstr "Failed to reload properties"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:36
 msgid "Failed to resend invitation"
 msgstr "Failed to resend invitation"
 
@@ -2784,7 +2785,7 @@ msgstr "Failed to update entry. Please try again."
 msgid "Failed to update product"
 msgstr "Failed to update product"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:128
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:119
 msgid "Failed to update profile"
 msgstr "Failed to update profile"
 
@@ -2863,7 +2864,7 @@ msgstr "Find bookings, follow their check-in and open one to edit."
 msgid "First {loaded} of {total} properties"
 msgstr "First {loaded} of {total} properties"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:151
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:140
 msgid "First name"
 msgstr "First name"
@@ -2877,7 +2878,7 @@ msgid "First Name"
 msgstr "First Name"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:81
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:74
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:43
 msgid "First name is required"
 msgstr "First name is required"
@@ -2914,7 +2915,7 @@ msgid "Forgot Password"
 msgstr "Forgot Password"
 
 #: src/routes/_auth-layout/auth/login.tsx:262
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:169
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:162
 msgid "Forgot password?"
 msgstr "Forgot password?"
 
@@ -3229,9 +3230,9 @@ msgstr "Holder"
 #: src/routes/_dashboard-layout/(user-view)/checkin-page.tsx:54
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:39
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:264
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:277
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:150
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
@@ -3251,7 +3252,7 @@ msgstr "Host is required"
 msgid "Hotel"
 msgstr "Hotel"
 
-#: src/routes/_dashboard-layout.tsx:39
+#: src/routes/_dashboard-layout.tsx:45
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -3280,7 +3281,7 @@ msgstr "How many people are staying, by age group, and who they are. The primary
 #~ msgid "How many people are staying, by age group."
 #~ msgstr "How many people are staying, by age group."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:155
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:130
 msgid "How you appear across the back-office."
 msgstr "How you appear across the back-office."
 
@@ -3288,11 +3289,11 @@ msgstr "How you appear across the back-office."
 msgid "I don't have my phone"
 msgstr "I don't have my phone"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:159
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:152
 msgid "I don't have my phone — use a recovery code"
 msgstr "I don't have my phone — use a recovery code"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:254
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:245
 msgid "I've saved my recovery codes in a safe place"
 msgstr "I've saved my recovery codes in a safe place"
 
@@ -3379,7 +3380,7 @@ msgstr "Invalid email address"
 msgid "Invalid link"
 msgstr "Invalid link"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:34
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:33
 msgid "Invitation resent successfully"
 msgstr "Invitation resent successfully"
 
@@ -3441,15 +3442,15 @@ msgstr "JPG, PNG or WebP up to 2 MB. Drag to change the order."
 msgid "Keep editing"
 msgstr "Keep editing"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:170
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:163
 msgid "Keep it on"
 msgstr "Keep it on"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:225
 msgid "Keep my changes"
 msgstr "Keep my changes"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:332
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:323
 msgid "Keep setting up"
 msgstr "Keep setting up"
 
@@ -3487,7 +3488,7 @@ msgstr "Last hour"
 msgid "Last month"
 msgstr "Last month"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:197
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:171
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:146
 msgid "Last name"
 msgstr "Last name"
@@ -3501,7 +3502,7 @@ msgid "Last Name"
 msgstr "Last Name"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:85
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:79
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:47
 msgid "Last name is required"
 msgstr "Last name is required"
@@ -3546,7 +3547,7 @@ msgstr "Last updated {date}"
 #~ msgstr "Last updated at {0}"
 
 #. placeholder {0}: dayjs(status.last_used_at).fromNow()
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:128
 msgid "Last used {0}"
 msgstr "Last used {0}"
 
@@ -3633,7 +3634,7 @@ msgid "Loading rooms…"
 msgstr "Loading rooms…"
 
 #: src/components/ui/data-grid-table.tsx:462
-#: src/routes/_dashboard-layout.tsx:169
+#: src/routes/_dashboard-layout.tsx:177
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -3674,7 +3675,7 @@ msgstr "Logs for reservation {bookingNr}"
 msgid "main"
 msgstr "main"
 
-#: src/routes/_dashboard-layout.tsx:60
+#: src/routes/_dashboard-layout.tsx:66
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -3746,7 +3747,7 @@ msgstr "Manage users, view user details, and assign roles"
 msgid "Manage your hotel operations efficiently"
 msgstr "Manage your hotel operations efficiently"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:74
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:77
 msgid "Manage your personal details, security and access rights."
 msgstr "Manage your personal details, security and access rights."
 
@@ -3931,7 +3932,7 @@ msgstr "Move up"
 msgid "Music"
 msgstr "Music"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:52
 msgid "My profile"
 msgstr "My profile"
 
@@ -4016,7 +4017,7 @@ msgstr "New Guest"
 msgid "New parent"
 msgstr "New parent"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:196
 msgid "New password"
 msgstr "New password"
 
@@ -4024,7 +4025,7 @@ msgstr "New password"
 msgid "New Password"
 msgstr "New Password"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:57
 msgid "New password must be different from your current one"
 msgstr "New password must be different from your current one"
 
@@ -4051,7 +4052,7 @@ msgid "New type"
 msgstr "New type"
 
 #: src/components/ui/pagination.tsx:104
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:272
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:225
 msgid "Next"
 msgstr "Next"
@@ -4150,11 +4151,11 @@ msgstr "No data available"
 #~ msgid "No devices match the filters"
 #~ msgstr "No devices match the filters"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:212
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:216
 msgid "No devices match the filters."
 msgstr "No devices match the filters."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:197
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:201
 msgid "No devices yet"
 msgstr "No devices yet"
 
@@ -4207,7 +4208,7 @@ msgstr "No logs in the last 24 hours"
 msgid "No logs match the current filters."
 msgstr "No logs match the current filters."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:125
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:129
 msgid "No name"
 msgstr "No name"
 
@@ -4362,7 +4363,7 @@ msgstr "No unsaved changes"
 msgid "No upcoming events"
 msgstr "No upcoming events"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:247
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:260
 msgid "No users match the filters."
 msgstr "No users match the filters."
 
@@ -4387,7 +4388,7 @@ msgstr "Not completed"
 msgid "Not provided"
 msgstr "Not provided"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:311
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:317
 msgid "Not verified yet."
 msgstr "Not verified yet."
 
@@ -4434,7 +4435,7 @@ msgstr "Occupied"
 msgid "of <0/>"
 msgstr "of <0/>"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:167
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:173
 msgid "Off"
 msgstr "Off"
 
@@ -4503,7 +4504,7 @@ msgstr "Only untranslated"
 msgid "Open image {0}"
 msgstr "Open image {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:430
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:421
 msgid "Open in my authenticator app"
 msgstr "Open in my authenticator app"
 
@@ -4511,7 +4512,7 @@ msgstr "Open in my authenticator app"
 msgid "Open menu"
 msgstr "Open menu"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:208
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:199
 msgid "Open your authenticator app and scan the code below."
 msgstr "Open your authenticator app and scan the code below."
 
@@ -4622,8 +4623,8 @@ msgstr "Party"
 #: src/routes/_auth-layout/auth/login.tsx:211
 #: src/routes/_auth-layout/auth/sign-up.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:221
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:137
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:141
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:132
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:124
 msgid "Password"
 msgstr "Password"
@@ -4676,11 +4677,11 @@ msgstr "Password strength"
 #~ msgid "Password strength requirements"
 #~ msgstr "Password strength requirements"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:104
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:98
 msgid "Password updated"
 msgstr "Password updated"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:53
 msgid "Passwords don't match"
 msgstr "Passwords don't match"
 
@@ -4738,7 +4739,7 @@ msgid "Payments appear here once the gateway authorizes them."
 msgstr "Payments appear here once the gateway authorizes them."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status.ts:20
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:128
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:132
 msgid "Pending"
 msgstr "Pending"
 
@@ -4754,8 +4755,8 @@ msgstr "Period"
 #~ msgid "Personal"
 #~ msgstr "Personal"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:136
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:129
 msgid "Personal details"
 msgstr "Personal details"
 
@@ -4820,7 +4821,7 @@ msgstr "Plan what is on for guests: concerts, tastings, tours."
 msgid "Please check your inbox and follow the instructions to reset your password."
 msgstr "Please check your inbox and follow the instructions to reset your password."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:49
 msgid "Please confirm your password"
 msgstr "Please confirm your password"
 
@@ -5043,9 +5044,9 @@ msgstr "Products"
 #~ msgstr "Products in {categoryTitle}"
 
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:271
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:64
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:72
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:153
 msgid "Profile"
 msgstr "Profile"
 
@@ -5090,7 +5091,7 @@ msgstr "Profile picture"
 #~ msgid "Profile update is not yet implemented"
 #~ msgstr "Profile update is not yet implemented"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:109
 msgid "Profile updated"
 msgstr "Profile updated"
 
@@ -5149,7 +5150,7 @@ msgstr "Property not found — check its ID."
 msgid "Property updated successfully"
 msgstr "Property updated successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:204
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:211
 msgid "Protect your account with a second step"
 msgstr "Protect your account with a second step"
 
@@ -5187,7 +5188,7 @@ msgstr "PWA Domain"
 msgid "PWA domain is required"
 msgstr "PWA domain is required"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:383
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:374
 msgid "QR code for setting up two-factor authentication"
 msgstr "QR code for setting up two-factor authentication"
 
@@ -5237,12 +5238,12 @@ msgid "Reception"
 msgstr "Reception"
 
 #: src/routes/_auth-layout/auth/login.tsx:373
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:130
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:123
 msgid "Recovery code"
 msgstr "Recovery code"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:25
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:141
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:145
 msgid "Recovery codes"
 msgstr "Recovery codes"
 
@@ -5262,7 +5263,7 @@ msgid "Reference"
 msgstr "Reference"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:161
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:131
 msgid "Reference copied"
 msgstr "Reference copied"
 
@@ -5275,7 +5276,7 @@ msgstr "Refresh"
 msgid "Refresh preview"
 msgstr "Refresh preview"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:183
 msgid "Regenerate"
 msgstr "Regenerate"
 
@@ -5288,7 +5289,7 @@ msgstr "Regenerate"
 #~ msgstr "Registration Forms"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/use-node-form.ts:127
-#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:235
 msgid "Reload"
 msgstr "Reload"
 
@@ -5404,11 +5405,11 @@ msgstr "Replace provider"
 msgid "required"
 msgstr "required"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:320
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:326
 msgid "Resend"
 msgstr "Resend"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
 msgid "Resend invitation"
 msgstr "Resend invitation"
 
@@ -5497,7 +5498,7 @@ msgstr "Reservations from the PMS show up here, or add one by hand."
 #: src/components/ui/data-grid-radio-filter.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:317
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:330
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:34
 msgid "Reset"
@@ -5522,7 +5523,7 @@ msgstr "Reset Password"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:305
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:318
 msgid "Role"
 msgstr "Role"
 
@@ -5533,11 +5534,11 @@ msgstr "Role"
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:51
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:204
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:264
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:220
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:224
 msgid "Roles"
 msgstr "Roles"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:149
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:23
 msgid "Roles & access"
 msgstr "Roles & access"
@@ -5586,7 +5587,7 @@ msgstr "Room {room}"
 msgid "Room <0>(Optional)</0>"
 msgstr "Room <0>(Optional)</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:67
 msgid "Room assignment"
 msgstr "Room assignment"
 
@@ -5711,13 +5712,13 @@ msgstr "Running tests… ({passedCount}/{0})"
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:203
 msgid "Save"
 msgstr "Save"
 
 #: src/components/provider-setup/provider-form-card.tsx:129
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-settings-form.tsx:39
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:161
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:135
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:63
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:123
 msgid "Save changes"
@@ -5739,7 +5740,7 @@ msgstr "Save photo"
 #~ msgid "Save Roles"
 #~ msgstr "Save Roles"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:216
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:207
 msgid "Save your recovery codes. You'll need them if you lose your phone, and each one works only once."
 msgstr "Save your recovery codes. You'll need them if you lose your phone, and each one works only once."
 
@@ -5769,11 +5770,11 @@ msgstr "Saving changes…"
 #~ msgid "Saving..."
 #~ msgstr "Saving..."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:143
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:140
 msgid "Saving…"
 msgstr "Saving…"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:194
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:185
 msgid "Scan this QR code"
 msgstr "Scan this QR code"
 
@@ -5799,7 +5800,7 @@ msgstr "Search country..."
 msgid "Search customers"
 msgstr "Search customers"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:60
 msgid "Search devices"
 msgstr "Search devices"
 
@@ -5831,7 +5832,7 @@ msgstr "Search for a guest..."
 msgid "Search logs"
 msgstr "Search logs"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:61
 msgid "Search name, serial number, room"
 msgstr "Search name, serial number, room"
 
@@ -5877,7 +5878,7 @@ msgstr "Search timezone..."
 msgid "Search titles"
 msgstr "Search titles"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:291
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:304
 msgid "Search users"
 msgstr "Search users"
 
@@ -6064,7 +6065,7 @@ msgstr "Settings"
 #~ msgid "Setup"
 #~ msgstr "Setup"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:407
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:398
 msgid "Setup key copied"
 msgstr "Setup key copied"
 
@@ -6160,7 +6161,7 @@ msgstr "Show only logs of reservation {bookingNr}"
 msgid "Show password"
 msgstr "Show password"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:329
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:342
 msgid "Show results for: <0>\"{q}\"</0>"
 msgstr "Show results for: <0>\"{q}\"</0>"
 
@@ -6199,7 +6200,7 @@ msgid "Sign Up"
 msgstr "Sign Up"
 
 #: src/routes/_auth-layout.tsx:17
-#: src/routes/_dashboard-layout.tsx:77
+#: src/routes/_dashboard-layout.tsx:83
 msgid "Skip to main content"
 msgstr "Skip to main content"
 
@@ -6222,7 +6223,7 @@ msgstr "SMS"
 msgid "Solutions"
 msgstr "Solutions"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:72
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:216
 msgid "Someone — most likely an administrator — changed your record while this page was open. Reload to see their version, or keep your edits and save again to overwrite it."
 msgstr "Someone — most likely an administrator — changed your record while this page was open. Reload to see their version, or keep your edits and save again to overwrite it."
 
@@ -6303,7 +6304,7 @@ msgstr "Station"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:111
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:122
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:158
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:277
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:98
@@ -6320,7 +6321,7 @@ msgstr "Stay"
 
 #. placeholder {0}: index + 1
 #. placeholder {1}: STEP_ORDER.length
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:356
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:347
 msgid "Step {0} of {1}"
 msgstr "Step {0} of {1}"
 
@@ -6497,11 +6498,11 @@ msgid "Text style"
 msgstr "Text style"
 
 #: src/routes/_auth-layout/auth/login.tsx:323
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:153
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:144
 msgid "That code isn't valid. Check your app and try again."
 msgstr "That code isn't valid. Check your app and try again."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:64
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:57
 msgid "That code isn't valid. Try again."
 msgstr "That code isn't valid. Try again."
 
@@ -6759,11 +6760,11 @@ msgstr "They get an email with a link to set a password and sign in."
 msgid "This action cannot be undone."
 msgstr "This action cannot be undone."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:297
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:303
 msgid "This address is verified."
 msgstr "This address is verified."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:299
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:305
 msgid "This address isn't verified yet. Check your inbox for the confirmation link."
 msgstr "This address isn't verified yet. Check your inbox for the confirmation link."
 
@@ -6839,7 +6840,7 @@ msgstr "This password reset link is invalid."
 msgid "This payment does not exist."
 msgstr "This payment does not exist."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:213
 msgid "This profile was updated elsewhere"
 msgstr "This profile was updated elsewhere"
 
@@ -6871,7 +6872,7 @@ msgstr "This will permanently delete the entry by <0>{authorName}</0>. This acti
 msgid "Time"
 msgstr "Time"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:411
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:402
 msgid "Time-based (TOTP) · 6 digits · 30 seconds"
 msgstr "Time-based (TOTP) · 6 digits · 30 seconds"
 
@@ -6914,7 +6915,7 @@ msgstr "TLS certificate"
 msgid "TLS handshake failed: certificate is self-signed or expired."
 msgstr "TLS handshake failed: certificate is self-signed or expired."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:325
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:331
 msgid "To change your email, contact your administrator."
 msgstr "To change your email, contact your administrator."
 
@@ -6970,7 +6971,7 @@ msgstr "Token is required"
 msgid "Too many attempts. Please try again later."
 msgstr "Too many attempts. Please try again later."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:467
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:458
 msgid "Too many attempts. Try again in {cooldown} seconds."
 msgstr "Too many attempts. Try again in {cooldown} seconds."
 
@@ -7008,15 +7009,15 @@ msgstr "Try again"
 #~ msgid "Try Again"
 #~ msgstr "Try Again"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:174
 msgid "Turn off"
 msgstr "Turn off"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:192
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:199
 msgid "Turn off two-factor authentication"
 msgstr "Turn off two-factor authentication"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:79
 msgid "Turn off two-factor authentication?"
 msgstr "Turn off two-factor authentication?"
 
@@ -7036,11 +7037,11 @@ msgstr "TV Guest Directory"
 #~ msgid "Two Factor"
 #~ msgstr "Two Factor"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:144
 msgid "Two-factor auth"
 msgstr "Two-factor auth"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:84
 msgid "Two-factor authentication"
 msgstr "Two-factor authentication"
 
@@ -7048,11 +7049,11 @@ msgstr "Two-factor authentication"
 #~ msgid "Two-Factor Authentication"
 #~ msgstr "Two-Factor Authentication"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:58
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:51
 msgid "Two-factor authentication disabled"
 msgstr "Two-factor authentication disabled"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:165
 msgid "Two-factor authentication enabled"
 msgstr "Two-factor authentication enabled"
 
@@ -7072,7 +7073,7 @@ msgstr "Two-factor authentication enabled"
 #~ msgid "Two-factor authentication is not yet implemented"
 #~ msgstr "Two-factor authentication is not yet implemented"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:202
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:193
 msgid "Two-factor authentication is on"
 msgstr "Two-factor authentication is on"
 
@@ -7096,7 +7097,7 @@ msgstr "Two-factor authentication is on"
 #~ msgid "Two-factor authentication setup is not yet implemented"
 #~ msgstr "Two-factor authentication setup is not yet implemented"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:324
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:315
 msgid "Two-factor authentication won't be enabled and your account will keep using just a password."
 msgstr "Two-factor authentication won't be enabled and your account will keep using just a password."
 
@@ -7131,7 +7132,7 @@ msgstr "Unassign from room"
 msgid "Unassign from room?"
 msgstr "Unassign from room?"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:91
 msgid "Unassigned"
 msgstr "Unassigned"
 
@@ -7178,7 +7179,7 @@ msgstr "Unpin {title} column"
 #: src/components/sectioned-form.tsx:94
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:100
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:179
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:182
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
 
@@ -7214,7 +7215,7 @@ msgstr "Update"
 msgid "Update event"
 msgstr "Update event"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:150
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:143
 msgid "Update password"
 msgstr "Update password"
 
@@ -7282,7 +7283,7 @@ msgid "Use “Add product” above to add the first one."
 msgstr "Use “Add product” above to add the first one."
 
 #: src/routes/_auth-layout/auth/login.tsx:415
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:157
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:150
 msgid "Use a code from my app instead"
 msgstr "Use a code from my app instead"
 
@@ -7294,7 +7295,7 @@ msgstr "Use Apaleo Payment for eCom payments"
 msgid "Use Apaleo Payment for POS payments"
 msgstr "Use Apaleo Payment for POS payments"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:134
 msgid "Use at least {MIN_PASSWORD_LENGTH} characters. A passphrase of a few unrelated words beats a short, complicated one."
 msgstr "Use at least {MIN_PASSWORD_LENGTH} characters. A passphrase of a few unrelated words beats a short, complicated one."
 
@@ -7307,7 +7308,7 @@ msgid "Use the arrow keys to move between the images."
 msgstr "Use the arrow keys to move between the images."
 
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:28
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:107
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:111
 msgid "User"
 msgstr "User"
 
@@ -7349,9 +7350,9 @@ msgid "Username is required"
 msgstr "Username is required"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:144
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:53
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:270
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:277
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:290
 msgid "Users"
 msgstr "Users"
 
@@ -7372,7 +7373,7 @@ msgstr "Venue name is required"
 msgid "Verification email resent successfully"
 msgstr "Verification email resent successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:248
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:254
 msgid "Verification email sent"
 msgstr "Verification email sent"
 
@@ -7385,7 +7386,7 @@ msgstr "Verification failed"
 #~ msgstr "Verified"
 
 #: src/routes/_auth-layout/auth/login.tsx:400
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:297
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:288
 msgid "Verify"
 msgstr "Verify"
 
@@ -7422,7 +7423,7 @@ msgstr "Visible — click to hide"
 msgid "Visible to guests"
 msgstr "Visible to guests"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:295
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:286
 msgid "Wait {cooldown}s"
 msgstr "Wait {cooldown}s"
 
@@ -7560,7 +7561,7 @@ msgstr "Which authenticator app should I use?"
 #~ msgid "Who owns this property."
 #~ msgstr "Who owns this property."
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:279
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:292
 msgid "Who works in the back-office, and with which roles."
 msgstr "Who works in the back-office, and with which roles."
 
@@ -7609,7 +7610,7 @@ msgstr "You can send the link by hand from a reservation."
 msgid "You have unsaved changes on this page. If you leave now they'll be lost."
 msgstr "You have unsaved changes on this page. If you leave now they'll be lost."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:160
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:164
 msgid "You haven't saved any recovery codes yet."
 msgstr "You haven't saved any recovery codes yet."
 
@@ -7617,11 +7618,11 @@ msgstr "You haven't saved any recovery codes yet."
 msgid "You will be logged out of your account and redirected to the login page."
 msgstr "You will be logged out of your account and redirected to the login page."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:135
 msgid "You're offline"
 msgstr "You're offline"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:87
 msgid "You're offline. Your changes are kept here and can be saved once you're back online."
 msgstr "You're offline. Your changes are kept here and can be saved once you're back online."
 
@@ -7637,15 +7638,15 @@ msgstr "Your account has been activated. You can now log in with your password."
 #~ msgid "Your account is protected with an extra verification step"
 #~ msgstr "Your account is protected with an extra verification step"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:273
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:266
 msgid "Your account uses two-factor authentication, so changing the password needs a code too."
 msgstr "Your account uses two-factor authentication, so changing the password needs a code too."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:89
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:82
 msgid "Your account will be protected by your password alone. Anyone who learns it will be able to sign in."
 msgstr "Your account will be protected by your password alone. Anyone who learns it will be able to sign in."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:213
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:204
 msgid "Your app generates a new code every 30 seconds."
 msgstr "Your app generates a new code every 30 seconds."
 
@@ -7663,7 +7664,7 @@ msgstr "Your image"
 #~ msgid "Your image: JPG, PNG or WebP, up to {0}, at least 1920 × 1080 pixels recommended."
 #~ msgstr "Your image: JPG, PNG or WebP, up to {0}, at least 1920 × 1080 pixels recommended."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:247
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:262
 msgid "Your new recovery codes"
 msgstr "Your new recovery codes"
 
@@ -7671,15 +7672,15 @@ msgstr "Your new recovery codes"
 msgid "Your password has been reset successfully. You can now log in with your new password."
 msgstr "Your password has been reset successfully. You can now log in with your new password."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:296
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:289
 msgid "Your password was changed, so you've been signed out on all other devices."
 msgstr "Your password was changed, so you've been signed out on all other devices."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:250
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:265
 msgid "Your previous codes no longer work. Save these somewhere safe — this is the only time they're shown."
 msgstr "Your previous codes no longer work. Save these somewhere safe — this is the only time they're shown."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:93
 msgid "Your recovery codes will be deleted, and you'll be signed out on all other devices."
 msgstr "Your recovery codes will be deleted, and you'll be signed out on all other devices."
 
