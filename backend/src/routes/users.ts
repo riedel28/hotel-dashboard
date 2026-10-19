@@ -23,11 +23,7 @@ import {
   updateUser
 } from '../controllers/user-controller';
 import { authenticateToken } from '../middleware/auth';
-import {
-  requireAdmin,
-  requireSelfOrAdmin,
-  stripAdminFields
-} from '../middleware/authorization';
+import { requireAdmin, requireSelfOrAdmin } from '../middleware/authorization';
 import {
   validateBody,
   validateParams,
@@ -80,10 +76,10 @@ router.get(
   getUserById
 );
 
-// Update user (strip admin fields for non-admins to prevent privilege escalation)
+// Update user (admin only; users edit themselves via PATCH /me)
 router.patch(
   '/:id',
-  stripAdminFields,
+  requireAdmin,
   validateParams(userIdParamsSchema),
   validateBody(updateUserSchema),
   updateUser

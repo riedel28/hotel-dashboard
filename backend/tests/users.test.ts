@@ -273,7 +273,7 @@ describe('Users API', () => {
 
       const response = await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(200);
 
@@ -342,7 +342,7 @@ describe('Users API', () => {
 
       await request(app)
         .patch('/api/users/99999')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(404);
     });
@@ -356,6 +356,31 @@ describe('Users API', () => {
         .patch(`/api/users/${testUserId}`)
         .send(updateData)
         .expect(401);
+    });
+
+    test("a non-admin can't update anyone, themselves included", async () => {
+      const { user: other } = await createTestUser({
+        email: `other-${Date.now()}@example.com`
+      });
+
+      for (const target of [other.id, testUserId]) {
+        await request(app)
+          .patch(`/api/users/${target}`)
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            first_name: 'Hijacked',
+            email: `hijack-${Date.now()}@example.com`
+          })
+          .expect(403);
+      }
+
+      // Their own profile goes through PATCH /users/me instead
+      const response = await request(app)
+        .patch('/api/users/me')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ first_name: 'Self' })
+        .expect(200);
+      expect(response.body.first_name).toBe('Self');
     });
 
     test('should validate email format', async () => {
@@ -377,7 +402,7 @@ describe('Users API', () => {
 
       await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(400);
     });
@@ -470,24 +495,6 @@ describe('Users API', () => {
         email_verified: true
       });
       expect(await unusedTokens(testUserId)).toEqual([]);
-    });
-
-    test("a non-admin can't change anyone's email", async () => {
-      const { user: other } = await createTestUser({
-        email: `other-${Date.now()}@example.com`
-      });
-
-      for (const target of [testUserId, other.id]) {
-        const before = await storedUser(target);
-
-        await request(app)
-          .patch(`/api/users/${target}`)
-          .set('Authorization', `Bearer ${authToken}`)
-          .send({ email: `hijack-${Date.now()}@example.com` })
-          .expect(200);
-
-        expect(await storedUser(target)).toEqual(before);
-      }
     });
   });
 

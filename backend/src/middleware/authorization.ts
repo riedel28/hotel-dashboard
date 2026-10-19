@@ -44,29 +44,3 @@ export function requireSelfOrAdmin(paramName = 'id') {
     next();
   };
 }
-
-/**
- * Strips admin-only fields (`is_admin`, `role_ids`, `email`) from the request
- * body if the authenticated user is not an admin. This prevents privilege
- * escalation via self-promotion, and taking over an account by pointing its
- * login (and so its password resets) at another mailbox.
- *
- * Must be used after `authenticateToken`.
- */
-export function stripAdminFields(
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) {
-  if (!req.user) {
-    return res.status(401).json({ error: 'Authentication required' });
-  }
-
-  if (req.user.is_admin !== true && req.body) {
-    delete req.body.is_admin;
-    delete req.body.role_ids;
-    delete req.body.email;
-  }
-
-  next();
-}

@@ -10,6 +10,7 @@ import {
   userQueryOptions,
   usersQueryOptions
 } from '@/api/users';
+import { useAuth } from '@/auth';
 import { ClearFiltersButton } from '@/components/clear-filters-button';
 import { EmptyFilterResult } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
@@ -51,6 +52,9 @@ function UsersPage() {
 
   const { t } = useLingui();
   useDocumentTitle(t`Users`);
+  const { user } = useAuth();
+  // Users are managed by administrators only; everyone else gets the list
+  const canManage = Boolean(user?.is_admin);
 
   const usersQuery = useQuery(
     usersQueryOptions({
@@ -69,10 +73,14 @@ function UsersPage() {
   const listedUser = pageUsers.find((u) => u.id === openUserId);
   const fetchedUserQuery = useQuery({
     ...userQueryOptions(openUserId ?? 0),
-    enabled: openUserId !== undefined && !listedUser && !usersQuery.isPending
+    enabled:
+      canManage &&
+      openUserId !== undefined &&
+      !listedUser &&
+      !usersQuery.isPending
   });
   const openUser =
-    openUserId === undefined
+    openUserId === undefined || !canManage
       ? undefined
       : (listedUser ?? fetchedUserQuery.data);
   const openUserById = (userId: number) =>
@@ -238,7 +246,7 @@ function UsersPage() {
           onPaginationChange={handlePaginationChange}
           sorting={sorting}
           onSortingChange={handleSortingChange}
-          onUserOpen={openUserById}
+          onUserOpen={canManage ? openUserById : undefined}
           selectedUserId={openUser?.id}
           // The list always holds the one looking at it, so only the
           // filters can leave it empty
@@ -278,7 +286,7 @@ function UsersPage() {
         description={
           <Trans>Who works in the back-office, and with which roles.</Trans>
         }
-        actions={<InviteUserModal />}
+        actions={canManage && <InviteUserModal />}
       />
 
       <div className="space-y-2.5">

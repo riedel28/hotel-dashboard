@@ -300,6 +300,14 @@ export default function UsersTable({
     ],
     [i18n.locale, t, onUserOpen]
   );
+  // Every row action is an administrator's: no drawer to open, no menu
+  const shownColumns = useMemo(
+    () =>
+      onUserOpen
+        ? columns
+        : columns.filter((column) => column.id !== 'actions'),
+    [columns, onUserOpen]
+  );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
     columns.map((column) => column.id as string)
@@ -312,7 +320,7 @@ export default function UsersTable({
 
   const table = useTable({
     features: dataGridFeatures,
-    columns,
+    columns: shownColumns,
     data: data || [],
     pageCount: pageCount,
     getRowId: (row: User) => row.id.toString(),
