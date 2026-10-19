@@ -384,7 +384,7 @@ msgid "Add categories"
 msgstr "Kategorien hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:71
-#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:23
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:21
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:144
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:145
 msgid "Add category"
@@ -445,7 +445,7 @@ msgid "Add New Guest"
 msgstr "Neuen Gast hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:80
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:126
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:124
 msgid "Add product"
 msgstr "Produkt hinzufügen"
 
@@ -1545,7 +1545,7 @@ msgstr "Monitoring-Protokolle konnten nicht geladen werden"
 msgid "Couldn't load payments"
 msgstr "Zahlungen konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:92
 msgid "Couldn't load products"
 msgstr "Produkte konnten nicht geladen werden"
 
@@ -1665,7 +1665,7 @@ msgstr "Objekt erstellen"
 msgid "Create reservation"
 msgstr "Reservierung erstellen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:19
+#: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:18
 msgid "Create the first category to start adding products."
 msgstr "Lege die erste Kategorie an, um Produkte hinzuzufügen."
 
@@ -3984,6 +3984,10 @@ msgstr "Noch keine Kategorien"
 msgid "No category found."
 msgstr "Keine Kategorie gefunden."
 
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-empty-state.tsx:23
+msgid "No category selected"
+msgstr "Keine Kategorie ausgewählt"
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:283
 msgid "No content yet"
 msgstr "Noch kein Inhalt"
@@ -4102,11 +4106,11 @@ msgstr "Noch keine Zahlungen"
 msgid "No primary guest"
 msgstr "Kein Hauptgast"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:132
 msgid "No products found"
 msgstr "Keine Produkte gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-empty-state.tsx:7
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-empty-state.tsx:9
 msgid "No products in this category"
 msgstr "Keine Produkte in dieser Kategorie"
 
@@ -4652,6 +4656,10 @@ msgstr "Wählen Sie einen längeren Zeitraum, um ältere Protokolle zu sehen."
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:365
 #~ msgid "Pick an item to edit"
 #~ msgstr "Wähle einen Eintrag zum Bearbeiten"
+
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-empty-state.tsx:25
+msgid "Pick one under Product categories to see its products."
+msgstr "Wählen Sie eine unter Produktkategorien, um ihre Produkte zu sehen."
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:191
 msgid "PIN"
@@ -5672,8 +5680,8 @@ msgstr "Nummer oder Name suchen"
 msgid "Search payments"
 msgstr "Zahlungen suchen"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:116
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:115
 msgid "Search products"
 msgstr "Produkte durchsuchen"
 
@@ -5740,10 +5748,6 @@ msgstr "Auswählen"
 
 #~ msgid "Select a category to edit"
 #~ msgstr "Wählen Sie eine Kategorie zum Bearbeiten aus"
-
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:46
-msgid "Select a category to view products"
-msgstr "Wählen Sie eine Kategorie, um Produkte anzuzeigen"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:365
 #~ msgid "Select a page or link to edit it"
@@ -7066,7 +7070,7 @@ msgstr "URL für diese Sprache"
 #~ msgid "Use “Add category” above to create the first one."
 #~ msgstr "Lege über „Kategorie hinzufügen“ oben die erste an."
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-empty-state.tsx:10
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-empty-state.tsx:11
 msgid "Use “Add product” above to add the first one."
 msgstr "Füge über „Produkt hinzufügen“ oben das erste hinzu."
 
