@@ -214,7 +214,12 @@ export function TwoFactorSection() {
           </div>
 
           <div className="flex justify-end">
-            <Button type="button" onClick={() => setSetupOpen(true)}>
+            <Button
+              type="button"
+              // Full width on a phone, like every other card's main button.
+              className="w-full sm:w-auto"
+              onClick={() => setSetupOpen(true)}
+            >
               <Trans>Enable two-factor authentication</Trans>
             </Button>
           </div>

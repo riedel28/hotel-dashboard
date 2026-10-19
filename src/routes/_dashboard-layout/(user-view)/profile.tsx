@@ -4,9 +4,11 @@ import {
   createFileRoute,
   Link,
   type LinkProps,
-  Outlet
+  Outlet,
+  useLocation
 } from '@tanstack/react-router';
 import { WifiOffIcon } from 'lucide-react';
+import * as React from 'react';
 
 import { meQueryOptions, twoFactorStatusQueryOptions } from '@/api/profile';
 import { PageHeader } from '@/components/page-header';
@@ -114,6 +116,16 @@ function ProfileNav() {
   const { t } = useLingui();
   // Not suspended: the dot is a nudge, and the nav shouldn't wait for it.
   const { data: twoFactor } = useQuery(twoFactorStatusQueryOptions());
+  const navRef = React.useRef<HTMLElement>(null);
+  const pathname = useLocation({ select: (location) => location.pathname });
+
+  // Below `lg` the tabs are a row that scrolls sideways; a tab opened by link
+  // (or the last one) would otherwise sit off the edge, nothing looking active.
+  React.useEffect(() => {
+    navRef.current
+      ?.querySelector('[aria-current="page"]')
+      ?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }, [pathname]);
 
   const items: {
     to: NonNullable<LinkProps['to']>;
@@ -134,8 +146,10 @@ function ProfileNav() {
   ];
 
   return (
-    <nav aria-label={t`Profile`} className="shrink-0 lg:w-50">
-      <SidebarMenu className="scrollbar-none flex-row overflow-x-auto lg:flex-col [&::-webkit-scrollbar]:hidden">
+    <nav ref={navRef} aria-label={t`Profile`} className="shrink-0 lg:w-50">
+      {/* The row bleeds through <main>'s side padding, so tabs scroll out at
+          the screen's edge rather than being cut off inside it. */}
+      <SidebarMenu className="-mx-3 scroll-px-3 scrollbar-none flex-row overflow-x-auto px-3 md:-mx-6 md:scroll-px-6 md:px-6 lg:mx-0 lg:flex-col lg:px-0 [&::-webkit-scrollbar]:hidden">
         {items.map(({ to, label, exact, warn }) => (
           <SidebarMenuItem key={to} className="shrink-0">
             <SidebarMenuButton

@@ -152,7 +152,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
   const isUploading = mutation.isPending;
 
   return (
-    <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+    <div className="flex items-center gap-4">
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
@@ -173,7 +173,7 @@ export function AvatarField({ user }: AvatarFieldProps) {
         }}
         aria-label={t`Change profile picture`}
         className={cn(
-          'relative grid size-20 shrink-0 place-items-center rounded-full border-2 border-dashed border-transparent p-1 transition-transform sm:size-24',
+          'relative grid size-18 shrink-0 place-items-center rounded-full border-2 border-dashed border-transparent p-1 transition-transform sm:size-24',
           'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current',
           isDragging && 'scale-102 border-primary bg-primary/5',
           rejection && 'border-danger'
@@ -229,20 +229,17 @@ export function AvatarField({ user }: AvatarFieldProps) {
         }}
       />
 
-      <div className="flex min-w-0 flex-1 flex-col items-center gap-2 sm:items-start">
+      <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
         <div>
           <p className="text-sm font-medium">
             <Trans>Profile picture</Trans>
           </p>
           <p className="text-sm text-muted-foreground">
-            <Trans>
-              Drop an image here or choose one. It's resized automatically, so
-              any size is fine.
-            </Trans>
+            <Trans>Drag an image here or upload one.</Trans>
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             type="button"
             variant="outline"
