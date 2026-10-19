@@ -1,7 +1,7 @@
 import type { MessageDescriptor } from '@lingui/core';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
-import { CircleAlertIcon } from 'lucide-react';
+import { CircleAlertIcon, ClockAlertIcon } from 'lucide-react';
 import {
   isCardExpired,
   latestStage,
@@ -21,7 +21,7 @@ import {
 import { cn } from '@/lib/utils';
 
 import { maskCardNumber, truncateMiddle } from '../-lib/format';
-import { dangerText, stageTones, staleBadge } from '../-lib/tones';
+import { dangerText, flagTones, stageTones } from '../-lib/tones';
 
 export const stageLabels = {
   authorized: msg`Authorized`,
@@ -42,25 +42,43 @@ export function PaymentTypeLabel({ type }: { type: PaymentType }) {
 }
 
 /**
- * The latest stage as a badge, orange while an authorization hangs. A partial
- * capture shows in the drawer's history only.
+ * The latest stage as a badge, always in its stage's colour so it matches the
+ * status filter; an authorization that hangs gets an orange clock beside it.
+ * A partial capture shows in the drawer's history only.
  */
 export function PaymentStatusBadge({ payment }: { payment: Payment }) {
   const { t } = useLingui();
   const { stage, flag } = latestStage(payment);
-  const isStale = flag?.kind === 'stale';
 
   return (
-    <Badge
-      size="sm"
-      variant="outline"
-      color={isStale ? staleBadge : stageTones[stage].badge}
-      className="rounded-md"
-      title={isStale ? t`Authorized long ago and not captured yet` : undefined}
-    >
-      <span className="mr-0.5 size-1.25 rounded-full bg-current/80" />
-      {t(stageLabels[stage])}
-    </Badge>
+    <span className="inline-flex items-center gap-1.5">
+      <Badge
+        size="sm"
+        variant="outline"
+        color={stageTones[stage].badge}
+        className="rounded-md"
+      >
+        <span className="mr-0.5 size-1.25 rounded-full bg-current/80" />
+        {t(stageLabels[stage])}
+      </Badge>
+      {flag?.kind === 'stale' && (
+        <Tooltip>
+          <TooltipTrigger
+            type="button"
+            aria-label={t`Authorized long ago and not captured yet`}
+            className={cn(
+              'rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              flagTones.stale.text
+            )}
+          >
+            <ClockAlertIcon className="size-4" aria-hidden="true" />
+          </TooltipTrigger>
+          <TooltipContent>
+            {t`Authorized long ago and not captured yet`}
+          </TooltipContent>
+        </Tooltip>
+      )}
+    </span>
   );
 }
 
