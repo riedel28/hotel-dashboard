@@ -21,4 +21,7 @@ if (isProd()) {
 }
 
 export const db = drizzle({ client, schema });
+
+/** The handle a `db.transaction` callback receives. */
+export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export default db;

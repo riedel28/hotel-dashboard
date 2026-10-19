@@ -13,11 +13,8 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import { UnsavedChangesGuard } from '@/components/unsaved-changes-guard';
 import { useOnlineStatus } from '@/hooks';
-import { cn } from '@/lib/utils';
-
-/** How long the card's border stays lit after a successful save. */
-const SUCCESS_FLASH_MS = 900;
 
 interface ProfileSectionProps {
   id: string;
@@ -25,14 +22,12 @@ interface ProfileSectionProps {
   description?: React.ReactNode;
   /** Badge or status rendered opposite the title. */
   action?: React.ReactNode;
-  /** Applied to the card — this is where `useSuccessFlash().flashClass` goes. */
-  className?: string;
   children: React.ReactNode;
 }
 
 /**
- * The shell every profile card shares: an anchor target for the section nav and
- * a heading wired up for `aria-labelledby`.
+ * The shell every profile card shares: a section with its heading wired up
+ * for `aria-labelledby`.
  *
  * Cards that own a form wrap their body in `ProfileSectionForm`, which adds the
  * save footer. Cards that don't (two-factor, roles) just render children.
@@ -42,21 +37,11 @@ export function ProfileSection({
   title,
   description,
   action,
-  className,
   children
 }: ProfileSectionProps) {
   return (
-    <section
-      id={id}
-      // Focusable so jumping from the nav moves the caret here, not just the
-      // scroll position — otherwise keyboard users land nowhere.
-      tabIndex={-1}
-      aria-labelledby={sectionHeadingId(id)}
-      // Below `lg` the chip bar is sticky over the top of the scroll area, so a
-      // jump has to clear its 60px or it lands on the card's own title.
-      className="scroll-mt-16 focus-visible:outline-none lg:scroll-mt-4"
-    >
-      <Card className={cn('@container/section', className)}>
+    <section id={id} aria-labelledby={sectionHeadingId(id)}>
+      <Card className="@container/section">
         <CardHeader>
           <CardTitle id={sectionHeadingId(id)}>{title}</CardTitle>
           {description && <CardDescription>{description}</CardDescription>}
@@ -69,35 +54,33 @@ export function ProfileSection({
 }
 
 interface ProfileSectionFormProps {
-  /** Marks the section dirty, enabling Save and arming the navigation guard. */
+  /** Enables Save, arms the navigation guard and shows the phone save bar. */
   isDirty: boolean;
   isSubmitting: boolean;
   submitLabel: React.ReactNode;
   onSubmit: () => void;
   onReset: () => void;
-  /** Hides Cancel and keeps Save always enabled — used by the password form,
-   *  which has nothing to revert to and no meaningful dirty baseline. */
-  alwaysEnabled?: boolean;
-  disabled?: boolean;
   children: React.ReactNode;
 }
 
+/**
+ * Everything a card with a form needs, owned in one place: the save footer,
+ * Cmd/Ctrl+S, a guard against leaving with unsaved changes, and the bottom
+ * bar that keeps Save within thumb reach on a phone.
+ */
 export function ProfileSectionForm({
   isDirty,
   isSubmitting,
   submitLabel,
   onSubmit,
   onReset,
-  alwaysEnabled = false,
-  disabled = false,
   children
 }: ProfileSectionFormProps) {
   const { t } = useLingui();
   const isOnline = useOnlineStatus();
   const formRef = React.useRef<HTMLFormElement>(null);
 
-  const canSubmit =
-    !isSubmitting && !disabled && isOnline && (alwaysEnabled || isDirty);
+  const canSubmit = !isSubmitting && isOnline && isDirty;
 
   // Callers pass an inline arrow, so the handler is read through a ref —
   // depending on the prop itself would rebind this listener every render.
@@ -132,7 +115,7 @@ export function ProfileSectionForm({
     >
       <CardContent className="space-y-6">{children}</CardContent>
       <CardFooter className="flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        {isDirty && !alwaysEnabled && (
+        {isDirty && (
           <Button
             type="button"
             variant="outline"
@@ -153,7 +136,7 @@ export function ProfileSectionForm({
         >
           {isSubmitting ? (
             <>
-              <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
               <Trans>Saving…</Trans>
             </>
           ) : (
@@ -161,6 +144,16 @@ export function ProfileSectionForm({
           )}
         </Button>
       </CardFooter>
+
+      <UnsavedChangesGuard when={isDirty} />
+      {isDirty && (
+        <MobileSaveBar
+          isSubmitting={isSubmitting}
+          canSubmit={canSubmit}
+          onSave={onSubmit}
+          onCancel={onReset}
+        />
+      )}
     </form>
   );
 }
@@ -169,23 +162,20 @@ export function ProfileSectionForm({
  * Bottom bar shown on small screens while a section is dirty, so Save is always
  * within thumb reach instead of somewhere below the fold.
  */
-export function MobileSaveBar({
-  visible,
+function MobileSaveBar({
   isSubmitting,
+  canSubmit,
   onSave,
   onCancel
 }: {
-  visible: boolean;
   isSubmitting: boolean;
+  canSubmit: boolean;
   onSave: () => void;
   onCancel: () => void;
 }) {
-  const isOnline = useOnlineStatus();
-
-  if (!visible) return null;
-
   return (
     <div
+      data-slot="mobile-save-bar"
       className="fixed inset-x-0 bottom-0 z-20 flex items-center gap-2 border-t bg-background/95 px-4 py-3 backdrop-blur-sm lg:hidden"
       style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
     >
@@ -194,7 +184,7 @@ export function MobileSaveBar({
       </span>
       <Button
         type="button"
-        variant="ghost"
+        variant="outline"
         size="sm"
         onClick={onCancel}
         disabled={isSubmitting}
@@ -205,36 +195,15 @@ export function MobileSaveBar({
         type="button"
         size="sm"
         onClick={onSave}
-        disabled={isSubmitting || !isOnline}
+        disabled={!canSubmit}
         aria-busy={isSubmitting}
       >
         {isSubmitting ? (
-          <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />
+          <Loader2Icon className="animate-spin" aria-hidden="true" />
         ) : (
           <Trans>Save</Trans>
         )}
       </Button>
     </div>
   );
-}
-
-/**
- * Drives the brief border highlight after a save. Returns a class to spread on
- * the card and a trigger to call from the mutation's onSuccess.
- */
-export function useSuccessFlash() {
-  const [flashing, setFlashing] = React.useState(false);
-
-  const flash = React.useCallback(() => {
-    setFlashing(true);
-    window.setTimeout(() => setFlashing(false), SUCCESS_FLASH_MS);
-  }, []);
-
-  return {
-    flash,
-    flashClass: cn(
-      'transition-shadow duration-300',
-      flashing && 'ring-2 ring-success/70'
-    )
-  };
 }

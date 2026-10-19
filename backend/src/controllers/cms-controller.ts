@@ -25,7 +25,7 @@ import {
   rethrowGoneImage,
   sweepImages
 } from '../db/image-queries';
-import { db } from '../db/pool';
+import { db, type Transaction } from '../db/pool';
 import { cmsNodeImages, cmsNodes, cmsNodeTranslations } from '../db/schema';
 import { HttpProblem, withFailMessage } from '../middleware/error';
 import {
@@ -38,7 +38,6 @@ import {
 const handle = withFailMessage<SelectedPropertyRequest>;
 
 type Executor = Pick<typeof db, 'select'>;
-type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 const copySuffix: Record<CmsLocale, string> = {
   de: ' (Kopie)',
@@ -103,7 +102,7 @@ async function loadNodes(
  * The property's nodes locked for the rest of the transaction, so concurrent
  * moves can't each pass the cycle check and form a loop together.
  */
-function lockNodes(tx: Tx, propertyId: string) {
+function lockNodes(tx: Transaction, propertyId: string) {
   return tx
     .select({
       id: cmsNodes.id,

@@ -140,7 +140,7 @@ export function AvatarCropperDialog({
             aria-busy={isRendering}
           >
             {isRendering && (
-              <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
             )}
             <Trans>Save photo</Trans>
           </Button>

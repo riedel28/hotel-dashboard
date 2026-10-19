@@ -31,8 +31,7 @@ export const stageTones = {
 export const dangerText = 'text-danger';
 
 // A hanging authorization only needs attention, so it is orange; a short
-// capture is red. Only the stale one shows on the status badge.
-export const staleBadge: BadgeColorProps = 'orange';
+// capture is red. Only the stale one shows next to the status badge.
 
 export const flagTones = {
   stale: {

@@ -10,6 +10,7 @@ import {
 import { type ReactNode, useMemo } from 'react';
 import { latestStage, type Payment } from 'shared/types/payments';
 
+import { openRowClassName } from '@/components/details-drawer';
 import { ReservationLink } from '@/components/reservation-link';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
 import {
@@ -239,7 +240,7 @@ export function PaymentsTable({
       table={table}
       recordCount={totalCount}
       onRowClick={(payment) => onPaymentOpen(payment.id)}
-      tableClassNames={{ edgeCell: 'px-5' }}
+      tableClassNames={{ edgeCell: 'px-5', bodyRow: openRowClassName }}
       emptyMessage={emptyMessage}
       tableLayout={{
         columnsPinnable: false,

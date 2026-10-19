@@ -1,6 +1,9 @@
+import { and, eq, isNull } from 'drizzle-orm';
 import request from 'supertest';
 
 import app from '../src/app';
+import { db } from '../src/db/pool';
+import { emailVerificationTokens, users } from '../src/db/schema';
 import {
   assignRoleToUser,
   createTestProperty,
@@ -124,6 +127,52 @@ describe('Users API', () => {
       expect(emails).toEqual(sortedEmails);
     });
 
+    test('should filter users by country', async () => {
+      const { user: swiss } = await createTestUser({ country_code: 'CH' });
+      const { user: german } = await createTestUser({ country_code: 'DE' });
+
+      const response = await request(app)
+        .get('/api/users?country_code=CH&per_page=100')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      const ids = response.body.index.map((u: { id: number }) => u.id);
+      expect(ids).toContain(swiss.id);
+      expect(ids).not.toContain(german.id);
+      expect(
+        response.body.index.every(
+          (u: { country_code: string }) => u.country_code === 'CH'
+        )
+      ).toBe(true);
+    });
+
+    test('should filter users having any of the given roles', async () => {
+      const manager = await createTestRole(`manager-${Date.now()}`);
+      const cleaner = await createTestRole(`cleaner-${Date.now()}`);
+      const { user: withManager } = await createTestUser();
+      const { user: withCleaner } = await createTestUser();
+      const { user: withBoth } = await createTestUser();
+      await assignRoleToUser(withManager.id, manager.id);
+      await assignRoleToUser(withCleaner.id, cleaner.id);
+      await assignRoleToUser(withBoth.id, manager.id);
+      await assignRoleToUser(withBoth.id, cleaner.id);
+
+      const response = await request(app)
+        .get(`/api/users?role=${manager.id}&per_page=100`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      const ids = response.body.index.map((u: { id: number }) => u.id);
+      expect(ids.sort()).toEqual([withManager.id, withBoth.id].sort());
+      expect(response.body.total).toBe(2);
+
+      const either = await request(app)
+        .get(`/api/users?role=${manager.id},${cleaner.id}&per_page=100`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      expect(either.body.total).toBe(3);
+    });
+
     test('should include user roles in response', async () => {
       const role = await createTestRole('admin');
       await assignRoleToUser(testUserId, role.id);
@@ -224,7 +273,7 @@ describe('Users API', () => {
 
       const response = await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(200);
 
@@ -293,7 +342,7 @@ describe('Users API', () => {
 
       await request(app)
         .patch('/api/users/99999')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(404);
     });
@@ -309,6 +358,31 @@ describe('Users API', () => {
         .expect(401);
     });
 
+    test("a non-admin can't update anyone, themselves included", async () => {
+      const { user: other } = await createTestUser({
+        email: `other-${Date.now()}@example.com`
+      });
+
+      for (const target of [other.id, testUserId]) {
+        await request(app)
+          .patch(`/api/users/${target}`)
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            first_name: 'Hijacked',
+            email: `hijack-${Date.now()}@example.com`
+          })
+          .expect(403);
+      }
+
+      // Their own profile goes through PATCH /users/me instead
+      const response = await request(app)
+        .patch('/api/users/me')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({ first_name: 'Self' })
+        .expect(200);
+      expect(response.body.first_name).toBe('Self');
+    });
+
     test('should validate email format', async () => {
       const updateData = {
         email: 'invalid-email'
@@ -316,7 +390,7 @@ describe('Users API', () => {
 
       await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(400);
     });
@@ -328,9 +402,99 @@ describe('Users API', () => {
 
       await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(400);
+    });
+  });
+
+  describe('PATCH /api/users/:id email change', () => {
+    async function unusedTokens(userId: number) {
+      return db
+        .select({ type: emailVerificationTokens.type })
+        .from(emailVerificationTokens)
+        .where(
+          and(
+            eq(emailVerificationTokens.user_id, userId),
+            isNull(emailVerificationTokens.used_at)
+          )
+        );
+    }
+
+    async function storedUser(userId: number) {
+      const [row] = await db
+        .select({ email: users.email, email_verified: users.email_verified })
+        .from(users)
+        .where(eq(users.id, userId));
+      return row;
+    }
+
+    test('admin changing the email unverifies it and sends a fresh link', async () => {
+      // A link mailed to the old address must stop working with the change.
+      await db.insert(emailVerificationTokens).values({
+        user_id: testUserId,
+        token: `old-reset-${Date.now()}`,
+        type: 'reset',
+        expires_at: new Date(Date.now() + 60 * 60 * 1000)
+      });
+      const newEmail = `renamed-${Date.now()}@example.com`;
+
+      const response = await request(app)
+        .patch(`/api/users/${testUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ email: newEmail })
+        .expect(200);
+
+      expect(response.body.email).toBe(newEmail);
+      expect(response.body.email_verified).toBe(false);
+      expect(await storedUser(testUserId)).toEqual({
+        email: newEmail,
+        email_verified: false
+      });
+      expect(await unusedTokens(testUserId)).toEqual([
+        { type: 'verification' }
+      ]);
+    });
+
+    test("changing an invited user's email re-sends the invitation", async () => {
+      const [invited] = await db
+        .insert(users)
+        .values({
+          email: `invited-${Date.now()}@example.com`,
+          first_name: 'Invited',
+          email_verified: false
+        })
+        .returning({ id: users.id });
+      await db.insert(emailVerificationTokens).values({
+        user_id: invited.id,
+        token: `old-invite-${Date.now()}`,
+        type: 'invitation',
+        expires_at: new Date(Date.now() + 60 * 60 * 1000)
+      });
+
+      await request(app)
+        .patch(`/api/users/${invited.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ email: `invited-new-${Date.now()}@example.com` })
+        .expect(200);
+
+      expect(await unusedTokens(invited.id)).toEqual([{ type: 'invitation' }]);
+    });
+
+    test('resending the same email leaves it verified', async () => {
+      const { email } = await storedUser(testUserId);
+
+      await request(app)
+        .patch(`/api/users/${testUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ email, first_name: 'Same' })
+        .expect(200);
+
+      expect(await storedUser(testUserId)).toEqual({
+        email,
+        email_verified: true
+      });
+      expect(await unusedTokens(testUserId)).toEqual([]);
     });
   });
 

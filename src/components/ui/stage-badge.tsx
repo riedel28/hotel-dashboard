@@ -3,7 +3,7 @@ import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import type { PropertyStage } from 'shared/types/properties';
 
-import { Badge, type BadgeProps } from '@/components/ui/badge';
+import { Badge, badgeDotColors, type BadgeProps } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 export type { PropertyStage };
@@ -51,5 +51,24 @@ export function StageBadge({
     >
       {t(stageLabels[stage])}
     </Badge>
+  );
+}
+
+/** A stage's name after a dot in its badge's color, for pickers and menus. */
+export function StageLabel({ stage }: { stage: PropertyStage }) {
+  const { t } = useLingui();
+
+  return (
+    <span className="flex items-center gap-2">
+      <span
+        className={cn(
+          // As small as SegmentedControl's dots
+          'size-1.5 shrink-0 rounded-full',
+          badgeDotColors[stageColors[stage]]
+        )}
+        aria-hidden="true"
+      />
+      {t(stageLabels[stage])}
+    </span>
   );
 }

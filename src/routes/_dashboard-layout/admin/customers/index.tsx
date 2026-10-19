@@ -12,6 +12,7 @@ import {
   EmptyTableState
 } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -164,21 +165,15 @@ function CustomersPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      {/* The title and its action share a row; the description runs under
-          both, so on a phone it is not squeezed beside the button */}
-      <div className="mb-6 space-y-1">
-        <div className="flex min-h-9 items-center justify-between gap-3">
-          <h1 className="text-xl font-bold">
-            <Trans>Customers</Trans>
-          </h1>
-          <AddCustomerDrawer />
-        </div>
-        <p className="text-sm text-muted-foreground">
+      <PageHeader
+        title={<Trans>Customers</Trans>}
+        description={
           <Trans>
             Manage the customers that own properties and their contact details.
           </Trans>
-        </p>
-      </div>
+        }
+        actions={<AddCustomerDrawer />}
+      />
 
       <CustomersContent />
     </div>

@@ -1,4 +1,4 @@
-import { ConciergeBellIcon } from 'lucide-react';
+import { MessageCircleIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
@@ -22,7 +22,7 @@ interface AppLogoProps {
   className?: string;
 }
 
-/** The product mark: a concierge bell on a primary tile. */
+/** The product mark: a speech bubble on a primary tile. */
 export function AppLogo({
   size = 'sm',
   tone = 'tint',
@@ -37,7 +37,7 @@ export function AppLogo({
         className
       )}
     >
-      <ConciergeBellIcon aria-hidden="true" />
+      <MessageCircleIcon aria-hidden="true" />
     </div>
   );
 }

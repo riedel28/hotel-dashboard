@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { PlusCircleIcon, TabletSmartphoneIcon } from 'lucide-react';
+import { PlusIcon, TabletSmartphoneIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
   type Device,
@@ -9,8 +9,12 @@ import {
 } from 'shared/types/devices';
 import { z } from 'zod';
 
-import { EmptyFilterResult } from '@/components/empty-table-state';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,14 +24,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { paginate } from '@/lib/paginate';
 import { lenientSearch } from '@/lib/search-params';
@@ -114,15 +110,20 @@ function DevicesPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Devices</Trans>
-        </h1>
-        <Button onClick={() => setIsClaimOpen(true)}>
-          <PlusCircleIcon className="mr-2 h-4 w-4" />
-          <Trans>Add device</Trans>
-        </Button>
-      </div>
+      <PageHeader
+        title={<Trans>Devices</Trans>}
+        description={
+          <Trans>
+            The tablets, phones and TVs in the rooms and their status.
+          </Trans>
+        }
+        actions={
+          <Button onClick={() => setIsClaimOpen(true)}>
+            <PlusIcon aria-hidden="true" />
+            <Trans>Add device</Trans>
+          </Button>
+        }
+      />
 
       <DevicesContent
         highlightedId={highlightedId}
@@ -135,33 +136,6 @@ function DevicesPage() {
         onClaimed={handleClaimed}
       />
     </div>
-  );
-}
-
-function NoDevices({ onAddDevice }: { onAddDevice: () => void }) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <TabletSmartphoneIcon />
-        </EmptyMedia>
-        <EmptyTitle>
-          <Trans>No devices yet</Trans>
-        </EmptyTitle>
-        <EmptyDescription>
-          <Trans>
-            Add a tablet, phone or TV with its serial number and the PIN shown
-            on its screen.
-          </Trans>
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <Button onClick={onAddDevice}>
-          <PlusCircleIcon className="mr-2 h-4 w-4" />
-          <Trans>Add device</Trans>
-        </Button>
-      </EmptyContent>
-    </Empty>
   );
 }
 
@@ -181,12 +155,23 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
   );
 
   const error = tableLoadError(query, <Trans>Couldn't load devices</Trans>);
-  if (query.isLoading || error) {
+  const loaded = !query.isLoading && !error;
+  // Shown while the devices load too, like every other list's filters; the
+  // tab counts join them once there is something to count.
+  const filtersBar = (
+    <DevicesFilters
+      devices={loaded ? devices : undefined}
+      filters={filters}
+      hasActiveFilters={search.hasActiveFilters}
+      setFilters={search.setFilters}
+      clearFilters={search.clearFilters}
+    />
+  );
+
+  if (!loaded) {
     return (
-      // The table under an empty row as tall as the filters, so it does not
-      // move when the devices arrive and the filters appear above it
       <div className="space-y-2.5">
-        <div className="h-9" />
+        {filtersBar}
         {error ? (
           <DevicesTable
             page={paginate([], 0, DEFAULT_DEVICE_PAGE_SIZE)}
@@ -199,20 +184,10 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
     );
   }
 
-  if (devices.length === 0) {
-    return <NoDevices onAddDevice={onAddDevice} />;
-  }
-
   return (
     <DeviceRoomActionsProvider>
       <div className="space-y-2.5">
-        <DevicesFilters
-          devices={devices}
-          filters={filters}
-          hasActiveFilters={search.hasActiveFilters}
-          setFilters={search.setFilters}
-          clearFilters={search.clearFilters}
-        />
+        {filtersBar}
 
         <DevicesTable
           page={paginate(listed, search.pageIndex, search.pageSize)}
@@ -221,10 +196,28 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
           onPageChange={search.setPage}
           highlightedId={highlightedId}
           emptyMessage={
-            <EmptyFilterResult
-              description={<Trans>No devices match the filters.</Trans>}
-              onClearFilters={search.clearFilters}
-            />
+            devices.length === 0 ? (
+              <EmptyTableState
+                icon={<TabletSmartphoneIcon />}
+                title={<Trans>No devices yet</Trans>}
+                description={
+                  <Trans>
+                    Add a tablet, phone or TV with its serial number and the PIN
+                    shown on its screen.
+                  </Trans>
+                }
+                action={{
+                  label: <Trans>Add device</Trans>,
+                  icon: <PlusIcon aria-hidden="true" />,
+                  onClick: onAddDevice
+                }}
+              />
+            ) : (
+              <EmptyFilterResult
+                description={<Trans>No devices match the filters.</Trans>}
+                onClearFilters={search.clearFilters}
+              />
+            )
           }
           onDeviceOpen={(device) => search.openDevice(device.id)}
         />

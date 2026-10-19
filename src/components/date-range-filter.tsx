@@ -115,7 +115,7 @@ export function DateRangeFilter({
           formatDateRange(applied)
         ) : (
           <span className="text-muted-foreground">
-            <Trans>Pick a date range</Trans>
+            <Trans>All dates</Trans>
           </span>
         )
       }

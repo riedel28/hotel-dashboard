@@ -32,7 +32,7 @@ export function ImportButton({ onImport }: { onImport: () => void }) {
               className="rounded-l-none border-l-0 px-2"
               {...props}
             >
-              <ChevronDownIcon className="h-4 w-4" />
+              <ChevronDownIcon />
             </Button>
           )}
         />

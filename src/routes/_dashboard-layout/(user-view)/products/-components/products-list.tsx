@@ -12,7 +12,7 @@ import { useDelayedFlag } from '@/hooks/use-delayed-flag';
 import { DeleteProductDialog } from './delete-product-dialog';
 import { ProductFormDrawer } from './product-form-drawer';
 import { CategoryBreadcrumb, ProductsCard } from './products-card';
-import { ProductsEmptyState } from './products-empty-state';
+import { NoCategorySelected, ProductsEmptyState } from './products-empty-state';
 import { ProductsLoadingState } from './products-loading-state';
 import { ProductsTable } from './products-table';
 import { useProductMutations } from './use-product-mutations';
@@ -42,9 +42,7 @@ export function ProductsList() {
   if (categoryId == null) {
     return (
       <ProductsCard>
-        <div className="flex min-h-[140px] items-center justify-center text-center text-base text-muted-foreground">
-          <Trans>Select a category to view products</Trans>
-        </div>
+        <NoCategorySelected />
       </ProductsCard>
     );
   }
@@ -118,8 +116,8 @@ function CategoryProducts({ categoryId, path }: CategoryProductsProps) {
             wrapperClassName="2xl:max-w-[400px]"
           />
           <Button
-            variant="secondary"
-            className="shrink-0 bg-clip-border"
+            variant="outline"
+            className="shrink-0"
             onClick={() => setForm({ open: true, product: null })}
           >
             <PlusIcon />
@@ -138,6 +136,9 @@ function CategoryProducts({ categoryId, path }: CategoryProductsProps) {
             products={visibleProducts}
             onEdit={(product) => setForm({ open: true, product })}
             onDelete={setPendingDelete}
+            selectedProductId={
+              form.open ? (form.product?.id ?? undefined) : undefined
+            }
           />
         )}
       </ProductsCard>

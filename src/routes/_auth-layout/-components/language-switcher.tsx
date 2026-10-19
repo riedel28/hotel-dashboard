@@ -50,7 +50,7 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
         )}
       />
 
-      <DropdownMenuContent align={align} className="w-32">
+      <DropdownMenuContent align={align} className="w-34">
         <DropdownMenuRadioGroup
           value={locale}
           onValueChange={handleChangeLocale}
@@ -59,7 +59,8 @@ export function LanguageSwitcher({ align = 'end' }: LanguageSwitcherProps) {
             <DropdownMenuRadioItem
               key={lang.code}
               value={lang.code}
-              className="overflow-hidden px-1.5 py-1 [&>svg]:shrink-0"
+              indicator="check"
+              className="overflow-hidden py-1 [&>svg]:shrink-0"
             >
               <CountryFlag
                 code={lang.country}

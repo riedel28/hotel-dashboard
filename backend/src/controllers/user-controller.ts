@@ -1,19 +1,18 @@
 import bcrypt from 'bcrypt';
-import { and, asc, count, desc, eq, ilike, isNull, or } from 'drizzle-orm';
+import { and, asc, count, desc, eq, ilike, inArray, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import env from '../../env';
-import { db } from '../db/pool';
+import { db, type Transaction } from '../db/pool';
+import { properties, userRoles, users } from '../db/schema';
 import {
-  emailVerificationTokens,
-  properties,
-  userRoles,
-  users
-} from '../db/schema';
+  createToken,
+  issueToken,
+  revokeTokens
+} from '../db/verification-tokens';
 import type { AuthenticatedRequest } from '../middleware/auth';
-import { sendInvitationEmail } from '../utils/email';
+import { sendInvitationEmail, sendVerificationEmail } from '../utils/email';
 import { escapeLikePattern } from '../utils/sql';
-import { generateVerificationToken } from '../utils/token';
 
 interface UserRow {
   id: number;
@@ -81,7 +80,8 @@ const DETAIL_COLUMNS = {
 
 async function getUsers(req: Request, res: Response) {
   try {
-    const { page, per_page, q, sort_by, sort_order } = req.query;
+    const { page, per_page, q, country_code, role, sort_by, sort_order } =
+      req.query;
 
     const conditions = [];
 
@@ -92,6 +92,24 @@ async function getUsers(req: Request, res: Response) {
           ilike(users.first_name, `%${escaped}%`),
           ilike(users.last_name, `%${escaped}%`),
           ilike(users.email, `%${escaped}%`)
+        )
+      );
+    }
+
+    if (country_code) {
+      conditions.push(eq(users.country_code, country_code as string));
+    }
+
+    // Any of the roles: the users who hold at least one of them
+    const roleIds = role as unknown as number[] | undefined;
+    if (roleIds?.length) {
+      conditions.push(
+        inArray(
+          users.id,
+          db
+            .select({ id: userRoles.user_id })
+            .from(userRoles)
+            .where(inArray(userRoles.role_id, roleIds))
         )
       );
     }
@@ -147,8 +165,8 @@ async function getUsers(req: Request, res: Response) {
           }
         }
       },
-      offset: ((Number(page) || 1) - 1) * (Number(per_page) || 10),
-      limit: Number(per_page) || 10,
+      offset: ((Number(page) || 1) - 1) * (Number(per_page) || 25),
+      limit: Number(per_page) || 25,
       orderBy
     });
 
@@ -164,9 +182,9 @@ async function getUsers(req: Request, res: Response) {
     res.status(200).json({
       index: transformedUsers,
       page: Number(page) || 1,
-      per_page: Number(per_page) || 10,
+      per_page: Number(per_page) || 25,
       total: totalCount,
-      page_count: Math.ceil(totalCount / (Number(per_page) || 10))
+      page_count: Math.ceil(totalCount / (Number(per_page) || 25))
     });
   } catch (error) {
     console.error(error);
@@ -358,73 +376,109 @@ async function updateMe(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+/** A link to mail to a user's new address, after their email changed. */
+interface NewAddressLink {
+  email: string;
+  token: string;
+  type: 'verification' | 'invitation';
+}
+
+/**
+ * A new address is unproven, so changing the email unverifies it (the caller
+ * sets `email_verified`) and issues a fresh link for it: a verification link to
+ * a user with a password, a new invitation to one who hasn't accepted theirs
+ * yet. Every link already sent to the old address dies with the change.
+ */
+async function linkForNewAddress(
+  tx: Transaction,
+  userId: number,
+  email: string
+): Promise<NewAddressLink | null> {
+  const current = await tx.query.users.findFirst({
+    columns: { email: true, password: true },
+    where: eq(users.id, userId)
+  });
+  // Case alone doesn't change the mailbox.
+  if (!current || current.email.toLowerCase() === email.toLowerCase()) {
+    return null;
+  }
+
+  await revokeTokens(tx, userId);
+  const type = current.password ? 'verification' : 'invitation';
+  return { email, type, token: await createToken(tx, userId, type) };
+}
+
+/**
+ * Sent after the commit, and not fatal: the change is saved either way, and
+ * the admin (or the user, from their profile) can resend the link.
+ */
+async function sendNewAddressLink(req: Request, link: NewAddressLink) {
+  try {
+    if (link.type === 'verification') {
+      await sendVerificationEmail(link.email, link.token);
+    } else {
+      await sendInvitationFrom(req, link.email, link.token);
+    }
+  } catch (error) {
+    console.error('Email change link error:', error);
+  }
+}
+
 async function updateUser(req: Request, res: Response) {
-  const { id } = req.params;
-  const updates = req.body ?? {};
-  const userId = Number(id);
+  const userId = Number(req.params.id);
+  const { role_ids, ...userUpdates } = req.body ?? {};
 
   try {
-    const userWithRoles = await db.transaction(async (tx) => {
-      const { role_ids, ...userUpdates } = updates;
+    const result = await db.transaction(async (tx) => {
+      const link =
+        typeof userUpdates.email === 'string'
+          ? await linkForNewAddress(tx, userId, userUpdates.email)
+          : null;
+      if (link) {
+        userUpdates.email_verified = false;
+      }
 
-      // Update user fields if there are any
       if (Object.keys(userUpdates).length > 0) {
-        const [updatedUser] = await tx
+        const [updated] = await tx
           .update(users)
           .set({ ...userUpdates, updated_at: new Date() })
           .where(eq(users.id, userId))
-          .returning({
-            id: users.id,
-            email: users.email,
-            first_name: users.first_name,
-            last_name: users.last_name,
-            country_code: users.country_code,
-            is_admin: users.is_admin,
-            created_at: users.created_at,
-            updated_at: users.updated_at
-          });
+          .returning({ id: users.id });
 
-        if (!updatedUser) {
+        if (!updated) {
           return null;
         }
       }
 
-      // Update roles if provided
       if (Array.isArray(role_ids)) {
-        // Delete existing user roles
         await tx.delete(userRoles).where(eq(userRoles.user_id, userId));
-
-        // Insert new user roles
         if (role_ids.length > 0) {
-          const newUserRoles = role_ids.map((roleId: number) => ({
-            user_id: userId,
-            role_id: roleId
-          }));
-          await tx.insert(userRoles).values(newUserRoles);
+          await tx.insert(userRoles).values(
+            role_ids.map((roleId: number) => ({
+              user_id: userId,
+              role_id: roleId
+            }))
+          );
         }
       }
 
-      // Fetch the updated user with roles
-      return tx.query.users.findFirst({
+      const user = await tx.query.users.findFirst({
         columns: DETAIL_COLUMNS,
         where: eq(users.id, userId),
-        with: {
-          userRoles: {
-            with: {
-              role: true
-            }
-          }
-        }
+        with: { userRoles: { with: { role: true } } }
       });
+      return user ? { user, link } : null;
     });
 
-    if (!userWithRoles) {
+    if (!result) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const transformedUser = toProfileResponse(userWithRoles);
+    if (result.link) {
+      await sendNewAddressLink(req, result.link);
+    }
 
-    res.status(200).json(transformedUser);
+    res.status(200).json(toProfileResponse(result.user));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update user' });
@@ -517,10 +571,16 @@ async function updateSelectedProperty(req: Request, res: Response) {
   }
 }
 
-const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+/** Mails an invitation in the name of the administrator making the request. */
+async function sendInvitationFrom(req: Request, email: string, token: string) {
+  const { user } = req as AuthenticatedRequest;
+  const inviterName = [user?.first_name, user?.last_name]
+    .filter(Boolean)
+    .join(' ');
+  await sendInvitationEmail(email, token, inviterName || undefined);
+}
 
 async function inviteUser(req: Request, res: Response) {
-  const authenticatedReq = req as AuthenticatedRequest;
   const { email, first_name, last_name, is_admin, role_ids } = req.body;
 
   try {
@@ -564,14 +624,7 @@ async function inviteUser(req: Request, res: Response) {
         await tx.insert(userRoles).values(newUserRoles);
       }
 
-      // Generate invitation token (7 day expiry)
-      invitationToken = generateVerificationToken();
-      await tx.insert(emailVerificationTokens).values({
-        user_id: newUser.id,
-        token: invitationToken,
-        type: 'invitation',
-        expires_at: new Date(Date.now() + SEVEN_DAYS_MS)
-      });
+      invitationToken = await issueToken(tx, newUser.id, 'invitation');
 
       // Fetch the created user with roles
       return tx.query.users.findFirst({
@@ -589,17 +642,7 @@ async function inviteUser(req: Request, res: Response) {
 
     // Send invitation email after transaction commits
     if (invitationToken) {
-      const inviterName = [
-        authenticatedReq.user?.first_name,
-        authenticatedReq.user?.last_name
-      ]
-        .filter(Boolean)
-        .join(' ');
-      await sendInvitationEmail(
-        email,
-        invitationToken,
-        inviterName || undefined
-      );
+      await sendInvitationFrom(req, email, invitationToken);
     }
 
     if (!userWithRoles) {
@@ -618,9 +661,7 @@ async function inviteUser(req: Request, res: Response) {
 }
 
 async function resendInvitation(req: Request, res: Response) {
-  const { id } = req.params;
-  const authenticatedReq = req as AuthenticatedRequest;
-  const userId = Number(id);
+  const userId = Number(req.params.id);
 
   try {
     const user = await db.query.users.findFirst({
@@ -639,35 +680,8 @@ async function resendInvitation(req: Request, res: Response) {
         .json({ error: 'User is already verified or has a password set' });
     }
 
-    // Invalidate old invitation tokens
-    await db
-      .update(emailVerificationTokens)
-      .set({ used_at: new Date() })
-      .where(
-        and(
-          eq(emailVerificationTokens.user_id, userId),
-          eq(emailVerificationTokens.type, 'invitation'),
-          isNull(emailVerificationTokens.used_at)
-        )
-      );
-
-    // Create new invitation token (7 day expiry)
-    const token = generateVerificationToken();
-    await db.insert(emailVerificationTokens).values({
-      user_id: userId,
-      token,
-      type: 'invitation',
-      expires_at: new Date(Date.now() + SEVEN_DAYS_MS)
-    });
-
-    // Send invitation email
-    const inviterName = [
-      authenticatedReq.user?.first_name,
-      authenticatedReq.user?.last_name
-    ]
-      .filter(Boolean)
-      .join(' ');
-    await sendInvitationEmail(user.email, token, inviterName || undefined);
+    const token = await issueToken(db, userId, 'invitation');
+    await sendInvitationFrom(req, user.email, token);
 
     res.status(200).json({ message: 'Invitation resent successfully' });
   } catch (error) {

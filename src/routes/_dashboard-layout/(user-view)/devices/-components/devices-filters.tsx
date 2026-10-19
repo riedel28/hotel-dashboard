@@ -18,11 +18,17 @@ const statusOptions = deviceConnectionStatusSchema.options.map((value) => ({
   label: <ConnectionStatusLabel status={value} />
 }));
 
-function TabLabel({ label, count }: { label: ReactNode; count: number }) {
+function TabLabel({
+  label,
+  count
+}: {
+  label: ReactNode;
+  count: number | undefined;
+}) {
   return (
     <span className="flex items-center gap-1.5">
       {label}
-      <CountBadge count={count} />
+      {count !== undefined && <CountBadge count={count} />}
     </span>
   );
 }
@@ -31,8 +37,9 @@ interface DevicesFiltersProps extends Pick<
   DevicesSearch,
   'filters' | 'hasActiveFilters' | 'setFilters' | 'clearFilters'
 > {
-  /** Every device of the property: the tabs count them, whatever is filtered. */
-  devices: DeviceView[];
+  /** Every device of the property: the tabs count them, whatever is filtered.
+   *  Undefined while they load, when the tabs show no counts yet. */
+  devices: DeviceView[] | undefined;
 }
 
 export function DevicesFilters({
@@ -43,7 +50,7 @@ export function DevicesFilters({
   clearFilters
 }: DevicesFiltersProps) {
   const { t } = useLingui();
-  const unassignedCount = devices.filter((device) => !device.room).length;
+  const unassignedCount = devices?.filter((device) => !device.room).length;
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -61,7 +68,7 @@ export function DevicesFilters({
         value={filters.tab}
         onValueChange={(tab) => setFilters({ tab })}
         allLabel={
-          <TabLabel label={<Trans>All</Trans>} count={devices.length} />
+          <TabLabel label={<Trans>All</Trans>} count={devices?.length} />
         }
         options={[
           {
@@ -69,7 +76,11 @@ export function DevicesFilters({
             label: (
               <TabLabel
                 label={<Trans>Assigned</Trans>}
-                count={devices.length - unassignedCount}
+                count={
+                  devices && unassignedCount !== undefined
+                    ? devices.length - unassignedCount
+                    : undefined
+                }
               />
             )
           },
@@ -100,7 +111,7 @@ export function DevicesFilters({
           onClick={clearFilters}
           className="text-muted-foreground hover:text-foreground"
         >
-          <XIcon className="mr-2 h-4 w-4" />
+          <XIcon aria-hidden="true" />
           <Trans>Clear filters</Trans>
         </Button>
       )}

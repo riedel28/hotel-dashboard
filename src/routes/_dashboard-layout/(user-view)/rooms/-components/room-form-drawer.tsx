@@ -20,12 +20,19 @@ import {
   type Room,
   updateRoomById
 } from '@/api/rooms';
+import { DetailsDrawerStepper } from '@/components/details-drawer';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog';
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
@@ -76,13 +83,18 @@ interface RoomFormDrawerProps {
   room?: Room | null;
   /** Types the property already uses, offered as suggestions */
   roomTypes: string[];
+  /** Rooms of the table page, stepped through in edit mode. */
+  pageRooms: Room[];
+  onSelect: (roomId: number) => void;
 }
 
 export function RoomFormDrawer({
   open,
   onOpenChange,
   room,
-  roomTypes
+  roomTypes,
+  pageRooms,
+  onSelect
 }: RoomFormDrawerProps) {
   const { t } = useLingui();
   const queryClient = useQueryClient();
@@ -144,196 +156,212 @@ export function RoomFormDrawer({
     }
   });
 
-  return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>
-            {isEdit ? <Trans>Edit room</Trans> : <Trans>Add room</Trans>}
-          </DrawerTitle>
-        </DrawerHeader>
-        <form
-          noValidate
-          onSubmit={form.handleSubmit((values) => saveMutation.mutate(values))}
-          className="flex min-h-0 flex-1 flex-col"
-        >
-          <DrawerBody>
-            <FieldSet className="gap-4">
-              <FieldGroup className="gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <Controller
-                    control={form.control}
-                    name="room_number"
-                    render={({ field, fieldState }) => (
-                      <Field
-                        data-invalid={fieldState.invalid}
-                        className="gap-2"
-                      >
-                        <FieldLabel htmlFor="room-number">
-                          <Trans>Number</Trans>
-                        </FieldLabel>
-                        <Input
-                          id="room-number"
-                          autoFocus
-                          placeholder="12A"
-                          {...field}
-                          aria-invalid={fieldState.invalid}
-                        />
-                        {fieldState.invalid && (
-                          <FieldError
-                            errors={[
-                              requiredError('room_number', fieldState.error)
-                            ]}
-                          />
-                        )}
-                      </Field>
-                    )}
+  const fields = (
+    <FieldSet className="gap-4">
+      <FieldGroup className="gap-4">
+        <div className="grid grid-cols-2 gap-4">
+          <Controller
+            control={form.control}
+            name="room_number"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="gap-2">
+                <FieldLabel htmlFor="room-number">
+                  <Trans>Number</Trans>
+                </FieldLabel>
+                <Input
+                  id="room-number"
+                  autoFocus
+                  placeholder="12A"
+                  {...field}
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError
+                    errors={[requiredError('room_number', fieldState.error)]}
                   />
-                  <Controller
-                    control={form.control}
-                    name="floor"
-                    render={({ field, fieldState }) => (
-                      <Field
-                        data-invalid={fieldState.invalid}
-                        className="gap-2"
-                      >
-                        <FieldLabel htmlFor="room-floor">
-                          <Trans>Floor</Trans>
-                          <FieldOptional />
-                        </FieldLabel>
-                        <NumberInput
-                          id="room-floor"
-                          name={field.name}
-                          value={field.value}
-                          step={1}
-                          format={{ maximumFractionDigits: 0 }}
-                          onValueChange={field.onChange}
-                          onBlur={field.onBlur}
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                </div>
-                <Controller
-                  control={form.control}
-                  name="name"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor="room-name">
-                        <Trans>Name</Trans>
-                        <FieldOptional />
-                      </FieldLabel>
-                      <Input
-                        id="room-name"
-                        {...field}
-                        disabled={isNameLocked}
-                        aria-invalid={fieldState.invalid}
-                        aria-describedby="room-name-hint"
-                      />
-                      <FieldDescription id="room-name-hint">
-                        {isNameLocked ? (
-                          <Trans>
-                            The room has an active reservation, so its name
-                            cannot be changed.
-                          </Trans>
-                        ) : (
-                          <Trans>
-                            Left empty, the room is named by its number.
-                          </Trans>
-                        )}
-                      </FieldDescription>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="floor"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="gap-2">
+                <FieldLabel htmlFor="room-floor">
+                  <Trans>Floor</Trans>
+                  <FieldOptional />
+                </FieldLabel>
+                <NumberInput
+                  id="room-floor"
+                  name={field.name}
+                  value={field.value}
+                  step={1}
+                  format={{ maximumFractionDigits: 0 }}
+                  onValueChange={field.onChange}
+                  onBlur={field.onBlur}
                 />
-                <Controller
-                  control={form.control}
-                  name="room_type"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="gap-2">
-                      <FieldLabel htmlFor="room-type">
-                        <Trans>Type</Trans>
-                      </FieldLabel>
-                      {/* A native datalist: pick a type in use or type a new one */}
-                      <Input
-                        id="room-type"
-                        list="room-type-options"
-                        autoComplete="off"
-                        placeholder={t`e.g. Standard, Suite`}
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      <datalist id="room-type-options">
-                        {roomTypes.map((type) => (
-                          <option key={type} value={type} />
-                        ))}
-                      </datalist>
-                      {fieldState.invalid && (
-                        <FieldError
-                          errors={[
-                            requiredError('room_type', fieldState.error)
-                          ]}
-                        />
-                      )}
-                    </Field>
-                  )}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </div>
+        <Controller
+          control={form.control}
+          name="name"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid} className="gap-2">
+              <FieldLabel htmlFor="room-name">
+                <Trans>Name</Trans>
+                <FieldOptional />
+              </FieldLabel>
+              <Input
+                id="room-name"
+                {...field}
+                disabled={isNameLocked}
+                aria-invalid={fieldState.invalid}
+                aria-describedby="room-name-hint"
+              />
+              <FieldDescription id="room-name-hint">
+                {isNameLocked ? (
+                  <Trans>
+                    The room has an active reservation, so its name cannot be
+                    changed.
+                  </Trans>
+                ) : (
+                  <Trans>Left empty, the room is named by its number.</Trans>
+                )}
+              </FieldDescription>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="room_type"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid} className="gap-2">
+              <FieldLabel htmlFor="room-type">
+                <Trans>Type</Trans>
+              </FieldLabel>
+              {/* A native datalist: pick a type in use or type a new one */}
+              <Input
+                id="room-type"
+                list="room-type-options"
+                autoComplete="off"
+                placeholder={t`e.g. Standard, Suite`}
+                {...field}
+                aria-invalid={fieldState.invalid}
+              />
+              <datalist id="room-type-options">
+                {roomTypes.map((type) => (
+                  <option key={type} value={type} />
+                ))}
+              </datalist>
+              {fieldState.invalid && (
+                <FieldError
+                  errors={[requiredError('room_type', fieldState.error)]}
                 />
-                <Controller
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <Field className="gap-2">
-                      <FieldLabel htmlFor="room-status">
-                        <Trans>Status</Trans>
-                      </FieldLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger id="room-status">
-                          <SelectValue>
-                            {(value: FormValues['status']) => (
-                              <RoomStatusLabel status={value} />
-                            )}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                          {roomStatusSchema.options.map((status) => (
-                            <SelectItem key={status} value={status}>
-                              <RoomStatusLabel status={status} />
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
-                  )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </DrawerBody>
-
-          <DrawerFooter>
-            <Button
-              variant="outline"
-              type="button"
-              onClick={() => onOpenChange(false)}
-            >
-              <Trans>Cancel</Trans>
-            </Button>
-            <Button type="submit" disabled={saveMutation.isPending}>
-              {saveMutation.isPending && (
-                <Loader2Icon className="animate-spin" />
               )}
-              {isEdit ? <Trans>Update</Trans> : <Trans>Add</Trans>}
-            </Button>
-          </DrawerFooter>
-        </form>
-      </DrawerContent>
-    </Drawer>
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <Field className="gap-2">
+              <FieldLabel htmlFor="room-status">
+                <Trans>Status</Trans>
+              </FieldLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger id="room-status">
+                  <SelectValue>
+                    {(value: FormValues['status']) => (
+                      <RoomStatusLabel status={value} />
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {roomStatusSchema.options.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      <RoomStatusLabel status={status} />
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+        />
+      </FieldGroup>
+    </FieldSet>
+  );
+  const actions = (
+    <>
+      <Button
+        variant="outline"
+        type="button"
+        onClick={() => onOpenChange(false)}
+      >
+        <Trans>Cancel</Trans>
+      </Button>
+      <Button type="submit" disabled={saveMutation.isPending}>
+        {saveMutation.isPending && <Loader2Icon className="animate-spin" />}
+        {isEdit ? <Trans>Update</Trans> : <Trans>Add</Trans>}
+      </Button>
+    </>
+  );
+  const submit = form.handleSubmit((values) => saveMutation.mutate(values));
+
+  return (
+    <>
+      {/* A new room is added in a dialog, as elsewhere in the app; an
+          existing one is edited beside the table it belongs to */}
+      <Dialog open={open && !isEdit} onOpenChange={onOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              <Trans>Add room</Trans>
+            </DialogTitle>
+          </DialogHeader>
+          <form noValidate onSubmit={submit} className="space-y-5">
+            {fields}
+            <DialogFooter>{actions}</DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Drawer open={open && isEdit} onOpenChange={onOpenChange}>
+        {/* As wide as the other details drawers */}
+        <DrawerContent className="sm:max-w-lg">
+          <DrawerHeader>
+            <DrawerTitle>
+              <Trans>Edit room</Trans>
+            </DrawerTitle>
+          </DrawerHeader>
+          <form
+            noValidate
+            onSubmit={submit}
+            className="flex min-h-0 flex-1 flex-col"
+          >
+            <DrawerBody>{fields}</DrawerBody>
+            <DetailsDrawerStepper
+              currentId={room?.id}
+              items={pageRooms}
+              onSelect={onSelect}
+              previousLabel={t`Previous room`}
+              nextLabel={t`Next room`}
+              // Stepping away would drop the edits without a word
+              disabled={form.formState.isDirty}
+              keyHints={false}
+            >
+              {actions}
+            </DetailsDrawerStepper>
+          </form>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 }

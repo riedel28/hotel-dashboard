@@ -70,9 +70,7 @@ export function DeleteEventDialog({
             onClick={() => remove.mutate()}
             disabled={remove.isPending}
           >
-            {remove.isPending && (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-            )}
+            {remove.isPending && <Loader2Icon className="animate-spin" />}
             <Trans>Delete</Trans>
           </Button>
         </AlertDialogFooter>

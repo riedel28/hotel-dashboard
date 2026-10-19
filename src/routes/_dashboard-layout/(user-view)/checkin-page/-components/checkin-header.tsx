@@ -131,14 +131,18 @@ function GuestLink({ url }: { url: string }) {
   const labelId = React.useId();
 
   return (
-    <div className="col-span-full flex flex-col gap-2">
+    // On the form sections' grid: the label in their headings' column, the
+    // link as wide as their fields
+    <div className="col-span-full grid grid-cols-1 gap-2 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-center lg:gap-4">
       <span id={labelId} className="text-sm font-medium">
         <Trans>Link sent to guests</Trans>
       </span>
       <div
         role="group"
         aria-labelledby={labelId}
-        className="flex h-9 items-center gap-0.5 rounded-lg border border-input bg-muted/50 ps-3 pe-1 dark:bg-input/30"
+        // Read-only in both themes: grey in light, sunk below the card in
+        // dark, where editable fields are lifted above it
+        className="flex h-9 items-center gap-0.5 rounded-lg border border-input bg-muted/50 ps-3 pe-1 dark:border-border dark:bg-background/60"
       >
         <span className="min-w-0 flex-1 truncate text-sm" title={url}>
           {url}
@@ -157,7 +161,7 @@ function GuestLink({ url }: { url: string }) {
             }
           >
             {copied ? (
-              <CheckIcon className="text-success" aria-hidden="true" />
+              <CheckIcon className="size-3.5 text-success" aria-hidden="true" />
             ) : (
               <CopyIcon aria-hidden="true" />
             )}

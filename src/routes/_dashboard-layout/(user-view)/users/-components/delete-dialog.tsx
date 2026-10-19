@@ -68,7 +68,7 @@ export function DeleteDialog({
             disabled={deleteUserMutation.isPending}
           >
             {deleteUserMutation.isPending && (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2Icon className="animate-spin" />
             )}
             <Trans>Delete</Trans>
           </Button>

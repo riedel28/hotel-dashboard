@@ -23,7 +23,7 @@ import {
   rethrowGoneImage,
   sweepImages
 } from '../db/image-queries';
-import { db } from '../db/pool';
+import { db, type Transaction } from '../db/pool';
 import { eventImages, events, properties } from '../db/schema';
 import { HttpProblem, withFailMessage } from '../middleware/error';
 import {
@@ -36,8 +36,6 @@ import { escapeLikePattern } from '../utils/sql';
 // property the list is empty and writes are 400. An event of another
 // property is a 404.
 const handle = withFailMessage<SelectedPropertyRequest>;
-
-type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 const eventNotFound = () => new HttpProblem(404, 'Event not found');
 
@@ -195,7 +193,7 @@ function eventValues(data: ParsedSaveEventData) {
 
 // Replaces the event's images with `ids`, which must be the property's own.
 async function setImages(
-  tx: Tx,
+  tx: Transaction,
   propertyId: string,
   eventId: number,
   ids: string[]

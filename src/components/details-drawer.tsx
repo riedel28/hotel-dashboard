@@ -4,16 +4,26 @@ import {
   useQuery,
   type UseQueryOptions
 } from '@tanstack/react-query';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { type ReactNode, useEffect, useRef } from 'react';
 
 import { ApiError } from '@/api/client';
+import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
+
+/**
+ * For the table row whose item is open in the drawer: tinted and marked with
+ * a bar on its left edge, so it stays easy to find beside the drawer.
+ */
+export const openRowClassName =
+  'data-[state=selected]:bg-primary/10 data-[state=selected]:*:first:before:absolute data-[state=selected]:*:first:before:inset-y-0 data-[state=selected]:*:first:before:left-0 data-[state=selected]:*:first:before:w-0.5 data-[state=selected]:*:first:before:bg-primary';
 
 interface DetailsDrawerProps<
   TItem extends { id: number },
@@ -141,5 +151,70 @@ function Details<TItem extends { id: number }, TQueryKey extends QueryKey>({
       <DrawerTitle>{title}</DrawerTitle>
       <p className="text-sm font-normal text-muted-foreground">{description}</p>
     </DrawerHeader>
+  );
+}
+
+/**
+ * Steps to the previous or next item of the table page, as ↑/↓ do, for the
+ * pointer and for phones without keys. The buttons are absent for an item
+ * not on the page; `children` (the drawer's own actions) sit on the right.
+ */
+export function DetailsDrawerStepper({
+  currentId,
+  items,
+  onSelect,
+  previousLabel,
+  nextLabel,
+  disabled = false,
+  keyHints = true,
+  children
+}: {
+  currentId: number | undefined;
+  items: { id: number }[];
+  onSelect: (id: number) => void;
+  previousLabel: string;
+  nextLabel: string;
+  disabled?: boolean;
+  /** Off where ↑/↓ belong to the drawer's fields, not to stepping. */
+  keyHints?: boolean;
+  children?: ReactNode;
+}) {
+  const index = items.findIndex((item) => item.id === currentId);
+
+  if (index === -1 && !children) {
+    return null;
+  }
+
+  const previous = items[index - 1];
+  const next = items[index + 1];
+
+  return (
+    <DrawerFooter className="flex-row items-center justify-between py-3 sm:justify-between">
+      {index !== -1 && (
+        <div className="flex gap-1">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            disabled={disabled || !previous}
+            aria-label={previousLabel}
+            title={keyHints ? `${previousLabel} (↑)` : previousLabel}
+            onClick={() => previous && onSelect(previous.id)}
+          >
+            <ChevronUpIcon />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            disabled={disabled || !next}
+            aria-label={nextLabel}
+            title={keyHints ? `${nextLabel} (↓)` : nextLabel}
+            onClick={() => next && onSelect(next.id)}
+          >
+            <ChevronDownIcon />
+          </Button>
+        </div>
+      )}
+      {children && <div className="ms-auto flex gap-2">{children}</div>}
+    </DrawerFooter>
   );
 }

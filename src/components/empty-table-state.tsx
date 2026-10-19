@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { EmptyMedia } from '@/components/ui/empty';
+import { cn } from '@/lib/utils';
 
 /**
  * In place of a list's rows when it has none: an icon, a title, a line on
@@ -26,7 +27,8 @@ export function EmptyTableState({
     label: ReactNode;
     onClick: () => void;
     icon?: ReactNode;
-    variant?: 'default' | 'secondary';
+    variant?: 'default' | 'secondary' | 'outline';
+    className?: string;
   };
 }) {
   return (
@@ -47,7 +49,7 @@ export function EmptyTableState({
         <Button
           variant={action.variant ?? 'default'}
           size="sm"
-          className="mt-2"
+          className={cn('mt-2', action.className)}
           onClick={action.onClick}
         >
           {action.icon}

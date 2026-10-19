@@ -3,6 +3,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { ChevronLeftIcon } from 'lucide-react';
 import { z } from 'zod';
 
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -47,11 +48,12 @@ function ProductsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Products</Trans>
-        </h1>
-      </div>
+      <PageHeader
+        title={<Trans>Products</Trans>}
+        description={
+          <Trans>What guests can order, sorted into categories.</Trans>
+        }
+      />
 
       {/* Two columns from lg up. Below that it's one screen at a time: the
           categories, then (once one is picked) its products with a way back.

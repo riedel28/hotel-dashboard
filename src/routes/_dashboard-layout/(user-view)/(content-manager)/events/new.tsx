@@ -28,7 +28,12 @@ function NewEventPage() {
 
   return (
     <div className="space-y-6">
-      <EventPageHeader title={t`New event`} />
+      <EventPageHeader
+        title={t`New event`}
+        description={
+          <Trans>Describe the event and when and where it takes place.</Trans>
+        }
+      />
       {property && initialValues ? (
         <EventForm
           // Another duplicate source starts the form afresh

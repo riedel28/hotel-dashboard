@@ -3,6 +3,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 import {
+  AlertCircleIcon,
   AlertTriangleIcon,
   Loader2Icon,
   RefreshCwIcon,
@@ -57,7 +58,7 @@ function LoginPage() {
   const router = useRouter();
   const navigate = Route.useNavigate();
   const { t } = useLingui();
-  useDocumentTitle(t`Login`);
+  useDocumentTitle(t`Log in`);
   const search = Route.useSearch();
 
   const form = useForm<LoginFormValues>({
@@ -89,6 +90,10 @@ function LoginPage() {
     onError: (error) => {
       if (error instanceof ApiError && error.code === 'EMAIL_NOT_VERIFIED') {
         form.setError('root.emailNotVerified', { message: 'emailNotVerified' });
+      } else if (error instanceof ApiError && error.status === 401) {
+        form.setError('root.invalidCredentials', {
+          message: 'invalidCredentials'
+        });
       } else {
         toast.error(t`Failed to login. Please try again.`);
       }
@@ -129,12 +134,10 @@ function LoginPage() {
           <AppLogo size="lg" tone="tint" />
           <div className="space-y-1.5">
             <h1 className="text-2xl font-semibold">
-              <Trans>Login</Trans>
+              <Trans>Log in</Trans>
             </h1>
             <p className="text-sm text-muted-foreground">
-              <Trans>
-                Enter your email and password to access the dashboard
-              </Trans>
+              <Trans>Welcome back to Hotel Dashboard</Trans>
             </p>
           </div>
         </div>
@@ -143,6 +146,15 @@ function LoginPage() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex w-full max-w-sm flex-col gap-5"
         >
+          {form.formState.errors.root?.invalidCredentials && (
+            <Alert variant="error">
+              <AlertCircleIcon />
+              <AlertTitle>
+                <Trans>Invalid email or password</Trans>
+              </AlertTitle>
+            </Alert>
+          )}
+
           {form.formState.errors.root?.emailNotVerified && (
             <Alert variant="warning">
               <AlertTriangleIcon />
@@ -162,9 +174,9 @@ function LoginPage() {
                   disabled={resendMutation.isPending}
                 >
                   {resendMutation.isPending ? (
-                    <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                    <Loader2Icon className="animate-spin" />
                   ) : (
-                    <RefreshCwIcon className="mr-2 h-3 w-3" />
+                    <RefreshCwIcon />
                   )}
                   <Trans>Resend verification email</Trans>
                 </Button>
@@ -184,8 +196,9 @@ function LoginPage() {
                   {...field}
                   id={field.name}
                   type="email"
-                  placeholder={t`Enter your email`}
+                  placeholder="name@hotel.com"
                   autoComplete="email"
+                  autoFocus
                   aria-required="true"
                   aria-invalid={fieldState.invalid}
                   aria-describedby={
@@ -213,7 +226,6 @@ function LoginPage() {
                 <PasswordInput
                   {...field}
                   id={field.name}
-                  placeholder={t`Enter your password`}
                   autoComplete="current-password"
                   aria-required="true"
                   aria-invalid={fieldState.invalid}
@@ -246,7 +258,6 @@ function LoginPage() {
                     onCheckedChange={(checked) =>
                       field.onChange(checked === true)
                     }
-                    aria-label={t`Remember me`}
                   />
                   <FieldLabel
                     htmlFor={field.name}
@@ -270,18 +281,11 @@ function LoginPage() {
             aria-busy={loginMutation.isPending}
           >
             {loginMutation.isPending && (
-              <Loader2Icon
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
             )}
-            <Trans>Login</Trans>
+            <Trans>Log in</Trans>
           </Button>
         </form>
-
-        <p className="text-center text-sm text-muted-foreground">
-          Don't have an account? <Link to="/auth/sign-up">Sign up</Link>
-        </p>
       </div>
     </div>
   );
@@ -398,10 +402,7 @@ function TwoFactorStep({
             aria-busy={mutation.isPending}
           >
             {mutation.isPending && (
-              <Loader2Icon
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
             )}
             <Trans>Verify</Trans>
           </Button>

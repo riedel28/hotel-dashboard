@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -26,6 +27,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldOptional,
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -96,24 +98,31 @@ export function InviteUserModal() {
     inviteUserMutation.mutate(data);
   };
 
+  const isSending = inviteUserMutation.isPending;
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
           <Button>
-            <SendIcon className="mr-2 h-4 w-4" />
-            <Trans>Invite User</Trans>
+            <SendIcon />
+            <Trans>Invite user</Trans>
           </Button>
         }
       />
       <DialogContent className="max-h-[90vh] max-w-lg! overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            <Trans>Invite User</Trans>
+            <Trans>Invite user</Trans>
           </DialogTitle>
+          <DialogDescription>
+            <Trans>
+              They get an email with a link to set a password and sign in.
+            </Trans>
+          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FieldSet className="gap-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <FieldSet className="gap-6" disabled={isSending}>
             <FieldGroup className="gap-4">
               <Controller
                 control={form.control}
@@ -126,6 +135,7 @@ export function InviteUserModal() {
                     <Input
                       id={field.name}
                       type="email"
+                      autoFocus
                       {...field}
                       aria-invalid={fieldState.invalid}
                       placeholder={t`user@example.com`}
@@ -145,6 +155,7 @@ export function InviteUserModal() {
                     <Field data-invalid={fieldState.invalid} className="gap-2">
                       <FieldLabel htmlFor={field.name}>
                         <Trans>First Name</Trans>
+                        <FieldOptional />
                       </FieldLabel>
                       <Input
                         id={field.name}
@@ -167,6 +178,7 @@ export function InviteUserModal() {
                     <Field data-invalid={fieldState.invalid} className="gap-2">
                       <FieldLabel htmlFor={field.name}>
                         <Trans>Last Name</Trans>
+                        <FieldOptional />
                       </FieldLabel>
                       <Input
                         id={field.name}
@@ -185,12 +197,66 @@ export function InviteUserModal() {
 
               <Controller
                 control={form.control}
+                name="role_ids"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel>
+                      <Trans>Roles</Trans>
+                      <FieldOptional />
+                    </FieldLabel>
+                    {roles && roles.length > 0 ? (
+                      // One box with a checkbox per role, not a card each
+                      <div className="grid grid-cols-1 gap-x-4 gap-y-2.5 rounded-lg border p-3 sm:grid-cols-2 dark:bg-input/30">
+                        {roles.map((role) => {
+                          const assigned = field.value?.includes(role.id);
+                          return (
+                            <Field
+                              key={role.id}
+                              orientation="horizontal"
+                              className="gap-2"
+                            >
+                              <Checkbox
+                                id={`role-${role.id}`}
+                                checked={assigned}
+                                onCheckedChange={(checked) => {
+                                  const nextRoles = checked
+                                    ? [...(field.value ?? []), role.id]
+                                    : (field.value ?? []).filter(
+                                        (r) => r !== role.id
+                                      );
+                                  field.onChange(nextRoles);
+                                }}
+                              />
+                              <FieldLabel
+                                htmlFor={`role-${role.id}`}
+                                className="cursor-pointer font-normal"
+                              >
+                                {role.name}
+                              </FieldLabel>
+                            </Field>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        <Trans>No roles available</Trans>
+                      </p>
+                    )}
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
                 name="is_admin"
                 render={({ field, fieldState }) => (
                   <Field
                     data-invalid={fieldState.invalid}
                     orientation="horizontal"
-                    className="my-1 items-center gap-3 rounded-lg border p-3 dark:bg-input/30"
+                    className="items-center gap-3 rounded-lg border p-3 dark:bg-input/30"
                   >
                     <FieldContent>
                       <FieldLabel
@@ -216,69 +282,6 @@ export function InviteUserModal() {
                   </Field>
                 )}
               />
-
-              <Controller
-                control={form.control}
-                name="role_ids"
-                render={({ field, fieldState }) => (
-                  <Field
-                    data-invalid={fieldState.invalid}
-                    orientation="vertical"
-                    className="gap-3"
-                  >
-                    <FieldContent>
-                      <FieldLabel>
-                        <Trans>Roles</Trans>
-                      </FieldLabel>
-                      <FieldDescription>
-                        <Trans>Select one or more roles to assign</Trans>
-                      </FieldDescription>
-                    </FieldContent>
-                    {roles && roles.length > 0 ? (
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        {roles.map((role) => {
-                          const assigned = field.value?.includes(role.id);
-                          return (
-                            <Field
-                              key={role.id}
-                              orientation="horizontal"
-                              className="gap-3 rounded-md border p-3 dark:bg-input/30"
-                            >
-                              <Checkbox
-                                id={`role-${role.id}`}
-                                checked={assigned}
-                                onCheckedChange={(checked) => {
-                                  const nextRoles = checked
-                                    ? [...(field.value ?? []), role.id]
-                                    : (field.value ?? []).filter(
-                                        (r) => r !== role.id
-                                      );
-                                  field.onChange(nextRoles);
-                                }}
-                              />
-                              <FieldLabel
-                                htmlFor={`role-${role.id}`}
-                                className="cursor-pointer text-sm font-normal"
-                              >
-                                {role.name}
-                              </FieldLabel>
-                            </Field>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center gap-2 rounded-lg border bg-muted p-4">
-                        <span className="text-sm text-muted-foreground">
-                          <Trans>No roles available</Trans>
-                        </span>
-                      </div>
-                    )}
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
             </FieldGroup>
           </FieldSet>
           <DialogFooter>
@@ -286,14 +289,13 @@ export function InviteUserModal() {
               type="button"
               variant="outline"
               onClick={() => handleOpenChange(false)}
+              disabled={isSending}
             >
               <Trans>Cancel</Trans>
             </Button>
-            <Button type="submit" disabled={inviteUserMutation.isPending}>
-              {inviteUserMutation.isPending && (
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              <Trans>Send Invitation</Trans>
+            <Button type="submit" disabled={isSending} aria-busy={isSending}>
+              {isSending && <Loader2Icon className="animate-spin" />}
+              <Trans>Send invitation</Trans>
             </Button>
           </DialogFooter>
         </form>

@@ -91,24 +91,17 @@ export function TwoFactorSetupDialog({
         error instanceof Error ? error.message : t`Couldn't start setup`
       );
       onOpenChange(false);
-    }
+    },
+    // Nothing is set up yet, so there is nothing to confirm abandoning.
+    onCancel: () => onOpenChange(false)
   });
 
   const { run: runSetup } = setup;
 
-  // Fetch a QR the moment the dialog opens; the first step is useless without it.
+  // Fetch a QR the moment the dialog opens; the first step is useless without
+  // it. Each opening is a fresh mount (the caller keys it), so state starts clean.
   React.useEffect(() => {
-    if (!open) return;
-    setStep('scan');
-    setSetupData(null);
-    setCode('');
-    setCodeError(null);
-    setAttempts(0);
-    setCooldown(0);
-    setRecoveryCodes(null);
-    setCodesAcknowledged(false);
-    setConfirmCancel(false);
-    runSetup();
+    if (open) runSetup();
   }, [open, runSetup]);
 
   // Keyed on whether a cooldown is running, not on its value — depending on the
@@ -259,7 +252,7 @@ export function TwoFactorSetupDialog({
           <DialogFooter>
             {step === 'scan' && (
               <>
-                <Button type="button" variant="ghost" onClick={requestClose}>
+                <Button type="button" variant="outline" onClick={requestClose}>
                   <Trans>Cancel</Trans>
                 </Button>
                 <Button
@@ -275,7 +268,7 @@ export function TwoFactorSetupDialog({
               <>
                 <Button
                   type="button"
-                  variant="ghost"
+                  variant="outline"
                   onClick={() => setStep('scan')}
                 >
                   <Trans>Back</Trans>
@@ -287,10 +280,7 @@ export function TwoFactorSetupDialog({
                   aria-busy={isVerifying}
                 >
                   {isVerifying && (
-                    <Loader2Icon
-                      className="size-4 animate-spin"
-                      aria-hidden="true"
-                    />
+                    <Loader2Icon className="animate-spin" aria-hidden="true" />
                   )}
                   {cooldown > 0 ? (
                     <Trans>Wait {cooldown}s</Trans>
@@ -353,28 +343,11 @@ function StepIndicator({ current }: { current: Step }) {
   const index = STEP_ORDER.indexOf(current);
 
   return (
-    <div className="mb-3 flex items-center gap-3">
-      <div className="flex items-center gap-1.5" aria-hidden="true">
-        {STEP_ORDER.map((step, position) => (
-          <span
-            key={step}
-            className={cn(
-              'h-1.5 rounded-full transition-all duration-300',
-              position === index
-                ? 'w-6 bg-primary'
-                : position < index
-                  ? 'w-1.5 bg-primary/50'
-                  : 'w-1.5 bg-border'
-            )}
-          />
-        ))}
-      </div>
-      <span className="text-xs font-medium text-muted-foreground">
-        <Trans>
-          Step {index + 1} of {STEP_ORDER.length}
-        </Trans>
-      </span>
-    </div>
+    <p className="mb-3 text-xs font-medium text-muted-foreground">
+      <Trans>
+        Step {index + 1} of {STEP_ORDER.length}
+      </Trans>
+    </p>
   );
 }
 

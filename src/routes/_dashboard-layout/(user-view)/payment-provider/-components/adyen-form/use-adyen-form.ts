@@ -34,7 +34,7 @@ const MESSAGES = {
 // the recipient the receipts are issued by, which the schema leaves optional.
 export const ADYEN_RECIPIENT_REQUIRED = {
   addressLine1: msg`Address line is required`,
-  zip: msg`ZIP / Postal code is required`,
+  zip: msg`ZIP code is required`,
   city: msg`City is required`,
   country: msg`Country is required`
 };

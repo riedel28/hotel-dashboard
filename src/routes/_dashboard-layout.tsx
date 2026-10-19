@@ -1,7 +1,13 @@
 'use client';
 
 import { Trans, useLingui } from '@lingui/react/macro';
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useMatches,
+  useRouter
+} from '@tanstack/react-router';
 
 import {
   fetchSelectedProperty,
@@ -143,6 +149,8 @@ export const Route = createFileRoute('/_dashboard-layout')({
 // placeholders where the nav, the property selector and the page will be.
 // Nothing moves when the page arrives, unlike a spinner swapped for a screen.
 function DashboardPending() {
+  const PagePending = usePagePendingComponent();
+
   return (
     <SidebarProvider className="h-svh overflow-hidden" aria-busy="true">
       <Sidebar collapsible="icon">
@@ -168,10 +176,36 @@ function DashboardPending() {
           <span className="sr-only">
             <Trans>Loading...</Trans>
           </span>
-          <Skeleton className="h-7 w-48" />
-          <Skeleton className="h-96 w-full rounded-lg" />
+          {PagePending ? (
+            <PagePending />
+          ) : (
+            <>
+              <Skeleton className="h-7 w-48" />
+              <Skeleton className="h-96 w-full rounded-lg" />
+            </>
+          )}
         </main>
       </SidebarInset>
     </SidebarProvider>
   );
+}
+
+/**
+ * The pendingComponent of the deepest page under this layout that has one. On
+ * a cold load it's this layout that waits, so a page's own skeleton would never
+ * get a turn; showing it here gives the page its shape from the first frame.
+ */
+function usePagePendingComponent() {
+  const router = useRouter();
+  return useMatches({
+    select: (matches) => {
+      const own = matches.findIndex((match) => match.routeId === Route.id);
+      return matches
+        .slice(own + 1)
+        .map(
+          (match) => router.routesById[match.routeId].options.pendingComponent
+        )
+        .findLast(Boolean);
+    }
+  });
 }

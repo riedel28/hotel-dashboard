@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { type ReactNode, useMemo, useState } from 'react';
 
 import type { Reservation } from '@/api/reservations';
+import { openRowClassName } from '@/components/details-drawer';
 import {
   DataGrid,
   DataGridContainer,
@@ -28,10 +29,9 @@ import { GuestsCell } from './-components/cells/guests-cell';
 import { ReservationNrCell } from './-components/cells/reservation-nr-cell';
 import { RowActions } from './row-actions';
 
-/** A stay date on one line: the year only when it is not the current one. */
+/** A stay date on one line, always with its year. */
 function StayDateCell({ date }: { date: Date | string }) {
   const value = dayjs(date);
-  const isCurrentYear = value.year() === dayjs().year();
 
   return (
     <time
@@ -39,7 +39,7 @@ function StayDateCell({ date }: { date: Date | string }) {
       title={value.format('DD.MM.YYYY HH:mm')}
       className="text-[13px] whitespace-nowrap tabular-nums"
     >
-      {value.format(isCurrentYear ? 'DD.MM' : 'DD.MM.YYYY')}{' '}
+      {value.format('DD.MM.YYYY')}{' '}
       <span className="text-muted-foreground">{value.format('HH:mm')}</span>
     </time>
   );
@@ -64,6 +64,8 @@ interface ReservationsTableProps {
   /** The reservation open in the details drawer, marked as the selected row. */
   selectedReservationId?: number;
   onReservationOpen?: (reservationId: number) => void;
+  /** Shown where the rows go when there are none. */
+  emptyMessage?: ReactNode;
   /** A failed load (`LoadErrorState`), shown where the rows go. */
   error?: ReactNode;
 }
@@ -80,6 +82,7 @@ export default function ReservationsTable({
   onSortingChange,
   selectedReservationId,
   onReservationOpen,
+  emptyMessage,
   error
 }: ReservationsTableProps) {
   const pagination = useMemo<PaginationState>(
@@ -345,8 +348,10 @@ export default function ReservationsTable({
       recordCount={totalCount}
       onRowClick={(reservation) => onReservationOpen?.(reservation.id)}
       tableClassNames={{
-        edgeCell: 'px-5'
+        edgeCell: 'px-5',
+        bodyRow: openRowClassName
       }}
+      emptyMessage={emptyMessage}
       tableLayout={{
         columnsPinnable: false,
         columnsMovable: false,

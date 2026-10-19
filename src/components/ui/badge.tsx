@@ -90,7 +90,24 @@ function Badge({
   });
 }
 
+// A dot in a Badge color: its saturated mid-tone, so it reads at a glance
+// beside plain text
+const badgeDotColors: Record<BadgeColorProps, string> = {
+  gray: 'bg-gray-500 dark:bg-gray-400',
+  red: 'bg-red-500 dark:bg-red-400',
+  yellow: 'bg-yellow-500 dark:bg-yellow-400',
+  emerald: 'bg-emerald-500 dark:bg-emerald-400',
+  sky: 'bg-sky-500 dark:bg-sky-400',
+  indigo: 'bg-indigo-500 dark:bg-indigo-400',
+  orange: 'bg-orange-500 dark:bg-orange-400',
+  teal: 'bg-teal-500 dark:bg-teal-400',
+  fuchsia: 'bg-fuchsia-500 dark:bg-fuchsia-400',
+  pink: 'bg-pink-500 dark:bg-pink-400',
+  rose: 'bg-rose-500 dark:bg-rose-400'
+};
+
 export {
+  badgeDotColors,
   Badge,
   badgeColors,
   type BadgeColorProps,

@@ -55,8 +55,18 @@ export function TwoFactorSection() {
   const queryClient = useQueryClient();
   const { data: status } = useSuspenseQuery(twoFactorStatusQueryOptions());
 
-  const [setupOpen, setSetupOpen] = React.useState(false);
-  const [disableOpen, setDisableOpen] = React.useState(false);
+  // Which dialog is open, and how many openings there have been: the count is
+  // the dialogs' key, so each opening starts from fresh state instead of
+  // resetting the last run's by hand. Closing keeps it, so the close animates.
+  const [dialog, setDialog] = React.useState<{
+    open: 'setup' | 'disable' | null;
+    opening: number;
+  }>({ open: null, opening: 0 });
+  const openDialog = (open: 'setup' | 'disable') =>
+    setDialog(({ opening }) => ({ open, opening: opening + 1 }));
+  const closeDialog = (open: boolean) => {
+    if (!open) setDialog(({ opening }) => ({ open: null, opening }));
+  };
   const [freshCodes, setFreshCodes] = React.useState<string[] | null>(null);
 
   const regenerate = useReauthedAction({
@@ -83,7 +93,7 @@ export function TwoFactorSection() {
       }
       action={
         <Badge
-          color={status.enabled ? 'emerald' : 'gray'}
+          color={status.enabled ? 'emerald' : 'yellow'}
           size="sm"
           className="rounded-md px-2 py-1"
         >
@@ -91,7 +101,7 @@ export function TwoFactorSection() {
             aria-hidden="true"
             className={cn(
               'mr-0.5 size-1.5 rounded-full',
-              status.enabled ? 'bg-success' : 'bg-subtle-foreground'
+              status.enabled ? 'bg-success' : 'bg-warning'
             )}
           />
           {status.enabled ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
@@ -172,12 +182,9 @@ export function TwoFactorSection() {
                   aria-busy={regenerate.isRunning}
                 >
                   {regenerate.isRunning ? (
-                    <Loader2Icon
-                      className="size-4 animate-spin"
-                      aria-hidden="true"
-                    />
+                    <Loader2Icon className="animate-spin" aria-hidden="true" />
                   ) : (
-                    <RotateCwIcon className="mr-0.5 size-3.25" />
+                    <RotateCwIcon />
                   )}
                   <Trans>Regenerate</Trans>
                 </Button>
@@ -190,7 +197,7 @@ export function TwoFactorSection() {
               type="button"
               variant="ghost"
               className="text-danger hover:bg-danger-soft hover:text-danger"
-              onClick={() => setDisableOpen(true)}
+              onClick={() => openDialog('disable')}
             >
               <Trans>Turn off two-factor authentication</Trans>
             </Button>
@@ -216,18 +223,30 @@ export function TwoFactorSection() {
             </div>
           </div>
 
-          <Button type="button" onClick={() => setSetupOpen(true)}>
-            <Trans>Enable two-factor authentication</Trans>
-          </Button>
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              // Full width on a phone, like every other card's main button.
+              className="w-full sm:w-auto"
+              onClick={() => openDialog('setup')}
+            >
+              <Trans>Enable two-factor authentication</Trans>
+            </Button>
+          </div>
 
           <AuthenticatorApps />
         </CardContent>
       )}
 
-      <TwoFactorSetupDialog open={setupOpen} onOpenChange={setSetupOpen} />
+      <TwoFactorSetupDialog
+        key={`setup-${dialog.opening}`}
+        open={dialog.open === 'setup'}
+        onOpenChange={closeDialog}
+      />
       <TwoFactorDisableDialog
-        open={disableOpen}
-        onOpenChange={setDisableOpen}
+        key={`disable-${dialog.opening}`}
+        open={dialog.open === 'disable'}
+        onOpenChange={closeDialog}
       />
       {regenerate.dialog}
 

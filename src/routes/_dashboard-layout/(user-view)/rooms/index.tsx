@@ -16,8 +16,12 @@ import { z } from 'zod';
 
 import { roomFilterOptionsQueryOptions, roomsQueryOptions } from '@/api/rooms';
 import { useAuth } from '@/auth';
-import { EmptyFilterResult } from '@/components/empty-table-state';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -29,7 +33,6 @@ import {
 import { Button } from '@/components/ui/button';
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -48,7 +51,7 @@ import { useEditingRoom } from './-hooks/use-editing-room';
 import { useRoomsSearch } from './-hooks/use-rooms-search';
 
 const PAGE_SIZES = [5, 10, 25, 50, 100];
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 25;
 
 const roomsSearchSchema = z.object({
   // A room number typed into the URL by hand arrives as a number
@@ -85,8 +88,6 @@ function RoomsPage() {
     ...roomsQueryOptions(search.params),
     enabled: hasProperty
   });
-  // The property has no rooms at all (not: none match the filters)
-  const hasNoRooms = roomsQuery.data?.total === 0 && !search.hasActiveFilters;
 
   return (
     <div className="space-y-1">
@@ -106,29 +107,26 @@ function RoomsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Rooms</Trans>
-        </h1>
-        {/* An empty property offers the same two actions in its empty state */}
-        {canManage && !hasNoRooms && (
-          <div className="flex gap-2">
-            <ImportButton onImport={() => setIsImportOpen(true)} />
-            <Button onClick={() => search.openForm('new')}>
-              <PlusIcon aria-hidden="true" />
-              <Trans>Add room</Trans>
-            </Button>
-          </div>
-        )}
-      </div>
+      <PageHeader
+        title={<Trans>Rooms</Trans>}
+        description={
+          <Trans>The property's rooms, their type, floor and status.</Trans>
+        }
+        actions={
+          canManage && (
+            <>
+              <ImportButton onImport={() => setIsImportOpen(true)} />
+              <Button onClick={() => search.openForm('new')}>
+                <PlusIcon aria-hidden="true" />
+                <Trans>Add room</Trans>
+              </Button>
+            </>
+          )
+        }
+      />
 
       {hasProperty ? (
-        <RoomsContent
-          roomsQuery={roomsQuery}
-          hasNoRooms={hasNoRooms}
-          canManage={canManage}
-          onImport={() => setIsImportOpen(true)}
-        />
+        <RoomsContent roomsQuery={roomsQuery} canManage={canManage} />
       ) : (
         <Empty>
           <EmptyHeader>
@@ -157,17 +155,10 @@ function RoomsPage() {
 interface RoomsContentProps {
   /** The page of rooms the URL asks for; the page header reads it too */
   roomsQuery: UseQueryResult<FetchRoomsResponse>;
-  hasNoRooms: boolean;
   canManage: boolean;
-  onImport: () => void;
 }
 
-function RoomsContent({
-  roomsQuery,
-  hasNoRooms,
-  canManage,
-  onImport
-}: RoomsContentProps) {
+function RoomsContent({ roomsQuery, canManage }: RoomsContentProps) {
   const queryClient = useQueryClient();
   const search = useRoomsSearch();
 
@@ -177,60 +168,87 @@ function RoomsContent({
   const rooms = roomsQuery.data?.index ?? [];
   // Only those who may edit have a form to open
   const form = useEditingRoom(canManage ? search.formTarget : undefined, rooms);
+  // The property has no rooms at all (not: none match the filters)
+  const hasNoRooms = roomsQuery.data?.total === 0 && !search.hasActiveFilters;
 
   return (
     <>
-      {hasNoRooms ? (
-        <NoRooms
-          canManage={canManage}
-          onAdd={() => search.openForm('new')}
-          onImport={onImport}
+      <div className="space-y-2.5">
+        <RoomsFilters
+          filters={search.filters}
+          hasActiveFilters={search.hasActiveFilters}
+          setFilters={search.setFilters}
+          clearFilters={search.clearFilters}
+          roomTypes={options.room_types}
+          floors={options.floors}
+          isRefreshing={roomsQuery.isFetching}
+          onRefresh={() =>
+            queryClient.invalidateQueries({ queryKey: ['rooms'] })
+          }
         />
-      ) : (
-        <div className="space-y-2.5">
-          <RoomsFilters
-            filters={search.filters}
-            hasActiveFilters={search.hasActiveFilters}
-            setFilters={search.setFilters}
-            clearFilters={search.clearFilters}
-            roomTypes={options.room_types}
-            floors={options.floors}
-            isRefreshing={roomsQuery.isFetching}
-            onRefresh={() =>
-              queryClient.invalidateQueries({ queryKey: ['rooms'] })
-            }
-          />
 
-          <div
-            className={cn('transition-opacity duration-300 ease-in-out', {
-              'opacity-70': roomsQuery.isFetching
-            })}
-          >
-            <RoomsTable
-              error={tableLoadError(
-                roomsQuery,
-                <Trans>Couldn't load rooms</Trans>
-              )}
-              data={rooms}
-              isLoading={roomsQuery.isLoading}
-              pageIndex={search.pageIndex}
-              pageSize={search.pageSize}
-              totalCount={roomsQuery.data?.total ?? 0}
-              pageCount={roomsQuery.data?.page_count ?? 0}
-              sort={search.sort}
-              onSortChange={search.setSort}
-              onPageChange={search.setPage}
-              onEdit={canManage ? search.openForm : undefined}
-              emptyMessage={
+        <div
+          className={cn('transition-opacity duration-300 ease-in-out', {
+            'opacity-70': roomsQuery.isFetching
+          })}
+        >
+          <RoomsTable
+            error={tableLoadError(
+              roomsQuery,
+              <Trans>Couldn't load rooms</Trans>
+            )}
+            data={rooms}
+            isLoading={roomsQuery.isLoading}
+            pageIndex={search.pageIndex}
+            pageSize={search.pageSize}
+            totalCount={roomsQuery.data?.total ?? 0}
+            pageCount={roomsQuery.data?.page_count ?? 0}
+            sort={search.sort}
+            onSortChange={search.setSort}
+            onPageChange={search.setPage}
+            onEdit={canManage ? search.openForm : undefined}
+            selectedRoomId={
+              canManage && typeof search.formTarget === 'number'
+                ? search.formTarget
+                : undefined
+            }
+            emptyMessage={
+              hasNoRooms ? (
+                <EmptyTableState
+                  icon={<DoorOpenIcon />}
+                  title={<Trans>No rooms yet</Trans>}
+                  description={
+                    canManage ? (
+                      <Trans>
+                        Add the rooms of this property one by one, or import
+                        them from a CSV or XLSX file.
+                      </Trans>
+                    ) : (
+                      <Trans>
+                        An administrator has not added any rooms yet.
+                      </Trans>
+                    )
+                  }
+                  action={
+                    canManage
+                      ? {
+                          label: <Trans>Add room</Trans>,
+                          icon: <PlusIcon aria-hidden="true" />,
+                          onClick: () => search.openForm('new')
+                        }
+                      : undefined
+                  }
+                />
+              ) : (
                 <EmptyFilterResult
                   description={<Trans>No rooms match the filters.</Trans>}
                   onClearFilters={search.clearFilters}
                 />
-              }
-            />
-          </div>
+              )
+            }
+          />
         </div>
-      )}
+      </div>
 
       {canManage && (
         <RoomFormDrawer
@@ -238,49 +256,11 @@ function RoomsContent({
           onOpenChange={(open) => !open && search.closeForm()}
           room={form.room}
           roomTypes={options.room_types}
+          pageRooms={rooms}
+          onSelect={search.openForm}
         />
       )}
     </>
-  );
-}
-
-interface NoRoomsProps {
-  canManage: boolean;
-  onAdd: () => void;
-  onImport: () => void;
-}
-
-function NoRooms({ canManage, onAdd, onImport }: NoRoomsProps) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <DoorOpenIcon />
-        </EmptyMedia>
-        <EmptyTitle>
-          <Trans>No rooms yet</Trans>
-        </EmptyTitle>
-        <EmptyDescription>
-          {canManage ? (
-            <Trans>
-              Add the rooms of this property one by one, or import them from a
-              CSV or XLSX file.
-            </Trans>
-          ) : (
-            <Trans>An administrator has not added any rooms yet.</Trans>
-          )}
-        </EmptyDescription>
-      </EmptyHeader>
-      {canManage && (
-        <EmptyContent className="flex-row justify-center gap-2">
-          <Button onClick={onAdd}>
-            <PlusIcon aria-hidden="true" />
-            <Trans>Add room</Trans>
-          </Button>
-          <ImportButton onImport={onImport} />
-        </EmptyContent>
-      )}
-    </Empty>
   );
 }
 

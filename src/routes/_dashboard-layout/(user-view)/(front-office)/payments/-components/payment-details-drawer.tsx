@@ -8,7 +8,10 @@ import {
 import { paymentQueryOptions } from '@/api/payments';
 import { BRAND_NAMES, BrandMark } from '@/components/brand-mark';
 import { DetailRow, DetailSection } from '@/components/detail-list';
-import { DetailsDrawer } from '@/components/details-drawer';
+import {
+  DetailsDrawer,
+  DetailsDrawerStepper
+} from '@/components/details-drawer';
 import { ReservationLink } from '@/components/reservation-link';
 import { CopyButton } from '@/components/ui/copy-button';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
@@ -44,16 +47,32 @@ export function PaymentDetailsDrawer({
       queryOptions={paymentQueryOptions}
       onSelect={onSelect}
       onClose={onClose}
+      // As wide as the reservation drawer
+      className="sm:max-w-lg"
       loadingText={<Trans>Loading payment…</Trans>}
       notFoundTitle={<Trans>Payment not found</Trans>}
       notFoundText={<Trans>This payment does not exist.</Trans>}
     >
-      {(payment) => <PaymentDetails payment={payment} />}
+      {(payment) => (
+        <PaymentDetails
+          payment={payment}
+          pagePayments={pagePayments}
+          onSelect={onSelect}
+        />
+      )}
     </DetailsDrawer>
   );
 }
 
-function PaymentDetails({ payment }: { payment: Payment }) {
+function PaymentDetails({
+  payment,
+  pagePayments,
+  onSelect
+}: {
+  payment: Payment;
+  pagePayments: Payment[];
+  onSelect: (paymentId: number) => void;
+}) {
   const { t } = useLingui();
   const latest = latestStage(payment);
   const expired = isCardExpired(payment);
@@ -152,6 +171,14 @@ function PaymentDetails({ payment }: { payment: Payment }) {
           <PaymentTimeline payment={payment} />
         </section>
       </DrawerBody>
+
+      <DetailsDrawerStepper
+        currentId={payment.id}
+        items={pagePayments}
+        onSelect={onSelect}
+        previousLabel={t`Previous payment`}
+        nextLabel={t`Next payment`}
+      />
     </>
   );
 }

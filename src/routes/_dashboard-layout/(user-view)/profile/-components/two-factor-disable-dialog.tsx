@@ -42,13 +42,6 @@ export function TwoFactorDisableDialog({
   const [useRecoveryCode, setUseRecoveryCode] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    if (!open) return;
-    setCode('');
-    setUseRecoveryCode(false);
-    setError(null);
-  }, [open]);
-
   const action = useReauthedAction({
     action: (reauth) => disableTwoFactor(code, reauth),
     onSuccess: () => {
@@ -176,10 +169,7 @@ export function TwoFactorDisableDialog({
                 aria-busy={action.isRunning}
               >
                 {action.isRunning && (
-                  <Loader2Icon
-                    className="size-4 animate-spin"
-                    aria-hidden="true"
-                  />
+                  <Loader2Icon className="animate-spin" aria-hidden="true" />
                 )}
                 <Trans>Turn off</Trans>
               </Button>

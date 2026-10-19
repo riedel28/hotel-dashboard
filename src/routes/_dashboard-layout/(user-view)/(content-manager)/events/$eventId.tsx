@@ -44,6 +44,7 @@ function EventPage() {
     <div className="space-y-6">
       <EventPageHeader
         title={event.title}
+        description={<Trans>Edit the event’s details, date and place.</Trans>}
         actions={
           <DropdownMenu>
             <DropdownMenuTrigger

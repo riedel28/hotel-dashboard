@@ -2,10 +2,19 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
-import { XIcon } from 'lucide-react';
+import { z } from 'zod';
 
-import { fetchUsersParamsSchema, usersQueryOptions } from '@/api/users';
+import { rolesQueryOptions } from '@/api/roles';
+import {
+  fetchUsersParamsSchema,
+  userQueryOptions,
+  usersQueryOptions
+} from '@/api/users';
+import { useAuth } from '@/auth';
+import { ClearFiltersButton } from '@/components/clear-filters-button';
+import { EmptyFilterResult } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,41 +23,102 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
+import { CountryPicker } from '@/components/ui/country-picker';
+import {
+  DataGridCheckboxFilter,
+  DataGridCheckboxFilterClear,
+  DataGridCheckboxFilterFooter
+} from '@/components/ui/data-grid-checkbox-filter';
 import { SearchInput } from '@/components/ui/search-input';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { InviteUserModal } from './-components/invite-user-modal';
+import { UserFormDrawer } from './-components/user-form-drawer';
 import UsersTable from './-components/users-table';
 
 function UsersPage() {
-  const { page, per_page, q, sort_by, sort_order } = Route.useSearch();
+  const {
+    page,
+    per_page,
+    q,
+    country_code,
+    role,
+    sort_by,
+    sort_order,
+    user: openUserId
+  } = Route.useSearch();
   const navigate = Route.useNavigate();
 
   const { t } = useLingui();
   useDocumentTitle(t`Users`);
+  const { user } = useAuth();
+  // Users are managed by administrators only; everyone else gets the list
+  const canManage = Boolean(user?.is_admin);
 
   const usersQuery = useQuery(
     usersQueryOptions({
       page,
       per_page,
       q,
+      country_code,
+      role,
       sort_by,
       sort_order
     })
   );
-
-  const handleSearchChange = (searchTerm: string) => {
+  const { data: roles = [] } = useQuery(rolesQueryOptions());
+  const pageUsers = usersQuery.data?.index ?? [];
+  // The open user is normally on the page; a link to one that is not loads it
+  const listedUser = pageUsers.find((u) => u.id === openUserId);
+  const fetchedUserQuery = useQuery({
+    ...userQueryOptions(openUserId ?? 0),
+    enabled:
+      canManage &&
+      openUserId !== undefined &&
+      !listedUser &&
+      !usersQuery.isPending
+  });
+  const openUser =
+    openUserId === undefined || !canManage
+      ? undefined
+      : (listedUser ?? fetchedUserQuery.data);
+  const openUserById = (userId: number) =>
+    navigate({ to: '/users', search: (prev) => ({ ...prev, user: userId }) });
+  // Stepping replaces the entry, so Back leaves the drawer, not each user
+  const selectUser = (userId: number) =>
     navigate({
       to: '/users',
-      search: (prev) => ({
-        ...prev,
-        page: 1,
-        q: searchTerm || undefined
-      })
+      search: (prev) => ({ ...prev, user: userId }),
+      replace: true
+    });
+  const closeUser = () =>
+    navigate({
+      to: '/users',
+      search: (prev) => ({ ...prev, user: undefined })
+    });
+  const roleOptions = roles.map((r) => ({
+    value: String(r.id),
+    label: r.name
+  }));
+  const hasActiveFilters = Boolean(q || country_code || role?.length);
+
+  // A changed filter starts again on the first page
+  const setFilters = (
+    filters: Partial<{
+      q: string;
+      country_code: string;
+      role: number[];
+    }>
+  ) => {
+    navigate({
+      to: '/users',
+      search: (prev) => ({ ...prev, page: 1, ...filters })
     });
   };
+
+  const handleSearchChange = (searchTerm: string) =>
+    setFilters({ q: searchTerm || undefined });
 
   const handlePaginationChange = (
     updaterOrValue:
@@ -59,7 +129,7 @@ function UsersPage() {
       typeof updaterOrValue === 'function'
         ? updaterOrValue({
             pageIndex: (page ?? 1) - 1,
-            pageSize: per_page ?? 10
+            pageSize: per_page ?? 25
           })
         : updaterOrValue;
 
@@ -121,6 +191,8 @@ function UsersPage() {
         page: 1,
         per_page: per_page,
         q: undefined,
+        country_code: undefined,
+        role: undefined,
         sort_by: undefined,
         sort_order: undefined
       }
@@ -138,12 +210,14 @@ function UsersPage() {
           data={[]}
           isLoading={true}
           pageIndex={(page ?? 1) - 1}
-          pageSize={per_page ?? 10}
+          pageSize={per_page ?? 25}
           totalCount={0}
           pageCount={0}
           onPaginationChange={handlePaginationChange}
           sorting={sorting}
           onSortingChange={handleSortingChange}
+          canManage={canManage}
+          onUserOpen={openUserById}
         />
       );
     }
@@ -157,8 +231,10 @@ function UsersPage() {
         <UsersTable
           data={[]}
           pageIndex={(page ?? 1) - 1}
-          pageSize={per_page ?? 10}
+          pageSize={per_page ?? 25}
           error={error}
+          canManage={canManage}
+          onUserOpen={openUserById}
         />
       );
     }
@@ -168,12 +244,23 @@ function UsersPage() {
         <UsersTable
           data={usersQuery.data.index}
           pageIndex={(page ?? 1) - 1}
-          pageSize={per_page ?? 10}
+          pageSize={per_page ?? 25}
           totalCount={usersQuery.data.total}
           pageCount={usersQuery.data.page_count}
           onPaginationChange={handlePaginationChange}
           sorting={sorting}
           onSortingChange={handleSortingChange}
+          canManage={canManage}
+          onUserOpen={openUserById}
+          selectedUserId={openUser?.id}
+          // The list always holds the one looking at it, so only the
+          // filters can leave it empty
+          emptyMessage={
+            <EmptyFilterResult
+              description={<Trans>No users match the filters.</Trans>}
+              onClearFilters={handleClearFilters}
+            />
+          }
         />
       );
     }
@@ -199,34 +286,55 @@ function UsersPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Users</Trans>
-        </h1>
-        <InviteUserModal />
-      </div>
+      <PageHeader
+        title={<Trans>Users</Trans>}
+        description={
+          <Trans>Who works in the back-office, and with which roles.</Trans>
+        }
+        actions={canManage && <InviteUserModal />}
+      />
 
       <div className="space-y-2.5">
-        <div className="flex items-center justify-between gap-3 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-2">
-            <SearchInput
-              value={q || ''}
-              onChange={handleSearchChange}
-              placeholder={t`Search users`}
-              wrapperClassName="w-full sm:w-[250px]"
-              debounceMs={500}
-            />
-            {q && (
-              <Button
-                variant="secondary"
-                onClick={handleClearFilters}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <XIcon />
-                <Trans>Clear filters</Trans>
-              </Button>
-            )}
-          </div>
+        {/* One row from `sm` up; on a phone the search keeps its row and
+            the other filters go under it */}
+        <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
+          <SearchInput
+            value={q || ''}
+            onChange={handleSearchChange}
+            placeholder={t`Search users`}
+            wrapperClassName="w-full sm:w-72 sm:min-w-36 sm:shrink"
+            debounceMs={500}
+          />
+          <CountryPicker
+            value={country_code}
+            onValueChange={(code) =>
+              setFilters({ country_code: code || undefined })
+            }
+            placeholder={t`All countries`}
+            // Room for nearly every name; the very longest are cut short
+            className="w-full sm:w-64 sm:min-w-40 sm:shrink"
+          />
+          <DataGridCheckboxFilter
+            label={<Trans>Role</Trans>}
+            placeholder={<Trans>All roles</Trans>}
+            options={roleOptions}
+            value={role?.map(String) ?? []}
+            onValueChange={(ids) =>
+              setFilters({ role: ids.length ? ids.map(Number) : undefined })
+            }
+            // Fits "Role: Roomservice Order Agent", the longest one
+            className="w-full sm:w-66 sm:min-w-36 sm:shrink"
+          >
+            <DataGridCheckboxFilterFooter>
+              <DataGridCheckboxFilterClear>
+                <Trans>Reset</Trans>
+              </DataGridCheckboxFilterClear>
+            </DataGridCheckboxFilterFooter>
+          </DataGridCheckboxFilter>
+          <ClearFiltersButton
+            hasActiveFilters={hasActiveFilters}
+            onClear={handleClearFilters}
+          />
         </div>
 
         {q && (
@@ -248,12 +356,23 @@ function UsersPage() {
         >
           {renderTableContent()}
         </div>
+
+        <UserFormDrawer
+          user={openUser}
+          pageUsers={pageUsers}
+          onSelect={selectUser}
+          onClose={closeUser}
+        />
       </div>
     </div>
   );
 }
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/users/')({
-  validateSearch: (search) => fetchUsersParamsSchema.parse(search),
+  // The list's filters plus the user open in the drawer
+  validateSearch: (search) =>
+    fetchUsersParamsSchema
+      .extend({ user: z.coerce.number().int().positive().optional() })
+      .parse(search),
   component: UsersPage
 });

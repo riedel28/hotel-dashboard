@@ -1,11 +1,9 @@
 import { asc, eq, sql } from 'drizzle-orm';
 
-import { db } from './pool';
+import { db, type Transaction } from './pool';
 import { reservations, rooms } from './schema';
 
 // Query fragments about rooms that more than one controller needs.
-
-export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 // A reservation names its room (reservations.room_name) instead of holding
 // it. It is active until the guest has checked out: not yet over, or the

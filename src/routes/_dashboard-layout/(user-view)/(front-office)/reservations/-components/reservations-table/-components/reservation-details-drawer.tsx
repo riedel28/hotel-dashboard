@@ -100,7 +100,12 @@ export function ReservationDetailsDrawer({
     >
       {/* Focus lands on the panel, not on its first button: opened from a link
           that button would show a focus ring nobody asked for */}
-      <DrawerContent ref={popupRef} initialFocus={popupRef}>
+      <DrawerContent
+        ref={popupRef}
+        initialFocus={popupRef}
+        // Leaves more of the table in view beside it
+        className="sm:max-w-lg"
+      >
         {reservation && (
           <ReservationDetails
             reservation={reservation}
@@ -183,9 +188,10 @@ function ReservationDetails({
 
   return (
     <>
-      <DrawerHeader className="space-y-1 py-3">
-        {/* Only the title row shares its line with the close button */}
-        <div className="flex items-center gap-2 pr-10">
+      <DrawerHeader className="space-y-2 pt-4 pb-3">
+        {/* Only the title row shares its line with the close button, and is
+            as tall as it, so the row below clears it */}
+        <div className="flex min-h-7 items-center gap-2 pr-10">
           <DrawerTitle className="min-w-0 truncate">
             {reservation.booking_nr}
           </DrawerTitle>

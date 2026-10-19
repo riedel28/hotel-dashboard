@@ -120,7 +120,8 @@ export function CategoryActionsDropdown({
     <span className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 has-data-popup-open:opacity-100 pointer-coarse:opacity-100">
       <DropdownMenu>
         <DropdownMenuTrigger
-          className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }))}
+          // As small as the Mobile CMS tree's, so the rows match its height
+          className={cn(buttonVariants({ size: 'icon-xs', variant: 'ghost' }))}
           aria-label={t`Category actions`}
           onClick={(e) => {
             e.stopPropagation();

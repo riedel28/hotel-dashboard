@@ -81,6 +81,9 @@ function ReservationPage() {
           {/* Set by the reservation's lifecycle, so shown rather than edited */}
           {data && <ReservationStatusBadge status={data.state} />}
         </div>
+        <p className="max-w-2xl text-sm text-pretty text-muted-foreground">
+          <Trans>Edit the booking, its guests and their check-in.</Trans>
+        </p>
       </div>
 
       <div>

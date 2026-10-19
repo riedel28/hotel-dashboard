@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 
 import { checkinSettingsQueryOptions, setCheckinEnabled } from '@/api/checkin';
 import { useAuth } from '@/auth';
+import { PageHeader } from '@/components/page-header';
 import { QueryBoundary } from '@/components/query-boundary';
 import {
   Breadcrumb,
@@ -28,10 +29,10 @@ import {
   EmptyMedia,
   EmptyTitle
 } from '@/components/ui/empty';
-import { FormSkeleton } from '@/components/ui/form-skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { CheckinForm } from './checkin-page/-components/checkin-form';
+import { CheckinSkeleton } from './checkin-page/-components/checkin-skeleton';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/checkin-page'
@@ -64,15 +65,15 @@ function CheckinPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex max-w-2xl flex-col gap-1">
-        <h1 className="text-xl font-semibold text-balance">{title}</h1>
-        <p className="text-sm text-pretty text-muted-foreground">
+      <PageHeader
+        title={title}
+        description={
           <Trans>Let guests check in online before they arrive.</Trans>
-        </p>
-      </div>
+        }
+      />
 
       <QueryBoundary
-        fallback={<FormSkeleton />}
+        fallback={<CheckinSkeleton />}
         title={<Trans>Couldn't load the check-in settings</Trans>}
       >
         <CheckinScreens />

@@ -9,6 +9,7 @@ import {
   EmptyTableState
 } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -61,13 +62,14 @@ function MonitoringPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      {/* From `sm` up as tall as the same row on pages that have an action
-          button in it; phones keep the space for the logs */}
-      <div className="mb-4 flex justify-between sm:mb-6 sm:min-h-9">
-        <h1 className="text-xl font-bold">
-          <Trans>Monitoring Logs</Trans>
-        </h1>
-      </div>
+      <PageHeader
+        title={<Trans>Monitoring Logs</Trans>}
+        description={
+          <Trans>
+            Track PMS, door lock and payment events and spot failed ones.
+          </Trans>
+        }
+      />
 
       <div className="space-y-2.5">
         <MonitoringFilters

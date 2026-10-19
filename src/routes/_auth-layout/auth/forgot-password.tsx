@@ -151,10 +151,7 @@ function ForgotPasswordPage() {
             aria-busy={forgotMutation.isPending}
           >
             {forgotMutation.isPending && (
-              <Loader2Icon
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
             )}
             <Trans>Send reset link</Trans>
           </Button>

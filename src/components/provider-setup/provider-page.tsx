@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 import type { ProviderKind } from 'shared/types/providers';
 
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -54,12 +55,7 @@ export function ProviderPage<K extends ProviderKind>({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex max-w-2xl flex-col gap-1">
-        <h1 className="text-xl font-semibold text-balance">{title}</h1>
-        <p className="text-sm text-pretty text-muted-foreground">
-          {description}
-        </p>
-      </div>
+      <PageHeader title={title} description={description} />
 
       <ProviderScreens {...screens} />
     </div>

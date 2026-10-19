@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { PlusIcon } from 'lucide-react';
+import { CalendarCheckIcon, PlusIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import {
@@ -8,7 +8,12 @@ import {
   reservationsQueryOptions
 } from '@/api/reservations';
 import { DateRangeFilter } from '@/components/date-range-filter';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -59,15 +64,20 @@ function ReservationsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Reservations</Trans>
-        </h1>
-        <Button onClick={() => void navigate({ to: '/reservations/new' })}>
-          <PlusIcon aria-hidden="true" />
-          <Trans>Add Reservation</Trans>
-        </Button>
-      </div>
+      <PageHeader
+        title={<Trans>Reservations</Trans>}
+        description={
+          <Trans>
+            Find bookings, follow their check-in and open one to edit.
+          </Trans>
+        }
+        actions={
+          <Button onClick={() => void navigate({ to: '/reservations/new' })}>
+            <PlusIcon aria-hidden="true" />
+            <Trans>Add Reservation</Trans>
+          </Button>
+        }
+      />
 
       <ReservationsContent />
     </div>
@@ -75,6 +85,7 @@ function ReservationsPage() {
 }
 
 function ReservationsContent() {
+  const navigate = useNavigate();
   const {
     reservationsQuery,
     searchTerm,
@@ -148,6 +159,29 @@ function ReservationsContent() {
           onSortingChange={setSorting}
           selectedReservationId={openReservationId}
           onReservationOpen={openReservation}
+          emptyMessage={
+            hasActiveFilters ? (
+              <EmptyFilterResult
+                description={<Trans>No reservations match the filters.</Trans>}
+                onClearFilters={clearFilters}
+              />
+            ) : (
+              <EmptyTableState
+                icon={<CalendarCheckIcon />}
+                title={<Trans>No reservations yet</Trans>}
+                description={
+                  <Trans>
+                    Reservations from the PMS show up here, or add one by hand.
+                  </Trans>
+                }
+                action={{
+                  label: <Trans>Add Reservation</Trans>,
+                  icon: <PlusIcon aria-hidden="true" />,
+                  onClick: () => void navigate({ to: '/reservations/new' })
+                }}
+              />
+            )
+          }
         />
       </div>
 

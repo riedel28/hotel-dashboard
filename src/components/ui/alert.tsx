@@ -13,6 +13,9 @@ const alertVariants = cva(
           'bg-card text-danger *:data-[slot=alert-description]:text-danger [&>svg]:text-current',
         // A quiet, compact notice rather than a call for attention
         info: 'border-foreground/10 bg-info-soft px-3 py-2 text-info *:data-[slot=alert-description]:text-current [&>svg]:text-current',
+        // The info note's quiet, compact form, in the danger colour
+        error:
+          'border-danger/20 bg-danger-soft px-3 py-2 text-danger *:data-[slot=alert-description]:text-current [&>svg]:text-current',
         // The info note's quiet, compact form, in the warning colour
         caution:
           'border-foreground/10 bg-warning-soft px-3 py-2 text-warning *:data-[slot=alert-description]:text-current [&>svg]:text-current',

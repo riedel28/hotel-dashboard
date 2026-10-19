@@ -2,8 +2,10 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { MoreHorizontalIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 
 import type { Product } from '@/api/products';
+import { openRowClassName } from '@/components/details-drawer';
 import { buttonVariants } from '@/components/ui/button';
 import { CurrencyFormatter } from '@/components/ui/currency-formatter';
+import { stopRowClick } from '@/components/ui/data-grid-cards';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,17 +21,21 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
 
 interface ProductsTableProps {
   products: Product[];
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
+  /** The product open in the drawer, marked like the other tables' rows. */
+  selectedProductId?: number;
 }
 
 export function ProductsTable({
   products,
   onEdit,
-  onDelete
+  onDelete,
+  selectedProductId
 }: ProductsTableProps) {
   const { t } = useLingui();
 
@@ -55,7 +61,17 @@ export function ProductsTable({
       </TableHeader>
       <TableBody>
         {products.map((product) => (
-          <TableRow key={product.id} className="hover:bg-transparent">
+          <TableRow
+            key={product.id}
+            data-state={
+              product.id === selectedProductId ? 'selected' : undefined
+            }
+            className={cn(
+              'cursor-pointer *:first:relative hover:bg-muted/40',
+              openRowClassName
+            )}
+            onClick={() => onEdit(product)}
+          >
             <TableCell className="truncate py-2.5 font-medium">
               {product.title}
             </TableCell>
@@ -65,7 +81,8 @@ export function ProductsTable({
             <TableCell className="py-2.5 text-right tabular-nums">
               <CurrencyFormatter value={product.price} />
             </TableCell>
-            <TableCell className="py-1.5 text-right">
+            {/* The menu keeps its clicks from opening the row */}
+            <TableCell className="py-1.5 text-right" onClick={stopRowClick}>
               <DropdownMenu>
                 <DropdownMenuTrigger
                   className={buttonVariants({

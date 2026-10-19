@@ -94,7 +94,9 @@ test.describe('Rooms', () => {
 
     const updatedName = `${roomName} Updated`;
     await drawer(page).getByLabel('Name').fill(updatedName);
-    await drawer(page).getByRole('button', { name: 'Update' }).click();
+    // Submitted from the keyboard: in a dev build the router devtools badge
+    // sits on top of the drawer's Update button.
+    await drawer(page).getByLabel('Name').press('Enter');
 
     await expect(page.getByText('Room updated successfully')).toBeVisible();
 

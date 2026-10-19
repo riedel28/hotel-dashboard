@@ -1,14 +1,11 @@
-import { and, eq, gt, isNull } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { emailVerificationTokens, users } from '../db/schema';
+import { consumeToken, issueToken } from '../db/verification-tokens';
 import { sendPasswordResetEmail, sendVerificationEmail } from '../utils/email';
 import { hashPassword } from '../utils/password';
-import { generateVerificationToken } from '../utils/token';
-
-const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
-const ONE_HOUR_MS = 60 * 60 * 1000;
 
 async function signUp(req: Request, res: Response) {
   const { email, password, first_name, last_name } = req.body;
@@ -37,14 +34,7 @@ async function signUp(req: Request, res: Response) {
       })
       .returning({ id: users.id, email: users.email });
 
-    // Generate verification token (24h expiry)
-    const token = generateVerificationToken();
-    await db.insert(emailVerificationTokens).values({
-      user_id: newUser.id,
-      token,
-      type: 'verification',
-      expires_at: new Date(Date.now() + TWENTY_FOUR_HOURS_MS)
-    });
+    const token = await issueToken(db, newUser.id, 'verification');
 
     await sendVerificationEmail(email, token);
 
@@ -62,20 +52,17 @@ async function verifyEmail(req: Request, res: Response) {
   const { token } = req.body;
 
   try {
-    // Look up valid token (unused, not expired, type verification)
-    const [tokenRecord] = await db
-      .select()
-      .from(emailVerificationTokens)
-      .where(
-        and(
-          eq(emailVerificationTokens.token, token),
-          eq(emailVerificationTokens.type, 'verification'),
-          isNull(emailVerificationTokens.used_at),
-          gt(emailVerificationTokens.expires_at, new Date())
-        )
-      );
+    const verified = await db.transaction(async (tx) => {
+      const userId = await consumeToken(tx, token, 'verification');
+      if (userId === null) return false;
+      await tx
+        .update(users)
+        .set({ email_verified: true, updated_at: new Date() })
+        .where(eq(users.id, userId));
+      return true;
+    });
 
-    if (!tokenRecord) {
+    if (!verified) {
       // Check if this token was already used and the user is verified (idempotent)
       const [usedToken] = await db
         .select({ user_id: emailVerificationTokens.user_id })
@@ -108,19 +95,6 @@ async function verifyEmail(req: Request, res: Response) {
         .json({ error: 'Invalid or expired verification link' });
     }
 
-    // In transaction: mark user verified and token used
-    await db.transaction(async (tx) => {
-      await tx
-        .update(users)
-        .set({ email_verified: true, updated_at: new Date() })
-        .where(eq(users.id, tokenRecord.user_id));
-
-      await tx
-        .update(emailVerificationTokens)
-        .set({ used_at: new Date() })
-        .where(eq(emailVerificationTokens.id, tokenRecord.id));
-    });
-
     res
       .status(200)
       .json({ message: 'Email verified successfully. You can now log in.' });
@@ -149,27 +123,7 @@ async function resendVerification(req: Request, res: Response) {
       return res.status(200).json(genericResponse);
     }
 
-    // Invalidate old tokens by marking them used
-    await db
-      .update(emailVerificationTokens)
-      .set({ used_at: new Date() })
-      .where(
-        and(
-          eq(emailVerificationTokens.user_id, user.id),
-          eq(emailVerificationTokens.type, 'verification'),
-          isNull(emailVerificationTokens.used_at)
-        )
-      );
-
-    // Create new token (24h expiry)
-    const token = generateVerificationToken();
-    await db.insert(emailVerificationTokens).values({
-      user_id: user.id,
-      token,
-      type: 'verification',
-      expires_at: new Date(Date.now() + TWENTY_FOUR_HOURS_MS)
-    });
-
+    const token = await issueToken(db, user.id, 'verification');
     await sendVerificationEmail(email, token);
 
     res.status(200).json(genericResponse);
@@ -183,29 +137,12 @@ async function acceptInvitation(req: Request, res: Response) {
   const { token, password, first_name, last_name } = req.body;
 
   try {
-    // Look up valid token (unused, not expired, type invitation)
-    const [tokenRecord] = await db
-      .select()
-      .from(emailVerificationTokens)
-      .where(
-        and(
-          eq(emailVerificationTokens.token, token),
-          eq(emailVerificationTokens.type, 'invitation'),
-          isNull(emailVerificationTokens.used_at),
-          gt(emailVerificationTokens.expires_at, new Date())
-        )
-      );
-
-    if (!tokenRecord) {
-      return res
-        .status(400)
-        .json({ error: 'Invalid or expired invitation link' });
-    }
-
     const hashedPassword = await hashPassword(password);
 
-    // In transaction: update user and mark token used
-    await db.transaction(async (tx) => {
+    const accepted = await db.transaction(async (tx) => {
+      const userId = await consumeToken(tx, token, 'invitation');
+      if (userId === null) return false;
+
       const [updatedUser] = await tx
         .update(users)
         .set({
@@ -215,7 +152,7 @@ async function acceptInvitation(req: Request, res: Response) {
           email_verified: true,
           updated_at: new Date()
         })
-        .where(eq(users.id, tokenRecord.user_id))
+        .where(eq(users.id, userId))
         .returning({ id: users.id });
 
       if (!updatedUser) {
@@ -223,12 +160,14 @@ async function acceptInvitation(req: Request, res: Response) {
           statusCode: 404
         });
       }
-
-      await tx
-        .update(emailVerificationTokens)
-        .set({ used_at: new Date() })
-        .where(eq(emailVerificationTokens.id, tokenRecord.id));
+      return true;
     });
+
+    if (!accepted) {
+      return res
+        .status(400)
+        .json({ error: 'Invalid or expired invitation link' });
+    }
 
     res.status(200).json({
       message: 'Account activated successfully. You can now log in.'
@@ -261,27 +200,7 @@ async function forgotPassword(req: Request, res: Response) {
       return res.status(200).json(genericResponse);
     }
 
-    // Invalidate existing unused reset tokens
-    await db
-      .update(emailVerificationTokens)
-      .set({ used_at: new Date() })
-      .where(
-        and(
-          eq(emailVerificationTokens.user_id, user.id),
-          eq(emailVerificationTokens.type, 'reset'),
-          isNull(emailVerificationTokens.used_at)
-        )
-      );
-
-    // Generate new reset token (1h expiry)
-    const token = generateVerificationToken();
-    await db.insert(emailVerificationTokens).values({
-      user_id: user.id,
-      token,
-      type: 'reset',
-      expires_at: new Date(Date.now() + ONE_HOUR_MS)
-    });
-
+    const token = await issueToken(db, user.id, 'reset');
     await sendPasswordResetEmail(email, token);
 
     res.status(200).json(genericResponse);
@@ -295,35 +214,21 @@ async function resetPassword(req: Request, res: Response) {
   const { token, password } = req.body;
 
   try {
-    const [tokenRecord] = await db
-      .select()
-      .from(emailVerificationTokens)
-      .where(
-        and(
-          eq(emailVerificationTokens.token, token),
-          eq(emailVerificationTokens.type, 'reset'),
-          isNull(emailVerificationTokens.used_at),
-          gt(emailVerificationTokens.expires_at, new Date())
-        )
-      );
-
-    if (!tokenRecord) {
-      return res.status(400).json({ error: 'Invalid or expired reset link' });
-    }
-
     const hashedPassword = await hashPassword(password);
 
-    await db.transaction(async (tx) => {
+    const reset = await db.transaction(async (tx) => {
+      const userId = await consumeToken(tx, token, 'reset');
+      if (userId === null) return false;
       await tx
         .update(users)
         .set({ password: hashedPassword, updated_at: new Date() })
-        .where(eq(users.id, tokenRecord.user_id));
-
-      await tx
-        .update(emailVerificationTokens)
-        .set({ used_at: new Date() })
-        .where(eq(emailVerificationTokens.id, tokenRecord.id));
+        .where(eq(users.id, userId));
+      return true;
     });
+
+    if (!reset) {
+      return res.status(400).json({ error: 'Invalid or expired reset link' });
+    }
 
     res
       .status(200)

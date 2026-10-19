@@ -203,10 +203,7 @@ function ResetPasswordPage() {
           aria-busy={resetMutation.isPending}
         >
           {resetMutation.isPending && (
-            <Loader2Icon
-              className="mr-2 h-4 w-4 animate-spin"
-              aria-hidden="true"
-            />
+            <Loader2Icon className="animate-spin" aria-hidden="true" />
           )}
           <Trans>Reset Password</Trans>
         </Button>

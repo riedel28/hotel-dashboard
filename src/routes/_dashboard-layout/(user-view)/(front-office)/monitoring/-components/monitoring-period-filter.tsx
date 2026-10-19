@@ -57,6 +57,8 @@ export function MonitoringPeriodFilter({
           : appliedRange && formatDateRange(appliedRange)
       }
       value={appliedRange}
+      // As wide as the Type filter beside it; a custom range may grow it
+      className="sm:w-[200px] xl:w-auto xl:max-w-[200px] xl:min-w-40 xl:flex-1"
       onApply={onRangeChange}
       applyLabel={<Trans>Apply custom range</Trans>}
       presets={(close) =>

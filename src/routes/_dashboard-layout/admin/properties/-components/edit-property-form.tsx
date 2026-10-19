@@ -41,7 +41,7 @@ import {
 import {
   type PropertyStage,
   propertyStages,
-  stageLabels
+  StageLabel
 } from '@/components/ui/stage-badge';
 
 import { CustomerPicker } from './customer-picker';
@@ -199,13 +199,13 @@ function GeneralFields({ form }: PropertyFieldsProps) {
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
                 <SelectValue>
-                  {(value: PropertyStage) => t(stageLabels[value])}
+                  {(value: PropertyStage) => <StageLabel stage={value} />}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {propertyStages.map((stage) => (
                   <SelectItem key={stage} value={stage}>
-                    {t(stageLabels[stage])}
+                    <StageLabel stage={stage} />
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -236,7 +236,7 @@ function AddressFields({ form }: PropertyFieldsProps) {
       {text('address_line_1', <Trans>Street</Trans>, 'address-line1')}
       {text('address_line_2', <Trans>Address line 2</Trans>, 'address-line2')}
       <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-        {text('zip', <Trans>Postal code</Trans>, 'postal-code')}
+        {text('zip', <Trans>ZIP code</Trans>, 'postal-code')}
         {text('city', <Trans>City</Trans>, 'address-level2')}
       </div>
       <Controller

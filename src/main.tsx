@@ -52,6 +52,8 @@ function InnerApp() {
 
   React.useEffect(() => {
     const handler = () => {
+      // A wrong password on the sign-in pages is a 401 too, not an expired session
+      if (router.state.location.pathname.startsWith('/auth/')) return;
       void logout()
         .catch((error) => {
           console.error('Auto logout failed', error);

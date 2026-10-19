@@ -274,10 +274,7 @@ function AcceptInvitationPage() {
           aria-busy={acceptMutation.isPending}
         >
           {acceptMutation.isPending && (
-            <Loader2Icon
-              className="mr-2 h-4 w-4 animate-spin"
-              aria-hidden="true"
-            />
+            <Loader2Icon className="animate-spin" aria-hidden="true" />
           )}
           <Trans>Activate Account</Trans>
         </Button>
