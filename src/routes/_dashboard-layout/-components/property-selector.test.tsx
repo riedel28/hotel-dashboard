@@ -135,6 +135,18 @@ describe('PropertySelector', () => {
         expect(screen.getByText(/no properties found/i)).toBeInTheDocument();
       });
     });
+
+    test('counts what the search found', async () => {
+      renderSelector();
+      const user = await open();
+      const search = screen.getByPlaceholderText(/search property/i);
+
+      expect(screen.getByText('4 properties')).toBeInTheDocument();
+      await user.type(search, 'Hotel A');
+      expect(await screen.findByText('1 of 4 properties')).toBeInTheDocument();
+      await user.type(search, 'xyz');
+      expect(await screen.findByText('0 properties')).toBeInTheDocument();
+    });
   });
 
   describe('Selecting', () => {

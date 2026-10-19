@@ -1,3 +1,4 @@
+import { Combobox as ComboboxPrimitive } from '@base-ui/react';
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
 import { BuildingIcon, LoaderCircleIcon, SearchIcon } from 'lucide-react';
 import * as React from 'react';
@@ -132,17 +133,32 @@ function PropertySelector({
         </ComboboxList>
         <ComboboxSeparator className="my-0" />
         <div className="shrink-0 px-3 py-2 text-xs text-muted-foreground">
-          {total > properties.length ? (
-            <Trans>
-              First {properties.length} of {total} properties
-            </Trans>
-          ) : (
-            <Plural value={total} one="# property" other="# properties" />
-          )}
+          <PropertyCount loaded={properties.length} total={total} />
         </div>
       </ComboboxContent>
     </Combobox>
   );
+}
+
+/** Reads the search result, so it has to render inside the Combobox. */
+function PropertyCount({ loaded, total }: { loaded: number; total: number }) {
+  const found = ComboboxPrimitive.useFilteredItems<Property>().length;
+
+  if (found === 0)
+    return <Plural value={0} one="# property" other="# properties" />;
+  if (found < loaded)
+    return (
+      <Trans>
+        {found} of {loaded} properties
+      </Trans>
+    );
+  if (total > loaded)
+    return (
+      <Trans>
+        First {loaded} of {total} properties
+      </Trans>
+    );
+  return <Plural value={total} one="# property" other="# properties" />;
 }
 
 export default PropertySelector;
