@@ -45,10 +45,10 @@ export function RoomStatusCell({ status }: RoomStatusProps) {
 
 // The badge's colors, as a dot
 const dotColors: Record<RoomStatus, string> = {
-  available: 'bg-success-solid',
+  available: 'bg-emerald-500',
   occupied: 'bg-yellow-500',
   maintenance: 'bg-sky-500',
-  out_of_order: 'bg-danger-solid'
+  out_of_order: 'bg-red-500'
 };
 
 /** A colored dot with the status spelled out, for selects. */

@@ -8,15 +8,11 @@ import { cn } from '@/lib/utils';
 // segment of SegmentedControl.
 const badgeColors = {
   gray: 'border-foreground/10 bg-gray-100/70 text-gray-800 dark:bg-gray-600/30 dark:text-gray-300 [a]:hover:bg-gray-100 dark:[a]:hover:bg-gray-600/40',
-  // Red and rose are the theme's danger red, as emerald is its success
-  // green, so the app has one red
-  red: 'border-foreground/10 bg-danger-soft text-danger [a]:hover:bg-danger/15 dark:[a]:hover:bg-danger/20',
+  red: 'border-foreground/10 bg-red-100/70 text-red-800 dark:bg-red-800/30 dark:text-red-300 [a]:hover:bg-red-100 dark:[a]:hover:bg-red-800/40',
   yellow:
     'border-foreground/10 bg-yellow-100/70 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-300 [a]:hover:bg-yellow-100 dark:[a]:hover:bg-yellow-800/40',
-  // The theme's success green rather than Tailwind's emerald, so every green
-  // in the app is the same one
   emerald:
-    'border-foreground/10 bg-success-soft text-success [a]:hover:bg-success/15 dark:[a]:hover:bg-success/20',
+    'border-foreground/10 bg-emerald-100/70 text-emerald-800 dark:bg-emerald-800/30 dark:text-emerald-300 [a]:hover:bg-emerald-100 dark:[a]:hover:bg-emerald-800/40',
   sky: 'border-foreground/10 bg-sky-100/70 text-sky-800 dark:bg-sky-800/30 dark:text-sky-300 [a]:hover:bg-sky-100 dark:[a]:hover:bg-sky-800/40',
   indigo:
     'border-foreground/10 bg-indigo-100/70 text-indigo-800 dark:bg-indigo-800/30 dark:text-indigo-300 [a]:hover:bg-indigo-100 dark:[a]:hover:bg-indigo-800/40',
@@ -26,7 +22,7 @@ const badgeColors = {
   fuchsia:
     'border-foreground/10 bg-fuchsia-100/70 text-fuchsia-800 dark:bg-fuchsia-800/30 dark:text-fuchsia-300 [a]:hover:bg-fuchsia-100 dark:[a]:hover:bg-fuchsia-800/40',
   pink: 'border-foreground/10 bg-pink-100/70 text-pink-800 dark:bg-pink-800/30 dark:text-pink-300 [a]:hover:bg-pink-100 dark:[a]:hover:bg-pink-800/40',
-  rose: 'border-foreground/10 bg-danger-soft text-danger [a]:hover:bg-danger/15 dark:[a]:hover:bg-danger/20'
+  rose: 'border-foreground/10 bg-rose-100/70 text-rose-800 dark:bg-rose-800/30 dark:text-rose-300 [a]:hover:bg-rose-100 dark:[a]:hover:bg-rose-800/40'
 };
 
 const badgeVariants = cva(
@@ -98,16 +94,16 @@ function Badge({
 // beside plain text
 const badgeDotColors: Record<BadgeColorProps, string> = {
   gray: 'bg-gray-500 dark:bg-gray-400',
-  red: 'bg-danger-solid dark:bg-danger',
+  red: 'bg-red-500 dark:bg-red-400',
   yellow: 'bg-yellow-500 dark:bg-yellow-400',
-  emerald: 'bg-success-solid dark:bg-success',
+  emerald: 'bg-emerald-500 dark:bg-emerald-400',
   sky: 'bg-sky-500 dark:bg-sky-400',
   indigo: 'bg-indigo-500 dark:bg-indigo-400',
   orange: 'bg-orange-500 dark:bg-orange-400',
   teal: 'bg-teal-500 dark:bg-teal-400',
   fuchsia: 'bg-fuchsia-500 dark:bg-fuchsia-400',
   pink: 'bg-pink-500 dark:bg-pink-400',
-  rose: 'bg-danger-solid dark:bg-danger'
+  rose: 'bg-rose-500 dark:bg-rose-400'
 };
 
 export {
