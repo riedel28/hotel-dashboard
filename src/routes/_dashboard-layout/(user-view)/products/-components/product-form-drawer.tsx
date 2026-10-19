@@ -74,7 +74,8 @@ export function ProductFormDrawer({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent>
+      {/* As wide as the other details drawers */}
+      <DrawerContent className="sm:max-w-lg">
         <DrawerHeader>
           <DrawerTitle>
             {isEdit ? <Trans>Edit product</Trans> : <Trans>Add product</Trans>}

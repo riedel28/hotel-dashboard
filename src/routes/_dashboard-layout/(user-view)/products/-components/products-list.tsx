@@ -136,6 +136,9 @@ function CategoryProducts({ categoryId, path }: CategoryProductsProps) {
             products={visibleProducts}
             onEdit={(product) => setForm({ open: true, product })}
             onDelete={setPendingDelete}
+            selectedProductId={
+              form.open ? (form.product?.id ?? undefined) : undefined
+            }
           />
         )}
       </ProductsCard>

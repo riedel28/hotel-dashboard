@@ -343,7 +343,7 @@ msgid "Accounting codes reported to your PMS per payment method and channel."
 msgstr "Accounting codes reported to your PMS per payment method and channel."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:80
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:51
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:57
 msgid "Actions"
 msgstr "Actions"
 
@@ -369,7 +369,7 @@ msgstr "Active reservation — will be skipped"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/nested-items.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:290
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:113
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:206
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:312
 msgid "Add"
 msgstr "Add"
@@ -447,7 +447,7 @@ msgstr "Add nested"
 msgid "Add New Guest"
 msgstr "Add New Guest"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:80
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-list.tsx:124
 msgid "Add product"
 msgstr "Add product"
@@ -1020,7 +1020,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-category-dialog.tsx:46
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:143
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:202
@@ -1852,7 +1852,7 @@ msgstr "Delete entry?"
 msgid "Delete event “{title}”?"
 msgstr "Delete event “{title}”?"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:90
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:107
 msgid "Delete product"
 msgstr "Delete product"
 
@@ -1923,7 +1923,7 @@ msgstr "Desc"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:287
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:120
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:120
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:117
 msgid "Description"
 msgstr "Description"
 
@@ -2126,8 +2126,8 @@ msgstr "Edit HTML"
 msgid "Edit item"
 msgstr "Edit item"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:80
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:81
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:99
 msgid "Edit product"
 msgstr "Edit product"
 
@@ -4493,7 +4493,7 @@ msgstr "Opens in the system browser"
 msgid "optional"
 msgstr "optional"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:118
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:119
 msgid "Optional"
 msgstr "Optional"
 
@@ -4924,11 +4924,11 @@ msgstr "Previous room"
 #~ msgid "Previous slide"
 #~ msgstr "Previous slide"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:47
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:53
 msgid "Price"
 msgstr "Price"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:144
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:145
 msgid "Price (€)"
 msgstr "Price (€)"
 
@@ -4971,7 +4971,7 @@ msgstr "Product “{0}” deleted"
 msgid "Product “{0}” updated"
 msgstr "Product “{0}” updated"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:75
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:92
 msgid "Product actions"
 msgstr "Product actions"
 
@@ -5148,8 +5148,8 @@ msgstr "QR code for setting up two-factor authentication"
 #~ msgid "Qty: {0}"
 #~ msgstr "Qty: {0}"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:171
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:44
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:50
 msgid "Quantity"
 msgstr "Quantity"
 
@@ -6815,8 +6815,8 @@ msgstr "Timezone"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:186
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:96
-#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:41
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:47
 msgid "Title"
 msgstr "Title"
 
@@ -7132,7 +7132,7 @@ msgstr "Upcoming"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/entry-card.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:301
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:206
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:312
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:178
 msgid "Update"
