@@ -140,7 +140,9 @@ function GuestLink({ url }: { url: string }) {
       <div
         role="group"
         aria-labelledby={labelId}
-        className="flex h-9 items-center gap-0.5 rounded-lg border border-input bg-muted/50 ps-3 pe-1 dark:bg-input/30"
+        // Read-only in both themes: grey in light, sunk below the card in
+        // dark, where editable fields are lifted above it
+        className="flex h-9 items-center gap-0.5 rounded-lg border border-input bg-muted/50 ps-3 pe-1 dark:border-border dark:bg-background/60"
       >
         <span className="min-w-0 flex-1 truncate text-sm" title={url}>
           {url}
