@@ -40,7 +40,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { propertyStages, stageLabels } from '@/components/ui/stage-badge';
+import { propertyStages, StageLabel } from '@/components/ui/stage-badge';
 
 import { CustomerPicker } from './customer-picker';
 
@@ -200,13 +200,15 @@ export function AddPropertyModal() {
                         aria-invalid={fieldState.invalid}
                       >
                         <SelectValue>
-                          {(value: PropertyStage) => t(stageLabels[value])}
+                          {(value: PropertyStage) => (
+                            <StageLabel stage={value} />
+                          )}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
                         {propertyStages.map((stage) => (
                           <SelectItem key={stage} value={stage}>
-                            {t(stageLabels[stage])}
+                            <StageLabel stage={stage} />
                           </SelectItem>
                         ))}
                       </SelectContent>
