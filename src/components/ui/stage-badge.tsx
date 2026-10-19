@@ -62,7 +62,8 @@ export function StageLabel({ stage }: { stage: PropertyStage }) {
     <span className="flex items-center gap-2">
       <span
         className={cn(
-          'size-2 shrink-0 rounded-full',
+          // As small as SegmentedControl's dots
+          'size-1.5 shrink-0 rounded-full',
           badgeDotColors[stageColors[stage]]
         )}
         aria-hidden="true"
