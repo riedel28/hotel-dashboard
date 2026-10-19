@@ -758,7 +758,7 @@ msgid "App version"
 msgstr "App version"
 
 #: src/components/date-range-filter.tsx:124
-#: src/components/ui/rich-text-editor.tsx:273
+#: src/components/ui/rich-text-editor.tsx:275
 msgid "Apply"
 msgstr "Apply"
 
@@ -947,7 +947,7 @@ msgstr "Basics"
 msgid "becomes"
 msgstr "becomes"
 
-#: src/components/ui/rich-text-editor.tsx:311
+#: src/components/ui/rich-text-editor.tsx:313
 msgid "Bold"
 msgstr "Bold"
 
@@ -976,7 +976,7 @@ msgstr "Bold"
 msgid "Brand"
 msgstr "Brand"
 
-#: src/components/ui/rich-text-editor.tsx:329
+#: src/components/ui/rich-text-editor.tsx:331
 msgid "Bulleted list"
 msgstr "Bulleted list"
 
@@ -2117,8 +2117,8 @@ msgstr "Edit guest"
 msgid "Edit Guest"
 msgstr "Edit Guest"
 
-#: src/components/ui/rich-text-editor.tsx:428
-#: src/components/ui/rich-text-editor.tsx:429
+#: src/components/ui/rich-text-editor.tsx:430
+#: src/components/ui/rich-text-editor.tsx:431
 msgid "Edit HTML"
 msgstr "Edit HTML"
 
@@ -2885,7 +2885,7 @@ msgstr "Forgot password?"
 msgid "Forgot your current password?"
 msgstr "Forgot your current password?"
 
-#: src/components/ui/rich-text-editor.tsx:345
+#: src/components/ui/rich-text-editor.tsx:347
 msgid "Formatting"
 msgstr "Formatting"
 
@@ -3043,11 +3043,11 @@ msgstr "Has errors"
 #~ msgid "Heading"
 #~ msgstr "Heading"
 
-#: src/components/ui/rich-text-editor.tsx:184
+#: src/components/ui/rich-text-editor.tsx:186
 msgid "Heading {headingLevel}"
 msgstr "Heading {headingLevel}"
 
-#: src/components/ui/rich-text-editor.tsx:160
+#: src/components/ui/rich-text-editor.tsx:162
 msgid "Heading {level}"
 msgstr "Heading {level}"
 
@@ -3259,7 +3259,7 @@ msgstr "I don't have my phone — use a recovery code"
 msgid "I've saved my recovery codes in a safe place"
 msgstr "I've saved my recovery codes in a safe place"
 
-#: src/components/ui/rich-text-editor.tsx:416
+#: src/components/ui/rich-text-editor.tsx:418
 msgid "Image"
 msgstr "Image"
 
@@ -3363,7 +3363,7 @@ msgstr "iOS App"
 msgid "It may have been deleted or moved."
 msgstr "It may have been deleted or moved."
 
-#: src/components/ui/rich-text-editor.tsx:317
+#: src/components/ui/rich-text-editor.tsx:319
 msgid "Italic"
 msgstr "Italic"
 
@@ -3541,7 +3541,7 @@ msgstr "Light"
 msgid "Line"
 msgstr "Line"
 
-#: src/components/ui/rich-text-editor.tsx:401
+#: src/components/ui/rich-text-editor.tsx:403
 msgid "Link"
 msgstr "Link"
 
@@ -4383,7 +4383,7 @@ msgstr "Number"
 #~ msgid "Number of People"
 #~ msgstr "Number of People"
 
-#: src/components/ui/rich-text-editor.tsx:335
+#: src/components/ui/rich-text-editor.tsx:337
 msgid "Numbered list"
 msgstr "Numbered list"
 
@@ -5203,8 +5203,8 @@ msgstr "Recovery codes"
 msgid "Recovery codes copied"
 msgstr "Recovery codes copied"
 
-#: src/components/ui/rich-text-editor.tsx:368
-#: src/components/ui/rich-text-editor.tsx:369
+#: src/components/ui/rich-text-editor.tsx:370
+#: src/components/ui/rich-text-editor.tsx:371
 msgid "Redo"
 msgstr "Redo"
 
@@ -5270,7 +5270,7 @@ msgstr "Reminder"
 msgid "Reminders go only to guests who haven’t checked in yet."
 msgstr "Reminders go only to guests who haven’t checked in yet."
 
-#: src/components/ui/rich-text-editor.tsx:273
+#: src/components/ui/rich-text-editor.tsx:275
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:264
 msgid "Remove"
 msgstr "Remove"
@@ -6433,14 +6433,14 @@ msgstr "Tested at {0}"
 #~ msgid "Testing the Test environment for {0}."
 #~ msgstr "Testing the Test environment for {0}."
 
-#: src/components/ui/rich-text-editor.tsx:160
-#: src/components/ui/rich-text-editor.tsx:173
+#: src/components/ui/rich-text-editor.tsx:162
+#: src/components/ui/rich-text-editor.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:241
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:246
 msgid "Text"
 msgstr "Text"
 
-#: src/components/ui/rich-text-editor.tsx:154
+#: src/components/ui/rich-text-editor.tsx:156
 msgid "Text style"
 msgstr "Text style"
 
@@ -7080,12 +7080,12 @@ msgstr "Unchanged"
 msgid "Unchecked nav items are hidden from the navigation and the Start page for this property."
 msgstr "Unchecked nav items are hidden from the navigation and the Start page for this property."
 
-#: src/components/ui/rich-text-editor.tsx:323
+#: src/components/ui/rich-text-editor.tsx:325
 msgid "Underline"
 msgstr "Underline"
 
-#: src/components/ui/rich-text-editor.tsx:355
-#: src/components/ui/rich-text-editor.tsx:356
+#: src/components/ui/rich-text-editor.tsx:357
+#: src/components/ui/rich-text-editor.tsx:358
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:85
 msgid "Undo"
 msgstr "Undo"

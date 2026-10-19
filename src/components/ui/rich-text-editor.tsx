@@ -130,7 +130,9 @@ const toolbarButtonClassName = cn(
 export const richTextClassName = cn(
   '[&_ol]:list-decimal [&_ol]:ps-5 [&_p+p]:mt-2 [&_ul]:list-disc [&_ul]:ps-5',
   '[&_:is(h1,h2,h3,h4,h5,h6)]:mt-3 [&_:is(h1,h2,h3,h4,h5,h6)]:font-semibold [&_:is(h1,h2,h3,h4,h5,h6):first-child]:mt-0',
-  '[&_h1]:text-2xl [&_h2]:text-xl [&_h3]:text-lg [&_h4]:text-base [&_h5]:text-sm [&_h6]:text-sm [&_h6]:font-medium [&_h6]:text-muted-foreground',
+  // One step above the 14px body text per level, so a heading stands out
+  // without dwarfing the field it is typed in
+  '[&_h1]:text-xl [&_h2]:text-lg [&_h3]:text-base [&_h4]:text-sm [&_h5]:text-sm [&_h6]:text-sm [&_h6]:font-medium [&_h6]:text-muted-foreground',
   '[&_img]:my-2 [&_img]:max-w-full [&_img]:rounded-md',
   '[&_a]:text-primary [&_a]:underline'
 );
