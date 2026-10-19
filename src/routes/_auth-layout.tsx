@@ -3,8 +3,6 @@ import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 import { AppLogo } from '@/components/app-logo';
 
-import { LanguageSwitcher } from './_auth-layout/-components/language-switcher';
-
 export const Route = createFileRoute('/_auth-layout')({
   component: AuthLayout
 });
@@ -44,10 +42,6 @@ function AuthLayout() {
         tabIndex={-1}
         className="relative flex min-h-[calc(100vh-8rem)] flex-col bg-card px-5 py-4 sm:min-h-[calc(100vh-14rem)] sm:px-8 lg:min-h-screen lg:px-12"
       >
-        <div className="absolute top-4 right-4">
-          <LanguageSwitcher />
-        </div>
-
         <Outlet />
       </main>
     </div>
