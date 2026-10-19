@@ -83,7 +83,7 @@ export function TwoFactorSection() {
       }
       action={
         <Badge
-          color={status.enabled ? 'emerald' : 'gray'}
+          color={status.enabled ? 'emerald' : 'yellow'}
           size="sm"
           className="rounded-md px-2 py-1"
         >
@@ -91,7 +91,7 @@ export function TwoFactorSection() {
             aria-hidden="true"
             className={cn(
               'mr-0.5 size-1.5 rounded-full',
-              status.enabled ? 'bg-success' : 'bg-subtle-foreground'
+              status.enabled ? 'bg-success' : 'bg-warning'
             )}
           />
           {status.enabled ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}

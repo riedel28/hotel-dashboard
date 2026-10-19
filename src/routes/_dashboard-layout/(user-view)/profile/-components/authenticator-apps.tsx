@@ -78,7 +78,7 @@ export function AuthenticatorApps() {
               </li>
             ))}
           </ul>
-          <p className="border-t pt-2.5 text-xs text-muted-foreground">
+          <p className="pt-1 text-xs text-muted-foreground">
             <Trans>
               Already have one? Any TOTP app works — just scan the QR code.
             </Trans>

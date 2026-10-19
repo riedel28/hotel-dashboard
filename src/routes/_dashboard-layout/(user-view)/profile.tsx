@@ -100,8 +100,10 @@ function RouteComponent() {
   );
 }
 
+// Important, because the item's own grey text and bare hover are classes on
+// the same element.
 const activeProps = {
-  className: 'bg-muted text-foreground hover:bg-muted! hover:text-foreground!'
+  className: 'bg-muted! text-foreground! hover:bg-muted!'
 };
 
 /**
@@ -137,7 +139,9 @@ function ProfileNav() {
         {items.map(({ to, label, exact, warn }) => (
           <SidebarMenuItem key={to} className="shrink-0">
             <SidebarMenuButton
-              className="px-3"
+              // Grey until hovered, then only the text lights up; the grey
+              // backdrop is the active tab's alone.
+              className="px-3 text-muted-foreground hover:bg-transparent hover:text-foreground active:bg-transparent"
               render={
                 <Link
                   to={to}
