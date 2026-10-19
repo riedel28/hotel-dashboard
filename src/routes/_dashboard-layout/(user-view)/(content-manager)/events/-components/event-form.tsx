@@ -167,10 +167,10 @@ const eventSections = (
 ): FormSectionDef<EventFormValues>[] => [
   {
     id: 'basics',
-    label: <Trans>Basics</Trans>,
+    label: <Trans>General</Trans>,
     description: <Trans>Title, description and categories.</Trans>,
     fields: ['title', 'description', 'categories'],
-    render: (form) => <BasicsFields form={form} />
+    render: (form) => <GeneralFields form={form} />
   },
   {
     id: 'date-time',
@@ -264,7 +264,7 @@ function TextField({
   );
 }
 
-function BasicsFields({ form }: { form: EventForm }) {
+function GeneralFields({ form }: { form: EventForm }) {
   const { t } = useLingui();
 
   return (
