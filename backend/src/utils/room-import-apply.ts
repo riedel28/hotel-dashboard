@@ -4,7 +4,8 @@ import type {
   RoomImportPreview,
   RoomImportResult
 } from '../../../shared/types/room-imports';
-import { hasActiveReservation, type Transaction } from '../db/room-queries';
+import { type Transaction } from '../db/pool';
+import { hasActiveReservation } from '../db/room-queries';
 import { rooms } from '../db/schema';
 import type { ExistingRoom } from './room-import-plan';
 
