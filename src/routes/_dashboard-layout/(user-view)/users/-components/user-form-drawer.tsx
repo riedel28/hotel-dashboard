@@ -27,6 +27,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldOptional,
   FieldSet
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -164,8 +165,8 @@ function UserForm({
       className="flex min-h-0 flex-1 flex-col"
     >
       <DrawerBody>
-        <FieldSet className="gap-6">
-          <FieldGroup className="gap-6">
+        <FieldSet className="gap-6" disabled={updateUserMutation.isPending}>
+          <FieldGroup className="gap-4">
             <Controller
               control={form.control}
               name="email"
@@ -256,62 +257,23 @@ function UserForm({
 
             <Controller
               control={form.control}
-              name="is_admin"
-              render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  orientation="horizontal"
-                  className="items-center gap-3 rounded-md border p-3"
-                >
-                  <FieldContent>
-                    <FieldLabel
-                      htmlFor={field.name}
-                      className="cursor-pointer text-sm font-normal"
-                    >
-                      <Trans>Admin User</Trans>
-                    </FieldLabel>
-                    <FieldDescription>
-                      <Trans>Grant administrator privileges to this user</Trans>
-                    </FieldDescription>
-                  </FieldContent>
-                  <Switch
-                    id={field.name}
-                    checked={field.value || false}
-                    onCheckedChange={field.onChange}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              control={form.control}
               name="role_ids"
               render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  orientation="vertical"
-                  className="gap-3"
-                >
-                  <FieldContent>
-                    <FieldLabel className="text-base font-medium">
-                      <Trans>Roles</Trans>
-                    </FieldLabel>
-                    <FieldDescription>
-                      <Trans>Select one or more roles to assign</Trans>
-                    </FieldDescription>
-                  </FieldContent>
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel>
+                    <Trans>Roles</Trans>
+                    <FieldOptional />
+                  </FieldLabel>
                   {roles && roles.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    // As in the invite dialog: one box, a checkbox per role
+                    <div className="grid grid-cols-1 gap-x-4 gap-y-2.5 rounded-lg border p-3 sm:grid-cols-2 dark:bg-input/30">
                       {roles.map((role) => {
                         const assigned = field.value?.includes(role.id);
                         return (
                           <Field
                             key={role.id}
                             orientation="horizontal"
-                            className="gap-3 rounded-md border bg-muted/20 p-3"
+                            className="gap-2"
                           >
                             <Checkbox
                               id={`role-${role.id}`}
@@ -327,7 +289,7 @@ function UserForm({
                             />
                             <FieldLabel
                               htmlFor={`role-${role.id}`}
-                              className="cursor-pointer text-sm font-normal"
+                              className="cursor-pointer font-normal"
                             >
                               {role.name}
                             </FieldLabel>
@@ -340,6 +302,35 @@ function UserForm({
                       <Trans>No roles available</Trans>
                     </p>
                   )}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              control={form.control}
+              name="is_admin"
+              render={({ field, fieldState }) => (
+                <Field
+                  data-invalid={fieldState.invalid}
+                  orientation="horizontal"
+                  className="items-center gap-3 rounded-lg border p-3 dark:bg-input/30"
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor={field.name} className="cursor-pointer">
+                      <Trans>Admin User</Trans>
+                    </FieldLabel>
+                    <FieldDescription>
+                      <Trans>Grant administrator privileges to this user</Trans>
+                    </FieldDescription>
+                  </FieldContent>
+                  <Switch
+                    id={field.name}
+                    checked={field.value || false}
+                    onCheckedChange={field.onChange}
+                  />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}

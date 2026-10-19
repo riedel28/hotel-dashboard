@@ -561,7 +561,7 @@ msgstr "Admin-Dashboard"
 #~ msgstr "Admin-Funktionen: Benutzer verwalten, Systemeinstellungen konfigurieren, auf alle Daten zugreifen, Systemadministration"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:266
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:271
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:323
 msgid "Admin User"
 msgstr "Administrator"
 
@@ -1017,7 +1017,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:294
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:363
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:354
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:95
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:229
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
@@ -1593,7 +1593,7 @@ msgstr "Einrichtung konnte nicht gestartet werden"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:546
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:222
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:245
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:181
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:212
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:176
@@ -1942,7 +1942,7 @@ msgid "Displays the mobile sidebar."
 msgstr "Zeigt die mobile Seitenleiste an."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:188
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:228
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:229
 msgid "Doe"
 msgstr "Doe"
 
@@ -2124,7 +2124,7 @@ msgstr "Zimmer bearbeiten"
 #~ msgstr "Bearbeiten Sie den Kategorietitel und speichern Sie, um die Produkte in dieser Kategorie zu aktualisieren."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:48
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:83
 msgid "Edit user"
 msgstr "Benutzer bearbeiten"
 
@@ -2158,7 +2158,7 @@ msgstr "Editor"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:257
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:133
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:175
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:156
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:163
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:288
@@ -2718,7 +2718,7 @@ msgstr "Fehler beim Aktualisieren der Reservierung. Bitte versuchen Sie es erneu
 #~ msgid "Failed to update room. Please try again."
 #~ msgstr "Fehler beim Aktualisieren des Zimmers. Bitte versuchen Sie es erneut."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:143
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:144
 msgid "Failed to update user"
 msgstr "Fehler beim Aktualisieren des Benutzers"
 
@@ -2781,13 +2781,13 @@ msgstr "Vorname"
 #: src/routes/_auth-layout/auth/sign-up.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:140
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:157
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:199
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:200
 msgid "First Name"
 msgstr "Vorname"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:79
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:43
 msgid "First name is required"
 msgstr "Vorname ist erforderlich"
 
@@ -2915,7 +2915,7 @@ msgstr "Gut"
 #~ msgstr "Google Authenticator ↗"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:269
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:274
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:326
 msgid "Grant administrator privileges to this user"
 msgstr "Diesem Benutzer Administratorrechte gewähren"
 
@@ -3262,7 +3262,7 @@ msgstr ""
 msgid "Integrations"
 msgstr "Integrationen"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:39
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:35
 msgid "Invalid email address"
 msgstr "Ungültige E-Mail-Adresse"
@@ -3311,7 +3311,7 @@ msgid "Items are the pages and links guests see in the hotel’s mobile app. Sta
 msgstr "Einträge sind die Seiten und Links, die Gäste in der Hotel-App sehen. Leg den ersten an."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:165
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:206
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:207
 msgid "John"
 msgstr "John"
 
@@ -3390,13 +3390,13 @@ msgstr "Nachname"
 #: src/routes/_auth-layout/auth/sign-up.tsx:193
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:161
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:180
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:221
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:222
 msgid "Last Name"
 msgstr "Nachname"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:85
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:84
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:46
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:47
 msgid "Last name is required"
 msgstr "Nachname ist erforderlich"
 
@@ -3964,7 +3964,7 @@ msgstr "Nächstes Zimmer"
 #~ msgid "Next slide"
 #~ msgstr "Nächste Folie"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:95
 msgid "Next user"
 msgstr "Nächster Benutzer"
 
@@ -4185,7 +4185,7 @@ msgid "No roles assigned. Contact your administrator if you're missing access yo
 msgstr "Keine Rollen zugewiesen. Wenden Sie sich an Ihren Administrator, wenn Ihnen Zugriff fehlt."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:242
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:340
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:302
 msgid "No roles available"
 msgstr "Keine Rollen verfügbar"
 
@@ -4825,7 +4825,7 @@ msgstr "Vorheriges Zimmer"
 #~ msgid "Previous slide"
 #~ msgstr "Vorherige Folie"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:93
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:94
 msgid "Previous user"
 msgstr "Vorheriger Benutzer"
 
@@ -5379,7 +5379,7 @@ msgstr "Rolle"
 #~ msgstr ""
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:204
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:300
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:264
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:220
 msgid "Roles"
 msgstr "Rollen"
@@ -5563,7 +5563,7 @@ msgstr "Speichern"
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:369
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:360
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
@@ -5785,10 +5785,6 @@ msgstr "Land auswählen"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-guest-form.tsx:193
 #~ msgid "Select nationality"
 #~ msgstr "Nationalität auswählen"
-
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:303
-msgid "Select one or more roles to assign"
-msgstr "Eine oder mehrere Rollen zum Zuweisen auswählen"
 
 #~ msgid "Select one or more roles to assign."
 #~ msgstr "Wählen Sie eine oder mehrere Rollen aus."
@@ -7122,7 +7118,7 @@ msgstr "Benutzermenü"
 #~ msgid "User Roles"
 #~ msgstr "Benutzerrollen"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:139
 msgid "User updated successfully"
 msgstr "Benutzer erfolgreich aktualisiert"
 
@@ -7130,7 +7126,7 @@ msgstr "Benutzer erfolgreich aktualisiert"
 #~ msgstr "Benutzer-Ansicht"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:141
-#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:184
 msgid "user@example.com"
 msgstr "benutzer@beispiel.de"
 
