@@ -210,7 +210,7 @@ export function PersonalSection({
             />
           </div>
 
-          <div className="grid gap-4 @md/section:grid-cols-[2fr_1fr]">
+          <div className="grid gap-4 @md/section:grid-cols-2">
             <EmailField user={user} />
 
             <Controller
@@ -256,15 +256,15 @@ function EmailField({ user }: { user: User }) {
       <FieldLabel htmlFor="profile-email">
         <Trans>Email</Trans>
       </FieldLabel>
-      {/* The control is disabled, but the group must not fade with it — the
-          verification mark in the addon is the one thing here worth reading. */}
-      <InputGroup className="has-disabled:opacity-100">
+      {/* Read-only rather than disabled, styled like the check-in page's
+          guest link: grey in light, sunk below the card in dark, and the
+          address at full contrast instead of faded. */}
+      <InputGroup className="bg-muted/50 dark:border-border dark:bg-background/60">
         <InputGroupInput
           id="profile-email"
           type="email"
           value={user.email}
           readOnly
-          disabled
           autoComplete="email"
         />
         <InputGroupAddon align="inline-end">
