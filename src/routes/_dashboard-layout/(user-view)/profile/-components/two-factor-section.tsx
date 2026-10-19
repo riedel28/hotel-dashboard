@@ -55,12 +55,18 @@ export function TwoFactorSection() {
   const queryClient = useQueryClient();
   const { data: status } = useSuspenseQuery(twoFactorStatusQueryOptions());
 
-  const [setupOpen, setSetupOpen] = React.useState(false);
-  const [disableOpen, setDisableOpen] = React.useState(false);
-  // Bumped on every open and used as the dialogs' key, so each opening starts
-  // from fresh state rather than resetting the last run's by hand. Closing
-  // leaves the key alone, so the close animation still plays.
-  const [openings, setOpenings] = React.useState(0);
+  // Which dialog is open, and how many openings there have been: the count is
+  // the dialogs' key, so each opening starts from fresh state instead of
+  // resetting the last run's by hand. Closing keeps it, so the close animates.
+  const [dialog, setDialog] = React.useState<{
+    open: 'setup' | 'disable' | null;
+    opening: number;
+  }>({ open: null, opening: 0 });
+  const openDialog = (open: 'setup' | 'disable') =>
+    setDialog(({ opening }) => ({ open, opening: opening + 1 }));
+  const closeDialog = (open: boolean) => {
+    if (!open) setDialog(({ opening }) => ({ open: null, opening }));
+  };
   const [freshCodes, setFreshCodes] = React.useState<string[] | null>(null);
 
   const regenerate = useReauthedAction({
@@ -191,10 +197,7 @@ export function TwoFactorSection() {
               type="button"
               variant="ghost"
               className="text-danger hover:bg-danger-soft hover:text-danger"
-              onClick={() => {
-                setOpenings((n) => n + 1);
-                setDisableOpen(true);
-              }}
+              onClick={() => openDialog('disable')}
             >
               <Trans>Turn off two-factor authentication</Trans>
             </Button>
@@ -225,10 +228,7 @@ export function TwoFactorSection() {
               type="button"
               // Full width on a phone, like every other card's main button.
               className="w-full sm:w-auto"
-              onClick={() => {
-                setOpenings((n) => n + 1);
-                setSetupOpen(true);
-              }}
+              onClick={() => openDialog('setup')}
             >
               <Trans>Enable two-factor authentication</Trans>
             </Button>
@@ -239,14 +239,14 @@ export function TwoFactorSection() {
       )}
 
       <TwoFactorSetupDialog
-        key={`setup-${openings}`}
-        open={setupOpen}
-        onOpenChange={setSetupOpen}
+        key={`setup-${dialog.opening}`}
+        open={dialog.open === 'setup'}
+        onOpenChange={closeDialog}
       />
       <TwoFactorDisableDialog
-        key={`disable-${openings}`}
-        open={disableOpen}
-        onOpenChange={setDisableOpen}
+        key={`disable-${dialog.opening}`}
+        open={dialog.open === 'disable'}
+        onOpenChange={closeDialog}
       />
       {regenerate.dialog}
 
