@@ -130,7 +130,7 @@ export function ImportRoomsDialog({
       open={open}
       onOpenChange={(next) => (next ? onOpenChange(true) : close())}
     >
-      <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-3xl">
+      <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>
             <Trans>Import rooms</Trans>

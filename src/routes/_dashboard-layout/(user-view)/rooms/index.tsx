@@ -48,7 +48,7 @@ import { useEditingRoom } from './-hooks/use-editing-room';
 import { useRoomsSearch } from './-hooks/use-rooms-search';
 
 const PAGE_SIZES = [5, 10, 25, 50, 100];
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 25;
 
 const roomsSearchSchema = z.object({
   // A room number typed into the URL by hand arrives as a number

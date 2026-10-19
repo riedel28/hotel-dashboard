@@ -52,7 +52,7 @@ export function RoomsFilters({
         placeholder={t`Search rooms`}
         aria-label={t`Search number or name`}
         className="text-sm"
-        wrapperClassName="w-full xl:w-[250px]"
+        wrapperClassName="w-full xl:w-72"
         debounceMs={300}
       />
       <DataGridCheckboxFilter
