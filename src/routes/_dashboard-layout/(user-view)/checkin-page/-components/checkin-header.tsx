@@ -131,14 +131,16 @@ function GuestLink({ url }: { url: string }) {
   const labelId = React.useId();
 
   return (
-    <div className="col-span-full flex flex-col gap-2">
-      <span id={labelId} className="text-sm font-medium">
+    // From `sm` up the label on the left and the link on the right, kept to
+    // a width a URL needs rather than the card's
+    <div className="col-span-full flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <span id={labelId} className="shrink-0 text-sm font-medium">
         <Trans>Link sent to guests</Trans>
       </span>
       <div
         role="group"
         aria-labelledby={labelId}
-        className="flex h-9 items-center gap-0.5 rounded-lg border border-input bg-muted/50 ps-3 pe-1 dark:bg-input/30"
+        className="flex h-9 w-full items-center gap-0.5 rounded-lg border border-input bg-muted/50 ps-3 pe-1 sm:max-w-sm dark:bg-input/30"
       >
         <span className="min-w-0 flex-1 truncate text-sm" title={url}>
           {url}

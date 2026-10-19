@@ -28,10 +28,10 @@ import {
   EmptyMedia,
   EmptyTitle
 } from '@/components/ui/empty';
-import { FormSkeleton } from '@/components/ui/form-skeleton';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
 import { CheckinForm } from './checkin-page/-components/checkin-form';
+import { CheckinSkeleton } from './checkin-page/-components/checkin-skeleton';
 
 export const Route = createFileRoute(
   '/_dashboard-layout/(user-view)/checkin-page'
@@ -72,7 +72,7 @@ function CheckinPage() {
       </div>
 
       <QueryBoundary
-        fallback={<FormSkeleton />}
+        fallback={<CheckinSkeleton />}
         title={<Trans>Couldn't load the check-in settings</Trans>}
       >
         <CheckinScreens />

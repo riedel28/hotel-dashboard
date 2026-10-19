@@ -278,14 +278,18 @@ function Tile({
       aria-label={label}
       className="group/tile flex w-full flex-col gap-1.5 rounded-lg text-start outline-none"
     >
-      <span className="relative block aspect-video w-full rounded-lg ring-offset-2 ring-offset-card outline-offset-[5px] transition-shadow duration-150 ease-out group-focus-visible/tile:outline-2 group-focus-visible/tile:outline-ring group-data-checked/tile:ring-[1.5px] group-data-checked/tile:ring-primary group-data-unchecked/tile:group-hover/tile:ring-[1.5px] group-data-unchecked/tile:group-hover/tile:ring-foreground/40">
+      <span className="relative block aspect-video w-full rounded-lg ring-offset-2 ring-offset-card outline-offset-[5px] transition-shadow duration-150 ease-out group-focus-visible/tile:outline-2 group-focus-visible/tile:outline-ring group-data-checked/tile:ring-[1.5px] group-data-checked/tile:ring-primary group-data-unchecked/tile:group-hover/tile:ring-[1.5px] group-data-unchecked/tile:group-hover/tile:ring-foreground/30 dark:group-data-unchecked/tile:group-hover/tile:ring-foreground/20">
         <span className="block size-full overflow-hidden rounded-lg">
           {children}
         </span>
         <span className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-foreground/10 ring-inset" />
         {/* The one accent of the picker */}
-        <RadioPrimitive.Indicator className="absolute end-2 top-2 flex size-[22px] items-center justify-center rounded-full bg-primary text-primary-foreground transition-[opacity,scale] duration-150 ease-out data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
-          <CheckIcon className="size-3" strokeWidth={3} aria-hidden="true" />
+        <RadioPrimitive.Indicator className="absolute end-2 top-2 flex size-[18px] items-center justify-center rounded-full bg-primary text-primary-foreground transition-[opacity,scale] duration-150 ease-out data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
+          <CheckIcon
+            className="size-2.5"
+            strokeWidth={3.5}
+            aria-hidden="true"
+          />
         </RadioPrimitive.Indicator>
       </span>
       <span
