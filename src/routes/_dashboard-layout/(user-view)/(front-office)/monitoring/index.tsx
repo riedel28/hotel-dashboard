@@ -63,10 +63,17 @@ function MonitoringPage() {
 
       {/* From `sm` up as tall as the same row on pages that have an action
           button in it; phones keep the space for the logs */}
-      <div className="mb-4 flex justify-between sm:mb-6 sm:min-h-9">
-        <h1 className="text-xl font-bold">
-          <Trans>Monitoring Logs</Trans>
-        </h1>
+      <div className="mb-4 space-y-1 sm:mb-6">
+        <div className="flex justify-between sm:min-h-9 sm:items-center">
+          <h1 className="text-xl font-bold">
+            <Trans>Monitoring Logs</Trans>
+          </h1>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          <Trans>
+            Track PMS, door lock and payment events and spot failed ones.
+          </Trans>
+        </p>
       </div>
 
       <div className="space-y-2.5">

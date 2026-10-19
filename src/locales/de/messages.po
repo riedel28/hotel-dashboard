@@ -552,7 +552,7 @@ msgid "Admin"
 msgstr "Admin"
 
 #: src/routes/_dashboard-layout/admin/index.tsx:14
-#: src/routes/_dashboard-layout/admin/index.tsx:37
+#: src/routes/_dashboard-layout/admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "Admin-Dashboard"
 
@@ -755,7 +755,7 @@ msgstr "App-Version"
 msgid "Apply"
 msgstr "Anwenden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:63
 msgid "Apply custom range"
 msgstr "Eigenen Zeitraum anwenden"
 
@@ -1537,7 +1537,7 @@ msgstr "Geräte konnten nicht geladen werden"
 msgid "Couldn't load events"
 msgstr "Events konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:102
 msgid "Couldn't load monitoring logs"
 msgstr "Monitoring-Protokolle konnten nicht geladen werden"
 
@@ -3633,7 +3633,7 @@ msgstr "Benutzer verwalten, Benutzerdetails anzeigen und Rollen zuweisen"
 #~ msgid "Manage users, view user details, and manage user roles"
 #~ msgstr "Benutzer verwalten, Benutzerdetails anzeigen und Benutzerrollen verwalten"
 
-#: src/routes/_dashboard-layout/index.tsx:65
+#: src/routes/_dashboard-layout/index.tsx:66
 msgid "Manage your hotel operations efficiently"
 msgstr "Verwalten Sie Ihre Hotelabläufe effizient"
 
@@ -3744,7 +3744,7 @@ msgstr "Tägliche Abläufe überwachen, Belegung verfolgen und Rezeptionstätigk
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:69
 msgid "Monitoring Logs"
 msgstr "Monitoring-Protokolle"
 
@@ -4070,11 +4070,11 @@ msgstr "Keine Gäste gefunden"
 msgid "No item selected"
 msgstr "Kein Eintrag ausgewählt"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:173
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:180
 msgid "No logs in the last 24 hours"
 msgstr "Keine Protokolle in den letzten 24 Stunden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:188
 msgid "No logs match the current filters."
 msgstr "Keine Protokolle entsprechen den aktuellen Filtern."
 
@@ -4633,7 +4633,7 @@ msgstr "Datum wählen"
 msgid "Pick a date range"
 msgstr "Datumsbereich auswählen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:181
 msgid "Pick a longer period to see older logs."
 msgstr "Wählen Sie einen längeren Zeitraum, um ältere Protokolle zu sehen."
 
@@ -5925,7 +5925,7 @@ msgstr "Anzeigen"
 msgid "Show all {0} properties"
 msgstr "Alle {0} Unterkünfte anzeigen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:161
 msgid "Show all logs"
 msgstr "Alle Protokolle anzeigen"
 
@@ -5986,7 +5986,7 @@ msgstr "Angezeigt werden Daten von {time}."
 #~ msgid "Showing only logs for reservation <0>{bookingNr}</0>"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:144
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:151
 msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr "Nur Protokolle der Reservierung <0>{reservation}</0>"
 
@@ -6755,6 +6755,10 @@ msgstr "Oberste Ebene"
 msgid "Tour"
 msgstr "Tour"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:73
+msgid "Track PMS, door lock and payment events and spot failed ones."
+msgstr "Verfolgen Sie PMS-, Türschloss- und Zahlungsereignisse und erkennen Sie fehlgeschlagene."
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:364
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:366
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:81
@@ -7237,8 +7241,8 @@ msgstr "Web App"
 #~ msgid "Welcome back, {0}!"
 #~ msgstr "Willkommen zurück, {0}!"
 
-#: src/routes/_dashboard-layout/admin/index.tsx:40
-#: src/routes/_dashboard-layout/index.tsx:62
+#: src/routes/_dashboard-layout/admin/index.tsx:41
+#: src/routes/_dashboard-layout/index.tsx:63
 msgid "Welcome back, {userName}!"
 msgstr "Willkommen zurück, {userName}!"
 

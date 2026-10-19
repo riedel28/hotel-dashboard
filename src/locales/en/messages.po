@@ -556,7 +556,7 @@ msgid "Admin"
 msgstr "Admin"
 
 #: src/routes/_dashboard-layout/admin/index.tsx:14
-#: src/routes/_dashboard-layout/admin/index.tsx:37
+#: src/routes/_dashboard-layout/admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
 
@@ -762,7 +762,7 @@ msgstr "App version"
 msgid "Apply"
 msgstr "Apply"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-period-filter.tsx:63
 msgid "Apply custom range"
 msgstr "Apply custom range"
 
@@ -1563,7 +1563,7 @@ msgstr "Couldn't load devices"
 msgid "Couldn't load events"
 msgstr "Couldn't load events"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:102
 msgid "Couldn't load monitoring logs"
 msgstr "Couldn't load monitoring logs"
 
@@ -3705,7 +3705,7 @@ msgstr "Manage users, view user details, and assign roles"
 #~ msgid "Manage users, view user details, and manage user roles"
 #~ msgstr "Manage users, view user details, and manage user roles"
 
-#: src/routes/_dashboard-layout/index.tsx:65
+#: src/routes/_dashboard-layout/index.tsx:66
 msgid "Manage your hotel operations efficiently"
 msgstr "Manage your hotel operations efficiently"
 
@@ -3822,7 +3822,7 @@ msgstr "Monitor daily operations, track occupancy, and oversee front-office acti
 msgid "Monitoring"
 msgstr "Monitoring"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:69
 msgid "Monitoring Logs"
 msgstr "Monitoring Logs"
 
@@ -4151,11 +4151,11 @@ msgstr "No guests found"
 msgid "No item selected"
 msgstr "No item selected"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:173
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:180
 msgid "No logs in the last 24 hours"
 msgstr "No logs in the last 24 hours"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:188
 msgid "No logs match the current filters."
 msgstr "No logs match the current filters."
 
@@ -4720,7 +4720,7 @@ msgstr "Pick a date"
 msgid "Pick a date range"
 msgstr "Pick a date range"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:174
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:181
 msgid "Pick a longer period to see older logs."
 msgstr "Pick a longer period to see older logs."
 
@@ -6047,7 +6047,7 @@ msgstr "Show"
 msgid "Show all {0} properties"
 msgstr "Show all {0} properties"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:161
 msgid "Show all logs"
 msgstr "Show all logs"
 
@@ -6108,7 +6108,7 @@ msgstr "Showing data from {time}."
 #~ msgid "Showing only logs for reservation <0>{bookingNr}</0>"
 #~ msgstr "Showing only logs for reservation <0>{bookingNr}</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:144
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:151
 msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr "Showing only logs for reservation <0>{reservation}</0>"
 
@@ -6891,6 +6891,10 @@ msgstr "Top level"
 msgid "Tour"
 msgstr "Tour"
 
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:73
+msgid "Track PMS, door lock and payment events and spot failed ones."
+msgstr "Track PMS, door lock and payment events and spot failed ones."
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:364
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/cms-tree.tsx:366
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:81
@@ -7383,8 +7387,8 @@ msgstr "Web App"
 #~ msgid "Welcome back, {0}!"
 #~ msgstr "Welcome back, {0}!"
 
-#: src/routes/_dashboard-layout/admin/index.tsx:40
-#: src/routes/_dashboard-layout/index.tsx:62
+#: src/routes/_dashboard-layout/admin/index.tsx:41
+#: src/routes/_dashboard-layout/index.tsx:63
 msgid "Welcome back, {userName}!"
 msgstr "Welcome back, {userName}!"
 
