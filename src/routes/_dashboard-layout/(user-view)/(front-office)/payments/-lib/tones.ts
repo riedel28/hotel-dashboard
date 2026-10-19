@@ -22,8 +22,8 @@ export const stageTones = {
   },
   paid: {
     badge: 'emerald',
-    dot: 'bg-emerald-600 dark:bg-emerald-400',
-    ring: 'ring-emerald-600/20 dark:ring-emerald-400/25'
+    dot: 'bg-success-solid dark:bg-success',
+    ring: 'ring-success/20 dark:ring-success/25'
   }
 } satisfies Record<PaymentStage, Tone>;
 

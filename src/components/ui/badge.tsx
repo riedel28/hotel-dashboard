@@ -11,8 +11,10 @@ const badgeColors = {
   red: 'border-foreground/10 bg-red-100/70 text-red-800 dark:bg-red-800/30 dark:text-red-300 [a]:hover:bg-red-100 dark:[a]:hover:bg-red-800/40',
   yellow:
     'border-foreground/10 bg-yellow-100/70 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-300 [a]:hover:bg-yellow-100 dark:[a]:hover:bg-yellow-800/40',
+  // The theme's success green rather than Tailwind's emerald, so every green
+  // in the app is the same one
   emerald:
-    'border-foreground/10 bg-emerald-100/70 text-emerald-800 dark:bg-emerald-800/30 dark:text-emerald-300 [a]:hover:bg-emerald-100 dark:[a]:hover:bg-emerald-800/40',
+    'border-foreground/10 bg-success-soft text-success [a]:hover:bg-success/15 dark:[a]:hover:bg-success/20',
   sky: 'border-foreground/10 bg-sky-100/70 text-sky-800 dark:bg-sky-800/30 dark:text-sky-300 [a]:hover:bg-sky-100 dark:[a]:hover:bg-sky-800/40',
   indigo:
     'border-foreground/10 bg-indigo-100/70 text-indigo-800 dark:bg-indigo-800/30 dark:text-indigo-300 [a]:hover:bg-indigo-100 dark:[a]:hover:bg-indigo-800/40',
@@ -96,7 +98,7 @@ const badgeDotColors: Record<BadgeColorProps, string> = {
   gray: 'bg-gray-500 dark:bg-gray-400',
   red: 'bg-red-500 dark:bg-red-400',
   yellow: 'bg-yellow-500 dark:bg-yellow-400',
-  emerald: 'bg-emerald-500 dark:bg-emerald-400',
+  emerald: 'bg-success-solid dark:bg-success',
   sky: 'bg-sky-500 dark:bg-sky-400',
   indigo: 'bg-indigo-500 dark:bg-indigo-400',
   orange: 'bg-orange-500 dark:bg-orange-400',
