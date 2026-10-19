@@ -234,7 +234,7 @@ export function TestConnectionDialog({
                     text={step.error}
                     size="icon-xs"
                     buttonClassName="bg-transparent!"
-                    iconClassName="-my-0.5 -mr-1 text-danger"
+                    iconClassName="-my-0.5 -mr-1 text-danger group-hover:text-danger/70"
                   />
                 </div>
               )}

@@ -40,8 +40,9 @@ function CopyButton({
         aria-hidden="true"
         className={cn(
           'size-3.5 text-muted-foreground group-hover:text-foreground',
-          copied && 'text-success group-hover:text-success',
-          iconClassName
+          iconClassName,
+          // Copied stays green whatever color the caller gave the icon
+          copied && 'text-success group-hover:text-success'
         )}
       />
     </Button>
