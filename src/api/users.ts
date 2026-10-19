@@ -41,9 +41,12 @@ async function fetchUsers(
   params: FetchUsersParams
 ): Promise<FetchUsersResponse> {
   try {
-    const validatedParams = fetchUsersParamsSchema.parse(params);
+    const { role, ...rest } = fetchUsersParamsSchema.parse(params);
     const response = await client.get('/users', {
-      params: validatedParams
+      params: {
+        ...rest,
+        role: role?.length ? role.join(',') : undefined
+      }
     });
     return fetchUsersResponseSchema.parse(response.data);
   } catch (err) {

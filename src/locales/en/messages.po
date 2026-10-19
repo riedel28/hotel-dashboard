@@ -630,6 +630,7 @@ msgstr "All categories"
 #~ msgid "All changes saved"
 #~ msgstr "All changes saved"
 
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:257
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:76
 #: src/routes/_dashboard-layout/admin/properties/-components/property-country-filter.tsx:20
 msgid "All countries"
@@ -646,6 +647,10 @@ msgstr "All floors"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:86
 #~ msgid "All logs"
 #~ msgstr "All logs"
+
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:262
+msgid "All roles"
+msgstr "All roles"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:26
 msgid "All solutions"
@@ -1307,7 +1312,6 @@ msgstr "Clear all"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:235
 msgid "Clear filters"
 msgstr "Clear filters"
 
@@ -1595,7 +1599,7 @@ msgstr "Couldn't load the content"
 msgid "Couldn't load this page"
 msgstr "Couldn't load this page"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:177
 msgid "Couldn't load users"
 msgstr "Couldn't load users"
 
@@ -3191,7 +3195,7 @@ msgstr "Holder"
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:107
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:97
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:31
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:199
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:222
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:149
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
@@ -3319,7 +3323,7 @@ msgstr "Infants"
 #~ msgid "Info"
 #~ msgstr "Info"
 
-#: src/components/provider-setup/integration-guide-badge.tsx:15
+#: src/components/provider-setup/integration-guide-badge.tsx:17
 msgid "Integration Guide"
 msgstr "Integration Guide"
 
@@ -4319,9 +4323,9 @@ msgstr "No unsaved changes"
 msgid "No upcoming events"
 msgstr "No upcoming events"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:182
-msgid "No users match the search."
-msgstr "No users match the search."
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:205
+msgid "No users match the filters."
+msgstr "No users match the filters."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:36
 msgid "No-show fee"
@@ -5438,6 +5442,7 @@ msgstr "Reservations from the PMS show up here, or add one by hand."
 #: src/components/ui/data-grid-radio-filter.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:272
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:34
 msgid "Reset"
@@ -5462,9 +5467,9 @@ msgstr "Reset Password"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:120
-#~ msgid "Role"
-#~ msgstr "Role"
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:261
+msgid "Role"
+msgstr "Role"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:194
 #~ msgid "Role assignments"
@@ -5812,7 +5817,7 @@ msgstr "Search timezone..."
 msgid "Search titles"
 msgstr "Search titles"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:224
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:248
 msgid "Search users"
 msgstr "Search users"
 
@@ -6100,7 +6105,7 @@ msgstr "Show only logs of reservation {bookingNr}"
 msgid "Show password"
 msgstr "Show password"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:243
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:284
 msgid "Show results for: <0>\"{q}\"</0>"
 msgstr "Show results for: <0>\"{q}\"</0>"
 
@@ -7274,9 +7279,9 @@ msgstr "Username is required"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:144
 #: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:37
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:31
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:205
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:213
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:228
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:236
 msgid "Users"
 msgstr "Users"
 
