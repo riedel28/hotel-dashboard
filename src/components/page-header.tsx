@@ -14,8 +14,9 @@ interface PageHeaderProps {
 /**
  * A page's title, its subtitle and its buttons, the same on every page.
  * The buttons share the title's row and the subtitle runs under both, so
- * on a phone it is not squeezed beside them. Without buttons the row is as
- * tall as the title, keeping the subtitle close under it.
+ * on a phone it is not squeezed beside them. The row is as tall as the title
+ * with or without buttons, so breadcrumb, title and subtitle sit at the same
+ * distances on every page.
  */
 export function PageHeader({
   title,
@@ -27,7 +28,9 @@ export function PageHeader({
     <div className={cn('mb-6 space-y-1', className)}>
       <div className="flex items-center justify-between gap-3">
         <h1 className="min-w-0 text-xl font-bold text-balance">{title}</h1>
-        {actions && <div className="flex shrink-0 gap-2">{actions}</div>}
+        {/* 36px buttons on the 28px title row: centred on it, they reach
+            4px past it either way instead of making it taller */}
+        {actions && <div className="-my-1 flex shrink-0 gap-2">{actions}</div>}
       </div>
       {description && (
         <p className="max-w-2xl text-sm text-pretty text-muted-foreground">

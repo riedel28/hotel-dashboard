@@ -69,8 +69,6 @@ function MonitoringPage() {
             Track PMS, door lock and payment events and spot failed ones.
           </Trans>
         }
-        // Phones keep the space for the logs
-        className="mb-4 sm:mb-6"
       />
 
       <div className="space-y-2.5">
