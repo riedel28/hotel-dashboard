@@ -1,3 +1,13 @@
+## [1.36.1](https://github.com/riedel28/hotel-dashboard/compare/v1.36.0...v1.36.1) (2026-10-19)
+
+
+### Performance Improvements
+
+* **auth:** load the sign-in photo early, and a smaller one on phones ([2011bc2](https://github.com/riedel28/hotel-dashboard/commit/2011bc2cc2da48bf92fcf7f110009643678a0d2c))
+* **build:** keep the dashboard out of the sign-in pages' bundle ([c0aeefc](https://github.com/riedel28/hotel-dashboard/commit/c0aeefcbb6d716caeb462487e2c262aa7d4cc54f))
+* **fonts:** self-host Inter instead of loading it from Google Fonts ([3d44a2c](https://github.com/riedel28/hotel-dashboard/commit/3d44a2c6ce5f818d7314c5d7d25d731475968d58))
+* **i18n:** ship the English catalog in the main bundle ([d7d52da](https://github.com/riedel28/hotel-dashboard/commit/d7d52da2d1bcb13c1c75432ace8aee4e5415e9eb))
+
 # [1.36.0](https://github.com/riedel28/hotel-dashboard/compare/v1.35.0...v1.36.0) (2026-10-19)
 
 
