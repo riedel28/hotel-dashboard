@@ -500,8 +500,8 @@ const TreePanel = React.memo(function TreePanel({
           action={{
             label: <Trans>Create the first item</Trans>,
             icon: <PlusIcon aria-hidden="true" />,
-            onClick: onAddSection,
-            variant: 'outline'
+            // The page's main action while it is empty
+            onClick: onAddSection
           }}
         />
       </div>
