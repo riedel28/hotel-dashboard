@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, ChevronDownIcon } from 'lucide-react';
 import { type ReactNode, useState } from 'react';
 import { type DateRange } from 'react-day-picker';
 
@@ -68,6 +68,7 @@ export function DateRangePopover({
       >
         <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
         {label}
+        <ChevronDownIcon className="ms-auto size-4 shrink-0 opacity-50" />
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <div className="flex max-sm:flex-col">
