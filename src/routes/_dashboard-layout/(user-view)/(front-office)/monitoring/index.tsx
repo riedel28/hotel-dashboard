@@ -61,14 +61,13 @@ function MonitoringPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      {/* From `sm` up as tall as the same row on pages that have an action
-          button in it; phones keep the space for the logs */}
+      {/* No action beside the title, so its row keeps to the title's height
+          and the subtitle sits close under it; phones keep the space for
+          the logs */}
       <div className="mb-4 space-y-1 sm:mb-6">
-        <div className="flex justify-between sm:min-h-9 sm:items-center">
-          <h1 className="text-xl font-bold">
-            <Trans>Monitoring Logs</Trans>
-          </h1>
-        </div>
+        <h1 className="text-xl font-bold">
+          <Trans>Monitoring Logs</Trans>
+        </h1>
         <p className="text-sm text-muted-foreground">
           <Trans>
             Track PMS, door lock and payment events and spot failed ones.
