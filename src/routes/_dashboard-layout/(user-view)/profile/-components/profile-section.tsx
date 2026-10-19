@@ -175,6 +175,7 @@ function MobileSaveBar({
 }) {
   return (
     <div
+      data-slot="mobile-save-bar"
       className="fixed inset-x-0 bottom-0 z-20 flex items-center gap-2 border-t bg-background/95 px-4 py-3 backdrop-blur-sm lg:hidden"
       style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
     >
