@@ -9,7 +9,11 @@ async function navigateToEditUser(
   page: Page,
   displayName = EDITABLE_USER_DISPLAY
 ) {
-  await page.getByRole('link', { name: 'Users', exact: true }).click();
+  // The sidebar's link: on the users page the breadcrumb names it too
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Users', exact: true })
+    .click();
   await expect(page).toHaveURL(/\/users/);
   await expect(page.getByRole('heading', { name: 'Users' })).toBeVisible();
 
@@ -77,14 +81,15 @@ test.describe('Edit User', () => {
     await page.getByPlaceholder('Search country...').fill('Germany');
     await page.getByRole('option', { name: 'Germany' }).click();
 
-    // Submit the form
-    await form.getByRole('button', { name: 'Save Changes' }).click();
+    // Submitted from the keyboard: in a dev build the router devtools badge
+    // sits on top of the drawer's Save button.
+    await lastNameInput.press('Enter');
     await expect(page.getByText('User updated successfully')).toBeVisible();
 
-    // Saving closes the drawer; reload and open the user again to check the
-    // values were stored
+    // Saving closes the drawer; load the app afresh and open the user again
+    // to check the values were stored
     await expect(page.getByRole('dialog')).toBeHidden();
-    await page.reload();
+    await page.goto('/');
     await navigateToEditUser(page, 'Updated User');
 
     const reloadedForm = page.getByRole('dialog').locator('form');
