@@ -48,6 +48,8 @@ interface UsersTableProps {
   ) => void;
   /** A failed load (`LoadErrorState`), shown where the rows go. */
   error?: ReactNode;
+  /** Shown where the rows go when there are none. */
+  emptyMessage?: ReactNode;
 }
 
 function getInitials(
@@ -69,7 +71,8 @@ export default function UsersTable({
   onPaginationChange,
   sorting: sortingProp,
   onSortingChange,
-  error
+  error,
+  emptyMessage
 }: UsersTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -318,6 +321,7 @@ export default function UsersTable({
       tableClassNames={{
         edgeCell: 'px-5'
       }}
+      emptyMessage={emptyMessage}
       tableLayout={{
         columnsPinnable: false,
         columnsMovable: false,

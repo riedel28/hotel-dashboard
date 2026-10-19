@@ -9,7 +9,10 @@ import {
 } from 'shared/types/devices';
 import { z } from 'zod';
 
-import { EmptyFilterResult } from '@/components/empty-table-state';
+import {
+  EmptyFilterResult,
+  EmptyTableState
+} from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -20,14 +23,6 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { paginate } from '@/lib/paginate';
 import { lenientSearch } from '@/lib/search-params';
@@ -138,33 +133,6 @@ function DevicesPage() {
   );
 }
 
-function NoDevices({ onAddDevice }: { onAddDevice: () => void }) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <TabletSmartphoneIcon />
-        </EmptyMedia>
-        <EmptyTitle>
-          <Trans>No devices yet</Trans>
-        </EmptyTitle>
-        <EmptyDescription>
-          <Trans>
-            Add a tablet, phone or TV with its serial number and the PIN shown
-            on its screen.
-          </Trans>
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <Button onClick={onAddDevice}>
-          <PlusCircleIcon className="mr-2 h-4 w-4" />
-          <Trans>Add device</Trans>
-        </Button>
-      </EmptyContent>
-    </Empty>
-  );
-}
-
 interface DevicesContentProps {
   highlightedId: number | undefined;
   onAddDevice: () => void;
@@ -199,10 +167,6 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
     );
   }
 
-  if (devices.length === 0) {
-    return <NoDevices onAddDevice={onAddDevice} />;
-  }
-
   return (
     <DeviceRoomActionsProvider>
       <div className="space-y-2.5">
@@ -221,10 +185,28 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
           onPageChange={search.setPage}
           highlightedId={highlightedId}
           emptyMessage={
-            <EmptyFilterResult
-              description={<Trans>No devices match the filters.</Trans>}
-              onClearFilters={search.clearFilters}
-            />
+            devices.length === 0 ? (
+              <EmptyTableState
+                icon={<TabletSmartphoneIcon />}
+                title={<Trans>No devices yet</Trans>}
+                description={
+                  <Trans>
+                    Add a tablet, phone or TV with its serial number and the PIN
+                    shown on its screen.
+                  </Trans>
+                }
+                action={{
+                  label: <Trans>Add device</Trans>,
+                  icon: <PlusCircleIcon aria-hidden="true" />,
+                  onClick: onAddDevice
+                }}
+              />
+            ) : (
+              <EmptyFilterResult
+                description={<Trans>No devices match the filters.</Trans>}
+                onClearFilters={search.clearFilters}
+              />
+            )
           }
           onDeviceOpen={(device) => search.openDevice(device.id)}
         />

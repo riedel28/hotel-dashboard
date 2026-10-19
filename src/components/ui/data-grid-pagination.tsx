@@ -270,10 +270,13 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
   );
 }
 
-/** Nothing to page through when the load failed: no pagination at all. */
+/**
+ * Nothing to page through when the load failed or there are no rows: no
+ * pagination at all, the empty state stands alone.
+ */
 function DataGridPaginationUnlessFailed(props: DataGridPaginationProps) {
-  const { props: gridProps } = useDataGrid();
-  if (gridProps.error) return null;
+  const { props: gridProps, recordCount, isLoading } = useDataGrid();
+  if (gridProps.error || (!isLoading && recordCount === 0)) return null;
   return <DataGridPaginationComponent {...props} />;
 }
 

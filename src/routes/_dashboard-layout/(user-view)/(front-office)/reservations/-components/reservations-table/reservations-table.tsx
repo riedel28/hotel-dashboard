@@ -65,6 +65,8 @@ interface ReservationsTableProps {
   /** The reservation open in the details drawer, marked as the selected row. */
   selectedReservationId?: number;
   onReservationOpen?: (reservationId: number) => void;
+  /** Shown where the rows go when there are none. */
+  emptyMessage?: ReactNode;
   /** A failed load (`LoadErrorState`), shown where the rows go. */
   error?: ReactNode;
 }
@@ -81,6 +83,7 @@ export default function ReservationsTable({
   onSortingChange,
   selectedReservationId,
   onReservationOpen,
+  emptyMessage,
   error
 }: ReservationsTableProps) {
   const pagination = useMemo<PaginationState>(
@@ -349,6 +352,7 @@ export default function ReservationsTable({
         edgeCell: 'px-5',
         bodyRow: openRowClassName
       }}
+      emptyMessage={emptyMessage}
       tableLayout={{
         columnsPinnable: false,
         columnsMovable: false,

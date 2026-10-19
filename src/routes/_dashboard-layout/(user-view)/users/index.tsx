@@ -5,6 +5,7 @@ import { type PaginationState, type SortingState } from '@tanstack/react-table';
 import { XIcon } from 'lucide-react';
 
 import { fetchUsersParamsSchema, usersQueryOptions } from '@/api/users';
+import { EmptyFilterResult } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -174,6 +175,14 @@ function UsersPage() {
           onPaginationChange={handlePaginationChange}
           sorting={sorting}
           onSortingChange={handleSortingChange}
+          // The list always holds the one looking at it, so only a search
+          // comes up empty
+          emptyMessage={
+            <EmptyFilterResult
+              description={<Trans>No users match the search.</Trans>}
+              onClearFilters={() => handleSearchChange('')}
+            />
+          }
         />
       );
     }
