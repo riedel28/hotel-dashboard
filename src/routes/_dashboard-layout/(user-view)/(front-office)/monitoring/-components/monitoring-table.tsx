@@ -10,6 +10,7 @@ import {
 import { type ReactNode, useMemo } from 'react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
+import { openRowClassName } from '@/components/details-drawer';
 import {
   DataGrid,
   DataGridContainer,
@@ -288,13 +289,8 @@ export function MonitoringTable({
       onRowClick={(log) => onLogOpen(log.id)}
       tableClassNames={{
         edgeCell: 'px-5',
-        // Lets cells reveal controls while their row is hovered. The open log
-        // is tinted and marked with a bar on its left edge, so it stays easy
-        // to find beside the drawer.
-        bodyRow: cn(
-          'group/row data-[state=selected]:bg-primary/10',
-          'data-[state=selected]:*:first:before:absolute data-[state=selected]:*:first:before:inset-y-0 data-[state=selected]:*:first:before:left-0 data-[state=selected]:*:first:before:w-0.5 data-[state=selected]:*:first:before:bg-primary'
-        )
+        // Lets cells reveal controls while their row is hovered
+        bodyRow: cn('group/row', openRowClassName)
       }}
       emptyMessage={emptyMessage}
       tableLayout={{

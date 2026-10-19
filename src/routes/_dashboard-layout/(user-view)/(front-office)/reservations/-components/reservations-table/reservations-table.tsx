@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { type ReactNode, useMemo, useState } from 'react';
 
 import type { Reservation } from '@/api/reservations';
+import { openRowClassName } from '@/components/details-drawer';
 import {
   DataGrid,
   DataGridContainer,
@@ -345,7 +346,8 @@ export default function ReservationsTable({
       recordCount={totalCount}
       onRowClick={(reservation) => onReservationOpen?.(reservation.id)}
       tableClassNames={{
-        edgeCell: 'px-5'
+        edgeCell: 'px-5',
+        bodyRow: openRowClassName
       }}
       tableLayout={{
         columnsPinnable: false,

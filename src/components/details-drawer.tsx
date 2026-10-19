@@ -18,6 +18,13 @@ import {
 } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
 
+/**
+ * For the table row whose item is open in the drawer: tinted and marked with
+ * a bar on its left edge, so it stays easy to find beside the drawer.
+ */
+export const openRowClassName =
+  'data-[state=selected]:bg-primary/10 data-[state=selected]:*:first:before:absolute data-[state=selected]:*:first:before:inset-y-0 data-[state=selected]:*:first:before:left-0 data-[state=selected]:*:first:before:w-0.5 data-[state=selected]:*:first:before:bg-primary';
+
 interface DetailsDrawerProps<
   TItem extends { id: number },
   TQueryKey extends QueryKey
