@@ -1229,7 +1229,7 @@ msgstr "Kinder"
 msgid "Choose a door lock system"
 msgstr "Türschließsystem auswählen"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:341
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:310
 msgid "Choose a page or link in the tree, or tap one in the preview."
 msgstr "Wähle eine Seite oder einen Link im Baum oder tippe in der Vorschau darauf."
 
@@ -1282,7 +1282,7 @@ msgstr "Alle zurücksetzen"
 #~ msgstr "Einlasszeit löschen"
 
 #: src/components/clear-filters-button.tsx:33
-#: src/components/empty-table-state.tsx:74
+#: src/components/empty-table-state.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:104
@@ -1430,7 +1430,7 @@ msgstr "Kontakt"
 #~ msgid "Contains an uppercase letter"
 #~ msgstr "Enthält einen Großbuchstaben"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:424
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:393
 msgid "Content"
 msgstr "Inhalt"
 
@@ -1439,7 +1439,7 @@ msgstr "Inhalt"
 msgid "Content Manager"
 msgstr "Content Manager"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:391
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:360
 msgid "Content of the hotel’s mobile app. Saved changes are live at once."
 msgstr "Inhalt der Hotel-App. Gespeicherte Änderungen sind sofort live."
 
@@ -1565,7 +1565,7 @@ msgstr "Zimmer konnten nicht geladen werden"
 msgid "Couldn't load the check-in settings"
 msgstr "Die Check-in-Einstellungen konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:270
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:263
 msgid "Couldn't load the content"
 msgstr "Der Inhalt konnte nicht geladen werden"
 
@@ -1669,7 +1669,7 @@ msgstr "Reservierung erstellen"
 msgid "Create the first category to start adding products."
 msgstr "Lege die erste Kategorie an, um Produkte hinzuzufügen."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:295
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:501
 msgid "Create the first item"
 msgstr "Ersten Eintrag anlegen"
 
@@ -2148,7 +2148,7 @@ msgstr "Bearbeitet {editedAt}"
 msgid "Edited {editedAt} by {editorName}"
 msgstr "Bearbeitet {editedAt} von {editorName}"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:314
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:282
 msgid "Editor"
 msgstr "Editor"
 
@@ -3116,7 +3116,7 @@ msgstr "Inhaber"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:66
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:110
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:373
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:342
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:52
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:47
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:63
@@ -3145,7 +3145,7 @@ msgstr ""
 msgid "Host is required"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:97
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:90
 msgid "Hotel"
 msgstr "Hotel"
 
@@ -3298,7 +3298,7 @@ msgstr "Möglicherweise wurde es gelöscht oder verschoben."
 msgid "Italic"
 msgstr "Kursiv"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:530
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:523
 msgid "Item"
 msgstr "Eintrag"
 
@@ -3306,7 +3306,7 @@ msgstr "Eintrag"
 msgid "Items"
 msgstr "Einträge"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:286
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:495
 msgid "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 msgstr "Einträge sind die Seiten und Links, die Gäste in der Hotel-App sehen. Leg den ersten an."
 
@@ -3355,7 +3355,7 @@ msgstr "Kinder"
 msgid "Language"
 msgstr "Sprache"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:546
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:539
 msgid "Language of the titles"
 msgstr "Sprache der Titel"
 
@@ -3724,9 +3724,9 @@ msgid "Mobile App (PWA)"
 msgstr "Mobile App (PWA)"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:108
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:83
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:379
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:388
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:348
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:357
 msgid "Mobile CMS"
 msgstr "Mobile CMS"
 
@@ -3988,7 +3988,7 @@ msgstr "Keine Kategorie gefunden."
 msgid "No category selected"
 msgstr "Keine Kategorie ausgewählt"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:283
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:493
 msgid "No content yet"
 msgstr "Noch kein Inhalt"
 
@@ -4074,7 +4074,7 @@ msgstr "Ohne Etage"
 msgid "No guests found"
 msgstr "Keine Gäste gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:337
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:306
 msgid "No item selected"
 msgstr "Kein Eintrag ausgewählt"
 
@@ -4279,11 +4279,11 @@ msgstr "Noch nicht"
 msgid "Notes your team adds about this property will be listed here."
 msgstr "Notizen Ihres Teams zu dieser Unterkunft werden hier aufgelistet."
 
-#: src/components/empty-table-state.tsx:71
+#: src/components/empty-table-state.tsx:73
 msgid "Nothing found"
 msgstr "Nichts gefunden"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:558
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:551
 msgid "Nothing matches"
 msgstr "Keine Treffer"
 
@@ -4365,8 +4365,8 @@ msgstr "Es wurde nur das erste Bild verwendet"
 #~ msgid "Only to guests who haven’t checked in yet."
 #~ msgstr "Nur an Gäste, die noch nicht eingecheckt haben."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:537
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:542
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:530
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:535
 msgid "Only untranslated"
 msgstr "Nur unübersetzte"
 
@@ -4781,9 +4781,9 @@ msgstr "Postleitzahl ist erforderlich"
 msgid "Prepayment"
 msgstr "Vorauszahlung"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:360
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:412
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:435
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:329
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:381
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:404
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-header.tsx:186
 msgid "Preview"
 msgstr "Vorschau"
@@ -5710,7 +5710,7 @@ msgstr "Zimmer suchen"
 msgid "Search timezone..."
 msgstr "Zeitzone suchen..."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:525
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:518
 msgid "Search titles"
 msgstr "Titel durchsuchen"
 
@@ -5965,7 +5965,7 @@ msgstr "Alle Rollen anzeigen"
 #~ msgid "Show API key"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:353
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:316
 msgid "Show content tree"
 msgstr "Inhaltsbaum anzeigen"
 
@@ -6611,7 +6611,7 @@ msgstr "Dieser Einladungslink ist ungültig."
 msgid "This is the service code that will be used to skip payment at check-in."
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:335
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:304
 msgid "This item doesn’t exist (anymore)"
 msgstr "Diesen Eintrag gibt es (nicht mehr)"
 
@@ -6790,7 +6790,7 @@ msgstr "Verfolgen Sie PMS-, Türschloss- und Zahlungsereignisse und erkennen Sie
 msgid "Translation missing"
 msgstr "Übersetzung fehlt"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:404
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:373
 msgid "Tree"
 msgstr "Baum"
 

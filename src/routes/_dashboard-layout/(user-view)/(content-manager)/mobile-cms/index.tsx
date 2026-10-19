@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { EyeIcon, ListTreeIcon, PlusIcon, SmartphoneIcon } from 'lucide-react';
+import { EyeIcon, ListTreeIcon, PlusIcon } from 'lucide-react';
 import * as React from 'react';
 import { cmsDescendantIds, cmsLineage } from 'shared/cms-tree';
 import {
@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { type CmsNode, cmsNodesQueryOptions } from '@/api/cms';
 import { selectablePropertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
+import { EmptyTableState } from '@/components/empty-table-state';
 import { LoadErrorState } from '@/components/load-error';
 import {
   Breadcrumb,
@@ -34,14 +35,6 @@ import {
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty';
 import { Label } from '@/components/ui/label';
 import { SearchInput } from '@/components/ui/search-input';
 import { SegmentedControl } from '@/components/ui/segmented-control';
@@ -272,31 +265,6 @@ function MobileCmsPage() {
         isRetrying={nodesQuery.isFetching}
       />
     );
-  } else if (nodes.length === 0) {
-    content = (
-      <Empty className="border border-dashed">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <SmartphoneIcon />
-          </EmptyMedia>
-          <EmptyTitle>
-            <Trans>No content yet</Trans>
-          </EmptyTitle>
-          <EmptyDescription>
-            <Trans>
-              Items are the pages and links guests see in the hotel’s mobile
-              app. Start with the first one.
-            </Trans>
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button onClick={addSection}>
-            <PlusIcon />
-            <Trans>Create the first item</Trans>
-          </Button>
-        </EmptyContent>
-      </Empty>
-    );
   } else {
     content = (
       <div className={columnsClassName}>
@@ -328,30 +296,31 @@ function MobileCmsPage() {
             />
           ) : (
             <CardContent>
-              {/* A title and a hint, a size up from Products' empty list. */}
-              <div className="flex min-h-[140px] flex-col items-center justify-center gap-1 text-center">
-                <p className="text-base font-medium">
-                  {requestedId != null ? (
-                    <Trans>This item doesn’t exist (anymore)</Trans>
-                  ) : (
-                    <Trans>No item selected</Trans>
-                  )}
-                </p>
-                <p className="text-base text-balance text-muted-foreground">
-                  <Trans>
-                    Choose a page or link in the tree, or tap one in the
-                    preview.
-                  </Trans>
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 @3xl:hidden"
-                  onClick={() => setTreeOpen(true)}
-                >
-                  <ListTreeIcon />
-                  <Trans>Show content tree</Trans>
-                </Button>
+              {/* Like Products' list before a category is picked */}
+              <div className="flex min-h-[140px] items-center justify-center text-center">
+                <EmptyTableState
+                  title={
+                    requestedId != null ? (
+                      <Trans>This item doesn’t exist (anymore)</Trans>
+                    ) : (
+                      <Trans>No item selected</Trans>
+                    )
+                  }
+                  description={
+                    <Trans>
+                      Choose a page or link in the tree, or tap one in the
+                      preview.
+                    </Trans>
+                  }
+                  action={{
+                    label: <Trans>Show content tree</Trans>,
+                    icon: <ListTreeIcon />,
+                    onClick: () => setTreeOpen(true),
+                    variant: 'outline',
+                    // The tree is in view beside it from here up
+                    className: '@3xl:hidden'
+                  }}
+                />
               </div>
             </CardContent>
           )}
@@ -393,7 +362,7 @@ function MobileCmsPage() {
             </Trans>
           </p>
         </div>
-        {nodes.length > 0 && (
+        {!nodesQuery.isPending && !nodesQuery.isLoadingError && (
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -515,6 +484,30 @@ const TreePanel = React.memo(function TreePanel({
   const { t } = useLingui();
   // Rendered twice (column and sheet): ids must differ for the label.
   const onlyMissingId = React.useId();
+
+  // Like Products' categories card: nothing to search or filter yet
+  if (nodes.length === 0) {
+    return (
+      <div className="flex min-h-[140px] items-center justify-center text-center">
+        <EmptyTableState
+          title={<Trans>No content yet</Trans>}
+          description={
+            <Trans>
+              Items are the pages and links guests see in the hotel’s mobile
+              app. Start with the first one.
+            </Trans>
+          }
+          action={{
+            label: <Trans>Create the first item</Trans>,
+            icon: <PlusIcon aria-hidden="true" />,
+            onClick: onAddSection,
+            variant: 'outline'
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
