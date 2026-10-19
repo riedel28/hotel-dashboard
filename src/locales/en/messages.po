@@ -4859,15 +4859,6 @@ msgstr "POS"
 msgid "Position your photo"
 msgstr "Position your photo"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:530
-#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:239
-msgid "Postal code"
-msgstr "Postal code"
-
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:77
-msgid "Postal code is required"
-msgstr "Postal code is required"
-
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-fields.tsx:33
 msgid "Prepayment"
 msgstr "Prepayment"
@@ -7631,13 +7622,15 @@ msgstr "Youth"
 msgid "ZIP"
 msgstr "ZIP"
 
-#: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/payment-provider-form.tsx:639
-#~ msgid "ZIP / Postal code"
-#~ msgstr "ZIP / Postal code"
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:530
+#: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:239
+msgid "ZIP code"
+msgstr "ZIP code"
 
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:77
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/use-adyen-form.ts:37
-msgid "ZIP / Postal code is required"
-msgstr "ZIP / Postal code is required"
+msgid "ZIP code is required"
+msgstr "ZIP code is required"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:113
 msgid "Zoom"

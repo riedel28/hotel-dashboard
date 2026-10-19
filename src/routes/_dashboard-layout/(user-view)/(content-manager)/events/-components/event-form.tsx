@@ -74,7 +74,7 @@ const errorMessages: Record<string, MessageDescriptor> = {
   [eventErrorCodes.titleRequired]: msg`Title is required`,
   [eventErrorCodes.venueRequired]: msg`Venue name is required`,
   [eventErrorCodes.streetRequired]: msg`Street is required`,
-  [eventErrorCodes.zipRequired]: msg`Postal code is required`,
+  [eventErrorCodes.zipRequired]: msg`ZIP code is required`,
   [eventErrorCodes.cityRequired]: msg`City is required`,
   [eventErrorCodes.countryRequired]: msg`Country is required`,
   [eventErrorCodes.startRequired]: msg`Start date and time are required`,
@@ -527,7 +527,7 @@ function LocationFields({
         <TextField
           form={form}
           name="zip"
-          label={<Trans>Postal code</Trans>}
+          label={<Trans>ZIP code</Trans>}
           autoComplete="postal-code"
         />
         <TextField
