@@ -155,11 +155,12 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
   );
 
   const error = tableLoadError(query, <Trans>Couldn't load devices</Trans>);
+  const loaded = !query.isLoading && !error;
   // Shown while the devices load too, like every other list's filters; the
   // tab counts join them once there is something to count.
   const filtersBar = (
     <DevicesFilters
-      devices={query.isLoading || error ? undefined : devices}
+      devices={loaded ? devices : undefined}
       filters={filters}
       hasActiveFilters={search.hasActiveFilters}
       setFilters={search.setFilters}
@@ -167,7 +168,7 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
     />
   );
 
-  if (query.isLoading || error) {
+  if (!loaded) {
     return (
       <div className="space-y-2.5">
         {filtersBar}
