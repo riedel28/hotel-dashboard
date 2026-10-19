@@ -100,7 +100,7 @@ export function DevicesFilters({
           onClick={clearFilters}
           className="text-muted-foreground hover:text-foreground"
         >
-          <XIcon className="mr-2 h-4 w-4" />
+          <XIcon aria-hidden="true" />
           <Trans>Clear filters</Trans>
         </Button>
       )}

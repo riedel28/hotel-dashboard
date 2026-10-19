@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
-import { PlusCircleIcon, TabletSmartphoneIcon } from 'lucide-react';
+import { PlusIcon, TabletSmartphoneIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
   type Device,
@@ -114,7 +114,7 @@ function DevicesPage() {
           <Trans>Devices</Trans>
         </h1>
         <Button onClick={() => setIsClaimOpen(true)}>
-          <PlusCircleIcon className="mr-2 h-4 w-4" />
+          <PlusIcon aria-hidden="true" />
           <Trans>Add device</Trans>
         </Button>
       </div>
@@ -197,7 +197,7 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
                 }
                 action={{
                   label: <Trans>Add device</Trans>,
-                  icon: <PlusCircleIcon aria-hidden="true" />,
+                  icon: <PlusIcon aria-hidden="true" />,
                   onClick: onAddDevice
                 }}
               />
