@@ -1,14 +1,17 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { ChevronDownIcon, ChevronUpIcon, ListFilterIcon } from 'lucide-react';
+import { ListFilterIcon } from 'lucide-react';
 import type { MonitoringLog } from 'shared/types/monitoring';
 
 import {
   monitoringLogQueryOptions,
   monitoringQueryOptions
 } from '@/api/monitoring';
-import { DetailsDrawer } from '@/components/details-drawer';
+import {
+  DetailsDrawer,
+  DetailsDrawerStepper
+} from '@/components/details-drawer';
 import { ReservationLink } from '@/components/reservation-link';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
@@ -46,9 +49,8 @@ export function LogDetailsDrawer({
       queryOptions={monitoringLogQueryOptions}
       onSelect={onSelect}
       onClose={onClose}
-      // Narrow enough to leave the table's status, date, type and event
-      // columns in view beside it
-      className="sm:max-w-md"
+      // As wide as the reservation drawer
+      className="sm:max-w-lg"
       loadingText={<Trans>Loading log…</Trans>}
       notFoundTitle={<Trans>Log not found</Trans>}
       notFoundText={<Trans>This log does not exist or was removed.</Trans>}
@@ -81,10 +83,8 @@ function LogDetails({
   return (
     <>
       <DrawerHeader className="space-y-2">
-        {/* Only the title row shares its line with the step and close
-            buttons */}
-        <DrawerTitle className="pr-28">{log.event}</DrawerTitle>
-        <PageStepper log={log} pageLogs={pageLogs} onSelect={onSelect} />
+        {/* Only the title row shares its line with the close button */}
+        <DrawerTitle className="pr-10">{log.event}</DrawerTitle>
         <div className="flex flex-wrap items-center gap-2 text-sm font-normal text-muted-foreground">
           <StatusCell status={log.status} />
           <TypeCell type={log.type} />
@@ -159,57 +159,15 @@ function LogDetails({
           />
         )}
       </DrawerBody>
+
+      <DetailsDrawerStepper
+        currentId={log.id}
+        items={pageLogs}
+        onSelect={onSelect}
+        previousLabel={t`Previous log`}
+        nextLabel={t`Next log`}
+      />
     </>
-  );
-}
-
-/**
- * Steps to the previous or next log of the table page, as ↑/↓ do, for the
- * pointer and for phones without keys. Absent for a log not on the page.
- */
-function PageStepper({
-  log,
-  pageLogs,
-  onSelect
-}: {
-  log: MonitoringLog;
-  pageLogs: MonitoringLog[];
-  onSelect: (logId: number) => void;
-}) {
-  const { t } = useLingui();
-  const index = pageLogs.findIndex((pageLog) => pageLog.id === log.id);
-
-  if (index === -1) {
-    return null;
-  }
-
-  const previous = pageLogs[index - 1];
-  const next = pageLogs[index + 1];
-
-  return (
-    // Left of the drawer's close button
-    <div className="absolute top-4 right-14 flex gap-0.5">
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        disabled={!previous}
-        aria-label={t`Previous log`}
-        title={t`Previous log (↑)`}
-        onClick={() => previous && onSelect(previous.id)}
-      >
-        <ChevronUpIcon />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        disabled={!next}
-        aria-label={t`Next log`}
-        title={t`Next log (↓)`}
-        onClick={() => next && onSelect(next.id)}
-      >
-        <ChevronDownIcon />
-      </Button>
-    </div>
   );
 }
 

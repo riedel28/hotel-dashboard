@@ -4,12 +4,15 @@ import {
   useQuery,
   type UseQueryOptions
 } from '@tanstack/react-query';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { type ReactNode, useEffect, useRef } from 'react';
 
 import { ApiError } from '@/api/client';
+import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
@@ -141,5 +144,57 @@ function Details<TItem extends { id: number }, TQueryKey extends QueryKey>({
       <DrawerTitle>{title}</DrawerTitle>
       <p className="text-sm font-normal text-muted-foreground">{description}</p>
     </DrawerHeader>
+  );
+}
+
+/**
+ * Steps to the previous or next item of the table page, as ↑/↓ do, for the
+ * pointer and for phones without keys. Absent for an item not on the page.
+ */
+export function DetailsDrawerStepper({
+  currentId,
+  items,
+  onSelect,
+  previousLabel,
+  nextLabel
+}: {
+  currentId: number;
+  items: { id: number }[];
+  onSelect: (id: number) => void;
+  previousLabel: string;
+  nextLabel: string;
+}) {
+  const index = items.findIndex((item) => item.id === currentId);
+
+  if (index === -1) {
+    return null;
+  }
+
+  const previous = items[index - 1];
+  const next = items[index + 1];
+
+  return (
+    <DrawerFooter className="flex-row items-center gap-1 py-3 sm:justify-start">
+      <Button
+        variant="outline"
+        size="icon-sm"
+        disabled={!previous}
+        aria-label={previousLabel}
+        title={`${previousLabel} (↑)`}
+        onClick={() => previous && onSelect(previous.id)}
+      >
+        <ChevronUpIcon />
+      </Button>
+      <Button
+        variant="outline"
+        size="icon-sm"
+        disabled={!next}
+        aria-label={nextLabel}
+        title={`${nextLabel} (↓)`}
+        onClick={() => next && onSelect(next.id)}
+      >
+        <ChevronDownIcon />
+      </Button>
+    </DrawerFooter>
   );
 }
