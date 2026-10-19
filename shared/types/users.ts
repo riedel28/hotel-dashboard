@@ -6,6 +6,7 @@ import {
   searchQuerySchema,
   sortOrderSchema
 } from './list-params';
+import { countryCodeSchema } from './properties';
 
 export const MIN_PASSWORD_LENGTH = 12;
 export const MAX_PASSWORD_LENGTH = 128;
@@ -61,8 +62,17 @@ export const sortableColumnsSchema = z.enum([
 
 export const fetchUsersParamsSchema = z.object({
   page: pageSchema.default(1).optional(),
-  per_page: perPageSchema.default(10).optional(),
+  per_page: perPageSchema.default(25).optional(),
   q: searchQuerySchema.optional(),
+  country_code: countryCodeSchema.optional(),
+  // Role ids; a user with any of them matches. A query string spells the
+  // list comma-separated ("1,3")
+  role: z
+    .preprocess(
+      (value) => (typeof value === 'string' ? value.split(',') : value),
+      z.array(z.coerce.number().int().positive())
+    )
+    .optional(),
   sort_by: sortableColumnsSchema.optional(),
   sort_order: sortOrderSchema.default('desc').optional()
 });

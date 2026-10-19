@@ -1,5 +1,15 @@
 import bcrypt from 'bcrypt';
-import { and, asc, count, desc, eq, ilike, isNull, or } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  ilike,
+  inArray,
+  isNull,
+  or
+} from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import env from '../../env';
@@ -81,7 +91,8 @@ const DETAIL_COLUMNS = {
 
 async function getUsers(req: Request, res: Response) {
   try {
-    const { page, per_page, q, sort_by, sort_order } = req.query;
+    const { page, per_page, q, country_code, role, sort_by, sort_order } =
+      req.query;
 
     const conditions = [];
 
@@ -92,6 +103,24 @@ async function getUsers(req: Request, res: Response) {
           ilike(users.first_name, `%${escaped}%`),
           ilike(users.last_name, `%${escaped}%`),
           ilike(users.email, `%${escaped}%`)
+        )
+      );
+    }
+
+    if (country_code) {
+      conditions.push(eq(users.country_code, country_code as string));
+    }
+
+    // Any of the roles: the users who hold at least one of them
+    const roleIds = role as unknown as number[] | undefined;
+    if (roleIds?.length) {
+      conditions.push(
+        inArray(
+          users.id,
+          db
+            .select({ id: userRoles.user_id })
+            .from(userRoles)
+            .where(inArray(userRoles.role_id, roleIds))
         )
       );
     }
@@ -147,8 +176,8 @@ async function getUsers(req: Request, res: Response) {
           }
         }
       },
-      offset: ((Number(page) || 1) - 1) * (Number(per_page) || 10),
-      limit: Number(per_page) || 10,
+      offset: ((Number(page) || 1) - 1) * (Number(per_page) || 25),
+      limit: Number(per_page) || 25,
       orderBy
     });
 
@@ -164,9 +193,9 @@ async function getUsers(req: Request, res: Response) {
     res.status(200).json({
       index: transformedUsers,
       page: Number(page) || 1,
-      per_page: Number(per_page) || 10,
+      per_page: Number(per_page) || 25,
       total: totalCount,
-      page_count: Math.ceil(totalCount / (Number(per_page) || 10))
+      page_count: Math.ceil(totalCount / (Number(per_page) || 25))
     });
   } catch (error) {
     console.error(error);

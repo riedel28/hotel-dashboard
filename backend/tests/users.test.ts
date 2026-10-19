@@ -124,6 +124,52 @@ describe('Users API', () => {
       expect(emails).toEqual(sortedEmails);
     });
 
+    test('should filter users by country', async () => {
+      const { user: swiss } = await createTestUser({ country_code: 'CH' });
+      const { user: german } = await createTestUser({ country_code: 'DE' });
+
+      const response = await request(app)
+        .get('/api/users?country_code=CH&per_page=100')
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      const ids = response.body.index.map((u: { id: number }) => u.id);
+      expect(ids).toContain(swiss.id);
+      expect(ids).not.toContain(german.id);
+      expect(
+        response.body.index.every(
+          (u: { country_code: string }) => u.country_code === 'CH'
+        )
+      ).toBe(true);
+    });
+
+    test('should filter users having any of the given roles', async () => {
+      const manager = await createTestRole(`manager-${Date.now()}`);
+      const cleaner = await createTestRole(`cleaner-${Date.now()}`);
+      const { user: withManager } = await createTestUser();
+      const { user: withCleaner } = await createTestUser();
+      const { user: withBoth } = await createTestUser();
+      await assignRoleToUser(withManager.id, manager.id);
+      await assignRoleToUser(withCleaner.id, cleaner.id);
+      await assignRoleToUser(withBoth.id, manager.id);
+      await assignRoleToUser(withBoth.id, cleaner.id);
+
+      const response = await request(app)
+        .get(`/api/users?role=${manager.id}&per_page=100`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      const ids = response.body.index.map((u: { id: number }) => u.id);
+      expect(ids.sort()).toEqual([withManager.id, withBoth.id].sort());
+      expect(response.body.total).toBe(2);
+
+      const either = await request(app)
+        .get(`/api/users?role=${manager.id},${cleaner.id}&per_page=100`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+      expect(either.body.total).toBe(3);
+    });
+
     test('should include user roles in response', async () => {
       const role = await createTestRole('admin');
       await assignRoleToUser(testUserId, role.id);
