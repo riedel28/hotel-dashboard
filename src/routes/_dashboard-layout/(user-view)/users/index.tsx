@@ -255,7 +255,8 @@ function UsersPage() {
               setFilters({ country_code: code || undefined })
             }
             placeholder={t`All countries`}
-            className="w-full sm:w-45 sm:shrink-0"
+            // Room for nearly every name; the very longest are cut short
+            className="w-full sm:w-64 sm:min-w-40 sm:shrink"
           />
           <DataGridCheckboxFilter
             label={<Trans>Role</Trans>}
@@ -265,7 +266,8 @@ function UsersPage() {
             onValueChange={(ids) =>
               setFilters({ role: ids.length ? ids.map(Number) : undefined })
             }
-            className="w-full sm:w-45 sm:shrink-0"
+            // Fits "Role: Roomservice Order Agent", the longest one
+            className="w-full sm:w-66 sm:min-w-36 sm:shrink"
           >
             <DataGridCheckboxFilterFooter>
               <DataGridCheckboxFilterClear>
