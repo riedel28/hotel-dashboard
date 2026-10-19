@@ -128,7 +128,7 @@ msgid "{0} of {plannedTotal} guests registered"
 msgstr "{0} von {plannedTotal} Gästen erfasst"
 
 #. placeholder {0}: status.recovery_codes_remaining
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:156
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:162
 msgid "{0} of 10 codes remaining"
 msgstr "Noch {0} von 10 Codes"
 
@@ -306,7 +306,7 @@ msgstr "Eine Unterkunft hat je Art genau einen Anbieter. Wenn Sie {name} verbind
 msgid "A room with this number already exists"
 msgstr "Ein Zimmer mit dieser Nummer existiert bereits"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:92
 msgid "A second step at sign-in, from an app on your phone."
 msgstr "Ein zweiter Schritt bei der Anmeldung, über eine App auf Ihrem Telefon."
 
@@ -375,7 +375,7 @@ msgstr "Aktive Reservierung – wird übersprungen"
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:204
 msgid "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 msgstr "Fügen Sie ein Tablet, Telefon oder TV-Gerät mit seiner Seriennummer und der auf dem Bildschirm angezeigten PIN hinzu."
 
@@ -404,7 +404,7 @@ msgstr "Kunde hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:135
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:123
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:209
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:210
 msgid "Add device"
 msgstr "Gerät hinzufügen"
 
@@ -505,7 +505,7 @@ msgstr "Zu „{parentTitle}“ hinzufügen"
 #~ msgstr "Benutzer hinzufügen"
 
 #. placeholder {0}: dayjs(status.enabled_at).format('D MMM YYYY')
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:121
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:127
 msgid "Added on {0}"
 msgstr "Hinzugefügt am {0}"
 
@@ -599,7 +599,7 @@ msgstr "Erwachsene"
 #~ msgid "Adyen connected"
 #~ msgstr "Adyen verbunden"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:214
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:217
 msgid "After entering your password you'll enter a 6-digit code from an authenticator app on your phone. It takes about a minute to set up."
 msgstr "Nach der Eingabe Ihres Passworts geben Sie einen 6-stelligen Code aus einer Authenticator-App auf Ihrem Telefon ein. Die Einrichtung dauert etwa eine Minute."
 
@@ -862,7 +862,7 @@ msgstr "Authentifizierung"
 msgid "Authentication code"
 msgstr "Authentifizierungscode"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:117
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:123
 msgid "Authenticator app"
 msgstr "Authenticator-App"
 
@@ -925,7 +925,7 @@ msgstr "Zurück"
 msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
 
-#: src/routes/_auth-layout/auth/login.tsx:421
+#: src/routes/_auth-layout/auth/login.tsx:428
 msgid "Back to sign in"
 msgstr "Zurück zur Anmeldung"
 
@@ -1014,7 +1014,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:126
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:191
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:192
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:140
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:256
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/upload-step.tsx:163
@@ -1531,7 +1531,7 @@ msgstr ""
 msgid "Could not reach the API — request timed out after 5000 ms."
 msgstr "Die API ist nicht erreichbar – Zeitüberschreitung nach 5000 ms."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:76
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:82
 msgid "Couldn't generate new recovery codes"
 msgstr "Neue Wiederherstellungscodes konnten nicht erzeugt werden"
 
@@ -1938,7 +1938,7 @@ msgstr "Geräte"
 msgid "Digits only (max 12)"
 msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:107
 msgid "Disabled"
 msgstr "Deaktiviert"
 
@@ -1966,6 +1966,10 @@ msgstr "Doe"
 #: src/routes/_auth-layout/auth/login.tsx:274
 #~ msgid "Don't have an account?"
 #~ msgstr "Haben Sie noch kein Konto?"
+
+#: src/routes/_auth-layout/auth/login.tsx:291
+#~ msgid "Don't have an account? <0>Sign up</0>"
+#~ msgstr "Noch kein Konto? <0>Registrieren</0>"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:128
 msgid "Don’t save"
@@ -2069,7 +2073,7 @@ msgstr "z. B. Standard, Suite"
 msgid "Each code can be used once."
 msgstr "Jeder Code lässt sich einmal verwenden."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:160
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:166
 msgid "Each code works once"
 msgstr ""
 
@@ -2182,7 +2186,7 @@ msgid "Editor"
 msgstr "Editor"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:122
-#: src/routes/_auth-layout/auth/login.tsx:181
+#: src/routes/_auth-layout/auth/login.tsx:193
 #: src/routes/_auth-layout/auth/sign-up.tsx:223
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:263
@@ -2200,7 +2204,7 @@ msgstr "E-Mail"
 #~ msgid "Email is required"
 #~ msgstr "E-Mail ist erforderlich"
 
-#: src/routes/_auth-layout/auth/login.tsx:150
+#: src/routes/_auth-layout/auth/login.tsx:162
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:280
 msgid "Email not verified"
 msgstr "E-Mail nicht verifiziert"
@@ -2224,7 +2228,7 @@ msgstr "E-Mail verifiziert!"
 msgid "Enable two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung aktivieren"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:101
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:107
 msgid "Enabled"
 msgstr "Aktiviert"
 
@@ -2280,7 +2284,7 @@ msgstr "Nachname eingeben"
 msgid "Enter one of your unused recovery codes"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/login.tsx:345
+#: src/routes/_auth-layout/auth/login.tsx:352
 msgid "Enter one of your unused recovery codes."
 msgstr "Geben Sie einen Ihrer unbenutzten Wiederherstellungscodes ein."
 
@@ -2318,7 +2322,7 @@ msgstr "Geben Sie den 6-stelligen Code ein"
 msgid "Enter the 6-digit code from your authenticator app"
 msgstr "Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein"
 
-#: src/routes/_auth-layout/auth/login.tsx:347
+#: src/routes/_auth-layout/auth/login.tsx:354
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein."
 
@@ -2347,7 +2351,6 @@ msgstr ""
 #~ msgstr "Geben Sie Ihre Anmeldedaten ein, um auf das Dashboard zuzugreifen"
 
 #: src/routes/_auth-layout/auth/forgot-password.tsx:128
-#: src/routes/_auth-layout/auth/login.tsx:187
 #: src/routes/_auth-layout/auth/sign-up.tsx:229
 msgid "Enter your email"
 msgstr "E-Mail-Adresse eingeben"
@@ -2357,8 +2360,8 @@ msgid "Enter your email address and we'll send you a link to reset your password
 msgstr "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts."
 
 #: src/routes/_auth-layout/auth/login.tsx:135
-msgid "Enter your email and password to access the dashboard"
-msgstr "E-Mail und Passwort zum Einloggen eingeben"
+#~ msgid "Enter your email and password to access the dashboard"
+#~ msgstr "E-Mail und Passwort zum Einloggen eingeben"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:161
 #: src/routes/_auth-layout/auth/sign-up.tsx:169
@@ -2379,7 +2382,6 @@ msgid "Enter your new password below"
 msgstr "Geben Sie unten Ihr neues Passwort ein"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:220
-#: src/routes/_auth-layout/auth/login.tsx:216
 #: src/routes/_auth-layout/auth/sign-up.tsx:258
 msgid "Enter your password"
 msgstr "Passwort eingeben"
@@ -2645,7 +2647,7 @@ msgstr "Zimmer konnten nicht geladen werden"
 msgid "Failed to load the provider."
 msgstr "Der Anbieter konnte nicht geladen werden."
 
-#: src/routes/_auth-layout/auth/login.tsx:93
+#: src/routes/_auth-layout/auth/login.tsx:98
 msgid "Failed to login. Please try again."
 msgstr "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
 
@@ -2667,7 +2669,7 @@ msgstr "Eintrag konnte nicht verschoben werden"
 msgid "Failed to resend invitation"
 msgstr "Einladung konnte nicht erneut gesendet werden"
 
-#: src/routes/_auth-layout/auth/login.tsx:104
+#: src/routes/_auth-layout/auth/login.tsx:109
 #: src/routes/_auth-layout/auth/sign-up.tsx:58
 msgid "Failed to resend verification email"
 msgstr "Bestätigungs-E-Mail konnte nicht erneut gesendet werden"
@@ -2859,7 +2861,7 @@ msgstr "Essen & Trinken"
 msgid "Forgot Password"
 msgstr "Passwort vergessen?"
 
-#: src/routes/_auth-layout/auth/login.tsx:262
+#: src/routes/_auth-layout/auth/login.tsx:273
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:162
 msgid "Forgot password?"
 msgstr "Passwort vergessen?"
@@ -3187,6 +3189,7 @@ msgstr ""
 msgid "Hotel"
 msgstr "Hotel"
 
+#: src/routes/_auth-layout.tsx:32
 #: src/routes/_dashboard-layout.tsx:45
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
 msgid "Hotel Dashboard"
@@ -3218,7 +3221,7 @@ msgstr "Wie viele Personen anreisen, nach Altersgruppe, und wer sie sind. Der Ha
 msgid "How you appear across the back-office."
 msgstr "So erscheinen Sie im Back-Office."
 
-#: src/routes/_auth-layout/auth/login.tsx:417
+#: src/routes/_auth-layout/auth/login.tsx:424
 msgid "I don't have my phone"
 msgstr "Ich habe mein Telefon nicht"
 
@@ -3304,6 +3307,10 @@ msgstr "Integrationen"
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:35
 msgid "Invalid email address"
 msgstr "Ungültige E-Mail-Adresse"
+
+#: src/routes/_auth-layout/auth/login.tsx:153
+msgid "Invalid email or password"
+msgstr "E-Mail oder Passwort ist falsch"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:82
 #: src/routes/_auth-layout/auth/reset-password.tsx:72
@@ -3476,7 +3483,7 @@ msgstr "Zuletzt aktualisiert: {date}"
 #~ msgstr ""
 
 #. placeholder {0}: dayjs(status.last_used_at).fromNow()
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:128
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:134
 msgid "Last used {0}"
 msgstr "Zuletzt verwendet {0}"
 
@@ -3576,6 +3583,12 @@ msgstr "Lobby"
 msgid "Location"
 msgstr "Standort"
 
+#: src/routes/_auth-layout/auth/login.tsx:61
+#: src/routes/_auth-layout/auth/login.tsx:137
+#: src/routes/_auth-layout/auth/login.tsx:286
+msgid "Log in"
+msgstr "Anmelden"
+
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/log-details-drawer.tsx:55
 msgid "Log not found"
 msgstr "Protokoll nicht gefunden"
@@ -3585,9 +3598,6 @@ msgstr "Protokoll nicht gefunden"
 msgid "Log out"
 msgstr "Abmelden"
 
-#: src/routes/_auth-layout/auth/login.tsx:60
-#: src/routes/_auth-layout/auth/login.tsx:132
-#: src/routes/_auth-layout/auth/login.tsx:275
 #: src/routes/_auth-layout/auth/sign-up.tsx:292
 msgid "Login"
 msgstr "Anmelden"
@@ -4070,11 +4080,11 @@ msgstr "Keine Daten verfügbar"
 #~ msgid "No devices match the filters"
 #~ msgstr "Keine Geräte entsprechen den Filtern"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:216
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:217
 msgid "No devices match the filters."
 msgstr "Keine Geräte entsprechen den Filtern."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:201
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:202
 msgid "No devices yet"
 msgstr "Noch keine Geräte"
 
@@ -4537,7 +4547,7 @@ msgid "Party"
 msgstr "Party"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:215
-#: src/routes/_auth-layout/auth/login.tsx:211
+#: src/routes/_auth-layout/auth/login.tsx:224
 #: src/routes/_auth-layout/auth/sign-up.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:221
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:141
@@ -4775,7 +4785,7 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein"
 #~ msgid "Please select at least one role"
 #~ msgstr "Bitte wählen Sie mindestens eine Rolle aus"
 
-#: src/routes/_auth-layout/auth/login.tsx:154
+#: src/routes/_auth-layout/auth/login.tsx:166
 msgid "Please verify your email address before logging in."
 msgstr "Bitte verifizieren Sie Ihre E-Mail-Adresse, bevor Sie sich anmelden."
 
@@ -5053,7 +5063,7 @@ msgstr "Unterkunft nicht gefunden – bitte die ID prüfen."
 msgid "Property updated successfully"
 msgstr "Unterkunft erfolgreich aktualisiert"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:211
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:214
 msgid "Protect your account with a second step"
 msgstr "Schützen Sie Ihr Konto mit einem zweiten Schritt"
 
@@ -5140,13 +5150,13 @@ msgstr "Seit Kurzem offline"
 msgid "Reception"
 msgstr "Rezeption"
 
-#: src/routes/_auth-layout/auth/login.tsx:373
+#: src/routes/_auth-layout/auth/login.tsx:380
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:123
 msgid "Recovery code"
 msgstr "Wiederherstellungscode"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/recovery-codes.tsx:25
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:145
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:151
 msgid "Recovery codes"
 msgstr "Wiederherstellungscodes"
 
@@ -5179,7 +5189,7 @@ msgstr "Aktualisieren"
 msgid "Refresh preview"
 msgstr "Vorschau aktualisieren"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:183
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:189
 msgid "Regenerate"
 msgstr "Neu erzeugen"
 
@@ -5207,8 +5217,7 @@ msgstr "Neu laden, um die andere Fassung zu sehen. Bis dahin bleiben deine Ände
 #~ msgid "Reloading properties"
 #~ msgstr "Objekte werden neu geladen"
 
-#: src/routes/_auth-layout/auth/login.tsx:249
-#: src/routes/_auth-layout/auth/login.tsx:255
+#: src/routes/_auth-layout/auth/login.tsx:266
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
@@ -5315,7 +5324,7 @@ msgstr "Erneut senden"
 msgid "Resend invitation"
 msgstr "Einladung erneut senden"
 
-#: src/routes/_auth-layout/auth/login.tsx:169
+#: src/routes/_auth-layout/auth/login.tsx:181
 #: src/routes/_auth-layout/auth/sign-up.tsx:92
 msgid "Resend verification email"
 msgstr "Bestätigungs-E-Mail erneut senden"
@@ -5390,6 +5399,10 @@ msgstr "Reservierungen"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:173
 msgid "Reservations from the PMS show up here, or add one by hand."
 msgstr "Reservierungen aus dem PMS erscheinen hier, oder fügen Sie eine von Hand hinzu."
+
+#: src/routes/_auth-layout.tsx:36
+msgid "Reservations, rooms and guests — your front office in one place."
+msgstr "Reservierungen, Zimmer und Gäste – Ihr Front Office an einem Ort."
 
 #: src/components/date-range-filter.tsx:159
 #: src/components/ui/data-grid-radio-filter.tsx:131
@@ -5605,7 +5618,7 @@ msgstr "Tests laufen… ({passedCount}/{0})"
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:204
 msgid "Save"
 msgstr "Speichern"
 
@@ -6078,7 +6091,7 @@ msgstr "Seitenleiste"
 msgid "Sign Up"
 msgstr "Registrieren"
 
-#: src/routes/_auth-layout.tsx:17
+#: src/routes/_auth-layout.tsx:19
 #: src/routes/_dashboard-layout.tsx:83
 msgid "Skip to main content"
 msgstr "Zum Hauptinhalt springen"
@@ -6253,7 +6266,7 @@ msgstr "Untertitel"
 #~ msgid "Success"
 #~ msgstr "Erfolg"
 
-#: src/routes/_auth-layout/auth/login.tsx:77
+#: src/routes/_auth-layout/auth/login.tsx:78
 msgid "Successfully logged in!"
 msgstr "Erfolgreich angemeldet!"
 
@@ -6369,7 +6382,7 @@ msgstr "Text"
 msgid "Text style"
 msgstr "Textstil"
 
-#: src/routes/_auth-layout/auth/login.tsx:323
+#: src/routes/_auth-layout/auth/login.tsx:330
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:144
 msgid "That code isn't valid. Check your app and try again."
 msgstr "Dieser Code ist ungültig. Prüfen Sie Ihre App und versuchen Sie es erneut."
@@ -6387,7 +6400,7 @@ msgstr "Diese Datei ist {0} groß. Bitte wählen Sie eine unter 20 MB."
 msgid "That image couldn't be opened. Try a different one."
 msgstr "Dieses Bild konnte nicht geöffnet werden. Versuchen Sie ein anderes."
 
-#: src/routes/_auth-layout/auth/login.tsx:316
+#: src/routes/_auth-layout/auth/login.tsx:323
 msgid "That sign-in attempt expired. Please start again."
 msgstr "Dieser Anmeldeversuch ist abgelaufen. Bitte beginnen Sie erneut."
 
@@ -6878,7 +6891,7 @@ msgstr "Erneut versuchen"
 msgid "Turn off"
 msgstr "Deaktivieren"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:199
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:202
 msgid "Turn off two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung deaktivieren"
 
@@ -6906,7 +6919,7 @@ msgstr "TV-Gästemappe"
 msgid "Two-factor auth"
 msgstr "Zwei-Faktor-Auth."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:90
 msgid "Two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung"
 
@@ -6963,7 +6976,7 @@ msgstr "Zwei-Faktor-Authentifizierung ist aktiv"
 msgid "Two-factor authentication won't be enabled and your account will keep using just a password."
 msgstr "Die Zwei-Faktor-Authentifizierung wird nicht aktiviert und Ihr Konto bleibt nur mit einem Passwort geschützt."
 
-#: src/routes/_auth-layout/auth/login.tsx:341
+#: src/routes/_auth-layout/auth/login.tsx:348
 msgid "Two-step verification"
 msgstr "Bestätigung in zwei Schritten"
 
@@ -7041,7 +7054,7 @@ msgstr "Spalte {title} lösen"
 #: src/components/sectioned-form.tsx:94
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:100
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:182
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:183
 msgid "Unsaved changes"
 msgstr "Nicht gespeicherte Änderungen"
 
@@ -7144,7 +7157,7 @@ msgstr "URL für diese Sprache"
 msgid "Use “Add product” above to add the first one."
 msgstr "Füge über „Produkt hinzufügen“ oben das erste hinzu."
 
-#: src/routes/_auth-layout/auth/login.tsx:415
+#: src/routes/_auth-layout/auth/login.tsx:422
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:150
 msgid "Use a code from my app instead"
 msgstr "Stattdessen Code aus meiner App verwenden"
@@ -7227,7 +7240,7 @@ msgstr "Name des Veranstaltungsorts"
 msgid "Venue name is required"
 msgstr "Name des Veranstaltungsorts ist erforderlich"
 
-#: src/routes/_auth-layout/auth/login.tsx:101
+#: src/routes/_auth-layout/auth/login.tsx:106
 #: src/routes/_auth-layout/auth/sign-up.tsx:55
 msgid "Verification email resent successfully"
 msgstr "Bestätigungs-E-Mail erfolgreich erneut gesendet"
@@ -7244,7 +7257,7 @@ msgstr "Verifizierung fehlgeschlagen"
 #~ msgid "Verified"
 #~ msgstr "Bestätigt"
 
-#: src/routes/_auth-layout/auth/login.tsx:400
+#: src/routes/_auth-layout/auth/login.tsx:407
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:288
 msgid "Verify"
 msgstr "Bestätigen"
@@ -7326,6 +7339,10 @@ msgstr "Web App"
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/provider-picker.tsx:125
 #~ msgid "Website"
 #~ msgstr "Website"
+
+#: src/routes/_auth-layout/auth/login.tsx:140
+msgid "Welcome back to Hotel Dashboard"
+msgstr "Willkommen zurück im Hotel Dashboard"
 
 #~ msgid "Welcome back, {0}!"
 #~ msgstr "Willkommen zurück, {0}!"
@@ -7460,7 +7477,7 @@ msgstr "Den Link können Sie manuell aus einer Reservierung senden."
 msgid "You have unsaved changes on this page. If you leave now they'll be lost."
 msgstr "Auf dieser Seite gibt es nicht gespeicherte Änderungen. Wenn Sie jetzt gehen, gehen sie verloren."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-section.tsx:170
 msgid "You haven't saved any recovery codes yet."
 msgstr "Sie haben noch keine Wiederherstellungscodes gespeichert."
 

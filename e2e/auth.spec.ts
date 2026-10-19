@@ -15,29 +15,32 @@ test.describe('Authentication', () => {
     test('should display login form', async ({ page }) => {
       const form = page.locator('form');
 
-      await expect(page.getByRole('heading', { name: 'Login' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Log in' })).toBeVisible();
       await expect(form.getByLabel('Email')).toBeVisible();
       await expect(form.getByLabel('Password', { exact: true })).toBeVisible();
-      await expect(form.getByRole('button', { name: 'Login' })).toBeVisible();
+      await expect(form.getByRole('button', { name: 'Log in' })).toBeVisible();
     });
 
     test('should show validation errors for empty fields', async ({ page }) => {
-      await page.locator('form').getByRole('button', { name: 'Login' }).click();
+      await page
+        .locator('form')
+        .getByRole('button', { name: 'Log in' })
+        .click();
 
       await expect(page.getByText('Invalid email format')).toBeVisible();
       await expect(page.getByText('Password is required')).toBeVisible();
     });
 
-    test('should show error toast for invalid credentials', async ({
+    test('should show an inline error for invalid credentials', async ({
       page
     }) => {
       const form = page.locator('form');
       await form.getByLabel('Email').fill('wrong@example.com');
       await form.getByLabel('Password', { exact: true }).fill('wrong_password');
-      await form.getByRole('button', { name: 'Login' }).click();
+      await form.getByRole('button', { name: 'Log in' }).click();
 
       await expect(
-        page.getByText('Failed to login. Please try again.')
+        form.getByRole('alert').getByText('Invalid email or password')
       ).toBeVisible();
     });
 
@@ -49,7 +52,7 @@ test.describe('Authentication', () => {
       await form
         .getByLabel('Password', { exact: true })
         .fill(process.env.E2E_USER_PASSWORD!);
-      await form.getByRole('button', { name: 'Login' }).click();
+      await form.getByRole('button', { name: 'Log in' }).click();
 
       await expect(page).toHaveURL('/');
       await expect(
@@ -67,7 +70,7 @@ test.describe('Authentication', () => {
       await form
         .getByLabel('Password', { exact: true })
         .fill(process.env.E2E_USER_PASSWORD!);
-      await form.getByRole('button', { name: 'Login' }).click();
+      await form.getByRole('button', { name: 'Log in' }).click();
 
       await expect(page).toHaveURL('/profile');
     });
@@ -80,7 +83,7 @@ test.describe('Authentication', () => {
       await form
         .getByLabel('Password', { exact: true })
         .fill(process.env.E2E_USER_PASSWORD!);
-      await form.getByRole('button', { name: 'Login' }).click();
+      await form.getByRole('button', { name: 'Log in' }).click();
       await expect(page).toHaveURL('/');
 
       await page.goto('/auth/login');
@@ -129,7 +132,7 @@ test.describe('Authentication', () => {
 
       // The auth guard appends ?redirect=… to the login URL.
       await expect(page).toHaveURL(/\/auth\/login/);
-      await expect(page.getByRole('heading', { name: 'Login' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Log in' })).toBeVisible();
     });
 
     test('should require login after logout', async ({ page }) => {

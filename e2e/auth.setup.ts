@@ -11,7 +11,7 @@ setup('authenticate', async ({ page }) => {
   await form
     .getByLabel('Password', { exact: true })
     .fill(process.env.E2E_USER_PASSWORD!);
-  await form.getByRole('button', { name: 'Login' }).click();
+  await form.getByRole('button', { name: 'Log in' }).click();
 
   await expect(page).toHaveURL('/');
 
