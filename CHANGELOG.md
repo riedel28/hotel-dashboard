@@ -1,3 +1,53 @@
+# [1.36.0](https://github.com/riedel28/hotel-dashboard/compare/v1.35.0...v1.36.0) (2026-10-19)
+
+
+### Bug Fixes
+
+* **auth:** an emailed link can be used only once, even under a race ([f91ced4](https://github.com/riedel28/hotel-dashboard/commit/f91ced49b9497fe1f7c3e75946413fec8d0b1d8b))
+* **copy:** say ZIP code instead of postal code ([f397318](https://github.com/riedel28/hotel-dashboard/commit/f3973181b9db7d5a31a8aff1cfc7b7f05e724bda))
+* **devices:** filters stay visible while devices load ([d37fd92](https://github.com/riedel28/hotel-dashboard/commit/d37fd92381a4cee913eecdac6005e61df0c719af))
+* **events:** name the first form section General ([92ae982](https://github.com/riedel28/hotel-dashboard/commit/92ae9821976fceb1d4f8e62b914404d56426bed6))
+* **payments:** Authorized badge keeps its colour, a clock marks a stale one ([d3b7f07](https://github.com/riedel28/hotel-dashboard/commit/d3b7f07ec3c62f3200f4803cdf11c061d0a06a35))
+* **profile:** cancelling the password prompt closes 2FA setup ([db75224](https://github.com/riedel28/hotel-dashboard/commit/db752245bef0c7c8d1d6cbecdb9b1516ea8d7f6a))
+* **profile:** room for the phone save bar only while it shows ([d1adf03](https://github.com/riedel28/hotel-dashboard/commit/d1adf03dc4d920ec4c416bcb748af180da6b2d6d))
+* **provider-setup:** keep the error copy icon red on hover ([f88f6a2](https://github.com/riedel28/hotel-dashboard/commit/f88f6a202f630303200cb9b24fe0d8aee1dc99b6))
+* **reservations:** always show the year in arrival and departure ([42f1d79](https://github.com/riedel28/hotel-dashboard/commit/42f1d79ef3b131f5da9ef221fdfc84b9142a1b16))
+* **sidebar:** collapsed group labels no longer block hover on the item above ([43183a7](https://github.com/riedel28/hotel-dashboard/commit/43183a705dafadab038fb98d218e84e88a941c9e))
+* **users:** changing an email unverifies it; only admins can change one ([cd55d43](https://github.com/riedel28/hotel-dashboard/commit/cd55d43d209da42b4491eca634ab4a49d0f980b3))
+* **users:** drop the dead ⌘⌫ hint from the row's Delete item ([943c5c4](https://github.com/riedel28/hotel-dashboard/commit/943c5c4afd3044a5386ada35e633aa330f2090b0))
+* **users:** only admins can update another user ([5e7307c](https://github.com/riedel28/hotel-dashboard/commit/5e7307cc0416ea34318fca70238dee27127530fe))
+* **users:** send the country and role filters and key the list by them ([87b0241](https://github.com/riedel28/hotel-dashboard/commit/87b024157464fd4b9e3a6f194d37a1ecc10794f5))
+
+
+### Features
+
+* **auth:** rework the login page ([0099cce](https://github.com/riedel28/hotel-dashboard/commit/0099cce736cf620f10a0904b2accab724ef9a3f1))
+* **brand:** speech bubble mark in the logo and favicon ([7e1026b](https://github.com/riedel28/hotel-dashboard/commit/7e1026bb6976529a78276aad77b7b99b36dccf4a))
+* **date-range:** show a chevron on the trigger, as on other dropdowns ([e3d4860](https://github.com/riedel28/hotel-dashboard/commit/e3d4860c81a9fc7e3b0f02e0eb21a84948049fb9))
+* **drawers:** step buttons in the footer and one width for details drawers ([6b3f773](https://github.com/riedel28/hotel-dashboard/commit/6b3f7733597a8bfeb587bcc6e31b2193a42ad37f))
+* **layout:** one page header for every page, each with a subtitle ([91fbfec](https://github.com/riedel28/hotel-dashboard/commit/91fbfecc9edf4710da1ed45289cb5541d4f639a3))
+* **monitoring:** add page subtitle and widen period filter ([da8de4b](https://github.com/riedel28/hotel-dashboard/commit/da8de4b8eba03dab1b4644540d978aed72846116))
+* **products:** open a clicked product row in the drawer and mark it ([58d8124](https://github.com/riedel28/hotel-dashboard/commit/58d8124a7d3ce42dc51ac70018bd3a248295349f))
+* **profile:** calmer password tab ([5647670](https://github.com/riedel28/hotel-dashboard/commit/5647670b13b6141bc04ea39409f0d408afcb4830))
+* **profile:** loading skeleton in the page's own shape ([df651b9](https://github.com/riedel28/hotel-dashboard/commit/df651b9d865888dbd8dc23cc818164f74b980afc))
+* **profile:** one tab per section instead of one long scroll ([b4a55b3](https://github.com/riedel28/hotel-dashboard/commit/b4a55b3f96f4306cfaf9386209db28378b0f9a04))
+* **profile:** roles shown as in the user drawer, read-only ([504bd2f](https://github.com/riedel28/hotel-dashboard/commit/504bd2f466beec5b39b8769e17bd22ea50e4b991))
+* **profile:** roles tab as a read-only summary ([1524f6a](https://github.com/riedel28/hotel-dashboard/commit/1524f6ade900e09d6cfec8033397155470726853))
+* **properties:** stage picker shows each stage's colored dot ([7c55ae9](https://github.com/riedel28/hotel-dashboard/commit/7c55ae9ae3e9daf3cff7c9bff4d0d3ccf5d58fc5))
+* **property-selector:** count search results in the footer ([83a37fa](https://github.com/riedel28/hotel-dashboard/commit/83a37fa338c914af24c3e93cf9f6a25b127f56f9))
+* **rooms:** add a room in a dialog, as elsewhere in the app ([0147836](https://github.com/riedel28/hotel-dashboard/commit/014783621da192ea92e6a3524629248905c31d05))
+* **rooms:** open a clicked row in the edit drawer and mark it ([ac5bec3](https://github.com/riedel28/hotel-dashboard/commit/ac5bec36796318ae7df4c036ace960f1feeec69e))
+* **rooms:** step through the page from the edit drawer ([9cf856f](https://github.com/riedel28/hotel-dashboard/commit/9cf856f4c2843e3bfab90790cb5dabedf8554d34))
+* **tables:** show the empty state inside the table on every list page ([ef01a5b](https://github.com/riedel28/hotel-dashboard/commit/ef01a5b86187c51cb4102803e6d4895fd2a8e3cf))
+* **users-api:** filter the users list by country and roles, 25 per page ([b991eed](https://github.com/riedel28/hotel-dashboard/commit/b991eed3e822d50e33cd3f199cd1c6e96e5b6d54))
+* **users:** country and role filters, wider search, 25 rows by default ([63705d2](https://github.com/riedel28/hotel-dashboard/commit/63705d2c91b291dfa0a89e42878fd9c2b5da4720))
+* **users:** edit a user in a drawer opened from the row, drop the edit page ([852825e](https://github.com/riedel28/hotel-dashboard/commit/852825e811b85ea8119954cb9c23bc7abdd2439c))
+
+
+### Reverts
+
+* **theme:** back to the previous red and green ([5c43716](https://github.com/riedel28/hotel-dashboard/commit/5c43716d659dbc110b831acac671faad7d4de395))
+
 # [1.35.0](https://github.com/riedel28/hotel-dashboard/compare/v1.34.0...v1.35.0) (2026-10-17)
 
 
