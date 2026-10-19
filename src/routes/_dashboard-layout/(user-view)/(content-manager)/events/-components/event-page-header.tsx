@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/react/macro';
 import type { ReactNode } from 'react';
 
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,9 +14,11 @@ import {
 /** Home / Events / {title}, the title under it and any actions beside it. */
 export function EventPageHeader({
   title,
+  description,
   actions
 }: {
   title: string;
+  description: ReactNode;
   actions?: ReactNode;
 }) {
   return (
@@ -39,10 +42,13 @@ export function EventPageHeader({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex items-center justify-between gap-2">
-        <h1 className="truncate text-xl font-bold">{title}</h1>
-        {actions}
-      </div>
+      {/* Spaced by the page's own column */}
+      <PageHeader
+        title={title}
+        description={description}
+        actions={actions}
+        className="mb-0"
+      />
     </div>
   );
 }

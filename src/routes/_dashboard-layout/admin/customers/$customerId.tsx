@@ -62,6 +62,9 @@ function CustomerPage() {
             </span>
           )}
         </div>
+        <p className="max-w-2xl text-sm text-pretty text-muted-foreground">
+          <Trans>Contact details and the properties this customer owns.</Trans>
+        </p>
       </div>
 
       <QueryBoundary fallback={<FormSkeleton />}>

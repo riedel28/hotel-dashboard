@@ -13,6 +13,7 @@ import {
 import { ClearFiltersButton } from '@/components/clear-filters-button';
 import { EmptyFilterResult } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -272,12 +273,13 @@ function UsersPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Users</Trans>
-        </h1>
-        <InviteUserModal />
-      </div>
+      <PageHeader
+        title={<Trans>Users</Trans>}
+        description={
+          <Trans>Who works in the back-office, and with which roles.</Trans>
+        }
+        actions={<InviteUserModal />}
+      />
 
       <div className="space-y-2.5">
         {/* One row from `sm` up; on a phone the search keeps its row and

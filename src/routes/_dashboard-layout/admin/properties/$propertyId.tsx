@@ -84,6 +84,9 @@ function PropertyPage() {
             </Link>
           )}
         </div>
+        <p className="max-w-2xl text-sm text-pretty text-muted-foreground">
+          <Trans>The property’s details and the work done on it.</Trans>
+        </p>
       </div>
 
       <Tabs

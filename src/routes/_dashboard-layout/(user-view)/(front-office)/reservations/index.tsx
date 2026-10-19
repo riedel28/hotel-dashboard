@@ -13,6 +13,7 @@ import {
   EmptyTableState
 } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -63,15 +64,20 @@ function ReservationsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Reservations</Trans>
-        </h1>
-        <Button onClick={() => void navigate({ to: '/reservations/new' })}>
-          <PlusIcon aria-hidden="true" />
-          <Trans>Add Reservation</Trans>
-        </Button>
-      </div>
+      <PageHeader
+        title={<Trans>Reservations</Trans>}
+        description={
+          <Trans>
+            Find bookings, follow their check-in and open one to edit.
+          </Trans>
+        }
+        actions={
+          <Button onClick={() => void navigate({ to: '/reservations/new' })}>
+            <PlusIcon aria-hidden="true" />
+            <Trans>Add Reservation</Trans>
+          </Button>
+        }
+      />
 
       <ReservationsContent />
     </div>

@@ -20,6 +20,7 @@ import {
   EmptyTableState
 } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -81,17 +82,22 @@ function EventsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Events</Trans>
-        </h1>
-        {property && (
-          <Button onClick={() => void navigate({ to: '/events/new' })}>
-            <PlusIcon aria-hidden="true" />
-            <Trans>New event</Trans>
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title={<Trans>Events</Trans>}
+        description={
+          <Trans>
+            Plan what is on for guests and show it in the guest app.
+          </Trans>
+        }
+        actions={
+          property && (
+            <Button onClick={() => void navigate({ to: '/events/new' })}>
+              <PlusIcon aria-hidden="true" />
+              <Trans>New event</Trans>
+            </Button>
+          )
+        }
+      />
 
       {property ? (
         <EventsContent property={property} />

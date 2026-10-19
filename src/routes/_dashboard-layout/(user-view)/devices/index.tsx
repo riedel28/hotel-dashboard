@@ -14,6 +14,7 @@ import {
   EmptyTableState
 } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -109,15 +110,20 @@ function DevicesPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Devices</Trans>
-        </h1>
-        <Button onClick={() => setIsClaimOpen(true)}>
-          <PlusIcon aria-hidden="true" />
-          <Trans>Add device</Trans>
-        </Button>
-      </div>
+      <PageHeader
+        title={<Trans>Devices</Trans>}
+        description={
+          <Trans>
+            The tablets, phones and TVs in the rooms and their status.
+          </Trans>
+        }
+        actions={
+          <Button onClick={() => setIsClaimOpen(true)}>
+            <PlusIcon aria-hidden="true" />
+            <Trans>Add device</Trans>
+          </Button>
+        }
+      />
 
       <DevicesContent
         highlightedId={highlightedId}

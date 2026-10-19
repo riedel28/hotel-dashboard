@@ -3,6 +3,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { BuildingIcon, UsersIcon } from 'lucide-react';
 
 import { useAuth } from '@/auth';
+import { PageHeader } from '@/components/page-header';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 
 export const Route = createFileRoute('/_dashboard-layout/admin/')({
@@ -33,17 +34,13 @@ function AdminStartPage() {
 
   return (
     <div>
-      <div className="space-y-1">
-        <h1 className="text-xl font-bold">
-          <Trans>Admin Dashboard</Trans>
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          <Trans>Welcome back, {userName}!</Trans>
-        </p>
-      </div>
+      <PageHeader
+        title={<Trans>Admin Dashboard</Trans>}
+        description={<Trans>Welcome back, {userName}!</Trans>}
+      />
 
       {/* Quick Actions Grid */}
-      <div className="mt-6 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
+      <div className="grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
         {quickActions.map((action) => {
           const IconComponent = action.icon;
 

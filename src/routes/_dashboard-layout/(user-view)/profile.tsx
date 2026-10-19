@@ -9,6 +9,7 @@ import {
   profileKeys,
   twoFactorStatusQueryOptions
 } from '@/api/profile';
+import { PageHeader } from '@/components/page-header';
 import {
   type NavSection,
   SectionNav,
@@ -117,16 +118,16 @@ function RouteComponent() {
       </Breadcrumb>
 
       <div className="space-y-6">
-        <div className="flex max-w-2xl flex-col gap-1">
-          <h1 className="text-xl font-semibold text-balance">
-            <Trans>Profile</Trans>
-          </h1>
-          <p className="text-sm text-pretty text-muted-foreground">
+        <PageHeader
+          title={<Trans>Profile</Trans>}
+          description={
             <Trans>
               Manage your personal details, security and access rights.
             </Trans>
-          </p>
-        </div>
+          }
+          // Spaced by the column it sits in
+          className="mb-0"
+        />
 
         {!isOnline && (
           <Alert variant="warning" role="status">

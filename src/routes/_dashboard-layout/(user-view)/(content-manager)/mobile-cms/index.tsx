@@ -17,6 +17,7 @@ import { selectablePropertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
 import { EmptyTableState } from '@/components/empty-table-state';
 import { LoadErrorState } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -351,38 +352,37 @@ function MobileCmsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-xl font-bold">
-            <Trans>Mobile CMS</Trans>
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            <Trans>
-              Content of the hotel’s mobile app. Saved changes are live at once.
-            </Trans>
-          </p>
-        </div>
-        {!nodesQuery.isPending && !nodesQuery.isLoadingError && (
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="@3xl:hidden"
-              onClick={() => setTreeOpen(true)}
-            >
-              <ListTreeIcon />
-              <Trans>Tree</Trans>
-            </Button>
-            <Button
-              variant="outline"
-              className="@7xl:hidden"
-              onClick={() => setPreviewOpen(true)}
-            >
-              <EyeIcon />
-              <Trans>Preview</Trans>
-            </Button>
-          </div>
-        )}
-      </div>
+      <PageHeader
+        title={<Trans>Mobile CMS</Trans>}
+        description={
+          <Trans>
+            Content of the hotel’s mobile app. Saved changes are live at once.
+          </Trans>
+        }
+        actions={
+          !nodesQuery.isPending &&
+          !nodesQuery.isLoadingError && (
+            <>
+              <Button
+                variant="outline"
+                className="@3xl:hidden"
+                onClick={() => setTreeOpen(true)}
+              >
+                <ListTreeIcon />
+                <Trans>Tree</Trans>
+              </Button>
+              <Button
+                variant="outline"
+                className="@7xl:hidden"
+                onClick={() => setPreviewOpen(true)}
+              >
+                <EyeIcon />
+                <Trans>Preview</Trans>
+              </Button>
+            </>
+          )
+        }
+      />
 
       {content}
 

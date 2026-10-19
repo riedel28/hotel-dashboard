@@ -21,6 +21,7 @@ import {
   EmptyTableState
 } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -106,20 +107,23 @@ function RoomsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mb-6 flex justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Rooms</Trans>
-        </h1>
-        {canManage && (
-          <div className="flex gap-2">
-            <ImportButton onImport={() => setIsImportOpen(true)} />
-            <Button onClick={() => search.openForm('new')}>
-              <PlusIcon aria-hidden="true" />
-              <Trans>Add room</Trans>
-            </Button>
-          </div>
-        )}
-      </div>
+      <PageHeader
+        title={<Trans>Rooms</Trans>}
+        description={
+          <Trans>The property's rooms, their type, floor and status.</Trans>
+        }
+        actions={
+          canManage && (
+            <>
+              <ImportButton onImport={() => setIsImportOpen(true)} />
+              <Button onClick={() => search.openForm('new')}>
+                <PlusIcon aria-hidden="true" />
+                <Trans>Add room</Trans>
+              </Button>
+            </>
+          )
+        }
+      />
 
       {hasProperty ? (
         <RoomsContent roomsQuery={roomsQuery} canManage={canManage} />

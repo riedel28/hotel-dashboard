@@ -9,6 +9,7 @@ import {
   EmptyTableState
 } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -56,12 +57,12 @@ function PaymentsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      {/* As tall as the same row on pages that have an action button in it */}
-      <div className="mb-6 flex min-h-9 justify-between">
-        <h1 className="text-xl font-bold">
-          <Trans>Payments</Trans>
-        </h1>
-      </div>
+      <PageHeader
+        title={<Trans>Payments</Trans>}
+        description={
+          <Trans>Card payments of the reservations and how they went.</Trans>
+        }
+      />
 
       <div className="space-y-2.5">
         <PaymentsFilters

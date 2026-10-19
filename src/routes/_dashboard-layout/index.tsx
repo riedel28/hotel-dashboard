@@ -2,6 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute, Link, type LinkProps } from '@tanstack/react-router';
 import type { NavItemId } from 'shared/types/properties';
 
+import { PageHeader } from '@/components/page-header';
 import { useDocumentTitle } from '@/hooks/use-document-title';
 import { navItems } from '@/routes/_dashboard-layout/-components/nav-items';
 import { useDisabledNavItems } from '@/routes/_dashboard-layout/-components/sidebar-nav';
@@ -58,17 +59,13 @@ function StartPage() {
 
   return (
     <div>
-      <div className="space-y-1">
-        <h1 className="text-xl font-bold">
-          <Trans>Welcome back, {userName}!</Trans>
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          <Trans>Manage your hotel operations efficiently</Trans>
-        </p>
-      </div>
+      <PageHeader
+        title={<Trans>Welcome back, {userName}!</Trans>}
+        description={<Trans>Manage your hotel operations efficiently</Trans>}
+      />
 
       {/* Quick Actions Grid */}
-      <div className="mt-6 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
+      <div className="grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
         {quickActions.map((action) => {
           const IconComponent = action.icon;
 

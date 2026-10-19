@@ -1,6 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { createFileRoute } from '@tanstack/react-router';
 
+import { PageHeader } from '@/components/page-header';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -41,9 +42,12 @@ function NewReservationPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="truncate text-xl font-bold">
-          <Trans>New reservation</Trans>
-        </h1>
+        <PageHeader
+          title={<Trans>New reservation</Trans>}
+          description={<Trans>Enter the booking, then add its guests.</Trans>}
+          // Spaced by the page's own column
+          className="mb-0"
+        />
       </div>
 
       <AddReservationForm />
