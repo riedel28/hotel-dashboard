@@ -28,10 +28,10 @@ import {
 const indent = 20;
 
 // Indent guides: one vertical line per ancestor level, drawn only across the
-// row's indentation. pb-1 (instead of a gap between rows) keeps the lines
+// row's indentation. pb-0.5 (instead of a gap between rows) keeps the lines
 // continuous.
 const rowClassName =
-  'relative pb-1 before:absolute before:inset-y-0 before:start-0 before:w-(--tree-padding) before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_15px,var(--border)_15px,var(--border)_16px,transparent_16px,transparent_var(--tree-indent))]';
+  'relative pb-0.5 before:absolute before:inset-y-0 before:start-0 before:w-(--tree-padding) before:bg-[repeating-linear-gradient(to_right,transparent_0,transparent_15px,var(--border)_15px,var(--border)_16px,transparent_16px,transparent_var(--tree-indent))]';
 // Rows mounted by expanding a folder fade/slide in.
 const rowEnterClassName =
   'duration-150 ease-out motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-top-1';
@@ -52,7 +52,7 @@ function CategoryRow({
       className={cn(
         // Keyboard focus: the app's thin primary ring, drawn inside the row
         // so it doesn't spill over its neighbours.
-        'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm font-medium in-focus-visible:ring-2 in-focus-visible:ring-primary in-focus-visible:ring-inset',
+        'group w-full justify-between rounded-lg bg-card px-2 py-1 text-sm in-focus-visible:ring-2 in-focus-visible:ring-primary in-focus-visible:ring-inset',
         isSelected ? 'bg-accent text-accent-foreground' : 'hover:bg-accent'
       )}
     >
@@ -85,14 +85,14 @@ function RenameRow({
         // Same height, text position and weight as the name it replaces.
         // 5px = the field's border + padding, kept small so the field
         // doesn't run into a folder's chevron.
-        className="-ms-[5px] h-8 ps-1 font-medium"
+        className="-ms-[5px] h-6 ps-1"
         onFocus={(e) => e.currentTarget.select()}
         onClick={(e) => e.stopPropagation()}
       />
       {/* For mouse users who don't know Enter saves. Kept out of the Tab
           order: leaving the field cancels the rename anyway. */}
       <Button
-        size="icon"
+        size="icon-xs"
         variant="secondary"
         // Fill the full height, like the field next to it.
         className="bg-clip-border"

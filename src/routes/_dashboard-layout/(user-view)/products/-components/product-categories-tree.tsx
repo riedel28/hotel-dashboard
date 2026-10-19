@@ -138,9 +138,8 @@ export function ProductCategoriesTree() {
         action={
           hasCategories && (
             <Button
-              variant="secondary"
+              variant="outline"
               size="icon-sm"
-              className="bg-clip-border"
               aria-label={t`Add category`}
               title={t`Add category`}
               onClick={() => openAddCategory(null)}

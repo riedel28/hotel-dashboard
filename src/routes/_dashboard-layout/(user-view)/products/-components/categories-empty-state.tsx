@@ -20,7 +20,8 @@ export function CategoriesEmptyState({
         action={{
           label: <Trans>Add category</Trans>,
           icon: <PlusIcon aria-hidden="true" />,
-          onClick: onAddCategory
+          onClick: onAddCategory,
+          variant: 'outline'
         }}
       />
     </div>

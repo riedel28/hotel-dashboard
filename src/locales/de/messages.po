@@ -385,8 +385,8 @@ msgstr "Kategorien hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:71
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-empty-state.tsx:21
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:143
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:144
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:145
 msgid "Add category"
 msgstr "Kategorie hinzufügen"
 
@@ -477,7 +477,7 @@ msgstr "Zimmer hinzufügen"
 #~ msgstr "Bereich hinzufügen"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/add-category-modal.tsx:69
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:139
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:140
 msgid "Add subcategory"
 msgstr "Unterkategorie hinzufügen"
 
@@ -1084,7 +1084,7 @@ msgstr "Kategorie „{0}“ verschoben"
 msgid "Category “{0}” updated"
 msgstr "Kategorie „{0}“ aktualisiert"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:125
 msgid "Category actions"
 msgstr "Kategorieaktionen"
 
@@ -1803,7 +1803,7 @@ msgstr "Löschen"
 msgid "Delete “{title}”?"
 msgstr "„{title}“ löschen?"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:176
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:177
 msgid "Delete category"
 msgstr "Kategorie löschen"
 
@@ -3791,7 +3791,7 @@ msgstr "Nach links"
 msgid "Move right"
 msgstr "Nach rechts"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:148
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:149
 msgid "Move to category"
 msgstr "In Kategorie verschieben"
 
@@ -5226,7 +5226,7 @@ msgstr "Reservierungsfilter entfernen"
 #~ msgid "Remove your photo and go back to initials?"
 #~ msgstr "Foto entfernen und wieder Initialen anzeigen?"
 
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:143
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:144
 msgid "Rename category"
 msgstr "Kategorie umbenennen"
 
@@ -5623,8 +5623,8 @@ msgstr "Diesen QR-Code scannen"
 msgid "Search by title"
 msgstr "Nach Titel suchen"
 
+#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:159
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:160
-#: src/routes/_dashboard-layout/(user-view)/products/-components/product-categories-tree.tsx:161
 msgid "Search categories"
 msgstr "Kategorien durchsuchen"
 
@@ -6771,7 +6771,7 @@ msgid "Too many attempts. Try again in {cooldown} seconds."
 msgstr "Zu viele Versuche. Erneut versuchen in {cooldown} Sekunden."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/move-node-dialog.tsx:69
-#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:158
+#: src/routes/_dashboard-layout/(user-view)/products/-components/category-actions-dropdown.tsx:159
 msgid "Top level"
 msgstr "Oberste Ebene"
 

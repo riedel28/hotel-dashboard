@@ -26,7 +26,7 @@ export function EmptyTableState({
     label: ReactNode;
     onClick: () => void;
     icon?: ReactNode;
-    variant?: 'default' | 'secondary';
+    variant?: 'default' | 'secondary' | 'outline';
   };
 }) {
   return (
