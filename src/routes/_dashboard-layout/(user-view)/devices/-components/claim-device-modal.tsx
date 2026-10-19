@@ -285,7 +285,7 @@ export function ClaimDeviceModal({
               disabled={!form.formState.isValid || claimMutation.isPending}
             >
               {claimMutation.isPending && (
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2Icon className="animate-spin" />
               )}
               <Trans>Add</Trans>
             </Button>

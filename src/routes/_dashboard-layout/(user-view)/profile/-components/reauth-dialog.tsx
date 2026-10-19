@@ -141,10 +141,7 @@ export function useReauthedAction<T>({
               aria-busy={isRunning}
             >
               {isRunning && (
-                <Loader2Icon
-                  className="size-4 animate-spin"
-                  aria-hidden="true"
-                />
+                <Loader2Icon className="animate-spin" aria-hidden="true" />
               )}
               <Trans>Continue</Trans>
             </Button>

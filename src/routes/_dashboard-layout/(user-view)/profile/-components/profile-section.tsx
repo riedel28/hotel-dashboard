@@ -153,7 +153,7 @@ export function ProfileSectionForm({
         >
           {isSubmitting ? (
             <>
-              <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
               <Trans>Saving…</Trans>
             </>
           ) : (
@@ -209,7 +209,7 @@ export function MobileSaveBar({
         aria-busy={isSubmitting}
       >
         {isSubmitting ? (
-          <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />
+          <Loader2Icon className="animate-spin" aria-hidden="true" />
         ) : (
           <Trans>Save</Trans>
         )}

@@ -162,9 +162,9 @@ function LoginPage() {
                   disabled={resendMutation.isPending}
                 >
                   {resendMutation.isPending ? (
-                    <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                    <Loader2Icon className="animate-spin" />
                   ) : (
-                    <RefreshCwIcon className="mr-2 h-3 w-3" />
+                    <RefreshCwIcon />
                   )}
                   <Trans>Resend verification email</Trans>
                 </Button>
@@ -270,10 +270,7 @@ function LoginPage() {
             aria-busy={loginMutation.isPending}
           >
             {loginMutation.isPending && (
-              <Loader2Icon
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
             )}
             <Trans>Login</Trans>
           </Button>
@@ -398,10 +395,7 @@ function TwoFactorStep({
             aria-busy={mutation.isPending}
           >
             {mutation.isPending && (
-              <Loader2Icon
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
             )}
             <Trans>Verify</Trans>
           </Button>

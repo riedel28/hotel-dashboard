@@ -101,7 +101,7 @@ export function InviteUserModal() {
       <DialogTrigger
         render={
           <Button>
-            <SendIcon className="mr-2 h-4 w-4" />
+            <SendIcon />
             <Trans>Invite User</Trans>
           </Button>
         }
@@ -291,7 +291,7 @@ export function InviteUserModal() {
             </Button>
             <Button type="submit" disabled={inviteUserMutation.isPending}>
               {inviteUserMutation.isPending && (
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2Icon className="animate-spin" />
               )}
               <Trans>Send Invitation</Trans>
             </Button>

@@ -65,9 +65,7 @@ export function DeleteDialog({ open, onOpenChange, room }: DeleteDialogProps) {
       onClick={() => deleteRoomMutation.mutate()}
       disabled={isBlocked || deleteRoomMutation.isPending}
     >
-      {deleteRoomMutation.isPending && (
-        <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-      )}
+      {deleteRoomMutation.isPending && <Loader2Icon className="animate-spin" />}
       <Trans>Delete</Trans>
     </Button>
   );

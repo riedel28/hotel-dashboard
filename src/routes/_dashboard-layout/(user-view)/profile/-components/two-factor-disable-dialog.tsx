@@ -176,10 +176,7 @@ export function TwoFactorDisableDialog({
                 aria-busy={action.isRunning}
               >
                 {action.isRunning && (
-                  <Loader2Icon
-                    className="size-4 animate-spin"
-                    aria-hidden="true"
-                  />
+                  <Loader2Icon className="animate-spin" aria-hidden="true" />
                 )}
                 <Trans>Turn off</Trans>
               </Button>

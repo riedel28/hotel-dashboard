@@ -172,12 +172,9 @@ export function TwoFactorSection() {
                   aria-busy={regenerate.isRunning}
                 >
                   {regenerate.isRunning ? (
-                    <Loader2Icon
-                      className="size-4 animate-spin"
-                      aria-hidden="true"
-                    />
+                    <Loader2Icon className="animate-spin" aria-hidden="true" />
                   ) : (
-                    <RotateCwIcon className="mr-0.5 size-3.25" />
+                    <RotateCwIcon />
                   )}
                   <Trans>Regenerate</Trans>
                 </Button>

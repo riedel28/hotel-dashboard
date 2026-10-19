@@ -85,9 +85,9 @@ function SuccessView({ email }: SuccessViewProps) {
             disabled={resendMutation.isPending}
           >
             {resendMutation.isPending ? (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2Icon className="animate-spin" />
             ) : (
-              <RefreshCwIcon className="mr-2 h-4 w-4" />
+              <RefreshCwIcon />
             )}
             <Trans>Resend verification email</Trans>
           </Button>
@@ -280,10 +280,7 @@ function SignUpPage() {
             aria-busy={signUpMutation.isPending}
           >
             {signUpMutation.isPending && (
-              <Loader2Icon
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
+              <Loader2Icon className="animate-spin" aria-hidden="true" />
             )}
             <Trans>Sign Up</Trans>
           </Button>

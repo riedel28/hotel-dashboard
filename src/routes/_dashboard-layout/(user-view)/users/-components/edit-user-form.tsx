@@ -291,7 +291,7 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
       <div className="flex justify-end gap-3">
         <Button type="submit" disabled={updateUserMutation.isPending}>
           {updateUserMutation.isPending && (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2Icon className="animate-spin" />
           )}
           <Trans>Save Changes</Trans>
         </Button>

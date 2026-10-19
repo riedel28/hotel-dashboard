@@ -287,10 +287,7 @@ export function TwoFactorSetupDialog({
                   aria-busy={isVerifying}
                 >
                   {isVerifying && (
-                    <Loader2Icon
-                      className="size-4 animate-spin"
-                      aria-hidden="true"
-                    />
+                    <Loader2Icon className="animate-spin" aria-hidden="true" />
                   )}
                   {cooldown > 0 ? (
                     <Trans>Wait {cooldown}s</Trans>
