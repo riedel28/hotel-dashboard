@@ -132,7 +132,7 @@ msgid "{0} of 10 codes remaining"
 msgstr "{0} of 10 codes remaining"
 
 #. placeholder {0}: roles.length
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:239
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:248
 msgid "{0} roles total"
 msgstr "{0} roles total"
 
@@ -565,8 +565,8 @@ msgstr "Admin Dashboard"
 #~ msgid "Admin features: Manage users, configure system settings, access all data, system administration"
 #~ msgstr "Admin features: Manage users, configure system settings, access all data, system administration"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:211
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:271
 msgid "Admin User"
 msgstr "Admin User"
 
@@ -630,7 +630,7 @@ msgstr "All categories"
 #~ msgid "All changes saved"
 #~ msgstr "All changes saved"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:257
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:298
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:76
 #: src/routes/_dashboard-layout/admin/properties/-components/property-country-filter.tsx:20
 msgid "All countries"
@@ -648,7 +648,7 @@ msgstr "All floors"
 #~ msgid "All logs"
 #~ msgstr "All logs"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:262
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:304
 msgid "All roles"
 msgstr "All roles"
 
@@ -1032,6 +1032,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:363
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:95
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:229
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
@@ -1599,7 +1600,7 @@ msgstr "Couldn't load the content"
 msgid "Couldn't load this page"
 msgstr "Couldn't load this page"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:216
 msgid "Couldn't load users"
 msgstr "Couldn't load users"
 
@@ -1618,8 +1619,8 @@ msgstr "Couldn't start setup"
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:546
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-recipient-section.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:222
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:184
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:172
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:181
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:212
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:176
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:248
@@ -1824,7 +1825,7 @@ msgstr "Deactivate online check-in?"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:58
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:69
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:73
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:68
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:77
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:81
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:167
@@ -1972,8 +1973,8 @@ msgstr "Dismiss"
 msgid "Displays the mobile sidebar."
 msgstr "Displays the mobile sidebar."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:168
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:176
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:228
 msgid "Doe"
 msgstr "Doe"
 
@@ -2088,7 +2089,6 @@ msgstr "Each code works once"
 #~ msgstr "Each code works once."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-row-actions.tsx:36
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:57
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-card.tsx:160
 msgid "Edit"
 msgstr "Edit"
@@ -2156,8 +2156,8 @@ msgstr "Edit room"
 #~ msgid "Edit the category title and save to update the products in this category."
 #~ msgstr "Edit the category title and save to update the products in this category."
 
-#: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:43
-#: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:82
 msgid "Edit user"
 msgstr "Edit user"
 
@@ -2190,9 +2190,9 @@ msgstr "Editor"
 #: src/routes/_auth-layout/auth/sign-up.tsx:223
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:257
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:115
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:124
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:175
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:156
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:163
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:288
 #: src/routes/_dashboard-layout/admin/customers/-components/customers-table.tsx:300
@@ -2677,7 +2677,7 @@ msgstr "Failed to move the item"
 #~ msgid "Failed to reload properties"
 #~ msgstr "Failed to reload properties"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:36
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:37
 msgid "Failed to resend invitation"
 msgstr "Failed to resend invitation"
 
@@ -2768,7 +2768,7 @@ msgstr "Failed to update reservation. Please try again."
 #~ msgid "Failed to update room. Please try again."
 #~ msgstr "Failed to update room. Please try again."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:87
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:143
 msgid "Failed to update user"
 msgstr "Failed to update user"
 
@@ -2835,14 +2835,14 @@ msgstr "First name"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:155
 #: src/routes/_auth-layout/auth/sign-up.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:140
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:139
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:199
 msgid "First Name"
 msgstr "First Name"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:79
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:34
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:42
 msgid "First name is required"
 msgstr "First name is required"
 
@@ -2970,8 +2970,8 @@ msgstr "Good"
 #~ msgid "Google Authenticator ↗"
 #~ msgstr "Google Authenticator ↗"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:214
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:274
 msgid "Grant administrator privileges to this user"
 msgstr "Grant administrator privileges to this user"
 
@@ -3194,8 +3194,7 @@ msgstr "Holder"
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:38
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:107
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:97
-#: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:31
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:263
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:149
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
@@ -3332,7 +3331,7 @@ msgstr "Integration Guide"
 msgid "Integrations"
 msgstr "Integrations"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:30
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:38
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:35
 msgid "Invalid email address"
 msgstr "Invalid email address"
@@ -3343,7 +3342,7 @@ msgstr "Invalid email address"
 msgid "Invalid link"
 msgstr "Invalid link"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:33
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:34
 msgid "Invitation resent successfully"
 msgstr "Invitation resent successfully"
 
@@ -3380,8 +3379,8 @@ msgstr "Items"
 msgid "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 msgstr "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:146
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:206
 msgid "John"
 msgstr "John"
 
@@ -3459,14 +3458,14 @@ msgstr "Last name"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:185
 #: src/routes/_auth-layout/auth/sign-up.tsx:193
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:161
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:161
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:169
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:221
 msgid "Last Name"
 msgstr "Last Name"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:85
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:84
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:46
 msgid "Last name is required"
 msgstr "Last name is required"
 
@@ -4046,6 +4045,10 @@ msgstr "Next room"
 #~ msgid "Next slide"
 #~ msgstr "Next slide"
 
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:94
+msgid "Next user"
+msgstr "Next user"
+
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:135
 msgid "No background"
 msgstr "No background"
@@ -4168,7 +4171,7 @@ msgstr "No logs in the last 24 hours"
 msgid "No logs match the current filters."
 msgstr "No logs match the current filters."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:116
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:125
 msgid "No name"
 msgstr "No name"
 
@@ -4262,8 +4265,8 @@ msgstr "No response from the PMS interface."
 msgid "No roles assigned. Contact your administrator if you're missing access you need."
 msgstr "No roles assigned. Contact your administrator if you're missing access you need."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:280
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:272
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:340
 msgid "No roles available"
 msgstr "No roles available"
 
@@ -4323,7 +4326,7 @@ msgstr "No unsaved changes"
 msgid "No upcoming events"
 msgstr "No upcoming events"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:205
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:246
 msgid "No users match the filters."
 msgstr "No users match the filters."
 
@@ -4696,7 +4699,7 @@ msgid "Payments appear here once the gateway authorizes them."
 msgstr "Payments appear here once the gateway authorizes them."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status.ts:20
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:119
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:128
 msgid "Pending"
 msgstr "Pending"
 
@@ -4915,6 +4918,10 @@ msgstr "Previous room"
 #: src/components/ui/carousel.tsx:202
 #~ msgid "Previous slide"
 #~ msgstr "Previous slide"
+
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:93
+msgid "Previous user"
+msgstr "Previous user"
 
 #: src/routes/_dashboard-layout/(user-view)/products/-components/products-table.tsx:53
 msgid "Price"
@@ -5353,7 +5360,7 @@ msgstr "required"
 msgid "Resend"
 msgstr "Resend"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/users/-components/row-actions.tsx:58
 msgid "Resend invitation"
 msgstr "Resend invitation"
 
@@ -5442,7 +5449,7 @@ msgstr "Reservations from the PMS show up here, or add one by hand."
 #: src/components/ui/data-grid-radio-filter.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:272
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:315
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:34
 msgid "Reset"
@@ -5467,7 +5474,7 @@ msgstr "Reset Password"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:261
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:303
 msgid "Role"
 msgstr "Role"
 
@@ -5475,9 +5482,9 @@ msgstr "Role"
 #~ msgid "Role assignments"
 #~ msgstr "Role assignments"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:240
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:231
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:211
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:300
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:220
 msgid "Roles"
 msgstr "Roles"
 
@@ -5663,7 +5670,7 @@ msgstr "Save"
 msgid "Save changes"
 msgstr "Save changes"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:296
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:369
 msgid "Save Changes"
 msgstr "Save Changes"
 
@@ -5817,7 +5824,7 @@ msgstr "Search timezone..."
 msgid "Search titles"
 msgstr "Search titles"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:248
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:289
 msgid "Search users"
 msgstr "Search users"
 
@@ -5889,8 +5896,8 @@ msgstr "Select country"
 #~ msgid "Select nationality"
 #~ msgstr "Select nationality"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:243
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:234
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:303
 msgid "Select one or more roles to assign"
 msgstr "Select one or more roles to assign"
 
@@ -6105,7 +6112,7 @@ msgstr "Show only logs of reservation {bookingNr}"
 msgid "Show password"
 msgstr "Show password"
 
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:284
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:327
 msgid "Show results for: <0>\"{q}\"</0>"
 msgstr "Show results for: <0>\"{q}\"</0>"
 
@@ -7232,17 +7239,13 @@ msgid "Use the arrow keys to move between the images."
 msgstr "Use the arrow keys to move between the images."
 
 #: src/routes/_dashboard-layout/-components/sidebar-view-toggle.tsx:28
-#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:107
 msgid "User"
 msgstr "User"
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/add-user-modal.tsx:89
 #~ msgid "User created successfully"
 #~ msgstr "User created successfully"
-
-#: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:22
-msgid "User Details"
-msgstr "User Details"
 
 #: src/routes/_dashboard-layout/-components/view-aware-content.tsx:23
 #~ msgid "User features: View reservations, make payments, access basic settings"
@@ -7256,7 +7259,7 @@ msgstr "User menu"
 #~ msgid "User Roles"
 #~ msgstr "User Roles"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:138
 msgid "User updated successfully"
 msgstr "User updated successfully"
 
@@ -7264,8 +7267,8 @@ msgstr "User updated successfully"
 #~ msgid "User view"
 #~ msgstr "User view"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/edit-user-form.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:131
+#: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:183
 msgid "user@example.com"
 msgstr "user@example.com"
 
@@ -7278,10 +7281,9 @@ msgid "Username is required"
 msgstr "Username is required"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:144
-#: src/routes/_dashboard-layout/(user-view)/users/$userId.tsx:37
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:38
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:228
-#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:236
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:269
+#: src/routes/_dashboard-layout/(user-view)/users/index.tsx:277
 msgid "Users"
 msgstr "Users"
 

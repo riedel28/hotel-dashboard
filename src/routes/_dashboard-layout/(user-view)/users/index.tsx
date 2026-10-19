@@ -2,9 +2,14 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type PaginationState, type SortingState } from '@tanstack/react-table';
+import { z } from 'zod';
 
 import { rolesQueryOptions } from '@/api/roles';
-import { fetchUsersParamsSchema, usersQueryOptions } from '@/api/users';
+import {
+  fetchUsersParamsSchema,
+  userQueryOptions,
+  usersQueryOptions
+} from '@/api/users';
 import { ClearFiltersButton } from '@/components/clear-filters-button';
 import { EmptyFilterResult } from '@/components/empty-table-state';
 import { tableLoadError } from '@/components/load-error';
@@ -27,11 +32,20 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { InviteUserModal } from './-components/invite-user-modal';
+import { UserFormDrawer } from './-components/user-form-drawer';
 import UsersTable from './-components/users-table';
 
 function UsersPage() {
-  const { page, per_page, q, country_code, role, sort_by, sort_order } =
-    Route.useSearch();
+  const {
+    page,
+    per_page,
+    q,
+    country_code,
+    role,
+    sort_by,
+    sort_order,
+    user: openUserId
+  } = Route.useSearch();
   const navigate = Route.useNavigate();
 
   const { t } = useLingui();
@@ -49,6 +63,31 @@ function UsersPage() {
     })
   );
   const { data: roles = [] } = useQuery(rolesQueryOptions());
+  const pageUsers = usersQuery.data?.index ?? [];
+  // The open user is normally on the page; a link to one that is not loads it
+  const listedUser = pageUsers.find((u) => u.id === openUserId);
+  const fetchedUserQuery = useQuery({
+    ...userQueryOptions(openUserId ?? 0),
+    enabled: openUserId !== undefined && !listedUser && !usersQuery.isPending
+  });
+  const openUser =
+    openUserId === undefined
+      ? undefined
+      : (listedUser ?? fetchedUserQuery.data);
+  const openUserById = (userId: number) =>
+    navigate({ to: '/users', search: (prev) => ({ ...prev, user: userId }) });
+  // Stepping replaces the entry, so Back leaves the drawer, not each user
+  const selectUser = (userId: number) =>
+    navigate({
+      to: '/users',
+      search: (prev) => ({ ...prev, user: userId }),
+      replace: true
+    });
+  const closeUser = () =>
+    navigate({
+      to: '/users',
+      search: (prev) => ({ ...prev, user: undefined })
+    });
   const roleOptions = roles.map((r) => ({
     value: String(r.id),
     label: r.name
@@ -198,6 +237,8 @@ function UsersPage() {
           onPaginationChange={handlePaginationChange}
           sorting={sorting}
           onSortingChange={handleSortingChange}
+          onUserOpen={openUserById}
+          selectedUserId={openUser?.id}
           // The list always holds the one looking at it, so only the
           // filters can leave it empty
           emptyMessage={
@@ -300,12 +341,23 @@ function UsersPage() {
         >
           {renderTableContent()}
         </div>
+
+        <UserFormDrawer
+          user={openUser}
+          pageUsers={pageUsers}
+          onSelect={selectUser}
+          onClose={closeUser}
+        />
       </div>
     </div>
   );
 }
 
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/users/')({
-  validateSearch: (search) => fetchUsersParamsSchema.parse(search),
+  // The list's filters plus the user open in the drawer
+  validateSearch: (search) =>
+    fetchUsersParamsSchema
+      .extend({ user: z.coerce.number().int().positive().optional() })
+      .parse(search),
   component: UsersPage
 });

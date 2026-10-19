@@ -2,12 +2,14 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
   type PaginationState,
+  type RowSelectionState,
   type SortingState,
   useTable
 } from '@tanstack/react-table';
 import { type ReactNode, useMemo, useState } from 'react';
 
 import type { User } from '@/api/users';
+import { openRowClassName } from '@/components/details-drawer';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { CountryFlag } from '@/components/ui/country-flag';
@@ -17,6 +19,7 @@ import {
   type DataGridFeatures,
   dataGridFeatures
 } from '@/components/ui/data-grid';
+import { stopRowClick } from '@/components/ui/data-grid-cards';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
@@ -50,6 +53,10 @@ interface UsersTableProps {
   error?: ReactNode;
   /** Shown where the rows go when there are none. */
   emptyMessage?: ReactNode;
+  /** Opens a user in the drawer: a click on the row or its Edit action. */
+  onUserOpen?: (userId: number) => void;
+  /** The user open in the drawer, marked as the selected row. */
+  selectedUserId?: number;
 }
 
 function getInitials(
@@ -72,7 +79,9 @@ export default function UsersTable({
   sorting: sortingProp,
   onSortingChange,
   error,
-  emptyMessage
+  emptyMessage,
+  onUserOpen,
+  selectedUserId
 }: UsersTableProps) {
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -270,8 +279,9 @@ export default function UsersTable({
         header: () => null,
         cell: ({ row }) => {
           return (
-            <div className="flex justify-center">
-              <RowActions row={row} />
+            // The menu and its dialogs keep their clicks from opening the row
+            <div className="flex justify-center" onClick={stopRowClick}>
+              <RowActions row={row} onEdit={onUserOpen} />
             </div>
           );
         },
@@ -288,11 +298,16 @@ export default function UsersTable({
         enableResizing: false
       }
     ],
-    [i18n.locale, t]
+    [i18n.locale, t, onUserOpen]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
     columns.map((column) => column.id as string)
+  );
+
+  const rowSelection = useMemo<RowSelectionState>(
+    () => (selectedUserId === undefined ? {} : { [selectedUserId]: true }),
+    [selectedUserId]
   );
 
   const table = useTable({
@@ -304,8 +319,11 @@ export default function UsersTable({
     state: {
       pagination,
       sorting,
-      columnOrder
+      columnOrder,
+      rowSelection
     },
+    // Selection only marks the user open in the drawer
+    enableRowSelection: true,
     onPaginationChange: onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnOrderChange: setColumnOrder,
@@ -318,8 +336,10 @@ export default function UsersTable({
       error={error}
       table={table}
       recordCount={totalCount}
+      onRowClick={onUserOpen ? (user: User) => onUserOpen(user.id) : undefined}
       tableClassNames={{
-        edgeCell: 'px-5'
+        edgeCell: 'px-5',
+        bodyRow: openRowClassName
       }}
       emptyMessage={emptyMessage}
       tableLayout={{

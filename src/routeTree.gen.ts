@@ -36,7 +36,6 @@ import { Route as DashboardLayoutuserViewDevicesIndexRouteImport } from './route
 import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
 import { Route as DashboardLayoutuserViewRoomsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/index'
 import { Route as DashboardLayoutuserViewUsersIndexRouteImport } from './routes/_dashboard-layout/(user-view)/users/index'
-import { Route as DashboardLayoutuserViewUsersUserIdRouteImport } from './routes/_dashboard-layout/(user-view)/users/$userId'
 import { Route as DashboardLayoutAdminCustomersIndexRouteImport } from './routes/_dashboard-layout/admin/customers/index'
 import { Route as DashboardLayoutAdminCustomersCustomerIdRouteImport } from './routes/_dashboard-layout/admin/customers/$customerId'
 import { Route as DashboardLayoutAdminPropertiesIndexRouteImport } from './routes/_dashboard-layout/admin/properties/index'
@@ -205,12 +204,6 @@ const DashboardLayoutuserViewUsersIndexRoute =
     path: '/users/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
-const DashboardLayoutuserViewUsersUserIdRoute =
-  DashboardLayoutuserViewUsersUserIdRouteImport.update({
-    id: '/(user-view)/users/$userId',
-    path: '/users/$userId',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
 const DashboardLayoutAdminCustomersIndexRoute =
   DashboardLayoutAdminCustomersIndexRouteImport.update({
     id: '/customers/',
@@ -320,7 +313,6 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
@@ -361,7 +353,6 @@ export interface FileRoutesByTo {
   '/admin': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  '/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/devices': typeof DashboardLayoutuserViewDevicesIndexRoute
@@ -406,7 +397,6 @@ export interface FileRoutesById {
   '/_dashboard-layout/admin/': typeof DashboardLayoutAdminIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/_dashboard-layout/(user-view)/(front-office)/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  '/_dashboard-layout/(user-view)/users/$userId': typeof DashboardLayoutuserViewUsersUserIdRoute
   '/_dashboard-layout/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/_dashboard-layout/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/_dashboard-layout/(user-view)/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
@@ -450,7 +440,6 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/orders'
     | '/registration-forms'
-    | '/users/$userId'
     | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
     | '/devices/'
@@ -491,7 +480,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/orders'
     | '/registration-forms'
-    | '/users/$userId'
     | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
     | '/devices'
@@ -535,7 +523,6 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/admin/'
     | '/_dashboard-layout/(user-view)/(front-office)/orders'
     | '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
-    | '/_dashboard-layout/(user-view)/users/$userId'
     | '/_dashboard-layout/admin/customers/$customerId'
     | '/_dashboard-layout/admin/properties/$propertyId'
     | '/_dashboard-layout/(user-view)/devices/'
@@ -752,13 +739,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewUsersIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
-    '/_dashboard-layout/(user-view)/users/$userId': {
-      id: '/_dashboard-layout/(user-view)/users/$userId'
-      path: '/users/$userId'
-      fullPath: '/users/$userId'
-      preLoaderRoute: typeof DashboardLayoutuserViewUsersUserIdRouteImport
-      parentRoute: typeof DashboardLayoutRoute
-    }
     '/_dashboard-layout/admin/customers/': {
       id: '/_dashboard-layout/admin/customers/'
       path: '/customers'
@@ -920,7 +900,6 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewTvRoute: typeof DashboardLayoutuserViewTvRoute
   DashboardLayoutuserViewfrontOfficeOrdersRoute: typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
-  DashboardLayoutuserViewUsersUserIdRoute: typeof DashboardLayoutuserViewUsersUserIdRoute
   DashboardLayoutuserViewDevicesIndexRoute: typeof DashboardLayoutuserViewDevicesIndexRoute
   DashboardLayoutuserViewProductsIndexRoute: typeof DashboardLayoutuserViewProductsIndexRoute
   DashboardLayoutuserViewRoomsIndexRoute: typeof DashboardLayoutuserViewRoomsIndexRoute
@@ -957,8 +936,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewfrontOfficeOrdersRoute,
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute:
     DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute,
-  DashboardLayoutuserViewUsersUserIdRoute:
-    DashboardLayoutuserViewUsersUserIdRoute,
   DashboardLayoutuserViewDevicesIndexRoute:
     DashboardLayoutuserViewDevicesIndexRoute,
   DashboardLayoutuserViewProductsIndexRoute:

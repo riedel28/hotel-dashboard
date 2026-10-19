@@ -1,9 +1,8 @@
 import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { useMutation } from '@tanstack/react-query';
-import { Link as RouterLink } from '@tanstack/react-router';
 import { type Row } from '@tanstack/react-table';
-import { MailIcon, PenSquareIcon, TrashIcon } from 'lucide-react';
+import { MailIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -22,9 +21,11 @@ import { DeleteDialog } from './delete-dialog';
 
 interface RowActionsProps {
   row: Row<DataGridFeatures, User>;
+  /** Opens the user in the drawer. */
+  onEdit?: (userId: number) => void;
 }
 
-export function RowActions({ row }: RowActionsProps) {
+export function RowActions({ row, onEdit }: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
   const resendMutation = useMutation({
@@ -42,22 +43,10 @@ export function RowActions({ row }: RowActionsProps) {
       <DropdownMenu>
         <DataGridRowActions />
         <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            render={(props) => (
-              <RouterLink
-                {...props}
-                to="/users/$userId"
-                params={{
-                  userId: String(row.original.id)
-                }}
-                search={{}}
-                replace
-              >
-                <PenSquareIcon />
-                <Trans>Edit</Trans>
-              </RouterLink>
-            )}
-          />
+          <DropdownMenuItem onClick={() => onEdit?.(row.original.id)}>
+            <PencilIcon />
+            <Trans>Edit user</Trans>
+          </DropdownMenuItem>
           {!row.original.email_verified && (
             <>
               <DropdownMenuSeparator />

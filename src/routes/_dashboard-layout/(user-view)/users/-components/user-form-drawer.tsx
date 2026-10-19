@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { t } from '@lingui/core/macro';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
@@ -8,10 +8,18 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { rolesQueryOptions } from '@/api/roles';
-import { updateUserById, type UpdateUserData } from '@/api/users';
+import { updateUserById, type UpdateUserData, type User } from '@/api/users';
+import { DetailsDrawerStepper } from '@/components/details-drawer';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CountryPicker } from '@/components/ui/country-picker';
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle
+} from '@/components/ui/drawer';
 import {
   Field,
   FieldContent,
@@ -44,25 +52,72 @@ const updateUserFormSchema = z.object({
 
 type UpdateUserFormData = z.infer<typeof updateUserFormSchema>;
 
-interface EditUserFormProps {
-  userId: number;
-  userData: {
-    email: string;
-    first_name: string | null;
-    last_name: string | null;
-    country_code: string | null;
-    is_admin: boolean;
-    roles: Array<{ id: number; name: string }>;
-  };
+interface UserFormDrawerProps {
+  /** The open user; the drawer is closed while undefined. */
+  user?: User;
+  /** Users of the table page, stepped through from the footer. */
+  pageUsers: User[];
+  onSelect: (userId: number) => void;
+  onClose: () => void;
 }
 
-async function updateUser(id: number, data: UpdateUserData) {
-  return updateUserById(id, data);
+/** Edits a user beside the table, as rooms are edited. */
+export function UserFormDrawer({
+  user,
+  pageUsers,
+  onSelect,
+  onClose
+}: UserFormDrawerProps) {
+  const { t } = useLingui();
+
+  return (
+    <Drawer
+      open={user !== undefined}
+      onOpenChange={(open) => !open && onClose()}
+    >
+      {/* As wide as the other details drawers */}
+      <DrawerContent className="sm:max-w-lg">
+        <DrawerHeader>
+          <DrawerTitle>
+            <Trans>Edit user</Trans>
+          </DrawerTitle>
+        </DrawerHeader>
+        {user && (
+          <UserForm
+            // A fresh form per user: no edits carry over to the next one
+            key={user.id}
+            user={user}
+            pageUsers={pageUsers}
+            onSelect={onSelect}
+            onCancel={onClose}
+            previousLabel={t`Previous user`}
+            nextLabel={t`Next user`}
+          />
+        )}
+      </DrawerContent>
+    </Drawer>
+  );
 }
 
-export function EditUserForm({ userId, userData }: EditUserFormProps) {
+function UserForm({
+  user,
+  pageUsers,
+  onSelect,
+  onCancel,
+  previousLabel,
+  nextLabel
+}: {
+  user: User;
+  pageUsers: User[];
+  onSelect: (userId: number) => void;
+  onCancel: () => void;
+  previousLabel: string;
+  nextLabel: string;
+}) {
   const queryClient = useQueryClient();
   const { data: roles } = useQuery(rolesQueryOptions());
+  const userId = user.id;
+  const userData = user;
 
   const form = useForm<UpdateUserFormData>({
     resolver: zodResolver(updateUserFormSchema),
@@ -77,11 +132,12 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
   });
 
   const updateUserMutation = useMutation({
-    mutationFn: (data: UpdateUserData) => updateUser(userId, data),
+    mutationFn: (data: UpdateUserData) => updateUserById(userId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      queryClient.invalidateQueries({ queryKey: ['users', userId] });
       toast.success(t`User updated successfully`);
+      // Saved: back to the list, as the room and product drawers do
+      onCancel();
     },
     onError: () => {
       toast.error(t`Failed to update user`);
@@ -103,47 +159,93 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-lg space-y-6">
-      <FieldSet className="gap-6">
-        <FieldGroup className="gap-6">
-          <Controller
-            control={form.control}
-            name="email"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="gap-2">
-                <FieldLabel htmlFor={field.name}>
-                  <Trans>Email</Trans>
-                </FieldLabel>
-                <Input
-                  id={field.name}
-                  type="email"
-                  {...field}
-                  value={field.value || ''}
-                  aria-invalid={fieldState.invalid}
-                  placeholder={t`user@example.com`}
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <div className="grid grid-cols-2 gap-4">
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex min-h-0 flex-1 flex-col"
+    >
+      <DrawerBody>
+        <FieldSet className="gap-6">
+          <FieldGroup className="gap-6">
             <Controller
               control={form.control}
-              name="first_name"
+              name="email"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="gap-2">
                   <FieldLabel htmlFor={field.name}>
-                    <Trans>First Name</Trans>
+                    <Trans>Email</Trans>
                   </FieldLabel>
                   <Input
                     id={field.name}
+                    type="email"
                     {...field}
                     value={field.value || ''}
                     aria-invalid={fieldState.invalid}
-                    placeholder={t`John`}
+                    placeholder={t`user@example.com`}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <Controller
+                control={form.control}
+                name="first_name"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>First Name</Trans>
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      {...field}
+                      value={field.value || ''}
+                      aria-invalid={fieldState.invalid}
+                      placeholder={t`John`}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                control={form.control}
+                name="last_name"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="gap-2">
+                    <FieldLabel htmlFor={field.name}>
+                      <Trans>Last Name</Trans>
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      {...field}
+                      value={field.value || ''}
+                      aria-invalid={fieldState.invalid}
+                      placeholder={t`Doe`}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <Controller
+              control={form.control}
+              name="country_code"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel>
+                    <Trans>Country</Trans>
+                  </FieldLabel>
+                  <CountryPicker
+                    value={field.value || undefined}
+                    onValueChange={field.onChange}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -154,18 +256,28 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
 
             <Controller
               control={form.control}
-              name="last_name"
+              name="is_admin"
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="gap-2">
-                  <FieldLabel htmlFor={field.name}>
-                    <Trans>Last Name</Trans>
-                  </FieldLabel>
-                  <Input
+                <Field
+                  data-invalid={fieldState.invalid}
+                  orientation="horizontal"
+                  className="items-center gap-3 rounded-md border p-3"
+                >
+                  <FieldContent>
+                    <FieldLabel
+                      htmlFor={field.name}
+                      className="cursor-pointer text-sm font-normal"
+                    >
+                      <Trans>Admin User</Trans>
+                    </FieldLabel>
+                    <FieldDescription>
+                      <Trans>Grant administrator privileges to this user</Trans>
+                    </FieldDescription>
+                  </FieldContent>
+                  <Switch
                     id={field.name}
-                    {...field}
-                    value={field.value || ''}
-                    aria-invalid={fieldState.invalid}
-                    placeholder={t`Doe`}
+                    checked={field.value || false}
+                    onCheckedChange={field.onChange}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -173,129 +285,90 @@ export function EditUserForm({ userId, userData }: EditUserFormProps) {
                 </Field>
               )}
             />
-          </div>
 
-          <Controller
-            control={form.control}
-            name="country_code"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="gap-2">
-                <FieldLabel>
-                  <Trans>Country</Trans>
-                </FieldLabel>
-                <CountryPicker
-                  value={field.value || undefined}
-                  onValueChange={field.onChange}
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <Controller
-            control={form.control}
-            name="is_admin"
-            render={({ field, fieldState }) => (
-              <Field
-                data-invalid={fieldState.invalid}
-                orientation="horizontal"
-                className="items-center gap-3 rounded-md border p-3"
-              >
-                <FieldContent>
-                  <FieldLabel
-                    htmlFor={field.name}
-                    className="cursor-pointer text-sm font-normal"
-                  >
-                    <Trans>Admin User</Trans>
-                  </FieldLabel>
-                  <FieldDescription>
-                    <Trans>Grant administrator privileges to this user</Trans>
-                  </FieldDescription>
-                </FieldContent>
-                <Switch
-                  id={field.name}
-                  checked={field.value || false}
-                  onCheckedChange={field.onChange}
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <Controller
-            control={form.control}
-            name="role_ids"
-            render={({ field, fieldState }) => (
-              <Field
-                data-invalid={fieldState.invalid}
-                orientation="vertical"
-                className="gap-3"
-              >
-                <FieldContent>
-                  <FieldLabel className="text-base font-medium">
-                    <Trans>Roles</Trans>
-                  </FieldLabel>
-                  <FieldDescription>
-                    <Trans>Select one or more roles to assign</Trans>
-                  </FieldDescription>
-                </FieldContent>
-                {roles && roles.length > 0 ? (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {roles.map((role) => {
-                      const assigned = field.value?.includes(role.id);
-                      return (
-                        <Field
-                          key={role.id}
-                          orientation="horizontal"
-                          className="gap-3 rounded-md border bg-muted/20 p-3"
-                        >
-                          <Checkbox
-                            id={`role-${role.id}`}
-                            checked={assigned}
-                            onCheckedChange={(checked) => {
-                              const nextRoles = checked
-                                ? [...(field.value ?? []), role.id]
-                                : (field.value ?? []).filter(
-                                    (r) => r !== role.id
-                                  );
-                              field.onChange(nextRoles);
-                            }}
-                          />
-                          <FieldLabel
-                            htmlFor={`role-${role.id}`}
-                            className="cursor-pointer text-sm font-normal"
+            <Controller
+              control={form.control}
+              name="role_ids"
+              render={({ field, fieldState }) => (
+                <Field
+                  data-invalid={fieldState.invalid}
+                  orientation="vertical"
+                  className="gap-3"
+                >
+                  <FieldContent>
+                    <FieldLabel className="text-base font-medium">
+                      <Trans>Roles</Trans>
+                    </FieldLabel>
+                    <FieldDescription>
+                      <Trans>Select one or more roles to assign</Trans>
+                    </FieldDescription>
+                  </FieldContent>
+                  {roles && roles.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {roles.map((role) => {
+                        const assigned = field.value?.includes(role.id);
+                        return (
+                          <Field
+                            key={role.id}
+                            orientation="horizontal"
+                            className="gap-3 rounded-md border bg-muted/20 p-3"
                           >
-                            {role.name}
-                          </FieldLabel>
-                        </Field>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    <Trans>No roles available</Trans>
-                  </p>
-                )}
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-        </FieldGroup>
-      </FieldSet>
-      <div className="flex justify-end gap-3">
+                            <Checkbox
+                              id={`role-${role.id}`}
+                              checked={assigned}
+                              onCheckedChange={(checked) => {
+                                const nextRoles = checked
+                                  ? [...(field.value ?? []), role.id]
+                                  : (field.value ?? []).filter(
+                                      (r) => r !== role.id
+                                    );
+                                field.onChange(nextRoles);
+                              }}
+                            />
+                            <FieldLabel
+                              htmlFor={`role-${role.id}`}
+                              className="cursor-pointer text-sm font-normal"
+                            >
+                              {role.name}
+                            </FieldLabel>
+                          </Field>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      <Trans>No roles available</Trans>
+                    </p>
+                  )}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </FieldSet>
+      </DrawerBody>
+      <DetailsDrawerStepper
+        currentId={userId}
+        items={pageUsers}
+        onSelect={onSelect}
+        previousLabel={previousLabel}
+        nextLabel={nextLabel}
+        // Stepping away would drop the edits without a word
+        disabled={form.formState.isDirty}
+        keyHints={false}
+      >
+        <Button variant="outline" type="button" onClick={onCancel}>
+          <Trans>Cancel</Trans>
+        </Button>
         <Button type="submit" disabled={updateUserMutation.isPending}>
           {updateUserMutation.isPending && (
             <Loader2Icon className="animate-spin" />
           )}
           <Trans>Save Changes</Trans>
         </Button>
-      </div>
+      </DetailsDrawerStepper>
     </form>
   );
 }

@@ -5,7 +5,10 @@ import { resetDatabase } from './helpers/reset-db';
 const EDITABLE_USER_EMAIL = 'cool_new_user@example.com';
 const EDITABLE_USER_DISPLAY = 'Very Cool';
 
-async function navigateToEditUser(page: Page) {
+async function navigateToEditUser(
+  page: Page,
+  displayName = EDITABLE_USER_DISPLAY
+) {
   await page.getByRole('link', { name: 'Users', exact: true }).click();
   await expect(page).toHaveURL(/\/users/);
   await expect(page.getByRole('heading', { name: 'Users' })).toBeVisible();
@@ -20,13 +23,13 @@ async function navigateToEditUser(page: Page) {
   await page.getByRole('searchbox').fill(EDITABLE_USER_EMAIL);
   await responsePromise;
 
-  const row = page.getByRole('row').filter({ hasText: EDITABLE_USER_DISPLAY });
+  const row = page.getByRole('row').filter({ hasText: displayName });
   await row.getByRole('button', { name: 'Open menu' }).click();
-  await page.getByRole('menuitem', { name: 'Edit' }).click();
+  await page.getByRole('menuitem', { name: 'Edit user' }).click();
 
+  // The form opens in a drawer beside the list
   await expect(page.getByRole('heading', { name: 'Edit user' })).toBeVisible();
-  // Wait for the form to be loaded (Suspense resolved)
-  await expect(page.locator('form')).toBeVisible();
+  await expect(page.getByRole('dialog').locator('form')).toBeVisible();
 }
 
 test.describe('Edit User', () => {
@@ -37,13 +40,13 @@ test.describe('Edit User', () => {
     await resetDatabase();
   });
 
-  test('should navigate to edit user page and display form with current values', async ({
+  test('should open the user in the drawer with the current values', async ({
     page
   }) => {
     await page.goto('/');
     await navigateToEditUser(page);
 
-    const form = page.locator('form');
+    const form = page.getByRole('dialog').locator('form');
     await expect(form.getByLabel('Email')).toHaveValue(
       'cool_new_user@example.com'
     );
@@ -57,7 +60,7 @@ test.describe('Edit User', () => {
     await page.goto('/');
     await navigateToEditUser(page);
 
-    const form = page.locator('form');
+    const form = page.getByRole('dialog').locator('form');
 
     // Update first name
     const firstNameInput = form.getByLabel('First Name');
@@ -78,21 +81,13 @@ test.describe('Edit User', () => {
     await form.getByRole('button', { name: 'Save Changes' }).click();
     await expect(page.getByText('User updated successfully')).toBeVisible();
 
-    // Reload the page to verify persistence
-    const userResponsePromise = page.waitForResponse(
-      (resp) =>
-        resp.url().includes('/api/users/') &&
-        resp.request().method() === 'GET' &&
-        resp.status() === 200
-    );
+    // Saving closes the drawer; reload and open the user again to check the
+    // values were stored
+    await expect(page.getByRole('dialog')).toBeHidden();
     await page.reload();
-    await userResponsePromise;
-    await expect(
-      page.getByRole('heading', { name: 'Edit user' })
-    ).toBeVisible();
-    await expect(page.locator('form')).toBeVisible();
+    await navigateToEditUser(page, 'Updated User');
 
-    const reloadedForm = page.locator('form');
+    const reloadedForm = page.getByRole('dialog').locator('form');
     await expect(reloadedForm.getByLabel('First Name')).toHaveValue('Updated');
     await expect(reloadedForm.getByLabel('Last Name')).toHaveValue('User');
     // Verify country picker shows selected country
