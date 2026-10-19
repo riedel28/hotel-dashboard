@@ -155,12 +155,22 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
   );
 
   const error = tableLoadError(query, <Trans>Couldn't load devices</Trans>);
+  // Shown while the devices load too, like every other list's filters; the
+  // tab counts join them once there is something to count.
+  const filtersBar = (
+    <DevicesFilters
+      devices={query.isLoading || error ? undefined : devices}
+      filters={filters}
+      hasActiveFilters={search.hasActiveFilters}
+      setFilters={search.setFilters}
+      clearFilters={search.clearFilters}
+    />
+  );
+
   if (query.isLoading || error) {
     return (
-      // The table under an empty row as tall as the filters, so it does not
-      // move when the devices arrive and the filters appear above it
       <div className="space-y-2.5">
-        <div className="h-9" />
+        {filtersBar}
         {error ? (
           <DevicesTable
             page={paginate([], 0, DEFAULT_DEVICE_PAGE_SIZE)}
@@ -176,13 +186,7 @@ function DevicesContent({ highlightedId, onAddDevice }: DevicesContentProps) {
   return (
     <DeviceRoomActionsProvider>
       <div className="space-y-2.5">
-        <DevicesFilters
-          devices={devices}
-          filters={filters}
-          hasActiveFilters={search.hasActiveFilters}
-          setFilters={search.setFilters}
-          clearFilters={search.clearFilters}
-        />
+        {filtersBar}
 
         <DevicesTable
           page={paginate(listed, search.pageIndex, search.pageSize)}
