@@ -19,6 +19,9 @@ function AuthLayout() {
       <section className="relative h-32 overflow-hidden sm:h-56 lg:h-auto lg:min-h-screen">
         <img
           src="/login-bg.avif"
+          // Keep in step with the preload in index.html
+          srcSet="/login-bg-sm.avif 1200w, /login-bg.avif 2400w"
+          sizes="(min-width: 1024px) 67vw, 100vw"
           alt=""
           fetchPriority="high"
           className="h-full w-full object-cover dark:brightness-75"
