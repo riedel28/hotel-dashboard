@@ -1,6 +1,6 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
-import { client, handleApiError } from '@/api/client';
+import { ApiError, client, handleApiError } from '@/api/client';
 
 import {
   type CreateUserData,
@@ -16,24 +16,21 @@ import {
   userSchema
 } from '../../shared/types/users';
 
-function usersQueryOptions({
-  page,
-  per_page,
-  q,
-  sort_by,
-  sort_order
-}: FetchUsersParams) {
+function usersQueryOptions(params: FetchUsersParams) {
   return queryOptions({
-    queryKey: ['users', page, per_page, q, sort_by, sort_order],
-    queryFn: () =>
-      fetchUsers({
-        page,
-        per_page,
-        q,
-        sort_by,
-        sort_order
-      }),
+    queryKey: ['users', 'list', params],
+    queryFn: () => fetchUsers(params),
     placeholderData: keepPreviousData
+  });
+}
+
+function userQueryOptions(id: number) {
+  return queryOptions({
+    queryKey: ['users', 'user', id],
+    queryFn: () => fetchUserById(id),
+    // A missing user stays missing
+    retry: (failureCount, error) =>
+      !(error instanceof ApiError && error.status === 404) && failureCount < 3
   });
 }
 
@@ -129,6 +126,7 @@ export {
   type UpdateUserData,
   type User,
   updateUserById,
+  userQueryOptions,
   userSchema,
   usersQueryOptions
 };
