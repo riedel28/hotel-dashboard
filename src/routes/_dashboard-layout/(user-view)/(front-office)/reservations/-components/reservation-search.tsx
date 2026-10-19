@@ -16,7 +16,7 @@ export function ReservationSearch({ value, onChange }: ReservationSearchProps) {
       onChange={onChange}
       placeholder={t`Search reservations`}
       className="text-sm"
-      wrapperClassName="w-full lg:w-[250px]"
+      wrapperClassName="w-full lg:w-72"
       debounceMs={500}
     />
   );

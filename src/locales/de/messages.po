@@ -627,10 +627,9 @@ msgstr "Alle Kategorien"
 msgid "All countries"
 msgstr "Alle Länder"
 
-#: src/components/date-range-filter.tsx:128
-#: src/components/date-range-filter.tsx:185
-#~ msgid "All dates"
-#~ msgstr "Alle Daten"
+#: src/components/date-range-filter.tsx:118
+msgid "All dates"
+msgstr "Gesamter Zeitraum"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:79
 msgid "All floors"
@@ -4628,10 +4627,6 @@ msgstr "Foto aktualisiert"
 #: src/components/date-time-field.tsx:78
 msgid "Pick a date"
 msgstr "Datum wählen"
-
-#: src/components/date-range-filter.tsx:118
-msgid "Pick a date range"
-msgstr "Datumsbereich auswählen"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:181
 msgid "Pick a longer period to see older logs."

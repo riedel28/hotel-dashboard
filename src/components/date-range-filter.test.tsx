@@ -13,7 +13,7 @@ describe('DateRangeFilter', () => {
     const onRangeChange = vi.fn();
     render(<DateRangeFilter onRangeChange={onRangeChange} />);
 
-    await user.click(screen.getByRole('button', { name: 'Pick a date range' }));
+    await user.click(screen.getByRole('button', { name: 'All dates' }));
     for (const name of ['Today', 'Last 30 days', 'Last year']) {
       expect(screen.getByRole('button', { name })).toBeInTheDocument();
     }
@@ -42,7 +42,7 @@ describe('DateRangeFilter', () => {
     const user = userEvent.setup();
     const onRangeChange = vi.fn();
     render(<DateRangeFilter onRangeChange={onRangeChange} />);
-    await user.click(screen.getByRole('button', { name: 'Pick a date range' }));
+    await user.click(screen.getByRole('button', { name: 'All dates' }));
 
     const days = screen
       .getAllByRole('button')
@@ -66,18 +66,14 @@ describe('DateRangeFilter', () => {
     try {
       const user = userEvent.setup();
       const { unmount } = render(<DateRangeFilter onRangeChange={vi.fn()} />);
-      await user.click(
-        screen.getByRole('button', { name: 'Pick a date range' })
-      );
+      await user.click(screen.getByRole('button', { name: 'All dates' }));
       expect(
         screen.getByRole('button', { name: /October 17th, 2026/ })
       ).toBeDisabled();
       unmount();
 
       render(<DateRangeFilter onRangeChange={vi.fn()} allowFuture />);
-      await user.click(
-        screen.getByRole('button', { name: 'Pick a date range' })
-      );
+      await user.click(screen.getByRole('button', { name: 'All dates' }));
       expect(
         screen.getByRole('button', { name: /October 17th, 2026/ })
       ).toBeEnabled();
