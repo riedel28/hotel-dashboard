@@ -2,18 +2,21 @@ import { useLingui } from '@lingui/react/macro';
 import {
   type ColumnDef,
   type PaginationState,
+  type RowSelectionState,
   type SortingState,
   useTable
 } from '@tanstack/react-table';
 import { type ReactNode, useMemo } from 'react';
 import type { Room } from 'shared/types/rooms';
 
+import { openRowClassName } from '@/components/details-drawer';
 import {
   DataGrid,
   DataGridContainer,
   type DataGridFeatures,
   dataGridFeatures
 } from '@/components/ui/data-grid';
+import { stopRowClick } from '@/components/ui/data-grid-cards';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
@@ -34,8 +37,11 @@ interface RoomsTableProps {
   sort?: { by: RoomSortColumn; order: 'asc' | 'desc' };
   onSortChange?: (by: RoomSortColumn, order: 'asc' | 'desc') => void;
   onPageChange?: (pageIndex: number, pageSize: number) => void;
-  /** Set for those who may edit rooms; adds the row actions */
+  /** Set for those who may edit rooms; adds the row actions and opens a
+      clicked row in the form */
   onEdit?: (roomId: number) => void;
+  /** The room open in the form, marked as the selected row. */
+  selectedRoomId?: number;
   emptyMessage?: ReactNode;
   /** A failed load (`LoadErrorState`), shown where the rows go. */
   error?: ReactNode;
@@ -52,6 +58,7 @@ export default function RoomsTable({
   onSortChange,
   onPageChange,
   onEdit,
+  selectedRoomId,
   emptyMessage,
   error
 }: RoomsTableProps) {
@@ -107,7 +114,8 @@ export default function RoomsTable({
               id: 'actions',
               header: () => null,
               cell: ({ row }) => (
-                <div className="flex justify-center">
+                // The menu and its dialog keep their clicks from opening the row
+                <div className="flex justify-center" onClick={stopRowClick}>
                   <RowActions room={row.original} onEdit={onEdit} />
                 </div>
               ),
@@ -128,13 +136,20 @@ export default function RoomsTable({
     ];
   }, [t, onEdit]);
 
+  const rowSelection = useMemo<RowSelectionState>(
+    () => (selectedRoomId === undefined ? {} : { [selectedRoomId]: true }),
+    [selectedRoomId]
+  );
+
   const table = useTable({
     features: dataGridFeatures,
     columns,
     data,
     pageCount,
     getRowId: (row: Room) => row.id.toString(),
-    state: { pagination, sorting },
+    state: { pagination, sorting, rowSelection },
+    // Selection only marks the room open in the form
+    enableRowSelection: true,
     onPaginationChange: (updater) => {
       const next =
         typeof updater === 'function' ? updater(pagination) : updater;
@@ -156,7 +171,8 @@ export default function RoomsTable({
       error={error}
       table={table}
       recordCount={totalCount}
-      tableClassNames={{ edgeCell: 'px-5' }}
+      onRowClick={onEdit ? (room: Room) => onEdit(room.id) : undefined}
+      tableClassNames={{ edgeCell: 'px-5', bodyRow: openRowClassName }}
       tableLayout={{
         columnsPinnable: false,
         columnsMovable: false,

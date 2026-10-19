@@ -146,7 +146,8 @@ export function RoomFormDrawer({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent>
+      {/* As wide as the other details drawers */}
+      <DrawerContent className="sm:max-w-lg">
         <DrawerHeader>
           <DrawerTitle>
             {isEdit ? <Trans>Edit room</Trans> : <Trans>Add room</Trans>}

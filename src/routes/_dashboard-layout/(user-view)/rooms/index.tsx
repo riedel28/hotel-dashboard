@@ -221,6 +221,11 @@ function RoomsContent({
               onSortChange={search.setSort}
               onPageChange={search.setPage}
               onEdit={canManage ? search.openForm : undefined}
+              selectedRoomId={
+                canManage && typeof search.formTarget === 'number'
+                  ? search.formTarget
+                  : undefined
+              }
               emptyMessage={
                 <EmptyFilterResult
                   description={<Trans>No rooms match the filters.</Trans>}
