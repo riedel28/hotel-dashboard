@@ -21,7 +21,7 @@ import {
   users
 } from '../db/schema';
 import type { AuthenticatedRequest } from '../middleware/auth';
-import { sendInvitationEmail } from '../utils/email';
+import { sendInvitationEmail, sendVerificationEmail } from '../utils/email';
 import { escapeLikePattern } from '../utils/sql';
 import { generateVerificationToken } from '../utils/token';
 
@@ -387,14 +387,62 @@ async function updateMe(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+/**
+ * A new address is unproven, so changing the email unverifies it and mails a
+ * fresh link there: a verification link to a user with a password, a new
+ * invitation to one who hasn't accepted theirs yet. Every link already sent to
+ * the old address dies with the change.
+ */
 async function updateUser(req: Request, res: Response) {
   const { id } = req.params;
   const updates = req.body ?? {};
   const userId = Number(id);
+  let linkToSend: {
+    email: string;
+    token: string;
+    type: 'verification' | 'invitation';
+  } | null = null;
 
   try {
     const userWithRoles = await db.transaction(async (tx) => {
       const { role_ids, ...userUpdates } = updates;
+
+      if (typeof userUpdates.email === 'string') {
+        const current = await tx.query.users.findFirst({
+          columns: { email: true, password: true },
+          where: eq(users.id, userId)
+        });
+        // Case alone doesn't change the mailbox.
+        if (
+          current &&
+          current.email.toLowerCase() !== userUpdates.email.toLowerCase()
+        ) {
+          userUpdates.email_verified = false;
+
+          await tx
+            .update(emailVerificationTokens)
+            .set({ used_at: new Date() })
+            .where(
+              and(
+                eq(emailVerificationTokens.user_id, userId),
+                isNull(emailVerificationTokens.used_at)
+              )
+            );
+
+          const type = current.password ? 'verification' : 'invitation';
+          const token = generateVerificationToken();
+          await tx.insert(emailVerificationTokens).values({
+            user_id: userId,
+            token,
+            type,
+            expires_at: new Date(
+              Date.now() +
+                (type === 'verification' ? TWENTY_FOUR_HOURS_MS : SEVEN_DAYS_MS)
+            )
+          });
+          linkToSend = { email: userUpdates.email, token, type };
+        }
+      }
 
       // Update user fields if there are any
       if (Object.keys(userUpdates).length > 0) {
@@ -452,6 +500,34 @@ async function updateUser(req: Request, res: Response) {
     }
 
     const transformedUser = toProfileResponse(userWithRoles);
+
+    // After the commit, and not fatal: the change is saved either way, and the
+    // admin (or the user, from their profile) can resend the link.
+    // Set inside the transaction callback, which TS's narrowing can't see:
+    // left alone it would still read `linkToSend` as the initial null.
+    const link = linkToSend as typeof linkToSend;
+    if (link) {
+      try {
+        if (link.type === 'verification') {
+          await sendVerificationEmail(link.email, link.token);
+        } else {
+          const authenticatedReq = req as AuthenticatedRequest;
+          const inviterName = [
+            authenticatedReq.user?.first_name,
+            authenticatedReq.user?.last_name
+          ]
+            .filter(Boolean)
+            .join(' ');
+          await sendInvitationEmail(
+            link.email,
+            link.token,
+            inviterName || undefined
+          );
+        }
+      } catch (emailError) {
+        console.error('Email change link error:', emailError);
+      }
+    }
 
     res.status(200).json(transformedUser);
   } catch (error) {
@@ -547,6 +623,7 @@ async function updateSelectedProperty(req: Request, res: Response) {
 }
 
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 
 async function inviteUser(req: Request, res: Response) {
   const authenticatedReq = req as AuthenticatedRequest;

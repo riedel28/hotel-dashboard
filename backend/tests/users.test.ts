@@ -1,6 +1,9 @@
+import { and, eq, isNull } from 'drizzle-orm';
 import request from 'supertest';
 
 import app from '../src/app';
+import { db } from '../src/db/pool';
+import { emailVerificationTokens, users } from '../src/db/schema';
 import {
   assignRoleToUser,
   createTestProperty,
@@ -362,7 +365,7 @@ describe('Users API', () => {
 
       await request(app)
         .patch(`/api/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .send(updateData)
         .expect(400);
     });
@@ -377,6 +380,114 @@ describe('Users API', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send(updateData)
         .expect(400);
+    });
+  });
+
+  describe('PATCH /api/users/:id email change', () => {
+    async function unusedTokens(userId: number) {
+      return db
+        .select({ type: emailVerificationTokens.type })
+        .from(emailVerificationTokens)
+        .where(
+          and(
+            eq(emailVerificationTokens.user_id, userId),
+            isNull(emailVerificationTokens.used_at)
+          )
+        );
+    }
+
+    async function storedUser(userId: number) {
+      const [row] = await db
+        .select({ email: users.email, email_verified: users.email_verified })
+        .from(users)
+        .where(eq(users.id, userId));
+      return row;
+    }
+
+    test('admin changing the email unverifies it and sends a fresh link', async () => {
+      // A link mailed to the old address must stop working with the change.
+      await db.insert(emailVerificationTokens).values({
+        user_id: testUserId,
+        token: `old-reset-${Date.now()}`,
+        type: 'reset',
+        expires_at: new Date(Date.now() + 60 * 60 * 1000)
+      });
+      const newEmail = `renamed-${Date.now()}@example.com`;
+
+      const response = await request(app)
+        .patch(`/api/users/${testUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ email: newEmail })
+        .expect(200);
+
+      expect(response.body.email).toBe(newEmail);
+      expect(response.body.email_verified).toBe(false);
+      expect(await storedUser(testUserId)).toEqual({
+        email: newEmail,
+        email_verified: false
+      });
+      expect(await unusedTokens(testUserId)).toEqual([
+        { type: 'verification' }
+      ]);
+    });
+
+    test("changing an invited user's email re-sends the invitation", async () => {
+      const [invited] = await db
+        .insert(users)
+        .values({
+          email: `invited-${Date.now()}@example.com`,
+          first_name: 'Invited',
+          email_verified: false
+        })
+        .returning({ id: users.id });
+      await db.insert(emailVerificationTokens).values({
+        user_id: invited.id,
+        token: `old-invite-${Date.now()}`,
+        type: 'invitation',
+        expires_at: new Date(Date.now() + 60 * 60 * 1000)
+      });
+
+      await request(app)
+        .patch(`/api/users/${invited.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ email: `invited-new-${Date.now()}@example.com` })
+        .expect(200);
+
+      expect(await unusedTokens(invited.id)).toEqual([{ type: 'invitation' }]);
+    });
+
+    test('resending the same email leaves it verified', async () => {
+      const { email } = await storedUser(testUserId);
+
+      await request(app)
+        .patch(`/api/users/${testUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ email, first_name: 'Same' })
+        .expect(200);
+
+      expect(await storedUser(testUserId)).toEqual({
+        email,
+        email_verified: true
+      });
+      expect(await unusedTokens(testUserId)).toEqual([]);
+    });
+
+    test("a non-admin can't change anyone's email", async () => {
+      const { user: other } = await createTestUser({
+        email: `other-${Date.now()}@example.com`
+      });
+
+      for (const target of [testUserId, other.id]) {
+        const before = await storedUser(target);
+
+        await request(app)
+          .patch(`/api/users/${target}`)
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({ email: `hijack-${Date.now()}@example.com` })
+          .expect(200);
+
+        expect(await storedUser(target)).toEqual(before);
+      }
     });
   });
 
