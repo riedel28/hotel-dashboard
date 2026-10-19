@@ -3,10 +3,13 @@ import { and, asc, count, desc, eq, ilike, inArray, or } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 
 import env from '../../env';
-import { db } from '../db/pool';
-import type { Transaction } from '../db/room-queries';
+import { db, type Transaction } from '../db/pool';
 import { properties, userRoles, users } from '../db/schema';
-import { issueToken, revokeTokens } from '../db/verification-tokens';
+import {
+  createToken,
+  issueToken,
+  revokeTokens
+} from '../db/verification-tokens';
 import type { AuthenticatedRequest } from '../middleware/auth';
 import { sendInvitationEmail, sendVerificationEmail } from '../utils/email';
 import { escapeLikePattern } from '../utils/sql';
@@ -402,7 +405,7 @@ async function linkForNewAddress(
 
   await revokeTokens(tx, userId);
   const type = current.password ? 'verification' : 'invitation';
-  return { email, type, token: await issueToken(tx, userId, type) };
+  return { email, type, token: await createToken(tx, userId, type) };
 }
 
 /**
