@@ -145,8 +145,7 @@ export function PasswordSection({ user }: PasswordSectionProps) {
       className={flashClass}
     >
       <ProfileSectionForm
-        isDirty
-        alwaysEnabled
+        isDirty={form.formState.isDirty}
         isSubmitting={mutation.isPending}
         submitLabel={<Trans>Update password</Trans>}
         onSubmit={() => void submit()}
@@ -154,15 +153,22 @@ export function PasswordSection({ user }: PasswordSectionProps) {
       >
         {/* Never side by side: adjacent password boxes invite typing the new
             one into the current-password field. */}
-        <FieldGroup className="max-w-120 gap-5">
+        <FieldGroup className="gap-5">
           <Controller
             control={form.control}
             name="current_password"
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} className="gap-2">
-                <FieldLabel htmlFor={field.name}>
-                  <Trans>Current password</Trans>
-                </FieldLabel>
+                {/* The way out sits by the field it's about, as on most sign-in
+                    forms, not at the bottom of the card. */}
+                <div className="flex items-center justify-between gap-2">
+                  <FieldLabel htmlFor={field.name}>
+                    <Trans>Current password</Trans>
+                  </FieldLabel>
+                  <Link to="/auth/forgot-password" className="text-sm">
+                    <Trans>Forgot password?</Trans>
+                  </Link>
+                </div>
                 <PasswordInput
                   {...field}
                   id={field.name}
@@ -204,16 +210,20 @@ export function PasswordSection({ user }: PasswordSectionProps) {
                   aria-invalid={fieldState.invalid}
                 />
                 {/* Live, unlike the other fields: here the feedback helps build
-                    the password rather than scolding a finished one. */}
-                <PasswordStrengthMeter
-                  password={field.value}
-                  userInputs={[
-                    user.email,
-                    user.first_name ?? '',
-                    user.last_name ?? ''
-                  ].filter(Boolean)}
-                  className="pt-1"
-                />
+                    the password rather than scolding a finished one. Not
+                    before the first keystroke — the card's description already
+                    states the rule, and an empty meter only lengthens it. */}
+                {field.value && (
+                  <PasswordStrengthMeter
+                    password={field.value}
+                    userInputs={[
+                      user.email,
+                      user.first_name ?? '',
+                      user.last_name ?? ''
+                    ].filter(Boolean)}
+                    className="pt-1"
+                  />
+                )}
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -279,10 +289,6 @@ export function PasswordSection({ user }: PasswordSectionProps) {
               )}
             />
           )}
-
-          <Link to="/auth/forgot-password">
-            <Trans>Forgot your current password?</Trans>
-          </Link>
 
           {signedOutElsewhere && (
             <p className="flex items-start gap-2 rounded-md border border-dashed p-3 text-sm text-muted-foreground">

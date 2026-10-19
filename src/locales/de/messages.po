@@ -854,7 +854,7 @@ msgstr ""
 msgid "Authentication"
 msgstr "Authentifizierung"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:260
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:270
 msgid "Authentication code"
 msgstr "Authentifizierungscode"
 
@@ -1008,8 +1008,8 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:137
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:196
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:188
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/upload-step.tsx:163
@@ -1034,7 +1034,7 @@ msgstr "Einrichtung abbrechen"
 msgid "Cancel setup?"
 msgstr "Einrichtung abbrechen?"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:187
 msgid "Caps Lock is on"
 msgstr "Feststelltaste ist aktiviert"
 
@@ -1367,7 +1367,7 @@ msgstr ""
 #~ msgid "Configured"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:230
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:240
 msgid "Confirm new password"
 msgstr "Neues Passwort bestätigen"
 
@@ -1711,7 +1711,7 @@ msgstr "Kultur"
 msgid "Current"
 msgstr "Aktuell"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:164
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:166
 msgid "Current password"
 msgstr "Aktuelles Passwort"
 
@@ -2851,12 +2851,13 @@ msgid "Forgot Password"
 msgstr "Passwort vergessen?"
 
 #: src/routes/_auth-layout/auth/login.tsx:262
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:169
 msgid "Forgot password?"
 msgstr "Passwort vergessen?"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:284
-msgid "Forgot your current password?"
-msgstr "Aktuelles Passwort vergessen?"
+#~ msgid "Forgot your current password?"
+#~ msgstr "Aktuelles Passwort vergessen?"
 
 #: src/components/ui/rich-text-editor.tsx:347
 msgid "Formatting"
@@ -3926,7 +3927,7 @@ msgstr "Neuer Gast"
 msgid "New parent"
 msgstr "Neuer übergeordneter Eintrag"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:197
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:203
 msgid "New password"
 msgstr "Neues Passwort"
 
@@ -4345,7 +4346,7 @@ msgstr "Belegt"
 msgid "of <0/>"
 msgstr "von <0/>"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:153
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:151
 msgid "Off"
 msgstr "Aus"
 
@@ -4531,7 +4532,7 @@ msgstr "Party"
 #: src/routes/_auth-layout/auth/login.tsx:211
 #: src/routes/_auth-layout/auth/sign-up.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:221
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:126
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:123
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:116
 msgid "Password"
@@ -4661,7 +4662,7 @@ msgstr "Zeitraum"
 #~ msgid "Personal"
 #~ msgstr "Persönlich"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:125
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:122
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:154
 msgid "Personal details"
 msgstr "Persönliche Daten"
@@ -4942,7 +4943,7 @@ msgstr "Produkte"
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:271
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:62
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:70
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:138
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:135
 msgid "Profile"
 msgstr "Profil"
 
@@ -5424,7 +5425,7 @@ msgstr "Rolle"
 msgid "Roles"
 msgstr "Rollen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:131
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:68
 msgid "Roles & access"
 msgstr "Rollen & Zugriff"
@@ -5591,7 +5592,7 @@ msgstr "Tests laufen… ({passedCount}/{0})"
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:208
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:200
 msgid "Save"
 msgstr "Speichern"
 
@@ -5648,7 +5649,7 @@ msgstr "Änderungen werden gespeichert…"
 #~ msgid "Saving..."
 #~ msgstr "Wird gespeichert..."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:151
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:143
 msgid "Saving…"
 msgstr "Wird gespeichert…"
 
@@ -6884,7 +6885,7 @@ msgstr "TV-Gästemappe"
 #~ msgid "Two Factor"
 #~ msgstr "Zwei Faktor"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:129
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:126
 msgid "Two-factor auth"
 msgstr "Zwei-Faktor-Auth."
 
@@ -7023,7 +7024,7 @@ msgstr "Spalte {title} lösen"
 #: src/components/sectioned-form.tsx:94
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:100
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:187
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:179
 msgid "Unsaved changes"
 msgstr "Nicht gespeicherte Änderungen"
 
@@ -7059,7 +7060,7 @@ msgstr "Aktualisieren"
 msgid "Update event"
 msgstr "Event aktualisieren"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:151
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:150
 msgid "Update password"
 msgstr "Passwort aktualisieren"
 
@@ -7450,11 +7451,11 @@ msgstr "Sie haben noch keine Wiederherstellungscodes gespeichert."
 msgid "You will be logged out of your account and redirected to the login page."
 msgstr "Sie werden von Ihrem Konto abgemeldet und zur Anmeldeseite weitergeleitet."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:146
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:138
 msgid "You're offline"
 msgstr "Sie sind offline"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:82
 msgid "You're offline. Your changes are kept here and can be saved once you're back online."
 msgstr "Sie sind offline. Ihre Änderungen bleiben hier erhalten und können gespeichert werden, sobald Sie wieder online sind."
 
@@ -7470,7 +7471,7 @@ msgstr "Ihr Konto wurde aktiviert. Sie können sich jetzt mit Ihrem Passwort anm
 #~ msgid "Your account is protected with an extra verification step"
 #~ msgstr "Ihr Konto ist mit einem zusätzlichen Verifizierungsschritt geschützt"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:263
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:273
 msgid "Your account uses two-factor authentication, so changing the password needs a code too."
 msgstr "Ihr Konto verwendet Zwei-Faktor-Authentifizierung, daher ist für die Passwortänderung auch ein Code erforderlich."
 
@@ -7504,7 +7505,7 @@ msgstr "Ihre neuen Wiederherstellungscodes"
 msgid "Your password has been reset successfully. You can now log in with your new password."
 msgstr "Ihr Passwort wurde erfolgreich zurückgesetzt. Sie können sich jetzt mit Ihrem neuen Passwort anmelden."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:290
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:296
 msgid "Your password was changed, so you've been signed out on all other devices."
 msgstr "Ihr Passwort wurde geändert, daher wurden Sie auf allen anderen Geräten abgemeldet."
 

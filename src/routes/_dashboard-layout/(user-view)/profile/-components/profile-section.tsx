@@ -66,9 +66,6 @@ interface ProfileSectionFormProps {
   submitLabel: React.ReactNode;
   onSubmit: () => void;
   onReset: () => void;
-  /** Hides Cancel and keeps Save always enabled — used by the password form,
-   *  which has nothing to revert to and no meaningful dirty baseline. */
-  alwaysEnabled?: boolean;
   disabled?: boolean;
   children: React.ReactNode;
 }
@@ -79,7 +76,6 @@ export function ProfileSectionForm({
   submitLabel,
   onSubmit,
   onReset,
-  alwaysEnabled = false,
   disabled = false,
   children
 }: ProfileSectionFormProps) {
@@ -87,8 +83,7 @@ export function ProfileSectionForm({
   const isOnline = useOnlineStatus();
   const formRef = React.useRef<HTMLFormElement>(null);
 
-  const canSubmit =
-    !isSubmitting && !disabled && isOnline && (alwaysEnabled || isDirty);
+  const canSubmit = !isSubmitting && !disabled && isOnline && isDirty;
 
   // Callers pass an inline arrow, so the handler is read through a ref —
   // depending on the prop itself would rebind this listener every render.
@@ -123,7 +118,7 @@ export function ProfileSectionForm({
     >
       <CardContent className="space-y-6">{children}</CardContent>
       <CardFooter className="flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        {isDirty && !alwaysEnabled && (
+        {isDirty && (
           <Button
             type="button"
             variant="outline"
