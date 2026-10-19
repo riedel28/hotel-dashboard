@@ -1,18 +1,8 @@
 import { Trans } from '@lingui/react/macro';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { LockIcon } from 'lucide-react';
 
-import { rolesQueryOptions } from '@/api/roles';
 import { Badge } from '@/components/ui/badge';
 import { CardContent } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldLabel
-} from '@/components/ui/field';
-import { Switch } from '@/components/ui/switch';
+import { Link } from '@/components/ui/link';
 
 import type { Role } from '../../../../../../shared/types/users';
 import { ProfileSection } from './profile-section';
@@ -23,86 +13,74 @@ interface RolesSectionProps {
 }
 
 /**
- * The same roles box and admin switch an administrator sees in the user
- * drawer, read-only: what you have is what's ticked, and the rest of the list
- * shows what you don't.
+ * A summary, not a form: roles and the admin flag are set by an administrator
+ * in Users, so nothing here looks editable.
  */
 export function RolesSection({ assignedRoles, isAdmin }: RolesSectionProps) {
-  const { data: roles } = useSuspenseQuery(rolesQueryOptions());
-  const assignedIds = new Set(assignedRoles.map((role) => role.id));
-
   return (
     <ProfileSection
       id="roles"
       title={<Trans>Roles &amp; access</Trans>}
       description={<Trans>What you're allowed to do in the back-office.</Trans>}
-      action={
-        <Badge
-          variant="outline"
-          color="gray"
-          size="sm"
-          className="rounded-md px-2 py-1"
-        >
-          <LockIcon className="mr-0.5" aria-hidden="true" />
-          <Trans>Read-only</Trans>
-        </Badge>
-      }
     >
       <CardContent className="space-y-6">
-        <Field className="gap-2">
-          <FieldLabel>
+        <dl className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 text-sm">
+          <dt className="font-medium">
+            <Trans>Access</Trans>
+          </dt>
+          <dd className="space-y-0.5">
+            {isAdmin ? (
+              <>
+                <p>
+                  <Trans>Administrator</Trans>
+                </p>
+                <p className="text-muted-foreground">
+                  <Trans>
+                    Full access to every property and every staff account.
+                  </Trans>
+                </p>
+              </>
+            ) : (
+              <p>
+                <Trans>Standard</Trans>
+              </p>
+            )}
+          </dd>
+
+          <dt className="font-medium">
             <Trans>Roles</Trans>
-          </FieldLabel>
-          {roles.length > 0 ? (
-            <div className="grid grid-cols-1 gap-x-4 gap-y-2.5 rounded-lg border p-3 sm:grid-cols-2 dark:bg-input/30">
-              {roles.map((role) => (
-                <Field key={role.id} orientation="horizontal" className="gap-2">
-                  <Checkbox
-                    id={`profile-role-${role.id}`}
-                    checked={assignedIds.has(role.id)}
-                    readOnly
-                  />
-                  <FieldLabel
-                    htmlFor={`profile-role-${role.id}`}
-                    className="font-normal"
-                  >
-                    {role.name}
-                  </FieldLabel>
-                </Field>
-              ))}
-            </div>
+          </dt>
+          <dd>
+            {assignedRoles.length > 0 ? (
+              <ul className="flex flex-wrap gap-1.5">
+                {assignedRoles.map((role) => (
+                  <li key={role.id}>
+                    <Badge variant="outline" color="gray" size="sm">
+                      {role.name}
+                    </Badge>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground">
+                <Trans>None</Trans>
+              </p>
+            )}
+          </dd>
+        </dl>
+
+        <p className="text-sm text-muted-foreground">
+          {isAdmin ? (
+            <Trans>
+              Roles and admin rights are managed in{' '}
+              <Link to="/users">Users</Link>.
+            </Trans>
           ) : (
-            <p className="text-sm text-muted-foreground">
-              <Trans>No roles available</Trans>
-            </p>
-          )}
-        </Field>
-
-        <Field
-          orientation="horizontal"
-          className="items-center gap-3 rounded-lg border p-3 dark:bg-input/30"
-        >
-          <FieldContent>
-            <FieldLabel htmlFor="profile-is-admin">
-              <Trans>Admin User</Trans>
-            </FieldLabel>
-            <FieldDescription>
-              <Trans>
-                Full access to every property and every staff account.
-              </Trans>
-            </FieldDescription>
-          </FieldContent>
-          <Switch id="profile-is-admin" checked={isAdmin} readOnly />
-        </Field>
-
-        {/* An administrator can change their own roles in Users. */}
-        {!isAdmin && (
-          <p className="text-sm text-muted-foreground">
             <Trans>
               To change your roles, contact your account administrator.
             </Trans>
-          </p>
-        )}
+          )}
+        </p>
       </CardContent>
     </ProfileSection>
   );

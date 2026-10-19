@@ -326,6 +326,10 @@ msgstr "About"
 msgid "Accept Invitation"
 msgstr "Accept Invitation"
 
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:29
+msgid "Access"
+msgstr "Access"
+
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:274
 #~ msgid "Access Provider"
 #~ msgstr "Access Provider"
@@ -565,7 +569,6 @@ msgstr "Admin Dashboard"
 #~ msgid "Admin features: Manage users, configure system settings, access all data, system administration"
 #~ msgstr "Admin features: Manage users, configure system settings, access all data, system administration"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:91
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:266
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:323
 msgid "Admin User"
@@ -575,9 +578,9 @@ msgstr "Admin User"
 #~ msgid "Admin view"
 #~ msgstr "Admin view"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:87
-#~ msgid "Administrator"
-#~ msgstr "Administrator"
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:35
+msgid "Administrator"
+msgstr "Administrator"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:33
 #~ msgid "Administrators"
@@ -2927,7 +2930,7 @@ msgstr "Free apps that work with any account:"
 msgid "Front Office"
 msgstr "Front Office"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:94
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:38
 msgid "Full access to every property and every staff account."
 msgstr "Full access to every property and every staff account."
 
@@ -4294,7 +4297,6 @@ msgstr "No response from the PMS interface."
 #~ msgid "No roles assigned. Contact your administrator if you're missing access you need."
 #~ msgstr "No roles assigned. Contact your administrator if you're missing access you need."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:80
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:242
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:302
 msgid "No roles available"
@@ -4364,9 +4366,9 @@ msgstr "No users match the filters."
 msgid "No-show fee"
 msgstr "No-show fee"
 
-#: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/background-picker.tsx:128
-#~ msgid "None"
-#~ msgstr "None"
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:66
+msgid "None"
+msgstr "None"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:272
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:265
@@ -5203,8 +5205,8 @@ msgid "Reach the API"
 msgstr "Reach the API"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:47
-msgid "Read-only"
-msgstr "Read-only"
+#~ msgid "Read-only"
+#~ msgstr "Read-only"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
 #~ msgid "Ready"
@@ -5524,7 +5526,7 @@ msgstr "Role"
 #~ msgid "Role assignments"
 #~ msgstr "Role assignments"
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:54
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:51
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:204
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:264
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:220
@@ -5532,9 +5534,13 @@ msgid "Roles"
 msgstr "Roles"
 
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:133
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:37
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:23
 msgid "Roles & access"
 msgstr "Roles & access"
+
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:74
+msgid "Roles and admin rights are managed in <0>Users</0>."
+msgstr "Roles and admin rights are managed in <0>Users</0>."
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:50
 #~ msgid "Roles update is not yet implemented"
@@ -6257,6 +6263,10 @@ msgstr "Stage"
 msgid "Staging"
 msgstr "Staging"
 
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:45
+msgid "Standard"
+msgstr "Standard"
+
 #: src/routes/_dashboard-layout/-components/nav-items.ts:55
 #: src/routes/_dashboard-layout/-components/nav-items.ts:184
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-form.tsx:345
@@ -6904,7 +6914,7 @@ msgstr "TLS handshake failed: certificate is self-signed or expired."
 msgid "To change your email, contact your administrator."
 msgstr "To change your email, contact your administrator."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:105
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:79
 msgid "To change your roles, contact your account administrator."
 msgstr "To change your roles, contact your account administrator."
 
@@ -7489,7 +7499,7 @@ msgstr "What the property is called, who owns it, its timezone and how far along
 msgid "What this property has booked."
 msgstr "What this property has booked."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:24
 msgid "What you're allowed to do in the back-office."
 msgstr "What you're allowed to do in the back-office."
 
