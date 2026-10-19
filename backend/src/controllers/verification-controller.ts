@@ -3,12 +3,9 @@ import type { Request, Response } from 'express';
 
 import { db } from '../db/pool';
 import { emailVerificationTokens, users } from '../db/schema';
+import { issueToken } from '../db/verification-tokens';
 import { sendPasswordResetEmail, sendVerificationEmail } from '../utils/email';
 import { hashPassword } from '../utils/password';
-import { generateVerificationToken } from '../utils/token';
-
-const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
-const ONE_HOUR_MS = 60 * 60 * 1000;
 
 async function signUp(req: Request, res: Response) {
   const { email, password, first_name, last_name } = req.body;
@@ -37,14 +34,7 @@ async function signUp(req: Request, res: Response) {
       })
       .returning({ id: users.id, email: users.email });
 
-    // Generate verification token (24h expiry)
-    const token = generateVerificationToken();
-    await db.insert(emailVerificationTokens).values({
-      user_id: newUser.id,
-      token,
-      type: 'verification',
-      expires_at: new Date(Date.now() + TWENTY_FOUR_HOURS_MS)
-    });
+    const token = await issueToken(db, newUser.id, 'verification');
 
     await sendVerificationEmail(email, token);
 
@@ -149,27 +139,7 @@ async function resendVerification(req: Request, res: Response) {
       return res.status(200).json(genericResponse);
     }
 
-    // Invalidate old tokens by marking them used
-    await db
-      .update(emailVerificationTokens)
-      .set({ used_at: new Date() })
-      .where(
-        and(
-          eq(emailVerificationTokens.user_id, user.id),
-          eq(emailVerificationTokens.type, 'verification'),
-          isNull(emailVerificationTokens.used_at)
-        )
-      );
-
-    // Create new token (24h expiry)
-    const token = generateVerificationToken();
-    await db.insert(emailVerificationTokens).values({
-      user_id: user.id,
-      token,
-      type: 'verification',
-      expires_at: new Date(Date.now() + TWENTY_FOUR_HOURS_MS)
-    });
-
+    const token = await issueToken(db, user.id, 'verification');
     await sendVerificationEmail(email, token);
 
     res.status(200).json(genericResponse);
@@ -261,27 +231,7 @@ async function forgotPassword(req: Request, res: Response) {
       return res.status(200).json(genericResponse);
     }
 
-    // Invalidate existing unused reset tokens
-    await db
-      .update(emailVerificationTokens)
-      .set({ used_at: new Date() })
-      .where(
-        and(
-          eq(emailVerificationTokens.user_id, user.id),
-          eq(emailVerificationTokens.type, 'reset'),
-          isNull(emailVerificationTokens.used_at)
-        )
-      );
-
-    // Generate new reset token (1h expiry)
-    const token = generateVerificationToken();
-    await db.insert(emailVerificationTokens).values({
-      user_id: user.id,
-      token,
-      type: 'reset',
-      expires_at: new Date(Date.now() + ONE_HOUR_MS)
-    });
-
+    const token = await issueToken(db, user.id, 'reset');
     await sendPasswordResetEmail(email, token);
 
     res.status(200).json(genericResponse);
