@@ -98,19 +98,10 @@ export function TwoFactorSetupDialog({
 
   const { run: runSetup } = setup;
 
-  // Fetch a QR the moment the dialog opens; the first step is useless without it.
+  // Fetch a QR the moment the dialog opens; the first step is useless without
+  // it. Each opening is a fresh mount (the caller keys it), so state starts clean.
   React.useEffect(() => {
-    if (!open) return;
-    setStep('scan');
-    setSetupData(null);
-    setCode('');
-    setCodeError(null);
-    setAttempts(0);
-    setCooldown(0);
-    setRecoveryCodes(null);
-    setCodesAcknowledged(false);
-    setConfirmCancel(false);
-    runSetup();
+    if (open) runSetup();
   }, [open, runSetup]);
 
   // Keyed on whether a cooldown is running, not on its value — depending on the

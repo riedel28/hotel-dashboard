@@ -57,6 +57,10 @@ export function TwoFactorSection() {
 
   const [setupOpen, setSetupOpen] = React.useState(false);
   const [disableOpen, setDisableOpen] = React.useState(false);
+  // Bumped on every open and used as the dialogs' key, so each opening starts
+  // from fresh state rather than resetting the last run's by hand. Closing
+  // leaves the key alone, so the close animation still plays.
+  const [openings, setOpenings] = React.useState(0);
   const [freshCodes, setFreshCodes] = React.useState<string[] | null>(null);
 
   const regenerate = useReauthedAction({
@@ -187,7 +191,10 @@ export function TwoFactorSection() {
               type="button"
               variant="ghost"
               className="text-danger hover:bg-danger-soft hover:text-danger"
-              onClick={() => setDisableOpen(true)}
+              onClick={() => {
+                setOpenings((n) => n + 1);
+                setDisableOpen(true);
+              }}
             >
               <Trans>Turn off two-factor authentication</Trans>
             </Button>
@@ -218,7 +225,10 @@ export function TwoFactorSection() {
               type="button"
               // Full width on a phone, like every other card's main button.
               className="w-full sm:w-auto"
-              onClick={() => setSetupOpen(true)}
+              onClick={() => {
+                setOpenings((n) => n + 1);
+                setSetupOpen(true);
+              }}
             >
               <Trans>Enable two-factor authentication</Trans>
             </Button>
@@ -228,8 +238,13 @@ export function TwoFactorSection() {
         </CardContent>
       )}
 
-      <TwoFactorSetupDialog open={setupOpen} onOpenChange={setSetupOpen} />
+      <TwoFactorSetupDialog
+        key={`setup-${openings}`}
+        open={setupOpen}
+        onOpenChange={setSetupOpen}
+      />
       <TwoFactorDisableDialog
+        key={`disable-${openings}`}
         open={disableOpen}
         onOpenChange={setDisableOpen}
       />

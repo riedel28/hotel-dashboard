@@ -42,13 +42,6 @@ export function TwoFactorDisableDialog({
   const [useRecoveryCode, setUseRecoveryCode] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    if (!open) return;
-    setCode('');
-    setUseRecoveryCode(false);
-    setError(null);
-  }, [open]);
-
   const action = useReauthedAction({
     action: (reauth) => disableTwoFactor(code, reauth),
     onSuccess: () => {
