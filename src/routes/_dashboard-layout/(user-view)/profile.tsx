@@ -28,8 +28,11 @@ import {
 } from '@/components/ui/sidebar';
 import { useDocumentTitle, useOnlineStatus } from '@/hooks';
 
+import { ProfileSkeleton } from './profile/-components/profile-skeleton';
+
 export const Route = createFileRoute('/_dashboard-layout/(user-view)/profile')({
   component: RouteComponent,
+  pendingComponent: ProfileSkeleton,
   loader: ({ context }) => {
     // Not awaited: only the nav's two-factor dot and that one tab need it, but
     // started here so it isn't queued behind /users/me.

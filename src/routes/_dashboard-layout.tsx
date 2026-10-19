@@ -1,7 +1,12 @@
 'use client';
 
 import { Trans, useLingui } from '@lingui/react/macro';
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useLocation
+} from '@tanstack/react-router';
 
 import {
   fetchSelectedProperty,
@@ -22,6 +27,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { viewOf } from '@/hooks/use-current-view';
+import { ProfileSkeleton } from '@/routes/_dashboard-layout/(user-view)/profile/-components/profile-skeleton';
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
 import { DashboardNav } from '@/routes/_dashboard-layout/-components/sidebar-nav';
@@ -143,6 +149,10 @@ export const Route = createFileRoute('/_dashboard-layout')({
 // placeholders where the nav, the property selector and the page will be.
 // Nothing moves when the page arrives, unlike a spinner swapped for a screen.
 function DashboardPending() {
+  // A page with a skeleton of its own shows it here too: on a cold load it's
+  // this layout that waits, and the page's pendingComponent never gets a turn.
+  const pathname = useLocation({ select: (location) => location.pathname });
+
   return (
     <SidebarProvider className="h-svh overflow-hidden" aria-busy="true">
       <Sidebar collapsible="icon">
@@ -168,8 +178,14 @@ function DashboardPending() {
           <span className="sr-only">
             <Trans>Loading...</Trans>
           </span>
-          <Skeleton className="h-7 w-48" />
-          <Skeleton className="h-96 w-full rounded-lg" />
+          {pathname.startsWith('/profile') ? (
+            <ProfileSkeleton />
+          ) : (
+            <>
+              <Skeleton className="h-7 w-48" />
+              <Skeleton className="h-96 w-full rounded-lg" />
+            </>
+          )}
         </main>
       </SidebarInset>
     </SidebarProvider>
