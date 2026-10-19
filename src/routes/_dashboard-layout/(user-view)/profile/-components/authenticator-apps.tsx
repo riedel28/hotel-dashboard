@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/react/macro';
 import { ArrowUpRightIcon, ChevronDownIcon } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import {
   Collapsible,
   CollapsibleContent,
@@ -52,8 +53,17 @@ function StoreLink({ href, children }: { href: string; children: string }) {
 export function AuthenticatorApps() {
   return (
     <Collapsible>
-      <CollapsibleTrigger className="group/apps flex items-center gap-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+      <CollapsibleTrigger
+        render={
+          <Button
+            variant="ghost"
+            // Pulled left so the chevron lines up with the card's content.
+            className="group/apps -ms-2 text-muted-foreground"
+          />
+        }
+      >
         <ChevronDownIcon
+          data-icon="inline-start"
           className="size-4 transition-transform group-data-[panel-open]/apps:rotate-180"
           aria-hidden="true"
         />

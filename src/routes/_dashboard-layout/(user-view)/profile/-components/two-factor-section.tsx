@@ -213,9 +213,11 @@ export function TwoFactorSection() {
             </div>
           </div>
 
-          <Button type="button" onClick={() => setSetupOpen(true)}>
-            <Trans>Enable two-factor authentication</Trans>
-          </Button>
+          <div className="flex justify-end">
+            <Button type="button" onClick={() => setSetupOpen(true)}>
+              <Trans>Enable two-factor authentication</Trans>
+            </Button>
+          </div>
 
           <AuthenticatorApps />
         </CardContent>
