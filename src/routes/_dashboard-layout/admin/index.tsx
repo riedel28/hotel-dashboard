@@ -33,15 +33,17 @@ function AdminStartPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold">
-        <Trans>Admin Dashboard</Trans>
-      </h1>
-      <p className="text-sm text-muted-foreground md:text-base">
-        <Trans>Welcome back, {userName}!</Trans>
-      </p>
+      <div className="space-y-1">
+        <h1 className="text-xl font-bold">
+          <Trans>Admin Dashboard</Trans>
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          <Trans>Welcome back, {userName}!</Trans>
+        </p>
+      </div>
 
       {/* Quick Actions Grid */}
-      <div className="mt-5 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
+      <div className="mt-6 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
         {quickActions.map((action) => {
           const IconComponent = action.icon;
 
@@ -51,8 +53,8 @@ function AdminStartPage() {
               className="group cursor-pointer rounded-xl border border-border bg-card p-5 shadow-none transition-all duration-200 hover:border-border hover:bg-accent/30 hover:shadow-xs dark:hover:bg-card/85"
             >
               <Link to={action.href} className="block space-y-1.5">
-                <div className="w-fit rounded-lg bg-accent p-2 md:p-2">
-                  <IconComponent className="size-4 text-accent-foreground md:size-4" />
+                <div className="w-fit rounded-lg bg-accent p-2 transition-colors group-hover:bg-primary-soft">
+                  <IconComponent className="size-4 text-accent-foreground transition-colors group-hover:text-primary-soft-foreground" />
                 </div>
                 <h3 className="text-base font-semibold md:text-lg">
                   {action.title}
