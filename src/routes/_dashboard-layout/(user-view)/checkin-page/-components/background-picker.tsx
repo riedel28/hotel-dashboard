@@ -218,7 +218,7 @@ export function BackgroundPicker({
               )}
               <span className="text-xs/relaxed text-pretty">{fileHint}</span>
             </span>
-            <span className="text-sm font-medium text-muted-foreground">
+            <span className="text-xs font-medium text-muted-foreground">
               <Trans>Your image</Trans>
             </span>
           </button>
@@ -293,7 +293,7 @@ function Tile({
         </RadioPrimitive.Indicator>
       </span>
       <span
-        className="text-sm font-medium text-muted-foreground transition-colors group-data-checked/tile:text-foreground"
+        className="text-xs font-medium text-muted-foreground transition-colors group-data-checked/tile:text-foreground"
         aria-hidden="true"
       >
         {label}

@@ -80,7 +80,7 @@ export function CheckinSkeleton() {
                 (labelWidth, index) => (
                   <div key={index} className="flex flex-col gap-2">
                     <Skeleton className="aspect-video w-full rounded-lg" />
-                    <Skeleton className={cn('h-3.5', labelWidth)} />
+                    <Skeleton className={cn('h-3', labelWidth)} />
                   </div>
                 )
               )}
