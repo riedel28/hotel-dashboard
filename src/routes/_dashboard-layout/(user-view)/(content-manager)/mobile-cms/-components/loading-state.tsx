@@ -4,6 +4,14 @@ import { cn } from '@/lib/utils';
 
 import { appTokens } from './preview/tokens';
 
+const treeRows = [
+  { indent: false, width: 'w-3/5' },
+  { indent: true, width: 'w-2/5' },
+  { indent: true, width: 'w-1/3' },
+  { indent: false, width: 'w-1/2' },
+  { indent: false, width: 'w-2/5' }
+];
+
 // A label above a field, at the loaded form's sizes.
 function FieldSkeleton({
   labelWidth,
@@ -41,13 +49,21 @@ export function CmsLoadingState({
             <Skeleton className="h-4 w-28" />
             <Skeleton className="h-8 w-24 rounded-lg" />
           </div>
-          {/* Rows like the tree's: 32px each, 20px per indent level. */}
-          <div className="flex flex-col gap-1">
-            <Skeleton className="h-8 w-full rounded-lg" />
-            <Skeleton className="ms-5 h-8 w-3/5 rounded-lg" />
-            <Skeleton className="ms-5 h-8 w-2/5 rounded-lg" />
-            <Skeleton className="h-8 w-full rounded-lg" />
-            <Skeleton className="h-8 w-4/5 rounded-lg" />
+          {/* As in Products' categories skeleton: rows as tall as the tree's
+              (32px + 2px gap, 20px per indent level), each with a bar the
+              size of its title. */}
+          <div className="flex flex-col gap-0.5">
+            {treeRows.map((row, index) => (
+              <div
+                key={index}
+                className={cn(
+                  'flex h-8 items-center px-2',
+                  row.indent && 'ms-5'
+                )}
+              >
+                <Skeleton className={cn('h-4', row.width)} />
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
