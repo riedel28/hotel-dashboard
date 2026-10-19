@@ -23,6 +23,8 @@ interface UseReauthedActionOptions<T> {
   action: (reauth: Reauth) => Promise<T>;
   onSuccess: (result: T) => void;
   onError?: (error: unknown) => void;
+  /** The password prompt was dismissed, so the action never ran. */
+  onCancel?: () => void;
 }
 
 /**
@@ -35,7 +37,8 @@ interface UseReauthedActionOptions<T> {
 export function useReauthedAction<T>({
   action,
   onSuccess,
-  onError
+  onError,
+  onCancel
 }: UseReauthedActionOptions<T>) {
   const [promptOpen, setPromptOpen] = React.useState(false);
   const [password, setPassword] = React.useState('');
@@ -48,8 +51,8 @@ export function useReauthedAction<T>({
    * capturing them in the closure would change the identity on every render,
    * and an effect depending on it would re-fire forever.
    */
-  const latest = React.useRef({ action, onSuccess, onError });
-  latest.current = { action, onSuccess, onError };
+  const latest = React.useRef({ action, onSuccess, onError, onCancel });
+  latest.current = { action, onSuccess, onError, onCancel };
 
   const invoke = React.useCallback(async (reauth: Reauth) => {
     setIsRunning(true);
@@ -81,15 +84,20 @@ export function useReauthedAction<T>({
 
   const run = React.useCallback(() => void invoke({}), [invoke]);
 
+  // Without telling the caller, a dialog waiting on the action (the 2FA setup
+  // with its QR spinner) would stay open, waiting for a result that never comes.
+  const cancel = () => {
+    setPromptOpen(false);
+    setPassword('');
+    setError(null);
+    latest.current.onCancel?.();
+  };
+
   const dialog = (
     <Dialog
       open={promptOpen}
       onOpenChange={(open) => {
-        if (!open) {
-          setPromptOpen(false);
-          setPassword('');
-          setError(null);
-        }
+        if (!open) cancel();
       }}
     >
       <DialogContent className="sm:max-w-sm">
@@ -128,11 +136,7 @@ export function useReauthedAction<T>({
           </Field>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setPromptOpen(false)}
-            >
+            <Button type="button" variant="outline" onClick={cancel}>
               <Trans>Cancel</Trans>
             </Button>
             <Button
