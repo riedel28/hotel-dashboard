@@ -13,44 +13,23 @@ import {
   fetchSelectedProperty,
   selectablePropertiesQueryOptions
 } from '@/api/properties';
-import { AppLogo } from '@/components/app-logo';
 import { FullScreenRouteError } from '@/components/route-state';
 import {
   Sidebar,
   SidebarGroup,
-  SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuSkeleton,
-  SidebarProvider,
-  SidebarTrigger
+  SidebarProvider
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { viewOf } from '@/hooks/use-current-view';
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
+import { DashboardSidebarHeader } from '@/routes/_dashboard-layout/-components/sidebar-header';
 import { DashboardNav } from '@/routes/_dashboard-layout/-components/sidebar-nav';
 import { SidebarViewToggle } from '@/routes/_dashboard-layout/-components/sidebar-view-toggle';
-
-// Sidebar header component
-function SidebarHeaderComponent() {
-  return (
-    <SidebarHeader>
-      <SidebarMenu>
-        <SidebarGroup>
-          <SidebarMenuItem className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-            <AppLogo className="transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0" />
-            <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
-              <Trans>Hotel Dashboard</Trans>
-            </span>
-            <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
-          </SidebarMenuItem>
-        </SidebarGroup>
-      </SidebarMenu>
-    </SidebarHeader>
-  );
-}
 
 // Main sidebar component
 function DashboardSidebar() {
@@ -58,7 +37,7 @@ function DashboardSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeaderComponent />
+      <DashboardSidebarHeader />
       <SidebarViewToggle />
       {/* A flex child that may shrink, so the menu scrolls inside the
           sidebar instead of running past the bottom of a short screen */}
@@ -154,7 +133,7 @@ function DashboardPending() {
   return (
     <SidebarProvider className="h-svh overflow-hidden" aria-busy="true">
       <Sidebar collapsible="icon">
-        <SidebarHeaderComponent />
+        <DashboardSidebarHeader />
         <SidebarGroup>
           <SidebarMenu>
             {Array.from({ length: 8 }, (_, index) => (

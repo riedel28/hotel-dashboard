@@ -37,11 +37,15 @@ import { useDocumentTitle } from '@/hooks/use-document-title';
 import { cn } from '@/lib/utils';
 
 import { AddPropertyModal } from './-components/add-property-modal';
-import { PER_PAGE, PropertiesTable } from './-components/properties-table';
+import { PropertiesTable } from './-components/properties-table';
 import { PropertyCountryFilter } from './-components/property-country-filter';
 import { PropertyOptionsFilter } from './-components/property-options-filter';
 import { PropertySearch } from './-components/property-search';
 import { PropertyStageFilter } from './-components/property-stage-filter';
+
+// Here and not in the table: validateSearch needs it, and importing the table
+// for it would put the whole grid in the main bundle
+const PER_PAGE = 25;
 
 function PropertiesContent() {
   const search = Route.useSearch();
