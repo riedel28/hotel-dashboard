@@ -116,8 +116,8 @@ function CategoryProducts({ categoryId, path }: CategoryProductsProps) {
             wrapperClassName="2xl:max-w-[400px]"
           />
           <Button
-            variant="secondary"
-            className="shrink-0 bg-clip-border"
+            variant="outline"
+            className="shrink-0"
             onClick={() => setForm({ open: true, product: null })}
           >
             <PlusIcon />
