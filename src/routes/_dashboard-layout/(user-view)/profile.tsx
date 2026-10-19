@@ -101,8 +101,7 @@ function RouteComponent() {
 }
 
 const activeProps = {
-  className:
-    'bg-muted text-foreground hover:bg-muted! hover:text-foreground!'
+  className: 'bg-muted text-foreground hover:bg-muted! hover:text-foreground!'
 };
 
 /**
@@ -138,6 +137,7 @@ function ProfileNav() {
         {items.map(({ to, label, exact, warn }) => (
           <SidebarMenuItem key={to} className="shrink-0">
             <SidebarMenuButton
+              className="px-3"
               render={
                 <Link
                   to={to}
