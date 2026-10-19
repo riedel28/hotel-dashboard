@@ -565,7 +565,7 @@ msgstr "Admin Dashboard"
 #~ msgid "Admin features: Manage users, configure system settings, access all data, system administration"
 #~ msgstr "Admin features: Manage users, configure system settings, access all data, system administration"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:200
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:266
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:271
 msgid "Admin User"
 msgstr "Admin User"
@@ -1031,7 +1031,7 @@ msgstr "Can't scan the code? Enter the key manually"
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:308
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/delete-dialog.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/users/-components/delete-dialog.tsx:63
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:290
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:294
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:363
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:95
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:229
@@ -1973,7 +1973,7 @@ msgstr "Dismiss"
 msgid "Displays the mobile sidebar."
 msgstr "Displays the mobile sidebar."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:176
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:188
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:228
 msgid "Doe"
 msgstr "Doe"
@@ -2190,7 +2190,7 @@ msgstr "Editor"
 #: src/routes/_auth-layout/auth/sign-up.tsx:223
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:185
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:257
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:133
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:156
 #: src/routes/_dashboard-layout/admin/customers/-components/customer-fields.tsx:163
@@ -2710,7 +2710,7 @@ msgstr "Failed to save event"
 #~ msgid "Failed to send email"
 #~ msgstr "Failed to send email"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:93
 msgid "Failed to send invitation"
 msgstr "Failed to send invitation"
 
@@ -2835,7 +2835,7 @@ msgstr "First name"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:155
 #: src/routes/_auth-layout/auth/sign-up.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:140
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:157
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:199
 msgid "First Name"
 msgstr "First Name"
@@ -2970,7 +2970,7 @@ msgstr "Good"
 #~ msgid "Google Authenticator ↗"
 #~ msgstr "Google Authenticator ↗"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:203
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:269
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:274
 msgid "Grant administrator privileges to this user"
 msgstr "Grant administrator privileges to this user"
@@ -3346,14 +3346,14 @@ msgstr "Invalid link"
 msgid "Invitation resent successfully"
 msgstr "Invitation resent successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:90
 msgid "Invitation sent successfully"
 msgstr "Invitation sent successfully"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:105
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:112
-msgid "Invite User"
-msgstr "Invite User"
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:109
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:116
+msgid "Invite user"
+msgstr "Invite user"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:160
 msgid "iOS App"
@@ -3379,7 +3379,7 @@ msgstr "Items"
 msgid "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 msgstr "Items are the pages and links guests see in the hotel’s mobile app. Start with the first one."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:165
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:206
 msgid "John"
 msgstr "John"
@@ -3458,7 +3458,7 @@ msgstr "Last name"
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:185
 #: src/routes/_auth-layout/auth/sign-up.tsx:193
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guest-dialog.tsx:161
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:169
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:180
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:221
 msgid "Last Name"
 msgstr "Last Name"
@@ -4265,7 +4265,7 @@ msgstr "No response from the PMS interface."
 msgid "No roles assigned. Contact your administrator if you're missing access you need."
 msgstr "No roles assigned. Contact your administrator if you're missing access you need."
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:272
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:242
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:340
 msgid "No roles available"
 msgstr "No roles available"
@@ -5482,7 +5482,7 @@ msgstr "Role"
 #~ msgid "Role assignments"
 #~ msgstr "Role assignments"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:231
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:204
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:300
 #: src/routes/_dashboard-layout/(user-view)/users/-components/users-table.tsx:220
 msgid "Roles"
@@ -5896,7 +5896,6 @@ msgstr "Select country"
 #~ msgid "Select nationality"
 #~ msgstr "Select nationality"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:234
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:303
 msgid "Select one or more roles to assign"
 msgstr "Select one or more roles to assign"
@@ -5956,9 +5955,9 @@ msgstr "Select the system this property's doors are locked with. You enter its c
 #~ msgid "Send"
 #~ msgstr "Send"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:296
-msgid "Send Invitation"
-msgstr "Send Invitation"
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:298
+msgid "Send invitation"
+msgstr "Send invitation"
 
 #: src/routes/_dashboard-layout/(user-view)/pms-provider/-components/casablanca-form.tsx:67
 msgid "Send invoice via PMS"
@@ -6686,6 +6685,10 @@ msgstr "Theme"
 #~ msgid "There was an error loading the product categories. Please try again."
 #~ msgstr "There was an error loading the product categories. Please try again."
 
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:119
+msgid "They get an email with a link to set a password and sign in."
+msgstr "They get an email with a link to set a password and sign in."
+
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/delete-event-dialog.tsx:61
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/delete-dialog.tsx:86
 msgid "This action cannot be undone."
@@ -7267,7 +7270,7 @@ msgstr "User updated successfully"
 #~ msgid "User view"
 #~ msgstr "User view"
 
-#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:131
+#: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:141
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:183
 msgid "user@example.com"
 msgstr "user@example.com"
