@@ -52,9 +52,9 @@ export function CheckinSkeleton() {
           <CardAction>
             <Skeleton className="h-7 w-24 rounded-lg" />
           </CardAction>
-          <div className="col-span-full flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="col-span-full grid grid-cols-1 gap-2 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-center lg:gap-4">
             <Skeleton className="h-3.5 w-32" />
-            <Skeleton className="h-9 w-full rounded-lg sm:max-w-sm" />
+            <Skeleton className="h-9 w-full rounded-lg" />
           </div>
         </CardHeader>
 
