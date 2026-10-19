@@ -48,7 +48,7 @@ const dotColors: Record<RoomStatus, string> = {
   available: 'bg-success-solid',
   occupied: 'bg-yellow-500',
   maintenance: 'bg-sky-500',
-  out_of_order: 'bg-red-500'
+  out_of_order: 'bg-danger-solid'
 };
 
 /** A colored dot with the status spelled out, for selects. */

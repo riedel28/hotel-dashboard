@@ -105,13 +105,15 @@
      Danger and success also have a -solid fill with its own foreground (the
      destructive button, the status disc), one value for both themes: a
      large area in the ink's lightness glares in dark mode.
-     Red is tuned to the cold brand at hue 14 (rose-cherry, not
-     terracotta). Green is a fresh, clear one: its ink an emerald green at
-     hue 162 (#008155), its fill a brighter grass green at hue 148
-     (#0aa543) that only ever carries a glyph, white on it >= 3:1. */
-  --danger: oklch(0.5 0.17 14);
-  --danger-soft: oklch(0.965 0.02 14);
-  --danger-solid: oklch(0.54 0.18 14);
+     Both are fresh, clear colours, each as bright as its contrast allows.
+     Green: an emerald ink at hue 162 (#008155) and a brighter grass-green
+     fill at hue 148 (#0aa543) that only ever carries a glyph, white on it
+     >= 3:1. Red: a clean red at hue 25, neither cherry nor terracotta, ink
+     #cc3336; its fill (#d73337) carries text (the destructive button), so
+     white on it stays >= 4.5:1. */
+  --danger: oklch(0.56 0.19 25);
+  --danger-soft: oklch(0.965 0.02 25);
+  --danger-solid: oklch(0.58 0.2 25);
   --danger-solid-foreground: oklch(1 0 0);
   --success: oklch(0.53 0.124 162);
   --success-soft: oklch(0.968 0.03 162);
@@ -176,8 +178,8 @@
      mode (status disc, destructive button); a translucent tint of them read
      as muddy maroon on the dark popover. The destructive menu item keeps a
      tint of the ink, a red block being too loud inside a menu. */
-  --danger: oklch(0.75 0.135 14);
-  --danger-soft: oklch(0.54 0.18 14 / 15%);
+  --danger: oklch(0.75 0.14 25);
+  --danger-soft: oklch(0.58 0.2 25 / 15%);
   --success: oklch(0.77 0.14 162);
   --success-soft: oklch(0.6 0.14 162 / 15%);
   --warning: oklch(0.879 0.169 91.605);
