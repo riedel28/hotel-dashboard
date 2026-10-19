@@ -36,8 +36,6 @@ import { DeletePropertyDialog } from './delete-property-dialog';
 import { PropertyOptionsCell } from './property-options-cell';
 
 // A page holds every property most installations have
-export const PER_PAGE = 25;
-
 function RowActions({ row }: { row: { original: Property } }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -125,7 +123,7 @@ export interface PropertiesTableProps {
   data: Property[];
   isLoading?: boolean;
   pageIndex?: number;
-  pageSize?: number;
+  pageSize: number;
   totalCount?: number;
   pageCount?: number;
   onPaginationChange?: (
@@ -145,7 +143,7 @@ export function PropertiesTable({
   data,
   isLoading = false,
   pageIndex = 0,
-  pageSize = PER_PAGE,
+  pageSize,
   totalCount = 0,
   pageCount = 0,
   onPaginationChange,

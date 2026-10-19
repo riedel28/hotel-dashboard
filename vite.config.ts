@@ -16,7 +16,18 @@ export default defineConfig({
     tailwindcss(),
     tanstackRouter({
       target: 'react',
-      autoCodeSplitting: true
+      autoCodeSplitting: true,
+      // The default leaves pendingComponent in the main bundle, and with it the
+      // skeletons of every page (sidebar, data grids, dialogs), which the sign-in
+      // pages then download too. The router preloads it with the route's chunk.
+      codeSplittingOptions: {
+        defaultBehavior: [
+          ['component'],
+          ['pendingComponent'],
+          ['errorComponent'],
+          ['notFoundComponent']
+        ]
+      }
     }),
     react(),
     // The parser is forced to TSX because the plugin infers it from the file
@@ -46,21 +57,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        assetFileNames: 'assets/[name]-[hash].[ext]',
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('recharts') || id.includes('d3-'))
-              return 'vendor-recharts';
-            if (id.includes('@fontsource')) return 'vendor-fonts';
-            if (id.includes('react-day-picker') || id.includes('dayjs'))
-              return 'vendor-date';
-            if (id.includes('react-hook-form') || id.includes('@hookform'))
-              return 'vendor-forms';
-            if (id.includes('@dnd-kit')) return 'vendor-dnd-kit';
-            if (id.includes('@tanstack/react-table'))
-              return 'vendor-tanstack-table';
-          }
-        }
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     }
   }

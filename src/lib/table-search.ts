@@ -1,8 +1,7 @@
-import {
-  functionalUpdate,
-  type PaginationState,
-  type SortingState,
-  type Updater
+import type {
+  PaginationState,
+  SortingState,
+  Updater
 } from '@tanstack/react-table';
 
 // Server-paged lists keep paging and sorting in their search params; these
@@ -13,6 +12,14 @@ export function toPagination(search: {
   per_page: number;
 }): PaginationState {
   return { pageIndex: search.page - 1, pageSize: search.per_page };
+}
+
+// The table's own helper, written out: route search hooks import this file, and
+// a value import from @tanstack/react-table would put it in the main bundle
+function functionalUpdate<T>(updater: Updater<T>, input: T): T {
+  return typeof updater === 'function'
+    ? (updater as (old: T) => T)(input)
+    : updater;
 }
 
 export function fromPagination(

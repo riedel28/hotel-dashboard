@@ -64,29 +64,29 @@
       content="Hotel management dashboard for front-office operations, reservations, and administrative functions."
     />
 
-    <!-- Preload LCP image -->
-    <link
-      rel="preload"
-      as="image"
-      type="image/avif"
-      href="/login-bg.avif"
-      media="(min-width: 1024px)"
-      fetchpriority="high"
-    />
+    <!-- The sign-in pages' photo is their largest paint, but React renders the
+         <img>, so without this it would wait for the whole bundle. Only on
+         /auth/ pages, so the dashboard doesn't download it; the srcset and
+         sizes match the <img> in _auth-layout.tsx. -->
+    <script>
+      if (location.pathname.indexOf('/auth/') === 0) {
+        var preload = document.createElement('link');
+        preload.rel = 'preload';
+        preload.as = 'image';
+        preload.type = 'image/avif';
+        preload.href = '/login-bg.avif';
+        preload.imageSrcset = '/login-bg-sm.avif 1200w, /login-bg.avif 2400w';
+        preload.imageSizes = '(min-width: 1024px) 67vw, 100vw';
+        preload.fetchPriority = 'high';
+        document.head.appendChild(preload);
+      }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/manifest.json" />
-
-    <!-- Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <div id="root"></div>

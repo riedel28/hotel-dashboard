@@ -1119,8 +1119,8 @@ msgstr "Ändern"
 #~ msgstr "Bild ändern"
 
 #: src/routes/_auth-layout/-components/language-switcher.tsx:45
-msgid "Change language"
-msgstr "Sprache ändern"
+#~ msgid "Change language"
+#~ msgstr "Sprache ändern"
 
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-field.tsx:174
 msgid "Change profile picture"
@@ -3189,7 +3189,7 @@ msgstr ""
 msgid "Hotel"
 msgstr "Hotel"
 
-#: src/routes/_auth-layout.tsx:32
+#: src/routes/_auth-layout.tsx:31
 #: src/routes/_dashboard-layout.tsx:45
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
 msgid "Hotel Dashboard"
@@ -5400,7 +5400,7 @@ msgstr "Reservierungen"
 msgid "Reservations from the PMS show up here, or add one by hand."
 msgstr "Reservierungen aus dem PMS erscheinen hier, oder fügen Sie eine von Hand hinzu."
 
-#: src/routes/_auth-layout.tsx:36
+#: src/routes/_auth-layout.tsx:35
 msgid "Reservations, rooms and guests — your front office in one place."
 msgstr "Reservierungen, Zimmer und Gäste – Ihr Front Office an einem Ort."
 
@@ -6091,7 +6091,7 @@ msgstr "Seitenleiste"
 msgid "Sign Up"
 msgstr "Registrieren"
 
-#: src/routes/_auth-layout.tsx:19
+#: src/routes/_auth-layout.tsx:18
 #: src/routes/_dashboard-layout.tsx:83
 msgid "Skip to main content"
 msgstr "Zum Hauptinhalt springen"

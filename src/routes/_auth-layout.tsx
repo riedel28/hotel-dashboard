@@ -3,8 +3,6 @@ import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 import { AppLogo } from '@/components/app-logo';
 
-import { LanguageSwitcher } from './_auth-layout/-components/language-switcher';
-
 export const Route = createFileRoute('/_auth-layout')({
   component: AuthLayout
 });
@@ -21,6 +19,9 @@ function AuthLayout() {
       <section className="relative h-32 overflow-hidden sm:h-56 lg:h-auto lg:min-h-screen">
         <img
           src="/login-bg.avif"
+          // Keep in step with the preload in index.html
+          srcSet="/login-bg-sm.avif 1200w, /login-bg.avif 2400w"
+          sizes="(min-width: 1024px) 67vw, 100vw"
           alt=""
           fetchPriority="high"
           className="h-full w-full object-cover dark:brightness-75"
@@ -44,10 +45,6 @@ function AuthLayout() {
         tabIndex={-1}
         className="relative flex min-h-[calc(100vh-8rem)] flex-col bg-card px-5 py-4 sm:min-h-[calc(100vh-14rem)] sm:px-8 lg:min-h-screen lg:px-12"
       >
-        <div className="absolute top-4 right-4">
-          <LanguageSwitcher />
-        </div>
-
         <Outlet />
       </main>
     </div>
