@@ -29,6 +29,8 @@ function renderDrawer(editing?: Room) {
         onOpenChange={onOpenChange}
         room={editing}
         roomTypes={['Standard', 'Suite']}
+        pageRooms={[]}
+        onSelect={vi.fn()}
       />
     </QueryClientProvider>
   );

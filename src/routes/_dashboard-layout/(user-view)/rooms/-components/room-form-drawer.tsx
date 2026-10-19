@@ -20,12 +20,12 @@ import {
   type Room,
   updateRoomById
 } from '@/api/rooms';
+import { DetailsDrawerStepper } from '@/components/details-drawer';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
@@ -76,13 +76,18 @@ interface RoomFormDrawerProps {
   room?: Room | null;
   /** Types the property already uses, offered as suggestions */
   roomTypes: string[];
+  /** Rooms of the table page, stepped through in edit mode. */
+  pageRooms: Room[];
+  onSelect: (roomId: number) => void;
 }
 
 export function RoomFormDrawer({
   open,
   onOpenChange,
   room,
-  roomTypes
+  roomTypes,
+  pageRooms,
+  onSelect
 }: RoomFormDrawerProps) {
   const { t } = useLingui();
   const queryClient = useQueryClient();
@@ -318,7 +323,16 @@ export function RoomFormDrawer({
             </FieldSet>
           </DrawerBody>
 
-          <DrawerFooter>
+          <DetailsDrawerStepper
+            currentId={room?.id}
+            items={pageRooms}
+            onSelect={onSelect}
+            previousLabel={t`Previous room`}
+            nextLabel={t`Next room`}
+            // Stepping away would drop the edits without a word
+            disabled={form.formState.isDirty}
+            keyHints={false}
+          >
             <Button
               variant="outline"
               type="button"
@@ -332,7 +346,7 @@ export function RoomFormDrawer({
               )}
               {isEdit ? <Trans>Update</Trans> : <Trans>Add</Trans>}
             </Button>
-          </DrawerFooter>
+          </DetailsDrawerStepper>
         </form>
       </DrawerContent>
     </Drawer>

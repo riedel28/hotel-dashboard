@@ -243,6 +243,8 @@ function RoomsContent({
           onOpenChange={(open) => !open && search.closeForm()}
           room={form.room}
           roomTypes={options.room_types}
+          pageRooms={rooms}
+          onSelect={search.openForm}
         />
       )}
     </>
