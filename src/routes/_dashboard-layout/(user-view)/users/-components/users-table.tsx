@@ -53,8 +53,11 @@ interface UsersTableProps {
   error?: ReactNode;
   /** Shown where the rows go when there are none. */
   emptyMessage?: ReactNode;
+  /** Whether the viewer is an administrator: only they get row actions and the
+   *  drawer, so without it the rows are read-only. */
+  canManage: boolean;
   /** Opens a user in the drawer: a click on the row or its Edit action. */
-  onUserOpen?: (userId: number) => void;
+  onUserOpen: (userId: number) => void;
   /** The user open in the drawer, marked as the selected row. */
   selectedUserId?: number;
 }
@@ -80,6 +83,7 @@ export default function UsersTable({
   onSortingChange,
   error,
   emptyMessage,
+  canManage,
   onUserOpen,
   selectedUserId
 }: UsersTableProps) {
@@ -303,10 +307,8 @@ export default function UsersTable({
   // Every row action is an administrator's: no drawer to open, no menu
   const shownColumns = useMemo(
     () =>
-      onUserOpen
-        ? columns
-        : columns.filter((column) => column.id !== 'actions'),
-    [columns, onUserOpen]
+      canManage ? columns : columns.filter((column) => column.id !== 'actions'),
+    [columns, canManage]
   );
 
   const [columnOrder, setColumnOrder] = useState<string[]>(
@@ -344,7 +346,7 @@ export default function UsersTable({
       error={error}
       table={table}
       recordCount={totalCount}
-      onRowClick={onUserOpen ? (user: User) => onUserOpen(user.id) : undefined}
+      onRowClick={canManage ? (user: User) => onUserOpen(user.id) : undefined}
       tableClassNames={{
         edgeCell: 'px-5',
         bodyRow: openRowClassName

@@ -216,6 +216,8 @@ function UsersPage() {
           onPaginationChange={handlePaginationChange}
           sorting={sorting}
           onSortingChange={handleSortingChange}
+          canManage={canManage}
+          onUserOpen={openUserById}
         />
       );
     }
@@ -231,6 +233,8 @@ function UsersPage() {
           pageIndex={(page ?? 1) - 1}
           pageSize={per_page ?? 25}
           error={error}
+          canManage={canManage}
+          onUserOpen={openUserById}
         />
       );
     }
@@ -246,7 +250,8 @@ function UsersPage() {
           onPaginationChange={handlePaginationChange}
           sorting={sorting}
           onSortingChange={handleSortingChange}
-          onUserOpen={canManage ? openUserById : undefined}
+          canManage={canManage}
+          onUserOpen={openUserById}
           selectedUserId={openUser?.id}
           // The list always holds the one looking at it, so only the
           // filters can leave it empty
