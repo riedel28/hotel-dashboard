@@ -229,7 +229,7 @@ function ComboboxItem({
         // A fixed slot, so labels line up whether or not the item is selected.
         <span className="flex size-4 shrink-0 items-center justify-center">
           <ComboboxPrimitive.ItemIndicator>
-            <CheckIcon className="pointer-events-none" />
+            <CheckIcon className="pointer-events-none text-primary-soft-foreground" />
           </ComboboxPrimitive.ItemIndicator>
         </span>
       )}
@@ -240,7 +240,7 @@ function ComboboxItem({
             <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
           }
         >
-          <CheckIcon className="pointer-events-none" />
+          <CheckIcon className="pointer-events-none text-primary-soft-foreground" />
         </ComboboxPrimitive.ItemIndicator>
       )}
     </ComboboxPrimitive.Item>

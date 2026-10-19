@@ -240,7 +240,10 @@ function DropdownMenuRadioItem({
             className="ml-auto flex items-center"
             data-slot="dropdown-menu-radio-item-indicator"
           >
-            <CheckIcon className="size-3.5" aria-hidden="true" />
+            <CheckIcon
+              className="size-3.5 text-primary-soft-foreground"
+              aria-hidden="true"
+            />
           </MenuPrimitive.RadioItemIndicator>
         </>
       ) : (
