@@ -13,8 +13,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
 
 import { DeleteDialog } from './delete-dialog';
@@ -66,7 +65,6 @@ export function RowActions({ row, onEdit }: RowActionsProps) {
           >
             <TrashIcon />
             <Trans>Delete</Trans>
-            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
