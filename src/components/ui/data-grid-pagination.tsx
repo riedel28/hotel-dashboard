@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { memo, type ReactNode, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useDataGrid } from '@/components/ui/data-grid';
@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 interface DataGridPaginationProps {
@@ -19,18 +18,16 @@ interface DataGridPaginationProps {
   sizesInfo?: string;
   sizesLabel?: string;
   sizesDescription?: string;
-  sizesSkeleton?: ReactNode;
   more?: boolean;
   moreLimit?: number;
   info?: string;
-  infoSkeleton?: ReactNode;
   className?: string;
 }
 
 const DEFAULT_PAGE_SIZES = [10, 25, 50, 100];
 
 function DataGridPaginationComponent(props: DataGridPaginationProps) {
-  const { table, recordCount, isLoading } = useDataGrid();
+  const { table, recordCount } = useDataGrid();
   const { t } = useLingui();
 
   const defaultProps = useMemo<Partial<DataGridPaginationProps>>(
@@ -38,11 +35,9 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
       sizes: DEFAULT_PAGE_SIZES,
       sizesLabel: t`Show`,
       sizesDescription: t`Per page`,
-      sizesSkeleton: <Skeleton className="h-8 w-44" />,
       moreLimit: 5,
       more: false,
-      info: '{from} - {to} of {count}',
-      infoSkeleton: <Skeleton className="h-8 w-60" />
+      info: '{from} - {to} of {count}'
     }),
     [t]
   );
@@ -175,108 +170,100 @@ function DataGridPaginationComponent(props: DataGridPaginationProps) {
       )}
     >
       <div className="order-1 flex flex-col items-center justify-center gap-2.5 pt-2.5 sm:order-1 sm:flex-row sm:justify-end sm:pt-0">
-        {isLoading ? (
-          mergedProps?.infoSkeleton
-        ) : (
-          <>
-            <div className="order-2 ml-0 text-sm text-nowrap text-muted-foreground sm:order-1 md:ml-2">
-              {mergedProps?.info?.startsWith('pagination.') ? (
-                <Trans>
-                  {from} - {to} of {recordCount}
-                </Trans>
-              ) : (
-                paginationInfo
-              )}
-            </div>
-            {pageCount > 1 && (
-              <div className="order-1 flex items-center space-x-1 sm:order-2">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className={btnArrowClasses}
-                  onClick={() => {
-                    if (table.getCanPreviousPage()) {
-                      updatePagination(pageIndex - 1);
-                    }
-                  }}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <span className="sr-only">
-                    <Trans>Go to previous page</Trans>
-                  </span>
-                  <ChevronLeftIcon className="size-4" />
-                </Button>
-
-                {renderEllipsisPrevButton()}
-
-                {pageButtons}
-
-                {renderEllipsisNextButton()}
-
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className={btnArrowClasses}
-                  onClick={() => {
-                    if (table.getCanNextPage()) {
-                      updatePagination(pageIndex + 1);
-                    }
-                  }}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <span className="sr-only">
-                    <Trans>Go to next page</Trans>
-                  </span>
-                  <ChevronRightIcon className="size-4" />
-                </Button>
-              </div>
+        <>
+          <div className="order-2 ml-0 text-sm text-nowrap text-muted-foreground sm:order-1 md:ml-2">
+            {mergedProps?.info?.startsWith('pagination.') ? (
+              <Trans>
+                {from} - {to} of {recordCount}
+              </Trans>
+            ) : (
+              paginationInfo
             )}
-          </>
-        )}
+          </div>
+          {pageCount > 1 && (
+            <div className="order-1 flex items-center space-x-1 sm:order-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                className={btnArrowClasses}
+                onClick={() => {
+                  if (table.getCanPreviousPage()) {
+                    updatePagination(pageIndex - 1);
+                  }
+                }}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <span className="sr-only">
+                  <Trans>Go to previous page</Trans>
+                </span>
+                <ChevronLeftIcon className="size-4" />
+              </Button>
+
+              {renderEllipsisPrevButton()}
+
+              {pageButtons}
+
+              {renderEllipsisNextButton()}
+
+              <Button
+                size="sm"
+                variant="ghost"
+                className={btnArrowClasses}
+                onClick={() => {
+                  if (table.getCanNextPage()) {
+                    updatePagination(pageIndex + 1);
+                  }
+                }}
+                disabled={!table.getCanNextPage()}
+              >
+                <span className="sr-only">
+                  <Trans>Go to next page</Trans>
+                </span>
+                <ChevronRightIcon className="size-4" />
+              </Button>
+            </div>
+          )}
+        </>
       </div>
       <div className="order-2 flex flex-wrap items-center space-x-2.5 pb-2.5 sm:order-2 sm:pb-0">
-        {isLoading ? (
-          mergedProps?.sizesSkeleton
-        ) : (
-          <>
-            <div className="hidden text-sm text-muted-foreground md:block">
-              <Trans>Rows per page</Trans>
-            </div>
-            <Select
-              value={`${pageSize}`}
-              onValueChange={(value) => {
-                const newPageSize = Number(value);
-                updatePagination(0, newPageSize); // Reset to first page when changing page size
-              }}
+        <>
+          <div className="hidden text-sm text-muted-foreground md:block">
+            <Trans>Rows per page</Trans>
+          </div>
+          <Select
+            value={`${pageSize}`}
+            onValueChange={(value) => {
+              const newPageSize = Number(value);
+              updatePagination(0, newPageSize); // Reset to first page when changing page size
+            }}
+          >
+            <SelectTrigger
+              className="mr-0 w-fit min-w-[70px] md:mr-2"
+              size="sm"
             >
-              <SelectTrigger
-                className="mr-0 w-fit min-w-[70px] md:mr-2"
-                size="sm"
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="min-w-[50px]">
-                {mergedProps?.sizes?.map((size: number) => (
-                  <SelectItem key={size} value={`${size}`}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </>
-        )}
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="min-w-[50px]">
+              {mergedProps?.sizes?.map((size: number) => (
+                <SelectItem key={size} value={`${size}`}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
       </div>
     </div>
   );
 }
 
 /**
- * Nothing to page through when the load failed or there are no rows: no
- * pagination at all, the empty state stands alone.
+ * Nothing to page through while the rows load, when the load failed or when
+ * there are none: no pagination at all, not even as a skeleton.
  */
 function DataGridPaginationUnlessFailed(props: DataGridPaginationProps) {
   const { props: gridProps, recordCount, isLoading } = useDataGrid();
-  if (gridProps.error || (!isLoading && recordCount === 0)) return null;
+  if (gridProps.error || isLoading || recordCount === 0) return null;
   return <DataGridPaginationComponent {...props} />;
 }
 
