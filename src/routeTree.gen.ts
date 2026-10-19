@@ -34,6 +34,10 @@ import { Route as DashboardLayoutuserViewfrontOfficeOrdersRouteImport } from './
 import { Route as DashboardLayoutuserViewfrontOfficeRegistrationFormsRouteImport } from './routes/_dashboard-layout/(user-view)/(front-office)/registration-forms'
 import { Route as DashboardLayoutuserViewDevicesIndexRouteImport } from './routes/_dashboard-layout/(user-view)/devices/index'
 import { Route as DashboardLayoutuserViewProductsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/products/index'
+import { Route as DashboardLayoutuserViewProfileIndexRouteImport } from './routes/_dashboard-layout/(user-view)/profile/index'
+import { Route as DashboardLayoutuserViewProfilePasswordRouteImport } from './routes/_dashboard-layout/(user-view)/profile/password'
+import { Route as DashboardLayoutuserViewProfileRolesRouteImport } from './routes/_dashboard-layout/(user-view)/profile/roles'
+import { Route as DashboardLayoutuserViewProfileTwoFactorRouteImport } from './routes/_dashboard-layout/(user-view)/profile/two-factor'
 import { Route as DashboardLayoutuserViewRoomsIndexRouteImport } from './routes/_dashboard-layout/(user-view)/rooms/index'
 import { Route as DashboardLayoutuserViewUsersIndexRouteImport } from './routes/_dashboard-layout/(user-view)/users/index'
 import { Route as DashboardLayoutAdminCustomersIndexRouteImport } from './routes/_dashboard-layout/admin/customers/index'
@@ -192,6 +196,30 @@ const DashboardLayoutuserViewProductsIndexRoute =
     path: '/products/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
+const DashboardLayoutuserViewProfileIndexRoute =
+  DashboardLayoutuserViewProfileIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardLayoutuserViewProfileRoute,
+  } as any)
+const DashboardLayoutuserViewProfilePasswordRoute =
+  DashboardLayoutuserViewProfilePasswordRouteImport.update({
+    id: '/password',
+    path: '/password',
+    getParentRoute: () => DashboardLayoutuserViewProfileRoute,
+  } as any)
+const DashboardLayoutuserViewProfileRolesRoute =
+  DashboardLayoutuserViewProfileRolesRouteImport.update({
+    id: '/roles',
+    path: '/roles',
+    getParentRoute: () => DashboardLayoutuserViewProfileRoute,
+  } as any)
+const DashboardLayoutuserViewProfileTwoFactorRoute =
+  DashboardLayoutuserViewProfileTwoFactorRouteImport.update({
+    id: '/two-factor',
+    path: '/two-factor',
+    getParentRoute: () => DashboardLayoutuserViewProfileRoute,
+  } as any)
 const DashboardLayoutuserViewRoomsIndexRoute =
   DashboardLayoutuserViewRoomsIndexRouteImport.update({
     id: '/(user-view)/rooms/',
@@ -308,15 +336,19 @@ export interface FileRoutesByFullPath {
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
-  '/profile': typeof DashboardLayoutuserViewProfileRoute
+  '/profile': typeof DashboardLayoutuserViewProfileRouteWithChildren
   '/tv': typeof DashboardLayoutuserViewTvRoute
   '/admin/': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
+  '/profile/password': typeof DashboardLayoutuserViewProfilePasswordRoute
+  '/profile/roles': typeof DashboardLayoutuserViewProfileRolesRoute
+  '/profile/two-factor': typeof DashboardLayoutuserViewProfileTwoFactorRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/products/': typeof DashboardLayoutuserViewProductsIndexRoute
+  '/profile/': typeof DashboardLayoutuserViewProfileIndexRoute
   '/rooms/': typeof DashboardLayoutuserViewRoomsIndexRoute
   '/users/': typeof DashboardLayoutuserViewUsersIndexRoute
   '/admin/customers/': typeof DashboardLayoutAdminCustomersIndexRoute
@@ -348,15 +380,18 @@ export interface FileRoutesByTo {
   '/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
-  '/profile': typeof DashboardLayoutuserViewProfileRoute
   '/tv': typeof DashboardLayoutuserViewTvRoute
   '/admin': typeof DashboardLayoutAdminIndexRoute
   '/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
+  '/profile/password': typeof DashboardLayoutuserViewProfilePasswordRoute
+  '/profile/roles': typeof DashboardLayoutuserViewProfileRolesRoute
+  '/profile/two-factor': typeof DashboardLayoutuserViewProfileTwoFactorRoute
   '/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/devices': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/products': typeof DashboardLayoutuserViewProductsIndexRoute
+  '/profile': typeof DashboardLayoutuserViewProfileIndexRoute
   '/rooms': typeof DashboardLayoutuserViewRoomsIndexRoute
   '/users': typeof DashboardLayoutuserViewUsersIndexRoute
   '/admin/customers': typeof DashboardLayoutAdminCustomersIndexRoute
@@ -392,15 +427,19 @@ export interface FileRoutesById {
   '/_dashboard-layout/(user-view)/door-locks': typeof DashboardLayoutuserViewDoorLocksRoute
   '/_dashboard-layout/(user-view)/payment-provider': typeof DashboardLayoutuserViewPaymentProviderRoute
   '/_dashboard-layout/(user-view)/pms-provider': typeof DashboardLayoutuserViewPmsProviderRoute
-  '/_dashboard-layout/(user-view)/profile': typeof DashboardLayoutuserViewProfileRoute
+  '/_dashboard-layout/(user-view)/profile': typeof DashboardLayoutuserViewProfileRouteWithChildren
   '/_dashboard-layout/(user-view)/tv': typeof DashboardLayoutuserViewTvRoute
   '/_dashboard-layout/admin/': typeof DashboardLayoutAdminIndexRoute
   '/_dashboard-layout/(user-view)/(front-office)/orders': typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   '/_dashboard-layout/(user-view)/(front-office)/registration-forms': typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
+  '/_dashboard-layout/(user-view)/profile/password': typeof DashboardLayoutuserViewProfilePasswordRoute
+  '/_dashboard-layout/(user-view)/profile/roles': typeof DashboardLayoutuserViewProfileRolesRoute
+  '/_dashboard-layout/(user-view)/profile/two-factor': typeof DashboardLayoutuserViewProfileTwoFactorRoute
   '/_dashboard-layout/admin/customers/$customerId': typeof DashboardLayoutAdminCustomersCustomerIdRoute
   '/_dashboard-layout/admin/properties/$propertyId': typeof DashboardLayoutAdminPropertiesPropertyIdRoute
   '/_dashboard-layout/(user-view)/devices/': typeof DashboardLayoutuserViewDevicesIndexRoute
   '/_dashboard-layout/(user-view)/products/': typeof DashboardLayoutuserViewProductsIndexRoute
+  '/_dashboard-layout/(user-view)/profile/': typeof DashboardLayoutuserViewProfileIndexRoute
   '/_dashboard-layout/(user-view)/rooms/': typeof DashboardLayoutuserViewRoomsIndexRoute
   '/_dashboard-layout/(user-view)/users/': typeof DashboardLayoutuserViewUsersIndexRoute
   '/_dashboard-layout/admin/customers/': typeof DashboardLayoutAdminCustomersIndexRoute
@@ -440,10 +479,14 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/orders'
     | '/registration-forms'
+    | '/profile/password'
+    | '/profile/roles'
+    | '/profile/two-factor'
     | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
     | '/devices/'
     | '/products/'
+    | '/profile/'
     | '/rooms/'
     | '/users/'
     | '/admin/customers/'
@@ -475,15 +518,18 @@ export interface FileRouteTypes {
     | '/door-locks'
     | '/payment-provider'
     | '/pms-provider'
-    | '/profile'
     | '/tv'
     | '/admin'
     | '/orders'
     | '/registration-forms'
+    | '/profile/password'
+    | '/profile/roles'
+    | '/profile/two-factor'
     | '/admin/customers/$customerId'
     | '/admin/properties/$propertyId'
     | '/devices'
     | '/products'
+    | '/profile'
     | '/rooms'
     | '/users'
     | '/admin/customers'
@@ -523,10 +569,14 @@ export interface FileRouteTypes {
     | '/_dashboard-layout/admin/'
     | '/_dashboard-layout/(user-view)/(front-office)/orders'
     | '/_dashboard-layout/(user-view)/(front-office)/registration-forms'
+    | '/_dashboard-layout/(user-view)/profile/password'
+    | '/_dashboard-layout/(user-view)/profile/roles'
+    | '/_dashboard-layout/(user-view)/profile/two-factor'
     | '/_dashboard-layout/admin/customers/$customerId'
     | '/_dashboard-layout/admin/properties/$propertyId'
     | '/_dashboard-layout/(user-view)/devices/'
     | '/_dashboard-layout/(user-view)/products/'
+    | '/_dashboard-layout/(user-view)/profile/'
     | '/_dashboard-layout/(user-view)/rooms/'
     | '/_dashboard-layout/(user-view)/users/'
     | '/_dashboard-layout/admin/customers/'
@@ -725,6 +775,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutuserViewProductsIndexRouteImport
       parentRoute: typeof DashboardLayoutRoute
     }
+    '/_dashboard-layout/(user-view)/profile/': {
+      id: '/_dashboard-layout/(user-view)/profile/'
+      path: '/'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof DashboardLayoutuserViewProfileIndexRouteImport
+      parentRoute: typeof DashboardLayoutuserViewProfileRoute
+    }
+    '/_dashboard-layout/(user-view)/profile/password': {
+      id: '/_dashboard-layout/(user-view)/profile/password'
+      path: '/password'
+      fullPath: '/profile/password'
+      preLoaderRoute: typeof DashboardLayoutuserViewProfilePasswordRouteImport
+      parentRoute: typeof DashboardLayoutuserViewProfileRoute
+    }
+    '/_dashboard-layout/(user-view)/profile/roles': {
+      id: '/_dashboard-layout/(user-view)/profile/roles'
+      path: '/roles'
+      fullPath: '/profile/roles'
+      preLoaderRoute: typeof DashboardLayoutuserViewProfileRolesRouteImport
+      parentRoute: typeof DashboardLayoutuserViewProfileRoute
+    }
+    '/_dashboard-layout/(user-view)/profile/two-factor': {
+      id: '/_dashboard-layout/(user-view)/profile/two-factor'
+      path: '/two-factor'
+      fullPath: '/profile/two-factor'
+      preLoaderRoute: typeof DashboardLayoutuserViewProfileTwoFactorRouteImport
+      parentRoute: typeof DashboardLayoutuserViewProfileRoute
+    }
     '/_dashboard-layout/(user-view)/rooms/': {
       id: '/_dashboard-layout/(user-view)/rooms/'
       path: '/rooms'
@@ -885,6 +963,30 @@ const DashboardLayoutAdminRouteChildren: DashboardLayoutAdminRouteChildren = {
 const DashboardLayoutAdminRouteWithChildren =
   DashboardLayoutAdminRoute._addFileChildren(DashboardLayoutAdminRouteChildren)
 
+interface DashboardLayoutuserViewProfileRouteChildren {
+  DashboardLayoutuserViewProfilePasswordRoute: typeof DashboardLayoutuserViewProfilePasswordRoute
+  DashboardLayoutuserViewProfileRolesRoute: typeof DashboardLayoutuserViewProfileRolesRoute
+  DashboardLayoutuserViewProfileTwoFactorRoute: typeof DashboardLayoutuserViewProfileTwoFactorRoute
+  DashboardLayoutuserViewProfileIndexRoute: typeof DashboardLayoutuserViewProfileIndexRoute
+}
+
+const DashboardLayoutuserViewProfileRouteChildren: DashboardLayoutuserViewProfileRouteChildren =
+  {
+    DashboardLayoutuserViewProfilePasswordRoute:
+      DashboardLayoutuserViewProfilePasswordRoute,
+    DashboardLayoutuserViewProfileRolesRoute:
+      DashboardLayoutuserViewProfileRolesRoute,
+    DashboardLayoutuserViewProfileTwoFactorRoute:
+      DashboardLayoutuserViewProfileTwoFactorRoute,
+    DashboardLayoutuserViewProfileIndexRoute:
+      DashboardLayoutuserViewProfileIndexRoute,
+  }
+
+const DashboardLayoutuserViewProfileRouteWithChildren =
+  DashboardLayoutuserViewProfileRoute._addFileChildren(
+    DashboardLayoutuserViewProfileRouteChildren,
+  )
+
 interface DashboardLayoutRouteChildren {
   DashboardLayoutSplatRoute: typeof DashboardLayoutSplatRoute
   DashboardLayoutAdminRoute: typeof DashboardLayoutAdminRouteWithChildren
@@ -896,7 +998,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutuserViewDoorLocksRoute: typeof DashboardLayoutuserViewDoorLocksRoute
   DashboardLayoutuserViewPaymentProviderRoute: typeof DashboardLayoutuserViewPaymentProviderRoute
   DashboardLayoutuserViewPmsProviderRoute: typeof DashboardLayoutuserViewPmsProviderRoute
-  DashboardLayoutuserViewProfileRoute: typeof DashboardLayoutuserViewProfileRoute
+  DashboardLayoutuserViewProfileRoute: typeof DashboardLayoutuserViewProfileRouteWithChildren
   DashboardLayoutuserViewTvRoute: typeof DashboardLayoutuserViewTvRoute
   DashboardLayoutuserViewfrontOfficeOrdersRoute: typeof DashboardLayoutuserViewfrontOfficeOrdersRoute
   DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute: typeof DashboardLayoutuserViewfrontOfficeRegistrationFormsRoute
@@ -930,7 +1032,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutuserViewPaymentProviderRoute,
   DashboardLayoutuserViewPmsProviderRoute:
     DashboardLayoutuserViewPmsProviderRoute,
-  DashboardLayoutuserViewProfileRoute: DashboardLayoutuserViewProfileRoute,
+  DashboardLayoutuserViewProfileRoute:
+    DashboardLayoutuserViewProfileRouteWithChildren,
   DashboardLayoutuserViewTvRoute: DashboardLayoutuserViewTvRoute,
   DashboardLayoutuserViewfrontOfficeOrdersRoute:
     DashboardLayoutuserViewfrontOfficeOrdersRoute,

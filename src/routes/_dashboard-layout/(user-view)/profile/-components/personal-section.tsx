@@ -151,7 +151,7 @@ export function PersonalSection({
   return (
     <ProfileSection
       id="profile"
-      title={<Trans>Profile</Trans>}
+      title={<Trans>Personal details</Trans>}
       description={<Trans>How you appear across the back-office.</Trans>}
       className={flashClass}
     >

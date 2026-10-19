@@ -1008,8 +1008,8 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/products/-components/delete-product-dialog.tsx:50
 #: src/routes/_dashboard-layout/(user-view)/products/-components/product-form-drawer.tsx:199
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/avatar-cropper-dialog.tsx:134
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:143
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:202
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:137
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:196
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:136
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:263
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/upload-step.tsx:163
@@ -1019,7 +1019,7 @@ msgstr "Code lässt sich nicht scannen? Schlüssel manuell eingeben"
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:294
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:354
 #: src/routes/_dashboard-layout/admin/customers/-components/add-customer-drawer.tsx:95
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:229
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:231
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-property-dialog.tsx:67
 #: src/routes/_dashboard-layout/admin/properties/-components/delete-worklog-dialog.tsx:71
 #: src/routes/_dashboard-layout/admin/properties/-components/worklog-message-form.tsx:138
@@ -1546,7 +1546,7 @@ msgstr "Geräte konnten nicht geladen werden"
 msgid "Couldn't load events"
 msgstr "Events konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:97
 msgid "Couldn't load monitoring logs"
 msgstr "Monitoring-Protokolle konnten nicht geladen werden"
 
@@ -1666,7 +1666,7 @@ msgstr "Event erstellen"
 #~ msgid "Create New User"
 #~ msgstr "Neuen Benutzer erstellen"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:233
+#: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:235
 msgid "Create property"
 msgstr "Objekt erstellen"
 
@@ -3003,7 +3003,7 @@ msgstr "Gäste erhalten einen Link per E-Mail und können schon vor der Anreise 
 msgid "Guests will no longer receive check-in links."
 msgstr "Gäste erhalten keine Check-in-Links mehr."
 
-#: src/components/section-nav.tsx:200
+#: src/components/section-nav.tsx:149
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:81
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/translation-tabs.tsx:85
 msgid "Has errors"
@@ -3155,7 +3155,7 @@ msgstr "Inhaber"
 #: src/routes/_dashboard-layout/(user-view)/checkin-page.tsx:54
 #: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:101
 #: src/routes/_dashboard-layout/(user-view)/products/index.tsx:39
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:108
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:98
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:264
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
@@ -3367,7 +3367,7 @@ msgstr "Weiter bearbeiten"
 msgid "Keep it on"
 msgstr "Aktiviert lassen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:207
+#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:81
 msgid "Keep my changes"
 msgstr "Meine Änderungen behalten"
 
@@ -3665,7 +3665,7 @@ msgstr "Benutzer verwalten, Benutzerdetails anzeigen und Rollen zuweisen"
 msgid "Manage your hotel operations efficiently"
 msgstr "Verwalten Sie Ihre Hotelabläufe effizient"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:124
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:72
 msgid "Manage your personal details, security and access rights."
 msgstr "Verwalten Sie Ihre persönlichen Daten, Sicherheit und Zugriffsrechte."
 
@@ -3844,8 +3844,7 @@ msgstr "Nach oben"
 msgid "Music"
 msgstr "Musik"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:77
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:114
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:47
 msgid "My profile"
 msgstr "Mein Profil"
 
@@ -4110,11 +4109,11 @@ msgstr "Keine Gäste gefunden"
 msgid "No item selected"
 msgstr "Kein Eintrag ausgewählt"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:175
 msgid "No logs in the last 24 hours"
 msgstr "Keine Protokolle in den letzten 24 Stunden"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:185
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:183
 msgid "No logs match the current filters."
 msgstr "Keine Protokolle entsprechen den aktuellen Filtern."
 
@@ -4346,6 +4345,10 @@ msgstr "Belegt"
 msgid "of <0/>"
 msgstr "von <0/>"
 
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:153
+msgid "Off"
+msgstr "Aus"
+
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/connection-status.tsx:36
 msgid "Offline"
 msgstr "Offline"
@@ -4355,8 +4358,8 @@ msgstr "Offline"
 msgid "OK"
 msgstr "OK"
 
-#: src/components/section-nav.tsx:271
-#: src/components/section-nav.tsx:314
+#: src/components/section-nav.tsx:220
+#: src/components/section-nav.tsx:263
 msgid "On this page"
 msgstr "Auf dieser Seite"
 
@@ -4528,7 +4531,7 @@ msgstr "Party"
 #: src/routes/_auth-layout/auth/login.tsx:211
 #: src/routes/_auth-layout/auth/sign-up.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:221
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:126
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/reauth-dialog.tsx:116
 msgid "Password"
@@ -4658,6 +4661,11 @@ msgstr "Zeitraum"
 #~ msgid "Personal"
 #~ msgstr "Persönlich"
 
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:125
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:154
+msgid "Personal details"
+msgstr "Persönliche Daten"
+
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:54
 #~ msgid "Personal Information"
 #~ msgstr "Persönliche Informationen"
@@ -4681,7 +4689,7 @@ msgstr "Foto aktualisiert"
 msgid "Pick a date"
 msgstr "Datum wählen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:176
 msgid "Pick a longer period to see older logs."
 msgstr "Wählen Sie einen längeren Zeitraum, um ältere Protokolle zu sehen."
 
@@ -4932,9 +4940,9 @@ msgstr "Produkte"
 #~ msgstr "Produkte in {categoryTitle}"
 
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:271
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:59
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:122
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/personal-section.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:138
 msgid "Profile"
 msgstr "Profil"
 
@@ -5175,7 +5183,7 @@ msgstr "Neu erzeugen"
 #~ msgstr "Meldescheine"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/use-node-form.ts:127
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:217
+#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:91
 msgid "Reload"
 msgstr "Aktualisieren"
 
@@ -5416,7 +5424,7 @@ msgstr "Rolle"
 msgid "Roles"
 msgstr "Rollen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:134
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/roles-section.tsx:68
 msgid "Roles & access"
 msgstr "Rollen & Zugriff"
@@ -5583,7 +5591,7 @@ msgstr "Tests laufen… ({passedCount}/{0})"
 #: src/routes/_dashboard-layout/(user-view)/checkin-page/-components/checkin-form.tsx:104
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:100
 #: src/routes/_dashboard-layout/(user-view)/products/-components/categories-tree.tsx:101
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:214
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:208
 msgid "Save"
 msgstr "Speichern"
 
@@ -5640,7 +5648,7 @@ msgstr "Änderungen werden gespeichert…"
 #~ msgid "Saving..."
 #~ msgstr "Wird gespeichert..."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:157
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:151
 msgid "Saving…"
 msgstr "Wird gespeichert…"
 
@@ -5977,7 +5985,7 @@ msgstr "Anzeigen"
 msgid "Show all {0} properties"
 msgstr "Alle {0} Unterkünfte anzeigen"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:158
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:156
 msgid "Show all logs"
 msgstr "Alle Protokolle anzeigen"
 
@@ -6038,7 +6046,7 @@ msgstr "Angezeigt werden Daten von {time}."
 #~ msgid "Showing only logs for reservation <0>{bookingNr}</0>"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:148
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:146
 msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr "Nur Protokolle der Reservierung <0>{reservation}</0>"
 
@@ -6079,7 +6087,7 @@ msgstr "SMS"
 msgid "Solutions"
 msgstr "Lösungen"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:72
 msgid "Someone — most likely an administrator — changed your record while this page was open. Reload to see their version, or keep your edits and save again to overwrite it."
 msgstr "Jemand — vermutlich ein Administrator — hat Ihren Datensatz geändert, während diese Seite geöffnet war. Laden Sie neu, um dessen Version zu sehen, oder behalten Sie Ihre Änderungen und speichern Sie erneut, um sie zu überschreiben."
 
@@ -6683,7 +6691,7 @@ msgstr "Dieser Link zum Zurücksetzen des Passworts ist ungültig."
 msgid "This payment does not exist."
 msgstr "Diese Zahlung existiert nicht."
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:195
+#: src/routes/_dashboard-layout/(user-view)/profile/index.tsx:69
 msgid "This profile was updated elsewhere"
 msgstr "Dieses Profil wurde an anderer Stelle geändert"
 
@@ -6876,7 +6884,7 @@ msgstr "TV-Gästemappe"
 #~ msgid "Two Factor"
 #~ msgstr "Zwei Faktor"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:129
 msgid "Two-factor auth"
 msgstr "Zwei-Faktor-Auth."
 
@@ -7015,7 +7023,7 @@ msgstr "Spalte {title} lösen"
 #: src/components/sectioned-form.tsx:94
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:317
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-mapping-codes-section.tsx:100
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:193
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:187
 msgid "Unsaved changes"
 msgstr "Nicht gespeicherte Änderungen"
 
@@ -7442,11 +7450,11 @@ msgstr "Sie haben noch keine Wiederherstellungscodes gespeichert."
 msgid "You will be logged out of your account and redirected to the login page."
 msgstr "Sie werden von Ihrem Konto abgemeldet und zur Anmeldeseite weitergeleitet."
 
-#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:152
+#: src/routes/_dashboard-layout/(user-view)/profile/-components/profile-section.tsx:146
 msgid "You're offline"
 msgstr "Sie sind offline"
 
-#: src/routes/_dashboard-layout/(user-view)/profile.tsx:136
+#: src/routes/_dashboard-layout/(user-view)/profile.tsx:84
 msgid "You're offline. Your changes are kept here and can be saved once you're back online."
 msgstr "Sie sind offline. Ihre Änderungen bleiben hier erhalten und können gespeichert werden, sobald Sie wieder online sind."
 

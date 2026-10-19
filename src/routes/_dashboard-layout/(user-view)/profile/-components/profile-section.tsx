@@ -31,8 +31,8 @@ interface ProfileSectionProps {
 }
 
 /**
- * The shell every profile card shares: an anchor target for the section nav and
- * a heading wired up for `aria-labelledby`.
+ * The shell every profile card shares: a section with its heading wired up
+ * for `aria-labelledby`.
  *
  * Cards that own a form wrap their body in `ProfileSectionForm`, which adds the
  * save footer. Cards that don't (two-factor, roles) just render children.
@@ -46,16 +46,7 @@ export function ProfileSection({
   children
 }: ProfileSectionProps) {
   return (
-    <section
-      id={id}
-      // Focusable so jumping from the nav moves the caret here, not just the
-      // scroll position — otherwise keyboard users land nowhere.
-      tabIndex={-1}
-      aria-labelledby={sectionHeadingId(id)}
-      // Below `lg` the chip bar is sticky over the top of the scroll area, so a
-      // jump has to clear its 60px or it lands on the card's own title.
-      className="scroll-mt-16 focus-visible:outline-none lg:scroll-mt-4"
-    >
+    <section id={id} aria-labelledby={sectionHeadingId(id)}>
       <Card className={cn('@container/section', className)}>
         <CardHeader>
           <CardTitle id={sectionHeadingId(id)}>{title}</CardTitle>
