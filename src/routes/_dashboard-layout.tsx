@@ -5,7 +5,8 @@ import {
   createFileRoute,
   Outlet,
   redirect,
-  useLocation
+  useMatches,
+  useRouter
 } from '@tanstack/react-router';
 
 import {
@@ -27,7 +28,6 @@ import {
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { viewOf } from '@/hooks/use-current-view';
-import { ProfileSkeleton } from '@/routes/_dashboard-layout/(user-view)/profile/-components/profile-skeleton';
 import Header from '@/routes/_dashboard-layout/-components/header';
 import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
 import { DashboardNav } from '@/routes/_dashboard-layout/-components/sidebar-nav';
@@ -149,9 +149,7 @@ export const Route = createFileRoute('/_dashboard-layout')({
 // placeholders where the nav, the property selector and the page will be.
 // Nothing moves when the page arrives, unlike a spinner swapped for a screen.
 function DashboardPending() {
-  // A page with a skeleton of its own shows it here too: on a cold load it's
-  // this layout that waits, and the page's pendingComponent never gets a turn.
-  const pathname = useLocation({ select: (location) => location.pathname });
+  const PagePending = usePagePendingComponent();
 
   return (
     <SidebarProvider className="h-svh overflow-hidden" aria-busy="true">
@@ -178,8 +176,8 @@ function DashboardPending() {
           <span className="sr-only">
             <Trans>Loading...</Trans>
           </span>
-          {pathname.startsWith('/profile') ? (
-            <ProfileSkeleton />
+          {PagePending ? (
+            <PagePending />
           ) : (
             <>
               <Skeleton className="h-7 w-48" />
@@ -190,4 +188,24 @@ function DashboardPending() {
       </SidebarInset>
     </SidebarProvider>
   );
+}
+
+/**
+ * The pendingComponent of the deepest page under this layout that has one. On
+ * a cold load it's this layout that waits, so a page's own skeleton would never
+ * get a turn; showing it here gives the page its shape from the first frame.
+ */
+function usePagePendingComponent() {
+  const router = useRouter();
+  return useMatches({
+    select: (matches) => {
+      const own = matches.findIndex((match) => match.routeId === Route.id);
+      return matches
+        .slice(own + 1)
+        .map(
+          (match) => router.routesById[match.routeId].options.pendingComponent
+        )
+        .findLast(Boolean);
+    }
+  });
 }
