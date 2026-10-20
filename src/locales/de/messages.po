@@ -78,7 +78,7 @@ msgid "{0, plural, one {# night} other {# nights}}"
 msgstr "{0, plural, one {# Nacht} other {# Nächte}}"
 
 #. placeholder {0}: 0
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:148
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:253
 msgid "{0, plural, one {# property} other {# properties}}"
 msgstr "{0, plural, one {# Unterkunft} other {# Unterkünfte}}"
 
@@ -108,7 +108,7 @@ msgid "{0, plural, one {Not captured for # day} other {Not captured for # days}}
 msgstr "{0, plural, one {Seit # Tag nicht erfasst} other {Seit # Tagen nicht erfasst}}"
 
 #. placeholder {0}: themeLabels[currentTheme]
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:170
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:179
 msgid "{0}"
 msgstr "{0}"
 
@@ -153,7 +153,7 @@ msgstr "{0} Rollen insgesamt"
 #~ msgstr "{0}, {1}"
 
 #. placeholder {0}: selected.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:76
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:75
 msgid "{0}, property"
 msgstr "{0}, Objekt"
 
@@ -178,7 +178,7 @@ msgstr "{deleteCount, plural, one {Mir ist bewusst, dass # Zimmer gelöscht wird
 msgid "{failedCount} of {0} tests failed"
 msgstr "{failedCount} von {0} Tests fehlgeschlagen"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:151
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:256
 msgid "{found} of {loaded} properties"
 msgstr "{found} von {loaded} Unterkünften"
 
@@ -240,7 +240,7 @@ msgstr "{shown} von {total} sichtbar"
 #~ msgid "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 #~ msgstr "{staleDays, plural, one {Seit # Tag nicht erfasst} other {Seit # Tagen nicht erfasst}}"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:161
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:266
 msgid "{total, plural, one {# property} other {# properties}}"
 msgstr ""
 
@@ -1327,7 +1327,7 @@ msgstr ""
 msgid "Close"
 msgstr "Schließen"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:66
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:70
 msgid "Close menu"
 msgstr "Menü schließen"
 
@@ -1770,7 +1770,8 @@ msgstr "Kunden"
 #~ msgid "Czech Republic"
 #~ msgstr "Tschechische Republik"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:185
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:194
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:413
 msgid "Dark"
 msgstr "Dunkel"
 
@@ -2713,7 +2714,7 @@ msgstr "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden. Bit
 #~ msgstr "SMS konnte nicht gesendet werden"
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:53
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:65
 msgid "Failed to switch to {0}"
 msgstr "Wechsel zu {0} fehlgeschlagen"
 
@@ -2811,7 +2812,7 @@ msgstr "Schlusszahlung"
 msgid "Find bookings, follow their check-in and open one to edit."
 msgstr "Buchungen finden, ihren Check-in verfolgen und zum Bearbeiten öffnen."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:157
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:262
 msgid "First {loaded} of {total} properties"
 msgstr "Erste {loaded} von {total} Unterkünften"
 
@@ -3194,7 +3195,7 @@ msgid "Hotel"
 msgstr "Hotel"
 
 #: src/routes/_auth-layout.tsx:34
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:59
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:63
 #: src/routes/_dashboard-layout/-components/sidebar-header.tsx:21
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -3400,7 +3401,9 @@ msgstr "Einrichtung fortsetzen"
 msgid "Kids"
 msgstr "Kinder"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:91
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:100
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:388
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:392
 msgid "Language"
 msgstr "Sprache"
 
@@ -3511,7 +3514,8 @@ msgstr "Lassen Sie Gäste schon vor der Anreise online einchecken."
 #~ msgid "Letter"
 #~ msgstr ""
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:181
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:190
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:412
 msgid "Light"
 msgstr "Hell"
 
@@ -3598,7 +3602,8 @@ msgid "Log not found"
 msgstr "Protokoll nicht gefunden"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:72
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:206
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:215
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:430
 msgid "Log out"
 msgstr "Abmelden"
 
@@ -3619,7 +3624,7 @@ msgid "main"
 msgstr "Hauptsprache"
 
 #: src/routes/_dashboard-layout.tsx:45
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:55
 msgid "Main navigation"
 msgstr "Hauptnavigation"
 
@@ -4174,7 +4179,8 @@ msgstr "Keine Produkte in dieser Kategorie"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "Keine Produkte in dieser Kategorie. Fügen Sie Produkte zu dieser Kategorie hinzu, indem Sie unten auf die Schaltfläche klicken."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:115
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:156
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:217
 msgid "No properties found"
 msgstr "Keine Properties gefunden"
 
@@ -4964,7 +4970,8 @@ msgstr "Produkte"
 #~ msgid "Products in {categoryTitle}"
 #~ msgstr "Produkte in {categoryTitle}"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:271
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:306
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:383
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:153
@@ -5763,7 +5770,8 @@ msgstr "Produkte durchsuchen"
 msgid "Search properties"
 msgstr "Unterkünfte suchen"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:105
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:145
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:207
 msgid "Search property"
 msgstr "Nach Property-Namen suchen"
 
@@ -5863,7 +5871,7 @@ msgstr "Land auswählen"
 #~ msgstr "Wählen Sie eine oder mehrere Rollen aus."
 
 #: src/routes/_dashboard-layout/-components/property-selector.tsx:76
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:96
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:93
 msgid "Select property"
 msgstr "Objekt auswählen"
 
@@ -6287,6 +6295,10 @@ msgstr "Zusammenfassung"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Unterstützte Formate: JPG, PNG, GIF (max. 5MB)"
 
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:128
+msgid "Switch property"
+msgstr "Objekt wechseln"
+
 #: src/routes/_dashboard-layout/(user-view)/payment-provider/-components/adyen-form/adyen-credentials-section.tsx:278
 msgid "Switch to Live"
 msgstr ""
@@ -6306,7 +6318,7 @@ msgstr "Ansicht wechseln"
 #~ msgstr "Gewechselt zu \"{propertyName}\""
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:51
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:63
 msgid "Switched to {0}"
 msgstr "Gewechselt zu {0}"
 
@@ -6324,7 +6336,8 @@ msgstr "Gewechselt zu {0}"
 #~ msgid "Switzerland"
 #~ msgstr "Schweiz"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:189
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:198
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:414
 msgid "System"
 msgstr "System"
 
@@ -6631,7 +6644,9 @@ msgstr "Der Benutzer {userName} wurde gelöscht"
 msgid "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 msgstr "Der Benutzer <0>{userName}</0> wird gelöscht. Diese Aktion kann nicht rückgängig gemacht werden."
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:164
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:173
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:405
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:408
 msgid "Theme"
 msgstr "Design"
 
@@ -7199,7 +7214,8 @@ msgstr "Benutzer"
 #~ msgid "User features: View reservations, make payments, access basic settings"
 #~ msgstr "Benutzerfunktionen: Reservierungen anzeigen, Zahlungen tätigen, grundlegende Einstellungen zugreifen"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:244
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:279
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:355
 msgid "User menu"
 msgstr "Benutzermenü"
 
@@ -7234,7 +7250,8 @@ msgstr ""
 msgid "Users"
 msgstr "Benutzer"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:208
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:217
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:432
 msgid "v{version}"
 msgstr "v{version}"
 

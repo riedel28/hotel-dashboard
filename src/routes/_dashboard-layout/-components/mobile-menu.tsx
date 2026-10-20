@@ -47,35 +47,40 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
               'pointer-coarse:**:data-[slot=sidebar-menu-button]:h-11 pointer-coarse:**:data-[slot=tabs-list]:h-10 pointer-coarse:**:data-[slot=tabs-trigger]:h-full'
             )}
           >
-            <DrawerPrimitive.Title className="sr-only">
-              <Trans>Main navigation</Trans>
-            </DrawerPrimitive.Title>
-            <SidebarHeader>
-              <SidebarMenu>
-                <SidebarGroup>
-                  <SidebarMenuItem className="flex items-center gap-2">
-                    <AppLogo />
-                    <span className="text-sm font-semibold whitespace-nowrap">
-                      <Trans>Hotel Dashboard</Trans>
-                    </span>
-                    <DrawerPrimitive.Close
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="icon-sm"
-                          aria-label={t`Close menu`}
-                          className="ml-auto pointer-coarse:-my-2 pointer-coarse:size-11"
-                        />
-                      }
-                    >
-                      <XIcon className="size-4" />
-                    </DrawerPrimitive.Close>
-                  </SidebarMenuItem>
-                </SidebarGroup>
-              </SidebarMenu>
-            </SidebarHeader>
-            <SidebarViewToggle />
-            <DashboardNav onNavigate={() => onOpenChange(false)} />
+            {/* Without it a mouse press starts a swipe and captures the
+                pointer, so the click lands on the panel instead of the link.
+                Touch still swipes from anywhere. */}
+            <DrawerPrimitive.Content className="flex min-h-0 flex-1 flex-col">
+              <DrawerPrimitive.Title className="sr-only">
+                <Trans>Main navigation</Trans>
+              </DrawerPrimitive.Title>
+              <SidebarHeader>
+                <SidebarMenu>
+                  <SidebarGroup>
+                    <SidebarMenuItem className="flex items-center gap-2">
+                      <AppLogo />
+                      <span className="text-sm font-semibold whitespace-nowrap">
+                        <Trans>Hotel Dashboard</Trans>
+                      </span>
+                      <DrawerPrimitive.Close
+                        render={
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            aria-label={t`Close menu`}
+                            className="ml-auto pointer-coarse:-my-2 pointer-coarse:size-11"
+                          />
+                        }
+                      >
+                        <XIcon className="size-4" />
+                      </DrawerPrimitive.Close>
+                    </SidebarMenuItem>
+                  </SidebarGroup>
+                </SidebarMenu>
+              </SidebarHeader>
+              <SidebarViewToggle />
+              <DashboardNav onNavigate={() => onOpenChange(false)} />
+            </DrawerPrimitive.Content>
           </DrawerPrimitive.Popup>
         </DrawerPrimitive.Viewport>
       </DrawerPrimitive.Portal>
