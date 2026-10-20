@@ -16,9 +16,8 @@ A hotel management dashboard with dual-view architecture (User View for front-of
 - **TanStack Router** — file-based, type-safe routing
 - **TanStack Query** — server state management
 - **TanStack Table** — data grids
-- **Tailwind CSS 4** + shadcn/ui + Radix UI
+- **Tailwind CSS 4** + shadcn/ui + Base UI
 - **Lingui** — i18n (English & German)
-- **Recharts** — charts and analytics
 - **React Hook Form** + Zod — form handling and validation
 
 ### Backend
@@ -28,13 +27,14 @@ A hotel management dashboard with dual-view architecture (User View for front-of
 - **Drizzle ORM** — schema, migrations, queries
 - **Zod** — runtime validation
 - **Jose** — JWT authentication
+- **otplib** — two-factor authentication (TOTP)
 - **Nodemailer** — transactional emails
 
 ### Testing & Quality
 
 - **Vitest** — unit/integration tests (frontend & backend)
 - **Playwright** — end-to-end tests
-- **Biome** — linting and formatting
+- **Oxlint** + **Oxfmt** — linting and formatting
 - **Husky** + **Commitlint** — conventional commits
 - **Semantic Release** — automated versioning and changelogs
 
@@ -122,8 +122,8 @@ The frontend runs at `http://localhost:5173` and the backend at `http://localhos
 | `bun run client` | Start frontend only |
 | `bun run build` | Production build (includes typecheck) |
 | `bun run typecheck:all` | Check both main and node TS configs |
-| `bun run lint` | Biome linter with auto-fix |
-| `bun run check` | Biome check with auto-fix (lint + format) |
+| `bun run lint` | Oxlint with auto-fix |
+| `bun run check` | Oxlint with auto-fix + Oxfmt formatting |
 | `bun run test` | Run frontend unit tests (no database) |
 | `bun run test:e2e` | Run Playwright E2E tests (requires `backend/.env.test`) |
 | `bun run lingui:extract` | Extract translatable strings |
@@ -139,7 +139,7 @@ The frontend runs at `http://localhost:5173` and the backend at `http://localhos
 | `bun run db:seed` | Seed database with sample data |
 | `bun run db:generate -- --name <what_changed>` | Generate a migration from schema changes |
 | `bun run db:migrate` | Apply pending migrations to the dev database |
-| `bun run db:migrate:prod` | Apply pending migrations to production |
+| `bun run db:migrate:prod` | Apply pending migrations to production by hand |
 | `bun run db:studio` | Open Drizzle Studio GUI |
 
 ## Project Structure
@@ -183,11 +183,11 @@ The app supports **English** and **German** via [Lingui](https://lingui.dev).
 ## Deployment
 
 - **Frontend** — [Vercel](https://vercel.com) with API rewrites proxying `/api/*` to the backend
-- **Backend** — [Fly.io](https://fly.io) (Frankfurt region), configured via `fly.toml`
+- **Backend** — [Render](https://render.com). Once CI passes on `master`, the `Deploy backend` workflow applies the migrations to production and only then triggers Render's deploy hook, so a failed migration leaves the old version running
 - **Database** — [Neon](https://neon.tech) serverless PostgreSQL
 
 ## Code Quality
 
-- **Biome** handles linting and formatting (replaces ESLint + Prettier)
+- **Oxlint** and **Oxfmt** handle linting and formatting
 - **Conventional commits** enforced via Husky + Commitlint
 - Always run `bun run typecheck:all && bun run check` before committing
