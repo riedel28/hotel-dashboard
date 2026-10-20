@@ -15,6 +15,7 @@ import {
 } from '../controllers/auth-controller';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/authorization';
+import { forbidDemo } from '../middleware/demo';
 import { validateBody } from '../middleware/validation';
 
 const router = Router();
@@ -62,6 +63,7 @@ router.post('/logout', logout);
 router.post(
   '/change-password',
   authenticateToken,
+  forbidDemo,
   validateBody(changePasswordSchema),
   changePassword
 );

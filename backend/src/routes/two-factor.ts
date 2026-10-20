@@ -14,6 +14,7 @@ import {
   setup
 } from '../controllers/two-factor-controller';
 import { authenticateToken } from '../middleware/auth';
+import { forbidDemo } from '../middleware/demo';
 import { requireFreshAuth } from '../middleware/require-fresh-auth';
 import { validateBody } from '../middleware/validation';
 
@@ -22,6 +23,9 @@ const router = Router();
 router.use(authenticateToken);
 
 router.get('/', getStatus);
+
+// The demo account is shared: whoever turned 2FA on would lock everyone else out
+router.use(forbidDemo);
 
 // Everything below changes the account's security posture, so a valid session
 // alone isn't enough — see middleware/require-fresh-auth.

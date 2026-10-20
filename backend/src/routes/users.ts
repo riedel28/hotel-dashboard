@@ -24,6 +24,7 @@ import {
 } from '../controllers/user-controller';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin, requireSelfOrAdmin } from '../middleware/authorization';
+import { forbidDemo, guardDemoUserEdit } from '../middleware/demo';
 import {
   validateBody,
   validateParams,
@@ -39,6 +40,7 @@ router.use(authenticateToken);
 router.post(
   '/invite',
   requireAdmin,
+  forbidDemo,
   validateBody(inviteUserSchema),
   inviteUser
 );
@@ -47,6 +49,7 @@ router.post(
 router.post(
   '/invite/:id/resend',
   requireAdmin,
+  forbidDemo,
   validateParams(userIdParamsSchema),
   resendInvitation
 );
@@ -82,6 +85,7 @@ router.patch(
   requireAdmin,
   validateParams(userIdParamsSchema),
   validateBody(updateUserSchema),
+  guardDemoUserEdit,
   updateUser
 );
 
@@ -90,6 +94,7 @@ router.delete(
   '/:id',
   requireAdmin,
   validateParams(userIdParamsSchema),
+  guardDemoUserEdit,
   deleteUser
 );
 

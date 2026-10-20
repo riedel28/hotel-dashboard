@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { isDemoForbidden } from '@/api/client';
 import { deleteUserById } from '@/api/users';
 import {
   AlertDialog,
@@ -38,8 +39,10 @@ export function DeleteDialog({
       await queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success(t`The user ${userName} has been deleted`);
     },
-    onError: () => {
-      toast.error(t`Error deleting user`);
+    onError: (error) => {
+      toast.error(
+        isDemoForbidden(error) ? error.message : t`Error deleting user`
+      );
     }
   });
 

@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { isDemoForbidden } from '@/api/client';
 import { rolesQueryOptions } from '@/api/roles';
 import { inviteUser } from '@/api/users';
 import { Button } from '@/components/ui/button';
@@ -89,8 +90,10 @@ export function InviteUserModal() {
       handleOpenChange(false);
       toast.success(t`Invitation sent successfully`);
     },
-    onError: () => {
-      toast.error(t`Failed to send invitation`);
+    onError: (error) => {
+      toast.error(
+        isDemoForbidden(error) ? error.message : t`Failed to send invitation`
+      );
     }
   });
 

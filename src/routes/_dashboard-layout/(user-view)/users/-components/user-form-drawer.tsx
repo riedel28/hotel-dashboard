@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { isDemoForbidden } from '@/api/client';
 import { rolesQueryOptions } from '@/api/roles';
 import { updateUserById, type UpdateUserData, type User } from '@/api/users';
 import { DetailsDrawerStepper } from '@/components/details-drawer';
@@ -140,8 +141,10 @@ function UserForm({
       // Saved: back to the list, as the room and product drawers do
       onCancel();
     },
-    onError: () => {
-      toast.error(t`Failed to update user`);
+    onError: (error) => {
+      toast.error(
+        isDemoForbidden(error) ? error.message : t`Failed to update user`
+      );
     }
   });
 
