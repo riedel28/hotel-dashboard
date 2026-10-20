@@ -128,7 +128,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center py-10">
+    <div className="flex flex-1 items-start justify-center pt-6 pb-10 lg:items-center lg:py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
           <AppLogo size="lg" tone="tint" />
@@ -198,6 +198,14 @@ function LoginPage() {
                   type="email"
                   placeholder="name@hotel.com"
                   autoComplete="email"
+                  enterKeyHint="next"
+                  // Enter moves on to the password instead of submitting a
+                  // form that can only fail validation
+                  onKeyDown={(event) => {
+                    if (event.key !== 'Enter') return;
+                    event.preventDefault();
+                    form.setFocus('password');
+                  }}
                   aria-required="true"
                   aria-invalid={fieldState.invalid}
                   aria-describedby={
@@ -226,6 +234,7 @@ function LoginPage() {
                   {...field}
                   id={field.name}
                   autoComplete="current-password"
+                  enterKeyHint="go"
                   aria-required="true"
                   aria-invalid={fieldState.invalid}
                   aria-describedby={
@@ -253,6 +262,7 @@ function LoginPage() {
                 >
                   <Checkbox
                     id={field.name}
+                    className="pointer-coarse:after:-inset-3.5"
                     checked={field.value}
                     onCheckedChange={(checked) =>
                       field.onChange(checked === true)
@@ -260,7 +270,7 @@ function LoginPage() {
                   />
                   <FieldLabel
                     htmlFor={field.name}
-                    className="cursor-pointer text-sm font-normal"
+                    className="cursor-pointer items-center text-sm font-normal pointer-coarse:min-h-11"
                   >
                     <Trans>Remember me</Trans>
                   </FieldLabel>
@@ -336,7 +346,7 @@ function TwoFactorStep({
     : /^\d{6}$/.test(code);
 
   return (
-    <div className="flex flex-1 items-center justify-center py-10">
+    <div className="flex flex-1 items-start justify-center pt-6 pb-10 lg:items-center lg:py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
           <div className="flex size-10 items-center justify-center rounded-lg bg-primary-soft text-primary-soft-foreground">
