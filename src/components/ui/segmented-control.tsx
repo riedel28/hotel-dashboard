@@ -29,8 +29,11 @@ interface SegmentedControlProps<TValue extends string> {
    * (default). When false the color shows in the dot alone.
    */
   tintSelected?: boolean;
-  /** 'sm' for compact toolbars, e.g. above a preview. */
-  size?: 'sm' | 'default';
+  /**
+   * 'sm' for compact toolbars, e.g. above a preview; 'lg' for touch, e.g. in
+   * a bottom sheet.
+   */
+  size?: 'sm' | 'default' | 'lg';
   className?: string;
 }
 
@@ -54,6 +57,8 @@ function SegmentedControl<TValue extends string>({
       className={cn(
         'flex h-9 w-fit shrink-0 items-center rounded-lg border border-input bg-background p-1 dark:bg-input/30',
         size === 'sm' && 'h-7 p-0.5',
+        // Rounder as it grows: the segments stay concentric with the track
+        size === 'lg' && 'h-10 rounded-xl p-0.5',
         className
       )}
     >
@@ -78,7 +83,8 @@ function SegmentedControl<TValue extends string>({
                     // hover strength stands out without glaring
                     'border-foreground/2 bg-muted text-foreground dark:border-transparent dark:bg-input/50'
                   : 'text-muted-foreground hover:text-foreground',
-              size === 'sm' && 'px-2 text-xs'
+              size === 'sm' && 'px-2 text-xs',
+              size === 'lg' && 'rounded-lg px-3'
             )}
           >
             {color && (
