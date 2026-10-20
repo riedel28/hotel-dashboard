@@ -1,3 +1,10 @@
+## [1.36.2](https://github.com/riedel28/hotel-dashboard/compare/v1.36.1...v1.36.2) (2026-10-20)
+
+
+### Performance Improvements
+
+* **auth:** drop autofocus from the sign-in email field ([749f144](https://github.com/riedel28/hotel-dashboard/commit/749f144f2f52cf389773d80110e321b6e4dc4232))
+
 ## [1.36.1](https://github.com/riedel28/hotel-dashboard/compare/v1.36.0...v1.36.1) (2026-10-19)
 
 
