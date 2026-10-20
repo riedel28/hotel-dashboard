@@ -1,3 +1,10 @@
+# [1.39.0](https://github.com/riedel28/hotel-dashboard/compare/v1.38.0...v1.39.0) (2026-10-20)
+
+
+### Features
+
+* **auth:** public demo access with a nightly reset ([45d21f4](https://github.com/riedel28/hotel-dashboard/commit/45d21f479c751abe5f265306a6f51b619bc8db36))
+
 # [1.38.0](https://github.com/riedel28/hotel-dashboard/compare/v1.37.1...v1.38.0) (2026-10-20)
 
 
