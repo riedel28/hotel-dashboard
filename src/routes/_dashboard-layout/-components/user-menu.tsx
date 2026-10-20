@@ -390,7 +390,6 @@ function UserSheet({
               <GlobeIcon />
               <Trans>Language</Trans>
             </span>
-            {/* 44px segments: the track adds its border and padding */}
             <SegmentedControl
               label={t`Language`}
               value={locale}
@@ -399,7 +398,7 @@ function UserSheet({
                 value: lang.code,
                 label: lang.label
               }))}
-              className="h-12.5 p-0.5"
+              size="lg"
             />
           </div>
           <div className="flex min-h-11 items-center justify-between gap-3 px-3">
@@ -416,7 +415,7 @@ function UserSheet({
                 { value: 'dark', label: t`Dark` },
                 { value: 'system', label: t`System` }
               ]}
-              className="h-12.5 p-0.5"
+              size="lg"
             />
           </div>
         </div>
