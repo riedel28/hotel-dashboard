@@ -1,3 +1,13 @@
+# [1.37.0](https://github.com/riedel28/hotel-dashboard/compare/v1.36.2...v1.37.0) (2026-10-20)
+
+
+### Features
+
+* **auth:** make the sign-in pages comfortable on phones ([f70fc96](https://github.com/riedel28/hotel-dashboard/commit/f70fc966944cdd895249568fcc30eb7e3646caf3)), closes [#70](https://github.com/riedel28/hotel-dashboard/issues/70)
+* **home:** whole-card links, compact rows on phones ([fc52969](https://github.com/riedel28/hotel-dashboard/commit/fc5296919cc4cb16e085ad41105583d49e10dc22))
+* **layout:** 44px header targets and a swipeable mobile menu ([883a058](https://github.com/riedel28/hotel-dashboard/commit/883a058150fb5043c4b1fa397011efc7bcf936cc))
+* **layout:** user menu and property switcher as bottom sheets on phones ([3ae7f56](https://github.com/riedel28/hotel-dashboard/commit/3ae7f5686268f6389aa285659c721673468f319d))
+
 ## [1.36.2](https://github.com/riedel28/hotel-dashboard/compare/v1.36.1...v1.36.2) (2026-10-20)
 
 
