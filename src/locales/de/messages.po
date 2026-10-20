@@ -552,7 +552,7 @@ msgstr "Fügt Zimmer hinzu und aktualisiert sie. Zimmer, die nicht in der Datei 
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:41
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:156
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:57
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:245
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:249
 msgid "Admin"
 msgstr "Admin"
 
@@ -925,7 +925,7 @@ msgstr "Zurück"
 msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
 
-#: src/routes/_auth-layout/auth/login.tsx:428
+#: src/routes/_auth-layout/auth/login.tsx:437
 msgid "Back to sign in"
 msgstr "Zurück zur Anmeldung"
 
@@ -1327,6 +1327,10 @@ msgstr ""
 msgid "Close"
 msgstr "Schließen"
 
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:66
+msgid "Close menu"
+msgstr "Menü schließen"
+
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:247
 #~ msgid "CN"
 #~ msgstr "CN"
@@ -1563,7 +1567,7 @@ msgstr "Zahlungen konnten nicht geladen werden"
 msgid "Couldn't load products"
 msgstr "Produkte konnten nicht geladen werden"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:185
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:189
 msgid "Couldn't load properties"
 msgstr "Objekte konnten nicht geladen werden"
 
@@ -1736,8 +1740,8 @@ msgstr "Aktuelles Passwort ist erforderlich"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:25
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:158
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:163
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:213
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:240
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:211
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:238
 msgid "Customer"
 msgstr "Kunde"
 
@@ -1842,7 +1846,7 @@ msgstr "Produkt löschen"
 msgid "Delete product?"
 msgstr "Produkt löschen?"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:68
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:66
 msgid "Delete property"
 msgstr "Unterkunft löschen"
 
@@ -1955,8 +1959,8 @@ msgid "Dismiss"
 msgstr "Verwerfen"
 
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:41
-msgid "Displays the mobile sidebar."
-msgstr "Zeigt die mobile Seitenleiste an."
+#~ msgid "Displays the mobile sidebar."
+#~ msgstr "Zeigt die mobile Seitenleiste an."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:188
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:229
@@ -2124,7 +2128,7 @@ msgstr "Eintrag bearbeiten"
 msgid "Edit product"
 msgstr "Produkt bearbeiten"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:58
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:56
 msgid "Edit property"
 msgstr "Unterkunft bearbeiten"
 
@@ -2284,7 +2288,7 @@ msgstr "Nachname eingeben"
 msgid "Enter one of your unused recovery codes"
 msgstr ""
 
-#: src/routes/_auth-layout/auth/login.tsx:352
+#: src/routes/_auth-layout/auth/login.tsx:361
 msgid "Enter one of your unused recovery codes."
 msgstr "Geben Sie einen Ihrer unbenutzten Wiederherstellungscodes ein."
 
@@ -2322,7 +2326,7 @@ msgstr "Geben Sie den 6-stelligen Code ein"
 msgid "Enter the 6-digit code from your authenticator app"
 msgstr "Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein"
 
-#: src/routes/_auth-layout/auth/login.tsx:354
+#: src/routes/_auth-layout/auth/login.tsx:363
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein."
 
@@ -2795,7 +2799,7 @@ msgid "Filter by reservation"
 msgstr "Nach Reservierung filtern"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:113
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:123
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:127
 msgid "Filters"
 msgstr "Filter"
 
@@ -2861,7 +2865,7 @@ msgstr "Essen & Trinken"
 msgid "Forgot Password"
 msgstr "Passwort vergessen?"
 
-#: src/routes/_auth-layout/auth/login.tsx:273
+#: src/routes/_auth-layout/auth/login.tsx:282
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/password-section.tsx:162
 msgid "Forgot password?"
 msgstr "Passwort vergessen?"
@@ -3173,7 +3177,7 @@ msgstr "Inhaber"
 #: src/routes/_dashboard-layout/admin/customers/$customerId.tsx:35
 #: src/routes/_dashboard-layout/admin/customers/index.tsx:150
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:51
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:239
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:243
 msgid "Home"
 msgstr "Start"
 
@@ -3189,9 +3193,9 @@ msgstr ""
 msgid "Hotel"
 msgstr "Hotel"
 
-#: src/routes/_auth-layout.tsx:31
-#: src/routes/_dashboard-layout.tsx:45
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
+#: src/routes/_auth-layout.tsx:34
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:59
+#: src/routes/_dashboard-layout/-components/sidebar-header.tsx:21
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
@@ -3221,7 +3225,7 @@ msgstr "Wie viele Personen anreisen, nach Altersgruppe, und wer sie sind. Der Ha
 msgid "How you appear across the back-office."
 msgstr "So erscheinen Sie im Back-Office."
 
-#: src/routes/_auth-layout/auth/login.tsx:424
+#: src/routes/_auth-layout/auth/login.tsx:433
 msgid "I don't have my phone"
 msgstr "Ich habe mein Telefon nicht"
 
@@ -3570,7 +3574,7 @@ msgid "Loading rooms…"
 msgstr "Zimmer werden geladen…"
 
 #: src/components/ui/data-grid-table.tsx:462
-#: src/routes/_dashboard-layout.tsx:177
+#: src/routes/_dashboard-layout.tsx:156
 msgid "Loading..."
 msgstr "Lädt..."
 
@@ -3585,7 +3589,7 @@ msgstr "Standort"
 
 #: src/routes/_auth-layout/auth/login.tsx:61
 #: src/routes/_auth-layout/auth/login.tsx:137
-#: src/routes/_auth-layout/auth/login.tsx:286
+#: src/routes/_auth-layout/auth/login.tsx:295
 msgid "Log in"
 msgstr "Anmelden"
 
@@ -3614,7 +3618,8 @@ msgstr "Protokolle der Reservierung {bookingNr}"
 msgid "main"
 msgstr "Hauptsprache"
 
-#: src/routes/_dashboard-layout.tsx:66
+#: src/routes/_dashboard-layout.tsx:45
+#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:51
 msgid "Main navigation"
 msgstr "Hauptnavigation"
 
@@ -3641,7 +3646,7 @@ msgstr "Hotelunterkünfte verwalten, Details anzeigen und Einstellungen konfigur
 #~ msgid "Manage orders, track shipments, view order history, and process returns efficiently"
 #~ msgstr "Bestellungen verwalten, Lieferungen verfolgen, Bestellhistorie einsehen und Retouren effizient bearbeiten"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:260
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:264
 msgid "Manage properties, their stage and the customers that own them."
 msgstr "Verwalten Sie Unterkünfte, ihre Phase und die Kunden, denen sie gehören."
 
@@ -4181,11 +4186,11 @@ msgstr "Keine Properties gefunden"
 #~ msgid "No properties match the filters"
 #~ msgstr "Keine Unterkünfte entsprechen den Filtern"
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:213
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:217
 msgid "No properties match the filters."
 msgstr "Keine Unterkünfte entsprechen den Filtern."
 
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:219
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:223
 msgid "No properties yet"
 msgstr "Noch keine Unterkünfte"
 
@@ -4438,6 +4443,7 @@ msgid "Open in my authenticator app"
 msgstr "In meiner Authenticator-App öffnen"
 
 #: src/components/ui/data-grid-row-actions.tsx:17
+#: src/routes/_dashboard-layout/-components/header.tsx:84
 msgid "Open menu"
 msgstr "Menü öffnen"
 
@@ -4547,7 +4553,7 @@ msgid "Party"
 msgstr "Party"
 
 #: src/routes/_auth-layout/auth/accept-invitation.tsx:215
-#: src/routes/_auth-layout/auth/login.tsx:224
+#: src/routes/_auth-layout/auth/login.tsx:231
 #: src/routes/_auth-layout/auth/sign-up.tsx:253
 #: src/routes/_dashboard-layout/(user-view)/door-locks/-components/salto-form.tsx:221
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:141
@@ -5019,9 +5025,9 @@ msgstr "Profil aktualisiert"
 #: src/routes/_dashboard-layout/admin/customers/-components/edit-customer-form.tsx:122
 #: src/routes/_dashboard-layout/admin/index.tsx:20
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:63
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:231
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:251
-#: src/routes/_dashboard-layout/admin/properties/index.tsx:258
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:235
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:255
+#: src/routes/_dashboard-layout/admin/properties/index.tsx:262
 msgid "Properties"
 msgstr "Properties"
 
@@ -5032,8 +5038,8 @@ msgstr "Properties"
 #~ msgid "Properties updated"
 #~ msgstr "Properties aktualisiert"
 
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:170
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:200
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:168
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:198
 #: src/routes/_dashboard-layout/admin/properties/$propertyId.tsx:41
 msgid "Property"
 msgstr "Unterkunft"
@@ -5150,7 +5156,7 @@ msgstr "Seit Kurzem offline"
 msgid "Reception"
 msgstr "Rezeption"
 
-#: src/routes/_auth-layout/auth/login.tsx:380
+#: src/routes/_auth-layout/auth/login.tsx:389
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:123
 msgid "Recovery code"
 msgstr "Wiederherstellungscode"
@@ -5217,7 +5223,7 @@ msgstr "Neu laden, um die andere Fassung zu sehen. Bis dahin bleiben deine Ände
 #~ msgid "Reloading properties"
 #~ msgstr "Objekte werden neu geladen"
 
-#: src/routes/_auth-layout/auth/login.tsx:266
+#: src/routes/_auth-layout/auth/login.tsx:275
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
@@ -5400,7 +5406,7 @@ msgstr "Reservierungen"
 msgid "Reservations from the PMS show up here, or add one by hand."
 msgstr "Reservierungen aus dem PMS erscheinen hier, oder fügen Sie eine von Hand hinzu."
 
-#: src/routes/_auth-layout.tsx:35
+#: src/routes/_auth-layout.tsx:38
 msgid "Reservations, rooms and guests — your front office in one place."
 msgstr "Reservierungen, Zimmer und Gäste – Ihr Front Office an einem Ort."
 
@@ -6078,8 +6084,8 @@ msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr "Nur Protokolle der Reservierung <0>{reservation}</0>"
 
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:38
-msgid "Sidebar"
-msgstr "Seitenleiste"
+#~ msgid "Sidebar"
+#~ msgstr "Seitenleiste"
 
 #: src/routes/_auth-layout/auth/login.tsx:280
 #~ msgid "Sign up"
@@ -6092,7 +6098,7 @@ msgid "Sign Up"
 msgstr "Registrieren"
 
 #: src/routes/_auth-layout.tsx:18
-#: src/routes/_dashboard-layout.tsx:83
+#: src/routes/_dashboard-layout.tsx:62
 msgid "Skip to main content"
 msgstr "Zum Hauptinhalt springen"
 
@@ -6108,8 +6114,8 @@ msgstr "SMS"
 #~ msgstr "SMS erfolgreich gesendet"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:429
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:275
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:285
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:273
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:283
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:25
 msgid "Solutions"
 msgstr "Lösungen"
@@ -6149,8 +6155,8 @@ msgstr "Sport"
 
 #: src/routes/_dashboard-layout/admin/properties/-components/add-property-modal.tsx:195
 #: src/routes/_dashboard-layout/admin/properties/-components/edit-property-form.tsx:197
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:252
-#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:263
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:250
+#: src/routes/_dashboard-layout/admin/properties/-components/properties-table.tsx:261
 #: src/routes/_dashboard-layout/admin/properties/-components/property-stage-filter.tsx:22
 msgid "Stage"
 msgstr "Phase"
@@ -6382,7 +6388,7 @@ msgstr "Text"
 msgid "Text style"
 msgstr "Textstil"
 
-#: src/routes/_auth-layout/auth/login.tsx:330
+#: src/routes/_auth-layout/auth/login.tsx:339
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:144
 msgid "That code isn't valid. Check your app and try again."
 msgstr "Dieser Code ist ungültig. Prüfen Sie Ihre App und versuchen Sie es erneut."
@@ -6400,7 +6406,7 @@ msgstr "Diese Datei ist {0} groß. Bitte wählen Sie eine unter 20 MB."
 msgid "That image couldn't be opened. Try a different one."
 msgstr "Dieses Bild konnte nicht geöffnet werden. Versuchen Sie ein anderes."
 
-#: src/routes/_auth-layout/auth/login.tsx:323
+#: src/routes/_auth-layout/auth/login.tsx:332
 msgid "That sign-in attempt expired. Please start again."
 msgstr "Dieser Anmeldeversuch ist abgelaufen. Bitte beginnen Sie erneut."
 
@@ -6976,7 +6982,7 @@ msgstr "Zwei-Faktor-Authentifizierung ist aktiv"
 msgid "Two-factor authentication won't be enabled and your account will keep using just a password."
 msgstr "Die Zwei-Faktor-Authentifizierung wird nicht aktiviert und Ihr Konto bleibt nur mit einem Passwort geschützt."
 
-#: src/routes/_auth-layout/auth/login.tsx:348
+#: src/routes/_auth-layout/auth/login.tsx:357
 msgid "Two-step verification"
 msgstr "Bestätigung in zwei Schritten"
 
@@ -7157,7 +7163,7 @@ msgstr "URL für diese Sprache"
 msgid "Use “Add product” above to add the first one."
 msgstr "Füge über „Produkt hinzufügen“ oben das erste hinzu."
 
-#: src/routes/_auth-layout/auth/login.tsx:422
+#: src/routes/_auth-layout/auth/login.tsx:431
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:150
 msgid "Use a code from my app instead"
 msgstr "Stattdessen Code aus meiner App verwenden"
@@ -7257,7 +7263,7 @@ msgstr "Verifizierung fehlgeschlagen"
 #~ msgid "Verified"
 #~ msgstr "Bestätigt"
 
-#: src/routes/_auth-layout/auth/login.tsx:407
+#: src/routes/_auth-layout/auth/login.tsx:416
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:288
 msgid "Verify"
 msgstr "Bestätigen"

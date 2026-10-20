@@ -245,7 +245,7 @@ export default function UserMenu() {
           nativeButton={false}
           className="focus-visible:outline-offset-0.5 outline-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid"
           render={
-            <Avatar size="default">
+            <Avatar size="default" className="pointer-coarse:size-11">
               <AvatarFallback>{avatarFallback}</AvatarFallback>
             </Avatar>
           }

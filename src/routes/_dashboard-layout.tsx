@@ -146,9 +146,9 @@ function DashboardPending() {
       </Sidebar>
       <SidebarInset className="flex h-full min-w-0 flex-col">
         <header className="border-b px-3 md:px-4 md:ps-3.5">
-          <div className="flex h-12 items-center justify-between gap-4">
-            <Skeleton className="h-8 w-44" />
-            <Skeleton className="size-8 rounded-full" />
+          <div className="flex h-12 items-center justify-between gap-4 pointer-coarse:h-14">
+            <Skeleton className="h-8 w-44 pointer-coarse:h-11" />
+            <Skeleton className="size-8 rounded-full pointer-coarse:size-11" />
           </div>
         </header>
         <main className="flex flex-col gap-4 px-3 py-2 md:px-6 md:py-4">

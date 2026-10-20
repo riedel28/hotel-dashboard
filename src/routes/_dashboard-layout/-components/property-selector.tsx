@@ -70,7 +70,7 @@ function PropertySelector({
       isItemEqualToValue={(a: Property, b: Property) => a.id === b.id}
     >
       <ComboboxTrigger
-        className="focus-visible:outline-offset-0.5 flex max-w-full min-w-0 items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-foreground outline-none hover:bg-accent focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid data-popup-open:bg-accent"
+        className="focus-visible:outline-offset-0.5 flex max-w-full min-w-0 items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-foreground outline-none hover:bg-accent focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid data-popup-open:bg-accent pointer-coarse:h-11"
         // Starts with the visible text, as WCAG 2.5.3 asks
         aria-label={
           selected ? t`${selected.name}, property` : t`Select property`

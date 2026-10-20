@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { TextAlignJustifyIcon } from 'lucide-react';
@@ -46,6 +47,7 @@ function HeaderPropertySelector() {
 
 export default function Header() {
   const view = useCurrentView();
+  const { t } = useLingui();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -70,7 +72,8 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/60 md:px-4 md:ps-3.5">
-        <div className="flex h-12 items-center justify-between gap-4">
+        {/* 56px on touch screens, to fit 44px targets */}
+        <div className="flex h-12 items-center justify-between gap-4 pointer-coarse:h-14">
           {/* Left side */}
           {/* Mobile menu trigger */}
           <Button
@@ -78,8 +81,8 @@ export default function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(true)}
-            aria-label="Open menu"
-            className="inline-flex md:hidden"
+            aria-label={t`Open menu`}
+            className="inline-flex md:hidden pointer-coarse:size-11"
           >
             <TextAlignJustifyIcon className="size-4" />
           </Button>
