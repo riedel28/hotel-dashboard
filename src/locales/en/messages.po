@@ -77,7 +77,7 @@ msgid "{0, plural, one {# night} other {# nights}}"
 msgstr "{0, plural, one {# night} other {# nights}}"
 
 #. placeholder {0}: 0
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:253
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:225
 msgid "{0, plural, one {# property} other {# properties}}"
 msgstr "{0, plural, one {# property} other {# properties}}"
 
@@ -107,7 +107,7 @@ msgid "{0, plural, one {Not captured for # day} other {Not captured for # days}}
 msgstr "{0, plural, one {Not captured for # day} other {Not captured for # days}}"
 
 #. placeholder {0}: themeLabels[currentTheme]
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:179
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:178
 msgid "{0}"
 msgstr "{0}"
 
@@ -177,7 +177,7 @@ msgstr "{deleteCount, plural, one {I understand that # room will be deleted} oth
 msgid "{failedCount} of {0} tests failed"
 msgstr "{failedCount} of {0} tests failed"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:256
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:228
 msgid "{found} of {loaded} properties"
 msgstr "{found} of {loaded} properties"
 
@@ -241,7 +241,7 @@ msgstr "{shown} of {total} shown"
 #~ msgid "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 #~ msgstr "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:266
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:238
 msgid "{total, plural, one {# property} other {# properties}}"
 msgstr "{total, plural, one {# property} other {# properties}}"
 
@@ -1347,14 +1347,14 @@ msgstr "Client Key is required"
 
 #: src/components/provider-setup/test-connection-dialog.tsx:296
 #: src/components/ui/drawer.tsx:56
-#: src/components/ui/sheet.tsx:79
+#: src/components/ui/sheet.tsx:105
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 msgid "Close"
 msgstr "Close"
 
 #: src/routes/_dashboard-layout/-components/mobile-menu.tsx:70
-msgid "Close menu"
-msgstr "Close menu"
+#~ msgid "Close menu"
+#~ msgstr "Close menu"
 
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:247
 #~ msgid "CN"
@@ -1800,12 +1800,12 @@ msgstr "Customers"
 #~ msgid "Czech Republic"
 #~ msgstr "Czech Republic"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:194
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:413
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:193
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:416
 msgid "Dark"
 msgstr "Dark"
 
-#: src/routes/_dashboard-layout/index.tsx:18
+#: src/routes/_dashboard-layout/index.tsx:19
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -1991,9 +1991,9 @@ msgstr "Discard changes?"
 msgid "Dismiss"
 msgstr "Dismiss"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:41
-#~ msgid "Displays the mobile sidebar."
-#~ msgstr "Displays the mobile sidebar."
+#: src/components/ui/sidebar.tsx:202
+msgid "Displays the mobile sidebar."
+msgstr "Displays the mobile sidebar."
 
 #: src/routes/_dashboard-layout/(user-view)/users/-components/invite-user-modal.tsx:188
 #: src/routes/_dashboard-layout/(user-view)/users/-components/user-form-drawer.tsx:229
@@ -2867,7 +2867,7 @@ msgstr "Find bookings, follow their check-in and open one to edit."
 #~ msgid "First {0} of {total} properties"
 #~ msgstr "First {0} of {total} properties"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:262
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:234
 msgid "First {loaded} of {total} properties"
 msgstr "First {loaded} of {total} properties"
 
@@ -3260,7 +3260,6 @@ msgid "Hotel"
 msgstr "Hotel"
 
 #: src/routes/_auth-layout.tsx:34
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:63
 #: src/routes/_dashboard-layout/-components/sidebar-header.tsx:21
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
@@ -3470,9 +3469,9 @@ msgstr "Keep setting up"
 msgid "Kids"
 msgstr "Kids"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:100
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:388
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:392
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:99
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:391
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:395
 msgid "Language"
 msgstr "Language"
 
@@ -3585,8 +3584,8 @@ msgstr "Let guests check in online before they arrive."
 #~ msgid "Letter"
 #~ msgstr "Letter"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:190
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:412
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:189
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:415
 msgid "Light"
 msgstr "Light"
 
@@ -3673,8 +3672,8 @@ msgid "Log not found"
 msgstr "Log not found"
 
 #: src/routes/_dashboard-layout/-components/logout-dialog.tsx:72
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:215
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:430
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:214
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:433
 msgid "Log out"
 msgstr "Log out"
 
@@ -3695,7 +3694,6 @@ msgid "main"
 msgstr "main"
 
 #: src/routes/_dashboard-layout.tsx:45
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:55
 msgid "Main navigation"
 msgstr "Main navigation"
 
@@ -3727,7 +3725,7 @@ msgstr "Manage hotel properties, view details, and configure settings"
 msgid "Manage properties, their stage and the customers that own them."
 msgstr "Manage properties, their stage and the customers that own them."
 
-#: src/routes/_dashboard-layout/index.tsx:36
+#: src/routes/_dashboard-layout/index.tsx:37
 msgid "Manage room inventory, availability, and room type configurations"
 msgstr "Manage room inventory, availability, and room type configurations"
 
@@ -3755,7 +3753,7 @@ msgstr "Manage this property's connection to its payment account."
 msgid "Manage this property's connection to its property management system."
 msgstr "Manage this property's connection to its property management system."
 
-#: src/routes/_dashboard-layout/index.tsx:40
+#: src/routes/_dashboard-layout/index.tsx:41
 msgid "Manage users, view user details, and assign roles"
 msgstr "Manage users, view user details, and assign roles"
 
@@ -3763,7 +3761,7 @@ msgstr "Manage users, view user details, and assign roles"
 #~ msgid "Manage users, view user details, and manage user roles"
 #~ msgstr "Manage users, view user details, and manage user roles"
 
-#: src/routes/_dashboard-layout/index.tsx:64
+#: src/routes/_dashboard-layout/index.tsx:65
 msgid "Manage your hotel operations efficiently"
 msgstr "Manage your hotel operations efficiently"
 
@@ -3870,7 +3868,7 @@ msgstr "Mobile CMS"
 msgid "Mock code"
 msgstr "Mock code"
 
-#: src/routes/_dashboard-layout/index.tsx:44
+#: src/routes/_dashboard-layout/index.tsx:45
 msgid "Monitor daily operations, track occupancy, and oversee front-office activity"
 msgstr "Monitor daily operations, track occupancy, and oversee front-office activity"
 
@@ -4260,8 +4258,7 @@ msgstr "No products in this category"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "No products in this category. Add products to this category by clicking the button below."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:156
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:217
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:126
 msgid "No properties found"
 msgstr "No properties found"
 
@@ -4530,7 +4527,7 @@ msgid "Open in my authenticator app"
 msgstr "Open in my authenticator app"
 
 #: src/components/ui/data-grid-row-actions.tsx:17
-#: src/routes/_dashboard-layout/-components/header.tsx:84
+#: src/routes/_dashboard-layout/-components/header.tsx:83
 msgid "Open menu"
 msgstr "Open menu"
 
@@ -5065,8 +5062,8 @@ msgstr "Products"
 #~ msgid "Products in {categoryTitle}"
 #~ msgstr "Products in {categoryTitle}"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:306
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:383
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:305
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:386
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:75
 #: src/routes/_dashboard-layout/(user-view)/profile.tsx:153
@@ -5879,8 +5876,7 @@ msgstr "Search products"
 msgid "Search properties"
 msgstr "Search properties"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:145
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:207
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:118
 msgid "Search property"
 msgstr "Search property"
 
@@ -6212,9 +6208,9 @@ msgstr "Showing data from {time}."
 msgid "Showing only logs for reservation <0>{reservation}</0>"
 msgstr "Showing only logs for reservation <0>{reservation}</0>"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:38
-#~ msgid "Sidebar"
-#~ msgstr "Sidebar"
+#: src/components/ui/sidebar.tsx:199
+msgid "Sidebar"
+msgstr "Sidebar"
 
 #: src/routes/_auth-layout/auth/login.tsx:280
 #~ msgid "Sign up"
@@ -6418,7 +6414,7 @@ msgstr "Summary"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Supported formats: JPG, PNG, GIF (max 5MB)"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:128
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:183
 msgid "Switch property"
 msgstr "Switch property"
 
@@ -6463,8 +6459,8 @@ msgstr "Switched to {0}"
 #~ msgid "Switzerland"
 #~ msgstr "Switzerland"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:198
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:414
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:197
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:417
 msgid "System"
 msgstr "System"
 
@@ -6775,9 +6771,9 @@ msgstr "The user {userName} has been deleted"
 msgid "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 msgstr "The user <0>{userName}</0> will be deleted. This action cannot be undone."
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:173
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:405
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:172
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:408
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:411
 msgid "Theme"
 msgstr "Theme"
 
@@ -7354,8 +7350,8 @@ msgstr "User"
 #~ msgid "User features: View reservations, make payments, access basic settings"
 #~ msgstr "User features: View reservations, make payments, access basic settings"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:279
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:355
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:278
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:358
 msgid "User menu"
 msgstr "User menu"
 
@@ -7391,8 +7387,8 @@ msgstr "Username is required"
 msgid "Users"
 msgstr "Users"
 
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:217
-#: src/routes/_dashboard-layout/-components/user-menu.tsx:432
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:216
+#: src/routes/_dashboard-layout/-components/user-menu.tsx:435
 msgid "v{version}"
 msgstr "v{version}"
 
@@ -7446,7 +7442,7 @@ msgstr "Very weak"
 msgid "View and manage customer accounts, profiles, and history"
 msgstr "View and manage customer accounts, profiles, and history"
 
-#: src/routes/_dashboard-layout/index.tsx:31
+#: src/routes/_dashboard-layout/index.tsx:32
 msgid "View and manage guest reservations, check-ins, and booking details"
 msgstr "View and manage guest reservations, check-ins, and booking details"
 
@@ -7516,7 +7512,7 @@ msgstr "Welcome back to Hotel Dashboard"
 #~ msgstr "Welcome back, {0}!"
 
 #: src/routes/_dashboard-layout/admin/index.tsx:39
-#: src/routes/_dashboard-layout/index.tsx:63
+#: src/routes/_dashboard-layout/index.tsx:64
 msgid "Welcome back, {userName}!"
 msgstr "Welcome back, {userName}!"
 

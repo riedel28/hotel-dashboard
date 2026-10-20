@@ -386,8 +386,8 @@ function MobileCmsPage() {
 
       {content}
 
-      <Sheet open={treeOpen} onOpenChange={setTreeOpen}>
-        <SheetContent side="left" className="w-80 overflow-y-auto p-4">
+      <Sheet side="left" open={treeOpen} onOpenChange={setTreeOpen}>
+        <SheetContent className="w-80 overflow-y-auto p-4">
           <SheetHeader className="p-0">
             <SheetTitle>
               <Trans>Content</Trans>

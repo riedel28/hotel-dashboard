@@ -14,13 +14,6 @@ import { useAuth } from '@/auth';
 import { useTheme } from '@/components/theme-provider';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import {
-  BottomSheet,
-  BottomSheetContent,
-  bottomSheetRowClassName,
-  BottomSheetTitle,
-  BottomSheetTrigger
-} from '@/components/ui/bottom-sheet';
 import { CountryFlag } from '@/components/ui/country-flag';
 import {
   DropdownMenu,
@@ -37,6 +30,12 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { SegmentedControl } from '@/components/ui/segmented-control';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { loadCatalog } from '@/i18n';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
@@ -332,6 +331,10 @@ interface UserSheetProps {
   onLogout: () => void;
 }
 
+/** A row in the sheet: 44px tall, the height of a touch target. */
+const sheetRowClassName =
+  'flex min-h-11 w-full items-center gap-3 rounded-md px-3 text-left text-base outline-none hover:bg-accent focus-visible:bg-accent active:bg-accent [&_svg]:size-5 [&_svg]:shrink-0 [&_svg]:text-muted-foreground';
+
 /**
  * The user menu on a phone: a bottom sheet in thumb reach, with language and
  * theme switched in place rather than in submenus that fly out sideways.
@@ -350,24 +353,24 @@ function UserSheet({
   const [open, setOpen] = useState(false);
 
   return (
-    <BottomSheet open={open} onOpenChange={setOpen}>
-      <BottomSheetTrigger
+    <Sheet side="bottom" open={open} onOpenChange={setOpen}>
+      <SheetTrigger
         aria-label={t`User menu`}
         className="focus-visible:outline-offset-0.5 rounded-full outline-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid"
       >
         <Avatar size="default" className="pointer-coarse:size-11">
           <AvatarFallback>{avatarFallback}</AvatarFallback>
         </Avatar>
-      </BottomSheetTrigger>
-      <BottomSheetContent>
+      </SheetTrigger>
+      <SheetContent showCloseButton={false}>
         <div className="flex items-center gap-3 px-4 pt-1 pb-3">
           <Avatar size="lg">
             <AvatarFallback>{avatarFallback}</AvatarFallback>
           </Avatar>
           <div className="grid min-w-0 flex-1 leading-tight">
-            <BottomSheetTitle className="truncate p-0">
+            <SheetTitle className="truncate text-base">
               {auth.user?.first_name} {auth.user?.last_name}
-            </BottomSheetTitle>
+            </SheetTitle>
             <span className="truncate text-sm text-muted-foreground">
               {auth.user?.email}
             </span>
@@ -376,7 +379,7 @@ function UserSheet({
         <div className="flex flex-col gap-1 border-t px-2 py-2">
           <Link
             to="/profile"
-            className={bottomSheetRowClassName}
+            className={sheetRowClassName}
             onClick={() => setOpen(false)}
           >
             <UserCircleIcon />
@@ -420,7 +423,7 @@ function UserSheet({
         <div className="border-t px-2 py-2">
           <button
             type="button"
-            className={bottomSheetRowClassName}
+            className={sheetRowClassName}
             onClick={() => {
               setOpen(false);
               onLogout();
@@ -433,7 +436,7 @@ function UserSheet({
             </span>
           </button>
         </div>
-      </BottomSheetContent>
-    </BottomSheet>
+      </SheetContent>
+    </Sheet>
   );
 }

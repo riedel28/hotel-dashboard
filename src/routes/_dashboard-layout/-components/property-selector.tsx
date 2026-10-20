@@ -11,12 +11,6 @@ import type { Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
 import {
-  BottomSheet,
-  BottomSheetContent,
-  BottomSheetTitle,
-  BottomSheetTrigger
-} from '@/components/ui/bottom-sheet';
-import {
   Combobox,
   ComboboxContent,
   ComboboxEmpty,
@@ -27,6 +21,12 @@ import {
   ComboboxTrigger,
   ComboboxValue
 } from '@/components/ui/combobox';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet';
 import { StageBadge } from '@/components/ui/stage-badge';
 import { useDelayedFlag } from '@/hooks/use-delayed-flag';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -96,18 +96,76 @@ function PropertySelector({
     </span>
   );
 
+  // Shared by the dropdown and the phone's sheet, so the two can't drift
+  const comboboxProps = {
+    items: properties,
+    value: selected,
+    onValueChange: (property: Property | null) => {
+      if (!property) return;
+      setSheetOpen(false);
+      void switchTo(property);
+    },
+    itemToStringLabel: (property: Property) => property.name,
+    isItemEqualToValue: (a: Property, b: Property) => a.id === b.id
+  };
+
+  // Search, list and count. Rendered in one place at a time: the dropdown
+  // from md up, the sheet below it, so `max-md:` sizes it for the sheet.
+  const listBody = (
+    <>
+      <ComboboxInput
+        variant="popup"
+        placeholder={t`Search property`}
+        iconLeft={
+          <SearchIcon
+            className="size-4 shrink-0 opacity-50"
+            aria-hidden="true"
+          />
+        }
+        showTrigger={false}
+        className="max-md:mx-4 max-md:h-11 max-md:rounded-lg max-md:border max-md:px-3"
+      />
+      <ComboboxEmpty className="py-4 text-center text-sm text-muted-foreground">
+        <Trans>No properties found</Trans>
+      </ComboboxEmpty>
+      {/*
+        In the dropdown, seven and a half rows — a row being an item (h-9) plus
+        the gap under it — so the cut-off one hints at more. In the sheet, all
+        the room it has.
+      */}
+      <ComboboxList className="mb-0 max-h-[calc(--spacing(10)*7.5+--spacing(1))] scroll-fade-y space-y-1 p-1 max-md:max-h-none max-md:min-h-0 max-md:flex-1 max-md:px-2 max-md:py-2">
+        {(property: Property) => (
+          <ComboboxItem
+            key={property.id}
+            value={property}
+            indicator="start"
+            className="h-9 rounded-md max-md:h-11 max-md:text-base"
+          >
+            <span className="flex-1 truncate">{property.name}</span>
+            <StageBadge stage={property.stage} />
+          </ComboboxItem>
+        )}
+      </ComboboxList>
+      <ComboboxSeparator className="my-0" />
+      <div className="shrink-0 px-3 py-2 text-xs text-muted-foreground max-md:px-4 max-md:py-3">
+        <PropertyCount loaded={properties.length} total={total} />
+      </div>
+    </>
+  );
+
   // On a phone the list is a bottom sheet in thumb reach. The search field
   // waits for a tap: focusing it on open would put the keyboard over the list.
   if (isMobile) {
     return (
-      <BottomSheet
+      <Sheet
+        side="bottom"
         open={sheetOpen}
         onOpenChange={(open) => {
           setSheetOpen(open);
           if (open) onOpen?.();
         }}
       >
-        <BottomSheetTrigger
+        <SheetTrigger
           className={triggerClassName}
           aria-label={triggerLabel}
           aria-busy={switching}
@@ -120,76 +178,27 @@ function PropertySelector({
               aria-hidden="true"
             />
           )}
-        </BottomSheetTrigger>
+        </SheetTrigger>
         {/* A fixed height, so the sheet and its search field don't drop as
             the search narrows the list */}
-        <BottomSheetContent className="h-[85dvh]">
-          <BottomSheetTitle>
+        <SheetContent showCloseButton={false} className="h-[85dvh]">
+          <SheetTitle className="px-4 pt-1 pb-2 text-base">
             <Trans>Switch property</Trans>
-          </BottomSheetTitle>
-          <Combobox
-            inline
-            open
-            items={properties}
-            value={selected}
-            onValueChange={(property: Property | null) => {
-              if (!property) return;
-              setSheetOpen(false);
-              void switchTo(property);
-            }}
-            itemToStringLabel={(property: Property) => property.name}
-            isItemEqualToValue={(a: Property, b: Property) => a.id === b.id}
-          >
-            <ComboboxInput
-              variant="popup"
-              placeholder={t`Search property`}
-              iconLeft={
-                <SearchIcon
-                  className="size-4 shrink-0 opacity-50"
-                  aria-hidden="true"
-                />
-              }
-              showTrigger={false}
-              className="mx-4 h-11 rounded-lg border border-input px-3"
-            />
-            <ComboboxEmpty className="py-4 text-center text-sm text-muted-foreground">
-              <Trans>No properties found</Trans>
-            </ComboboxEmpty>
-            <ComboboxList className="max-h-none min-h-0 flex-1 space-y-1 px-2 py-2">
-              {(property: Property) => (
-                <ComboboxItem
-                  key={property.id}
-                  value={property}
-                  indicator="start"
-                  className="h-11 rounded-md text-base"
-                >
-                  <span className="flex-1 truncate">{property.name}</span>
-                  <StageBadge stage={property.stage} />
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-            <ComboboxSeparator className="my-0" />
-            <div className="shrink-0 px-4 py-3 text-xs text-muted-foreground">
-              <PropertyCount loaded={properties.length} total={total} />
-            </div>
+          </SheetTitle>
+          <Combobox {...comboboxProps} inline open>
+            {listBody}
           </Combobox>
-        </BottomSheetContent>
-      </BottomSheet>
+        </SheetContent>
+      </Sheet>
     );
   }
 
   return (
     <Combobox
-      items={properties}
-      value={selected}
-      onValueChange={(property: Property | null) => {
-        if (property) void switchTo(property);
-      }}
+      {...comboboxProps}
       onOpenChange={(open) => {
         if (open) onOpen?.();
       }}
-      itemToStringLabel={(property: Property) => property.name}
-      isItemEqualToValue={(a: Property, b: Property) => a.id === b.id}
     >
       <ComboboxTrigger
         className={triggerClassName}
@@ -202,41 +211,7 @@ function PropertySelector({
         <ComboboxValue>{name}</ComboboxValue>
       </ComboboxTrigger>
       <ComboboxContent className="max-h-(--available-height) w-96">
-        <ComboboxInput
-          variant="popup"
-          placeholder={t`Search property`}
-          iconLeft={
-            <SearchIcon
-              className="size-4 shrink-0 opacity-50"
-              aria-hidden="true"
-            />
-          }
-          showTrigger={false}
-        />
-        <ComboboxEmpty className="py-4 text-center text-sm text-muted-foreground">
-          <Trans>No properties found</Trans>
-        </ComboboxEmpty>
-        {/*
-          Seven and a half rows — a row being an item (h-9) plus the gap under
-          it — so the cut-off one hints at more.
-        */}
-        <ComboboxList className="mb-0 max-h-[calc(--spacing(10)*7.5+--spacing(1))] scroll-fade-y space-y-1 p-1">
-          {(property: Property) => (
-            <ComboboxItem
-              key={property.id}
-              value={property}
-              indicator="start"
-              className="h-9 rounded-md"
-            >
-              <span className="flex-1 truncate">{property.name}</span>
-              <StageBadge stage={property.stage} />
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-        <ComboboxSeparator className="my-0" />
-        <div className="shrink-0 px-3 py-2 text-xs text-muted-foreground">
-          <PropertyCount loaded={properties.length} total={total} />
-        </div>
+        {listBody}
       </ComboboxContent>
     </Combobox>
   );
