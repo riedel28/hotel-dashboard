@@ -1,86 +1,115 @@
 'use client';
 
+import { Drawer as SheetPrimitive } from '@base-ui/react/drawer';
 import { Trans } from '@lingui/react/macro';
-import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />;
-}
+// A panel that slides in from an edge, follows the finger and closes with a
+// swipe back towards that edge, a tap outside or Escape. Built on the Base UI
+// drawer; `side` sits on the root because the swipe direction is set there.
 
-function SheetTrigger({
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
-  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
-}
+type SheetSide = 'left' | 'right' | 'bottom';
 
-function SheetClose({
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Close>) {
-  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
-}
+const SheetSideContext = React.createContext<SheetSide>('right');
 
-function SheetPortal({
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Portal>) {
-  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
-}
+const swipeDirections = {
+  left: 'left',
+  right: 'right',
+  bottom: 'down'
+} as const;
 
-function SheetOverlay({
-  className,
+function Sheet({
+  side = 'right',
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
+}: SheetPrimitive.Root.Props & { side?: SheetSide }) {
   return (
-    <SheetPrimitive.Overlay
-      data-slot="sheet-overlay"
-      className={cn(
-        'fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
-        className
-      )}
-      {...props}
-    />
+    <SheetSideContext value={side}>
+      <SheetPrimitive.Root
+        data-slot="sheet"
+        swipeDirection={swipeDirections[side]}
+        {...props}
+      />
+    </SheetSideContext>
   );
 }
+
+const SheetTrigger = SheetPrimitive.Trigger;
+const SheetClose = SheetPrimitive.Close;
+
+// The viewport lays the panel against its edge
+const viewportClassNames: Record<SheetSide, string> = {
+  left: 'justify-start',
+  right: 'justify-end',
+  bottom: 'items-end'
+};
+
+// At rest the panel follows the swipe; it enters and leaves past its edge
+const panelClassNames: Record<SheetSide, string> = {
+  left: 'h-full w-3/4 border-r sm:max-w-sm [transform:translateX(var(--drawer-swipe-movement-x))] data-ending-style:[transform:translateX(-100%)] data-starting-style:[transform:translateX(-100%)]',
+  right:
+    'h-full w-3/4 border-l sm:max-w-sm [transform:translateX(var(--drawer-swipe-movement-x))] data-ending-style:[transform:translateX(100%)] data-starting-style:[transform:translateX(100%)]',
+  // Clear of the home indicator and, while it is up, the on-screen keyboard
+  bottom:
+    'max-h-[85dvh] w-full rounded-t-xl ring-1 ring-foreground/10 pb-[calc(env(safe-area-inset-bottom)+var(--drawer-keyboard-inset,0px))] [transform:translateY(var(--drawer-swipe-movement-y))] data-ending-style:[transform:translateY(100%)] data-starting-style:[transform:translateY(100%)]'
+};
 
 function SheetContent({
   className,
   children,
-  side = 'right',
+  showCloseButton = true,
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: 'top' | 'right' | 'bottom' | 'left';
-}) {
+}: SheetPrimitive.Popup.Props & { showCloseButton?: boolean }) {
+  const side = React.use(SheetSideContext);
+
   return (
-    <SheetPortal>
-      <SheetOverlay />
-      <SheetPrimitive.Content
-        data-slot="sheet-content"
-        className={cn(
-          'fixed z-50 flex flex-col gap-4 bg-background shadow-lg transition ease-in-out data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:animate-in data-[state=open]:duration-500',
-          side === 'right' &&
-            'inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
-          side === 'left' &&
-            'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
-          side === 'top' &&
-            'inset-x-0 top-0 h-auto border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
-          side === 'bottom' &&
-            'inset-x-0 bottom-0 h-auto border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary">
-          <XIcon className="size-4" />
-          <span className="sr-only">
-            <Trans>Close</Trans>
-          </span>
-        </SheetPrimitive.Close>
-      </SheetPrimitive.Content>
-    </SheetPortal>
+    // Sets --drawer-keyboard-inset while the on-screen keyboard is up
+    <SheetPrimitive.VirtualKeyboardProvider>
+      <SheetPrimitive.Portal>
+        <SheetPrimitive.Backdrop
+          data-slot="sheet-overlay"
+          className="fixed inset-0 z-50 bg-black opacity-[calc(0.5*(1-var(--drawer-swipe-progress)))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-starting-style:opacity-0 data-swiping:duration-0"
+        />
+        <SheetPrimitive.Viewport
+          className={cn('fixed inset-0 z-50 flex', viewportClassNames[side])}
+        >
+          <SheetPrimitive.Popup
+            data-slot="sheet-content"
+            className={cn(
+              'relative flex flex-col bg-background shadow-lg outline-none',
+              'transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-swiping:duration-0 data-swiping:select-none',
+              panelClassNames[side],
+              className
+            )}
+            {...props}
+          >
+            {side === 'bottom' && (
+              // The grip that says it can be swiped away
+              <div
+                aria-hidden="true"
+                className="mx-auto mt-2 mb-1 h-1 w-10 shrink-0 rounded-full bg-muted-foreground/30"
+              />
+            )}
+            {/* Without it a mouse press starts a swipe and captures the
+                pointer, so the click lands on the panel instead of the
+                control. Touch still swipes from anywhere. */}
+            <SheetPrimitive.Content className="flex min-h-0 flex-1 flex-col">
+              {children}
+            </SheetPrimitive.Content>
+            {showCloseButton && (
+              <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden disabled:pointer-events-none">
+                <XIcon className="size-4" />
+                <span className="sr-only">
+                  <Trans>Close</Trans>
+                </span>
+              </SheetPrimitive.Close>
+            )}
+          </SheetPrimitive.Popup>
+        </SheetPrimitive.Viewport>
+      </SheetPrimitive.Portal>
+    </SheetPrimitive.VirtualKeyboardProvider>
   );
 }
 
@@ -104,10 +133,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-function SheetTitle({
-  className,
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Title>) {
+function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
@@ -120,7 +146,7 @@ function SheetTitle({
 function SheetDescription({
   className,
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Description>) {
+}: SheetPrimitive.Description.Props) {
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"

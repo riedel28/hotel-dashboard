@@ -8,7 +8,8 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
+  useSidebar
 } from '@/components/ui/sidebar';
 import { useCurrentView } from '@/hooks/use-current-view';
 import {
@@ -23,9 +24,11 @@ export function useDisabledNavItems(): NavItemId[] {
   return dashboardRoute.useRouteContext().disabledNavItems;
 }
 
-/** The navigation of the current view, shared by the sidebar and the mobile menu. */
-export function DashboardNav({ onNavigate }: { onNavigate?: () => void }) {
+/** The navigation of the current view. */
+export function DashboardNav() {
   const { t } = useLingui();
+  // On a phone the sidebar is a sheet over the page; following a link closes it
+  const { setOpenMobile } = useSidebar();
   const disabledNavItems = useDisabledNavItems();
   const sections =
     useCurrentView() === 'admin'
@@ -52,7 +55,7 @@ export function DashboardNav({ onNavigate }: { onNavigate?: () => void }) {
                         className:
                           'bg-primary-soft text-primary-soft-foreground hover:bg-primary-soft! hover:text-primary-soft-foreground!'
                       }}
-                      onClick={onNavigate}
+                      onClick={() => setOpenMobile(false)}
                     >
                       <Icon />
                       <span>{t(label)}</span>

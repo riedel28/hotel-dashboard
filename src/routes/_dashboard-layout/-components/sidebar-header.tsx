@@ -20,7 +20,7 @@ export function DashboardSidebarHeader() {
             <span className="text-sm font-semibold whitespace-nowrap transition-all duration-200 ease-in-out group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:scale-95 group-data-[collapsible=icon]:opacity-0">
               <Trans>Hotel Dashboard</Trans>
             </span>
-            <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0" />
+            <SidebarTrigger className="ml-auto transition-all duration-200 ease-in-out group-data-[collapsible=icon]:ml-0 in-data-[mobile=true]:pointer-coarse:-my-2 in-data-[mobile=true]:pointer-coarse:size-11" />
           </SidebarMenuItem>
         </SidebarGroup>
       </SidebarMenu>

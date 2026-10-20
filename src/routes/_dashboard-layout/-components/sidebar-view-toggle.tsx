@@ -18,11 +18,11 @@ export function SidebarViewToggle() {
   return (
     <SidebarGroup className="py-2 group-data-[collapsible=icon]:hidden">
       <Tabs value={currentView} aria-label={t`Switch view`}>
-        <TabsList className="w-full">
+        <TabsList className="w-full in-data-[mobile=true]:pointer-coarse:h-10!">
           <TabsTrigger
             value="user"
             nativeButton={false}
-            className="h-6 flex-1 text-xs"
+            className="h-6 flex-1 text-xs in-data-[mobile=true]:pointer-coarse:h-full"
             render={<Link to="/" />}
           >
             <Trans>User</Trans>
@@ -30,7 +30,7 @@ export function SidebarViewToggle() {
           <TabsTrigger
             value="admin"
             nativeButton={false}
-            className="h-6 flex-1 text-xs"
+            className="h-6 flex-1 text-xs in-data-[mobile=true]:pointer-coarse:h-full"
             render={<Link to="/admin" />}
           >
             <Trans>Admin</Trans>

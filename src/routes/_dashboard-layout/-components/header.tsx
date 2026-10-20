@@ -1,3 +1,4 @@
+import { useLingui } from '@lingui/react/macro';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { TextAlignJustifyIcon } from 'lucide-react';
@@ -6,8 +7,8 @@ import * as React from 'react';
 import { selectablePropertiesQueryOptions } from '@/api/properties';
 import { useAuth } from '@/auth';
 import { Button } from '@/components/ui/button';
+import { useSidebar } from '@/components/ui/sidebar';
 import { useCurrentView } from '@/hooks/use-current-view';
-import { MobileMenu } from '@/routes/_dashboard-layout/-components/mobile-menu';
 import PropertySelector from '@/routes/_dashboard-layout/-components/property-selector';
 import UserMenu from '@/routes/_dashboard-layout/-components/user-menu';
 
@@ -44,12 +45,25 @@ function HeaderPropertySelector() {
   );
 }
 
+/** The header's bar, shared with the layout's loading skeleton so the two line up. */
+export function HeaderFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <header className="sticky top-0 z-50 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/60 md:px-4 md:ps-3.5">
+      {/* 56px on touch screens, to fit 44px targets */}
+      <div className="flex h-12 items-center justify-between gap-4 pointer-coarse:h-14">
+        {children}
+      </div>
+    </header>
+  );
+}
+
 export default function Header() {
   const view = useCurrentView();
+  const { t } = useLingui();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const { toggleSidebar } = useSidebar();
 
   // Everything that follows a change of selected Property, in one place. An
   // effect rather than the change handler, because the router context only
@@ -68,39 +82,34 @@ export default function Header() {
   }, [selectedPropertyId, queryClient, router]);
 
   return (
-    <>
-      <header className="sticky top-0 z-50 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/60 md:px-4 md:ps-3.5">
-        <div className="flex h-12 items-center justify-between gap-4">
-          {/* Left side */}
-          {/* Mobile menu trigger */}
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileMenuOpen(true)}
-            aria-label="Open menu"
-            className="inline-flex md:hidden"
-          >
-            <TextAlignJustifyIcon className="size-4" />
-          </Button>
-          <div className="min-w-0">
-            {/*
+    <HeaderFrame>
+      {/* Left side */}
+      {/* Mobile menu trigger */}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={toggleSidebar}
+        aria-label={t`Open menu`}
+        className="inline-flex md:hidden pointer-coarse:size-11"
+      >
+        <TextAlignJustifyIcon className="size-4" />
+      </Button>
+      <div className="min-w-0">
+        {/*
               The admin area is not about any one Property. Coming from there,
               the list may not be loaded yet — the selector appears once it is.
             */}
-            {view === 'user' && (
-              <React.Suspense fallback={null}>
-                <HeaderPropertySelector />
-              </React.Suspense>
-            )}
-          </div>
-          {/* Right side */}
-          <div className="flex items-center gap-2">
-            <UserMenu />
-          </div>
-        </div>
-      </header>
-      <MobileMenu open={mobileMenuOpen} onOpenChange={setMobileMenuOpen} />
-    </>
+        {view === 'user' && (
+          <React.Suspense fallback={null}>
+            <HeaderPropertySelector />
+          </React.Suspense>
+        )}
+      </div>
+      {/* Right side */}
+      <div className="flex items-center gap-2">
+        <UserMenu />
+      </div>
+    </HeaderFrame>
   );
 }

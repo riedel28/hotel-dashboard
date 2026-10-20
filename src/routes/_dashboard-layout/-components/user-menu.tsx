@@ -29,6 +29,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { SegmentedControl } from '@/components/ui/segmented-control';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { loadCatalog } from '@/i18n';
 import { Route as DashboardLayoutRoute } from '@/routes/_dashboard-layout';
 import { LogoutDialog } from '@/routes/_dashboard-layout/-components/logout-dialog';
@@ -219,6 +227,7 @@ export default function UserMenu() {
 
   const navigate = DashboardLayoutRoute.useNavigate();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const currentLanguage = languages.find((l) => l.code === locale);
   const version = getPackageVersion();
@@ -237,6 +246,31 @@ export default function UserMenu() {
     await navigate({ to: '/auth/login', replace: true });
   };
 
+  const logoutDialog = (
+    <LogoutDialog
+      open={logoutDialogOpen}
+      onOpenChange={setLogoutDialogOpen}
+      onLogoutSuccess={handleLogoutSuccess}
+    />
+  );
+
+  if (isMobile) {
+    return (
+      <>
+        <UserSheet
+          avatarFallback={avatarFallback}
+          locale={locale}
+          onLocaleChange={handleChangeLocale}
+          theme={theme}
+          onThemeChange={setTheme}
+          version={version}
+          onLogout={handleLogout}
+        />
+        {logoutDialog}
+      </>
+    );
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -245,7 +279,7 @@ export default function UserMenu() {
           nativeButton={false}
           className="focus-visible:outline-offset-0.5 outline-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid"
           render={
-            <Avatar size="default">
+            <Avatar size="default" className="pointer-coarse:size-11">
               <AvatarFallback>{avatarFallback}</AvatarFallback>
             </Avatar>
           }
@@ -282,11 +316,127 @@ export default function UserMenu() {
           <LogoutMenuItem version={version} onLogout={handleLogout} />
         </DropdownMenuContent>
       </DropdownMenu>
-      <LogoutDialog
-        open={logoutDialogOpen}
-        onOpenChange={setLogoutDialogOpen}
-        onLogoutSuccess={handleLogoutSuccess}
-      />
+      {logoutDialog}
     </>
+  );
+}
+
+interface UserSheetProps {
+  avatarFallback: string;
+  locale: string;
+  onLocaleChange: (locale: string) => void;
+  theme: Theme;
+  onThemeChange: (theme: Theme) => void;
+  version: string;
+  onLogout: () => void;
+}
+
+/** A row in the sheet: 44px tall, the height of a touch target. */
+const sheetRowClassName =
+  'flex min-h-11 w-full items-center gap-3 rounded-md px-3 text-left text-base outline-none hover:bg-accent focus-visible:bg-accent active:bg-accent [&_svg]:size-5 [&_svg]:shrink-0 [&_svg]:text-muted-foreground';
+
+/**
+ * The user menu on a phone: a bottom sheet in thumb reach, with language and
+ * theme switched in place rather than in submenus that fly out sideways.
+ */
+function UserSheet({
+  avatarFallback,
+  locale,
+  onLocaleChange,
+  theme,
+  onThemeChange,
+  version,
+  onLogout
+}: UserSheetProps) {
+  const auth = useAuth();
+  const { t } = useLingui();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Sheet side="bottom" open={open} onOpenChange={setOpen}>
+      <SheetTrigger
+        aria-label={t`User menu`}
+        className="focus-visible:outline-offset-0.5 rounded-full outline-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid"
+      >
+        <Avatar size="default" className="pointer-coarse:size-11">
+          <AvatarFallback>{avatarFallback}</AvatarFallback>
+        </Avatar>
+      </SheetTrigger>
+      <SheetContent showCloseButton={false}>
+        <div className="flex items-center gap-3 px-4 pt-1 pb-3">
+          <Avatar size="lg">
+            <AvatarFallback>{avatarFallback}</AvatarFallback>
+          </Avatar>
+          <div className="grid min-w-0 flex-1 leading-tight">
+            <SheetTitle className="truncate text-base">
+              {auth.user?.first_name} {auth.user?.last_name}
+            </SheetTitle>
+            <span className="truncate text-sm text-muted-foreground">
+              {auth.user?.email}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-1 border-t px-2 py-2">
+          <Link
+            to="/profile"
+            className={sheetRowClassName}
+            onClick={() => setOpen(false)}
+          >
+            <UserCircleIcon />
+            <Trans>Profile</Trans>
+          </Link>
+          <div className="flex min-h-11 items-center justify-between gap-3 px-3">
+            <span className="flex items-center gap-3 text-base [&_svg]:size-5 [&_svg]:text-muted-foreground">
+              <GlobeIcon />
+              <Trans>Language</Trans>
+            </span>
+            {/* 44px segments: the track adds its border and padding */}
+            <SegmentedControl
+              label={t`Language`}
+              value={locale}
+              onValueChange={onLocaleChange}
+              options={languages.map((lang) => ({
+                value: lang.code,
+                label: lang.label
+              }))}
+              className="h-12.5 p-0.5"
+            />
+          </div>
+          <div className="flex min-h-11 items-center justify-between gap-3 px-3">
+            <span className="flex items-center gap-3 text-base [&_svg]:size-5 [&_svg]:text-muted-foreground">
+              <MonitorIcon />
+              <Trans>Theme</Trans>
+            </span>
+            <SegmentedControl
+              label={t`Theme`}
+              value={theme}
+              onValueChange={onThemeChange}
+              options={[
+                { value: 'light', label: t`Light` },
+                { value: 'dark', label: t`Dark` },
+                { value: 'system', label: t`System` }
+              ]}
+              className="h-12.5 p-0.5"
+            />
+          </div>
+        </div>
+        <div className="border-t px-2 py-2">
+          <button
+            type="button"
+            className={sheetRowClassName}
+            onClick={() => {
+              setOpen(false);
+              onLogout();
+            }}
+          >
+            <LogOutIcon />
+            <Trans>Log out</Trans>
+            <span className="ml-auto text-xs text-muted-foreground">
+              <Trans>v{version}</Trans>
+            </span>
+          </button>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
