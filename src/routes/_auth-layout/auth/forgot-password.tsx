@@ -29,7 +29,7 @@ interface SuccessViewProps {
 
 function SuccessView({ email }: SuccessViewProps) {
   return (
-    <div className="flex flex-1 items-center justify-center py-10">
+    <div className="flex flex-1 items-start justify-center pt-6 pb-10 lg:items-center lg:py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-center gap-4">
           <div className="flex size-10 items-center justify-center rounded-full bg-success-soft text-sm font-bold text-success">
@@ -92,7 +92,7 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex flex-1 items-center justify-center py-10">
+    <div className="flex flex-1 items-start justify-center pt-6 pb-10 lg:items-center lg:py-10">
       <div className="flex w-full max-w-sm flex-col gap-5">
         <div className="mb-3 flex flex-col items-start gap-4">
           <AppLogo size="lg" tone="tint" />

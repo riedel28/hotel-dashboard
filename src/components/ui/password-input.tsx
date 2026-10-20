@@ -37,7 +37,8 @@ function PasswordInput({
           aria-label={isVisible ? t`Hide password` : t`Show password`}
           aria-pressed={isVisible}
           aria-controls={inputId}
-          className="hover:bg-transparent"
+          // A 44px hit area on touch screens, the icon stays 24px
+          className="relative hover:bg-transparent pointer-coarse:after:absolute pointer-coarse:after:-inset-2.5"
         >
           {isVisible ? (
             <EyeOffIcon size={16} strokeWidth={2} aria-hidden="true" />
