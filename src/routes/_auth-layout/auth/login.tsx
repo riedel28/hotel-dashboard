@@ -198,7 +198,6 @@ function LoginPage() {
                   type="email"
                   placeholder="name@hotel.com"
                   autoComplete="email"
-                  autoFocus
                   aria-required="true"
                   aria-invalid={fieldState.invalid}
                   aria-describedby={
