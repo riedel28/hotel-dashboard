@@ -1,3 +1,15 @@
+# [1.38.0](https://github.com/riedel28/hotel-dashboard/compare/v1.37.1...v1.38.0) (2026-10-20)
+
+
+### Bug Fixes
+
+* **layout:** 16px gutters on phones, rounder view toggle in the sheet ([5f01488](https://github.com/riedel28/hotel-dashboard/commit/5f01488958a4e8fa09b785873f046cc42f345c47))
+
+
+### Features
+
+* **sidebar:** swipe in from the edge to open, from the home screen ([d9c6a43](https://github.com/riedel28/hotel-dashboard/commit/d9c6a435796a60f158aa3bbea19f4e7455844fb4))
+
 ## [1.37.1](https://github.com/riedel28/hotel-dashboard/compare/v1.37.0...v1.37.1) (2026-10-20)
 
 
