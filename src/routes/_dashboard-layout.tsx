@@ -78,7 +78,7 @@ function DashboardLayout() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="relative min-h-0 flex-1 [scrollbar-gutter:stable] overflow-auto px-3 py-2 pb-4 focus:outline-none md:px-6 md:py-4 md:pb-8"
+          className="relative min-h-0 flex-1 [scrollbar-gutter:stable] overflow-auto px-4 pt-4 pb-6 focus:outline-none md:px-6 md:pb-8"
         >
           <Outlet />
         </main>
@@ -152,7 +152,7 @@ function DashboardPending() {
           <Skeleton className="h-8 w-44 pointer-coarse:h-11" />
           <Skeleton className="size-8 rounded-full pointer-coarse:size-11" />
         </HeaderFrame>
-        <main className="flex flex-col gap-4 px-3 py-2 md:px-6 md:py-4">
+        <main className="flex flex-col gap-4 px-4 pt-4 md:px-6">
           <span className="sr-only">
             <Trans>Loading...</Trans>
           </span>

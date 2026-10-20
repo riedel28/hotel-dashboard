@@ -48,7 +48,7 @@ function HeaderPropertySelector() {
 /** The header's bar, shared with the layout's loading skeleton so the two line up. */
 export function HeaderFrame({ children }: { children: React.ReactNode }) {
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/60 md:px-4 md:ps-3.5">
+    <header className="sticky top-0 z-50 border-b bg-background/95 px-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:ps-3.5">
       {/* 56px on touch screens, to fit 44px targets */}
       <div className="flex h-12 items-center justify-between gap-4 pointer-coarse:h-14">
         {children}
@@ -91,7 +91,9 @@ export default function Header() {
         size="icon"
         onClick={toggleSidebar}
         aria-label={t`Open menu`}
-        className="inline-flex md:hidden pointer-coarse:size-11"
+        // Pulled out by the icon's inset, so the icon lines up with the
+        // page's 16px gutter rather than the button's edge
+        className="-ml-2 inline-flex md:hidden pointer-coarse:-ml-3.5 pointer-coarse:size-11"
       >
         <TextAlignJustifyIcon className="size-4" />
       </Button>
