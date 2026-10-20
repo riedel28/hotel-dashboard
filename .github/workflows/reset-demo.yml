@@ -1,0 +1,38 @@
+name: Reset demo
+
+# The demo account is public, so whatever its visitors change, delete or upload
+# stays until this reseeds the production database — every table, not just the
+# demo account's, back to the seed data. Production is a showcase, nothing in it
+# is meant to last.
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+# Not while a deploy is migrating the same database
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  reset:
+    name: Reseed production
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+      NODE_ENV: production
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.8"
+
+      - name: Install backend dependencies
+        run: cd ./backend && bun install --frozen-lockfile
+
+      - name: Reseed
+        run: cd ./backend && bun src/scripts/seed.ts

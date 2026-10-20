@@ -1,4 +1,6 @@
+import { t } from '@lingui/core/macro';
 import axios, { AxiosError, isAxiosError } from 'axios';
+import { DEMO_FORBIDDEN } from 'shared/demo';
 import z from 'zod';
 
 type UnauthorizedHandler = (() => void) | null;
@@ -20,11 +22,13 @@ const client = axios.create({
 });
 
 /**
- * 401s the caller is expected to handle in place. These mean "prove yourself
- * again for this one action", not "your session is gone" — signing the user out
- * and bouncing them to the login page would destroy whatever they were doing.
+ * 401s and 403s the caller is expected to handle in place. These mean "prove
+ * yourself again for this one action" (or "not this one, in the demo"), not
+ * "your session is gone" — signing the user out and bouncing them to the login
+ * page would destroy whatever they were doing.
  */
 const IN_FLOW_CHALLENGE_CODES = new Set([
+  DEMO_FORBIDDEN,
   'REAUTH_REQUIRED',
   'REAUTH_FAILED',
   'INVALID_CURRENT_PASSWORD',
@@ -66,6 +70,11 @@ class ApiError extends Error {
   }
 }
 
+/** The demo account was refused the request; the message says so. */
+function isDemoForbidden(error: unknown): error is ApiError {
+  return error instanceof ApiError && error.code === DEMO_FORBIDDEN;
+}
+
 /** A failed request that signed the user out; the login page says enough. */
 function isSessionError(error: unknown) {
   return error instanceof ApiError && endsSession(error.status, error.code);
@@ -78,9 +87,14 @@ function handleApiError(err: unknown, context: string): never {
       message?: string;
       code?: string;
     }>;
+    const code = ae.response?.data?.code;
     throw new ApiError(
-      ae.response?.data?.error ?? ae.response?.data?.message ?? ae.message,
-      ae.response?.data?.code,
+      code === DEMO_FORBIDDEN
+        ? t`This isn't available in the demo`
+        : (ae.response?.data?.error ??
+            ae.response?.data?.message ??
+            ae.message),
+      code,
       ae.response?.status
     );
   }
@@ -95,6 +109,7 @@ export {
   ApiError,
   client,
   handleApiError,
+  isDemoForbidden,
   isSessionError,
   setUnauthorizedHandler
 };

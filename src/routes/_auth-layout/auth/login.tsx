@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { DEMO_EMAIL, DEMO_PASSWORD } from 'shared/demo';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -22,7 +23,12 @@ import { OtpField } from '@/components/otp-field';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+  FieldSeparator
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Link } from '@/components/ui/link';
 import { PasswordInput } from '@/components/ui/password-input';
@@ -295,6 +301,30 @@ function LoginPage() {
             <Trans>Log in</Trans>
           </Button>
         </form>
+
+        {/* The auth panel is a card, not the page background */}
+        <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
+          <Trans>or</Trans>
+        </FieldSeparator>
+
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-info/20 bg-info-soft px-3 py-2 text-sm text-info">
+          <span className="font-medium">
+            <Trans>Try demo access</Trans>
+          </span>
+          <Button
+            size="sm"
+            onClick={() =>
+              loginMutation.mutate({
+                email: DEMO_EMAIL,
+                password: DEMO_PASSWORD,
+                rememberMe: false
+              })
+            }
+            disabled={loginMutation.isPending}
+          >
+            <Trans>Log in</Trans>
+          </Button>
+        </div>
       </div>
     </div>
   );

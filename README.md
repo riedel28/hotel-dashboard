@@ -6,7 +6,7 @@ A hotel management dashboard with dual-view architecture (User View for front-of
 |:---:|:---:|
 | ![Login](public/screenshot.png) | ![Reservations](public/screenshot-reservations.png) |
 
-[Live Demo](https://backoffice-hotel-dashboard.vercel.app)
+[Live Demo](https://backoffice-hotel-dashboard.vercel.app) — use **Try demo access** on the login page to sign in as an admin of a demo hotel.
 
 ## Tech Stack
 
@@ -185,6 +185,7 @@ The app supports **English** and **German** via [Lingui](https://lingui.dev).
 - **Frontend** — [Vercel](https://vercel.com) with API rewrites proxying `/api/*` to the backend
 - **Backend** — [Render](https://render.com). Once CI passes on `master`, the `Deploy backend` workflow applies the migrations to production and only then triggers Render's deploy hook, so a failed migration leaves the old version running
 - **Database** — [Neon](https://neon.tech) serverless PostgreSQL
+- **Demo reset** — production is a public showcase: the `Reset demo` workflow reseeds its database every night at 03:00 UTC (or on demand), undoing whatever visitors of the demo account changed
 
 ## Code Quality
 

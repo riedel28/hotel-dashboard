@@ -6,6 +6,7 @@ import { MailIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
+import { isDemoForbidden } from '@/api/client';
 import { resendInvitation, type User } from '@/api/users';
 import { type DataGridFeatures } from '@/components/ui/data-grid';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
@@ -32,8 +33,10 @@ export function RowActions({ row, onEdit }: RowActionsProps) {
     onSuccess: () => {
       toast.success(t`Invitation resent successfully`);
     },
-    onError: () => {
-      toast.error(t`Failed to resend invitation`);
+    onError: (error) => {
+      toast.error(
+        isDemoForbidden(error) ? error.message : t`Failed to resend invitation`
+      );
     }
   });
 

@@ -6,6 +6,10 @@ import { sql } from 'drizzle-orm';
 
 import { sanitizeCmsHtml } from '../../../shared/cms-html';
 import {
+  DEMO_EMAIL,
+  DEMO_PASSWORD as PUBLIC_DEMO_PASSWORD
+} from '../../../shared/demo';
+import {
   cmsLocales,
   type CmsNodeType,
   type CmsOpenMode
@@ -86,6 +90,15 @@ async function seedUsers() {
         password,
         first_name: 'John',
         last_name: 'Doe',
+        email_verified: true,
+        is_admin: true
+      },
+      // The public demo account shown on the login page
+      {
+        email: DEMO_EMAIL,
+        password: await hashPassword(PUBLIC_DEMO_PASSWORD),
+        first_name: 'Demo',
+        last_name: 'User',
         email_verified: true,
         is_admin: true
       }
