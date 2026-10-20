@@ -15,6 +15,7 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
+  SheetSwipeArea,
   SheetTitle
 } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -24,6 +25,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsStandalone } from '@/hooks/use-standalone';
 import { cn } from '@/lib/utils';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
@@ -163,6 +165,7 @@ function Sidebar({
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+  const isStandalone = useIsStandalone();
 
   if (collapsible === 'none') {
     return (
@@ -182,6 +185,17 @@ function Sidebar({
   if (isMobile) {
     return (
       <Sheet side={side} open={openMobile} onOpenChange={setOpenMobile}>
+        {/* Swipe in from the edge to open, only from the home screen: in a
+            browser that edge is its back gesture, which would win. Under the
+            sticky header (z-50), so it never takes a tap meant for it. */}
+        {isStandalone && (
+          <SheetSwipeArea
+            className={cn(
+              'fixed inset-y-0 z-40 w-3',
+              side === 'left' ? 'left-0' : 'right-0'
+            )}
+          />
+        )}
         <SheetContent
           data-sidebar="sidebar"
           data-slot="sidebar"

@@ -38,6 +38,8 @@ function Sheet({
 
 const SheetTrigger = SheetPrimitive.Trigger;
 const SheetClose = SheetPrimitive.Close;
+/** An invisible strip that opens the sheet with a swipe from its edge. */
+const SheetSwipeArea = SheetPrimitive.SwipeArea;
 
 // The viewport lays the panel against its edge
 const viewportClassNames: Record<SheetSide, string> = {
@@ -163,6 +165,7 @@ export {
   SheetDescription,
   SheetFooter,
   SheetHeader,
+  SheetSwipeArea,
   SheetTitle,
   SheetTrigger
 };
