@@ -45,6 +45,18 @@ function HeaderPropertySelector() {
   );
 }
 
+/** The header's bar, shared with the layout's loading skeleton so the two line up. */
+export function HeaderFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <header className="sticky top-0 z-50 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/60 md:px-4 md:ps-3.5">
+      {/* 56px on touch screens, to fit 44px targets */}
+      <div className="flex h-12 items-center justify-between gap-4 pointer-coarse:h-14">
+        {children}
+      </div>
+    </header>
+  );
+}
+
 export default function Header() {
   const view = useCurrentView();
   const { t } = useLingui();
@@ -70,37 +82,34 @@ export default function Header() {
   }, [selectedPropertyId, queryClient, router]);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/60 md:px-4 md:ps-3.5">
-      {/* 56px on touch screens, to fit 44px targets */}
-      <div className="flex h-12 items-center justify-between gap-4 pointer-coarse:h-14">
-        {/* Left side */}
-        {/* Mobile menu trigger */}
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={toggleSidebar}
-          aria-label={t`Open menu`}
-          className="inline-flex md:hidden pointer-coarse:size-11"
-        >
-          <TextAlignJustifyIcon className="size-4" />
-        </Button>
-        <div className="min-w-0">
-          {/*
+    <HeaderFrame>
+      {/* Left side */}
+      {/* Mobile menu trigger */}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={toggleSidebar}
+        aria-label={t`Open menu`}
+        className="inline-flex md:hidden pointer-coarse:size-11"
+      >
+        <TextAlignJustifyIcon className="size-4" />
+      </Button>
+      <div className="min-w-0">
+        {/*
               The admin area is not about any one Property. Coming from there,
               the list may not be loaded yet — the selector appears once it is.
             */}
-          {view === 'user' && (
-            <React.Suspense fallback={null}>
-              <HeaderPropertySelector />
-            </React.Suspense>
-          )}
-        </div>
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          <UserMenu />
-        </div>
+        {view === 'user' && (
+          <React.Suspense fallback={null}>
+            <HeaderPropertySelector />
+          </React.Suspense>
+        )}
       </div>
-    </header>
+      {/* Right side */}
+      <div className="flex items-center gap-2">
+        <UserMenu />
+      </div>
+    </HeaderFrame>
   );
 }

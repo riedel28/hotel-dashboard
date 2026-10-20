@@ -25,7 +25,9 @@ import {
 } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { viewOf } from '@/hooks/use-current-view';
-import Header from '@/routes/_dashboard-layout/-components/header';
+import Header, {
+  HeaderFrame
+} from '@/routes/_dashboard-layout/-components/header';
 import { isNavPathDisabled } from '@/routes/_dashboard-layout/-components/nav-items';
 import { DashboardSidebarHeader } from '@/routes/_dashboard-layout/-components/sidebar-header';
 import { DashboardNav } from '@/routes/_dashboard-layout/-components/sidebar-nav';
@@ -145,12 +147,11 @@ function DashboardPending() {
         </SidebarGroup>
       </Sidebar>
       <SidebarInset className="flex h-full min-w-0 flex-col">
-        <header className="border-b px-3 md:px-4 md:ps-3.5">
-          <div className="flex h-12 items-center justify-between gap-4 pointer-coarse:h-14">
-            <Skeleton className="h-8 w-44 pointer-coarse:h-11" />
-            <Skeleton className="size-8 rounded-full pointer-coarse:size-11" />
-          </div>
-        </header>
+        <HeaderFrame>
+          <Skeleton className="size-8 md:hidden pointer-coarse:size-11" />
+          <Skeleton className="h-8 w-44 pointer-coarse:h-11" />
+          <Skeleton className="size-8 rounded-full pointer-coarse:size-11" />
+        </HeaderFrame>
         <main className="flex flex-col gap-4 px-3 py-2 md:px-6 md:py-4">
           <span className="sr-only">
             <Trans>Loading...</Trans>
