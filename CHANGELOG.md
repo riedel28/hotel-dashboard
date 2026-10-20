@@ -1,3 +1,10 @@
+## [1.37.1](https://github.com/riedel28/hotel-dashboard/compare/v1.37.0...v1.37.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **user-menu:** smaller, rounder segmented controls in the phone sheet ([4c526ad](https://github.com/riedel28/hotel-dashboard/commit/4c526add2aa03da5304cc541e5347f09cda1d02c))
+
 # [1.37.0](https://github.com/riedel28/hotel-dashboard/compare/v1.36.2...v1.37.0) (2026-10-20)
 
 
