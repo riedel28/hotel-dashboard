@@ -34,7 +34,7 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
-import { StageBadge, StageLabel } from '@/components/ui/stage-badge';
+import { StageBadge } from '@/components/ui/stage-badge';
 import { useDelayedFlag } from '@/hooks/use-delayed-flag';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -240,7 +240,7 @@ function PropertySelector({
                   items={group.items}
                   className="pt-5"
                 >
-                  <ComboboxLabel className="px-1 pt-0 pb-2 text-xs font-medium tracking-wide uppercase">
+                  <ComboboxLabel className="px-1 pt-0 pb-2 text-sm font-medium">
                     {group.label}
                   </ComboboxLabel>
                   <div className="divide-y overflow-hidden rounded-xl border bg-card">
@@ -309,13 +309,8 @@ function MobilePropertyItem({ property }: { property: Property }) {
         <span className="block truncate">{property.name}</span>
         <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
           <CountryFlag code={property.country_code} className="size-4" />
-          {property.city && (
-            <>
-              <span className="truncate">{property.city}</span>
-              <span aria-hidden="true">·</span>
-            </>
-          )}
-          <StageLabel stage={property.stage} />
+          {property.city && <span className="truncate">{property.city}</span>}
+          <StageBadge stage={property.stage} />
         </span>
       </span>
     </ComboboxItem>
