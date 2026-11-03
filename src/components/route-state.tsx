@@ -8,6 +8,7 @@ import {
 import { SearchIcon } from 'lucide-react';
 import { type ReactNode, useCallback, useState } from 'react';
 
+import { isSessionError } from '@/api/client';
 import { StateMessage } from '@/components/state-message';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -62,6 +63,10 @@ function RouteError({
     setIsRetrying(true);
     void router.invalidate().finally(() => setIsRetrying(false));
   }, [reset, router]);
+
+  // The session is gone and the user is already on the way to the login page
+  // (see `setUnauthorizedHandler`); a card here would only flash before it
+  if (isSessionError(error)) return null;
 
   return (
     <RouteFrame fullScreen={fullScreen}>
