@@ -15,9 +15,11 @@ const flagComponents = Flags as Record<string, FlagComponent>;
 // flag itself and not on an empty square around it.
 const flagBox = { height: 'auto', aspectRatio: '3 / 2' };
 
-// A hairline around the flag: without it a mostly white flag (Japan) loses its
-// shape on a light background.
-const flagEdge = 'ring-1 ring-foreground/15';
+// A hairline on the flag's own edge: without it a mostly white flag (Japan)
+// loses its shape on a light background. Drawn inside and faint, it only
+// shades the edge of a coloured flag instead of framing it in grey.
+const flagEdge =
+  'outline outline-black/10 -outline-offset-1 dark:outline-white/10';
 
 interface CountryFlagProps extends React.HTMLAttributes<
   HTMLElement & SVGElement

@@ -17,6 +17,7 @@ import {
   type DataGridFeatures,
   dataGridFeatures
 } from '@/components/ui/data-grid';
+import { DataGridCards, stopRowClick } from '@/components/ui/data-grid-cards';
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header';
 import { DataGridPagination } from '@/components/ui/data-grid-pagination';
 import { DataGridTable } from '@/components/ui/data-grid-table';
@@ -42,6 +43,64 @@ function StayDateCell({ date }: { date: Date | string }) {
       {value.format('DD.MM.YYYY')}{' '}
       <span className="text-muted-foreground">{value.format('HH:mm')}</span>
     </time>
+  );
+}
+
+/** The stay as one short range: "10.03 – 12.03.2024". */
+function StayRange({ from, to }: { from: Date; to: Date }) {
+  const start = dayjs(from);
+  const end = dayjs(to);
+  const startFormat = start.isSame(end, 'year') ? 'DD.MM' : 'DD.MM.YYYY';
+
+  return (
+    <span className="whitespace-nowrap tabular-nums">
+      {start.format(startFormat)} – {end.format('DD.MM.YYYY')}
+    </span>
+  );
+}
+
+/** A reservation as a card, for phones: what the table row shows, stacked. */
+function ReservationCard({
+  reservation,
+  onOpen
+}: {
+  reservation: Reservation;
+  onOpen?: (reservationId: number) => void;
+}) {
+  return (
+    <>
+      <div className="min-w-0 flex-1 space-y-1.5 text-sm">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => onOpen?.(reservation.id)}
+            // Stretched over the card, so all of it opens the reservation
+            className="cursor-pointer truncate text-left font-medium outline-none after:absolute after:inset-0 focus-visible:after:ring-2 focus-visible:after:ring-ring focus-visible:after:ring-inset"
+          >
+            {reservation.booking_nr}
+          </button>
+          <ReservationStatusBadge status={reservation.state} />
+        </div>
+        <GuestsCell guests={reservation.guests} />
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span className="truncate">{reservationRoomLabel(reservation)}</span>
+          <span aria-hidden>·</span>
+          <StayRange
+            from={reservation.booking_from}
+            to={reservation.booking_to}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col items-end gap-2">
+        {/* Above the stretched button */}
+        <div className="relative" onClick={stopRowClick}>
+          <RowActions reservation={reservation} className="size-8" />
+        </div>
+        <div className="text-sm">
+          <BalanceCell value={reservation.balance} currency="EUR" />
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -287,7 +346,7 @@ export default function ReservationsTable({
               className="flex justify-center"
               onClick={(event) => event.stopPropagation()}
             >
-              <RowActions row={row} />
+              <RowActions reservation={row.original} />
             </div>
           );
         },
@@ -360,9 +419,18 @@ export default function ReservationsTable({
       isLoading={isLoading}
     >
       <div className="w-full space-y-2.5">
-        <DataGridContainer>
+        <DataGridContainer className="hidden sm:grid">
           <DataGridTable />
         </DataGridContainer>
+        <DataGridCards<Reservation>
+          className="sm:hidden"
+          renderCard={(reservation) => (
+            <ReservationCard
+              reservation={reservation}
+              onOpen={onReservationOpen}
+            />
+          )}
+        />
         <DataGridPagination />
       </div>
     </DataGrid>

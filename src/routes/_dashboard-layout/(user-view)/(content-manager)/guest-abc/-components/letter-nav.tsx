@@ -31,7 +31,7 @@ export function LetterNav({
     <div
       ref={containerRef}
       className={cn(
-        'sticky -top-4 z-10 -mx-4 mb-6 border-b border-transparent bg-background px-4 pt-3 pb-3 transition-colors md:-mx-6 md:px-6',
+        'sticky -top-4 z-10 -mx-4 mb-2 border-b border-transparent bg-background px-4 pt-3 pb-3 transition-colors sm:mb-6 md:-mx-6 md:px-6',
         stuck && 'border-border'
       )}
     >

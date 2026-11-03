@@ -116,9 +116,14 @@ function RoomsPage() {
           canManage && (
             <>
               <ImportButton onImport={() => setIsImportOpen(true)} />
-              <Button onClick={() => search.openForm('new')}>
+              <Button
+                className="max-sm:size-9 max-sm:p-0"
+                onClick={() => search.openForm('new')}
+              >
                 <PlusIcon aria-hidden="true" />
-                <Trans>Add room</Trans>
+                <span className="max-sm:sr-only">
+                  <Trans>Add room</Trans>
+                </span>
               </Button>
             </>
           )

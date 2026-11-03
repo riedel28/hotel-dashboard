@@ -77,7 +77,7 @@ msgid "{0, plural, one {# night} other {# nights}}"
 msgstr "{0, plural, one {# night} other {# nights}}"
 
 #. placeholder {0}: 0
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:228
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:370
 msgid "{0, plural, one {# property} other {# properties}}"
 msgstr "{0, plural, one {# property} other {# properties}}"
 
@@ -152,7 +152,7 @@ msgstr "{0} roles total"
 #~ msgstr "{0}, {1}"
 
 #. placeholder {0}: selected.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:75
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:82
 msgid "{0}, property"
 msgstr "{0}, property"
 
@@ -177,7 +177,7 @@ msgstr "{deleteCount, plural, one {I understand that # room will be deleted} oth
 msgid "{failedCount} of {0} tests failed"
 msgstr "{failedCount} of {0} tests failed"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:231
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:373
 msgid "{found} of {loaded} properties"
 msgstr "{found} of {loaded} properties"
 
@@ -241,7 +241,7 @@ msgstr "{shown} of {total} shown"
 #~ msgid "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 #~ msgstr "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:241
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:383
 msgid "{total, plural, one {# property} other {# properties}}"
 msgstr "{total, plural, one {# property} other {# properties}}"
 
@@ -378,7 +378,7 @@ msgstr "Active reservation — will be skipped"
 msgid "Add"
 msgstr "Add"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:204
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:209
 msgid "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 msgstr "Add a tablet, phone or TV with its serial number and the PIN shown on its screen."
 
@@ -406,13 +406,13 @@ msgstr "Add customer"
 #~ msgstr "Add Customer"
 
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/claim-device-modal.tsx:135
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:123
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:210
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:127
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:215
 msgid "Add device"
 msgstr "Add device"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/-components/add-entry-modal.tsx:88
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:57
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:61
 #: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:100
 msgid "Add entry"
 msgstr "Add entry"
@@ -464,14 +464,14 @@ msgstr "Add property"
 #~ msgid "Add Property"
 #~ msgstr "Add Property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:77
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:178
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:82
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:191
 msgid "Add Reservation"
 msgstr "Add Reservation"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:326
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:121
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:235
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:125
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:240
 msgid "Add room"
 msgstr "Add room"
 
@@ -492,7 +492,7 @@ msgstr "Add subcategory"
 msgid "Add the payment recipient to finish the setup."
 msgstr "Add the payment recipient to finish the setup."
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:222
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:227
 msgid "Add the rooms of this property one by one, or import them from a CSV or XLSX file."
 msgstr "Add the rooms of this property one by one, or import them from a CSV or XLSX file."
 
@@ -615,9 +615,9 @@ msgid "Age group"
 msgstr "Age group"
 
 #: src/components/ui/data-grid-segmented-filter.tsx:41
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:62
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:141
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:71
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:73
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:120
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:134
 msgid "All"
 msgstr "All"
@@ -626,7 +626,7 @@ msgstr "All"
 msgid "All {total} shown"
 msgstr "All {total} shown"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:78
 msgid "All categories"
 msgstr "All categories"
 
@@ -644,13 +644,17 @@ msgstr "All countries"
 msgid "All dates"
 msgstr "All dates"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:79
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:91
 msgid "All floors"
 msgstr "All floors"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:86
 #~ msgid "All logs"
 #~ msgstr "All logs"
+
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:172
+msgid "All properties"
+msgstr "All properties"
 
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:319
 msgid "All roles"
@@ -665,8 +669,8 @@ msgid "All stages"
 msgstr "All stages"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:49
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:101
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:99
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:106
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:111
 msgid "All statuses"
 msgstr "All statuses"
 
@@ -679,8 +683,8 @@ msgstr "All statuses"
 msgid "All tests passed ({passedCount}/{0})"
 msgstr "All tests passed ({passedCount}/{0})"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:168
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:147
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:72
 msgid "All types"
 msgstr "All types"
 
@@ -701,7 +705,7 @@ msgstr "Already stored. Enter a new one only to replace it."
 msgid "Amount"
 msgstr "Amount"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:227
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:232
 msgid "An administrator has not added any rooms yet."
 msgstr "An administrator has not added any rooms yet."
 
@@ -798,8 +802,8 @@ msgstr "Are you sure?"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:160
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:164
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:215
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:223
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:274
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:282
 msgid "Arrival"
 msgstr "Arrival"
 
@@ -819,7 +823,7 @@ msgstr "Assign"
 msgid "Assign {name} to a room"
 msgstr "Assign {name} to a room"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:83
 msgid "Assigned"
 msgstr "Assigned"
 
@@ -939,13 +943,13 @@ msgstr "Back"
 msgid "Back to login"
 msgstr "Back to login"
 
-#: src/routes/_auth-layout/auth/login.tsx:466
+#: src/routes/_auth-layout/auth/login.tsx:467
 msgid "Back to sign in"
 msgstr "Back to sign in"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:323
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:256
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:271
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:315
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:330
 msgid "Balance"
 msgstr "Balance"
 
@@ -1086,7 +1090,7 @@ msgstr "Card payments of the reservations and how they went."
 msgid "Categories"
 msgstr "Categories"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:66
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:77
 msgid "Category"
 msgstr "Category"
 
@@ -1319,9 +1323,9 @@ msgstr "Clear all"
 
 #: src/components/clear-filters-button.tsx:33
 #: src/components/empty-table-state.tsx:76
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:72
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:76
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-clear-filters.tsx:26
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:115
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:120
 msgid "Clear filters"
 msgstr "Clear filters"
 
@@ -1348,13 +1352,14 @@ msgstr "Client Key is required"
 #: src/components/provider-setup/test-connection-dialog.tsx:296
 #: src/components/ui/drawer.tsx:56
 #: src/components/ui/sheet.tsx:107
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:213
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 msgid "Close"
 msgstr "Close"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:70
-#~ msgid "Close menu"
-#~ msgstr "Close menu"
+#: src/routes/_dashboard-layout/-components/sidebar-header.tsx:35
+msgid "Close menu"
+msgstr "Close menu"
 
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:247
 #~ msgid "CN"
@@ -1478,7 +1483,7 @@ msgid "Content"
 msgstr "Content"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:58
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:73
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:78
 msgid "Content Manager"
 msgstr "Content Manager"
 
@@ -1573,11 +1578,11 @@ msgstr "Couldn't load categories"
 msgid "Couldn't load customers"
 msgstr "Couldn't load customers"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:157
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:162
 msgid "Couldn't load devices"
 msgstr "Couldn't load devices"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:141
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:146
 msgid "Couldn't load events"
 msgstr "Couldn't load events"
 
@@ -1597,11 +1602,11 @@ msgstr "Couldn't load products"
 msgid "Couldn't load properties"
 msgstr "Couldn't load properties"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:151
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:164
 msgid "Couldn't load reservations"
 msgstr "Couldn't load reservations"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:198
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:203
 msgid "Couldn't load rooms"
 msgstr "Couldn't load rooms"
 
@@ -1746,6 +1751,7 @@ msgid "Culture"
 msgstr "Culture"
 
 #: src/components/provider-setup/provider-picker.tsx:69
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:168
 msgid "Current"
 msgstr "Current"
 
@@ -1895,7 +1901,7 @@ msgstr "Delete property?"
 msgid "Delete reservation"
 msgstr "Delete reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:65
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:67
 msgid "Delete Reservation"
 msgstr "Delete Reservation"
 
@@ -1917,8 +1923,8 @@ msgstr "Demo"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:178
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:183
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:235
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:243
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:294
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:302
 msgid "Departure"
 msgstr "Departure"
 
@@ -2055,15 +2061,15 @@ msgstr "Download .txt"
 #~ msgid "Download a template:"
 #~ msgstr "Download a template:"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:44
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:50
 msgid "Download CSV template"
 msgstr "Download CSV template"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:29
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:35
 msgid "Download template"
 msgstr "Download template"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:58
 msgid "Download XLSX template"
 msgstr "Download XLSX template"
 
@@ -2173,7 +2179,7 @@ msgstr "Edit property"
 msgid "Edit reservation"
 msgstr "Edit reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:55
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:57
 msgid "Edit Reservation"
 msgstr "Edit Reservation"
 
@@ -2324,7 +2330,7 @@ msgstr "Enter last name"
 msgid "Enter one of your unused recovery codes"
 msgstr "Enter one of your unused recovery codes"
 
-#: src/routes/_auth-layout/auth/login.tsx:390
+#: src/routes/_auth-layout/auth/login.tsx:391
 msgid "Enter one of your unused recovery codes."
 msgstr "Enter one of your unused recovery codes."
 
@@ -2364,7 +2370,7 @@ msgstr "Enter the 6-digit code"
 msgid "Enter the 6-digit code from your authenticator app"
 msgstr "Enter the 6-digit code from your authenticator app"
 
-#: src/routes/_auth-layout/auth/login.tsx:392
+#: src/routes/_auth-layout/auth/login.tsx:393
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Enter the 6-digit code from your authenticator app."
 
@@ -2459,7 +2465,7 @@ msgid "Environment mismatch — these credentials belong to a different environm
 msgstr "Environment mismatch — these credentials belong to a different environment."
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:159
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:138
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/messages.ts:46
 msgid "Error"
 msgstr "Error"
@@ -2763,7 +2769,7 @@ msgstr "Failed to send password reset email. Please try again."
 #~ msgstr "Failed to send SMS"
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:65
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:72
 msgid "Failed to switch to {0}"
 msgstr "Failed to switch to {0}"
 
@@ -2849,7 +2855,7 @@ msgstr "File"
 msgid "Filter by reservation"
 msgstr "Filter by reservation"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:113
+#: src/components/folded-filters.tsx:37
 #: src/routes/_dashboard-layout/admin/properties/index.tsx:127
 msgid "Filters"
 msgstr "Filters"
@@ -2858,7 +2864,7 @@ msgstr "Filters"
 msgid "Final payment"
 msgstr "Final payment"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:70
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:71
 msgid "Find bookings, follow their check-in and open one to edit."
 msgstr "Find bookings, follow their check-in and open one to edit."
 
@@ -2867,7 +2873,7 @@ msgstr "Find bookings, follow their check-in and open one to edit."
 #~ msgid "First {0} of {total} properties"
 #~ msgstr "First {0} of {total} properties"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:237
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:379
 msgid "First {loaded} of {total} properties"
 msgstr "First {loaded} of {total} properties"
 
@@ -2896,7 +2902,7 @@ msgstr "First send"
 
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/messages.ts:55
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:192
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:78
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:90
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:105
 msgid "Floor"
 msgstr "Floor"
@@ -3026,12 +3032,12 @@ msgstr "Group folio listing by rate plan"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:96
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:36
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:79
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:86
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:84
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:91
 msgid "Guest ABC"
 msgstr "Guest ABC"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:113
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:118
 msgid "Guest ABC entries help guests find hotel information from A to Z. Add your first entry to get started."
 msgstr "Guest ABC entries help guests find hotel information from A to Z. Add your first entry to get started."
 
@@ -3057,8 +3063,8 @@ msgstr "Guest Email"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/guests-section.tsx:272
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:278
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:167
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:175
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:226
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:234
 msgid "Guests"
 msgstr "Guests"
 
@@ -3225,13 +3231,13 @@ msgstr "Holder"
 #: src/components/provider-setup/provider-page.tsx:44
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/event-page-header.tsx:30
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:73
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:72
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/index.tsx:343
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/index.tsx:53
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/index.tsx:48
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:63
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:55
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:56
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/new.tsx:28
 #: src/routes/_dashboard-layout/(user-view)/about.tsx:24
 #: src/routes/_dashboard-layout/(user-view)/checkin-page.tsx:54
@@ -3260,7 +3266,7 @@ msgid "Hotel"
 msgstr "Hotel"
 
 #: src/routes/_auth-layout.tsx:34
-#: src/routes/_dashboard-layout/-components/sidebar-header.tsx:21
+#: src/routes/_dashboard-layout/-components/sidebar-header.tsx:27
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
@@ -3292,7 +3298,7 @@ msgstr "How many people are staying, by age group, and who they are. The primary
 msgid "How you appear across the back-office."
 msgstr "How you appear across the back-office."
 
-#: src/routes/_auth-layout/auth/login.tsx:462
+#: src/routes/_auth-layout/auth/login.tsx:463
 msgid "I don't have my phone"
 msgstr "I don't have my phone"
 
@@ -3335,7 +3341,7 @@ msgstr "Image or icon"
 msgid "Images"
 msgstr "Images"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:22
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/import-button.tsx:27
 msgid "Import"
 msgstr "Import"
 
@@ -3668,7 +3674,7 @@ msgstr "Location"
 #: src/routes/_auth-layout/auth/login.tsx:67
 #: src/routes/_auth-layout/auth/login.tsx:143
 #: src/routes/_auth-layout/auth/login.tsx:301
-#: src/routes/_auth-layout/auth/login.tsx:324
+#: src/routes/_auth-layout/auth/login.tsx:325
 msgid "Log in"
 msgstr "Log in"
 
@@ -3742,7 +3748,7 @@ msgstr "Manage room inventory, availability, and room type configurations"
 msgid "Manage the customers that own properties and their contact details."
 msgstr "Manage the customers that own properties and their contact details."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:88
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:93
 msgid "Manage the hotel information your guests can browse, from A to Z."
 msgstr "Manage the hotel information your guests can browse, from A to Z."
 
@@ -4029,8 +4035,8 @@ msgstr "New"
 msgid "New customer"
 msgstr "New customer"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:96
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:170
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:175
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:23
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/new.tsx:32
 msgid "New event"
@@ -4178,11 +4184,11 @@ msgstr "No data available"
 #~ msgid "No devices match the filters"
 #~ msgstr "No devices match the filters"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:217
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:222
 msgid "No devices match the filters."
 msgstr "No devices match the filters."
 
-#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:202
+#: src/routes/_dashboard-layout/(user-view)/devices/index.tsx:207
 msgid "No devices yet"
 msgstr "No devices yet"
 
@@ -4190,12 +4196,12 @@ msgstr "No devices yet"
 #~ msgid "No email"
 #~ msgstr "No email"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:110
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/guest-abc/index.tsx:115
 #: src/routes/_dashboard-layout/admin/properties/-components/work-log.tsx:114
 msgid "No entries yet"
 msgstr "No entries yet"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:177
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:182
 msgid "No events match the filters."
 msgstr "No events match the filters."
 
@@ -4267,7 +4273,8 @@ msgstr "No products in this category"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "No products in this category. Add products to this category by clicking the button below."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:129
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:135
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:234
 msgid "No properties found"
 msgstr "No properties found"
 
@@ -4296,7 +4303,7 @@ msgstr "No properties yet."
 #~ msgstr "No properties yet. Assign this customer on a property's page."
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/no-property-selected.tsx:21
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:137
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:142
 msgid "No property selected"
 msgstr "No property selected"
 
@@ -4305,11 +4312,11 @@ msgstr "No property selected"
 msgid "No reminder"
 msgstr "No reminder"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:178
 msgid "No reservations match the filters."
 msgstr "No reservations match the filters."
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:171
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:184
 msgid "No reservations yet"
 msgstr "No reservations yet"
 
@@ -4358,11 +4365,11 @@ msgstr "No rooms found"
 #~ msgid "No rooms match the filters"
 #~ msgstr "No rooms match the filters"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:244
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:249
 msgid "No rooms match the filters."
 msgstr "No rooms match the filters."
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:219
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:224
 msgid "No rooms yet"
 msgstr "No rooms yet"
 
@@ -4378,7 +4385,7 @@ msgstr "No timezone found."
 msgid "No translation yet. The app shows the German text in its place."
 msgstr "No translation yet. The app shows the German text in its place."
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:69
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:81
 msgid "No type"
 msgstr "No type"
 
@@ -4386,7 +4393,7 @@ msgstr "No type"
 msgid "No unsaved changes"
 msgstr "No unsaved changes"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:163
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:168
 msgid "No upcoming events"
 msgstr "No upcoming events"
 
@@ -4471,7 +4478,7 @@ msgid "Offline"
 msgstr "Offline"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/cells/status-cell.tsx:21
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:149
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:128
 msgid "OK"
 msgstr "OK"
 
@@ -4573,7 +4580,7 @@ msgstr "Optional"
 msgid "Optional JSON or certificates passed to the Adyen SDK."
 msgstr "Optional JSON or certificates passed to the Adyen SDK."
 
-#: src/routes/_auth-layout/auth/login.tsx:306
+#: src/routes/_auth-layout/auth/login.tsx:307
 msgid "or"
 msgstr "or"
 
@@ -4717,7 +4724,7 @@ msgstr "Password updated"
 msgid "Passwords don't match"
 msgstr "Passwords don't match"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:72
 msgid "Past"
 msgstr "Past"
 
@@ -4779,7 +4786,7 @@ msgstr "Pending"
 msgid "Per page"
 msgstr "Per page"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:55
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:66
 msgid "Period"
 msgstr "Period"
 
@@ -4845,7 +4852,7 @@ msgstr "Pin to right"
 msgid "Plan what is on for guests and show it in the guest app."
 msgstr "Plan what is on for guests and show it in the guest app."
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:165
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/index.tsx:170
 msgid "Plan what is on for guests: concerts, tastings, tours."
 msgstr "Plan what is on for guests: concerts, tastings, tours."
 
@@ -5200,12 +5207,12 @@ msgstr "Purpose of stay"
 #~ msgstr "Purpose of Stay"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:380
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:44
 msgid "Push to device"
 msgstr "Push to device"
 
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:377
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:38
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/row-actions.tsx:40
 msgid "Pushed to device"
 msgstr "Pushed to device"
 
@@ -5270,7 +5277,7 @@ msgstr "Recently offline"
 msgid "Reception"
 msgstr "Reception"
 
-#: src/routes/_auth-layout/auth/login.tsx:418
+#: src/routes/_auth-layout/auth/login.tsx:419
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:123
 msgid "Recovery code"
 msgstr "Recovery code"
@@ -5459,8 +5466,8 @@ msgstr "Resend verification email"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/add-reservation-form.tsx:111
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/edit-reservation-form.tsx:108
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:260
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:134
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:154
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:193
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:213
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:38
 msgid "Reservation"
 msgstr "Reservation"
@@ -5515,14 +5522,14 @@ msgstr "Reservation updated successfully"
 
 #: src/routes/_dashboard-layout/-components/nav-items.ts:78
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/$reservationId.tsx:69
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:47
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:61
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:68
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:62
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:69
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/new.tsx:34
 msgid "Reservations"
 msgstr "Reservations"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:173
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/index.tsx:186
 msgid "Reservations from the PMS show up here, or add one by hand."
 msgstr "Reservations from the PMS show up here, or add one by hand."
 
@@ -5532,7 +5539,7 @@ msgstr "Reservations, rooms and guests — your front office in one place."
 
 #: src/components/date-range-filter.tsx:159
 #: src/components/ui/data-grid-radio-filter.tsx:131
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:176
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:155
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:67
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:330
 #: src/routes/_dashboard-layout/admin/properties/-components/property-options-filter.tsx:38
@@ -5594,8 +5601,8 @@ msgstr "Roles and admin rights are managed in <0>Users</0>."
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:106
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-fields.tsx:60
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/-components/reservation-details-drawer.tsx:269
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:187
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:202
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:246
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:261
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/device-details-drawer.tsx:99
 #: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-table.tsx:177
 msgid "Room"
@@ -5623,7 +5630,7 @@ msgstr "Room {room}"
 msgid "Room <0>(Optional)</0>"
 msgstr "Room <0>(Optional)</0>"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:67
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:72
 msgid "Room assignment"
 msgstr "Room assignment"
 
@@ -5818,7 +5825,7 @@ msgstr "Scan this QR code"
 #~ msgid "Search"
 #~ msgstr "Search"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:49
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:51
 msgid "Search by title"
 msgstr "Search by title"
 
@@ -5836,7 +5843,7 @@ msgstr "Search country..."
 msgid "Search customers"
 msgstr "Search customers"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:62
 msgid "Search devices"
 msgstr "Search devices"
 
@@ -5844,11 +5851,11 @@ msgstr "Search devices"
 #~ msgid "Search event, message, booking number"
 #~ msgstr "Search event, message, booking number"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:96
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:94
 msgid "Search event, message, reservation number"
 msgstr "Search event, message, reservation number"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:50
 msgid "Search events"
 msgstr "Search events"
 
@@ -5864,19 +5871,19 @@ msgstr "Search for a guest..."
 #~ msgid "Search for property"
 #~ msgstr "Search for property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:95
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:93
 msgid "Search logs"
 msgstr "Search logs"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:61
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:63
 msgid "Search name, serial number, room"
 msgstr "Search name, serial number, room"
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:53
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:56
 msgid "Search number or name"
 msgstr "Search number or name"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:41
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:42
 msgid "Search payments"
 msgstr "Search payments"
 
@@ -5889,11 +5896,12 @@ msgstr "Search products"
 msgid "Search properties"
 msgstr "Search properties"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:118
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:125
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:221
 msgid "Search property"
 msgstr "Search property"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:42
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:43
 msgid "Search reservation number, reference, last four card digits"
 msgstr "Search reservation number, reference, last four card digits"
 
@@ -5902,7 +5910,7 @@ msgid "Search reservations"
 msgstr "Search reservations"
 
 #: src/components/room-picker.tsx:98
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:52
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:55
 msgid "Search rooms"
 msgstr "Search rooms"
 
@@ -5958,7 +5966,7 @@ msgstr "Select"
 msgid "Select a property at the top of the page to see its events."
 msgstr "Select a property at the top of the page to see its events."
 
-#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:140
+#: src/routes/_dashboard-layout/(user-view)/rooms/index.tsx:145
 msgid "Select a property at the top of the page to see its rooms."
 msgstr "Select a property at the top of the page to see its rooms."
 
@@ -5990,8 +5998,8 @@ msgstr "Select country"
 #~ msgid "Select one or more roles to assign."
 #~ msgstr "Select one or more roles to assign."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:76
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:93
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:83
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:100
 msgid "Select property"
 msgstr "Select property"
 
@@ -6335,19 +6343,19 @@ msgstr "Start empty"
 msgid "Station"
 msgstr "Station"
 
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:134
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:113
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:114
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:122
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:48
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-filters.tsx:52
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:124
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:129
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservation-status-filter.tsx:48
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:111
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:122
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:100
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:170
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/reservations/-components/reservations-table/reservations-table.tsx:181
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:105
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/preview-rows.tsx:158
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:277
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:98
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:110
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:108
 msgid "Status"
 msgstr "Status"
@@ -6431,7 +6439,7 @@ msgstr "Summary"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Supported formats: JPG, PNG, GIF (max 5MB)"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:186
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:207
 msgid "Switch property"
 msgstr "Switch property"
 
@@ -6456,7 +6464,7 @@ msgstr "Switch view"
 #~ msgstr "Switched to \"{propertyName}\""
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:63
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:70
 msgid "Switched to {0}"
 msgstr "Switched to {0}"
 
@@ -6542,7 +6550,7 @@ msgstr "Text"
 msgid "Text style"
 msgstr "Text style"
 
-#: src/routes/_auth-layout/auth/login.tsx:368
+#: src/routes/_auth-layout/auth/login.tsx:369
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:144
 msgid "That code isn't valid. Check your app and try again."
 msgstr "That code isn't valid. Check your app and try again."
@@ -6560,7 +6568,7 @@ msgstr "That file is {0}. Please choose one under 20 MB."
 msgid "That image couldn't be opened. Try a different one."
 msgstr "That image couldn't be opened. Try a different one."
 
-#: src/routes/_auth-layout/auth/login.tsx:361
+#: src/routes/_auth-layout/auth/login.tsx:362
 msgid "That sign-in attempt expired. Please start again."
 msgstr "That sign-in attempt expired. Please start again."
 
@@ -7060,7 +7068,7 @@ msgstr "Try again"
 #~ msgid "Try Again"
 #~ msgstr "Try Again"
 
-#: src/routes/_auth-layout/auth/login.tsx:311
+#: src/routes/_auth-layout/auth/login.tsx:312
 msgid "Try demo access"
 msgstr "Try demo access"
 
@@ -7156,13 +7164,13 @@ msgstr "Two-factor authentication is on"
 msgid "Two-factor authentication won't be enabled and your account will keep using just a password."
 msgstr "Two-factor authentication won't be enabled and your account will keep using just a password."
 
-#: src/routes/_auth-layout/auth/login.tsx:386
+#: src/routes/_auth-layout/auth/login.tsx:387
 msgid "Two-step verification"
 msgstr "Two-step verification"
 
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/create-node-dialog.tsx:121
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor.tsx:158
-#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:167
+#: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:146
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:155
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-table.tsx:163
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payment-details-drawer.tsx:111
@@ -7170,7 +7178,7 @@ msgstr "Two-step verification"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/payments/-components/payments-table.tsx:116
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/import-rooms/messages.ts:54
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/room-form-drawer.tsx:247
-#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:59
+#: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-filters.tsx:71
 #: src/routes/_dashboard-layout/(user-view)/rooms/-components/rooms-table/rooms-table.tsx:104
 msgid "Type"
 msgstr "Type"
@@ -7187,7 +7195,7 @@ msgstr "Unassign from room"
 msgid "Unassign from room?"
 msgstr "Unassign from room?"
 
-#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:91
+#: src/routes/_dashboard-layout/(user-view)/devices/-components/devices-filters.tsx:96
 msgid "Unassigned"
 msgstr "Unassigned"
 
@@ -7250,7 +7258,7 @@ msgstr "Untitled"
 #~ msgid "Unverified"
 #~ msgstr "Unverified"
 
-#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:60
+#: src/routes/_dashboard-layout/(user-view)/(content-manager)/events/-components/events-filters.tsx:71
 msgid "Upcoming"
 msgstr "Upcoming"
 
@@ -7337,7 +7345,7 @@ msgstr "URL for this language"
 msgid "Use “Add product” above to add the first one."
 msgstr "Use “Add product” above to add the first one."
 
-#: src/routes/_auth-layout/auth/login.tsx:460
+#: src/routes/_auth-layout/auth/login.tsx:461
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-disable-dialog.tsx:150
 msgid "Use a code from my app instead"
 msgstr "Use a code from my app instead"
@@ -7442,7 +7450,7 @@ msgstr "Verification failed"
 #~ msgid "Verified"
 #~ msgstr "Verified"
 
-#: src/routes/_auth-layout/auth/login.tsx:445
+#: src/routes/_auth-layout/auth/login.tsx:446
 #: src/routes/_dashboard-layout/(user-view)/profile/-components/two-factor-setup-dialog.tsx:288
 msgid "Verify"
 msgstr "Verify"

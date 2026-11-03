@@ -21,9 +21,9 @@ export function LetterSection({
       ref={(el) => {
         sectionRefs.current[letter] = el;
       }}
-      className="flex max-w-lg scroll-mt-24 flex-col gap-4 p-4"
+      className="flex max-w-lg scroll-mt-24 flex-col gap-3 py-3 sm:gap-4 sm:p-4"
     >
-      <span className="text-2xl font-semibold text-foreground uppercase">
+      <span className="text-xl font-semibold text-foreground uppercase sm:text-2xl">
         {letter}
       </span>
 

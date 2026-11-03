@@ -91,9 +91,14 @@ function EventsPage() {
         }
         actions={
           property && (
-            <Button onClick={() => void navigate({ to: '/events/new' })}>
+            <Button
+              className="max-sm:size-9 max-sm:p-0"
+              onClick={() => void navigate({ to: '/events/new' })}
+            >
               <PlusIcon aria-hidden="true" />
-              <Trans>New event</Trans>
+              <span className="max-sm:sr-only">
+                <Trans>New event</Trans>
+              </span>
             </Button>
           )
         }
