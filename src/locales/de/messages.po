@@ -78,7 +78,7 @@ msgid "{0, plural, one {# night} other {# nights}}"
 msgstr "{0, plural, one {# Nacht} other {# Nächte}}"
 
 #. placeholder {0}: 0
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:228
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:370
 msgid "{0, plural, one {# property} other {# properties}}"
 msgstr "{0, plural, one {# Unterkunft} other {# Unterkünfte}}"
 
@@ -153,7 +153,7 @@ msgstr "{0} Rollen insgesamt"
 #~ msgstr "{0}, {1}"
 
 #. placeholder {0}: selected.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:75
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:82
 msgid "{0}, property"
 msgstr "{0}, Objekt"
 
@@ -178,7 +178,7 @@ msgstr "{deleteCount, plural, one {Mir ist bewusst, dass # Zimmer gelöscht wird
 msgid "{failedCount} of {0} tests failed"
 msgstr "{failedCount} von {0} Tests fehlgeschlagen"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:231
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:373
 msgid "{found} of {loaded} properties"
 msgstr "{found} von {loaded} Unterkünften"
 
@@ -240,7 +240,7 @@ msgstr "{shown} von {total} sichtbar"
 #~ msgid "{staleDays, plural, one {Not captured for # day} other {Not captured for # days}}"
 #~ msgstr "{staleDays, plural, one {Seit # Tag nicht erfasst} other {Seit # Tagen nicht erfasst}}"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:241
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:383
 msgid "{total, plural, one {# property} other {# properties}}"
 msgstr ""
 
@@ -644,6 +644,10 @@ msgstr "Alle Etagen"
 #: src/routes/_dashboard-layout/(user-view)/(front-office)/monitoring/-components/monitoring-filters.tsx:86
 #~ msgid "All logs"
 #~ msgstr ""
+
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:172
+msgid "All properties"
+msgstr "Alle Objekte"
 
 #: src/routes/_dashboard-layout/(user-view)/users/index.tsx:319
 msgid "All roles"
@@ -1323,6 +1327,7 @@ msgstr ""
 #: src/components/provider-setup/test-connection-dialog.tsx:296
 #: src/components/ui/drawer.tsx:56
 #: src/components/ui/sheet.tsx:107
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:213
 #: src/routes/_dashboard-layout/(user-view)/(content-manager)/mobile-cms/-components/node-editor-dialogs.tsx:79
 msgid "Close"
 msgstr "Schließen"
@@ -1717,6 +1722,7 @@ msgid "Culture"
 msgstr "Kultur"
 
 #: src/components/provider-setup/provider-picker.tsx:69
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:168
 msgid "Current"
 msgstr "Aktuell"
 
@@ -2714,7 +2720,7 @@ msgstr "E-Mail zum Zurücksetzen des Passworts konnte nicht gesendet werden. Bit
 #~ msgstr "SMS konnte nicht gesendet werden"
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:65
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:72
 msgid "Failed to switch to {0}"
 msgstr "Wechsel zu {0} fehlgeschlagen"
 
@@ -2812,7 +2818,7 @@ msgstr "Schlusszahlung"
 msgid "Find bookings, follow their check-in and open one to edit."
 msgstr "Buchungen finden, ihren Check-in verfolgen und zum Bearbeiten öffnen."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:237
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:379
 msgid "First {loaded} of {total} properties"
 msgstr "Erste {loaded} von {total} Unterkünften"
 
@@ -4186,7 +4192,8 @@ msgstr "Keine Produkte in dieser Kategorie"
 #~ msgid "No products in this category. Add products to this category by clicking the button below."
 #~ msgstr "Keine Produkte in dieser Kategorie. Fügen Sie Produkte zu dieser Kategorie hinzu, indem Sie unten auf die Schaltfläche klicken."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:129
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:135
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:234
 msgid "No properties found"
 msgstr "Keine Properties gefunden"
 
@@ -5780,7 +5787,8 @@ msgstr "Produkte durchsuchen"
 msgid "Search properties"
 msgstr "Unterkünfte suchen"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:118
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:125
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:221
 msgid "Search property"
 msgstr "Nach Property-Namen suchen"
 
@@ -5879,8 +5887,8 @@ msgstr "Land auswählen"
 #~ msgid "Select one or more roles to assign."
 #~ msgstr "Wählen Sie eine oder mehrere Rollen aus."
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:76
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:93
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:83
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:100
 msgid "Select property"
 msgstr "Objekt auswählen"
 
@@ -6308,7 +6316,7 @@ msgstr "Zusammenfassung"
 #~ msgid "Supported formats: JPG, PNG, GIF (max 5MB)"
 #~ msgstr "Unterstützte Formate: JPG, PNG, GIF (max. 5MB)"
 
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:186
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:207
 msgid "Switch property"
 msgstr "Objekt wechseln"
 
@@ -6331,7 +6339,7 @@ msgstr "Ansicht wechseln"
 #~ msgstr "Gewechselt zu \"{propertyName}\""
 
 #. placeholder {0}: property.name
-#: src/routes/_dashboard-layout/-components/property-selector.tsx:63
+#: src/routes/_dashboard-layout/-components/property-selector.tsx:70
 msgid "Switched to {0}"
 msgstr "Gewechselt zu {0}"
 

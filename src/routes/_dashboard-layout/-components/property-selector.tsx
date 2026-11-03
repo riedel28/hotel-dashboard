@@ -4,30 +4,37 @@ import {
   BuildingIcon,
   ChevronDownIcon,
   LoaderCircleIcon,
-  SearchIcon
+  SearchIcon,
+  XIcon
 } from 'lucide-react';
 import * as React from 'react';
 import type { Property } from 'shared/types/properties';
 import { toast } from 'sonner';
 
+import { Button } from '@/components/ui/button';
 import {
   Combobox,
+  ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
+  ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
+  ComboboxLabel,
   ComboboxList,
   ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue
 } from '@/components/ui/combobox';
+import { CountryFlag } from '@/components/ui/country-flag';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
-import { StageBadge } from '@/components/ui/stage-badge';
+import { StageBadge, StageLabel } from '@/components/ui/stage-badge';
 import { useDelayedFlag } from '@/hooks/use-delayed-flag';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -96,7 +103,8 @@ function PropertySelector({
     </span>
   );
 
-  // Shared by the dropdown and the phone's sheet, so the two can't drift
+  // Shared by the dropdown and the phone's sheet, so the two can't drift (the
+  // sheet groups the items)
   const comboboxProps = {
     items: properties,
     value: selected,
@@ -109,8 +117,7 @@ function PropertySelector({
     isItemEqualToValue: (a: Property, b: Property) => a.id === b.id
   };
 
-  // Search, list and count. Rendered in one place at a time: the dropdown
-  // from md up, the sheet below it, so `max-md:` sizes it for the sheet.
+  // The dropdown's search, list and count, from md up
   const listBody = (
     <>
       <ComboboxInput
@@ -123,23 +130,21 @@ function PropertySelector({
           />
         }
         showTrigger={false}
-        className="max-md:mx-4 max-md:h-11 max-md:rounded-lg max-md:border max-md:px-3"
       />
       <ComboboxEmpty className="py-4 text-center text-sm text-muted-foreground">
         <Trans>No properties found</Trans>
       </ComboboxEmpty>
       {/*
         In the dropdown, seven and a half rows — a row being an item (h-9) plus
-        the gap under it — so the cut-off one hints at more. In the sheet, all
-        the room it has.
+        the gap under it — so the cut-off one hints at more.
       */}
-      <ComboboxList className="mb-0 max-h-[calc(--spacing(10)*7.5+--spacing(1))] scroll-fade-y space-y-1 p-1 max-md:max-h-none max-md:min-h-0 max-md:flex-1 max-md:px-2 max-md:py-2">
+      <ComboboxList className="mb-0 max-h-[calc(--spacing(10)*7.5+--spacing(1))] scroll-fade-y space-y-1 p-1">
         {(property: Property) => (
           <ComboboxItem
             key={property.id}
             value={property}
             indicator="start"
-            className="h-9 rounded-md max-md:h-11 max-md:text-base"
+            className="h-9 rounded-md"
           >
             <span className="flex-1 truncate">{property.name}</span>
             <StageBadge stage={property.stage} />
@@ -147,15 +152,30 @@ function PropertySelector({
         )}
       </ComboboxList>
       <ComboboxSeparator className="my-0" />
-      <div className="shrink-0 px-3 py-2 text-xs text-muted-foreground max-md:px-4 max-md:py-3">
+      <div className="shrink-0 px-3 py-2 text-xs text-muted-foreground">
         <PropertyCount loaded={properties.length} total={total} />
       </div>
     </>
   );
 
-  // On a phone the list is a bottom sheet in thumb reach. The search field
-  // waits for a tap: focusing it on open would put the keyboard over the list.
+  // On a phone the list is a bottom sheet in thumb reach, laid out like the
+  // phone's own settings lists: the current property on its own on top, then
+  // the others by name. The search field waits for a tap: focusing it on open
+  // would put the keyboard over the list.
   if (isMobile) {
+    const groups: PropertyGroup[] = [
+      ...(selected
+        ? [{ id: 'current', label: t`Current`, items: [selected] }]
+        : []),
+      {
+        id: 'all',
+        label: t`All properties`,
+        items: properties
+          .filter((property) => property !== selected)
+          .toSorted((a, b) => a.name.localeCompare(b.name))
+      }
+    ];
+
     return (
       <Sheet
         side="bottom"
@@ -182,11 +202,61 @@ function PropertySelector({
         {/* A fixed height, so the sheet and its search field don't drop as
             the search narrows the list */}
         <SheetContent showCloseButton={false} className="h-[85dvh]">
-          <SheetTitle className="px-4 pt-1 pb-2 text-base">
-            <Trans>Switch property</Trans>
-          </SheetTitle>
-          <Combobox {...comboboxProps} inline open>
-            {listBody}
+          <div className="flex items-center justify-between gap-2 py-1 pr-2 pl-4">
+            <SheetTitle className="text-lg">
+              <Trans>Switch property</Trans>
+            </SheetTitle>
+            <SheetClose
+              render={
+                <Button variant="ghost" size="icon" className="size-11" />
+              }
+              aria-label={t`Close`}
+            >
+              <XIcon className="size-5" />
+            </SheetClose>
+          </div>
+          <Combobox {...comboboxProps} items={groups} inline open>
+            <ComboboxInput
+              variant="popup"
+              placeholder={t`Search property`}
+              iconLeft={
+                <SearchIcon
+                  className="size-4 shrink-0 opacity-50"
+                  aria-hidden="true"
+                />
+              }
+              showTrigger={false}
+              className="mx-4 h-11 rounded-lg border px-3"
+            />
+            {/* No popup here to reveal it when empty: it shows by itself,
+                and collapses while it has nothing to say */}
+            <ComboboxEmpty className="flex py-8 text-center text-sm text-muted-foreground empty:hidden">
+              <Trans>No properties found</Trans>
+            </ComboboxEmpty>
+            <ComboboxList className="max-h-none min-h-0 flex-1 p-0 px-4 pb-4">
+              {(group: PropertyGroup) => (
+                <ComboboxGroup
+                  key={group.id}
+                  items={group.items}
+                  className="pt-5"
+                >
+                  <ComboboxLabel className="px-1 pt-0 pb-2 text-xs font-medium tracking-wide uppercase">
+                    {group.label}
+                  </ComboboxLabel>
+                  <div className="divide-y overflow-hidden rounded-xl border bg-card">
+                    <ComboboxCollection>
+                      {(property: Property) => (
+                        <MobilePropertyItem
+                          key={property.id}
+                          property={property}
+                        />
+                      )}
+                    </ComboboxCollection>
+                  </div>
+                </ComboboxGroup>
+              )}
+            </ComboboxList>
+            <MobilePropertyCount loaded={properties.length} total={total} />
           </Combobox>
         </SheetContent>
       </Sheet>
@@ -220,10 +290,82 @@ function PropertySelector({
 const triggerClassName =
   'focus-visible:outline-offset-0.5 flex max-w-full min-w-0 items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-foreground outline-none hover:bg-accent focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-solid data-popup-open:bg-accent pointer-coarse:h-11';
 
+/** The phone sheet's sections: the current property, then all the others. */
+interface PropertyGroup {
+  id: string;
+  label: string;
+  items: Property[];
+}
+
+/** A property in the phone sheet: its name over where it is and its stage. */
+function MobilePropertyItem({ property }: { property: Property }) {
+  return (
+    <ComboboxItem
+      value={property}
+      // The check mark in line with the row's padding
+      className="min-h-14 rounded-none py-2.5 pr-11 pl-4 text-base data-highlighted:bg-muted data-highlighted:text-foreground [&>span:last-child]:right-4"
+    >
+      <span className="min-w-0 flex-1">
+        <span className="block truncate">{property.name}</span>
+        <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
+          <CountryFlag code={property.country_code} className="size-4" />
+          {property.city && (
+            <>
+              <span className="truncate">{property.city}</span>
+              <span aria-hidden="true">·</span>
+            </>
+          )}
+          <StageLabel stage={property.stage} />
+        </span>
+      </span>
+    </ComboboxItem>
+  );
+}
+
+/** The phone sheet's count: only when it says something, a search narrowing
+ *  the list or a list cut short. */
+function MobilePropertyCount({
+  loaded,
+  total
+}: {
+  loaded: number;
+  total: number;
+}) {
+  const filtered = ComboboxPrimitive.useFilteredItems<
+    Property | PropertyGroup
+  >();
+  // Grouped, the filtered items are the groups with what's left in each
+  const found = filtered.reduce(
+    (count, item) => count + ('items' in item ? item.items.length : 1),
+    0
+  );
+
+  if (found === loaded && total <= loaded) return null;
+
+  return (
+    <div className="shrink-0 border-t px-4 py-3 text-xs text-muted-foreground">
+      <PropertyCountText found={found} loaded={loaded} total={total} />
+    </div>
+  );
+}
+
 /** Reads the search result, so it has to render inside the Combobox. */
 function PropertyCount({ loaded, total }: { loaded: number; total: number }) {
   const found = ComboboxPrimitive.useFilteredItems<Property>().length;
 
+  return <PropertyCountText found={found} loaded={loaded} total={total} />;
+}
+
+/** How many properties the list shows, out of how many. */
+function PropertyCountText({
+  found,
+  loaded,
+  total
+}: {
+  found: number;
+  loaded: number;
+  total: number;
+}) {
   if (found === 0)
     return <Plural value={0} one="# property" other="# properties" />;
   if (found < loaded)
