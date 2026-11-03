@@ -297,20 +297,21 @@ interface PropertyGroup {
   items: Property[];
 }
 
-/** A property in the phone sheet: its name over where it is and its stage. */
+/** A property in the phone sheet: its name over where it is, its stage in
+ *  the bottom corner and, when selected, a check mark in the top one. */
 function MobilePropertyItem({ property }: { property: Property }) {
   return (
     <ComboboxItem
       value={property}
-      // The check mark in line with the row's padding
-      className="min-h-14 rounded-none py-2.5 pr-11 pl-4 text-base data-highlighted:bg-muted data-highlighted:text-foreground [&>span:last-child]:right-4"
+      // The check mark (the item's last child, once selected) beside the name
+      className="min-h-14 rounded-none px-4 py-2.5 text-base data-highlighted:bg-muted data-highlighted:text-foreground [&>span:last-child]:top-3.5 [&>span:last-child]:right-4"
     >
       <span className="min-w-0 flex-1">
-        <span className="block truncate">{property.name}</span>
+        <span className="block truncate pr-6">{property.name}</span>
         <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
           <CountryFlag code={property.country_code} className="size-4" />
           {property.city && <span className="truncate">{property.city}</span>}
-          <StageBadge stage={property.stage} />
+          <StageBadge stage={property.stage} className="ml-auto" />
         </span>
       </span>
     </ComboboxItem>
