@@ -37,6 +37,7 @@ import {
 import { StageBadge } from '@/components/ui/stage-badge';
 import { useDelayedFlag } from '@/hooks/use-delayed-flag';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getCountryName } from '@/lib/countries';
 
 interface PropertySelectorProps {
   properties: Property[];
@@ -300,6 +301,9 @@ interface PropertyGroup {
 /** A property in the phone sheet: its name over where it is, its stage in
  *  the bottom corner and, when selected, a check mark in the top one. */
 function MobilePropertyItem({ property }: { property: Property }) {
+  const { i18n } = useLingui();
+  const country = getCountryName(property.country_code, i18n.locale);
+
   return (
     <ComboboxItem
       value={property}
@@ -309,8 +313,14 @@ function MobilePropertyItem({ property }: { property: Property }) {
       <span className="min-w-0 flex-1">
         <span className="block truncate pr-6">{property.name}</span>
         <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
-          <CountryFlag code={property.country_code} className="size-4" />
-          {property.city && <span className="truncate">{property.city}</span>}
+          <CountryFlag
+            code={property.country_code}
+            className="size-4"
+            aria-hidden="true"
+          />
+          <span className="truncate">
+            {property.city ? `${property.city}, ${country}` : country}
+          </span>
           <StageBadge stage={property.stage} className="ml-auto" />
         </span>
       </span>
