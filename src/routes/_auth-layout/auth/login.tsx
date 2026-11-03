@@ -313,13 +313,16 @@ function LoginPage() {
           </span>
           <Button
             size="sm"
-            onClick={() =>
-              loginMutation.mutate({
+            // Fills the form and submits it, so the visitor sees what signed
+            // them in
+            onClick={() => {
+              form.reset({
                 email: DEMO_EMAIL,
                 password: DEMO_PASSWORD,
-                rememberMe: false
-              })
-            }
+                rememberMe: true
+              });
+              void form.handleSubmit(onSubmit)();
+            }}
             disabled={loginMutation.isPending}
           >
             <Trans>Log in</Trans>
