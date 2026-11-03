@@ -59,7 +59,6 @@ export function DevicesFilters({
         onChange={(q) => setFilters({ q: q || undefined })}
         placeholder={t`Search devices`}
         aria-label={t`Search name, serial number, room`}
-        className="text-sm"
         wrapperClassName="min-w-56 flex-1 xl:w-72 xl:flex-none"
         debounceMs={200}
       />

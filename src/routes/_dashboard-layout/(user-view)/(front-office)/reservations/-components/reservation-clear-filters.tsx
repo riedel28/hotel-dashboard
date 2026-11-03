@@ -20,7 +20,7 @@ export function ReservationClearFilters({
     <Button
       variant="secondary"
       onClick={onClear}
-      className="w-full text-muted-foreground hover:text-foreground lg:w-auto"
+      className="w-full text-muted-foreground hover:text-foreground max-md:order-last lg:w-auto"
     >
       <XIcon />
       <Trans>Clear filters</Trans>

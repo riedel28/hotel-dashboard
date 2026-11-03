@@ -2,13 +2,11 @@
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link as RouterLink } from '@tanstack/react-router';
-import { type Row } from '@tanstack/react-table';
 import { MessageSquareDotIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
 import type { Reservation } from '@/api/reservations';
-import { type DataGridFeatures } from '@/components/ui/data-grid';
 import { DataGridRowActions } from '@/components/ui/data-grid-row-actions';
 import {
   DropdownMenu,
@@ -20,18 +18,22 @@ import {
 import { DeleteDialog } from './delete-dialog';
 
 interface RowActionsProps {
-  row: Row<DataGridFeatures, Reservation>;
+  reservation: Reservation;
+  /** The trigger's size: 24px keeps a table row as low as its text cells. */
+  className?: string;
 }
 
-export function RowActions({ row }: RowActionsProps) {
+export function RowActions({
+  reservation,
+  className = 'size-6'
+}: RowActionsProps) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const { t } = useLingui();
 
   return (
     <>
       <DropdownMenu>
-        {/* 24px keeps the row as low as its text cells allow */}
-        <DataGridRowActions className="size-6" />
+        <DataGridRowActions className={className} />
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             onClick={() => {
@@ -47,7 +49,7 @@ export function RowActions({ row }: RowActionsProps) {
                 {...props}
                 to="/reservations/$reservationId"
                 params={{
-                  reservationId: String(row.original.id)
+                  reservationId: String(reservation.id)
                 }}
                 preload="intent"
               >
@@ -69,7 +71,7 @@ export function RowActions({ row }: RowActionsProps) {
       <DeleteDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        reservation={row.original}
+        reservation={reservation}
       />
     </>
   );

@@ -62,7 +62,7 @@ export function DateRangePopover({
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger
         className={cn(
-          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal whitespace-nowrap dark:border-input dark:bg-input/30',
+          'inline-flex h-9 min-w-fit items-center justify-start gap-2 rounded-lg border border-input bg-background px-3 py-2 text-base font-normal whitespace-nowrap md:text-sm dark:border-input dark:bg-input/30',
           className
         )}
       >
@@ -73,7 +73,7 @@ export function DateRangePopover({
       <PopoverContent className="w-auto p-0" align="start">
         <div className="flex max-sm:flex-col">
           {presets && (
-            <div className="flex flex-col gap-0.5 border-border p-1 max-sm:order-1 max-sm:border-t sm:w-36 sm:border-e">
+            <div className="grid grid-cols-2 gap-0.5 border-border p-1 max-sm:order-1 max-sm:border-t sm:flex sm:w-36 sm:flex-col sm:border-e">
               {presets(close)}
             </div>
           )}

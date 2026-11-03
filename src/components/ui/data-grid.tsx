@@ -252,8 +252,10 @@ function DataGridContainer({
       data-slot="data-grid"
       className={cn(
         // A size container, so a row can span just the visible part (`cqw`)
-        // of a table wider than it
-        '@container grid w-full overflow-x-auto',
+        // of a table wider than it. `relative` keeps absolutely positioned
+        // children (sr-only labels) inside the scroll box, so a wide table
+        // doesn't widen the page on mobile.
+        '@container relative grid w-full overflow-x-auto',
         border && 'rounded-lg border border-border bg-card',
         className
       )}

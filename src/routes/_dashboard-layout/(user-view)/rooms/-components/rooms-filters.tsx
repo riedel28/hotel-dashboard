@@ -51,7 +51,6 @@ export function RoomsFilters({
         onChange={(q) => setFilters({ q: q || undefined })}
         placeholder={t`Search rooms`}
         aria-label={t`Search number or name`}
-        className="text-sm"
         wrapperClassName="w-full xl:w-72"
         debounceMs={300}
       />

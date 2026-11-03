@@ -72,9 +72,14 @@ function ReservationsPage() {
           </Trans>
         }
         actions={
-          <Button onClick={() => void navigate({ to: '/reservations/new' })}>
+          <Button
+            className="max-sm:size-9 max-sm:p-0"
+            onClick={() => void navigate({ to: '/reservations/new' })}
+          >
             <PlusIcon aria-hidden="true" />
-            <Trans>Add Reservation</Trans>
+            <span className="max-sm:sr-only">
+              <Trans>Add Reservation</Trans>
+            </span>
           </Button>
         }
       />
@@ -116,14 +121,14 @@ function ReservationsContent() {
         <ReservationStatusFilter
           value={selectedStatuses}
           onValueChange={setStatuses}
-          className="lg:w-[180px]"
+          className="flex-1 lg:w-[180px] lg:flex-none"
         />
         <DateRangeFilter
           from={dateRange.from}
           to={dateRange.to}
           onRangeChange={setDateRange}
           allowFuture
-          className="w-full lg:w-[208px]"
+          className="flex-1 md:w-full lg:w-[208px] lg:flex-none"
         />
         <ReservationClearFilters
           hasActiveFilters={hasActiveFilters}

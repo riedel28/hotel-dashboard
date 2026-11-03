@@ -94,7 +94,6 @@ export function MonitoringFilters({
         onChange={setQuery}
         placeholder={t`Search logs`}
         aria-label={t`Search event, message, reservation number`}
-        className="text-sm"
         wrapperClassName="min-w-0 flex-1 xl:max-w-72 xl:min-w-36"
         debounceMs={300}
       />

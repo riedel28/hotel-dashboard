@@ -118,9 +118,14 @@ function DevicesPage() {
           </Trans>
         }
         actions={
-          <Button onClick={() => setIsClaimOpen(true)}>
+          <Button
+            className="max-sm:size-9 max-sm:p-0"
+            onClick={() => setIsClaimOpen(true)}
+          >
             <PlusIcon aria-hidden="true" />
-            <Trans>Add device</Trans>
+            <span className="max-sm:sr-only">
+              <Trans>Add device</Trans>
+            </span>
           </Button>
         }
       />

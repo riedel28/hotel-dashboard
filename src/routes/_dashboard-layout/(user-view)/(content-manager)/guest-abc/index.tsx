@@ -52,9 +52,14 @@ function GuestABCPage() {
   const isEmpty = !isPending && entries.length === 0;
 
   const addEntryButton = (
-    <Button onClick={() => setAddOpen(true)}>
+    <Button
+      className="max-sm:size-9 max-sm:p-0"
+      onClick={() => setAddOpen(true)}
+    >
       <PlusIcon />
-      <Trans>Add entry</Trans>
+      <span className="max-sm:sr-only">
+        <Trans>Add entry</Trans>
+      </span>
     </Button>
   );
 

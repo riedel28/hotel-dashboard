@@ -47,7 +47,6 @@ export function EventsFilters({
         onChange={(q) => setFilters({ q: q || undefined })}
         placeholder={t`Search events`}
         aria-label={t`Search by title`}
-        className="text-sm"
         wrapperClassName="w-full xl:w-[250px]"
         debounceMs={300}
       />

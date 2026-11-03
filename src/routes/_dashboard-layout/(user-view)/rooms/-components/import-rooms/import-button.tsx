@@ -17,9 +17,15 @@ export function ImportButton({ onImport }: { onImport: () => void }) {
 
   return (
     <div className="flex">
-      <Button variant="outline" className="rounded-r-none" onClick={onImport}>
+      <Button
+        variant="outline"
+        className="rounded-r-none max-sm:size-9 max-sm:p-0"
+        onClick={onImport}
+      >
         <UploadIcon />
-        <Trans>Import</Trans>
+        <span className="max-sm:sr-only">
+          <Trans>Import</Trans>
+        </span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger

@@ -40,7 +40,6 @@ export function PaymentsFilters({
         onChange={setQuery}
         placeholder={t`Search payments`}
         aria-label={t`Search reservation number, reference, last four card digits`}
-        className="text-sm"
         wrapperClassName="col-span-2 min-w-0 sm:w-auto sm:min-w-56 sm:flex-1 xl:w-72 xl:flex-none"
         debounceMs={300}
       />
