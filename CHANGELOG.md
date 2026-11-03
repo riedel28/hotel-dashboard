@@ -1,3 +1,15 @@
+# [1.41.0](https://github.com/riedel28/hotel-dashboard/compare/v1.40.0...v1.41.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **route-error:** no error flash when the session has ended ([55cd076](https://github.com/riedel28/hotel-dashboard/commit/55cd07610030f8c50efd580c1b32d50190351722))
+
+
+### Features
+
+* **login:** demo access fills the form and submits it ([aeff210](https://github.com/riedel28/hotel-dashboard/commit/aeff2103becf7a11fe50a095eba31f59800f8914))
+
 # [1.40.0](https://github.com/riedel28/hotel-dashboard/compare/v1.39.0...v1.40.0) (2026-11-03)
 
 
