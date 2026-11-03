@@ -176,13 +176,14 @@ export function EntryCard({ entry }: EntryCardProps) {
             flips true→false for a frame; an always-on transition would then
             fade the actions out from that transient reveal (a visible blink).
             Transitioning only while revealed keeps the hover fade-in but hides
-            instantly on collapse.
+            instantly on collapse. Without a mouse there is no hover: the
+            actions always show, finger-sized.
           */}
-          <ItemActions className="gap-0.5 opacity-0 group-hover/item:opacity-100 group-hover/item:transition-opacity focus-within:opacity-100 focus-within:transition-opacity">
+          <ItemActions className="gap-0.5 group-hover/item:opacity-100 group-hover/item:transition-opacity focus-within:opacity-100 focus-within:transition-opacity [@media(hover:hover)]:opacity-0">
             <Button
               size="icon-sm"
               variant="ghost"
-              className="text-muted-foreground"
+              className="text-muted-foreground pointer-coarse:size-9"
               onClick={startEditing}
             >
               <Edit2Icon className="size-3.5" />
@@ -190,7 +191,7 @@ export function EntryCard({ entry }: EntryCardProps) {
             <Button
               size="icon-sm"
               variant="ghost"
-              className="text-muted-foreground"
+              className="text-muted-foreground pointer-coarse:size-9"
               onClick={() => setDeleteOpen(true)}
             >
               <TrashIcon className="size-3.5" />
@@ -218,7 +219,7 @@ export function EntryCard({ entry }: EntryCardProps) {
 export function EntryCardSkeleton() {
   return (
     <Item variant="outline" className="flex-col items-stretch gap-1.5 p-4">
-      <div className="flex h-7 items-center">
+      <div className="flex h-7 items-center pointer-coarse:h-9">
         <Skeleton className="h-4 w-32" />
       </div>
       <div>

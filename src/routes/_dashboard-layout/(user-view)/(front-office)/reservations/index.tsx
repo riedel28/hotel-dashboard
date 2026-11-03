@@ -12,6 +12,7 @@ import {
   EmptyFilterResult,
   EmptyTableState
 } from '@/components/empty-table-state';
+import { FoldedFilters } from '@/components/folded-filters';
 import { tableLoadError } from '@/components/load-error';
 import { PageHeader } from '@/components/page-header';
 import {
@@ -118,22 +119,29 @@ function ReservationsContent() {
     <div className="space-y-2.5">
       <ReservationsFilters>
         <ReservationSearch value={searchTerm} onChange={setSearchTerm} />
-        <ReservationStatusFilter
-          value={selectedStatuses}
-          onValueChange={setStatuses}
-          className="flex-1 lg:w-[180px] lg:flex-none"
-        />
-        <DateRangeFilter
-          from={dateRange.from}
-          to={dateRange.to}
-          onRangeChange={setDateRange}
-          allowFuture
-          className="flex-1 md:w-full lg:w-[208px] lg:flex-none"
-        />
-        <ReservationClearFilters
-          hasActiveFilters={hasActiveFilters}
-          onClear={clearFilters}
-        />
+        <FoldedFilters
+          breakpoint="lg"
+          activeCount={
+            [selectedStatuses.length, dateRange.from].filter(Boolean).length
+          }
+        >
+          <ReservationStatusFilter
+            value={selectedStatuses}
+            onValueChange={setStatuses}
+            className="sm:w-[180px]"
+          />
+          <DateRangeFilter
+            from={dateRange.from}
+            to={dateRange.to}
+            onRangeChange={setDateRange}
+            allowFuture
+            className="sm:w-[208px]"
+          />
+          <ReservationClearFilters
+            hasActiveFilters={hasActiveFilters}
+            onClear={clearFilters}
+          />
+        </FoldedFilters>
         <DataGridRefreshButton
           isRefreshing={reservationsQuery.isFetching}
           onRefresh={refresh}

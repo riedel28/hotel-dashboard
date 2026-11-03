@@ -1,5 +1,4 @@
 import { Trans, useLingui } from '@lingui/react/macro';
-import { ListFilterIcon } from 'lucide-react';
 import { type ReactNode, useId, useState } from 'react';
 import {
   type FetchMonitoringLogsResponse,
@@ -7,8 +6,7 @@ import {
 } from 'shared/types/monitoring';
 
 import { ClearFiltersButton } from '@/components/clear-filters-button';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { FiltersToggle } from '@/components/folded-filters';
 import { CountBadge } from '@/components/ui/count-badge';
 import {
   DataGridCheckboxFilter,
@@ -97,31 +95,13 @@ export function MonitoringFilters({
         wrapperClassName="min-w-0 flex-1 xl:max-w-72 xl:min-w-36"
         debounceMs={300}
       />
-      <Button
-        variant="outline"
-        // Greyed while any of the folded filters is set
-        className={cn(
-          'xl:hidden',
-          activeFilterCount > 0 && 'bg-muted dark:bg-input/50'
-        )}
-        aria-expanded={filtersOpen}
-        aria-controls={filtersId}
-        onClick={() => setFiltersOpen((open) => !open)}
-      >
-        <ListFilterIcon />
-        <Trans>Filters</Trans>
-        {/* The same count badge the filters show their picks with */}
-        {activeFilterCount > 0 && (
-          <Badge
-            variant="secondary"
-            color="gray"
-            size="xs"
-            className="tabular-nums"
-          >
-            {activeFilterCount}
-          </Badge>
-        )}
-      </Button>
+      <FiltersToggle
+        open={filtersOpen}
+        onOpenChange={setFiltersOpen}
+        controls={filtersId}
+        activeCount={activeFilterCount}
+        className="xl:hidden"
+      />
       <div
         id={filtersId}
         className={cn(
