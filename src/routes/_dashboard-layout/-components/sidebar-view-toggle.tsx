@@ -20,7 +20,7 @@ export function SidebarViewToggle() {
       <Tabs value={currentView} aria-label={t`Switch view`}>
         {/* Touch size in the phone sheet: taller and rounder, with the tabs
           concentric with the track */}
-        <TabsList className="w-full in-data-[mobile=true]:pointer-coarse:h-10! in-data-[mobile=true]:pointer-coarse:rounded-xl">
+        <TabsList className="w-full in-data-[mobile=true]:pointer-coarse:h-11! in-data-[mobile=true]:pointer-coarse:rounded-xl">
           <TabsTrigger
             value="user"
             nativeButton={false}

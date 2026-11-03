@@ -1327,9 +1327,9 @@ msgstr ""
 msgid "Close"
 msgstr "Schließen"
 
-#: src/routes/_dashboard-layout/-components/mobile-menu.tsx:70
-#~ msgid "Close menu"
-#~ msgstr "Menü schließen"
+#: src/routes/_dashboard-layout/-components/sidebar-header.tsx:35
+msgid "Close menu"
+msgstr "Menü schließen"
 
 #: src/routes/_dashboard-layout/-components/user-menu.tsx:247
 #~ msgid "CN"
@@ -3195,7 +3195,7 @@ msgid "Hotel"
 msgstr "Hotel"
 
 #: src/routes/_auth-layout.tsx:34
-#: src/routes/_dashboard-layout/-components/sidebar-header.tsx:21
+#: src/routes/_dashboard-layout/-components/sidebar-header.tsx:27
 msgid "Hotel Dashboard"
 msgstr "Hotel Dashboard"
 
