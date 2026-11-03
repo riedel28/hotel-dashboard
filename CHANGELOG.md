@@ -1,3 +1,13 @@
+# [1.40.0](https://github.com/riedel28/hotel-dashboard/compare/v1.39.0...v1.40.0) (2026-11-03)
+
+
+### Features
+
+* **mobile:** adapt reservations and shared filters for phones ([00bbbb1](https://github.com/riedel28/hotel-dashboard/commit/00bbbb1b6c3f6b572a4409318c22533bf5d0b9f4))
+* **mobile:** fold filters behind a button and adapt guest ABC ([8f36c5d](https://github.com/riedel28/hotel-dashboard/commit/8f36c5dece7dfd9f97421308a56c7bb98371cdda))
+* **property-selector:** native-style list in the phone sheet ([c2d0567](https://github.com/riedel28/hotel-dashboard/commit/c2d056748ab3f73aecec6d485fa2f566a7b51111))
+* **sidebar:** close cross and taller view switch on phones ([32364b0](https://github.com/riedel28/hotel-dashboard/commit/32364b0fdb3077e0bf72cfbd623f4d2edf372528))
+
 # [1.39.0](https://github.com/riedel28/hotel-dashboard/compare/v1.38.0...v1.39.0) (2026-10-20)
 
 
